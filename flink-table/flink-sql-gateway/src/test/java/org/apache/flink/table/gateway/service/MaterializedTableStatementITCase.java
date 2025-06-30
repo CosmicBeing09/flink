@@ -976,7 +976,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testRefreshMaterializedTableWithStaticPartition() throws Exception {
+    void testRefreshMaterializedTableWithStaticPartitionInContinuousMode() throws Exception {
         List<Row> data = new ArrayList<>();
         data.add(Row.of(1L, 1L, 1L, "2024-01-01"));
         data.add(Row.of(2L, 2L, 2L, "2024-01-02"));
