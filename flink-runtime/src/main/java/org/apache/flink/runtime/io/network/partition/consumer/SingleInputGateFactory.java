@@ -171,7 +171,7 @@ public class SingleInputGateFactory {
         SupplierWithException<BufferPool, IOException> bufferPoolFactory =
                 createBufferPoolFactory(
                         networkBufferPool,
-                        gateBuffersSpec.getExpectedBuffersPerGate(),
+                        gateBuffersSpec.getMaxFloating(),
                         gateBuffersSpec.getMinBuffersPerGate(),
                         gateBuffersSpec.getMaxBuffersPerGate());
 

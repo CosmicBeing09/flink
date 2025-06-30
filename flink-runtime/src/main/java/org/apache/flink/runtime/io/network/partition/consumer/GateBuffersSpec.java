@@ -43,7 +43,7 @@ public class GateBuffersSpec {
         this.maxBuffersPerGate = maxBuffersPerGate;
     }
 
-    int getExpectedBuffersPerGate() {
+    int getMaxFloating() {
         return expectedBuffersPerGate;
     }
 
