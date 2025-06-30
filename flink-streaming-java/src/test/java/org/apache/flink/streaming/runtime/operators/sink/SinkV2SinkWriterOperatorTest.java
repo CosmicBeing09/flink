@@ -127,37 +127,37 @@ class SinkV2SinkWriterOperatorTest {
     }
 
     InspectableSink sinkWithoutCommitter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter = new TestSinkV2.DefaultSinkWriter<>();
-        return new InspectableSink(TestSinkV2.<Integer>newBuilder().setWriter(sinkWriter).build());
+        TestSinkV2.DefaultSinkWriter<Integer> restoredWriter = new TestSinkV2.DefaultSinkWriter<>();
+        return new InspectableSink(TestSinkV2.<Integer>newBuilder().setWriter(restoredWriter).build());
     }
 
     InspectableSink sinkWithCommitter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> restoredWriter =
                 new TestSinkV2.DefaultCommittingSinkWriter<>();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(restoredWriter)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithTimeBasedWriter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter = new TimeBasedBufferingSinkWriter();
+        TestSinkV2.DefaultSinkWriter<Integer> restoredWriter = new TimeBasedBufferingSinkWriter();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(restoredWriter)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithState(boolean withState, String stateName) {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> restoredWriter =
                 new TestSinkV2.DefaultStatefulSinkWriter<>();
         TestSinkV2.Builder<Integer> builder =
                 TestSinkV2.<Integer>newBuilder()
                         .setDefaultCommitter()
                         .setWithPostCommitTopology(true)
-                        .setWriter(sinkWriter);
+                        .setWriter(restoredWriter);
         if (withState) {
             builder.setWriterState(true);
         }
