@@ -95,17 +95,17 @@ public final class TypeInferenceUtil {
     }
 
     /**
-     * Adapts the call's argument if necessary.
+     * Casts the call's arguments if necessary.
      *
      * <p>This includes casts that need to be inserted, reordering of arguments (*), or insertion of
      * default values (*) where (*) is future work.
      */
-    public static CallContext adaptArguments(
+    public static CallContext castArguments(
             TypeInference typeInference, CallContext callContext, @Nullable DataType outputType) {
-        return adaptArguments(typeInference, callContext, outputType, true);
+        return castArguments(typeInference, callContext, outputType, true);
     }
 
-    private static CallContext adaptArguments(
+    private static CallContext castArguments(
             TypeInference typeInference,
             CallContext callContext,
             @Nullable DataType outputType,
@@ -316,7 +316,7 @@ public final class TypeInferenceUtil {
                 // We might not be able to infer the input types at this moment, if the surrounding
                 // function does not provide an explicit input type strategy.
                 final CallContext adaptedContext =
-                        adaptArguments(typeInference, callContext, null, false);
+                        castArguments(typeInference, callContext, null, false);
                 return typeInference
                         .getInputTypeStrategy()
                         .inferInputTypes(adaptedContext, false)
@@ -418,7 +418,7 @@ public final class TypeInferenceUtil {
                 outputType = null;
             }
 
-            adaptedCallContext = adaptArguments(typeInference, callContext, outputType);
+            adaptedCallContext = castArguments(typeInference, callContext, outputType);
         } catch (ValidationException e) {
             throw createInvalidInputException(typeInference, callContext, e);
         }

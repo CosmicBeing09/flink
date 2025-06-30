@@ -57,7 +57,7 @@ import java.util.stream.Collectors;
 import static org.apache.flink.table.planner.calcite.FlinkTypeFactory.toLogicalType;
 import static org.apache.flink.table.planner.typeutils.LogicalRelDataTypeConverter.toRelDataType;
 import static org.apache.flink.table.planner.utils.ShortcutUtils.unwrapTypeFactory;
-import static org.apache.flink.table.types.inference.TypeInferenceUtil.adaptArguments;
+import static org.apache.flink.table.types.inference.TypeInferenceUtil.castArguments;
 import static org.apache.flink.table.types.inference.TypeInferenceUtil.createInvalidCallException;
 import static org.apache.flink.table.types.inference.TypeInferenceUtil.createInvalidInputException;
 import static org.apache.flink.table.types.inference.TypeInferenceUtil.createUnexpectedException;
@@ -205,7 +205,7 @@ public final class TypeInferenceOperandChecker
     private boolean checkOperandTypesOrError(SqlCallBinding callBinding, CallContext callContext) {
         final CallContext adaptedCallContext;
         try {
-            adaptedCallContext = adaptArguments(typeInference, callContext, null);
+            adaptedCallContext = castArguments(typeInference, callContext, null);
         } catch (ValidationException e) {
             throw createInvalidInputException(typeInference, callContext, e);
         }
