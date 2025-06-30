@@ -46,8 +46,8 @@ public class InputGateSpecUtils {
         int targetExpectedBuffersPerGate =
                 getExpectedBuffersTargetPerGate(
                         numInputChannels, configuredNetworkBuffersPerChannel);
-        int maxBuffersPerGate =
-                getMaxBuffersPerGate(
+        int totalFloatingBuffers =
+                getTotalFloatingBuffers(
                         numInputChannels,
                         configuredNetworkBuffersPerChannel,
                         configuredFloatingNetworkBuffersPerGate);
@@ -68,7 +68,7 @@ public class InputGateSpecUtils {
                 effectiveExclusiveBuffersPerChannel,
                 expectedBuffersPerGate,
                 minBuffersPerGate,
-                maxBuffersPerGate);
+                totalFloatingBuffers);
     }
 
     @VisibleForTesting
@@ -111,7 +111,7 @@ public class InputGateSpecUtils {
     }
 
     /** */
-    private static int getMaxBuffersPerGate(
+    private static int getTotalFloatingBuffers(
             int numInputChannels,
             int configuredNetworkBuffersPerChannel,
             int configuredFloatingBuffersPerGate) {
