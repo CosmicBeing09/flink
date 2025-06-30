@@ -125,7 +125,7 @@ public class ReporterSetupBuilder<
                                     (reporterName,
                                             metricConfig,
                                             traceReporter,
-                                            metricFilter,
+                                     reporterFilter,
                                             additionalVariables) ->
                                             new TraceReporterSetup(
                                                     reporterName,
@@ -156,7 +156,7 @@ public class ReporterSetupBuilder<
                 String reporterName,
                 MetricConfig metricConfig,
                 REPORTER reporter,
-                MetricFilter metricFilter,
+                MetricFilter reporterFilter,
                 Map<String, String> additionalVariables);
     }
 
@@ -253,9 +253,9 @@ public class ReporterSetupBuilder<
     }
 
     @VisibleForTesting
-    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter metricFilter) {
+    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, new MetricConfig(), reporter, metricFilter, Collections.emptyMap());
+                reporterName, new MetricConfig(), reporter, reporterFilter, Collections.emptyMap());
     }
 
     @VisibleForTesting
@@ -282,11 +282,11 @@ public class ReporterSetupBuilder<
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter,
+            MetricFilter reporterFilter,
             Map<String, String> additionalVariables) {
         reporter.open(metricConfig);
         return reporterSetupInfo.reporterSetupFactory.createReporterSetup(
-                reporterName, metricConfig, reporter, metricFilter, additionalVariables);
+                reporterName, metricConfig, reporter, reporterFilter, additionalVariables);
     }
 
     public List<SETUP> fromConfiguration(
