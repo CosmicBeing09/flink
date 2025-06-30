@@ -64,7 +64,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /** A {@link Sink} for all the sink related tests. */
 public class TestSinkV2<InputT> implements Sink<InputT> {
-    public static final SimpleVersionedSerializerAdapter<String> COMMITTABLE_SERIALIZER =
+    public static final SimpleVersionedSerializerAdapter<String> commSerializerFactory =
             new SimpleVersionedSerializerAdapter<>(StringSerializer.INSTANCE);
     public static final SimpleVersionedSerializerAdapter<Integer> WRITER_SERIALIZER =
             new SimpleVersionedSerializerAdapter<>(IntSerializer.INSTANCE);
@@ -161,7 +161,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                     if (!withPreCommitTopology) {
                         // TwoPhaseCommittingSink with a stateless writer and a committer
                         return new TestSinkV2TwoPhaseCommittingSink<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, commSerializerFactory, committer);
                     } else {
                         // TwoPhaseCommittingSink with a stateless writer, pre commit topology,
                         // committer
@@ -169,7 +169,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 writer instanceof DefaultCommittingSinkWriter,
                                 "Please provide a DefaultCommittingSinkWriter instance");
                         return new TestSinkV2WithPreCommitTopology<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, commSerializerFactory, committer);
                     }
                 } else {
                     if (withWriterState) {
@@ -180,7 +180,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 "Please provide a DefaultStatefulSinkWriter instance");
                         return new TestStatefulSinkV2<>(
                                 (DefaultStatefulSinkWriter<InputT>) writer,
-                                COMMITTABLE_SERIALIZER,
+                                commSerializerFactory,
                                 committer,
                                 compatibleStateNames);
                     } else {
@@ -190,7 +190,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 writer instanceof DefaultCommittingSinkWriter,
                                 "Please provide a DefaultCommittingSinkWriter instance");
                         return new TestSinkV2WithPostCommitTopology<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, commSerializerFactory, committer);
                     }
                 }
             }
@@ -271,7 +271,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                     return withLineage.map(old -> old + "Transformed");
                                 }
                             })
-                    .returns(CommittableMessageTypeInfo.of(() -> COMMITTABLE_SERIALIZER));
+                    .returns(CommittableMessageTypeInfo.of(() -> commSerializerFactory));
         }
 
         @Override
