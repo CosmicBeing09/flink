@@ -53,7 +53,7 @@ public class LatencyTrackingStateFactory<
         this.stateFactories = createStateFactories();
     }
 
-    /** Create latency tracking state if enabled. */
+    /** Create metrics tracking state if enabled. */
     public static <K, N, V, S extends State>
             InternalKvState<K, N, ?> createStateAndWrapWithLatencyTrackingIfEnabled(
                     InternalKvState<K, N, ?> kvState,
