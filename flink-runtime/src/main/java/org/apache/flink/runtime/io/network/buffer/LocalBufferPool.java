@@ -104,7 +104,7 @@ public class LocalBufferPool implements BufferPool {
     private final int expectedNumberOfMemorySegments;
 
     /** The number of guaranteed (minimum number of) memory segments of this buffer pool. */
-    private final int minNumberOfMemorySegments;
+    private final int numberOfRequiredMemorySegments;
 
     /** Maximum number of network buffers to allocate. */
     private final int maxNumberOfMemorySegments;
@@ -232,7 +232,7 @@ public class LocalBufferPool implements BufferPool {
         this.networkBufferPool = networkBufferPool;
         this.expectedNumberOfMemorySegments = expectedNumberOfMemorySegments;
         this.currentPoolSize = minNumberOfMemorySegments;
-        this.minNumberOfMemorySegments = minNumberOfMemorySegments;
+        this.numberOfRequiredMemorySegments = minNumberOfMemorySegments;
         this.maxNumberOfMemorySegments = maxNumberOfMemorySegments;
 
         if (numberOfSubpartitions > 0) {
@@ -268,7 +268,7 @@ public class LocalBufferPool implements BufferPool {
     @Override
     public void reserveSegments(int numberOfSegmentsToReserve) throws IOException {
         checkArgument(
-                numberOfSegmentsToReserve <= minNumberOfMemorySegments,
+                numberOfSegmentsToReserve <= numberOfRequiredMemorySegments,
                 "Can not reserve more segments than number of minimum segments.");
 
         CompletableFuture<?> toNotify = null;
@@ -299,7 +299,7 @@ public class LocalBufferPool implements BufferPool {
 
     @Override
     public int getMinNumberOfMemorySegments() {
-        return minNumberOfMemorySegments;
+        return numberOfRequiredMemorySegments;
     }
 
     @Override
@@ -690,9 +690,9 @@ public class LocalBufferPool implements BufferPool {
         CompletableFuture<?> toNotify;
         synchronized (availableMemorySegments) {
             checkArgument(
-                    numBuffers >= minNumberOfMemorySegments,
+                    numBuffers >= numberOfRequiredMemorySegments,
                     "Buffer pool needs at least %s buffers, but tried to set to %s",
-                    minNumberOfMemorySegments,
+                    numberOfRequiredMemorySegments,
                     numBuffers);
 
             currentPoolSize = Math.min(numBuffers, maxNumberOfMemorySegments);
@@ -737,7 +737,7 @@ public class LocalBufferPool implements BufferPool {
                     numberOfRequestedMemorySegments,
                     availableMemorySegments.size(),
                     expectedNumberOfMemorySegments,
-                    minNumberOfMemorySegments,
+                    numberOfRequiredMemorySegments,
                     maxNumberOfMemorySegments,
                     registeredListeners.size(),
                     subpartitionBuffersCount.length,
