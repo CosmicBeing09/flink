@@ -51,7 +51,7 @@ public class GateBuffersSpec {
         return minBuffersPerGate;
     }
 
-    public int getMaxBuffersPerGate() {
+    public int getTotalBuffersTargetPerGate() {
         return maxBuffersPerGate;
     }
 
