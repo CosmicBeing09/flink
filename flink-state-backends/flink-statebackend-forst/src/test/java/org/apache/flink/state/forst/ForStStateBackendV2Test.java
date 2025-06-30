@@ -55,7 +55,7 @@ import static org.apache.flink.state.forst.ForStConfigurableOptions.USE_DELETE_F
 import static org.apache.flink.state.forst.ForStConfigurableOptions.USE_INGEST_DB_RESTORE_MODE;
 import static org.apache.flink.state.forst.ForStOptions.LOCAL_DIRECTORIES;
 import static org.apache.flink.state.forst.ForStOptions.REMOTE_DIRECTORY;
-import static org.apache.flink.state.forst.ForStStateBackend.REMOTE_SHORTCUT_CHECKPOINT;
+import static org.apache.flink.state.forst.ForStStateBackend.CHECKPOINT_DIR_AS_PRIMARY_SHORTCUT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /** Tests for the async keyed state backend part of {@link ForStStateBackend}. */
@@ -207,7 +207,7 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
 
         Configuration config = new Configuration();
         config.set(LOCAL_DIRECTORIES, tempFolderForForStLocal.toString());
-        config.set(REMOTE_DIRECTORY, REMOTE_SHORTCUT_CHECKPOINT);
+        config.set(REMOTE_DIRECTORY, CHECKPOINT_DIR_AS_PRIMARY_SHORTCUT);
         config.set(CheckpointingOptions.CREATE_CHECKPOINT_SUB_DIR, createJob);
 
         checkpointStorage =
