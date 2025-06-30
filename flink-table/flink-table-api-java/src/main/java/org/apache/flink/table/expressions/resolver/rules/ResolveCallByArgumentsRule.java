@@ -115,7 +115,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 definition = unresolvedCall.getFunctionDefinition();
             }
 
-            final String name =
+            final String functionName =
                     unresolvedCall
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
@@ -134,7 +134,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                                 .map(
                                         inference ->
                                                 SurroundingInfo.of(
-                                                        name,
+                                                        functionName,
                                                         definition,
                                                         inference,
                                                         argCount,
@@ -155,7 +155,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                             .map(
                                     newInference ->
                                             runTypeInference(
-                                                    name,
+                                                    functionName,
                                                     unresolvedCall,
                                                     newInference,
                                                     resolvedArgs,
@@ -164,7 +164,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                                     () ->
                                             new TableException(
                                                     "Could not get a type inference for function: "
-                                                            + name)));
+                                                            + functionName)));
         }
 
         @Override
@@ -341,7 +341,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         private final DataTypeFactory typeFactory;
 
-        private final String name;
+        private final String functionName;
 
         private final FunctionDefinition definition;
 
@@ -351,12 +351,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         public TableApiCallContext(
                 DataTypeFactory typeFactory,
-                String name,
+                String functionName,
                 FunctionDefinition definition,
                 List<ResolvedExpression> resolvedArgs,
                 boolean isGroupedAggregation) {
             this.typeFactory = typeFactory;
-            this.name = name;
+            this.functionName = functionName;
             this.definition = definition;
             this.resolvedArgs = resolvedArgs;
             this.isGroupedAggregation = isGroupedAggregation;
@@ -409,8 +409,8 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         @Override
-        public String getName() {
-            return name;
+        public String getFunctionName() {
+            return functionName;
         }
 
         @Override
@@ -435,7 +435,8 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 throw new IndexOutOfBoundsException(
                         String.format(
                                 "Not enough arguments to access literal at position %d for function '%s'.",
-                                pos, name));
+                                pos,
+                                functionName));
             }
             return resolvedArgs.get(pos);
         }

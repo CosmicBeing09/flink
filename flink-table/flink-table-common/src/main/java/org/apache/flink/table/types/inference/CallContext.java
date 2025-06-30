@@ -80,7 +80,7 @@ public interface CallContext {
      *
      * <p>Note: The name is meant for debugging purposes only.
      */
-    String getName();
+    String getFunctionName();
 
     /**
      * Returns a resolved list of the call's argument types. It also includes a type for every

@@ -100,7 +100,7 @@ public final class AdaptedCallContext implements CallContext {
 
     @Override
     public String getName() {
-        return originalContext.getName();
+        return originalContext.getFunctionName();
     }
 
     @Override

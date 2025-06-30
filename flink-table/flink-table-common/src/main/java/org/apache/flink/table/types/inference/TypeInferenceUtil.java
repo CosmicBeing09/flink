@@ -208,7 +208,7 @@ public final class TypeInferenceUtil {
                         "Invalid input arguments. Expected signatures are:\n%s",
                         generateSignature(
                                 typeInference,
-                                callContext.getName(),
+                                callContext.getFunctionName(),
                                 callContext.getFunctionDefinition())),
                 cause);
     }
@@ -219,7 +219,7 @@ public final class TypeInferenceUtil {
         return new ValidationException(
                 String.format(
                         "Invalid function call:\n%s(%s)",
-                        callContext.getName(),
+                        callContext.getFunctionName(),
                         callContext.getArgumentDataTypes().stream()
                                 .map(DataType::toString)
                                 .collect(Collectors.joining(", "))),
@@ -232,7 +232,7 @@ public final class TypeInferenceUtil {
         return new TableException(
                 String.format(
                         "Unexpected error in type inference logic of function '%s'. This is a bug.",
-                        callContext.getName()),
+                        callContext.getFunctionName()),
                 cause);
     }
 

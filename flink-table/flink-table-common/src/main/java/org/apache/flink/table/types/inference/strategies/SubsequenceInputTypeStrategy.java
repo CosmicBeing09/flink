@@ -175,7 +175,7 @@ public final class SubsequenceInputTypeStrategy implements InputTypeStrategy {
 
         @Override
         public String getName() {
-            return originalCallContext.getName();
+            return originalCallContext.getFunctionName();
         }
 
         @Override
