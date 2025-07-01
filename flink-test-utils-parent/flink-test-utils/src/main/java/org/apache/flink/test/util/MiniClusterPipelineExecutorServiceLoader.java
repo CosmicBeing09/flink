@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
+import org.apache.flink.client.deployment.executors.ExecutionPlanUtils;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
@@ -171,7 +171,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
                 Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassLoader)
                 throws Exception {
             final JobGraph jobGraph =
-                    PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassLoader);
+                    ExecutionPlanUtils.getJobGraph(pipeline, configuration, userCodeClassLoader);
             if (jobGraph.getSavepointRestoreSettings() == SavepointRestoreSettings.none()
                     && pipeline instanceof StreamGraph) {
                 jobGraph.setSavepointRestoreSettings(
@@ -182,7 +182,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
                     .whenComplete(
                             (ignored, throwable) -> {
                                 if (throwable == null) {
-                                    PipelineExecutorUtils.notifyJobStatusListeners(
+                                    ExecutionPlanUtils.notifyJobStatusListeners(
                                             pipeline, jobGraph, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(

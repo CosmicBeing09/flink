@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.cli.ClientOptions;
-import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
+import org.apache.flink.client.deployment.executors.ExecutionPlanUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptionsInternal;
 import org.apache.flink.core.execution.JobClient;
@@ -140,7 +140,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
         final Duration timeout = configuration.get(ClientOptions.CLIENT_TIMEOUT);
 
         final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+                ExecutionPlanUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
         final JobID actualJobId = jobGraph.getJobID();
 
         this.submittedJobIds.add(actualJobId);
@@ -177,7 +177,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
                 .whenCompleteAsync(
                         (jobClient, throwable) -> {
                             if (throwable == null) {
-                                PipelineExecutorUtils.notifyJobStatusListeners(
+                                ExecutionPlanUtils.notifyJobStatusListeners(
                                         pipeline, jobGraph, jobStatusChangedListeners);
                             } else {
                                 LOG.error(

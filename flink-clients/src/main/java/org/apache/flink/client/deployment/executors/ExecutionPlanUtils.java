@@ -44,8 +44,8 @@ import java.util.List;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** Utility class with method related to job execution. */
-public class PipelineExecutorUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(PipelineExecutorUtils.class);
+public class ExecutionPlanUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(ExecutionPlanUtils.class);
 
     /**
      * Creates the {@link JobGraph} corresponding to the provided {@link Pipeline}.

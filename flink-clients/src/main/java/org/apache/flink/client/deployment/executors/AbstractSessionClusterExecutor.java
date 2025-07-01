@@ -91,7 +91,7 @@ public class AbstractSessionClusterExecutor<
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
         final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+                ExecutionPlanUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {
@@ -122,7 +122,7 @@ public class AbstractSessionClusterExecutor<
                     .whenCompleteAsync(
                             (jobClient, throwable) -> {
                                 if (throwable == null) {
-                                    PipelineExecutorUtils.notifyJobStatusListeners(
+                                    ExecutionPlanUtils.notifyJobStatusListeners(
                                             pipeline, jobGraph, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(

@@ -103,7 +103,7 @@ public class LocalExecutor implements PipelineExecutor {
                 .whenComplete(
                         (ignored, throwable) -> {
                             if (throwable == null) {
-                                PipelineExecutorUtils.notifyJobStatusListeners(
+                                ExecutionPlanUtils.notifyJobStatusListeners(
                                         pipeline, jobGraph, jobStatusChangedListeners);
                             } else {
                                 LOG.error(
@@ -130,6 +130,6 @@ public class LocalExecutor implements PipelineExecutor {
             plan.setDefaultParallelism(slotsPerTaskManager * numTaskManagers);
         }
 
-        return PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        return ExecutionPlanUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
     }
 }
