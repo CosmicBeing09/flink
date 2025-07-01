@@ -369,12 +369,12 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
      */
     @Test
     void testReconfigureDifferentSubclassRegistrationOrder() throws Exception {
-        ExecutionConfig executionConfig = new ExecutionConfig();
-        executionConfig.registerPojoType(SubTestUserClassA.class);
-        executionConfig.registerPojoType(SubTestUserClassB.class);
+        ExecutionConfig serializerConfig = new ExecutionConfig();
+        serializerConfig.registerPojoType(SubTestUserClassA.class);
+        serializerConfig.registerPojoType(SubTestUserClassB.class);
 
         PojoSerializer<TestUserClass> pojoSerializer =
-                (PojoSerializer<TestUserClass>) type.createSerializer(executionConfig);
+                (PojoSerializer<TestUserClass>) type.createSerializer(serializerConfig);
 
         // get original registration ids
         int subClassATag = pojoSerializer.getRegisteredClasses().get(SubTestUserClassA.class);
@@ -391,12 +391,12 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
         }
 
         // use new config and instantiate new PojoSerializer
-        executionConfig = new ExecutionConfig();
-        executionConfig.registerPojoType(
+        serializerConfig = new ExecutionConfig();
+        serializerConfig.registerPojoType(
                 SubTestUserClassB.class); // test with B registered before A
-        executionConfig.registerPojoType(SubTestUserClassA.class);
+        serializerConfig.registerPojoType(SubTestUserClassA.class);
 
-        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(executionConfig);
+        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(serializerConfig);
 
         // read configuration from bytes
         try (ByteArrayInputStream in = new ByteArrayInputStream(serializedConfig)) {
