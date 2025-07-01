@@ -99,7 +99,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
         TypeSerializer<UpgradedElementT> createUpgradedSerializer();
 
         /** Returns a {@link Matcher} for asserting the deserialized test data. */
-        Matcher<UpgradedElementT> testDataMatcher();
+        Matcher<UpgradedElementT> testDataCondition();
 
         /**
          * Returns a {@link Matcher} for comparing the {@link TypeSerializerSchemaCompatibility}
@@ -179,7 +179,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
         public Matcher<UpgradedElementT> testDataMatcher() {
             try (ThreadContextClassLoader ignored =
                     new ThreadContextClassLoader(verifierClassloader)) {
-                return delegateVerifier.testDataMatcher();
+                return delegateVerifier.testDataCondition();
             }
         }
 
@@ -292,7 +292,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     restoredSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataCondition());
         }
     }
 
@@ -353,11 +353,11 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
                             dataUnderTest(testSpecification),
                             restoreSerializer,
                             upgradedSerializer,
-                            testSpecification.verifier.testDataMatcher());
+                            testSpecification.verifier.testDataCondition());
 
             // .. and then assert that the upgraded serializer is valid with the migrated data
             assertSerializerIsValid(
-                    upgradedSerializer, migratedData, testSpecification.verifier.testDataMatcher());
+                    upgradedSerializer, migratedData, testSpecification.verifier.testDataCondition());
         }
     }
 
@@ -390,7 +390,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     reconfiguredUpgradedSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataCondition());
         }
     }
 
@@ -418,7 +418,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     upgradedSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataCondition());
         }
     }
 
