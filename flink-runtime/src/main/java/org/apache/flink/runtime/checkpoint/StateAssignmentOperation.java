@@ -763,10 +763,10 @@ public class StateAssignmentOperation {
                 if (allowNonRestoredState) {
                     LOG.info(
                             "Skipped checkpoint state for operator {}.",
-                            operatorState.getOperatorID());
+                            operatorState.getOperatorIdentifier());
                 } else {
                     throw new IllegalStateException(
-                            "There is no operator for the state " + operatorState.getOperatorID());
+                            "There is no operator for the state " + operatorState.getOperatorIdentifier());
                 }
             }
         }
