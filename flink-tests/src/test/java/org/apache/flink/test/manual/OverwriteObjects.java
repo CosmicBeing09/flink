@@ -202,7 +202,7 @@ public class OverwriteObjects {
 
                 enabledResult =
                         getDataSet(env)
-                                .leftOuterJoin(getFilteredDataSet(env), joinHint)
+                                .leftOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -214,7 +214,7 @@ public class OverwriteObjects {
 
                 disabledResult =
                         getDataSet(env)
-                                .leftOuterJoin(getFilteredDataSet(env), joinHint)
+                                .leftOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -234,7 +234,7 @@ public class OverwriteObjects {
 
                 enabledResult =
                         getDataSet(env)
-                                .rightOuterJoin(getFilteredDataSet(env), joinHint)
+                                .rightOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -246,7 +246,7 @@ public class OverwriteObjects {
 
                 disabledResult =
                         getDataSet(env)
-                                .rightOuterJoin(getFilteredDataSet(env), joinHint)
+                                .rightOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -267,7 +267,7 @@ public class OverwriteObjects {
 
                 enabledResult =
                         getDataSet(env)
-                                .fullOuterJoin(getFilteredDataSet(env), joinHint)
+                                .fullOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -279,7 +279,7 @@ public class OverwriteObjects {
 
                 disabledResult =
                         getDataSet(env)
-                                .fullOuterJoin(getFilteredDataSet(env), joinHint)
+                                .fullOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -377,7 +377,7 @@ public class OverwriteObjects {
         return getDataSet(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
     }
 
-    private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataSet(ExecutionEnvironment env) {
+    private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataStream(ExecutionEnvironment env) {
         return getDataSet(env)
                 .filter(
                         new FilterFunction<Tuple2<IntValue, IntValue>>() {
