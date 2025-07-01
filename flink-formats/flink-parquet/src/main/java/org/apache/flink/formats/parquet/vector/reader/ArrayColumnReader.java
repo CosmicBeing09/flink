@@ -365,9 +365,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case FLOAT:
-                HeapFloatVector floatVector = new HeapFloatVector(total);
-                floatVector.reset();
-                lcv.setChild(floatVector);
+                HeapFloatVector heapFloatVector = new HeapFloatVector(total);
+                heapFloatVector.reset();
+                lcv.setChild(heapFloatVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapFloatVector) lcv.getChild()).setNullAt(i);
