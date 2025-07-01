@@ -129,7 +129,7 @@ public abstract class AbstractQueryableStateTestBase {
     @BeforeEach
     void setUp() throws Exception {
         // NOTE: do not use a shared instance for all tests as the tests may break
-        this.stateBackend = createStateBackend();
+        this.stateBackend = createEnv();
 
         assertThat(clusterClient).isNotNull();
 
@@ -137,12 +137,12 @@ public abstract class AbstractQueryableStateTestBase {
     }
 
     /**
-     * Creates a state backend instance which is used in the {@link #setUp()} method before each
+     * Creates an execution environment instance which is used in the {@link #setUp()} method before each
      * test case.
      *
      * @return a state backend instance for each unit test
      */
-    protected abstract StateBackend createStateBackend() throws Exception;
+    protected abstract StateBackend createEnv() throws Exception;
 
     /**
      * Runs a simple topology producing random (key, 1) pairs at the sources (where number of keys
