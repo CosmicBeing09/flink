@@ -78,7 +78,7 @@ public abstract class AbstractMultipleInputTransformation<OUT> extends PhysicalT
     @Override
     public List<Transformation<?>> getTransitivePredecessors() {
         return inputs.stream()
-                .flatMap(input -> input.getTransitivePredecessors().stream())
+                .flatMap(input -> input.getTransitivePredecessorsInternal().stream())
                 .collect(Collectors.toList());
     }
 
