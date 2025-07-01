@@ -145,7 +145,7 @@ public class CliFrontendParser {
                             + "savepoint files, but can reuse some shared files.");
 
     @Deprecated
-    public static final Option SAVEPOINT_RESTORE_MODE =
+    public static final Option SAVEPOINT_RECOVERY_CLAIM_MODE =
             new Option(
                     "rm",
                     "restoreMode",
@@ -346,7 +346,7 @@ public class CliFrontendParser {
 
         SAVEPOINT_ALLOW_NON_RESTORED_OPTION.setRequired(false);
         SAVEPOINT_CLAIM_MODE.setRequired(false);
-        SAVEPOINT_RESTORE_MODE.setRequired(false);
+        SAVEPOINT_RECOVERY_CLAIM_MODE.setRequired(false);
 
         SAVEPOINT_FORMAT_OPTION.setRequired(false);
 
@@ -434,7 +434,7 @@ public class CliFrontendParser {
                 .addOption(SAVEPOINT_PATH_OPTION)
                 .addOption(SAVEPOINT_ALLOW_NON_RESTORED_OPTION)
                 .addOption(SAVEPOINT_CLAIM_MODE)
-                .addOption(SAVEPOINT_RESTORE_MODE);
+                .addOption(SAVEPOINT_RECOVERY_CLAIM_MODE);
     }
 
     static Options getInfoCommandOptions() {
@@ -484,7 +484,7 @@ public class CliFrontendParser {
                 .addOption(SAVEPOINT_PATH_OPTION)
                 .addOption(SAVEPOINT_ALLOW_NON_RESTORED_OPTION)
                 .addOption(SAVEPOINT_CLAIM_MODE)
-                .addOption(SAVEPOINT_RESTORE_MODE);
+                .addOption(SAVEPOINT_RECOVERY_CLAIM_MODE);
     }
 
     private static Options getInfoOptionsWithoutDeprecatedOptions(Options options) {
@@ -697,25 +697,25 @@ public class CliFrontendParser {
             String savepointPath = commandLine.getOptionValue(SAVEPOINT_PATH_OPTION.getOpt());
             boolean allowNonRestoredState =
                     commandLine.hasOption(SAVEPOINT_ALLOW_NON_RESTORED_OPTION.getOpt());
-            final RestoreMode restoreMode;
+            final RestoreMode recoveryClaimMode;
             if (commandLine.hasOption(SAVEPOINT_CLAIM_MODE)) {
-                restoreMode =
+                recoveryClaimMode =
                         ConfigurationUtils.convertValue(
                                 commandLine.getOptionValue(SAVEPOINT_CLAIM_MODE),
                                 RestoreMode.class);
-            } else if (commandLine.hasOption(SAVEPOINT_RESTORE_MODE)) {
-                restoreMode =
+            } else if (commandLine.hasOption(SAVEPOINT_RECOVERY_CLAIM_MODE)) {
+                recoveryClaimMode =
                         ConfigurationUtils.convertValue(
-                                commandLine.getOptionValue(SAVEPOINT_RESTORE_MODE),
+                                commandLine.getOptionValue(SAVEPOINT_RECOVERY_CLAIM_MODE),
                                 RestoreMode.class);
                 System.out.printf(
                         "The option '%s' is deprecated. Please use '%s' instead.%n",
-                        SAVEPOINT_RESTORE_MODE.getLongOpt(), SAVEPOINT_CLAIM_MODE.getLongOpt());
+                        SAVEPOINT_RECOVERY_CLAIM_MODE.getLongOpt(), SAVEPOINT_CLAIM_MODE.getLongOpt());
             } else {
-                restoreMode = StateRecoveryOptions.RESTORE_MODE.defaultValue();
+                recoveryClaimMode = StateRecoveryOptions.RESTORE_MODE.defaultValue();
             }
             return SavepointRestoreSettings.forPath(
-                    savepointPath, allowNonRestoredState, restoreMode);
+                    savepointPath, allowNonRestoredState, recoveryClaimMode);
         } else {
             return SavepointRestoreSettings.none();
         }
