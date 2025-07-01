@@ -58,13 +58,13 @@ import java.util.stream.Collectors;
 
 /** State which represents a running job with an {@link ExecutionGraph} and assigned slots. */
 class Executing extends StateWithExecutionGraph
-        implements ResourceListener, RescaleManager.Context, CheckpointStatsListener {
+        implements ResourceListener, StateTransitionManager.Context, CheckpointStatsListener {
 
     private final Context context;
 
     private final RescalingController sufficientResourcesController;
     private final RescalingController desiredResourcesController;
-    private final RescaleManager rescaleManager;
+    private final StateTransitionManager rescaleManager;
     private final int rescaleOnFailedCheckpointCount;
     // null indicates that there was no change event observed, yet
     @Nullable private AtomicInteger failedCheckpointCountdown;
@@ -77,7 +77,7 @@ class Executing extends StateWithExecutionGraph
             Context context,
             ClassLoader userCodeClassLoader,
             List<ExceptionHistoryEntry> failureCollection,
-            RescaleManager.Factory rescaleManagerFactory,
+            StateTransitionManager.Factory rescaleManagerFactory,
             int minParallelismChangeForRescale,
             int rescaleOnFailedCheckpointCount,
             Instant lastRescale) {
@@ -322,7 +322,7 @@ class Executing extends StateWithExecutionGraph
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
-        private final RescaleManager.Factory rescaleManagerFactory;
+        private final StateTransitionManager.Factory rescaleManagerFactory;
         private final int minParallelismChangeForRescale;
         private final int rescaleOnFailedCheckpointCount;
 
@@ -334,7 +334,7 @@ class Executing extends StateWithExecutionGraph
                 Context context,
                 ClassLoader userCodeClassLoader,
                 List<ExceptionHistoryEntry> failureCollection,
-                RescaleManager.Factory rescaleManagerFactory,
+                StateTransitionManager.Factory rescaleManagerFactory,
                 int minParallelismChangeForRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.context = context;

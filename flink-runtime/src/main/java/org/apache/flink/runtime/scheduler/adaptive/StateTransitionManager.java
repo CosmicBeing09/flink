@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 /** The {@code RescaleManager} decides on whether rescaling should happen or not. */
-public interface RescaleManager {
+public interface StateTransitionManager {
 
     /** Is called if the environment changed in a way that a rescaling could be considered. */
     void onChange();
@@ -65,6 +65,6 @@ public interface RescaleManager {
          * Creates a {@code RescaleManager} instance for the given {@code rescaleContext} and
          * previous rescale time.
          */
-        RescaleManager create(Context rescaleContext, Instant lastRescale);
+        StateTransitionManager create(Context rescaleContext, Instant lastRescale);
     }
 }
