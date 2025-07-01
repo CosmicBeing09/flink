@@ -472,7 +472,7 @@ public class EmbeddedLeaderService {
         }
 
         @Override
-        public boolean hasLeadership(UUID leaderSessionId) {
+        public boolean hasLeadershipAsync(UUID leaderSessionId) {
             return isLeader && leaderSessionId.equals(currentLeaderSessionId);
         }
 

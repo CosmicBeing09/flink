@@ -503,7 +503,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
     private boolean isValidLeader(UUID expectedLeaderId) {
         return isRunning()
                 && leaderElection != null
-                && leaderElection.hasLeadership(expectedLeaderId);
+                && leaderElection.hasLeadershipAsync(expectedLeaderId);
     }
 
     private <T> void forwardIfValidLeader(

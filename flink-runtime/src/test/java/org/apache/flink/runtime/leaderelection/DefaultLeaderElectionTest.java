@@ -180,7 +180,7 @@ class DefaultLeaderElectionTest {
                 new DefaultLeaderElection(parentService, DEFAULT_TEST_COMPONENT_ID)) {
 
             final UUID expectedLeaderSessionID = UUID.randomUUID();
-            assertThat(testInstance.hasLeadership(expectedLeaderSessionID))
+            assertThat(testInstance.hasLeadershipAsync(expectedLeaderSessionID))
                     .isEqualTo(expectedReturnValue);
             assertThat(componentIdRef).hasValue(DEFAULT_TEST_COMPONENT_ID);
             assertThat(leaderSessionIDRef).hasValue(expectedLeaderSessionID);

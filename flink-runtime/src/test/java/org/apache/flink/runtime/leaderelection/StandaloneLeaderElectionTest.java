@@ -85,20 +85,20 @@ class StandaloneLeaderElectionTest {
         try (final LeaderElection testInstance = new StandaloneLeaderElection(SESSION_ID)) {
             testInstance.startLeaderElection(contender);
 
-            assertThat(testInstance.hasLeadership(SESSION_ID)).isTrue();
+            assertThat(testInstance.hasLeadershipAsync(SESSION_ID)).isTrue();
 
             final UUID differentSessionID = UUID.randomUUID();
-            assertThat(testInstance.hasLeadership(differentSessionID)).isFalse();
+            assertThat(testInstance.hasLeadershipAsync(differentSessionID)).isFalse();
         }
     }
 
     @Test
     void testHasLeadershipWithoutContender() throws Exception {
         try (final LeaderElection testInstance = new StandaloneLeaderElection(SESSION_ID)) {
-            assertThat(testInstance.hasLeadership(SESSION_ID)).isFalse();
+            assertThat(testInstance.hasLeadershipAsync(SESSION_ID)).isFalse();
 
             final UUID differentSessionID = UUID.randomUUID();
-            assertThat(testInstance.hasLeadership(differentSessionID)).isFalse();
+            assertThat(testInstance.hasLeadershipAsync(differentSessionID)).isFalse();
         }
     }
 

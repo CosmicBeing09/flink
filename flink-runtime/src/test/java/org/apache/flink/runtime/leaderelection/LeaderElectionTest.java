@@ -89,16 +89,16 @@ public class LeaderElectionTest {
 
             final UUID leaderSessionId = manualLeaderContender.waitForLeaderSessionId();
 
-            assertThat(leaderElection.hasLeadership(leaderSessionId)).isTrue();
-            assertThat(leaderElection.hasLeadership(UUID.randomUUID())).isFalse();
+            assertThat(leaderElection.hasLeadershipAsync(leaderSessionId)).isTrue();
+            assertThat(leaderElection.hasLeadershipAsync(UUID.randomUUID())).isFalse();
 
             leaderElection.confirmLeadership(leaderSessionId, "foobar");
 
-            assertThat(leaderElection.hasLeadership(leaderSessionId)).isTrue();
+            assertThat(leaderElection.hasLeadershipAsync(leaderSessionId)).isTrue();
 
             leaderElection.close();
 
-            assertThat(leaderElection.hasLeadership(leaderSessionId)).isFalse();
+            assertThat(leaderElection.hasLeadershipAsync(leaderSessionId)).isFalse();
 
             assertThat(manualLeaderContender.waitForLeaderSessionId())
                     .as("The leadership has been revoked from the contender.")

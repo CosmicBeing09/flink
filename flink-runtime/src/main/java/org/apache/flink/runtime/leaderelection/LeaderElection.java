@@ -51,7 +51,7 @@ public interface LeaderElection extends AutoCloseable {
      * @param leaderSessionId identifying the current leader
      * @return true if the associated {@link LeaderContender} is the leader, otherwise false
      */
-    boolean hasLeadership(UUID leaderSessionId);
+    boolean hasLeadershipAsync(UUID leaderSessionId);
 
     /**
      * Closes the {@code LeaderElection} by deregistering the {@link LeaderContender} from the
