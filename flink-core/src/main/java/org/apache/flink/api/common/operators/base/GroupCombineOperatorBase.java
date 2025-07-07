@@ -92,12 +92,12 @@ public class GroupCombineOperatorBase<IN, OUT, FT extends GroupCombineFunction<I
             TypeInformation<IN> typeInfo,
             int[] sortColumns,
             boolean[] sortOrderings,
-            ExecutionConfig executionConfig) {
+            ExecutionConfig config) {
         if (typeInfo instanceof CompositeType) {
             return ((CompositeType<IN>) typeInfo)
-                    .createComparator(sortColumns, sortOrderings, 0, executionConfig);
+                    .createComparator(sortColumns, sortOrderings, 0, config);
         } else if (typeInfo instanceof AtomicType) {
-            return ((AtomicType<IN>) typeInfo).createComparator(sortOrderings[0], executionConfig);
+            return ((AtomicType<IN>) typeInfo).createComparator(sortOrderings[0], config);
         }
 
         throw new InvalidProgramException(
