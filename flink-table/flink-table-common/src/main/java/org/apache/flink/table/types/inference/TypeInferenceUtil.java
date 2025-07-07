@@ -124,11 +124,11 @@ public final class TypeInferenceUtil {
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final AdaptedCallContext castCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
-        final List<DataType> expectedTypes = adaptedCallContext.getArgumentDataTypes();
+        final List<DataType> expectedTypes = castCallContext.getArgumentDataTypes();
         for (int pos = 0; pos < actualTypes.size(); pos++) {
             final DataType expectedType = expectedTypes.get(pos);
             final DataType actualType = actualTypes.get(pos);
@@ -144,7 +144,7 @@ public final class TypeInferenceUtil {
             }
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     /**
