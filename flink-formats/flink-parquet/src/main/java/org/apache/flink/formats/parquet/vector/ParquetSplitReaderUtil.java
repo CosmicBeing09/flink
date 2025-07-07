@@ -183,13 +183,13 @@ public class ParquetSplitReaderUtil {
                 }
                 return byteVector;
             case SMALLINT:
-                HeapShortVector sv = new HeapShortVector(batchSize);
+                HeapShortVector heapShortVector = new HeapShortVector(batchSize);
                 if (value == null) {
-                    sv.fillWithNulls();
+                    heapShortVector.fillWithNulls();
                 } else {
-                    sv.fill(((Number) value).shortValue());
+                    heapShortVector.fill(((Number) value).shortValue());
                 }
-                return sv;
+                return heapShortVector;
             case INTEGER:
                 HeapIntVector iv = new HeapIntVector(batchSize);
                 if (value == null) {

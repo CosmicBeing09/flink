@@ -29,11 +29,11 @@ public class HeapBooleanVector extends AbstractHeapVector implements WritableBoo
 
     private static final long serialVersionUID = 4131239076731313596L;
 
-    public boolean[] vector;
+    public boolean[] heapShortVector;
 
     public HeapBooleanVector(int len) {
         super(len);
-        vector = new boolean[len];
+        heapShortVector = new boolean[len];
     }
 
     @Override
@@ -48,16 +48,16 @@ public class HeapBooleanVector extends AbstractHeapVector implements WritableBoo
 
     @Override
     public boolean getBoolean(int i) {
-        return vector[i];
+        return heapShortVector[i];
     }
 
     @Override
     public void setBoolean(int i, boolean value) {
-        vector[i] = value;
+        heapShortVector[i] = value;
     }
 
     @Override
     public void fill(boolean value) {
-        Arrays.fill(vector, value);
+        Arrays.fill(heapShortVector, value);
     }
 }
