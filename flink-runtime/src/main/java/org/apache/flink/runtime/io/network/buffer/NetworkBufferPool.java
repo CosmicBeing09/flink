@@ -539,7 +539,7 @@ public class NetworkBufferPool
 
         synchronized (factoryLock) {
             if (allBufferPools.remove(bufferPool)) {
-                numTotalRequiredBuffers -= bufferPool.getMinNumberOfMemorySegments();
+                numTotalRequiredBuffers -= bufferPool.getNumberOfRequiredMemorySegments();
                 resizableBufferPools.remove(bufferPool);
 
                 redistributeBuffers();
@@ -611,7 +611,7 @@ public class NetworkBufferPool
         if (numAvailableMemorySegment == 0) {
             // in this case, we need to redistribute buffers so that every pool gets its minimum
             for (LocalBufferPool bufferPool : resizableBufferPools) {
-                bufferPool.setNumBuffers(bufferPool.getMinNumberOfMemorySegments());
+                bufferPool.setNumBuffers(bufferPool.getNumberOfRequiredMemorySegments());
             }
             return;
         }
@@ -621,7 +621,7 @@ public class NetworkBufferPool
         int totalWeight = 0;
         int numBuffersToBeRedistributed = numAvailableMemorySegment;
         for (LocalBufferPool bufferPool : resizableBufferPools) {
-            numBuffersToBeRedistributed += bufferPool.getMinNumberOfMemorySegments();
+            numBuffersToBeRedistributed += bufferPool.getNumberOfRequiredMemorySegments();
             totalWeight += bufferPool.getExpectedNumberOfMemorySegments();
         }
 
@@ -640,7 +640,7 @@ public class NetworkBufferPool
                     Math.min(
                             bufferPool.getMaxNumberOfMemorySegments(),
                             Math.max(
-                                    bufferPool.getMinNumberOfMemorySegments(), expectedNumBuffers));
+                                    bufferPool.getNumberOfRequiredMemorySegments(), expectedNumBuffers));
             cachedPoolSize.put(bufferPool, actualAllocated);
             totalAllocated += actualAllocated;
         }
@@ -664,7 +664,7 @@ public class NetworkBufferPool
         for (LocalBufferPool bufferPool : resizableBufferPools) {
             bufferPool.setNumBuffers(
                     cachedPoolSize.getOrDefault(
-                            bufferPool, bufferPool.getMinNumberOfMemorySegments()));
+                            bufferPool, bufferPool.getNumberOfRequiredMemorySegments()));
         }
     }
 
@@ -716,7 +716,7 @@ public class NetworkBufferPool
 
             int totalWeight = 0;
             for (LocalBufferPool bufferPool : resizableBufferPools) {
-                if (cachedPoolSize.get(bufferPool) == bufferPool.getMinNumberOfMemorySegments()) {
+                if (cachedPoolSize.get(bufferPool) == bufferPool.getNumberOfRequiredMemorySegments()) {
                     continue;
                 }
                 poolsToBeRedistributed.add(bufferPool);
@@ -737,7 +737,7 @@ public class NetworkBufferPool
                                                                 .getExpectedNumberOfMemorySegments()));
                 int numBuffers =
                         Math.max(
-                                bufferPool.getMinNumberOfMemorySegments(),
+                                bufferPool.getNumberOfRequiredMemorySegments(),
                                 cachedPoolSize.get(bufferPool) - extraDeallocated);
                 totalDeallocated += cachedPoolSize.get(bufferPool) - numBuffers;
                 cachedPoolSize.put(bufferPool, numBuffers);
