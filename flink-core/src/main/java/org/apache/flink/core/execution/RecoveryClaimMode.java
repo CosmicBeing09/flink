@@ -31,7 +31,7 @@ import static org.apache.flink.configuration.description.TextElement.text;
  * be adjusted accordingly.
  */
 @PublicEvolving
-public enum RestoreMode implements DescribedEnum {
+public enum RecoveryClaimMode implements DescribedEnum {
     CLAIM(
             "Flink will take ownership of the given snapshot. It will clean the"
                     + " snapshot once it is subsumed by newer ones."),
@@ -51,7 +51,7 @@ public enum RestoreMode implements DescribedEnum {
 
     private final String description;
 
-    RestoreMode(String description) {
+    RecoveryClaimMode(String description) {
         this.description = description;
     }
 
@@ -61,5 +61,5 @@ public enum RestoreMode implements DescribedEnum {
         return text(description);
     }
 
-    public static final RestoreMode DEFAULT = NO_CLAIM;
+    public static final RecoveryClaimMode DEFAULT = NO_CLAIM;
 }

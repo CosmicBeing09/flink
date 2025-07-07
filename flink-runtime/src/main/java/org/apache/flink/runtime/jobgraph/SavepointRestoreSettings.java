@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobgraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.configuration.StateRecoveryOptions;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 
 import javax.annotation.Nonnull;
 
@@ -37,7 +37,7 @@ public class SavepointRestoreSettings implements Serializable {
 
     /** No restore should happen. */
     private static final SavepointRestoreSettings NONE =
-            new SavepointRestoreSettings(null, false, RestoreMode.NO_CLAIM);
+            new SavepointRestoreSettings(null, false, RecoveryClaimMode.NO_CLAIM);
 
     /** Savepoint restore path. */
     private final String restorePath;
@@ -48,7 +48,7 @@ public class SavepointRestoreSettings implements Serializable {
      */
     private final boolean allowNonRestoredState;
 
-    private final @Nonnull RestoreMode restoreMode;
+    private final @Nonnull RecoveryClaimMode restoreMode;
 
     /**
      * Creates the restore settings.
@@ -58,7 +58,7 @@ public class SavepointRestoreSettings implements Serializable {
      * @param restoreMode how to restore from the savepoint
      */
     private SavepointRestoreSettings(
-            String restorePath, boolean allowNonRestoredState, @Nonnull RestoreMode restoreMode) {
+            String restorePath, boolean allowNonRestoredState, @Nonnull RecoveryClaimMode restoreMode) {
         this.restorePath = restorePath;
         this.allowNonRestoredState = allowNonRestoredState;
         this.restoreMode = restoreMode;
@@ -94,7 +94,7 @@ public class SavepointRestoreSettings implements Serializable {
     }
 
     /** Tells how to restore from the given savepoint. */
-    public @Nonnull RestoreMode getRestoreMode() {
+    public @Nonnull RecoveryClaimMode getRecoveryClaimMode() {
         return restoreMode;
     }
 
@@ -160,7 +160,7 @@ public class SavepointRestoreSettings implements Serializable {
     }
 
     public static SavepointRestoreSettings forPath(
-            String savepointPath, boolean allowNonRestoredState, @Nonnull RestoreMode restoreMode) {
+            String savepointPath, boolean allowNonRestoredState, @Nonnull RecoveryClaimMode restoreMode) {
         checkNotNull(savepointPath, "Savepoint restore path.");
         return new SavepointRestoreSettings(savepointPath, allowNonRestoredState, restoreMode);
     }
@@ -175,7 +175,7 @@ public class SavepointRestoreSettings implements Serializable {
                 StateRecoveryOptions.SAVEPOINT_IGNORE_UNCLAIMED_STATE,
                 savepointRestoreSettings.allowNonRestoredState());
         configuration.set(
-                StateRecoveryOptions.RESTORE_MODE, savepointRestoreSettings.getRestoreMode());
+                StateRecoveryOptions.RESTORE_MODE, savepointRestoreSettings.getRecoveryClaimMode());
         final String savepointPath = savepointRestoreSettings.getRestorePath();
         if (savepointPath != null) {
             configuration.set(StateRecoveryOptions.SAVEPOINT_PATH, savepointPath);
@@ -186,7 +186,7 @@ public class SavepointRestoreSettings implements Serializable {
         final String savepointPath = configuration.get(StateRecoveryOptions.SAVEPOINT_PATH);
         final boolean allowNonRestored =
                 configuration.get(StateRecoveryOptions.SAVEPOINT_IGNORE_UNCLAIMED_STATE);
-        final RestoreMode restoreMode = configuration.get(StateRecoveryOptions.RESTORE_MODE);
+        final RecoveryClaimMode restoreMode = configuration.get(StateRecoveryOptions.RESTORE_MODE);
         return savepointPath == null
                 ? SavepointRestoreSettings.none()
                 : SavepointRestoreSettings.forPath(savepointPath, allowNonRestored, restoreMode);
