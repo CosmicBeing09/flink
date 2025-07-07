@@ -145,7 +145,7 @@ public final class MiniClusterExtension
 
     private InternalMiniClusterExtension internalMiniClusterExtension;
 
-    private TestEnvironment executionEnvironment;
+    private TestEnvironment streamExecutionEnvironment;
 
     public MiniClusterExtension() {
         this(
@@ -250,8 +250,8 @@ public final class MiniClusterExtension
         }
     }
 
-    public TestEnvironment getTestEnvironment() {
-        return this.executionEnvironment;
+    public TestEnvironment getStreamExecutionEnvironment() {
+        return this.streamExecutionEnvironment;
     }
 
     // Implementation
@@ -269,12 +269,12 @@ public final class MiniClusterExtension
                 new TestEnvironment(
                         internalMiniClusterExtension.getMiniCluster(), defaultParallelism, false);
         executionEnvironment.setAsContext();
-        this.executionEnvironment =
+        this.streamExecutionEnvironment =
                 new TestEnvironment(
                         internalMiniClusterExtension.getMiniCluster(),
                         internalMiniClusterExtension.getNumberSlots(),
                         false);
-        this.executionEnvironment.setAsContext();
+        this.streamExecutionEnvironment.setAsContext();
         TestStreamEnvironment.setAsContext(
                 internalMiniClusterExtension.getMiniCluster(), defaultParallelism);
     }
