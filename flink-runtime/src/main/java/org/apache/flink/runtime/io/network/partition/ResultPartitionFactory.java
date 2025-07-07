@@ -71,7 +71,7 @@ public class ResultPartitionFactory {
 
     private final int configuredNetworkBuffersPerChannel;
 
-    private final int floatingNetworkBuffersPerGate;
+    private final int requiredFloatingBuffers;
 
     private final int networkBufferSize;
 
@@ -103,7 +103,7 @@ public class ResultPartitionFactory {
             ScheduledExecutorService batchShuffleReadIOExecutor,
             BoundedBlockingSubpartitionType blockingSubpartitionType,
             int configuredNetworkBuffersPerChannel,
-            int floatingNetworkBuffersPerGate,
+            int requiredFloatingBuffers,
             int networkBufferSize,
             boolean batchShuffleCompressionEnabled,
             CompressionCodec compressionCodec,
@@ -119,7 +119,7 @@ public class ResultPartitionFactory {
         this.partitionManager = partitionManager;
         this.channelManager = channelManager;
         this.configuredNetworkBuffersPerChannel = configuredNetworkBuffersPerChannel;
-        this.floatingNetworkBuffersPerGate = floatingNetworkBuffersPerGate;
+        this.requiredFloatingBuffers = requiredFloatingBuffers;
         this.bufferPoolFactory = bufferPoolFactory;
         this.batchShuffleReadBufferPool = batchShuffleReadBufferPool;
         this.batchShuffleReadIOExecutor = batchShuffleReadIOExecutor;
@@ -386,7 +386,7 @@ public class ResultPartitionFactory {
             Tuple3<Integer, Integer, Integer> tuple =
                     NettyShuffleUtils.getMinMaxNetworkBuffersPerResultPartition(
                             configuredNetworkBuffersPerChannel,
-                            floatingNetworkBuffersPerGate,
+                            requiredFloatingBuffers,
                             sortShuffleMinParallelism,
                             sortShuffleMinBuffers,
                             numberOfSubpartitions,

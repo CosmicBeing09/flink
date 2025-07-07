@@ -318,14 +318,14 @@ class ResultPartitionTest {
     private void testPartitionBufferPool(ResultPartitionType type) throws Exception {
         // setup
         final int networkBuffersPerChannel = 2;
-        final int floatingNetworkBuffersPerGate = 8;
+        final int requiredFloatingBuffers = 8;
         final NetworkBufferPool globalPool = new NetworkBufferPool(20, 1);
         final ResultPartition partition =
                 new ResultPartitionBuilder()
                         .setResultPartitionType(type)
                         .setFileChannelManager(fileChannelManager)
                         .setNetworkBuffersPerChannel(networkBuffersPerChannel)
-                        .setFloatingNetworkBuffersPerGate(floatingNetworkBuffersPerGate)
+                        .setRequiredFloatingBuffers(requiredFloatingBuffers)
                         .setNetworkBufferPool(globalPool)
                         .build();
 
@@ -338,7 +338,7 @@ class ResultPartitionTest {
             if (type.isBounded()) {
                 final int maxNumBuffers =
                         networkBuffersPerChannel * partition.getNumberOfSubpartitions()
-                                + floatingNetworkBuffersPerGate;
+                                + requiredFloatingBuffers;
                 assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(maxNumBuffers);
             } else {
                 assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);

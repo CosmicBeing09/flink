@@ -454,14 +454,14 @@ public class NetworkBufferPool
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
+            int requiredFloatingBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
+                requiredFloatingBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
     }
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers,
+            int requiredFloatingBuffers,
             int minUsedBuffers,
             int maxUsedBuffers,
             int numSubpartitions,
@@ -469,7 +469,7 @@ public class NetworkBufferPool
             int maxOverdraftBuffersPerGate)
             throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers,
+                requiredFloatingBuffers,
                 minUsedBuffers,
                 maxUsedBuffers,
                 numSubpartitions,
@@ -478,7 +478,7 @@ public class NetworkBufferPool
     }
 
     private BufferPool internalCreateBufferPool(
-            int numExpectedBuffers,
+            int requiredFloatingBuffers,
             int minUsedBuffers,
             int maxUsedBuffers,
             int numSubpartitions,
@@ -512,7 +512,7 @@ public class NetworkBufferPool
             LocalBufferPool localBufferPool =
                     new LocalBufferPool(
                             this,
-                            numExpectedBuffers,
+                            requiredFloatingBuffers,
                             minUsedBuffers,
                             maxUsedBuffers,
                             numSubpartitions,
