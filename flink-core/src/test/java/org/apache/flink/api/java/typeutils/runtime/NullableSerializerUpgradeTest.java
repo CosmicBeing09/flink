@@ -88,7 +88,7 @@ class NullableSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Long, 
         }
 
         @Override
-        public Matcher<Long> testDataMatcher() {
+        public Matcher<Long> testDataCondition() {
             return is((Long) null);
         }
 
@@ -132,7 +132,7 @@ class NullableSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Long, 
         }
 
         @Override
-        public Matcher<Long> testDataMatcher() {
+        public Matcher<Long> testDataCondition() {
             return is((Long) null);
         }
 

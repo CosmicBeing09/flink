@@ -84,7 +84,7 @@ class LockableTypeSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Lockable<String>> testDataMatcher() {
+        public Matcher<Lockable<String>> testDataCondition() {
             return is(new Lockable<>("flink", 10));
         }
 

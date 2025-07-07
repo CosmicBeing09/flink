@@ -92,7 +92,7 @@ class TupleSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Tuple3<String, String, Integer>> testDataMatcher() {
+        public Matcher<Tuple3<String, String, Integer>> testDataCondition() {
             return is(new Tuple3<>("hello Gordon", "ciao", 14));
         }
 
