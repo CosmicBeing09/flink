@@ -259,7 +259,7 @@ class NettyShuffleEnvironmentTest {
 
         int channels = 2;
         int rp4Channels = 4;
-        int floatingBuffers = network.getConfiguration().floatingNetworkBuffersPerGate();
+        int floatingBuffers = network.getConfiguration().requiredFloatingBuffers();
         int exclusiveBuffers = network.getConfiguration().networkBuffersPerChannel();
 
         int expectedBuffers = channels * exclusiveBuffers + floatingBuffers;
