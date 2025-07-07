@@ -240,7 +240,7 @@ public abstract class AbstractStreamTableEnvironmentImpl extends TableEnvironmen
      * StreamExecutionEnvironment at all.
      */
     @Internal
-    public StreamExecutionEnvironment execEnv() {
+    public StreamExecutionEnvironment streamExecutionEnvironment() {
         return executionEnvironment;
     }
 
