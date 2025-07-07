@@ -504,12 +504,12 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
 
     @Experimental
     public long getAsyncStateActiveBufferTimeout() {
-        return configuration.get(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT);
+        return configuration.get(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT);
     }
 
     @Experimental
     public ExecutionConfig setAsyncStateActiveBufferTimeout(long timeout) {
-        configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, timeout);
+        configuration.set(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT, timeout);
         return this;
     }
 
