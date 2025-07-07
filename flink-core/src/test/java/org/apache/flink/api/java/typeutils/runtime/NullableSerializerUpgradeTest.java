@@ -93,7 +93,7 @@ class NullableSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Long, 
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Long>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Long>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -137,7 +137,7 @@ class NullableSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Long, 
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Long>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Long>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

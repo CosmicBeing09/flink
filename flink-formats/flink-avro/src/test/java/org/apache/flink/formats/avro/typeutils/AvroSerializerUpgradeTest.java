@@ -110,7 +110,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<GenericRecord>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<GenericRecord>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -172,7 +172,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Address>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Address>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

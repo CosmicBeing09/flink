@@ -95,7 +95,7 @@ class OptionSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Option<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

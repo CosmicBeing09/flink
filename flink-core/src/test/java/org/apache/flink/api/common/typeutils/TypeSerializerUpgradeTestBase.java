@@ -106,7 +106,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
          * that the serializer upgrade produced with an expected {@link
          * TypeSerializerSchemaCompatibility}.
          */
-        Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>> schemaCompatibilityMatcher(
+        Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>> schemaCompatibilityCondition(
                 FlinkVersion version);
     }
 
@@ -185,10 +185,10 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             try (ThreadContextClassLoader ignored =
                     new ThreadContextClassLoader(verifierClassloader)) {
-                return delegateVerifier.schemaCompatibilityMatcher(version);
+                return delegateVerifier.schemaCompatibilityCondition(version);
             }
         }
     }
@@ -281,7 +281,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
                     .is(
                             HamcrestCondition.matching(
                                     not(
-                                            testSpecification.verifier.schemaCompatibilityMatcher(
+                                            testSpecification.verifier.schemaCompatibilityCondition(
                                                     testSpecification.flinkVersion))));
 
             TypeSerializerSnapshot<UpgradedElementT> restoredSerializerSnapshot =
@@ -316,7 +316,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertThat(upgradeCompatibility)
                     .is(
                             HamcrestCondition.matching(
-                                    testSpecification.verifier.schemaCompatibilityMatcher(
+                                    testSpecification.verifier.schemaCompatibilityCondition(
                                             testSpecification.flinkVersion)));
         }
     }

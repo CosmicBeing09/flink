@@ -152,7 +152,7 @@ class CopyableSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<SimpleCopyable>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
