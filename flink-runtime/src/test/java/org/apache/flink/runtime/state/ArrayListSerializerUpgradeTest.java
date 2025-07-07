@@ -95,7 +95,7 @@ class ArrayListSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<ArrayList<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

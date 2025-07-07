@@ -95,7 +95,7 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<TimeWindow>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<TimeWindow>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -138,7 +138,7 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<GlobalWindow>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<GlobalWindow>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
