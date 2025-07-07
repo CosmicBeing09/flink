@@ -83,8 +83,8 @@ public abstract class QueryOperationDefaultVisitor<T> implements QueryOperationV
     }
 
     @Override
-    public T visit(CalculatedQueryOperation calculatedTable) {
-        return defaultMethod(calculatedTable);
+    public T visit(CalculatedQueryOperation correlatedFunctionTable) {
+        return defaultMethod(correlatedFunctionTable);
     }
 
     @Override
