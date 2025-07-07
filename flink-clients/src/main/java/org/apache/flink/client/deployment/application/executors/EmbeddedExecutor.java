@@ -140,7 +140,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
         final Duration timeout = configuration.get(ClientOptions.CLIENT_TIMEOUT);
 
         final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+                PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassloader);
         final JobID actualJobId = jobGraph.getJobID();
 
         this.submittedJobIds.add(actualJobId);
