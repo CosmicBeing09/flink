@@ -122,7 +122,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
             StandaloneApplicationClusterConfiguration clusterConfiguration) {
         Configuration configuration = loadConfiguration(clusterConfiguration);
         setStaticJobId(clusterConfiguration, configuration);
-        setJobJarFile(clusterConfiguration, configuration);
+        setJobJars(clusterConfiguration, configuration);
         SavepointRestoreSettings.toConfiguration(
                 clusterConfiguration.getSavepointRestoreSettings(), configuration);
         return configuration;
@@ -133,14 +133,14 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
             Configuration flinkConfiguration)
             throws FlinkException {
         final File userLibDir = ClusterEntrypointUtils.tryFindUserLibDirectory().orElse(null);
-        File jarFile =
+        File jars =
                 clusterConfiguration.getJarFile() == null
                         ? null
                         : fetchJarFileForApplicationMode(flinkConfiguration).get(0);
         final PackagedProgramRetriever programRetriever =
                 DefaultPackagedProgramRetriever.create(
                         userLibDir,
-                        jarFile,
+                        jars,
                         clusterConfiguration.getJobClassName(),
                         clusterConfiguration.getArgs(),
                         flinkConfiguration);
@@ -156,7 +156,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
         }
     }
 
-    private static void setJobJarFile(
+    private static void setJobJars(
             StandaloneApplicationClusterConfiguration clusterConfiguration,
             Configuration configuration) {
         final String jarFile = clusterConfiguration.getJarFile();
