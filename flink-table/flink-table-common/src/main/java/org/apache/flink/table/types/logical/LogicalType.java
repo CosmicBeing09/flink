@@ -58,11 +58,11 @@ public abstract class LogicalType implements Serializable {
 
     private final boolean isNullable;
 
-    private final LogicalTypeRoot typeRoot;
+    private final LogicalTypeRoot categoryRoot;
 
-    public LogicalType(boolean isNullable, LogicalTypeRoot typeRoot) {
+    public LogicalType(boolean isNullable, LogicalTypeRoot categoryRoot) {
         this.isNullable = isNullable;
-        this.typeRoot = Preconditions.checkNotNull(typeRoot);
+        this.categoryRoot = Preconditions.checkNotNull(categoryRoot);
     }
 
     /** Returns whether a value of this type can be {@code null}. */
@@ -74,7 +74,7 @@ public abstract class LogicalType implements Serializable {
      * Returns the root of this type. It is an essential description without additional parameters.
      */
     public LogicalTypeRoot getTypeRoot() {
-        return typeRoot;
+        return categoryRoot;
     }
 
     /**
@@ -83,7 +83,7 @@ public abstract class LogicalType implements Serializable {
      * @param typeRoot The root type to check against for equality
      */
     public boolean is(LogicalTypeRoot typeRoot) {
-        return this.typeRoot == typeRoot;
+        return this.categoryRoot == typeRoot;
     }
 
     /**
@@ -92,7 +92,7 @@ public abstract class LogicalType implements Serializable {
      * @param typeRoots The root types to check against for equality
      */
     public boolean isAnyOf(LogicalTypeRoot... typeRoots) {
-        return Arrays.stream(typeRoots).anyMatch(tr -> this.typeRoot == tr);
+        return Arrays.stream(typeRoots).anyMatch(tr -> this.categoryRoot == tr);
     }
 
     /**
@@ -102,7 +102,7 @@ public abstract class LogicalType implements Serializable {
      * @param typeFamilies The families to check against for equality
      */
     public boolean isAnyOf(LogicalTypeFamily... typeFamilies) {
-        return Arrays.stream(typeFamilies).anyMatch(tf -> this.typeRoot.getFamilies().contains(tf));
+        return Arrays.stream(typeFamilies).anyMatch(tf -> this.categoryRoot.getFamilies().contains(tf));
     }
 
     /**
@@ -111,7 +111,7 @@ public abstract class LogicalType implements Serializable {
      * @param family The family type to check against for equality
      */
     public boolean is(LogicalTypeFamily family) {
-        return typeRoot.getFamilies().contains(family);
+        return categoryRoot.getFamilies().contains(family);
     }
 
     /**
@@ -221,12 +221,12 @@ public abstract class LogicalType implements Serializable {
             return false;
         }
         LogicalType that = (LogicalType) o;
-        return isNullable == that.isNullable && typeRoot == that.typeRoot;
+        return isNullable == that.isNullable && categoryRoot == that.categoryRoot;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isNullable, typeRoot);
+        return Objects.hash(isNullable, categoryRoot);
     }
 
     // --------------------------------------------------------------------------------------------
