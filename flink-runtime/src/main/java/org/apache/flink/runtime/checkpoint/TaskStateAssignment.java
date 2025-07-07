@@ -252,7 +252,7 @@ class TaskStateAssignment {
             BiFunction<TaskStateAssignment, Boolean, SubtasksRescaleMapping> mappingRetriever,
             Map<Integer, SubtasksRescaleMapping> subtaskGateOrPartitionMappings,
             Function<Integer, SubtasksRescaleMapping> subtaskMappingCalculator) {
-        if (!expectedOperatorID.equals(instanceID.getOperatorId())) {
+        if (!expectedOperatorID.equals(instanceID.getOperatorIdentifier())) {
             return InflightDataRescalingDescriptor.NO_RESCALE;
         }
 
