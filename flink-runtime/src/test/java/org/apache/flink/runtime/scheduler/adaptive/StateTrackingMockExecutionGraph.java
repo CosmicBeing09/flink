@@ -183,7 +183,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getPlan() {
         return "";
     }
 
@@ -193,7 +193,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public void setJsonPlan(String jsonPlan) {}
+    public void setPlan(String plan) {}
 
     @Override
     public JobID getJobID() {

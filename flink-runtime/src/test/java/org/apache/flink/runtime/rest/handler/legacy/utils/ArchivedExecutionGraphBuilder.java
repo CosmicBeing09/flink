@@ -51,7 +51,7 @@ public class ArchivedExecutionGraphBuilder {
     private long[] stateTimestamps;
     private JobStatus state;
     private ErrorInfo failureCause;
-    private String jsonPlan;
+    private String plan;
     private StringifiedAccumulatorResult[] archivedUserAccumulators;
     private ArchivedExecutionConfig archivedExecutionConfig;
     private boolean isStoppable;
@@ -98,8 +98,8 @@ public class ArchivedExecutionGraphBuilder {
         return this;
     }
 
-    public ArchivedExecutionGraphBuilder setJsonPlan(String jsonPlan) {
-        this.jsonPlan = jsonPlan;
+    public ArchivedExecutionGraphBuilder setPlan(String jsonPlan) {
+        this.plan = jsonPlan;
         return this;
     }
 
@@ -161,8 +161,8 @@ public class ArchivedExecutionGraphBuilder {
                 state != null ? state : JobStatus.FINISHED,
                 JobType.STREAMING,
                 failureCause,
-                jsonPlan != null
-                        ? jsonPlan
+                plan != null
+                        ? plan
                         : "{\"jobid\":\""
                                 + jobID
                                 + "\", \"name\":\""

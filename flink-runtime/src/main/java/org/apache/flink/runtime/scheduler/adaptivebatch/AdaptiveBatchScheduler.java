@@ -274,7 +274,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler implements JobGraph
         logicalTopology = DefaultLogicalTopology.fromJobGraph(getJobGraph());
 
         // 4. update json plan
-        getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
+        getExecutionGraph().setPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
 
         // 5. In broadcast join optimization, results might be written first with a hash
         // method and then read with a broadcast method. Therefore, we need to update the
@@ -837,11 +837,11 @@ public class AdaptiveBatchScheduler extends DefaultScheduler implements JobGraph
         // job vertices
         jobVertex.getJobVertex().setDynamicParallelism(parallelism);
         try {
-            getExecutionGraph().setJsonPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
+            getExecutionGraph().setPlan(JsonPlanGenerator.generatePlan(getJobGraph()));
         } catch (Throwable t) {
             log.warn("Cannot create JSON plan for job", t);
             // give the graph an empty plan
-            getExecutionGraph().setJsonPlan("{}");
+            getExecutionGraph().setPlan("{}");
         }
 
         jobVertex.setParallelism(parallelism);
