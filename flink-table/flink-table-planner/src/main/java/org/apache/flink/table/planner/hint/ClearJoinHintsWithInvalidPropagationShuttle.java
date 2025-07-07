@@ -105,12 +105,12 @@ public class ClearJoinHintsWithInvalidPropagationShuttle extends JoinHintsRelShu
         private final Deque<Integer> currentInheritPath;
 
         // the join hint that need be removed
-        private final RelHint joinHintNeedRemove;
+        private final RelHint queryHintNeedRemove;
 
-        public ClearOuterJoinHintShuttle(RelHint joinHintNeedRemove) {
-            this.joinHintNeedRemove = joinHintNeedRemove;
+        public ClearOuterJoinHintShuttle(RelHint queryHintNeedRemove) {
+            this.queryHintNeedRemove = queryHintNeedRemove;
             this.currentInheritPath = new ArrayDeque<>();
-            this.currentInheritPath.addAll(joinHintNeedRemove.inheritPath);
+            this.currentInheritPath.addAll(queryHintNeedRemove.inheritPath);
         }
 
         @Override
@@ -163,7 +163,7 @@ public class ClearJoinHintsWithInvalidPropagationShuttle extends JoinHintsRelShu
          */
         private Optional<RelHint> getInvalidJoinHint(List<RelHint> hints) {
             for (RelHint hint : hints) {
-                if (hint.hintName.equals(joinHintNeedRemove.hintName)
+                if (hint.hintName.equals(queryHintNeedRemove.hintName)
                         && isMatchInvalidInheritPath(
                                 new ArrayList<>(currentInheritPath), hint.inheritPath)) {
                     return Optional.of(hint);
