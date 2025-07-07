@@ -45,7 +45,7 @@ import org.apache.flink.table.legacy.api.TableSchema;
 import org.apache.flink.table.legacy.sources.LookupableTableSource;
 import org.apache.flink.table.legacy.sources.TableSource;
 import org.apache.flink.table.operations.AggregateQueryOperation;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
+import org.apache.flink.table.operations.CorrelatedFunctionTableFactory;
 import org.apache.flink.table.operations.DataStreamQueryOperation;
 import org.apache.flink.table.operations.DistinctQueryOperation;
 import org.apache.flink.table.operations.ExternalQueryOperation;
@@ -288,15 +288,15 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         @Override
-        public RelNode visit(CalculatedQueryOperation calculatedTable) {
-            final ContextResolvedFunction resolvedFunction = calculatedTable.getResolvedFunction();
-            final List<RexNode> parameters = convertToRexNodes(calculatedTable.getArguments());
+        public RelNode visit(CorrelatedFunctionTableFactory correlatedFunctionTable) {
+            final ContextResolvedFunction resolvedFunction = correlatedFunctionTable.getResolvedFunction();
+            final List<RexNode> parameters = convertToRexNodes(correlatedFunctionTable.getArguments());
 
             final FunctionDefinition functionDefinition = resolvedFunction.getDefinition();
             if (functionDefinition instanceof TableFunctionDefinition) {
                 final FlinkTypeFactory typeFactory = relBuilder.getTypeFactory();
                 return convertLegacyTableFunction(
-                        calculatedTable,
+                        correlatedFunctionTable,
                         (TableFunctionDefinition) functionDefinition,
                         parameters,
                         typeFactory);
@@ -310,13 +310,13 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
                     sqlFunction,
                     0,
                     parameters,
-                    calculatedTable.getResolvedSchema().getColumnNames());
+                    correlatedFunctionTable.getResolvedSchema().getColumnNames());
 
             return relBuilder.build();
         }
 
         private RelNode convertLegacyTableFunction(
-                CalculatedQueryOperation calculatedTable,
+                CorrelatedFunctionTableFactory calculatedTable,
                 TableFunctionDefinition functionDefinition,
                 List<RexNode> parameters,
                 FlinkTypeFactory typeFactory) {
