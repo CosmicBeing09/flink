@@ -201,7 +201,7 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
 
     @Override
     protected List<OUT> executeOnCollections(
-            List<IN1> input1, List<IN2> input2, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN1> input1, List<IN2> input2, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         // --------------------------------------------------------------------
         // Setup
@@ -218,13 +218,13 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
         Arrays.fill(inputDirections1, true);
         Arrays.fill(inputDirections2, true);
 
-        final TypeSerializer<IN1> inputSerializer1 = inputType1.createSerializer(executionConfig);
-        final TypeSerializer<IN2> inputSerializer2 = inputType2.createSerializer(executionConfig);
+        final TypeSerializer<IN1> inputSerializer1 = inputType1.createSerializer(config);
+        final TypeSerializer<IN2> inputSerializer2 = inputType2.createSerializer(config);
 
         final TypeComparator<IN1> inputComparator1 =
-                getTypeComparator(executionConfig, inputType1, inputKeys1, inputDirections1);
+                getTypeComparator(config, inputType1, inputKeys1, inputDirections1);
         final TypeComparator<IN2> inputComparator2 =
-                getTypeComparator(executionConfig, inputType2, inputKeys2, inputDirections2);
+                getTypeComparator(config, inputType2, inputKeys2, inputDirections2);
 
         final TypeComparator<IN1> inputSortComparator1;
         final TypeComparator<IN2> inputSortComparator2;
@@ -251,7 +251,7 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
                     groupSortDirections.length);
 
             inputSortComparator1 =
-                    getTypeComparator(executionConfig, inputType1, allSortKeys, allSortDirections);
+                    getTypeComparator(config, inputType1, allSortKeys, allSortDirections);
         }
 
         if (groupOrder2 == null || groupOrder2.getNumberOfFields() == 0) {
@@ -276,7 +276,7 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
                     groupSortDirections.length);
 
             inputSortComparator2 =
-                    getTypeComparator(executionConfig, inputType2, allSortKeys, allSortDirections);
+                    getTypeComparator(config, inputType2, allSortKeys, allSortDirections);
         }
 
         CoGroupSortListIterator<IN1, IN2> coGroupIterator =
@@ -302,7 +302,7 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
         Collector<OUT> resultCollector =
                 new CopyingListCollector<OUT>(
                         result,
-                        getOperatorInfo().getOutputType().createSerializer(executionConfig));
+                        getOperatorInfo().getOutputType().createSerializer(config));
 
         while (coGroupIterator.next()) {
             function.coGroup(
@@ -316,16 +316,16 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
 
     @SuppressWarnings("unchecked")
     private <T> TypeComparator<T> getTypeComparator(
-            ExecutionConfig executionConfig,
+            ExecutionConfig config,
             TypeInformation<T> inputType,
             int[] inputKeys,
             boolean[] inputSortDirections) {
         if (inputType instanceof CompositeType) {
             return ((CompositeType<T>) inputType)
-                    .createComparator(inputKeys, inputSortDirections, 0, executionConfig);
+                    .createComparator(inputKeys, inputSortDirections, 0, config);
         } else if (inputType instanceof AtomicType) {
             return ((AtomicType<T>) inputType)
-                    .createComparator(inputSortDirections[0], executionConfig);
+                    .createComparator(inputSortDirections[0], config);
         }
 
         throw new InvalidProgramException(

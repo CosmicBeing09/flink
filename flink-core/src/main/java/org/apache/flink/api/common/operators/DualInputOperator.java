@@ -300,6 +300,6 @@ public abstract class DualInputOperator<IN1, IN2, OUT, FT extends Function>
             List<IN1> inputData1,
             List<IN2> inputData2,
             RuntimeContext runtimeContext,
-            ExecutionConfig executionConfig)
+            ExecutionConfig config)
             throws Exception;
 }
