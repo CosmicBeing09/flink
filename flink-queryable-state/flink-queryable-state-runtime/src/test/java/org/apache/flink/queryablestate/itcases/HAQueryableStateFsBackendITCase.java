@@ -78,7 +78,7 @@ class HAQueryableStateFsBackendITCase extends AbstractQueryableStateTestBase {
                                     .build());
 
     @Override
-    protected StateBackend createStateBackend() throws Exception {
+    protected StateBackend createStreamExecutionEnvironment() throws Exception {
         return new FsStateBackend(tmpStateBackendDir.toUri().toString());
     }
 

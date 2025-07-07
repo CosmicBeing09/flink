@@ -78,7 +78,7 @@ class HAQueryableStateRocksDBBackendITCase extends AbstractQueryableStateTestBas
                                     .build());
 
     @Override
-    protected StateBackend createStateBackend() throws Exception {
+    protected StateBackend createStreamExecutionEnvironment() throws Exception {
         return new RocksDBStateBackend(tmpStateBackendDir.toUri().toString());
     }
 
