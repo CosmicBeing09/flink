@@ -84,7 +84,7 @@ public abstract class Grouping<T> {
      * corresponds to the input of the {@code groupBy()} (because of the {@code getDataset()}).
      */
     @Internal
-    public DataSet<T> getInputDataSet() {
+    public DataSet<T> getInputDataStream() {
         return this.inputDataSet;
     }
 

@@ -92,7 +92,7 @@ public class GroupCombineOperator<IN, OUT>
             TypeInformation<OUT> resultType,
             GroupCombineFunction<IN, OUT> function,
             String defaultName) {
-        super(input != null ? input.getInputDataSet() : null, resultType);
+        super(input != null ? input.getInputDataStream() : null, resultType);
 
         this.function = function;
         this.grouper = input;

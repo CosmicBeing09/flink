@@ -104,18 +104,18 @@ public class AggregateOperator<IN> extends SingleInputOperator<IN, IN, Aggregate
     public AggregateOperator(
             Grouping<IN> input, Aggregations function, int field, String aggregateLocationName) {
         super(
-                Preconditions.checkNotNull(input).getInputDataSet(),
-                input.getInputDataSet().getType());
+                Preconditions.checkNotNull(input).getInputDataStream(),
+                input.getInputDataStream().getType());
         Preconditions.checkNotNull(function);
 
         this.aggregateLocationName = aggregateLocationName;
 
-        if (!input.getInputDataSet().getType().isTupleType()) {
+        if (!input.getInputDataStream().getType().isTupleType()) {
             throw new InvalidProgramException(
                     "Aggregating on field positions is only possible on tuple data types.");
         }
 
-        TupleTypeInfoBase<?> inType = (TupleTypeInfoBase<?>) input.getInputDataSet().getType();
+        TupleTypeInfoBase<?> inType = (TupleTypeInfoBase<?>) input.getInputDataStream().getType();
 
         if (field < 0 || field >= inType.getArity()) {
             throw new IllegalArgumentException("Aggregation field position is out of range.");

@@ -76,7 +76,7 @@ public class ReduceOperator<IN> extends SingleInputUdfOperator<IN, IN, ReduceOpe
     }
 
     public ReduceOperator(Grouping<IN> input, ReduceFunction<IN> function, String defaultName) {
-        super(input.getInputDataSet(), input.getInputDataSet().getType());
+        super(input.getInputDataStream(), input.getInputDataStream().getType());
 
         this.function = function;
         this.grouper = input;

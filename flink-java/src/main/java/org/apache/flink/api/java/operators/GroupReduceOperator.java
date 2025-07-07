@@ -106,7 +106,7 @@ public class GroupReduceOperator<IN, OUT>
             TypeInformation<OUT> resultType,
             GroupReduceFunction<IN, OUT> function,
             String defaultName) {
-        super(input != null ? input.getInputDataSet() : null, resultType);
+        super(input != null ? input.getInputDataStream() : null, resultType);
 
         this.function = function;
         this.grouper = input;

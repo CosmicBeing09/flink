@@ -210,7 +210,7 @@ public class SortedGrouping<T> extends Grouping<T> {
         TypeInformation<R> resultType =
                 TypeExtractor.getGroupCombineReturnTypes(
                         combiner,
-                        this.getInputDataSet().getType(),
+                        this.getInputDataStream().getType(),
                         Utils.getCallLocationName(),
                         true);
 
