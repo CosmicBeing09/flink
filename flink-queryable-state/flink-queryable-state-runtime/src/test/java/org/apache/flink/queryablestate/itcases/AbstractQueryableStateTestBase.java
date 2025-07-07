@@ -115,7 +115,7 @@ public abstract class AbstractQueryableStateTestBase {
             new ScheduledExecutorServiceAdapter(EXECUTOR_EXTENSION.getExecutor());
 
     /** State backend to use. */
-    private StateBackend stateBackend;
+    private StateBackend env;
 
     /** Client shared between all the test. */
     protected static QueryableStateClient client;
@@ -129,7 +129,7 @@ public abstract class AbstractQueryableStateTestBase {
     @BeforeEach
     void setUp() throws Exception {
         // NOTE: do not use a shared instance for all tests as the tests may break
-        this.stateBackend = createStateBackend();
+        this.env = createEnv();
 
         assertThat(clusterClient).isNotNull();
 
@@ -142,7 +142,7 @@ public abstract class AbstractQueryableStateTestBase {
      *
      * @return a state backend instance for each unit test
      */
-    protected abstract StateBackend createStateBackend() throws Exception;
+    protected abstract StateBackend createEnv() throws Exception;
 
     /**
      * Runs a simple topology producing random (key, 1) pairs at the sources (where number of keys
@@ -158,7 +158,7 @@ public abstract class AbstractQueryableStateTestBase {
         final int numKeys = 256;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -261,7 +261,7 @@ public abstract class AbstractQueryableStateTestBase {
         final int numKeys = 256;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -337,7 +337,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -385,7 +385,7 @@ public abstract class AbstractQueryableStateTestBase {
                 createLoaderWithCustomKryoSerializer(customSerializerClassName);
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -455,7 +455,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 1000L);
 
@@ -546,7 +546,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because clusterClient is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -607,7 +607,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -676,7 +676,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -726,7 +726,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -803,7 +803,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -906,7 +906,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
@@ -1010,7 +1010,7 @@ public abstract class AbstractQueryableStateTestBase {
         final long numElements = 1024L;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setStateBackend(stateBackend);
+        env.setStateBackend(this.env);
         env.setParallelism(maxParallelism);
         // Very important, because cluster is shared between tests and we
         // don't explicitly check that all slots are available before
