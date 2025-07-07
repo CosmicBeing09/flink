@@ -460,7 +460,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         private final DataTypeFactory typeFactory;
 
-        private final String name;
+        private final String functionName;
 
         private final FunctionDefinition definition;
 
@@ -470,12 +470,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         public TableApiCallContext(
                 DataTypeFactory typeFactory,
-                String name,
+                String functionName,
                 FunctionDefinition definition,
                 List<ResolvedExpression> resolvedArgs,
                 boolean isGroupedAggregation) {
             this.typeFactory = typeFactory;
-            this.name = name;
+            this.functionName = functionName;
             this.definition = definition;
             this.resolvedArgs = resolvedArgs;
             this.isGroupedAggregation = isGroupedAggregation;
@@ -529,7 +529,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public String getName() {
-            return name;
+            return functionName;
         }
 
         @Override
@@ -554,7 +554,8 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 throw new IndexOutOfBoundsException(
                         String.format(
                                 "Not enough arguments to access literal at position %d for function '%s'.",
-                                pos, name));
+                                pos,
+                                functionName));
             }
             return resolvedArgs.get(pos);
         }
