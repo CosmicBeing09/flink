@@ -203,7 +203,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @VisibleForTesting
     public void serializeOutputStateHandle(
             OutputStateHandle handle, DataOutputStream dos) throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        channelStateHandleSerializer.serializeOutputStateHandle(handle, dos);
     }
 
     @VisibleForTesting
@@ -217,7 +217,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @Override
     public void serializeInputChannelStateHandle(InputStateHandle handle, DataOutputStream dos)
             throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        channelStateHandleSerializer.serializeInputStateHandle(handle, dos);
     }
 
     @VisibleForTesting
