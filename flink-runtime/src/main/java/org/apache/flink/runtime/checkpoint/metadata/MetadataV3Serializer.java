@@ -98,8 +98,8 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     protected void serializeOperatorState(OperatorState operatorState, DataOutputStream dos)
             throws IOException {
         // Operator ID
-        dos.writeLong(operatorState.getOperatorID().getLowerPart());
-        dos.writeLong(operatorState.getOperatorID().getUpperPart());
+        dos.writeLong(operatorState.getOperatorIdentifier().getLowerPart());
+        dos.writeLong(operatorState.getOperatorIdentifier().getUpperPart());
 
         // Parallelism
         dos.writeInt(operatorState.getParallelism());
