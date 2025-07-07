@@ -130,7 +130,7 @@ class DataStreamJavaITCase {
                             .setNumberSlotsPerTaskManager(4)
                             .build());
 
-    private StreamExecutionEnvironment env;
+    private StreamExecutionEnvironment streamExecutionEnvironment;
 
     enum ObjectReuse {
         ENABLED,
@@ -173,24 +173,25 @@ class DataStreamJavaITCase {
 
     @BeforeEach
     void before() throws IOException {
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setRuntimeMode(RuntimeExecutionMode.STREAMING);
-        env.setParallelism(4);
+        streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setRuntimeMode(RuntimeExecutionMode.STREAMING);
+        streamExecutionEnvironment.setParallelism(4);
         if (objectReuse == ObjectReuse.ENABLED) {
-            env.getConfig().enableObjectReuse();
+            streamExecutionEnvironment.getConfig().enableObjectReuse();
         } else if (objectReuse == ObjectReuse.DISABLED) {
-            env.getConfig().disableObjectReuse();
+            streamExecutionEnvironment.getConfig().disableObjectReuse();
         }
         final Configuration defaultConfig = new Configuration();
         defaultConfig.set(PipelineOptions.JARS, Collections.emptyList());
-        env.configure(defaultConfig);
+        streamExecutionEnvironment.configure(defaultConfig);
     }
 
     @TestTemplate
     void testFromDataStreamAtomic() {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
-        final DataStream<Integer> dataStream = env.fromData(1, 2, 3, 4, 5);
+        final DataStream<Integer> dataStream = streamExecutionEnvironment.fromData(1, 2, 3, 4, 5);
 
         // wraps the atomic type
         final TableResult result = tableEnv.fromDataStream(dataStream).execute();
@@ -202,7 +203,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testToDataStreamAtomic() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final Table table = tableEnv.fromValues(1, 2, 3, 4, 5);
 
@@ -211,7 +213,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromDataStreamWithRow() {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final TypeInformation<Row> typeInfo =
                 Types.ROW_NAMED(
@@ -226,7 +229,7 @@ class DataStreamJavaITCase {
                     Row.of(null, Row.of(false, null), Collections.singletonMap("world", null))
                 };
 
-        final DataStream<Row> dataStream = env.fromData(Arrays.asList(rows), typeInfo);
+        final DataStream<Row> dataStream = streamExecutionEnvironment.fromData(Arrays.asList(rows), typeInfo);
 
         final TableResult result = tableEnv.fromDataStream(dataStream).execute();
 
@@ -241,7 +244,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testToDataStreamWithRow() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final Row[] rows =
                 new Row[] {
@@ -256,14 +260,15 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToDataStreamWithPojo() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final ComplexPojo[] pojos = {
             ComplexPojo.of(42, "hello", new ImmutablePojo(42.0, null)),
             ComplexPojo.of(42, null, null)
         };
 
-        final DataStream<ComplexPojo> dataStream = env.fromData(pojos);
+        final DataStream<ComplexPojo> dataStream = streamExecutionEnvironment.fromData(pojos);
 
         // reorders columns and enriches the immutable type
         final Table table =
@@ -298,14 +303,15 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToDataStreamWithRaw() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final List<Tuple2<DayOfWeek, ZoneOffset>> rawRecords =
                 Arrays.asList(
                         Tuple2.of(DayOfWeek.MONDAY, ZoneOffset.UTC),
                         Tuple2.of(DayOfWeek.FRIDAY, ZoneOffset.ofHours(5)));
 
-        final DataStream<Tuple2<DayOfWeek, ZoneOffset>> dataStream = env.fromData(rawRecords);
+        final DataStream<Tuple2<DayOfWeek, ZoneOffset>> dataStream = streamExecutionEnvironment.fromData(rawRecords);
 
         // verify incoming type information
         assertThat(dataStream.getType()).isInstanceOf(TupleTypeInfo.class);
@@ -332,7 +338,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToDataStreamEventTime() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final DataStream<Tuple3<Long, Integer, String>> dataStream = getWatermarkedDataStream();
 
@@ -394,9 +401,10 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToDataStreamBypassConversion() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
-        DataStream<Row> dataStream = env.fromData(Row.of(1L, "a"));
+        DataStream<Row> dataStream = streamExecutionEnvironment.fromData(Row.of(1L, "a"));
         Table table = tableEnv.fromDataStream(dataStream);
         DataStream<Row> convertedDataStream = tableEnv.toDataStream(table);
 
@@ -407,7 +415,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToChangelogStreamEventTime() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final DataStream<Tuple3<Long, Integer, String>> dataStream = getWatermarkedDataStream();
 
@@ -463,7 +472,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToChangelogStreamRetract() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final List<Either<Row, Row>> inputOrOutput =
                 Arrays.asList(
@@ -499,7 +509,7 @@ class DataStreamJavaITCase {
                         output(RowKind.UPDATE_BEFORE, "alice", 1),
                         output(RowKind.UPDATE_AFTER, "alice", 101));
 
-        final DataStream<Row> changelogStream = env.fromData(getInput(inputOrOutput));
+        final DataStream<Row> changelogStream = streamExecutionEnvironment.fromData(getInput(inputOrOutput));
         tableEnv.createTemporaryView("t", tableEnv.fromChangelogStream(changelogStream));
 
         final Table result = tableEnv.sqlQuery("SELECT f0, SUM(f1) FROM t GROUP BY f0");
@@ -511,7 +521,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromChangelogStreamUpsert() {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final List<Either<Row, Row>> inputOrOutput =
                 Arrays.asList(
@@ -535,7 +546,7 @@ class DataStreamJavaITCase {
                         output(RowKind.UPDATE_BEFORE, "alice", 2),
                         output(RowKind.UPDATE_AFTER, "alice", 100));
 
-        final DataStream<Row> changelogStream = env.fromData(getInput(inputOrOutput));
+        final DataStream<Row> changelogStream = streamExecutionEnvironment.fromData(getInput(inputOrOutput));
         tableEnv.createTemporaryView(
                 "t",
                 tableEnv.fromChangelogStream(
@@ -550,7 +561,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testFromAndToChangelogStreamUpsert() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final List<Either<Row, Row>> inputOrOutput =
                 Arrays.asList(
@@ -571,7 +583,7 @@ class DataStreamJavaITCase {
                         input(RowKind.UPDATE_AFTER, "alice", 100),
                         output(RowKind.UPDATE_AFTER, "alice", 100));
 
-        final DataStream<Row> changelogStream = env.fromData(getInput(inputOrOutput));
+        final DataStream<Row> changelogStream = streamExecutionEnvironment.fromData(getInput(inputOrOutput));
         tableEnv.createTemporaryView(
                 "t",
                 tableEnv.fromChangelogStream(
@@ -591,7 +603,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testToDataStreamCustomEventTime() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final TableConfig tableConfig = tableEnv.getConfig();
 
@@ -603,7 +616,7 @@ class DataStreamJavaITCase {
         final LocalDateTime localDateTime2 = LocalDateTime.parse("1970-01-01T01:00:00.000");
 
         final DataStream<Tuple2<LocalDateTime, String>> dataStream =
-                env.fromData(
+                streamExecutionEnvironment.fromData(
                         new Tuple2<>(localDateTime1, "alice"), new Tuple2<>(localDateTime2, "bob"));
 
         final Table table =
@@ -652,26 +665,27 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testComplexUnifiedPipelineBatch() {
-        env.setRuntimeMode(RuntimeExecutionMode.BATCH);
+        streamExecutionEnvironment.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
-        final Table resultTable = getComplexUnifiedPipeline(env);
+        final Table resultTable = getComplexUnifiedPipeline(streamExecutionEnvironment);
 
         testResult(resultTable.execute(), Row.of("Bob", 1L), Row.of("Alice", 1L));
     }
 
     @TestTemplate
     void testTableStreamConversionBatch() throws Exception {
-        env.setRuntimeMode(RuntimeExecutionMode.BATCH);
+        streamExecutionEnvironment.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         DataStreamSource<Row> streamSource =
-                env.fromData(
+                streamExecutionEnvironment.fromData(
                         Row.of("Alice"),
                         Row.of("alice"),
                         Row.of("lily"),
                         Row.of("Bob"),
                         Row.of("lily"),
                         Row.of("lily"));
-        StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(env);
+        StreamTableEnvironment tableEnvironment = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
         Table sourceTable = tableEnvironment.fromDataStream(streamSource).as("word");
         tableEnvironment.createTemporaryView("tmp_table", sourceTable);
         Table resultTable = tableEnvironment.sqlQuery("select UPPER(word) as word from tmp_table");
@@ -694,7 +708,7 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testComplexUnifiedPipelineStreaming() {
-        final Table resultTable = getComplexUnifiedPipeline(env);
+        final Table resultTable = getComplexUnifiedPipeline(streamExecutionEnvironment);
 
         // more rows than in batch mode due to incremental computations
         testResult(
@@ -707,7 +721,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testAttachAsDataStream() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         final String input1DataId =
                 TestValuesTableFactory.registerData(Arrays.asList(Row.of(1, "a"), Row.of(2, "b")));
@@ -733,7 +748,7 @@ class DataStreamJavaITCase {
                                         .build())
                         .build());
 
-        tableEnv.createTemporaryView("InputTable2", env.fromData(1, 2, 3));
+        tableEnv.createTemporaryView("InputTable2", streamExecutionEnvironment.fromData(1, 2, 3));
 
         tableEnv.createTemporaryTable(
                 "OutputTable2",
@@ -747,7 +762,7 @@ class DataStreamJavaITCase {
                 .attachAsDataStream();
 
         // submits all source-to-sink pipelines
-        testResult(env.fromData(3, 4, 5), 3, 4, 5);
+        testResult(streamExecutionEnvironment.fromData(3, 4, 5), 3, 4, 5);
 
         assertThat(TestValuesTableFactory.getResultsAsStrings("OutputTable1"))
                 .containsExactlyInAnyOrder("+I[1, a]", "+I[2, b]");
@@ -758,7 +773,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testMultiChangelogStreamUpsert() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
 
         createTableFromElements(
                 tableEnv,
@@ -832,7 +848,8 @@ class DataStreamJavaITCase {
 
     @TestTemplate
     void testResourcePropagation() throws Exception {
-        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);
+        final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(
+                streamExecutionEnvironment);
         assertStreamJarsOf(0);
         assertTableJarsOf(tableEnv, 0);
 
@@ -847,7 +864,7 @@ class DataStreamJavaITCase {
         // but just for testing proper merging.
         final Configuration customConfig = new Configuration();
         customConfig.set(PipelineOptions.JARS, Collections.singletonList(jarPath2));
-        env.configure(customConfig);
+        streamExecutionEnvironment.configure(customConfig);
         assertStreamJarsOf(1);
         assertTableJarsOf(tableEnv, 1);
 
@@ -885,7 +902,7 @@ class DataStreamJavaITCase {
     }
 
     private void assertStreamJarsOf(int size) {
-        assertThat(env.getConfiguration().get(PipelineOptions.JARS)).hasSize(size);
+        assertThat(streamExecutionEnvironment.getConfiguration().get(PipelineOptions.JARS)).hasSize(size);
     }
 
     private Table getComplexUnifiedPipeline(StreamExecutionEnvironment env) {
@@ -945,7 +962,7 @@ class DataStreamJavaITCase {
 
     private DataStream<Tuple3<Long, Integer, String>> getWatermarkedDataStream() {
         final DataStream<Tuple3<Long, Integer, String>> dataStream =
-                env.fromData(
+                streamExecutionEnvironment.fromData(
                         Arrays.asList(
                                 Tuple3.of(1L, 42, "a"),
                                 Tuple3.of(2L, 5, "a"),
@@ -990,7 +1007,8 @@ class DataStreamJavaITCase {
                         .toArray(String[]::new);
         final TypeInformation<?>[] fieldTypes = fieldTypeInfo.toArray(new TypeInformation[0]);
         final DataStream<Row> dataStream =
-                env.fromData(elements).returns(Types.ROW_NAMED(fieldNames, fieldTypes));
+                streamExecutionEnvironment
+                        .fromData(elements).returns(Types.ROW_NAMED(fieldNames, fieldTypes));
         final Table table = tableEnv.fromChangelogStream(dataStream, schema, changelogMode);
         tableEnv.createTemporaryView(name, table);
     }
