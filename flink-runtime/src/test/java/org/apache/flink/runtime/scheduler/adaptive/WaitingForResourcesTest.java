@@ -49,7 +49,7 @@ class WaitingForResourcesTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(WaitingForResourcesTest.class);
 
-    private static final Duration STABILIZATION_TIMEOUT = Duration.ofSeconds(1);
+    private static final Duration STATE_TRANSITION_MANAGER_FACTORY = Duration.ofSeconds(1);
 
     @RegisterExtension private MockContext ctx = new MockContext();
 
@@ -60,7 +60,7 @@ class WaitingForResourcesTest {
 
         ctx.setExpectCreatingExecutionGraph();
 
-        new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
+        new WaitingForResources(ctx, LOG, Duration.ZERO, STATE_TRANSITION_MANAGER_FACTORY);
 
         ctx.runScheduledTasks();
     }
@@ -69,7 +69,7 @@ class WaitingForResourcesTest {
     void testNotEnoughResources() {
         ctx.setHasDesiredResources(() -> false);
         WaitingForResources wfr =
-                new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
+                new WaitingForResources(ctx, LOG, Duration.ZERO, STATE_TRANSITION_MANAGER_FACTORY);
 
         // we expect no state transition.
         wfr.onNewResourcesAvailable();
@@ -79,7 +79,7 @@ class WaitingForResourcesTest {
     void testNotifyNewResourcesAvailable() {
         ctx.setHasDesiredResources(() -> false); // initially, not enough resources
         WaitingForResources wfr =
-                new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
+                new WaitingForResources(ctx, LOG, Duration.ZERO, STATE_TRANSITION_MANAGER_FACTORY);
         ctx.setHasDesiredResources(() -> true); // make resources available
         ctx.setExpectCreatingExecutionGraph();
         wfr.onNewResourcesAvailable(); // .. and notify
@@ -191,7 +191,8 @@ class WaitingForResourcesTest {
     void testNoStateTransitionOnNoResourceTimeout() {
         ctx.setHasDesiredResources(() -> false);
         WaitingForResources wfr =
-                new WaitingForResources(ctx, LOG, Duration.ofMillis(-1), STABILIZATION_TIMEOUT);
+                new WaitingForResources(ctx, LOG, Duration.ofMillis(-1),
+                        STATE_TRANSITION_MANAGER_FACTORY);
 
         ctx.runScheduledTasks();
         assertThat(ctx.hasStateTransition()).isFalse();
@@ -201,7 +202,7 @@ class WaitingForResourcesTest {
     void testStateTransitionOnResourceTimeout() {
         ctx.setHasDesiredResources(() -> false);
         WaitingForResources wfr =
-                new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
+                new WaitingForResources(ctx, LOG, Duration.ZERO, STATE_TRANSITION_MANAGER_FACTORY);
 
         ctx.setExpectCreatingExecutionGraph();
 
