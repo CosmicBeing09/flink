@@ -42,9 +42,8 @@ class DefaultLeaderElection implements LeaderElection {
         parentService.register(componentId, contender);
     }
 
-    @Override
-    public void confirmLeadership(UUID leaderSessionID, String leaderAddress) {
-        parentService.confirmLeadership(componentId, leaderSessionID, leaderAddress);
+    public void confirmLeadershipAsync(UUID leaderSessionID, String leaderAddress) {
+        parentService.confirmLeadershipAsync(componentId, leaderSessionID, leaderAddress);
     }
 
     @Override
@@ -81,7 +80,7 @@ class DefaultLeaderElection implements LeaderElection {
          * the {@link LeaderContender} that is associated with the {@code componentId}. The
          * information is only propagated to the HA backend if the leadership is still acquired.
          */
-        abstract void confirmLeadership(
+        abstract void confirmLeadershipAsync(
                 String componentId, UUID leaderSessionID, String leaderAddress);
 
         /**
