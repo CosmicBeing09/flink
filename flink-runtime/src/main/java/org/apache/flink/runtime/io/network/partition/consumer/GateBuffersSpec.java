@@ -28,18 +28,18 @@ public class GateBuffersSpec {
 
     private final int expectedBuffersPerGate;
 
-    private final int minBuffersPerGate;
+    private final int totalFloatingBuffers;
 
     private final int maxBuffersPerGate;
 
     GateBuffersSpec(
             int effectiveExclusiveBuffersPerChannel,
             int expectedBuffersPerGate,
-            int minBuffersPerGate,
+            int totalFloatingBuffers,
             int maxBuffersPerGate) {
         this.effectiveExclusiveBuffersPerChannel = effectiveExclusiveBuffersPerChannel;
         this.expectedBuffersPerGate = expectedBuffersPerGate;
-        this.minBuffersPerGate = minBuffersPerGate;
+        this.totalFloatingBuffers = totalFloatingBuffers;
         this.maxBuffersPerGate = maxBuffersPerGate;
     }
 
@@ -47,8 +47,8 @@ public class GateBuffersSpec {
         return expectedBuffersPerGate;
     }
 
-    int getMinBuffersPerGate() {
-        return minBuffersPerGate;
+    int getTotalFloatingBuffers() {
+        return totalFloatingBuffers;
     }
 
     public int getMaxBuffersPerGate() {

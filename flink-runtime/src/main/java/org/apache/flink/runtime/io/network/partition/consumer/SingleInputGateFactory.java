@@ -172,7 +172,7 @@ public class SingleInputGateFactory {
                 createBufferPoolFactory(
                         networkBufferPool,
                         gateBuffersSpec.getExpectedBuffersPerGate(),
-                        gateBuffersSpec.getMinBuffersPerGate(),
+                        gateBuffersSpec.getTotalFloatingBuffers(),
                         gateBuffersSpec.getMaxBuffersPerGate());
 
         BufferDecompressor bufferDecompressor = null;
@@ -447,11 +447,11 @@ public class SingleInputGateFactory {
     static SupplierWithException<BufferPool, IOException> createBufferPoolFactory(
             BufferPoolFactory bufferPoolFactory,
             int expectedBuffersPerGate,
-            int minBuffersPerGate,
+            int totalFloatingBuffers,
             int maxBuffersPerGate) {
         return () ->
                 bufferPoolFactory.createBufferPool(
-                        expectedBuffersPerGate, minBuffersPerGate, maxBuffersPerGate);
+                        expectedBuffersPerGate, totalFloatingBuffers, maxBuffersPerGate);
     }
 
     /** Statistics of input channels. */

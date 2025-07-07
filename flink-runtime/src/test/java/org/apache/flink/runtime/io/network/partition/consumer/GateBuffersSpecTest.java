@@ -121,15 +121,15 @@ class GateBuffersSpecTest {
                 createGateBuffersSpec(
                         numInputChannels, partitionType, numExclusiveBuffersPerChannel);
 
-        int minBuffersPerGate = 1;
+        int totalFloatingBuffers = 1;
         int maxBuffersPerGate = 8;
         int numExclusivePerChannel = 0;
 
         checkBuffersInGate(
                 gateBuffersSpec,
                 numExclusivePerChannel,
-                minBuffersPerGate,
-                minBuffersPerGate,
+                totalFloatingBuffers,
+                totalFloatingBuffers,
                 maxBuffersPerGate);
     }
 
@@ -177,12 +177,12 @@ class GateBuffersSpecTest {
             GateBuffersSpec gateBuffersSpec,
             int numExclusivePerChannel,
             int expectedBuffersPerGate,
-            int minBuffersPerGate,
+            int totalFloatingBuffers,
             int maxBuffersPerGate) {
         assertThat(gateBuffersSpec.getEffectiveExclusiveBuffersPerChannel())
                 .isEqualTo(numExclusivePerChannel);
         assertThat(gateBuffersSpec.getExpectedBuffersPerGate()).isEqualTo(expectedBuffersPerGate);
-        assertThat(gateBuffersSpec.getMinBuffersPerGate()).isEqualTo(minBuffersPerGate);
+        assertThat(gateBuffersSpec.getTotalFloatingBuffers()).isEqualTo(totalFloatingBuffers);
         assertThat(gateBuffersSpec.getMaxBuffersPerGate()).isEqualTo(maxBuffersPerGate);
     }
 
