@@ -81,11 +81,11 @@ class VertexFinishedStateCheckerTest {
 
         Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
-                useUidHash ? op1.getUserDefinedOperatorID().get() : op1.getGeneratedOperatorID(),
-                new FullyFinishedOperatorState(op1.getGeneratedOperatorID(), 1, 1));
+                useUidHash ? op1.getUserDefinedOperatorID().get() : op1.getOperatorIdentifier(),
+                new FullyFinishedOperatorState(op1.getOperatorIdentifier(), 1, 1));
         operatorStates.put(
-                op2.getGeneratedOperatorID(),
-                new OperatorState(op2.getGeneratedOperatorID(), 1, 1));
+                op2.getOperatorIdentifier(),
+                new OperatorState(op2.getOperatorIdentifier(), 1, 1));
 
         Set<ExecutionJobVertex> vertices = new HashSet<>();
         vertices.add(graph.getJobVertex(jobVertexID1));
@@ -271,11 +271,11 @@ class VertexFinishedStateCheckerTest {
 
         Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
-                op1.getGeneratedOperatorID(),
-                createOperatorState(op1.getGeneratedOperatorID(), firstOperatorFinishedState));
+                op1.getOperatorIdentifier(),
+                createOperatorState(op1.getOperatorIdentifier(), firstOperatorFinishedState));
         operatorStates.put(
-                op2.getGeneratedOperatorID(),
-                createOperatorState(op2.getGeneratedOperatorID(), secondOperatorFinishedState));
+                op2.getOperatorIdentifier(),
+                createOperatorState(op2.getOperatorIdentifier(), secondOperatorFinishedState));
 
         Set<ExecutionJobVertex> vertices = new HashSet<>();
         vertices.add(graph.getJobVertex(vertex1.getID()));

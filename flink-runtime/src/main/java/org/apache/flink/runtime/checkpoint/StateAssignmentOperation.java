@@ -113,7 +113,7 @@ public class StateAssignmentOperation {
                         operatorIDPair
                                 .getUserDefinedOperatorID()
                                 .filter(localOperators::containsKey)
-                                .orElse(operatorIDPair.getGeneratedOperatorID());
+                                .orElse(operatorIDPair.getOperatorIdentifier());
 
                 OperatorState operatorState = localOperators.remove(operatorID);
                 if (operatorState == null) {
@@ -123,7 +123,7 @@ public class StateAssignmentOperation {
                                     executionJobVertex.getParallelism(),
                                     executionJobVertex.getMaxParallelism());
                 }
-                operatorStates.put(operatorIDPair.getGeneratedOperatorID(), operatorState);
+                operatorStates.put(operatorIDPair.getOperatorIdentifier(), operatorState);
             }
 
             final TaskStateAssignment stateAssignment =
@@ -256,12 +256,12 @@ public class StateAssignmentOperation {
 
         for (OperatorIDPair operatorID : operatorIDs) {
             OperatorInstanceID instanceID =
-                    OperatorInstanceID.of(subTaskIndex, operatorID.getGeneratedOperatorID());
+                    OperatorInstanceID.of(subTaskIndex, operatorID.getOperatorIdentifier());
 
             OperatorSubtaskState operatorSubtaskState = assignment.getSubtaskState(instanceID);
 
             taskState.putSubtaskStateByOperatorID(
-                    operatorID.getGeneratedOperatorID(), operatorSubtaskState);
+                    operatorID.getOperatorIdentifier(), operatorSubtaskState);
         }
 
         JobManagerTaskRestore taskRestore =
@@ -747,7 +747,7 @@ public class StateAssignmentOperation {
         Set<OperatorID> allOperatorIDs = new HashSet<>();
         for (ExecutionJobVertex executionJobVertex : tasks) {
             for (OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIDs()) {
-                allOperatorIDs.add(operatorIDPair.getGeneratedOperatorID());
+                allOperatorIDs.add(operatorIDPair.getOperatorIdentifier());
                 operatorIDPair.getUserDefinedOperatorID().ifPresent(allOperatorIDs::add);
             }
         }

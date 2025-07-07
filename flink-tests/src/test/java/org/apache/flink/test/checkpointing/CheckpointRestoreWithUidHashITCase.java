@@ -129,7 +129,7 @@ public class CheckpointRestoreWithUidHashITCase {
                         StatefulSourceBehavior.PROCESS_ONLY,
                         maxNumber,
                         null,
-                        sourceOperatorIds.getGeneratedOperatorID().toHexString(),
+                        sourceOperatorIds.getOperatorIdentifier().toHexString(),
                         savepointPath);
         miniClusterResource.getMiniCluster().executeJobBlocking(secondJob);
         assertThat(result.get(), contains(IntStream.range(0, maxNumber).boxed().toArray()));

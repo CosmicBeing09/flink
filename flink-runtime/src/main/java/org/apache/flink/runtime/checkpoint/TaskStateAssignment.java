@@ -124,8 +124,8 @@ class TaskStateAssignment {
         subRawKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
 
         final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
-        outputOperatorID = operatorIDs.get(0).getGeneratedOperatorID();
-        inputOperatorID = operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID();
+        outputOperatorID = operatorIDs.get(0).getOperatorIdentifier();
+        inputOperatorID = operatorIDs.get(operatorIDs.size() - 1).getOperatorIdentifier();
 
         hasInputState =
                 oldState.get(inputOperatorID).getStates().stream()

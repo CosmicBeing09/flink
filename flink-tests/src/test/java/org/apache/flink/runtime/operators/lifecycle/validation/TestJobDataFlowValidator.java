@@ -167,7 +167,7 @@ public class TestJobDataFlowValidator {
             OperatorIDPair idPair = upstream ? iterator.next() : iterator.previous();
             String id =
                     idPair.getUserDefinedOperatorID()
-                            .orElse(idPair.getGeneratedOperatorID())
+                            .orElse(idPair.getOperatorIdentifier())
                             .toString();
             if (testJob.operatorsWithDataFlowTracking.contains(id)) {
                 return Optional.of(id);

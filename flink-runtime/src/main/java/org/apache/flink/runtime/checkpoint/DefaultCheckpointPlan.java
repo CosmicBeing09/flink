@@ -195,7 +195,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             ExecutionJobVertex vertex, Map<OperatorID, OperatorState> operatorStates) {
         for (OperatorIDPair operatorIDPair : vertex.getOperatorIDs()) {
             OperatorState operatorState =
-                    operatorStates.get(operatorIDPair.getGeneratedOperatorID());
+                    operatorStates.get(operatorIDPair.getOperatorIdentifier());
             if (operatorState == null) {
                 continue;
             }
@@ -230,17 +230,17 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
         for (ExecutionJobVertex jobVertex : fullyFinishedOrFinishedOnRestoreVertices.values()) {
             for (OperatorIDPair operatorID : jobVertex.getOperatorIDs()) {
                 OperatorState operatorState =
-                        operatorStates.get(operatorID.getGeneratedOperatorID());
+                        operatorStates.get(operatorID.getOperatorIdentifier());
                 checkState(
                         operatorState == null || !operatorState.hasSubtaskStates(),
                         "There should be no states or only coordinator state reported for fully finished operators");
 
                 operatorState =
                         new FullyFinishedOperatorState(
-                                operatorID.getGeneratedOperatorID(),
+                                operatorID.getOperatorIdentifier(),
                                 jobVertex.getParallelism(),
                                 jobVertex.getMaxParallelism());
-                operatorStates.put(operatorID.getGeneratedOperatorID(), operatorState);
+                operatorStates.put(operatorID.getOperatorIdentifier(), operatorState);
             }
         }
     }
@@ -251,7 +251,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             ExecutionJobVertex jobVertex = finishedTask.getVertex().getJobVertex();
             for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
                 OperatorState operatorState =
-                        operatorStates.get(operatorIDPair.getGeneratedOperatorID());
+                        operatorStates.get(operatorIDPair.getOperatorIdentifier());
 
                 if (operatorState != null && operatorState.isFullyFinished()) {
                     continue;
@@ -260,10 +260,10 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
                 if (operatorState == null) {
                     operatorState =
                             new OperatorState(
-                                    operatorIDPair.getGeneratedOperatorID(),
+                                    operatorIDPair.getOperatorIdentifier(),
                                     jobVertex.getParallelism(),
                                     jobVertex.getMaxParallelism());
-                    operatorStates.put(operatorIDPair.getGeneratedOperatorID(), operatorState);
+                    operatorStates.put(operatorIDPair.getOperatorIdentifier(), operatorState);
                 }
 
                 operatorState.putState(

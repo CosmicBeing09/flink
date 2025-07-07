@@ -506,7 +506,7 @@ class StateAssignmentOperationTest {
         JobVertex downstream = createJobVertex(new OperatorID(), 2);
         List<OperatorID> operatorIds =
                 Stream.of(upstream1, upstream2, downstream)
-                        .map(v -> v.getOperatorIDs().get(0).getGeneratedOperatorID())
+                        .map(v -> v.getOperatorIDs().get(0).getOperatorIdentifier())
                         .collect(Collectors.toList());
         Map<OperatorID, OperatorState> states = buildOperatorStates(operatorIds, 3);
 
@@ -570,7 +570,7 @@ class StateAssignmentOperationTest {
         JobVertex downstream = createJobVertex(new OperatorID(), 3);
         List<OperatorID> operatorIds =
                 Stream.of(upstream1, upstream2, downstream)
-                        .map(v -> v.getOperatorIDs().get(0).getGeneratedOperatorID())
+                        .map(v -> v.getOperatorIDs().get(0).getOperatorIdentifier())
                         .collect(Collectors.toList());
         Map<OperatorID, OperatorState> states = buildOperatorStates(operatorIds, 3);
 
@@ -1199,7 +1199,7 @@ class StateAssignmentOperationTest {
                 .collect(
                         Collectors.toMap(
                                 jobVertex ->
-                                        jobVertex.getOperatorIDs().get(0).getGeneratedOperatorID(),
+                                        jobVertex.getOperatorIDs().get(0).getOperatorIdentifier(),
                                 jobVertex -> {
                                     try {
                                         return eg.getJobVertex(jobVertex.getID());

@@ -198,7 +198,7 @@ public class VertexFinishedStateChecker {
             OperatorID operatorId =
                     idPair.getUserDefinedOperatorID()
                             .filter(operatorStates::containsKey)
-                            .orElse(idPair.getGeneratedOperatorID());
+                            .orElse(idPair.getOperatorIdentifier());
             return Optional.ofNullable(operatorStates.get(operatorId))
                     .map(
                             operatorState -> {

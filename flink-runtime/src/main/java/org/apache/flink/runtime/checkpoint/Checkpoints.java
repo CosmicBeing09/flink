@@ -154,7 +154,7 @@ public class Checkpoints {
         Map<OperatorID, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
         for (ExecutionJobVertex task : tasks.values()) {
             for (OperatorIDPair operatorIDPair : task.getOperatorIDs()) {
-                operatorToJobVertexMapping.put(operatorIDPair.getGeneratedOperatorID(), task);
+                operatorToJobVertexMapping.put(operatorIDPair.getOperatorIdentifier(), task);
                 operatorIDPair
                         .getUserDefinedOperatorID()
                         .ifPresent(id -> operatorToJobVertexMapping.put(id, task));
