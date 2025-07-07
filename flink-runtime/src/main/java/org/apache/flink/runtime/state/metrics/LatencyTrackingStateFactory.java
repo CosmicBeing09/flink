@@ -40,7 +40,7 @@ public class LatencyTrackingStateFactory<
 
     private final InternalKvState<K, N, ?> kvState;
     private final StateDescriptor<S, V> stateDescriptor;
-    private final LatencyTrackingStateConfig latencyTrackingStateConfig;
+    private final LatencyTrackingStateConfig metricsTrackingStateConfig;
     private final Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> stateFactories;
 
     private LatencyTrackingStateFactory(
@@ -49,7 +49,7 @@ public class LatencyTrackingStateFactory<
             LatencyTrackingStateConfig latencyTrackingStateConfig) {
         this.kvState = kvState;
         this.stateDescriptor = stateDescriptor;
-        this.latencyTrackingStateConfig = latencyTrackingStateConfig;
+        this.metricsTrackingStateConfig = latencyTrackingStateConfig;
         this.stateFactories = createStateFactories();
     }
 
@@ -108,7 +108,7 @@ public class LatencyTrackingStateFactory<
                 new LatencyTrackingValueState<>(
                         stateDescriptor.getName(),
                         (InternalValueState<K, N, V>) kvState,
-                        latencyTrackingStateConfig);
+                        metricsTrackingStateConfig);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -117,7 +117,7 @@ public class LatencyTrackingStateFactory<
                 new LatencyTrackingListState<>(
                         stateDescriptor.getName(),
                         (InternalListState<K, N, V>) kvState,
-                        latencyTrackingStateConfig);
+                        metricsTrackingStateConfig);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -126,7 +126,7 @@ public class LatencyTrackingStateFactory<
                 new LatencyTrackingMapState<>(
                         stateDescriptor.getName(),
                         (InternalMapState<K, N, UK, UV>) kvState,
-                        latencyTrackingStateConfig);
+                        metricsTrackingStateConfig);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -135,7 +135,7 @@ public class LatencyTrackingStateFactory<
                 new LatencyTrackingReducingState<>(
                         stateDescriptor.getName(),
                         (InternalReducingState<K, N, V>) kvState,
-                        latencyTrackingStateConfig);
+                        metricsTrackingStateConfig);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -144,6 +144,6 @@ public class LatencyTrackingStateFactory<
                 new LatencyTrackingAggregatingState<>(
                         stateDescriptor.getName(),
                         (InternalAggregatingState<K, N, IN, SV, OUT>) kvState,
-                        latencyTrackingStateConfig);
+                        metricsTrackingStateConfig);
     }
 }
