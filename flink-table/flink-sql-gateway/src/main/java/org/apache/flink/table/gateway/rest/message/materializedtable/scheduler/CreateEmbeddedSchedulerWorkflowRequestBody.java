@@ -81,7 +81,7 @@ public class CreateEmbeddedSchedulerWorkflowRequestBody implements RequestBody {
     }
 
     @Nullable
-    public Map<String, String> getDynamicOptions() {
+    public Map<String, String> getInitConfig() {
         return dynamicOptions;
     }
 
