@@ -45,7 +45,7 @@ import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.filesystem.FsCheckpointStorageAccess;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.state.forst.ForStMemoryControllerUtils.ForStMemoryFactory;
 import org.apache.flink.state.forst.sync.ForStPriorityQueueConfig;
 import org.apache.flink.state.forst.sync.ForStSyncKeyedStateBackendBuilder;
@@ -516,7 +516,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         StreamCompressionDecorator keyGroupCompressionDecorator =
                 getCompressionDecorator(executionConfig);
 
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
                 latencyTrackingConfigBuilder.setMetricGroup(parameters.getMetricGroup()).build();
         ForStSyncKeyedStateBackendBuilder<K> builder =
                 new ForStSyncKeyedStateBackendBuilder<>(

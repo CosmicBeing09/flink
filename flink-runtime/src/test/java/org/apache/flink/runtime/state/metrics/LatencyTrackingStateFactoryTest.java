@@ -57,9 +57,9 @@ public class LatencyTrackingStateFactoryTest {
         return Arrays.asList(true, false);
     }
 
-    private LatencyTrackingStateConfig getLatencyTrackingStateConfig() {
+    private MetricsTrackingStateConfig getLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        return LatencyTrackingStateConfig.newBuilder()
+        return MetricsTrackingStateConfig.newBuilder()
                 .setEnabled(enableLatencyTracking)
                 .setMetricGroup(metricsGroup)
                 .build();

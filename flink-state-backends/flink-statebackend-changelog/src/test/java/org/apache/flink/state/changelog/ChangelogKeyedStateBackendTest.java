@@ -32,7 +32,7 @@ import org.apache.flink.runtime.state.UncompressedStreamCompressionDecorator;
 import org.apache.flink.runtime.state.changelog.SequenceNumber;
 import org.apache.flink.runtime.state.changelog.inmemory.InMemoryStateChangelogStorage;
 import org.apache.flink.runtime.state.memory.MemCheckpointStreamFactory;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.runtime.state.ttl.mock.MockKeyedStateBackend;
 import org.apache.flink.runtime.state.ttl.mock.MockKeyedStateBackend.MockSnapshotSupplier;
@@ -150,7 +150,7 @@ public class ChangelogKeyedStateBackendTest {
                         KeyGroupRange.of(0, 0),
                         new ExecutionConfig(),
                         TtlTimeProvider.DEFAULT,
-                        LatencyTrackingStateConfig.disabled(),
+                        MetricsTrackingStateConfig.disabled(),
                         emptyList(),
                         UncompressedStreamCompressionDecorator.INSTANCE,
                         new CloseableRegistry(),

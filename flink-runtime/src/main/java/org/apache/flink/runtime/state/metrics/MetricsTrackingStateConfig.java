@@ -28,7 +28,7 @@ import java.io.Serializable;
 
 /** Config to create latency tracking state metric. */
 @Internal
-public class LatencyTrackingStateConfig {
+public class MetricsTrackingStateConfig {
 
     private final MetricGroup metricGroup;
 
@@ -37,7 +37,7 @@ public class LatencyTrackingStateConfig {
     private final int historySize;
     private final boolean stateNameAsVariable;
 
-    LatencyTrackingStateConfig(
+    MetricsTrackingStateConfig(
             MetricGroup metricGroup,
             boolean enabled,
             int sampleInterval,
@@ -75,7 +75,7 @@ public class LatencyTrackingStateConfig {
         return stateNameAsVariable;
     }
 
-    public static LatencyTrackingStateConfig disabled() {
+    public static MetricsTrackingStateConfig disabled() {
         return newBuilder().setEnabled(false).build();
     }
 
@@ -131,8 +131,8 @@ public class LatencyTrackingStateConfig {
             return this;
         }
 
-        public LatencyTrackingStateConfig build() {
-            return new LatencyTrackingStateConfig(
+        public MetricsTrackingStateConfig build() {
+            return new MetricsTrackingStateConfig(
                     metricGroup, enabled, sampleInterval, historySize, stateNameAsVariable);
         }
     }

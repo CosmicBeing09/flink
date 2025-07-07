@@ -44,7 +44,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
     LatencyTrackingAggregatingState(
             String stateName,
             InternalAggregatingState<K, N, IN, ACC, OUT> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new AggregatingStateLatencyMetrics(
@@ -68,7 +68,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
 
     @Override
     public void add(IN value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAdd()) {
+        if (latencyTrackingStateMetric.trackMetricsOnAdd()) {
             trackLatencyWithException(
                     () -> original.add(value),
                     AggregatingStateLatencyMetrics.AGGREGATING_STATE_ADD_LATENCY);
@@ -134,7 +134,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnAdd() {
+        private boolean trackMetricsOnAdd() {
             addCount = loopUpdateCounter(addCount);
             return addCount == 1;
         }

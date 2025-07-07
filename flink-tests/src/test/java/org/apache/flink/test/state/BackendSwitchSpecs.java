@@ -34,7 +34,7 @@ import org.apache.flink.runtime.state.UncompressedStreamCompressionDecorator;
 import org.apache.flink.runtime.state.heap.HeapKeyedStateBackend;
 import org.apache.flink.runtime.state.heap.HeapKeyedStateBackendBuilder;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSetFactory;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.state.rocksdb.EmbeddedRocksDBStateBackend;
 import org.apache.flink.state.rocksdb.EmbeddedRocksDBStateBackend.PriorityQueueStateType;
@@ -110,7 +110,7 @@ public final class BackendSwitchSpecs {
                             TestLocalRecoveryConfig.disabled(),
                             RocksDBPriorityQueueConfig.buildWithPriorityQueueType(queueStateType),
                             TtlTimeProvider.DEFAULT,
-                            LatencyTrackingStateConfig.disabled(),
+                            MetricsTrackingStateConfig.disabled(),
                             new UnregisteredMetricsGroup(),
                             (key, value) -> {},
                             stateHandles,
@@ -147,7 +147,7 @@ public final class BackendSwitchSpecs {
                             keyGroupRange,
                             executionConfig,
                             TtlTimeProvider.DEFAULT,
-                            LatencyTrackingStateConfig.disabled(),
+                            MetricsTrackingStateConfig.disabled(),
                             stateHandles,
                             AbstractStateBackend.getCompressionDecorator(executionConfig),
                             TestLocalRecoveryConfig.disabled(),
