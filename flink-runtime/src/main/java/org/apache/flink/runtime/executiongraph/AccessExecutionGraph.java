@@ -41,9 +41,9 @@ import java.util.Optional;
  */
 public interface AccessExecutionGraph extends JobStatusProvider {
     /**
-     * Returns the job plan as a JSON string.
+     * Returns the job plan.
      *
-     * @return job plan as a JSON string
+     * @return job plan
      */
     String getPlan();
 

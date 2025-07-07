@@ -613,8 +613,8 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public void setJsonPlan(String jsonPlan) {
-        this.jsonPlan = jsonPlan;
+    public void setPlan(String plan) {
+        this.jsonPlan = plan;
     }
 
     @Override

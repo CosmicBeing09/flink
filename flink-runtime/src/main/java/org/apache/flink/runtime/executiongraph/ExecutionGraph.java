@@ -99,7 +99,7 @@ public interface ExecutionGraph extends AccessExecutionGraph {
 
     KvStateLocationRegistry getKvStateLocationRegistry();
 
-    void setJsonPlan(String jsonPlan);
+    void setPlan(String plan);
 
     Configuration getJobConfiguration();
 

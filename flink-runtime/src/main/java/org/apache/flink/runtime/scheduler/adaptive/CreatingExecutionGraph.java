@@ -135,7 +135,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                                                 .map(ExecutionJobVertex::getJobVertex)
                                                 .iterator(),
                                 executionGraphWithVertexParallelism.getVertexParallelism());
-                executionGraph.setJsonPlan(updatedPlan);
+                executionGraph.setPlan(updatedPlan);
 
                 executionGraph.transitionToRunning();
                 operatorCoordinatorHandler.startAllOperatorCoordinators();
