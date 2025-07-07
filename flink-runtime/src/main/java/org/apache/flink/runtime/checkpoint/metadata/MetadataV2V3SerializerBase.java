@@ -313,7 +313,7 @@ public abstract class MetadataV2V3SerializerBase {
         }
 
         state.setInputChannelState(deserializeInputChannelStateHandle(dis, context));
-        state.setResultSubpartitionState(deserializeResultSubpartitionStateHandle(dis, context));
+        state.setResultSubpartitionState(deserializeOutputStateHandle(dis, context));
 
         return state.build();
     }
@@ -696,7 +696,7 @@ public abstract class MetadataV2V3SerializerBase {
     //  channel state (unaligned checkpoints)
     // ------------------------------------------------------------------------
 
-    protected StateObjectCollection<OutputStateHandle> deserializeResultSubpartitionStateHandle(
+    protected StateObjectCollection<OutputStateHandle> deserializeOutputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return StateObjectCollection.empty();
     }
@@ -706,7 +706,7 @@ public abstract class MetadataV2V3SerializerBase {
         return StateObjectCollection.empty();
     }
 
-    protected void serializeResultSubpartitionStateHandle(
+    protected void serializeOutputStateHandle(
             OutputStateHandle resultSubpartitionStateHandle, DataOutputStream dos)
             throws IOException {}
 
