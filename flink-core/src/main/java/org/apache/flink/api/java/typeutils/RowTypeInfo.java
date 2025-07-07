@@ -367,13 +367,13 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
                     fieldComparators.size() == logicalKeyFields.size(),
                     "The number of field comparators and key fields is not equal.");
 
-            final int maxKey = Collections.max(logicalKeyFields);
+            final int len = Collections.max(logicalKeyFields);
 
-            checkState(maxKey >= 0, "The maximum key field must be greater or equal than 0.");
+            checkState(len >= 0, "The maximum key field must be greater or equal than 0.");
 
-            TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[maxKey + 1];
+            TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[len + 1];
 
-            for (int i = 0; i <= maxKey; i++) {
+            for (int i = 0; i <= len; i++) {
                 fieldSerializers[i] = types[i].createSerializer(config);
             }
 
