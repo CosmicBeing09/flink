@@ -123,7 +123,7 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataOutputStream create(final Path path, final WriteMode overwrite)
+    public FSDataOutputStream create(final Path dbFilePath, final WriteMode overwrite)
             throws IOException {
         throw new UnsupportedOperationException("Dummy FS doesn't support create operation");
     }
