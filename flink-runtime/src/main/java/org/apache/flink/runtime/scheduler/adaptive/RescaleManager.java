@@ -52,7 +52,7 @@ public interface RescaleManager {
         boolean hasDesiredResources();
 
         /** Triggers the rescaling of the job. */
-        void rescale();
+        void transitionToSubsequentState();
 
         /** Runs operation with a given delay in the underlying main thread. */
         void scheduleOperation(Runnable callback, Duration delay);

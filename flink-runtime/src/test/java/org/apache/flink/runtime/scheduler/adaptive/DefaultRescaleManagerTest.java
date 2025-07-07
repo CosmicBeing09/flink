@@ -526,7 +526,7 @@ class DefaultRescaleManagerTest {
         }
 
         @Override
-        public void rescale() {
+        public void transitionToSubsequentState() {
             rescaleTriggered.set(true);
         }
 
