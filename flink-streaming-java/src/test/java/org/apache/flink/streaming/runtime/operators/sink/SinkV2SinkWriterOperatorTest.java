@@ -321,7 +321,7 @@ class SinkV2SinkWriterOperatorTest {
         InspectableSink sink = sinkWithCommitter();
         final OneInputStreamOperatorTestHarness<String, String> committer =
                 new OneInputStreamOperatorTestHarness<>(
-                        new TestCommitterOperator(TestSinkV2.COMMITTABLE_SERIALIZER),
+                        new TestCommitterOperator(TestSinkV2.committableSerializer),
                         StringSerializer.INSTANCE);
 
         final OperatorSubtaskState committerState =

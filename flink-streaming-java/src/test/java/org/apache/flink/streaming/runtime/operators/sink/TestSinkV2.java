@@ -64,7 +64,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /** A {@link Sink} for all the sink related tests. */
 public class TestSinkV2<InputT> implements Sink<InputT> {
-    public static final SimpleVersionedSerializerAdapter<String> COMMITTABLE_SERIALIZER =
+    public static final SimpleVersionedSerializerAdapter<String> committableSerializer =
             new SimpleVersionedSerializerAdapter<>(StringSerializer.INSTANCE);
     public static final SimpleVersionedSerializerAdapter<Integer> WRITER_SERIALIZER =
             new SimpleVersionedSerializerAdapter<>(IntSerializer.INSTANCE);
@@ -161,7 +161,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                     if (!withPreCommitTopology) {
                         // TwoPhaseCommittingSink with a stateless writer and a committer
                         return new TestSinkV2TwoPhaseCommittingSink<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, committableSerializer, committer);
                     } else {
                         // TwoPhaseCommittingSink with a stateless writer, pre commit topology,
                         // committer
@@ -169,7 +169,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 writer instanceof DefaultCommittingSinkWriter,
                                 "Please provide a DefaultCommittingSinkWriter instance");
                         return new TestSinkV2WithPreCommitTopology<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, committableSerializer, committer);
                     }
                 } else {
                     if (withWriterState) {
@@ -180,7 +180,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 "Please provide a DefaultStatefulSinkWriter instance");
                         return new TestStatefulSinkV2<>(
                                 (DefaultStatefulSinkWriter<InputT>) writer,
-                                COMMITTABLE_SERIALIZER,
+                                committableSerializer,
                                 committer,
                                 compatibleStateNames);
                     } else {
@@ -190,7 +190,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                 writer instanceof DefaultCommittingSinkWriter,
                                 "Please provide a DefaultCommittingSinkWriter instance");
                         return new TestSinkV2WithPostCommitTopology<>(
-                                writer, COMMITTABLE_SERIALIZER, committer);
+                                writer, committableSerializer, committer);
                     }
                 }
             }
@@ -200,15 +200,15 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
     private static class TestSinkV2TwoPhaseCommittingSink<InputT> extends TestSinkV2<InputT>
             implements SupportsCommitter<String> {
         private final DefaultCommitter committer;
-        private final SimpleVersionedSerializer<String> committableSerializer;
+        private final SimpleVersionedSerializer<String> commSerializerFactory;
 
         public TestSinkV2TwoPhaseCommittingSink(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
             super(writer);
             this.committer = committer;
-            this.committableSerializer = committableSerializer;
+            this.commSerializerFactory = commSerializerFactory;
         }
 
         @Override
@@ -224,7 +224,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
 
         @Override
         public SimpleVersionedSerializer<String> getCommittableSerializer() {
-            return committableSerializer;
+            return commSerializerFactory;
         }
     }
 
@@ -235,9 +235,9 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
             implements SupportsPostCommitTopology<String> {
         public TestSinkV2WithPostCommitTopology(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
         }
 
         @Override
@@ -252,9 +252,9 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
             implements SupportsPreCommitTopology<String, String> {
         public TestSinkV2WithPreCommitTopology(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
         }
 
         @Override
@@ -271,7 +271,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
                                     return withLineage.map(old -> old + "Transformed");
                                 }
                             })
-                    .returns(CommittableMessageTypeInfo.of(() -> COMMITTABLE_SERIALIZER));
+                    .returns(CommittableMessageTypeInfo.of(() -> TestSinkV2.committableSerializer));
         }
 
         @Override
@@ -287,10 +287,10 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
 
         public TestStatefulSinkV2(
                 DefaultStatefulSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer,
                 String compatibleState) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
             this.compatibleState = compatibleState;
         }
 
