@@ -127,8 +127,8 @@ class StreamOperatorContextBuilder {
 
         try {
             return initializer.streamOperatorStateContext(
-                    operatorState.getOperatorID(),
-                    operatorState.getOperatorID().toString(),
+                    operatorState.getOperatorIdentifier(),
+                    operatorState.getOperatorIdentifier().toString(),
                     new NeverFireProcessingTimeService(),
                     keyContext,
                     keySerializer,

@@ -81,7 +81,7 @@ public class OperatorState implements CompositeStateHandle {
         this.maxParallelism = maxParallelism;
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorID getOperatorIdentifier() {
         return operatorID;
     }
 
