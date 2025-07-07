@@ -52,7 +52,7 @@ public class ForStOptions {
 
     /** The remote directory where ForSt puts its SST files. */
     @Documentation.Section(Documentation.Sections.STATE_BACKEND_FORST)
-    public static final ConfigOption<String> REMOTE_DIRECTORY =
+    public static final ConfigOption<String> PRIMARY_DIRECTORY =
             ConfigOptions.key("state.backend.forst.remote-dir")
                     .stringType()
                     .noDefaultValue()
