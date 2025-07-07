@@ -751,7 +751,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testDropMaterializedTable() throws Exception {
+    void testDropMaterializedTableInContinuousMode() throws Exception {
         String materializedTableDDL =
                 "CREATE MATERIALIZED TABLE users_shops"
                         + " PARTITIONED BY (ds)\n"
