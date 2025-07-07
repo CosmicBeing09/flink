@@ -96,15 +96,15 @@ public class LocalExecutor implements PipelineExecutor {
         // we only support attached execution with the local executor.
         checkState(configuration.get(DeploymentOptions.ATTACHED));
 
-        final JobGraph jobGraph = getJobGraph(pipeline, effectiveConfig, userCodeClassloader);
+        final JobGraph executionPlan = getExecutionPlan(pipeline, effectiveConfig, userCodeClassloader);
 
         return PerJobMiniClusterFactory.createWithFactory(effectiveConfig, miniClusterFactory)
-                .submitJob(jobGraph, userCodeClassloader)
+                .submitJob(executionPlan, userCodeClassloader)
                 .whenComplete(
                         (ignored, throwable) -> {
                             if (throwable == null) {
                                 PipelineExecutorUtils.notifyJobStatusListeners(
-                                        pipeline, jobGraph, jobStatusChangedListeners);
+                                        pipeline, executionPlan, jobStatusChangedListeners);
                             } else {
                                 LOG.error(
                                         "Failed to submit job graph to local mini cluster.",
@@ -113,7 +113,7 @@ public class LocalExecutor implements PipelineExecutor {
                         });
     }
 
-    private JobGraph getJobGraph(
+    private JobGraph getExecutionPlan(
             Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws MalformedURLException {
         // This is a quirk in how LocalEnvironment used to work. It sets the default parallelism
@@ -130,6 +130,6 @@ public class LocalExecutor implements PipelineExecutor {
             plan.setDefaultParallelism(slotsPerTaskManager * numTaskManagers);
         }
 
-        return PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        return PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassloader);
     }
 }

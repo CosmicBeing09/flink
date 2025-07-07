@@ -90,8 +90,8 @@ public class AbstractSessionClusterExecutor<
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
-        final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        final JobGraph executionPlan =
+                PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {
@@ -102,7 +102,7 @@ public class AbstractSessionClusterExecutor<
                     clusterDescriptor.retrieve(clusterID);
             ClusterClient<ClusterID> clusterClient = clusterClientProvider.getClusterClient();
             return clusterClient
-                    .submitJob(jobGraph)
+                    .submitJob(executionPlan)
                     .thenApplyAsync(
                             FunctionUtils.uncheckedFunction(
                                     jobId -> {
@@ -123,7 +123,7 @@ public class AbstractSessionClusterExecutor<
                             (jobClient, throwable) -> {
                                 if (throwable == null) {
                                     PipelineExecutorUtils.notifyJobStatusListeners(
-                                            pipeline, jobGraph, jobStatusChangedListeners);
+                                            pipeline, executionPlan, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(
                                             "Failed to submit job graph to remote session cluster.",

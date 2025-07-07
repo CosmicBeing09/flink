@@ -203,17 +203,17 @@ class DefaultPackagedProgramRetrieverITCase {
                         ClasspathProviderExtension.parametersForTestJob(expectedSuffix),
                         new Configuration());
 
-        final JobGraph jobGraph = retrieveJobGraph(retriever, configuration);
+        final JobGraph executionPlan = retrieveJobGraph(retriever, configuration);
 
-        assertThat(jobGraph.getName())
+        assertThat(executionPlan.getName())
                 .isEqualTo(
                         testJobEntryClassClasspathProvider.getJobClassName()
                                 + "-"
                                 + expectedSuffix);
-        assertThat(jobGraph.getSavepointRestoreSettings())
+        assertThat(executionPlan.getSavepointRestoreSettings())
                 .isEqualTo(SavepointRestoreSettings.none());
-        assertThat(jobGraph.getMaximumParallelism()).isEqualTo(parallelism);
-        assertThat(jobGraph.getJobID()).isEqualTo(jobId);
+        assertThat(executionPlan.getMaximumParallelism()).isEqualTo(parallelism);
+        assertThat(executionPlan.getJobID()).isEqualTo(jobId);
     }
 
     @Test
@@ -670,7 +670,7 @@ class DefaultPackagedProgramRetrieverITCase {
         final Pipeline pipeline =
                 PackagedProgramUtils.getPipelineFromProgram(
                         packagedProgram, configuration, defaultParallelism, false);
-        return PipelineExecutorUtils.getJobGraph(
+        return PipelineExecutorUtils.getExecutionPlan(
                 pipeline, configuration, packagedProgram.getUserCodeClassLoader());
     }
 

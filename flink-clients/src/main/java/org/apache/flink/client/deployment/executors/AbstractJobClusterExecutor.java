@@ -68,8 +68,8 @@ public class AbstractJobClusterExecutor<
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
-        final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        final JobGraph executionPlan =
+                PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {
@@ -81,12 +81,12 @@ public class AbstractJobClusterExecutor<
 
             final ClusterClientProvider<ClusterID> clusterClientProvider =
                     clusterDescriptor.deployJobCluster(
-                            clusterSpecification, jobGraph, configAccessor.getDetachedMode());
-            LOG.info("Job has been submitted with JobID " + jobGraph.getJobID());
+                            clusterSpecification, executionPlan, configAccessor.getDetachedMode());
+            LOG.info("Job has been submitted with JobID " + executionPlan.getJobID());
 
             return CompletableFuture.completedFuture(
                     new ClusterClientJobClientAdapter<>(
-                            clusterClientProvider, jobGraph.getJobID(), userCodeClassloader));
+                            clusterClientProvider, executionPlan.getJobID(), userCodeClassloader));
         }
     }
 }

@@ -170,20 +170,20 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
         public CompletableFuture<JobClient> execute(
                 Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassLoader)
                 throws Exception {
-            final JobGraph jobGraph =
-                    PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassLoader);
-            if (jobGraph.getSavepointRestoreSettings() == SavepointRestoreSettings.none()
+            final JobGraph executionPlan =
+                    PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassLoader);
+            if (executionPlan.getSavepointRestoreSettings() == SavepointRestoreSettings.none()
                     && pipeline instanceof StreamGraph) {
-                jobGraph.setSavepointRestoreSettings(
+                executionPlan.setSavepointRestoreSettings(
                         ((StreamGraph) pipeline).getSavepointRestoreSettings());
             }
             return miniCluster
-                    .submitJob(jobGraph)
+                    .submitJob(executionPlan)
                     .whenComplete(
                             (ignored, throwable) -> {
                                 if (throwable == null) {
                                     PipelineExecutorUtils.notifyJobStatusListeners(
-                                            pipeline, jobGraph, jobStatusChangedListeners);
+                                            pipeline, executionPlan, jobStatusChangedListeners);
                                 } else {
                                     LOG.error(
                                             "Failed to submit job graph to mini cluster.",
