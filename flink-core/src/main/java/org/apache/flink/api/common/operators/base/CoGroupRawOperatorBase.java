@@ -182,7 +182,7 @@ public class CoGroupRawOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN
     // ------------------------------------------------------------------------
     @Override
     protected List<OUT> executeOnCollections(
-            List<IN1> input1, List<IN2> input2, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN1> input1, List<IN2> input2, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         // --------------------------------------------------------------------
         // Setup
@@ -199,13 +199,13 @@ public class CoGroupRawOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN
         Arrays.fill(inputSortDirections1, true);
         Arrays.fill(inputSortDirections2, true);
 
-        final TypeSerializer<IN1> inputSerializer1 = inputType1.createSerializer(executionConfig);
-        final TypeSerializer<IN2> inputSerializer2 = inputType2.createSerializer(executionConfig);
+        final TypeSerializer<IN1> inputSerializer1 = inputType1.createSerializer(config);
+        final TypeSerializer<IN2> inputSerializer2 = inputType2.createSerializer(config);
 
         final TypeComparator<IN1> inputComparator1 =
-                getTypeComparator(executionConfig, inputType1, inputKeys1, inputSortDirections1);
+                getTypeComparator(config, inputType1, inputKeys1, inputSortDirections1);
         final TypeComparator<IN2> inputComparator2 =
-                getTypeComparator(executionConfig, inputType2, inputKeys2, inputSortDirections2);
+                getTypeComparator(config, inputType2, inputKeys2, inputSortDirections2);
 
         SimpleListIterable<IN1> iterator1 =
                 new SimpleListIterable<IN1>(input1, inputComparator1, inputSerializer1);
@@ -224,7 +224,7 @@ public class CoGroupRawOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN
         Collector<OUT> resultCollector =
                 new CopyingListCollector<OUT>(
                         result,
-                        getOperatorInfo().getOutputType().createSerializer(executionConfig));
+                        getOperatorInfo().getOutputType().createSerializer(config));
 
         function.coGroup(iterator1, iterator2, resultCollector);
 

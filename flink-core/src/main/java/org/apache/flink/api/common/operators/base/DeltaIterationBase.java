@@ -355,7 +355,7 @@ public class DeltaIterationBase<ST, WT> extends DualInputOperator<ST, WT, ST, Ab
             List<ST> inputData1,
             List<WT> inputData2,
             RuntimeContext runtimeContext,
-            ExecutionConfig executionConfig) {
+            ExecutionConfig config) {
         throw new UnsupportedOperationException();
     }
 }

@@ -114,7 +114,7 @@ public final class CollectDynamicSink implements DynamicTableSink {
                     ProviderContext providerContext, DataStream<RowData> inputStream) {
                 final CheckpointConfig checkpointConfig =
                         inputStream.getExecutionEnvironment().getCheckpointConfig();
-                final ExecutionConfig config = inputStream.getExecutionConfig();
+                final ExecutionConfig config = inputStream.getConfig();
 
                 final TypeSerializer<RowData> externalSerializer =
                         InternalTypeInfo.<RowData>of(consumedDataType.getLogicalType())

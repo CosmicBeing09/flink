@@ -106,19 +106,19 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
             List<IN1> leftInput,
             List<IN2> rightInput,
             RuntimeContext runtimeContext,
-            ExecutionConfig executionConfig)
+            ExecutionConfig config)
             throws Exception {
         TypeInformation<IN1> leftInformation = getOperatorInfo().getFirstInputType();
         TypeInformation<IN2> rightInformation = getOperatorInfo().getSecondInputType();
         TypeInformation<OUT> outInformation = getOperatorInfo().getOutputType();
 
         TypeComparator<IN1> leftComparator =
-                buildComparatorFor(0, executionConfig, leftInformation);
+                buildComparatorFor(0, config, leftInformation);
         TypeComparator<IN2> rightComparator =
-                buildComparatorFor(1, executionConfig, rightInformation);
+                buildComparatorFor(1, config, rightInformation);
 
-        TypeSerializer<IN1> leftSerializer = leftInformation.createSerializer(executionConfig);
-        TypeSerializer<IN2> rightSerializer = rightInformation.createSerializer(executionConfig);
+        TypeSerializer<IN1> leftSerializer = leftInformation.createSerializer(config);
+        TypeSerializer<IN2> rightSerializer = rightInformation.createSerializer(config);
 
         OuterJoinListIterator<IN1, IN2> outerJoinIterator =
                 new OuterJoinListIterator<>(
@@ -141,7 +141,7 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
         List<OUT> result = new ArrayList<>();
         Collector<OUT> collector =
                 new CopyingListCollector<>(
-                        result, outInformation.createSerializer(executionConfig));
+                        result, outInformation.createSerializer(config));
 
         while (outerJoinIterator.next()) {
             IN1 left = outerJoinIterator.getLeft();
@@ -159,10 +159,10 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
 
     @SuppressWarnings("unchecked")
     private <T> TypeComparator<T> buildComparatorFor(
-            int input, ExecutionConfig executionConfig, TypeInformation<T> typeInformation) {
+            int input, ExecutionConfig config, TypeInformation<T> typeInformation) {
         TypeComparator<T> comparator;
         if (typeInformation instanceof AtomicType) {
-            comparator = ((AtomicType<T>) typeInformation).createComparator(true, executionConfig);
+            comparator = ((AtomicType<T>) typeInformation).createComparator(true, config);
         } else if (typeInformation instanceof CompositeType) {
             int[] keyPositions = getKeyColumns(input);
             boolean[] orders = new boolean[keyPositions.length];
@@ -170,7 +170,7 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
 
             comparator =
                     ((CompositeType<T>) typeInformation)
-                            .createComparator(keyPositions, orders, 0, executionConfig);
+                            .createComparator(keyPositions, orders, 0, config);
         } else {
             throw new RuntimeException(
                     "Type information for input of type "

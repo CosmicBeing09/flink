@@ -47,7 +47,7 @@ public class NoOpUnaryUdfOp<OUT> extends SingleInputOperator<OUT, OUT, NoOpFunct
 
     @Override
     protected List<OUT> executeOnCollections(
-            List<OUT> inputData, RuntimeContext runtimeContext, ExecutionConfig executionConfig) {
+            List<OUT> inputData, RuntimeContext runtimeContext, ExecutionConfig config) {
         return inputData;
     }
 }
