@@ -372,7 +372,7 @@ class JMFailoverITCase {
 
         return operatorCoordinatorsSupportsBatchSnapshot
                 ? createJobGraph(env, methodName)
-                : createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
+                : createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
     }
 
     private TestingMiniClusterConfiguration getMiniClusterConfiguration(Configuration config)
@@ -471,7 +471,7 @@ class JMFailoverITCase {
         return StreamingJobGraphGenerator.createJobGraph(streamGraph);
     }
 
-    private JobGraph createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
+    private JobGraph createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
             StreamExecutionEnvironment env, String jobName) throws Exception {
 
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
