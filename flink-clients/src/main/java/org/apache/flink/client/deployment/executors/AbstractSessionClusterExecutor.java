@@ -91,7 +91,7 @@ public class AbstractSessionClusterExecutor<
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
         final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+                PipelineExecutorUtils.getExecutionPlan(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {

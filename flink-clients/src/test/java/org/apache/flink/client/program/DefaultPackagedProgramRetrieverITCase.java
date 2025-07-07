@@ -670,7 +670,7 @@ class DefaultPackagedProgramRetrieverITCase {
         final Pipeline pipeline =
                 PackagedProgramUtils.getPipelineFromProgram(
                         packagedProgram, configuration, defaultParallelism, false);
-        return PipelineExecutorUtils.getJobGraph(
+        return PipelineExecutorUtils.getExecutionPlan(
                 pipeline, configuration, packagedProgram.getUserCodeClassLoader());
     }
 
