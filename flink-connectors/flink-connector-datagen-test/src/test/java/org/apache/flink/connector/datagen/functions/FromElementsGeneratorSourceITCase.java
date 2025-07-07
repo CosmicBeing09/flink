@@ -61,15 +61,15 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Produces expected String output")
     void testBasicType() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
         String[] data = {"Foo", "bar", "baz"};
         FromElementsGeneratorFunction<String> generatorFunction =
                 new FromElementsGeneratorFunction<>(Types.STRING, "Foo", "bar", "baz");
         DataGeneratorSource<String> dataGeneratorSource =
                 new DataGeneratorSource<>(generatorFunction, data.length, Types.STRING);
         DataStream<String> stream =
-                env.fromSource(
+                streamExecutionEnvironment.fromSource(
                         dataGeneratorSource, WatermarkStrategy.noWatermarks(), "generator source");
 
         List<String> result = stream.executeAndCollect(data.length + 1);
@@ -82,8 +82,8 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Handles Avro data correctly")
     void testAvroType() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
         User user1 = new User("Foo", 1);
         User user2 = new User("Bar", 2);
         User[] data = {user1, user2};
@@ -93,7 +93,7 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
                 new DataGeneratorSource<>(
                         generatorFunction, data.length, new AvroTypeInfo<>(User.class));
         DataStream<User> stream =
-                env.fromSource(
+                streamExecutionEnvironment.fromSource(
                         dataGeneratorSource, WatermarkStrategy.noWatermarks(), "generator source");
 
         List<User> result = stream.executeAndCollect(data.length + 1);

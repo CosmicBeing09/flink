@@ -90,10 +90,10 @@ class HiveTableSpeculativeSinkITCase {
 
     @Test
     void testBatchWritingWithoutCompactionWithSpeculativeSink() throws Exception {
-        StreamExecutionEnvironment env =
+        StreamExecutionEnvironment streamExecutionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment(configure(new Configuration()));
         StreamTableEnvironment tEnv =
-                StreamTableEnvironment.create(env, EnvironmentSettings.inBatchMode());
+                StreamTableEnvironment.create(streamExecutionEnvironment, EnvironmentSettings.inBatchMode());
         tEnv.getConfig().set(TABLE_EXEC_RESOURCE_DEFAULT_PARALLELISM, 1);
 
         tEnv.getConfig().setSqlDialect(SqlDialect.HIVE);
@@ -161,7 +161,7 @@ class HiveTableSpeculativeSinkITCase {
                     // to a slow sink as well.
                     StreamTableEnvironmentImpl tEnvImpl = (StreamTableEnvironmentImpl) tEnv;
                     JobGraph jobGraph =
-                            tEnvImpl.execEnv()
+                            tEnvImpl.streamExecutionEnvironment()
                                     .generateStreamGraph(
                                             tEnvImpl.getPlanner()
                                                     .translate(

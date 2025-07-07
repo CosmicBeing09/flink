@@ -222,7 +222,7 @@ class CatalogITCase {
 
     private TableEnvironment getTableEnvironment() {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        return StreamTableEnvironment.create(env, settings);
+        StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        return StreamTableEnvironment.create(streamExecutionEnvironment, settings);
     }
 }

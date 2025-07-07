@@ -94,11 +94,11 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        TestEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
-        env.getConfig().enableObjectReuse();
+        TestEnvironment streamExecutionEnvironment = MINI_CLUSTER_EXTENSION.getStreamExecutionEnvironment();
+        streamExecutionEnvironment.getConfig().enableObjectReuse();
 
         // Possibly run the test multiple times
-        executeProgramMultipleTimes(env);
+        executeProgramMultipleTimes(streamExecutionEnvironment);
     }
 
     private void executeProgramMultipleTimes(ExecutionEnvironment env) throws Exception {
@@ -129,11 +129,11 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
-        env.getConfig().disableObjectReuse();
+        ExecutionEnvironment streamExecutionEnvironment = MINI_CLUSTER_EXTENSION.getStreamExecutionEnvironment();
+        streamExecutionEnvironment.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times
-        executeProgramMultipleTimes(env);
+        executeProgramMultipleTimes(streamExecutionEnvironment);
     }
 
     @Test
@@ -160,7 +160,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
             e.printStackTrace();
             fail("Error while calling the test program: " + e.getMessage());
         } finally {
-            MINI_CLUSTER_EXTENSION.getTestEnvironment().setAsContext();
+            MINI_CLUSTER_EXTENSION.getStreamExecutionEnvironment().setAsContext();
         }
 
         assertThat(this.latestExecutionResult)

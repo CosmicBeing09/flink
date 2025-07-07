@@ -42,20 +42,20 @@ public class AsyncSinkBaseITCase {
                             .setNumberSlotsPerTaskManager(1)
                             .build());
 
-    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+    final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
 
     @Test
     public void testWriteTwentyThousandRecordsToGenericSink() throws Exception {
-        env.fromSequence(1, 20000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
-        env.execute("Integration Test: AsyncSinkBaseITCase").getJobExecutionResult();
+        streamExecutionEnvironment.fromSequence(1, 20000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
+        streamExecutionEnvironment.execute("Integration Test: AsyncSinkBaseITCase").getJobExecutionResult();
     }
 
     @Test
     public void testFailuresOnPersistingToDestinationAreCaughtAndRaised() {
-        env.fromSequence(999_999, 1_000_100)
+        streamExecutionEnvironment.fromSequence(999_999, 1_000_100)
                 .map(Object::toString)
                 .sinkTo(new ArrayListAsyncSink(1, 1, 2, 10, 1000, 10));
-        assertThatThrownBy(() -> env.execute("Integration Test: AsyncSinkBaseITCase"))
+        assertThatThrownBy(() -> streamExecutionEnvironment.execute("Integration Test: AsyncSinkBaseITCase"))
                 .isInstanceOf(JobExecutionException.class)
                 .rootCause()
                 .hasMessageContaining(
@@ -64,9 +64,9 @@ public class AsyncSinkBaseITCase {
 
     @Test
     public void testThatNoIssuesOccurWhenCheckpointingIsEnabled() throws Exception {
-        env.enableCheckpointing(20);
-        RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 200);
-        env.fromSequence(1, 10_000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
-        env.execute("Integration Test: AsyncSinkBaseITCase");
+        streamExecutionEnvironment.enableCheckpointing(20);
+        RestartStrategyUtils.configureFixedDelayRestartStrategy(streamExecutionEnvironment, 1, 200);
+        streamExecutionEnvironment.fromSequence(1, 10_000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
+        streamExecutionEnvironment.execute("Integration Test: AsyncSinkBaseITCase");
     }
 }

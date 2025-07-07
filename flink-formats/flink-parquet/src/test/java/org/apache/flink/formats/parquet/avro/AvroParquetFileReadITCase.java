@@ -122,12 +122,12 @@ class AvroParquetFileReadITCase {
                                 Path.fromLocalFile(temporaryFolder.toFile()))
                         .monitorContinuously(Duration.ofMillis(5))
                         .build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
-        env.enableCheckpointing(10L);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
+        streamExecutionEnvironment.enableCheckpointing(10L);
 
         DataStream<GenericRecord> stream =
-                env.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
+                streamExecutionEnvironment.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
 
         try (CloseableIterator<GenericRecord> iterator =
                 stream.executeAndCollect("Reading Avro GenericRecords")) {
@@ -149,12 +149,12 @@ class AvroParquetFileReadITCase {
                                 Path.fromLocalFile(temporaryFolder.toFile()))
                         .monitorContinuously(Duration.ofMillis(5))
                         .build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
-        env.enableCheckpointing(10L);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
+        streamExecutionEnvironment.enableCheckpointing(10L);
 
         DataStream<AvroParquetRecordFormatTest.User> stream =
-                env.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
+                streamExecutionEnvironment.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
 
         try (CloseableIterator<AvroParquetRecordFormatTest.User> iterator =
                 stream.executeAndCollect("Reading Avro Reflect Records")) {
