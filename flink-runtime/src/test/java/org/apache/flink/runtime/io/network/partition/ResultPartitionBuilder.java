@@ -68,7 +68,7 @@ public class ResultPartitionBuilder {
 
     private int networkBuffersPerChannel = 1;
 
-    private int floatingNetworkBuffersPerGate = 1;
+    private int requiredFloatingBuffers = 1;
 
     private int sortShuffleMinBuffers = 100;
 
@@ -134,7 +134,7 @@ public class ResultPartitionBuilder {
             NettyShuffleEnvironment environment) {
         return setNetworkBuffersPerChannel(
                         environment.getConfiguration().networkBuffersPerChannel())
-                .setFloatingNetworkBuffersPerGate(
+                .setRequiredFloatingBuffers(
                         environment.getConfiguration().requiredFloatingBuffers())
                 .setNetworkBufferSize(environment.getConfiguration().networkBufferSize())
                 .setNetworkBufferPool(environment.getNetworkBufferPool())
@@ -167,9 +167,9 @@ public class ResultPartitionBuilder {
         return this;
     }
 
-    public ResultPartitionBuilder setFloatingNetworkBuffersPerGate(
+    public ResultPartitionBuilder setRequiredFloatingBuffers(
             int floatingNetworkBuffersPerGate) {
-        this.floatingNetworkBuffersPerGate = floatingNetworkBuffersPerGate;
+        this.requiredFloatingBuffers = floatingNetworkBuffersPerGate;
         return this;
     }
 
@@ -250,7 +250,7 @@ public class ResultPartitionBuilder {
                         batchShuffleReadIOExecutor,
                         blockingSubpartitionType,
                         networkBuffersPerChannel,
-                        floatingNetworkBuffersPerGate,
+                        requiredFloatingBuffers,
                         networkBufferSize,
                         blockingShuffleCompressionEnabled,
                         compressionCodec,
