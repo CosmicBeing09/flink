@@ -164,7 +164,7 @@ public class DefaultRescaleManager implements RescaleManager {
         rescaleScheduled = false;
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         } else if (scalingIntervalMax != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
@@ -187,7 +187,7 @@ public class DefaultRescaleManager implements RescaleManager {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
                     scalingIntervalMax);
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         }
     }
 
