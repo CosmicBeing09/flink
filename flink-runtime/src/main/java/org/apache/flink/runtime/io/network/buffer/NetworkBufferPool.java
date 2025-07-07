@@ -454,9 +454,9 @@ public class NetworkBufferPool
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
+            int requiredFloatingBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
+                requiredFloatingBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
     }
 
     @Override

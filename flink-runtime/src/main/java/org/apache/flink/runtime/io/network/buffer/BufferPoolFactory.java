@@ -30,11 +30,11 @@ public interface BufferPoolFactory {
      * <p>The buffer pool is of dynamic size ranges from <tt>minUsedBuffers</tt> to
      * <tt>maxUsedBuffers</tt>, with <tt>numExpectedBuffers</tt> serving as the weight.
      *
-     * @param numExpectedBuffers the number of expected network buffers of this pool
+     * @param requiredFloatingBuffers the number of expected network buffers of this pool
      * @param minUsedBuffers minimum number of network buffers in this pool
      * @param maxUsedBuffers maximum number of network buffers this pool offers
      */
-    BufferPool createBufferPool(int numExpectedBuffers, int minUsedBuffers, int maxUsedBuffers)
+    BufferPool createBufferPool(int requiredFloatingBuffers, int minUsedBuffers, int maxUsedBuffers)
             throws IOException;
 
     /**
