@@ -173,7 +173,7 @@ public class SingleInputGateFactory {
                         networkBufferPool,
                         gateBuffersSpec.getExpectedBuffersPerGate(),
                         gateBuffersSpec.getMinBuffersPerGate(),
-                        gateBuffersSpec.getMaxBuffersPerGate());
+                        gateBuffersSpec.getTotalBuffersTargetPerGate());
 
         BufferDecompressor bufferDecompressor = null;
         if (igdd.getConsumedPartitionType().supportCompression()
