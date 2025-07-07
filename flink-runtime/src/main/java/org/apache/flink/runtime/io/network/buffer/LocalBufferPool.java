@@ -298,7 +298,7 @@ public class LocalBufferPool implements BufferPool {
     }
 
     @Override
-    public int getMinNumberOfMemorySegments() {
+    public int getNumberOfRequiredMemorySegments() {
         return minNumberOfMemorySegments;
     }
 
