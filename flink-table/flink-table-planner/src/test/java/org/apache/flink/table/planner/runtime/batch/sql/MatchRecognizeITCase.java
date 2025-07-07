@@ -54,13 +54,13 @@ class MatchRecognizeITCase {
     @RegisterExtension
     private static final MiniClusterExtension MINI_CLUSTER_EXTENSION = new MiniClusterExtension();
 
-    private StreamExecutionEnvironment env;
+    private StreamExecutionEnvironment streamExecutionEnvironment;
     private StreamTableEnvironment tEnv;
 
     @BeforeEach
     void setup() {
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
-        tEnv = StreamTableEnvironment.create(env, EnvironmentSettings.inBatchMode());
+        streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        tEnv = StreamTableEnvironment.create(streamExecutionEnvironment, EnvironmentSettings.inBatchMode());
         tEnv.getConfig().set(BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_ENABLED, false);
     }
 
@@ -69,7 +69,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a"),
                                         Row.of(2, "z"),
                                         Row.of(3, "b"),
@@ -110,7 +110,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a", null),
                                         Row.of(2, "b", null),
                                         Row.of(3, "c", null),
@@ -159,7 +159,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a", "key1", "second_key3"),
                                         Row.of(2, "b", "key1", "second_key3"),
                                         Row.of(3, "c", "key1", "second_key3"),
@@ -215,7 +215,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "Ticker",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of("ACME", 1L, 19, 1),
                                         Row.of("ACME", 2L, 17, 2),
                                         Row.of("ACME", 3L, 13, 3),
@@ -266,7 +266,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "Ticker",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "ACME", 1L, 20),
                                         Row.of(2, "ACME", 2L, 19),
                                         Row.of(3, "ACME", 3L, 18),
@@ -328,7 +328,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "Ticker",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of("ACME", 1L, 19, 1),
                                         Row.of("ACME", 2L, 17, 2),
                                         Row.of("ACME", 3L, 13, 3),
@@ -381,7 +381,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a", 1, 0.8, 1),
                                         Row.of(2, "z", 2, 0.8, 3),
                                         Row.of(3, "b", 1, 0.8, 2),
@@ -450,7 +450,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a", 10),
                                         Row.of(2, "z", 10),
                                         Row.of(3, "b", null),
@@ -501,7 +501,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(Row.of(1, "a"))
+                        streamExecutionEnvironment.fromData(Row.of(1, "a"))
                                 .returns(ROW_NAMED(new String[] {"id", "name"}, INT, STRING)),
                         Schema.newBuilder()
                                 .column("id", DataTypes.INT())
@@ -531,7 +531,7 @@ class MatchRecognizeITCase {
         tEnv.createTemporaryView(
                 "MyTable",
                 tEnv.fromDataStream(
-                        env.fromData(
+                        streamExecutionEnvironment.fromData(
                                         Row.of(1, "a", 1),
                                         Row.of(2, "a", 1),
                                         Row.of(3, "a", 1),
@@ -560,7 +560,7 @@ class MatchRecognizeITCase {
         Configuration jobParameters = new Configuration();
         jobParameters.setString("prefix", prefix);
         jobParameters.setString("start", Integer.toString(startFrom));
-        env.getConfig().setGlobalJobParameters(jobParameters);
+        streamExecutionEnvironment.getConfig().setGlobalJobParameters(jobParameters);
         TableResult tableResult =
                 tEnv.executeSql(
                         String.format(
