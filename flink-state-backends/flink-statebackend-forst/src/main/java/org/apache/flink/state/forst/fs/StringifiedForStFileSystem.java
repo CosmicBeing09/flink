@@ -40,12 +40,12 @@ public class StringifiedForStFileSystem {
         return new StringifiedForStFileSystem(ForStFlinkFileSystem.get(URI.create(uri)));
     }
 
-    public boolean exists(final String path) throws IOException {
-        return fileSystem.exists(new Path(path));
+    public boolean exists(final String dbFilePath) throws IOException {
+        return fileSystem.exists(new Path(dbFilePath));
     }
 
-    public ForStFileStatus getFileStatus(String path) throws IOException {
-        return new ForStFileStatus(fileSystem.getFileStatus(new Path(path)));
+    public ForStFileStatus getFileStatus(String dbFilePath) throws IOException {
+        return new ForStFileStatus(fileSystem.getFileStatus(new Path(dbFilePath)));
     }
 
     public ForStFileStatus[] listStatus(String path) throws IOException {
