@@ -213,7 +213,7 @@ public class DataStream<T> {
         return environment;
     }
 
-    public ExecutionConfig getExecutionConfig() {
+    public ExecutionConfig getConfig() {
         return environment.getConfig();
     }
 
@@ -343,7 +343,7 @@ public class DataStream<T> {
     private KeyedStream<T, Tuple> keyBy(Keys<T> keys) {
         return new KeyedStream<>(
                 this,
-                clean(KeySelectorUtil.getSelectorForKeys(keys, getType(), getExecutionConfig())));
+                clean(KeySelectorUtil.getSelectorForKeys(keys, getType(), getConfig())));
     }
 
     /**
@@ -405,7 +405,7 @@ public class DataStream<T> {
     private <K> DataStream<T> partitionCustom(Partitioner<K> partitioner, Keys<T> keys) {
         KeySelector<T, K> keySelector =
                 KeySelectorUtil.getSelectorForOneKey(
-                        keys, partitioner, getType(), getExecutionConfig());
+                        keys, partitioner, getType(), getConfig());
 
         return setConnectionType(
                 new CustomPartitionerWrapper<>(clean(partitioner), clean(keySelector)));
@@ -1257,7 +1257,7 @@ public class DataStream<T> {
 
         // configure the type if needed
         if (sinkFunction instanceof InputTypeConfigurable) {
-            ((InputTypeConfigurable) sinkFunction).setInputType(getType(), getExecutionConfig());
+            ((InputTypeConfigurable) sinkFunction).setInputType(getType(), getConfig());
         }
 
         return DataStreamSink.forSinkFunction(this, clean(sinkFunction));

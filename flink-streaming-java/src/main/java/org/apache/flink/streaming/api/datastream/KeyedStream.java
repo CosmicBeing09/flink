@@ -675,8 +675,8 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                             upperBoundInclusive,
                             leftLateDataOutputTag,
                             rightLateDataOutputTag,
-                            left.getType().createSerializer(left.getExecutionConfig()),
-                            right.getType().createSerializer(right.getExecutionConfig()),
+                            left.getType().createSerializer(left.getConfig()),
+                            right.getType().createSerializer(right.getConfig()),
                             cleanedUdf);
 
             return left.connect(right)
@@ -811,7 +811,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
      * @return The transformed DataStream.
      */
     public SingleOutputStreamOperator<T> sum(int positionToSum) {
-        return aggregate(new SumAggregator<>(positionToSum, getType(), getExecutionConfig()));
+        return aggregate(new SumAggregator<>(positionToSum, getType(), getConfig()));
     }
 
     /**
@@ -825,7 +825,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
      * @return The transformed DataStream.
      */
     public SingleOutputStreamOperator<T> sum(String field) {
-        return aggregate(new SumAggregator<>(field, getType(), getExecutionConfig()));
+        return aggregate(new SumAggregator<>(field, getType(), getConfig()));
     }
 
     /**
@@ -843,7 +843,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         positionToMin,
                         getType(),
                         AggregationFunction.AggregationType.MIN,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -866,7 +866,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MIN,
                         false,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -884,7 +884,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         positionToMax,
                         getType(),
                         AggregationFunction.AggregationType.MAX,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -907,7 +907,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MAX,
                         false,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -932,7 +932,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MINBY,
                         first,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -956,7 +956,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MAXBY,
                         first,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -1008,7 +1008,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MINBY,
                         first,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     /**
@@ -1060,7 +1060,7 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                         getType(),
                         AggregationFunction.AggregationType.MAXBY,
                         first,
-                        getExecutionConfig()));
+                        getConfig()));
     }
 
     protected SingleOutputStreamOperator<T> aggregate(AggregationFunction<T> aggregate) {
@@ -1103,12 +1103,12 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                 getType(),
                 new QueryableValueStateOperator<>(queryableStateName, stateDescriptor));
 
-        stateDescriptor.initializeSerializerUnlessSet(getExecutionConfig());
+        stateDescriptor.initializeSerializerUnlessSet(getConfig());
 
         return new QueryableStateStream<>(
                 queryableStateName,
                 stateDescriptor,
-                getKeyType().createSerializer(getExecutionConfig()));
+                getKeyType().createSerializer(getConfig()));
     }
 
     /**
@@ -1130,11 +1130,11 @@ public class KeyedStream<T, KEY> extends DataStream<T> {
                 getType(),
                 new QueryableAppendingStateOperator<>(queryableStateName, stateDescriptor));
 
-        stateDescriptor.initializeSerializerUnlessSet(getExecutionConfig());
+        stateDescriptor.initializeSerializerUnlessSet(getConfig());
 
         return new QueryableStateStream<>(
                 queryableStateName,
                 stateDescriptor,
-                getKeyType().createSerializer(getExecutionConfig()));
+                getKeyType().createSerializer(getConfig()));
     }
 }

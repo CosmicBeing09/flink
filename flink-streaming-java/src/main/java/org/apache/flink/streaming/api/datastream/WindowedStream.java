@@ -86,7 +86,7 @@ public class WindowedStream<T, K, W extends Window> {
                 new WindowOperatorBuilder<>(
                         windowAssigner,
                         windowAssigner.getDefaultTrigger(),
-                        input.getExecutionConfig(),
+                        input.getConfig(),
                         input.getType(),
                         input.getKeySelector(),
                         input.getKeyType());
@@ -696,7 +696,7 @@ public class WindowedStream<T, K, W extends Window> {
      */
     public SingleOutputStreamOperator<T> sum(int positionToSum) {
         return aggregate(
-                new SumAggregator<>(positionToSum, input.getType(), input.getExecutionConfig()));
+                new SumAggregator<>(positionToSum, input.getType(), input.getConfig()));
     }
 
     /**
@@ -711,7 +711,7 @@ public class WindowedStream<T, K, W extends Window> {
      * @return The transformed DataStream.
      */
     public SingleOutputStreamOperator<T> sum(String field) {
-        return aggregate(new SumAggregator<>(field, input.getType(), input.getExecutionConfig()));
+        return aggregate(new SumAggregator<>(field, input.getType(), input.getConfig()));
     }
 
     /**
@@ -727,7 +727,7 @@ public class WindowedStream<T, K, W extends Window> {
                         positionToMin,
                         input.getType(),
                         AggregationFunction.AggregationType.MIN,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -748,7 +748,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MIN,
                         false,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -792,7 +792,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MINBY,
                         first,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -812,7 +812,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MINBY,
                         first,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -828,7 +828,7 @@ public class WindowedStream<T, K, W extends Window> {
                         positionToMax,
                         input.getType(),
                         AggregationFunction.AggregationType.MAX,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -847,7 +847,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MAX,
                         false,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -891,7 +891,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MAXBY,
                         first,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     /**
@@ -911,7 +911,7 @@ public class WindowedStream<T, K, W extends Window> {
                         input.getType(),
                         AggregationFunction.AggregationType.MAXBY,
                         first,
-                        input.getExecutionConfig()));
+                        input.getConfig()));
     }
 
     private SingleOutputStreamOperator<T> aggregate(AggregationFunction<T> aggregator) {
