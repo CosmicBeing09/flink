@@ -235,7 +235,7 @@ public class GenericDataSinkBase<IN> extends Operator<Nothing> {
 
     @SuppressWarnings("unchecked")
     protected void executeOnCollections(
-            List<IN> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         OutputFormat<IN> format = this.formatWrapper.getUserCodeObject();
         TypeInformation<IN> inputType = getInput().getOperatorInfo().getOutputType();
@@ -248,11 +248,11 @@ public class GenericDataSinkBase<IN> extends Operator<Nothing> {
             if (inputType instanceof CompositeType) {
                 sortComparator =
                         ((CompositeType<IN>) inputType)
-                                .createComparator(sortColumns, sortOrderings, 0, executionConfig);
+                                .createComparator(sortColumns, sortOrderings, 0, config);
             } else if (inputType instanceof AtomicType) {
                 sortComparator =
                         ((AtomicType<IN>) inputType)
-                                .createComparator(sortOrderings[0], executionConfig);
+                                .createComparator(sortOrderings[0], config);
             } else {
                 throw new UnsupportedOperationException(
                         "Local output sorting does not support type " + inputType + " yet.");
