@@ -124,7 +124,7 @@ public class RowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Row,
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Row>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Row>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             if (version.isNewerVersionThan(FlinkVersion.v1_10)) {
                 return TypeSerializerMatchers.isCompatibleAsIs();
