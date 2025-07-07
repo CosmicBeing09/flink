@@ -46,7 +46,7 @@ public class FileMappingManagerTest {
         fileMappingManager.createFile(new Path(src));
         String dst = tempDir.toString() + "/dst";
         fileMappingManager.link(src, dst);
-        assertThat(fileMappingManager.realPath(new Path(dst)).path.toString()).isEqualTo(src);
+        assertThat(fileMappingManager.mappingEntry(new Path(dst)).path.toString()).isEqualTo(src);
     }
 
     @Test
@@ -64,17 +64,17 @@ public class FileMappingManagerTest {
         fileMappingManager.createFile(new Path(src));
         String dstB = tempDir.toString() + "/b";
         fileMappingManager.link(src, dstB);
-        assertThat(fileMappingManager.realPath(new Path(dstB)).path.toString()).isEqualTo(src);
+        assertThat(fileMappingManager.mappingEntry(new Path(dstB)).path.toString()).isEqualTo(src);
         assertThat(fileMappingManager.mappingEntry(dstB).getReferenceCount()).isEqualTo(2);
 
         String dstC = tempDir.toString() + "/c";
         fileMappingManager.link(dstB, dstC);
-        assertThat(fileMappingManager.realPath(new Path(dstC)).path.toString()).isEqualTo(src);
+        assertThat(fileMappingManager.mappingEntry(new Path(dstC)).path.toString()).isEqualTo(src);
         assertThat(fileMappingManager.mappingEntry(dstC).getReferenceCount()).isEqualTo(3);
 
         String dstD = tempDir.toString() + "/d";
         fileMappingManager.link(dstC, dstD);
-        assertThat(fileMappingManager.realPath(new Path(dstD)).path.toString()).isEqualTo(src);
+        assertThat(fileMappingManager.mappingEntry(new Path(dstD)).path.toString()).isEqualTo(src);
         assertThat(fileMappingManager.mappingEntry(dstC).getReferenceCount()).isEqualTo(4);
 
         assertThat(fileMappingManager.link(dstD, dstC)).isEqualTo(-1);
