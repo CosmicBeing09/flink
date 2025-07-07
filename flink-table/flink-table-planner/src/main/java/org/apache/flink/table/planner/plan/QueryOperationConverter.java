@@ -288,15 +288,15 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         @Override
-        public RelNode visit(CalculatedQueryOperation calculatedTable) {
-            final ContextResolvedFunction resolvedFunction = calculatedTable.getResolvedFunction();
-            final List<RexNode> parameters = convertToRexNodes(calculatedTable.getArguments());
+        public RelNode visit(CalculatedQueryOperation correlatedFunctionTable) {
+            final ContextResolvedFunction resolvedFunction = correlatedFunctionTable.getResolvedFunction();
+            final List<RexNode> parameters = convertToRexNodes(correlatedFunctionTable.getArguments());
 
             final FunctionDefinition functionDefinition = resolvedFunction.getDefinition();
             if (functionDefinition instanceof TableFunctionDefinition) {
                 final FlinkTypeFactory typeFactory = relBuilder.getTypeFactory();
                 return convertLegacyTableFunction(
-                        calculatedTable,
+                        correlatedFunctionTable,
                         (TableFunctionDefinition) functionDefinition,
                         parameters,
                         typeFactory);
@@ -310,7 +310,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
                     sqlFunction,
                     0,
                     parameters,
-                    calculatedTable.getResolvedSchema().getColumnNames());
+                    correlatedFunctionTable.getResolvedSchema().getColumnNames());
 
             return relBuilder.build();
         }
