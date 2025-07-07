@@ -51,7 +51,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.memory.SharedResources;
@@ -189,7 +189,7 @@ class TaskCheckpointingBehaviourTest {
         Configuration taskConfig = new Configuration();
         StreamConfig cfg = new StreamConfig(taskConfig);
         cfg.setStreamOperator(op);
-        cfg.setOperatorID(new OperatorID());
+        cfg.setOperatorID(new OPERATOR_ID_PAIR());
         cfg.setStateBackend(backend);
         cfg.serializeAllConfigs();
 

@@ -20,11 +20,10 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.OperatorStreamStateHandle;
 import org.apache.flink.runtime.state.StreamStateHandle;
@@ -61,7 +60,7 @@ class CheckpointMetadataLoadingTest {
     @Test
     void testAllStateRestored() throws Exception {
         final JobID jobId = new JobID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         final long checkpointId = Integer.MAX_VALUE + 123123L;
         final int parallelism = 128128;
 
@@ -86,7 +85,7 @@ class CheckpointMetadataLoadingTest {
     /** Tests that savepoint loading fails when there is a max-parallelism mismatch. */
     @Test
     void testMaxParallelismMismatch() throws Exception {
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         final int parallelism = 128128;
 
         final CompletedCheckpointStorageLocation testSavepoint =
@@ -113,7 +112,7 @@ class CheckpointMetadataLoadingTest {
      */
     @Test
     void testNonRestoredStateWhenDisallowed() throws Exception {
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         final int parallelism = 9;
 
         final CompletedCheckpointStorageLocation testSavepoint =
@@ -139,7 +138,7 @@ class CheckpointMetadataLoadingTest {
      */
     @Test
     void testNonRestoredStateWhenAllowed() throws Exception {
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         final int parallelism = 9;
 
         final CompletedCheckpointStorageLocation testSavepoint =
@@ -164,7 +163,7 @@ class CheckpointMetadataLoadingTest {
      */
     @Test
     void testUnmatchedCoordinatorOnlyStateFails() throws Exception {
-        final OperatorID operatorID = new OperatorID();
+        final OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
         final int maxParallelism = 1234;
 
         final OperatorState state =
@@ -210,7 +209,7 @@ class CheckpointMetadataLoadingTest {
     }
 
     private static CompletedCheckpointStorageLocation createSavepointWithOperatorSubtaskState(
-            final long checkpointId, final OperatorID operatorId, final int parallelism)
+            final long checkpointId, final OPERATOR_ID_PAIR operatorId, final int parallelism)
             throws IOException {
 
         final Random rnd = new Random();
@@ -233,15 +232,15 @@ class CheckpointMetadataLoadingTest {
     }
 
     private static Map<JobVertexID, ExecutionJobVertex> createTasks(
-            OperatorID operatorId, int parallelism, int maxParallelism) {
+            OPERATOR_ID_PAIR operatorId, int parallelism, int maxParallelism) {
         final JobVertexID vertexId =
                 new JobVertexID(operatorId.getLowerPart(), operatorId.getUpperPart());
 
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
         when(vertex.getParallelism()).thenReturn(parallelism);
         when(vertex.getMaxParallelism()).thenReturn(maxParallelism);
-        when(vertex.getOperatorIDs())
-                .thenReturn(Collections.singletonList(OperatorIDPair.generatedIDOnly(operatorId)));
+        when(vertex.getOperatorIDPairs())
+                .thenReturn(Collections.singletonList(org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(operatorId)));
 
         if (parallelism != maxParallelism) {
             when(vertex.canRescaleMaxParallelism(anyInt())).thenReturn(false);

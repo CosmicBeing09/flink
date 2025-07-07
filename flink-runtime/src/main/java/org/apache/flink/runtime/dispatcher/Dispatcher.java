@@ -59,11 +59,8 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.highavailability.JobResultStoreOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmanager.JobGraphWriter;
 import org.apache.flink.runtime.jobmaster.JobManagerRunner;
 import org.apache.flink.runtime.jobmaster.JobManagerRunnerResult;
@@ -1099,7 +1096,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
             JobID jobId,
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             SerializedValue<CoordinationRequest> serializedRequest,
             Time timeout) {
         return performOperationOnJobMasterGateway(

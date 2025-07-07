@@ -28,7 +28,7 @@ import org.apache.flink.api.connector.source.SourceReaderContext;
 import org.apache.flink.api.connector.source.SourceSplit;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorEventGateway;
 import org.apache.flink.runtime.source.coordinator.SourceCoordinatorProvider;
@@ -95,7 +95,7 @@ public class SourceOperatorFactory<OUT> extends AbstractStreamOperatorFactory<OU
     @Override
     public <T extends StreamOperator<OUT>> T createStreamOperator(
             StreamOperatorParameters<OUT> parameters) {
-        final OperatorID operatorId = parameters.getStreamConfig().getOperatorID();
+        final OPERATOR_ID_PAIR operatorId = parameters.getStreamConfig().getOperatorID();
         final OperatorEventGateway gateway =
                 parameters.getOperatorEventDispatcher().getOperatorEventGateway(operatorId);
 
@@ -134,7 +134,7 @@ public class SourceOperatorFactory<OUT> extends AbstractStreamOperatorFactory<OU
 
     @Override
     public OperatorCoordinator.Provider getCoordinatorProvider(
-            String operatorName, OperatorID operatorID) {
+            String operatorName, OPERATOR_ID_PAIR operatorID) {
         return new SourceCoordinatorProvider<>(
                 operatorName,
                 operatorID,

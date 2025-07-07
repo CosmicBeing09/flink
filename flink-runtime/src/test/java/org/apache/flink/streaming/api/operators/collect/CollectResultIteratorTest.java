@@ -24,7 +24,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.operators.collect.utils.AbstractTestCoordinationRequestHandler;
 import org.apache.flink.streaming.api.operators.collect.utils.TestCheckpointedCoordinationRequestHandler;
 import org.apache.flink.streaming.api.operators.collect.utils.TestJobClient;
@@ -49,7 +49,7 @@ class CollectResultIteratorTest {
 
     private final TypeSerializer<Integer> serializer = IntSerializer.INSTANCE;
 
-    private static final OperatorID TEST_OPERATOR_ID = new OperatorID();
+    private static final OPERATOR_ID_PAIR TEST_OPERATOR_ID = new OPERATOR_ID_PAIR();
     private static final JobID TEST_JOB_ID = new JobID();
     private static final String ACCUMULATOR_NAME = "accumulatorName";
 

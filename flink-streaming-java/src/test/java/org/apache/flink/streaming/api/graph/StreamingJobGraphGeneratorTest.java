@@ -58,16 +58,8 @@ import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
@@ -711,14 +703,14 @@ class StreamingJobGraphGeneratorTest {
                 new InputOutputFormatContainer(
                         new TaskConfig(jobVertex.getConfiguration()),
                         Thread.currentThread().getContextClassLoader());
-        Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+        Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                 formatContainer.getInputFormats();
-        Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+        Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                 formatContainer.getOutputFormats();
         assertThat(inputFormats).hasSize(1);
         assertThat(outputFormats).hasSize(2);
 
-        Map<String, OperatorID> nameToOperatorIds = new HashMap<>();
+        Map<String, OPERATOR_ID_PAIR> nameToOperatorIds = new HashMap<>();
         StreamConfig headConfig = new StreamConfig(jobVertex.getConfiguration());
         nameToOperatorIds.put(headConfig.getOperatorName(), headConfig.getOperatorID());
 
@@ -2721,7 +2713,7 @@ class StreamingJobGraphGeneratorTest {
 
         @Override
         public OperatorCoordinator.Provider getCoordinatorProvider(
-                String operatorName, OperatorID operatorID) {
+                String operatorName, OPERATOR_ID_PAIR operatorID) {
             return new NonSerializableCoordinatorProvider();
         }
 
@@ -2759,7 +2751,7 @@ class StreamingJobGraphGeneratorTest {
             implements OperatorCoordinator.Provider {
 
         @Override
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             throw new UnsupportedOperationException();
         }
 
@@ -2914,10 +2906,10 @@ class StreamingJobGraphGeneratorTest {
 
         @Override
         public OperatorCoordinator.Provider getCoordinatorProvider(
-                String operatorName, OperatorID operatorID) {
+                String operatorName, OPERATOR_ID_PAIR operatorID) {
             return new OperatorCoordinator.Provider() {
                 @Override
-                public OperatorID getOperatorId() {
+                public OPERATOR_ID_PAIR getOperatorId() {
                     return null;
                 }
 

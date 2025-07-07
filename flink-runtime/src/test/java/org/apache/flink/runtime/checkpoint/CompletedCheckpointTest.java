@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
 import org.apache.flink.runtime.state.testutils.EmptyStreamStateHandle;
@@ -213,8 +213,8 @@ public class CompletedCheckpointTest {
     @Test
     void testRegisterStatesAtRegistry() {
         OperatorState state = mock(OperatorState.class);
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-        operatorStates.put(new OperatorID(), state);
+        Map<OPERATOR_ID_PAIR, OperatorState> operatorStates = new HashMap<>();
+        operatorStates.put(new OPERATOR_ID_PAIR(), state);
 
         CompletedCheckpoint checkpoint =
                 new CompletedCheckpoint(
@@ -239,8 +239,8 @@ public class CompletedCheckpointTest {
     @Test
     void testCleanUpOnSubsume() throws Exception {
         OperatorState state = mock(OperatorState.class);
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-        operatorStates.put(new OperatorID(), state);
+        Map<OPERATOR_ID_PAIR, OperatorState> operatorStates = new HashMap<>();
+        operatorStates.put(new OPERATOR_ID_PAIR(), state);
 
         EmptyStreamStateHandle metadata = new EmptyStreamStateHandle();
         TestCompletedCheckpointStorageLocation location =
@@ -286,8 +286,8 @@ public class CompletedCheckpointTest {
         for (JobStatus status : terminalStates) {
 
             OperatorState state = mock(OperatorState.class);
-            Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
-            operatorStates.put(new OperatorID(), state);
+            Map<OPERATOR_ID_PAIR, OperatorState> operatorStates = new HashMap<>();
+            operatorStates.put(new OPERATOR_ID_PAIR(), state);
 
             EmptyStreamStateHandle retainedHandle = new EmptyStreamStateHandle();
             TestCompletedCheckpointStorageLocation retainedLocation =

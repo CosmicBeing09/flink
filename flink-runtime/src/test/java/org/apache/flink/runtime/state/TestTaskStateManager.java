@@ -31,7 +31,7 @@ import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.checkpoint.channel.SequentialChannelStateReader;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandle;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorage;
 import org.apache.flink.runtime.state.changelog.StateChangelogStorageLoader;
@@ -184,7 +184,7 @@ public class TestTaskStateManager implements TaskStateManager {
 
     @Nonnull
     @Override
-    public PrioritizedOperatorSubtaskState prioritizedOperatorState(OperatorID operatorID) {
+    public PrioritizedOperatorSubtaskState prioritizedOperatorState(OPERATOR_ID_PAIR operatorID) {
         TaskStateSnapshot jmTaskStateSnapshot = getLastJobManagerTaskStateSnapshot();
         TaskStateSnapshot tmTaskStateSnapshot = getLastTaskManagerTaskStateSnapshot();
 
@@ -219,7 +219,7 @@ public class TestTaskStateManager implements TaskStateManager {
     }
 
     @Override
-    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OperatorID operatorID) {
+    public Optional<OperatorSubtaskState> getSubtaskJobManagerRestoredState(OPERATOR_ID_PAIR operatorID) {
         TaskStateSnapshot taskStateSnapshot =
                 jobManagerTaskStateSnapshotsByCheckpointId.get(reportedCheckpointId);
         if (taskStateSnapshot == null) {

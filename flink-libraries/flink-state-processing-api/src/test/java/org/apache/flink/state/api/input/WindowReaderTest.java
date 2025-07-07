@@ -27,7 +27,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.state.api.functions.WindowReaderFunction;
 import org.apache.flink.state.api.input.operator.WindowReaderOperator;
@@ -247,7 +247,7 @@ public class WindowReaderTest {
         OperatorSubtaskState state = harness.snapshot(0, 0L);
         harness.close();
 
-        OperatorID operatorID = OperatorIDGenerator.fromUid(UID);
+        OPERATOR_ID_PAIR operatorID = OperatorIDGenerator.fromUid(UID);
         OperatorState operatorState = new OperatorState(operatorID, 1, MAX_PARALLELISM);
         operatorState.putState(0, state);
         return operatorState;

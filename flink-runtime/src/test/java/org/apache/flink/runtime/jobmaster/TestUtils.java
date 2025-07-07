@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -52,7 +52,7 @@ import static org.apache.flink.runtime.checkpoint.StateObjectCollection.singleto
 public class TestUtils {
 
     public static File createSavepointWithOperatorState(
-            File savepointFile, long savepointId, OperatorID... operatorIds) throws IOException {
+            File savepointFile, long savepointId, OPERATOR_ID_PAIR... operatorIds) throws IOException {
         final Collection<OperatorState> operatorStates = createOperatorState(operatorIds);
         final CheckpointMetadata savepoint =
                 new CheckpointMetadata(savepointId, operatorStates, Collections.emptyList());
@@ -64,11 +64,11 @@ public class TestUtils {
         return savepointFile;
     }
 
-    private static Collection<OperatorState> createOperatorState(OperatorID... operatorIds) {
+    private static Collection<OperatorState> createOperatorState(OPERATOR_ID_PAIR... operatorIds) {
         Random random = new Random();
         Collection<OperatorState> operatorStates = new ArrayList<>(operatorIds.length);
 
-        for (OperatorID operatorId : operatorIds) {
+        for (OPERATOR_ID_PAIR operatorId : operatorIds) {
             final OperatorState operatorState = new OperatorState(operatorId, 1, 42);
             final OperatorSubtaskState subtaskState =
                     OperatorSubtaskState.builder()

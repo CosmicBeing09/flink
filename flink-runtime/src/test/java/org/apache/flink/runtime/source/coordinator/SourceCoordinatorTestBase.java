@@ -26,7 +26,7 @@ import org.apache.flink.api.connector.source.mocks.MockSourceSplitSerializer;
 import org.apache.flink.api.connector.source.mocks.MockSplitEnumeratorCheckpointSerializer;
 import org.apache.flink.core.fs.AutoCloseableRegistry;
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.operators.coordination.EventReceivingTasks;
 import org.apache.flink.runtime.operators.coordination.MockOperatorCoordinatorContext;
@@ -51,7 +51,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 abstract class SourceCoordinatorTestBase {
 
     protected static final String OPERATOR_NAME = "TestOperator";
-    protected static final OperatorID TEST_OPERATOR_ID = new OperatorID(1234L, 5678L);
+    protected static final OPERATOR_ID_PAIR TEST_OPERATOR_ID = new OPERATOR_ID_PAIR(1234L, 5678L);
     protected static final int NUM_SUBTASKS = 3;
 
     protected boolean supportsConcurrentExecutionAttempts = false;

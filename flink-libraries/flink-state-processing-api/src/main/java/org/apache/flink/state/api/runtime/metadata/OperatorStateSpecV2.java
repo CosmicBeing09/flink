@@ -20,7 +20,7 @@ package org.apache.flink.state.api.runtime.metadata;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.runtime.checkpoint.OperatorState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.state.api.runtime.StateBootstrapTransformationWithID;
 import org.apache.flink.util.Preconditions;
 
@@ -34,7 +34,7 @@ import javax.annotation.Nullable;
 @Internal
 class OperatorStateSpecV2 {
 
-    private final OperatorID id;
+    private final OPERATOR_ID_PAIR id;
 
     @Nullable private final OperatorState existingState;
 

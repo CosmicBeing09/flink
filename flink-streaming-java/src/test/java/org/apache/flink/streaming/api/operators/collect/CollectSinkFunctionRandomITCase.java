@@ -20,7 +20,7 @@ package org.apache.flink.streaming.api.operators.collect;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.operators.collect.utils.CollectSinkFunctionTestWrapper;
 import org.apache.flink.streaming.api.operators.collect.utils.TestJobClient;
 import org.apache.flink.util.OptionalFailure;
@@ -49,7 +49,7 @@ class CollectSinkFunctionRandomITCase {
 
     private static final int MAX_RESULTS_PER_BATCH = 3;
     private static final JobID TEST_JOB_ID = new JobID();
-    private static final OperatorID TEST_OPERATOR_ID = new OperatorID();
+    private static final OPERATOR_ID_PAIR TEST_OPERATOR_ID = new OPERATOR_ID_PAIR();
 
     private static final TypeSerializer<Integer> serializer = IntSerializer.INSTANCE;
 

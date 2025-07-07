@@ -31,7 +31,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateBuilder;
 import org.apache.flink.runtime.io.network.partition.consumer.StreamTestSingleInputGate;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.metrics.groups.TaskMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
@@ -180,11 +180,11 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
     public <SourceType> StreamTaskMailboxTestHarnessBuilder<OUT> addSourceInput(
             SourceOperatorFactory<SourceType> sourceOperatorFactory,
             TypeInformation<SourceType> sourceType) {
-        return addSourceInput(new OperatorID(), sourceOperatorFactory, sourceType);
+        return addSourceInput(new OPERATOR_ID_PAIR(), sourceOperatorFactory, sourceType);
     }
 
     public <SourceType> StreamTaskMailboxTestHarnessBuilder<OUT> addSourceInput(
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             SourceOperatorFactory<SourceType> sourceOperatorFactory,
             TypeInformation<SourceType> sourceType) {
         return addSourceInput(
@@ -196,11 +196,11 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
     public <SourceType> StreamTaskMailboxTestHarnessBuilder<OUT> addSourceInput(
             SourceOperatorFactory<SourceType> sourceOperatorFactory,
             TypeSerializer<SourceType> sourceSerializer) {
-        return addSourceInput(new OperatorID(), sourceOperatorFactory, sourceSerializer);
+        return addSourceInput(new OPERATOR_ID_PAIR(), sourceOperatorFactory, sourceSerializer);
     }
 
     public <SourceType> StreamTaskMailboxTestHarnessBuilder<OUT> addSourceInput(
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             SourceOperatorFactory<SourceType> sourceOperatorFactory,
             TypeSerializer<SourceType> sourceSerializer) {
         inputs.add(
@@ -396,17 +396,17 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
     public StreamTaskMailboxTestHarnessBuilder<OUT> setupOutputForSingletonOperatorChain(
             StreamOperator<?> operator) {
         return setupOutputForSingletonOperatorChain(
-                SimpleOperatorFactory.of(operator), new OperatorID());
+                SimpleOperatorFactory.of(operator), new OPERATOR_ID_PAIR());
     }
 
     public StreamTaskMailboxTestHarnessBuilder<OUT> setupOutputForSingletonOperatorChain(
-            StreamOperator<?> operator, OperatorID operatorID) {
+            StreamOperator<?> operator, OPERATOR_ID_PAIR operatorID) {
         return setupOutputForSingletonOperatorChain(SimpleOperatorFactory.of(operator), operatorID);
     }
 
     public StreamTaskMailboxTestHarnessBuilder<OUT> setupOutputForSingletonOperatorChain(
             StreamOperatorFactory<?> factory) {
-        return setupOutputForSingletonOperatorChain(factory, new OperatorID());
+        return setupOutputForSingletonOperatorChain(factory, new OPERATOR_ID_PAIR());
     }
 
     /**
@@ -418,7 +418,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
      * harness, please manually configure the stream config.
      */
     public StreamTaskMailboxTestHarnessBuilder<OUT> setupOutputForSingletonOperatorChain(
-            StreamOperatorFactory<?> factory, OperatorID operatorID) {
+            StreamOperatorFactory<?> factory, OPERATOR_ID_PAIR operatorID) {
         checkState(!setupCalled, "This harness was already setup.");
         return setupOperatorChain(operatorID, factory)
                 .finishForSingletonOperatorChain(outputSerializer, partitioner);
@@ -426,21 +426,21 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
 
     public StreamConfigChainer<StreamTaskMailboxTestHarnessBuilder<OUT>> setupOperatorChain(
             StreamOperator<?> headOperator) {
-        return setupOperatorChain(new OperatorID(), headOperator);
+        return setupOperatorChain(new OPERATOR_ID_PAIR(), headOperator);
     }
 
     public StreamConfigChainer<StreamTaskMailboxTestHarnessBuilder<OUT>> setupOperatorChain(
-            OperatorID headOperatorId, StreamOperator<?> headOperator) {
+            OPERATOR_ID_PAIR headOperatorId, StreamOperator<?> headOperator) {
         return setupOperatorChain(headOperatorId, SimpleOperatorFactory.of(headOperator));
     }
 
     public StreamConfigChainer<StreamTaskMailboxTestHarnessBuilder<OUT>> setupOperatorChain(
             StreamOperatorFactory<?> headOperatorFactory) {
-        return setupOperatorChain(new OperatorID(), headOperatorFactory);
+        return setupOperatorChain(new OPERATOR_ID_PAIR(), headOperatorFactory);
     }
 
     public StreamConfigChainer<StreamTaskMailboxTestHarnessBuilder<OUT>> setupOperatorChain(
-            OperatorID headOperatorId, StreamOperatorFactory<?> headOperatorFactory) {
+            OPERATOR_ID_PAIR headOperatorId, StreamOperatorFactory<?> headOperatorFactory) {
         checkState(!setupCalled, "This harness was already setup.");
         setupCalled = true;
         streamConfig.setStreamOperatorFactory(headOperatorFactory);
@@ -480,12 +480,12 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
      * it is replaced with {@link SourceInputConfig}.
      */
     public static class SourceInputConfigPlaceHolder<SourceOut> implements InputConfig {
-        private OperatorID operatorId;
+        private OPERATOR_ID_PAIR operatorId;
         private SourceOperatorFactory<SourceOut> sourceOperatorFactory;
         private TypeSerializer<SourceOut> sourceSerializer;
 
         public SourceInputConfigPlaceHolder(
-                OperatorID operatorId,
+                OPERATOR_ID_PAIR operatorId,
                 SourceOperatorFactory<SourceOut> sourceOperatorFactory,
                 TypeSerializer<SourceOut> sourceSerializer) {
             this.operatorId = operatorId;
@@ -493,7 +493,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
             this.sourceSerializer = sourceSerializer;
         }
 
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             return operatorId;
         }
 

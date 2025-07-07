@@ -29,7 +29,7 @@ import org.apache.flink.runtime.client.JobStatusMessage;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -196,7 +196,7 @@ public class MiniClusterClient implements ClusterClient<MiniClusterClient.MiniCl
 
     @Override
     public CompletableFuture<CoordinationResponse> sendCoordinationRequest(
-            JobID jobId, OperatorID operatorId, CoordinationRequest request) {
+            JobID jobId, OPERATOR_ID_PAIR operatorId, CoordinationRequest request) {
         try {
             SerializedValue<CoordinationRequest> serializedRequest = new SerializedValue<>(request);
             return miniCluster.deliverCoordinationRequestToCoordinator(

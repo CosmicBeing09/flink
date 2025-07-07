@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.util.CloseableIterator;
 
@@ -52,14 +52,14 @@ public class CollectResultIterator<T> implements CloseableIterator<T> {
     private final CollectResultFetcher<T> fetcher;
     private T bufferedResult;
 
-    private CompletableFuture<OperatorID> operatorIdFuture;
+    private CompletableFuture<OPERATOR_ID_PAIR> operatorIdFuture;
     private TypeSerializer<T> serializer;
     private String accumulatorName;
     private CheckpointConfig checkpointConfig;
     private long resultFetchTimeout;
 
     public CollectResultIterator(
-            CompletableFuture<OperatorID> operatorIdFuture,
+            CompletableFuture<OPERATOR_ID_PAIR> operatorIdFuture,
             TypeSerializer<T> serializer,
             String accumulatorName,
             CheckpointConfig checkpointConfig,
@@ -79,7 +79,7 @@ public class CollectResultIterator<T> implements CloseableIterator<T> {
     @VisibleForTesting
     public CollectResultIterator(
             AbstractCollectResultBuffer<T> buffer,
-            CompletableFuture<OperatorID> operatorIdFuture,
+            CompletableFuture<OPERATOR_ID_PAIR> operatorIdFuture,
             String accumulatorName,
             int retryMillis) {
         this.fetcher =

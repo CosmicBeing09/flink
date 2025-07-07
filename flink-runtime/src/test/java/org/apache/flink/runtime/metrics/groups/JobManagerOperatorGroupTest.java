@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.scope.ScopeFormats;
@@ -49,8 +49,8 @@ class JobManagerOperatorGroupTest {
 
         final JobVertexID jobVertexId1 = new JobVertexID();
         final JobVertexID jobVertexId2 = new JobVertexID();
-        final OperatorID operatorId1 = new OperatorID();
-        final OperatorID operatorId2 = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId1 = new OPERATOR_ID_PAIR();
+        final OPERATOR_ID_PAIR operatorId2 = new OPERATOR_ID_PAIR();
 
         JobManagerOperatorMetricGroup jmOperatorGroup11 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
@@ -80,8 +80,8 @@ class JobManagerOperatorGroupTest {
 
         final JobVertexID jobVertexId1 = new JobVertexID();
         final JobVertexID jobVertexId2 = new JobVertexID();
-        final OperatorID operatorId1 = new OperatorID();
-        final OperatorID operatorId2 = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId1 = new OPERATOR_ID_PAIR();
+        final OPERATOR_ID_PAIR operatorId2 = new OPERATOR_ID_PAIR();
 
         JobManagerOperatorMetricGroup jmOperatorGroup11 =
                 jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
@@ -107,7 +107,7 @@ class JobManagerOperatorGroupTest {
     void testGenerateScopeDefault() {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
@@ -132,7 +132,7 @@ class JobManagerOperatorGroupTest {
 
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
@@ -170,7 +170,7 @@ class JobManagerOperatorGroupTest {
 
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
@@ -195,7 +195,7 @@ class JobManagerOperatorGroupTest {
     void testCreateQueryServiceMetricInfo() {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")

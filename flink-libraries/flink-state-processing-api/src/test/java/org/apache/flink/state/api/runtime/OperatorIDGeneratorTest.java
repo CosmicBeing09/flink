@@ -21,7 +21,7 @@ package org.apache.flink.state.api.runtime;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 
@@ -41,14 +41,14 @@ public class OperatorIDGeneratorTest {
 
     @Test
     public void testOperatorIdMatchesUid() {
-        OperatorID expectedId = getOperatorID();
+        OPERATOR_ID_PAIR expectedId = getOperatorID();
 
-        OperatorID generatedId = OperatorIDGenerator.fromUid(UID);
+        OPERATOR_ID_PAIR generatedId = OperatorIDGenerator.fromUid(UID);
 
         Assert.assertEquals(expectedId, generatedId);
     }
 
-    private static OperatorID getOperatorID() {
+    private static OPERATOR_ID_PAIR getOperatorID() {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);

@@ -41,7 +41,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
@@ -188,14 +188,14 @@ public class TestingJobMasterGateway implements JobMasterGateway {
     @Nonnull
     private final TriFunction<
                     ExecutionAttemptID,
-                    OperatorID,
+            OPERATOR_ID_PAIR,
                     SerializedValue<OperatorEvent>,
                     CompletableFuture<Acknowledge>>
             operatorEventSender;
 
     @Nonnull
     private final BiFunction<
-                    OperatorID,
+            OPERATOR_ID_PAIR,
                     SerializedValue<CoordinationRequest>,
                     CompletableFuture<CoordinationResponse>>
             deliverCoordinationRequestFunction;
@@ -303,13 +303,13 @@ public class TestingJobMasterGateway implements JobMasterGateway {
             @Nonnull
                     TriFunction<
                                     ExecutionAttemptID,
-                                    OperatorID,
+                            OPERATOR_ID_PAIR,
                                     SerializedValue<OperatorEvent>,
                                     CompletableFuture<Acknowledge>>
                             operatorEventSender,
             @Nonnull
                     BiFunction<
-                                    OperatorID,
+                            OPERATOR_ID_PAIR,
                                     SerializedValue<CoordinationRequest>,
                                     CompletableFuture<CoordinationResponse>>
                             deliverCoordinationRequestFunction,
@@ -570,19 +570,19 @@ public class TestingJobMasterGateway implements JobMasterGateway {
 
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToCoordinator(
-            ExecutionAttemptID task, OperatorID operatorID, SerializedValue<OperatorEvent> event) {
+            ExecutionAttemptID task, OPERATOR_ID_PAIR operatorID, SerializedValue<OperatorEvent> event) {
         return operatorEventSender.apply(task, operatorID, event);
     }
 
     @Override
     public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operatorID, SerializedValue<CoordinationRequest> request) {
+            OPERATOR_ID_PAIR operatorID, SerializedValue<CoordinationRequest> request) {
         return deliverCoordinationRequestFunction.apply(operatorID, request);
     }
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             SerializedValue<CoordinationRequest> serializedRequest,
             Time timeout) {
         return deliverCoordinationRequestFunction.apply(operatorId, serializedRequest);

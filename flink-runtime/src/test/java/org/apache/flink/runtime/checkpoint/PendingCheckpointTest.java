@@ -23,7 +23,6 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.fs.local.LocalFileSystem;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinatorTest.OperatorSubtaskStateMock;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinatorTestingUtils.StringSerializer;
 import org.apache.flink.runtime.checkpoint.PendingCheckpoint.TaskAcknowledgeResult;
@@ -32,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.OperatorInfo;
 import org.apache.flink.runtime.operators.coordination.TestingOperatorInfo;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
@@ -76,7 +75,7 @@ class PendingCheckpointTest {
     private static final List<ExecutionVertex> TASKS_TO_COMMIT = new ArrayList<>();
     private static final ExecutionAttemptID ATTEMPT_ID = createExecutionAttemptId();
 
-    public static final OperatorID OPERATOR_ID = new OperatorID();
+    public static final org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR OPERATOR_ID_PAIR = new OPERATOR_ID_PAIR();
 
     public static final int PARALLELISM = 1;
 
@@ -84,8 +83,9 @@ class PendingCheckpointTest {
 
     static {
         ExecutionJobVertex jobVertex = mock(ExecutionJobVertex.class);
-        when(jobVertex.getOperatorIDs())
-                .thenReturn(Collections.singletonList(OperatorIDPair.generatedIDOnly(OPERATOR_ID)));
+        when(jobVertex.getOperatorIDPairs())
+                .thenReturn(Collections.singletonList(org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(
+                        OPERATOR_ID_PAIR)));
 
         ExecutionVertex vertex = mock(ExecutionVertex.class);
         when(vertex.getMaxParallelism()).thenReturn(MAX_PARALLELISM);
@@ -225,7 +225,7 @@ class PendingCheckpointTest {
                         false, CheckpointType.CHECKPOINT, false, false, false, false, false, false);
         QueueExecutor executor = new QueueExecutor();
 
-        OperatorState state = new OperatorState(new OperatorID(), 1, 256);
+        OperatorState state = new OperatorState(new OPERATOR_ID_PAIR(), 1, 256);
         OperatorSubtaskStateMock subtaskStateMock = new OperatorSubtaskStateMock();
         OperatorSubtaskState subtaskState = subtaskStateMock.getSubtaskState();
         state.putState(0, subtaskState);
@@ -287,8 +287,8 @@ class PendingCheckpointTest {
                                 CheckpointRetentionPolicy.NEVER_RETAIN_AFTER_TERMINATION));
         pending.acknowledgeTask(ATTEMPT_ID, null, mock(CheckpointMetrics.class));
         final OperatorState expectedState =
-                new OperatorState(OPERATOR_ID, PARALLELISM, MAX_PARALLELISM);
-        assertThat(Collections.singletonMap(OPERATOR_ID, expectedState))
+                new OperatorState(OPERATOR_ID_PAIR, PARALLELISM, MAX_PARALLELISM);
+        assertThat(Collections.singletonMap(OPERATOR_ID_PAIR, expectedState))
                 .isEqualTo(pending.getOperatorStates());
     }
 
@@ -444,7 +444,7 @@ class PendingCheckpointTest {
         assertThat(0).isEqualTo(checkpoint.getNumberOfNonAcknowledgedOperatorCoordinators());
         assertThat(checkpoint.isFullyAcknowledged()).isTrue();
         assertThat(checkpoint.getOperatorStates().keySet())
-                .contains(OPERATOR_ID, coord1.operatorId(), coord2.operatorId());
+                .contains(OPERATOR_ID_PAIR, coord1.operatorId(), coord2.operatorId());
     }
 
     @Test
@@ -576,7 +576,7 @@ class PendingCheckpointTest {
 
     private PendingCheckpoint createPendingCheckpoint(
             CheckpointProperties props,
-            Collection<OperatorID> operatorCoordinators,
+            Collection<org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR> operatorCoordinators,
             Collection<String> masterStateIdentifiers,
             Executor executor)
             throws IOException {
@@ -599,7 +599,7 @@ class PendingCheckpointTest {
 
     private PendingCheckpoint createPendingCheckpoint(
             CheckpointProperties props,
-            Collection<OperatorID> operatorCoordinators,
+            Collection<org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR> operatorCoordinators,
             Collection<String> masterStateIdentifiers,
             CheckpointPlan checkpointPlan,
             Executor executor)
@@ -637,10 +637,10 @@ class PendingCheckpointTest {
             throws NoSuchFieldException, IllegalAccessException {
         Field field = PendingCheckpoint.class.getDeclaredField("operatorStates");
         field.setAccessible(true);
-        Map<OperatorID, OperatorState> taskStates =
-                (Map<OperatorID, OperatorState>) field.get(pending);
+        Map<org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR, OperatorState> taskStates =
+                (Map<org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR, OperatorState>) field.get(pending);
 
-        taskStates.put(new OperatorID(), state);
+        taskStates.put(new OPERATOR_ID_PAIR(), state);
     }
 
     private void abort(PendingCheckpoint checkpoint, CheckpointFailureReason reason) {

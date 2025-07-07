@@ -27,7 +27,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.shuffle.ShuffleEnvironment;
 import org.apache.flink.runtime.state.StateInitializationContext;
 import org.apache.flink.runtime.state.StateSnapshotContext;
@@ -160,7 +160,7 @@ class AbstractUdfStreamOperatorLifecycleTest {
         MockSourceFunction srcFun = new MockSourceFunction();
 
         cfg.setStreamOperator(new LifecycleTrackingStreamSource<>(srcFun, true));
-        cfg.setOperatorID(new OperatorID());
+        cfg.setOperatorID(new OPERATOR_ID_PAIR());
         cfg.setTimeCharacteristic(TimeCharacteristic.ProcessingTime);
 
         try (ShuffleEnvironment shuffleEnvironment = new NettyShuffleEnvironmentBuilder().build()) {
@@ -191,7 +191,7 @@ class AbstractUdfStreamOperatorLifecycleTest {
         StreamConfig cfg = new StreamConfig(new Configuration());
         MockSourceFunction srcFun = new MockSourceFunction();
         cfg.setStreamOperator(new LifecycleTrackingStreamSource<>(srcFun, false));
-        cfg.setOperatorID(new OperatorID());
+        cfg.setOperatorID(new OPERATOR_ID_PAIR());
         cfg.setTimeCharacteristic(TimeCharacteristic.ProcessingTime);
 
         try (ShuffleEnvironment shuffleEnvironment = new NettyShuffleEnvironmentBuilder().build()) {

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CompositeStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.StateObject;
@@ -67,7 +67,7 @@ public class TaskStateSnapshot implements CompositeStateHandle {
             new TaskStateSnapshot(new HashMap<>(), true, true);
 
     /** Mapping from an operator id to the state of one subtask of this operator. */
-    private final Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID;
+    private final Map<OPERATOR_ID_PAIR, OperatorSubtaskState> subtaskStatesByOperatorID;
 
     private final boolean isTaskDeployedAsFinished;
 
@@ -81,12 +81,12 @@ public class TaskStateSnapshot implements CompositeStateHandle {
         this(CollectionUtil.newHashMapWithExpectedSize(size), false, isTaskFinished);
     }
 
-    public TaskStateSnapshot(Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID) {
+    public TaskStateSnapshot(Map<OPERATOR_ID_PAIR, OperatorSubtaskState> subtaskStatesByOperatorID) {
         this(subtaskStatesByOperatorID, false, false);
     }
 
     private TaskStateSnapshot(
-            Map<OperatorID, OperatorSubtaskState> subtaskStatesByOperatorID,
+            Map<OPERATOR_ID_PAIR, OperatorSubtaskState> subtaskStatesByOperatorID,
             boolean isTaskDeployedAsFinished,
             boolean isTaskFinished) {
         this.subtaskStatesByOperatorID = Preconditions.checkNotNull(subtaskStatesByOperatorID);
@@ -106,7 +106,7 @@ public class TaskStateSnapshot implements CompositeStateHandle {
 
     /** Returns the subtask state for the given operator id (or null if not contained). */
     @Nullable
-    public OperatorSubtaskState getSubtaskStateByOperatorID(OperatorID operatorID) {
+    public OperatorSubtaskState getSubtaskStateByOperatorID(OPERATOR_ID_PAIR operatorID) {
         return subtaskStatesByOperatorID.get(operatorID);
     }
 
@@ -115,13 +115,13 @@ public class TaskStateSnapshot implements CompositeStateHandle {
      * previous mapping, if such a mapping existed or null otherwise.
      */
     public OperatorSubtaskState putSubtaskStateByOperatorID(
-            @Nonnull OperatorID operatorID, @Nonnull OperatorSubtaskState state) {
+            @Nonnull OPERATOR_ID_PAIR operatorID, @Nonnull OperatorSubtaskState state) {
 
         return subtaskStatesByOperatorID.put(operatorID, Preconditions.checkNotNull(state));
     }
 
     /** Returns the set of all mappings from operator id to the corresponding subtask state. */
-    public Set<Map.Entry<OperatorID, OperatorSubtaskState>> getSubtaskStateMappings() {
+    public Set<Map.Entry<OPERATOR_ID_PAIR, OperatorSubtaskState>> getSubtaskStateMappings() {
         return subtaskStatesByOperatorID.entrySet();
     }
 

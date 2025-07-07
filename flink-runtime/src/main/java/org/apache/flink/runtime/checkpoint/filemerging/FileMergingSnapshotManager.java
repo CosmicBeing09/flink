@@ -23,7 +23,7 @@ import org.apache.flink.api.common.TaskInfo;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.PlaceholderStreamStateHandle;
 import org.apache.flink.runtime.state.StreamStateHandle;
@@ -226,7 +226,7 @@ public interface FileMergingSnapshotManager extends Closeable {
          */
         final int hashCode;
 
-        public SubtaskKey(JobID jobID, OperatorID operatorID, TaskInfo taskInfo) {
+        public SubtaskKey(JobID jobID, OPERATOR_ID_PAIR operatorID, TaskInfo taskInfo) {
             this(
                     jobID.toHexString(),
                     operatorID.toHexString(),
@@ -251,7 +251,7 @@ public interface FileMergingSnapshotManager extends Closeable {
         public static SubtaskKey of(Environment environment) {
             return new SubtaskKey(
                     environment.getJobID(),
-                    OperatorID.fromJobVertexID(environment.getJobVertexId()),
+                    OPERATOR_ID_PAIR.fromJobVertexID(environment.getJobVertexId()),
                     environment.getTaskInfo());
         }
 

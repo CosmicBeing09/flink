@@ -48,7 +48,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.InputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGate;
 import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
 import org.apache.flink.util.function.SupplierWithException;
 
@@ -302,7 +302,7 @@ class ChannelPersistenceITCase {
     private TaskStateSnapshot toTaskStateSnapshot(ChannelStateWriteResult t) throws Exception {
         return new TaskStateSnapshot(
                 singletonMap(
-                        new OperatorID(),
+                        new OPERATOR_ID_PAIR(),
                         OperatorSubtaskState.builder()
                                 .setInputChannelState(
                                         new StateObjectCollection<>(

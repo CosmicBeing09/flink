@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
 import org.apache.flink.runtime.checkpoint.CheckpointFailureReason;
 import org.apache.flink.runtime.io.network.api.CancelCheckpointMarker;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.functions.co.CoMapFunction;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.operators.StreamMap;
@@ -67,7 +67,7 @@ class StreamTaskCancellationBarrierTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         StreamMap<String, String> mapOperator = new StreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(mapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         StreamMockEnvironment environment = spy(testHarness.createEnvironment());
 
@@ -121,7 +121,7 @@ class StreamTaskCancellationBarrierTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, String, String> op = new CoStreamMap<>(new UnionCoMap());
         streamConfig.setStreamOperator(op);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         StreamMockEnvironment environment = spy(testHarness.createEnvironment());
 

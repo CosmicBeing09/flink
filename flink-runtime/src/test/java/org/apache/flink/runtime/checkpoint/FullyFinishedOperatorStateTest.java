@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
 import org.apache.flink.runtime.state.StateObject;
@@ -40,7 +40,7 @@ class FullyFinishedOperatorStateTest {
 
     @Test
     void testFullyFinishedOperatorState() {
-        OperatorState operatorState = new FullyFinishedOperatorState(new OperatorID(), 5, 256);
+        OperatorState operatorState = new FullyFinishedOperatorState(new OPERATOR_ID_PAIR(), 5, 256);
         assertThat(operatorState.isFullyFinished()).isTrue();
 
         assertThat(operatorState.getSubtaskStates()).isEmpty();
@@ -66,7 +66,7 @@ class FullyFinishedOperatorStateTest {
         Tuple2<List<StateObject>, OperatorSubtaskState> opSubtaskStates2 =
                 generateSampleOperatorSubtaskState();
 
-        OperatorState operatorState = new OperatorState(new OperatorID(), 2, 256);
+        OperatorState operatorState = new OperatorState(new OPERATOR_ID_PAIR(), 2, 256);
         operatorState.putState(0, opSubtaskStates1.f1);
         operatorState.putState(1, opSubtaskStates2.f1);
         ByteStreamStateHandle coordinatorState =

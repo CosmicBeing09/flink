@@ -40,7 +40,7 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.PartitionTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.streaming.api.graph.StreamConfig;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperatorFactory;
@@ -468,9 +468,9 @@ class MultipleInputStreamTaskChainedSourcesCheckpointingTest {
 
     @TestTemplate
     void testSkipExecutionsIfFinishedOnRestoreWithSourceChained() throws Exception {
-        OperatorID firstSourceOperatorId = new OperatorID();
-        OperatorID secondSourceOperatorId = new OperatorID();
-        OperatorID nonSourceOperatorId = new OperatorID();
+        OPERATOR_ID_PAIR firstSourceOperatorId = new OPERATOR_ID_PAIR();
+        OPERATOR_ID_PAIR secondSourceOperatorId = new OPERATOR_ID_PAIR();
+        OPERATOR_ID_PAIR nonSourceOperatorId = new OPERATOR_ID_PAIR();
 
         List<Object> output = new ArrayList<>();
         try (StreamTaskMailboxTestHarness<String> testHarness =

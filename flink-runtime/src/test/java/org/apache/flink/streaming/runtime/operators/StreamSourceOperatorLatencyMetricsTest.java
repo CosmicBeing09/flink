@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironmentBuilder;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
@@ -236,7 +236,7 @@ class StreamSourceOperatorLatencyMetricsTest {
         cfg.setStateBackend(new MemoryStateBackend());
 
         cfg.setTimeCharacteristic(TimeCharacteristic.EventTime);
-        cfg.setOperatorID(new OperatorID());
+        cfg.setOperatorID(new OPERATOR_ID_PAIR());
         cfg.serializeAllConfigs();
 
         MockStreamTask mockTask =

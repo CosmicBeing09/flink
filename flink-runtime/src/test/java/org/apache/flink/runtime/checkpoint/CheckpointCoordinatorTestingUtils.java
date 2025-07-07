@@ -23,7 +23,6 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.FSDataInputStream;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.execution.ExecutionState;
@@ -37,7 +36,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration.CheckpointCoordinatorConfigurationBuilder;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
@@ -253,7 +252,7 @@ public class CheckpointCoordinatorTestingUtils {
 
             OperatorSubtaskState operatorState =
                     stateSnapshot.getSubtaskStateByOperatorID(
-                            OperatorID.fromJobVertexID(jobVertexID));
+                            OPERATOR_ID_PAIR.fromJobVertexID(jobVertexID));
 
             ChainedStateHandle<OperatorStateHandle> expectedOpStateBackend =
                     generateChainedPartitionableStateHandle(jobVertexID, i, 2, 8, false);
@@ -389,7 +388,7 @@ public class CheckpointCoordinatorTestingUtils {
                                 .build());
 
         subtaskStates.putSubtaskStateByOperatorID(
-                OperatorID.fromJobVertexID(jobVertexID), subtaskState);
+                OPERATOR_ID_PAIR.fromJobVertexID(jobVertexID), subtaskState);
 
         return subtaskStates;
     }
@@ -481,7 +480,7 @@ public class CheckpointCoordinatorTestingUtils {
     }
 
     public static TaskStateSnapshot createSnapshotWithUnionListState(
-            File stateFile, OperatorID operatorId, boolean isTaskFinished) throws IOException {
+            File stateFile, OPERATOR_ID_PAIR operatorId, boolean isTaskFinished) throws IOException {
         TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot(1, isTaskFinished);
         taskStateSnapshot.putSubtaskStateByOperatorID(
                 operatorId, createSubtaskStateWithUnionListState(stateFile));
@@ -660,7 +659,7 @@ public class CheckpointCoordinatorTestingUtils {
                 JobVertexID id,
                 int parallelism,
                 int maxParallelism,
-                List<OperatorIDPair> operators,
+                List<org.apache.flink.runtime.OperatorIDPair> operators,
                 boolean isSource) {
 
             JobVertex jobVertex =
@@ -786,7 +785,7 @@ public class CheckpointCoordinatorTestingUtils {
 
         private BiFunction<
                         Set<ExecutionJobVertex>,
-                        Map<OperatorID, OperatorState>,
+                        Map<OPERATOR_ID_PAIR, OperatorState>,
                         VertexFinishedStateChecker>
                 vertexFinishedStateCheckerFactory = VertexFinishedStateChecker::new;
 
@@ -862,7 +861,7 @@ public class CheckpointCoordinatorTestingUtils {
         public CheckpointCoordinatorBuilder setVertexFinishedStateCheckerFactory(
                 BiFunction<
                                 Set<ExecutionJobVertex>,
-                                Map<OperatorID, OperatorState>,
+                                Map<OPERATOR_ID_PAIR, OperatorState>,
                                 VertexFinishedStateChecker>
                         vertexFinishedStateCheckerFactory) {
             this.vertexFinishedStateCheckerFactory = vertexFinishedStateCheckerFactory;
@@ -933,7 +932,7 @@ public class CheckpointCoordinatorTestingUtils {
     static final class MockOperatorCheckpointCoordinatorContextBuilder {
         private BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator = null;
         private Runnable onCallingAbortCurrentTriggering = null;
-        private OperatorID operatorID = null;
+        private OPERATOR_ID_PAIR operatorID = null;
 
         public MockOperatorCheckpointCoordinatorContextBuilder setOnCallingCheckpointCoordinator(
                 BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator) {
@@ -948,7 +947,7 @@ public class CheckpointCoordinatorTestingUtils {
         }
 
         public MockOperatorCheckpointCoordinatorContextBuilder setOperatorID(
-                OperatorID operatorID) {
+                OPERATOR_ID_PAIR operatorID) {
             this.operatorID = operatorID;
             return this;
         }
@@ -969,14 +968,14 @@ public class CheckpointCoordinatorTestingUtils {
             implements OperatorCoordinatorCheckpointContext {
         private final BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator;
         private final Runnable onCallingAbortCurrentTriggering;
-        private final OperatorID operatorID;
+        private final OPERATOR_ID_PAIR operatorID;
         private final List<Long> completedCheckpoints;
         private final List<Long> abortedCheckpoints;
 
         private MockOperatorCoordinatorCheckpointContext(
                 BiConsumer<Long, CompletableFuture<byte[]>> onCallingCheckpointCoordinator,
                 Runnable onCallingAbortCurrentTriggering,
-                OperatorID operatorID) {
+                OPERATOR_ID_PAIR operatorID) {
             this.onCallingCheckpointCoordinator = onCallingCheckpointCoordinator;
             this.onCallingAbortCurrentTriggering = onCallingAbortCurrentTriggering;
             this.operatorID = operatorID;
@@ -1017,7 +1016,7 @@ public class CheckpointCoordinatorTestingUtils {
         public void subtaskReset(int subtask, long checkpointId) {}
 
         @Override
-        public OperatorID operatorId() {
+        public OPERATOR_ID_PAIR operatorId() {
             return operatorID;
         }
 

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.metrics.groups;
 
 import org.apache.flink.metrics.CharacterFilter;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
@@ -38,14 +38,14 @@ public class JobManagerOperatorMetricGroup extends ComponentMetricGroup<JobManag
     private final AbstractID vertexId;
     private final String taskName;
     private final String operatorName;
-    private final OperatorID operatorID;
+    private final OPERATOR_ID_PAIR operatorID;
 
     public JobManagerOperatorMetricGroup(
             MetricRegistry registry,
             JobManagerJobMetricGroup parent,
             AbstractID vertexId,
             String taskName,
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             String operatorName) {
         super(
                 registry,

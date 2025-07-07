@@ -23,7 +23,7 @@ import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.PrioritizedOperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.state.api.input.splits.PrioritizedOperatorSubtaskStateInputSplit;
 import org.apache.flink.state.api.utils.CustomStateBackendFactory;
 import org.apache.flink.streaming.util.MockStreamingRuntimeContext;
@@ -50,7 +50,7 @@ public class StreamOperatorContextBuilderTest {
                 new StreamOperatorContextBuilder(
                         context,
                         configuration,
-                        new OperatorState(new OperatorID(), 1, 128),
+                        new OperatorState(new OPERATOR_ID_PAIR(), 1, 128),
                         new PrioritizedOperatorSubtaskStateInputSplit() {
                             @Override
                             public PrioritizedOperatorSubtaskState

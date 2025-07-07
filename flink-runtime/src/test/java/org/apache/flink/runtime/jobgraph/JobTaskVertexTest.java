@@ -116,7 +116,7 @@ class JobTaskVertexTest {
     void testOutputFormat() throws Exception {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex("Name");
 
-        OperatorID operatorID = new OperatorID();
+        OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
         Configuration parameters = new Configuration();
         parameters.setString("test_key", "test_value");
         new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader())
@@ -175,7 +175,7 @@ class JobTaskVertexTest {
     void testInputFormat() throws Exception {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex("Name");
 
-        OperatorID operatorID = new OperatorID();
+        OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
         Configuration parameters = new Configuration();
         parameters.setString("test_key", "test_value");
         new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader())
@@ -199,7 +199,7 @@ class JobTaskVertexTest {
         int initialParallelism = 1;
         vertex.setParallelism(initialParallelism);
 
-        OperatorID operatorID = new OperatorID();
+        OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
         // just a mutable container for integer
         SharedReference<AtomicInteger> globalParallelism = sharedObjects.add(new AtomicInteger());
         new InputOutputFormatContainer(Thread.currentThread().getContextClassLoader())

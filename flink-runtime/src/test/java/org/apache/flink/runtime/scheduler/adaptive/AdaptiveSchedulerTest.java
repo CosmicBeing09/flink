@@ -70,7 +70,7 @@ import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexResourceRequirements;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
@@ -1875,7 +1875,7 @@ public class AdaptiveSchedulerTest {
                         () ->
                                 scheduler.deliverOperatorEventToCoordinator(
                                         createExecutionAttemptId(),
-                                        new OperatorID(),
+                                        new OPERATOR_ID_PAIR(),
                                         new TestOperatorEvent()))
                 .isInstanceOf(TaskNotRunningException.class);
     }
@@ -1891,7 +1891,7 @@ public class AdaptiveSchedulerTest {
 
         assertThatFuture(
                         scheduler.deliverCoordinationRequestToCoordinator(
-                                new OperatorID(), new CoordinationRequest() {}))
+                                new OPERATOR_ID_PAIR(), new CoordinationRequest() {}))
                 .eventuallyFailsWith(ExecutionException.class)
                 .withCauseInstanceOf(FlinkException.class);
     }

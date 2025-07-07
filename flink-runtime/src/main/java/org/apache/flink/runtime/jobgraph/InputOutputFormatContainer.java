@@ -89,21 +89,21 @@ public class InputOutputFormatContainer {
         }
     }
 
-    public Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> getInputFormats() {
+    public Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> getInputFormats() {
         return formats.getInputFormats();
     }
 
-    public Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> getOutputFormats() {
+    public Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> getOutputFormats() {
         return formats.getOutputFormats();
     }
 
     @SuppressWarnings("unchecked")
-    public <OT, T extends InputSplit> Pair<OperatorID, InputFormat<OT, T>> getUniqueInputFormat() {
-        Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+    public <OT, T extends InputSplit> Pair<OPERATOR_ID_PAIR, InputFormat<OT, T>> getUniqueInputFormat() {
+        Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                 formats.getInputFormats();
         Preconditions.checkState(inputFormats.size() == 1);
 
-        Map.Entry<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> entry =
+        Map.Entry<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> entry =
                 inputFormats.entrySet().iterator().next();
 
         return new ImmutablePair<>(
@@ -113,12 +113,12 @@ public class InputOutputFormatContainer {
     }
 
     @SuppressWarnings("unchecked")
-    public <IT> Pair<OperatorID, OutputFormat<IT>> getUniqueOutputFormat() {
-        Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+    public <IT> Pair<OPERATOR_ID_PAIR, OutputFormat<IT>> getUniqueOutputFormat() {
+        Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                 formats.getOutputFormats();
         Preconditions.checkState(outputFormats.size() == 1);
 
-        Map.Entry<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> entry =
+        Map.Entry<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> entry =
                 outputFormats.entrySet().iterator().next();
 
         return new ImmutablePair<>(
@@ -129,35 +129,35 @@ public class InputOutputFormatContainer {
     }
 
     public InputOutputFormatContainer addInputFormat(
-            OperatorID operatorId, InputFormat<?, ?> inputFormat) {
+            OPERATOR_ID_PAIR operatorId, InputFormat<?, ?> inputFormat) {
         formats.addInputFormat(operatorId, new UserCodeObjectWrapper<>(inputFormat));
         return this;
     }
 
     public InputOutputFormatContainer addInputFormat(
-            OperatorID operatorId, UserCodeWrapper<? extends InputFormat<?, ?>> wrapper) {
+            OPERATOR_ID_PAIR operatorId, UserCodeWrapper<? extends InputFormat<?, ?>> wrapper) {
         formats.addInputFormat(operatorId, wrapper);
         return this;
     }
 
     public InputOutputFormatContainer addOutputFormat(
-            OperatorID operatorId, OutputFormat<?> outputFormat) {
+            OPERATOR_ID_PAIR operatorId, OutputFormat<?> outputFormat) {
         formats.addOutputFormat(operatorId, new UserCodeObjectWrapper<>(outputFormat));
         return this;
     }
 
     public InputOutputFormatContainer addOutputFormat(
-            OperatorID operatorId, UserCodeWrapper<? extends OutputFormat<?>> wrapper) {
+            OPERATOR_ID_PAIR operatorId, UserCodeWrapper<? extends OutputFormat<?>> wrapper) {
         formats.addOutputFormat(operatorId, wrapper);
         return this;
     }
 
-    public Configuration getParameters(OperatorID operatorId) {
+    public Configuration getParameters(OPERATOR_ID_PAIR operatorId) {
         return new DelegatingConfiguration(parameters, getParamKeyPrefix(operatorId));
     }
 
     public InputOutputFormatContainer addParameters(
-            OperatorID operatorId, Configuration parameters) {
+            OPERATOR_ID_PAIR operatorId, Configuration parameters) {
         for (String key : parameters.keySet()) {
             addParameters(operatorId, key, parameters.getString(key, null));
         }
@@ -165,7 +165,7 @@ public class InputOutputFormatContainer {
     }
 
     public InputOutputFormatContainer addParameters(
-            OperatorID operatorId, String key, String value) {
+            OPERATOR_ID_PAIR operatorId, String key, String value) {
         parameters.setString(getParamKeyPrefix(operatorId) + key, value);
         return this;
     }
@@ -175,7 +175,7 @@ public class InputOutputFormatContainer {
         config.setStubParameters(parameters);
     }
 
-    private String getParamKeyPrefix(OperatorID operatorId) {
+    private String getParamKeyPrefix(OPERATOR_ID_PAIR operatorId) {
         return operatorId + ".";
     }
 
@@ -186,8 +186,8 @@ public class InputOutputFormatContainer {
 
         private static final long serialVersionUID = 1L;
 
-        private final Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats;
-        private final Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats;
+        private final Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats;
+        private final Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats;
 
         public FormatUserCodeTable() {
             this.inputFormats = new HashMap<>();
@@ -195,7 +195,7 @@ public class InputOutputFormatContainer {
         }
 
         public void addInputFormat(
-                OperatorID operatorId, UserCodeWrapper<? extends InputFormat<?, ?>> wrapper) {
+                OPERATOR_ID_PAIR operatorId, UserCodeWrapper<? extends InputFormat<?, ?>> wrapper) {
             if (inputFormats.containsKey(checkNotNull(operatorId))) {
                 throw new IllegalStateException(
                         "The input format has been set for the operator: " + operatorId);
@@ -205,7 +205,7 @@ public class InputOutputFormatContainer {
         }
 
         public void addOutputFormat(
-                OperatorID operatorId, UserCodeWrapper<? extends OutputFormat<?>> wrapper) {
+                OPERATOR_ID_PAIR operatorId, UserCodeWrapper<? extends OutputFormat<?>> wrapper) {
             if (outputFormats.containsKey(checkNotNull(operatorId))) {
                 throw new IllegalStateException(
                         "The output format has been set for the operator: " + operatorId);
@@ -214,11 +214,11 @@ public class InputOutputFormatContainer {
             outputFormats.put(operatorId, checkNotNull(wrapper));
         }
 
-        public Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> getInputFormats() {
+        public Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends InputFormat<?, ?>>> getInputFormats() {
             return Collections.unmodifiableMap(inputFormats);
         }
 
-        public Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> getOutputFormats() {
+        public Map<OPERATOR_ID_PAIR, UserCodeWrapper<? extends OutputFormat<?>>> getOutputFormats() {
             return Collections.unmodifiableMap(outputFormats);
         }
     }

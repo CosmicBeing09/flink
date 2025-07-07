@@ -33,7 +33,6 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.accumulators.AccumulatorSnapshot;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
@@ -75,7 +74,7 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -1107,7 +1106,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public void deliverOperatorEventToCoordinator(
             final ExecutionAttemptID taskExecutionId,
-            final OperatorID operatorId,
+            final OPERATOR_ID_PAIR operatorId,
             final OperatorEvent evt)
             throws FlinkException {
 
@@ -1117,7 +1116,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException {
+            OPERATOR_ID_PAIR operator, CoordinationRequest request) throws FlinkException {
 
         return operatorCoordinatorHandler.deliverCoordinationRequestToCoordinator(
                 operator, request);
@@ -1133,14 +1132,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             vertexEndOfDataListener.recordTaskEndOfData(executionAttemptID);
             if (vertexEndOfDataListener.areAllTasksOfJobVertexEndOfData(
                     executionAttemptID.getJobVertexId())) {
-                List<OperatorIDPair> operatorIDPairs =
+                List<org.apache.flink.runtime.OperatorIDPair> operatorIDPairs =
                         executionGraph
                                 .getJobVertex(executionAttemptID.getJobVertexId())
-                                .getOperatorIDs();
+                                .getOperatorIDPairs();
                 CheckpointCoordinator checkpointCoordinator =
                         executionGraph.getCheckpointCoordinator();
                 if (checkpointCoordinator != null) {
-                    for (OperatorIDPair operatorIDPair : operatorIDPairs) {
+                    for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : operatorIDPairs) {
                         checkpointCoordinator.setIsProcessingBacklog(
                                 operatorIDPair.getGeneratedOperatorID(), false);
                     }

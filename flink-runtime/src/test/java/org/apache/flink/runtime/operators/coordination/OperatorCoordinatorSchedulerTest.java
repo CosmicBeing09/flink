@@ -19,7 +19,6 @@
 package org.apache.flink.runtime.operators.coordination;
 
 import org.apache.flink.core.testutils.CommonTestUtils;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
 import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpoint;
@@ -34,12 +33,8 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.failover.RestartAllFailoverStrategy;
 import org.apache.flink.runtime.executiongraph.failover.TestRestartBackoffTimeStrategy;
 import org.apache.flink.runtime.executiongraph.utils.SimpleAckingTaskManagerGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
-import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -92,7 +87,7 @@ import static org.assertj.core.api.Assertions.fail;
 class OperatorCoordinatorSchedulerTest {
 
     private final JobVertexID testVertexId = new JobVertexID();
-    private final OperatorID testOperatorId = new OperatorID();
+    private final OPERATOR_ID_PAIR testOperatorId = new OPERATOR_ID_PAIR();
 
     @RegisterExtension
     private static final TestExecutorExtension<ScheduledExecutorService> EXECUTOR_EXTENSION =
@@ -552,7 +547,7 @@ class OperatorCoordinatorSchedulerTest {
         CommonTestUtils.assertThrows(
                 "does not exist",
                 FlinkException.class,
-                () -> scheduler.deliverCoordinationRequestToCoordinator(new OperatorID(), request));
+                () -> scheduler.deliverCoordinationRequestToCoordinator(new OPERATOR_ID_PAIR(), request));
     }
 
     // ------------------------------------------------------------------------
@@ -667,7 +662,7 @@ class OperatorCoordinatorSchedulerTest {
             boolean restartAllOnFailover)
             throws Exception {
 
-        final OperatorIDPair opIds = OperatorIDPair.of(new OperatorID(), provider.getOperatorId());
+        final org.apache.flink.runtime.OperatorIDPair opIds = org.apache.flink.runtime.OperatorIDPair.of(new OPERATOR_ID_PAIR(), provider.getOperatorId());
         final JobVertex vertex =
                 new JobVertex(
                         "Vertex with OperatorCoordinator",
@@ -947,13 +942,13 @@ class OperatorCoordinatorSchedulerTest {
         return scheduler.getExecutionVertex(id).getJobVertex();
     }
 
-    private static OperatorState createOperatorState(OperatorID id, byte[] coordinatorState) {
+    private static OperatorState createOperatorState(OPERATOR_ID_PAIR id, byte[] coordinatorState) {
         final OperatorState state = new OperatorState(id, 10, 16384);
         state.setCoordinatorState(new ByteStreamStateHandle("name", coordinatorState));
         return state;
     }
 
-    private static byte[] serializeAsCheckpointMetadata(OperatorID id, byte[] coordinatorState)
+    private static byte[] serializeAsCheckpointMetadata(OPERATOR_ID_PAIR id, byte[] coordinatorState)
             throws IOException {
         final OperatorState state = createOperatorState(id, coordinatorState);
         final CheckpointMetadata metadata =
@@ -1011,7 +1006,7 @@ class OperatorCoordinatorSchedulerTest {
 
         @Override
         public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-                ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+                ExecutionAttemptID task, OPERATOR_ID_PAIR operator, SerializedValue<OperatorEvent> evt) {
             return FutureUtils.completedExceptionally(new TestException());
         }
     }
@@ -1043,7 +1038,7 @@ class OperatorCoordinatorSchedulerTest {
 
         @Override
         public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-                ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+                ExecutionAttemptID task, OPERATOR_ID_PAIR operator, SerializedValue<OperatorEvent> evt) {
             return operatorGateway.sendOperatorEventToTask(task, operator, evt);
         }
     }

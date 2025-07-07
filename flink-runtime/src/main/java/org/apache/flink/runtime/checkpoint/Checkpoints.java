@@ -20,14 +20,13 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataSerializer;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataSerializers;
 import org.apache.flink.runtime.checkpoint.metadata.MetadataV4Serializer;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageLoader;
 import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
@@ -151,9 +150,9 @@ public class Checkpoints {
         }
 
         // generate mapping from operator to task
-        Map<OperatorID, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
+        Map<OPERATOR_ID_PAIR, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
         for (ExecutionJobVertex task : tasks.values()) {
-            for (OperatorIDPair operatorIDPair : task.getOperatorIDs()) {
+            for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : task.getOperatorIDPairs()) {
                 operatorToJobVertexMapping.put(operatorIDPair.getGeneratedOperatorID(), task);
                 operatorIDPair
                         .getUserDefinedOperatorID()
@@ -162,7 +161,7 @@ public class Checkpoints {
         }
 
         // (2) validate it (parallelism, etc)
-        HashMap<OperatorID, OperatorState> operatorStates =
+        HashMap<OPERATOR_ID_PAIR, OperatorState> operatorStates =
                 CollectionUtil.newHashMapWithExpectedSize(
                         checkpointMetadata.getOperatorStates().size());
         for (OperatorState operatorState : checkpointMetadata.getOperatorStates()) {
@@ -227,7 +226,7 @@ public class Checkpoints {
     }
 
     private static void throwNonRestoredStateException(
-            String checkpointPointer, OperatorID operatorId) {
+            String checkpointPointer, OPERATOR_ID_PAIR operatorId) {
         String msg =
                 String.format(
                         "Failed to rollback to checkpoint/savepoint %s. "

@@ -28,7 +28,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.JobManagerTaskRestore;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.StateInitializationContext;
 import org.apache.flink.runtime.state.StateSnapshotContext;
@@ -63,7 +63,7 @@ import static org.junit.Assert.assertEquals;
 /** Test for StatefulOperatorChainedTaskTest. */
 public class StatefulOperatorChainedTaskTest {
 
-    private static final Set<OperatorID> RESTORED_OPERATORS = ConcurrentHashMap.newKeySet();
+    private static final Set<OPERATOR_ID_PAIR> RESTORED_OPERATORS = ConcurrentHashMap.newKeySet();
     private TemporaryFolder temporaryFolder;
 
     @Before
@@ -76,8 +76,8 @@ public class StatefulOperatorChainedTaskTest {
     @Test
     public void testMultipleStatefulOperatorChainedSnapshotAndRestore() throws Exception {
 
-        OperatorID headOperatorID = new OperatorID(42L, 42L);
-        OperatorID tailOperatorID = new OperatorID(44L, 44L);
+        OPERATOR_ID_PAIR headOperatorID = new OPERATOR_ID_PAIR(42L, 42L);
+        OPERATOR_ID_PAIR tailOperatorID = new OPERATOR_ID_PAIR(44L, 44L);
 
         JobManagerTaskRestore restore =
                 createRunAndCheckpointOperatorChain(
@@ -103,9 +103,9 @@ public class StatefulOperatorChainedTaskTest {
     }
 
     private JobManagerTaskRestore createRunAndCheckpointOperatorChain(
-            OperatorID headId,
+            OPERATOR_ID_PAIR headId,
             OneInputStreamOperator<String, String> headOperator,
-            OperatorID tailId,
+            OPERATOR_ID_PAIR tailId,
             OneInputStreamOperator<String, String> tailOperator,
             Optional<JobManagerTaskRestore> restore)
             throws Exception {

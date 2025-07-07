@@ -25,7 +25,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointMetaData;
 import org.apache.flink.runtime.checkpoint.CheckpointMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.taskmanager.Task;
 import org.apache.flink.util.FlinkException;
@@ -215,7 +215,7 @@ public abstract class AbstractInvokable
                         this.getClass().getName()));
     }
 
-    public void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event)
+    public void dispatchOperatorEvent(OPERATOR_ID_PAIR operator, SerializedValue<OperatorEvent> event)
             throws FlinkException {
         throw new UnsupportedOperationException(
                 "dispatchOperatorEvent not supported by " + getClass().getName());

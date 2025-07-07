@@ -66,7 +66,7 @@ import org.apache.flink.runtime.highavailability.nonha.embedded.HaLeadershipCont
 import org.apache.flink.runtime.io.network.partition.ClusterPartitionManager;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -973,7 +973,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
             JobID jobId,
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             SerializedValue<CoordinationRequest> serializedRequest) {
         return runDispatcherCommand(
                 dispatcherGateway ->

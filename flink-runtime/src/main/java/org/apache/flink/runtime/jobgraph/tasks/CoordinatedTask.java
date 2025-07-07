@@ -17,7 +17,7 @@
 package org.apache.flink.runtime.jobgraph.tasks;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.util.FlinkException;
@@ -28,6 +28,6 @@ import org.apache.flink.util.SerializedValue;
  */
 @Internal
 public interface CoordinatedTask {
-    void dispatchOperatorEvent(OperatorID operator, SerializedValue<OperatorEvent> event)
+    void dispatchOperatorEvent(OPERATOR_ID_PAIR operator, SerializedValue<OperatorEvent> event)
             throws FlinkException;
 }

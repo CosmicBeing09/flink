@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler;
 
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -56,7 +56,7 @@ public interface OperatorCoordinatorHandler {
      * @throws FlinkException If no coordinator is registered for operator.
      */
     void deliverOperatorEventToCoordinator(
-            ExecutionAttemptID taskExecutionId, OperatorID operatorId, OperatorEvent event)
+            ExecutionAttemptID taskExecutionId, OPERATOR_ID_PAIR operatorId, OperatorEvent event)
             throws FlinkException;
 
     /**
@@ -68,7 +68,7 @@ public interface OperatorCoordinatorHandler {
      * @throws FlinkException If the coordinator doesn't exist or if it can not handle the request.
      */
     CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException;
+            OPERATOR_ID_PAIR operator, CoordinationRequest request) throws FlinkException;
 
     /**
      * Register and start new operator coordinators.

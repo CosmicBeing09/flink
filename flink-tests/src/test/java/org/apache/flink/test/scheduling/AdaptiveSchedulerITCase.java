@@ -35,11 +35,8 @@ import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -310,7 +307,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
         jobVertex.setInvokableClass(FailingInvokable.class);
         jobVertex.addOperatorCoordinator(
                 new SerializedValue<>(
-                        new FailingCoordinatorProvider(OperatorID.fromJobVertexID(jobVertexId))));
+                        new FailingCoordinatorProvider(OPERATOR_ID_PAIR.fromJobVertexID(jobVertexId))));
         jobVertex.setParallelism(1);
 
         final ExecutionConfig executionConfig = new ExecutionConfig();
@@ -411,15 +408,15 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
         private static final CountDownLatch JOB_RESTARTING = new CountDownLatch(1);
 
-        private final OperatorID operatorId;
+        private final OPERATOR_ID_PAIR operatorId;
         private static final String globalExceptionMsg = "Global exception.";
 
-        FailingCoordinatorProvider(OperatorID operatorId) {
+        FailingCoordinatorProvider(OPERATOR_ID_PAIR operatorId) {
             this.operatorId = operatorId;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             return operatorId;
         }
 

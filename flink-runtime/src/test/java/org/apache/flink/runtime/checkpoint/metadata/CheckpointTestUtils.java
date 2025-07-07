@@ -26,7 +26,7 @@ import org.apache.flink.runtime.checkpoint.MasterState;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.filemerging.LogicalFile;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CheckpointedStateScope;
 import org.apache.flink.runtime.state.DiscardRecordedStateObject;
 import org.apache.flink.runtime.state.IncrementalKeyedStateHandle.HandleAndLocalPath;
@@ -97,7 +97,7 @@ public class CheckpointTestUtils {
                                 + numFullyFinishedTaskStates);
 
         for (int stateIdx = 0; stateIdx < numAllRunningTaskStates; ++stateIdx) {
-            OperatorState taskState = new OperatorState(new OperatorID(), numSubtasksPerTask, 128);
+            OperatorState taskState = new OperatorState(new OPERATOR_ID_PAIR(), numSubtasksPerTask, 128);
             randomlySetCoordinatorState(taskState, random);
             randomlySetSubtaskState(
                     taskState, IntStream.range(0, numSubtasksPerTask).toArray(), random, basePath);
@@ -105,7 +105,7 @@ public class CheckpointTestUtils {
         }
 
         for (int stateIdx = 0; stateIdx < numPartlyFinishedTaskStates; ++stateIdx) {
-            OperatorState taskState = new OperatorState(new OperatorID(), numSubtasksPerTask, 128);
+            OperatorState taskState = new OperatorState(new OPERATOR_ID_PAIR(), numSubtasksPerTask, 128);
             randomlySetCoordinatorState(taskState, random);
             randomlySetSubtaskState(
                     taskState,
@@ -122,7 +122,7 @@ public class CheckpointTestUtils {
 
         for (int stateIdx = 0; stateIdx < numFullyFinishedTaskStates; ++stateIdx) {
             taskStates.add(
-                    new FullyFinishedOperatorState(new OperatorID(), numSubtasksPerTask, 128));
+                    new FullyFinishedOperatorState(new OPERATOR_ID_PAIR(), numSubtasksPerTask, 128));
         }
 
         return taskStates;

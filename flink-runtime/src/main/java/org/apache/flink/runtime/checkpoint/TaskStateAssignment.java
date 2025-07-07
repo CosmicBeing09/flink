@@ -17,14 +17,13 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.InflightDataRescalingDescriptor.InflightDataGateOrPartitionRescalingDescriptor;
 import org.apache.flink.runtime.checkpoint.InflightDataRescalingDescriptor.InflightDataGateOrPartitionRescalingDescriptor.MappingType;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
@@ -62,14 +61,14 @@ class TaskStateAssignment {
     private static final Logger LOG = LoggerFactory.getLogger(TaskStateAssignment.class);
 
     final ExecutionJobVertex executionJobVertex;
-    final Map<OperatorID, OperatorState> oldState;
+    final Map<OPERATOR_ID_PAIR, OperatorState> oldState;
     final boolean hasNonFinishedState;
     final boolean isFullyFinished;
     final boolean hasInputState;
     final boolean hasOutputState;
     final int newParallelism;
-    final OperatorID inputOperatorID;
-    final OperatorID outputOperatorID;
+    final OPERATOR_ID_PAIR inputOperatorID;
+    final OPERATOR_ID_PAIR outputOperatorID;
 
     final Map<OperatorInstanceID, List<OperatorStateHandle>> subManagedOperatorState;
     final Map<OperatorInstanceID, List<OperatorStateHandle>> subRawOperatorState;
@@ -93,7 +92,7 @@ class TaskStateAssignment {
 
     public TaskStateAssignment(
             ExecutionJobVertex executionJobVertex,
-            Map<OperatorID, OperatorState> oldState,
+            Map<OPERATOR_ID_PAIR, OperatorState> oldState,
             Map<IntermediateDataSetID, TaskStateAssignment> consumerAssignment,
             Map<ExecutionJobVertex, TaskStateAssignment> vertexAssignments) {
 
@@ -123,7 +122,7 @@ class TaskStateAssignment {
         subManagedKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
         subRawKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
 
-        final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
+        final List<org.apache.flink.runtime.OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDPairs();
         outputOperatorID = operatorIDs.get(0).getGeneratedOperatorID();
         inputOperatorID = operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID();
 
@@ -247,7 +246,7 @@ class TaskStateAssignment {
 
     private InflightDataRescalingDescriptor createRescalingDescriptor(
             OperatorInstanceID instanceID,
-            OperatorID expectedOperatorID,
+            OPERATOR_ID_PAIR expectedOperatorID,
             TaskStateAssignment[] connectedAssignments,
             BiFunction<TaskStateAssignment, Boolean, SubtasksRescaleMapping> mappingRetriever,
             Map<Integer, SubtasksRescaleMapping> subtaskGateOrPartitionMappings,

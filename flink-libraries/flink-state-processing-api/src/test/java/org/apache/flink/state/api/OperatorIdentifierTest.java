@@ -18,7 +18,7 @@
 
 package org.apache.flink.state.api;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.state.api.runtime.OperatorIDGenerator;
 
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ class OperatorIdentifierTest {
 
     @Test
     void testForUidHash() {
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         final String hash = operatorId.toHexString();
 
         assertThat(OperatorIdentifier.forUidHash(hash).getOperatorId()).isEqualTo(operatorId);
@@ -38,7 +38,7 @@ class OperatorIdentifierTest {
     @Test
     void testForUid() {
         final String uid = "uid";
-        final OperatorID operatorId = OperatorIDGenerator.fromUid(uid);
+        final OPERATOR_ID_PAIR operatorId = OperatorIDGenerator.fromUid(uid);
 
         assertThat(OperatorIdentifier.forUid(uid).getOperatorId()).isEqualTo(operatorId);
     }
@@ -46,7 +46,7 @@ class OperatorIdentifierTest {
     @Test
     void testEqualityBasedOnOperatorId() {
         final String uid = "uid";
-        final OperatorID operatorId = OperatorIDGenerator.fromUid(uid);
+        final OPERATOR_ID_PAIR operatorId = OperatorIDGenerator.fromUid(uid);
 
         assertThat(OperatorIdentifier.forUid(uid))
                 .isEqualTo(OperatorIdentifier.forUidHash(operatorId.toHexString()));

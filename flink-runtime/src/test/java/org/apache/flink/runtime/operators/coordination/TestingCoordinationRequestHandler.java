@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -45,14 +45,14 @@ public class TestingCoordinationRequestHandler extends TestingOperatorCoordinato
 
         private static final long serialVersionUID = 1L;
 
-        private final OperatorID operatorId;
+        private final OPERATOR_ID_PAIR operatorId;
 
-        public Provider(OperatorID operatorId) {
+        public Provider(OPERATOR_ID_PAIR operatorId) {
             this.operatorId = operatorId;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             return operatorId;
         }
 

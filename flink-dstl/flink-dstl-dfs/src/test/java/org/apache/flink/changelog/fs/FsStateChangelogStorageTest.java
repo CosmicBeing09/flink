@@ -20,7 +20,7 @@ package org.apache.flink.changelog.fs;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.changelog.fs.BatchingStateChangeUploadSchedulerTest.BlockingUploader;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.TestLocalRecoveryConfig;
 import org.apache.flink.runtime.state.changelog.ChangelogStateHandleStreamImpl;
@@ -108,7 +108,7 @@ public class FsStateChangelogStorageTest
                                         TaskChangelogRegistry.NO_OP, /* persist immediately */
                                         TestLocalRecoveryConfig.disabled())
                                 .createWriter(
-                                        new OperatorID().toString(),
+                                        new OPERATOR_ID_PAIR().toString(),
                                         KeyGroupRange.of(0, 0),
                                         mailboxExecutor); ) {
             // 1. start with 1-byte request - releasing only it will NOT allow proceeding in 3, but

@@ -21,23 +21,23 @@ package org.apache.flink.runtime.jobgraph;
 import org.apache.flink.util.AbstractID;
 
 /** A class for statistically unique operator IDs. */
-public class OperatorID extends AbstractID {
+public class OPERATOR_ID_PAIR extends AbstractID {
 
     private static final long serialVersionUID = 1L;
 
-    public OperatorID() {
+    public OPERATOR_ID_PAIR() {
         super();
     }
 
-    public OperatorID(byte[] bytes) {
+    public OPERATOR_ID_PAIR(byte[] bytes) {
         super(bytes);
     }
 
-    public OperatorID(long lowerPart, long upperPart) {
+    public OPERATOR_ID_PAIR(long lowerPart, long upperPart) {
         super(lowerPart, upperPart);
     }
 
-    public static OperatorID fromJobVertexID(JobVertexID id) {
-        return new OperatorID(id.getLowerPart(), id.getUpperPart());
+    public static OPERATOR_ID_PAIR fromJobVertexID(JobVertexID id) {
+        return new OPERATOR_ID_PAIR(id.getLowerPart(), id.getUpperPart());
     }
 }

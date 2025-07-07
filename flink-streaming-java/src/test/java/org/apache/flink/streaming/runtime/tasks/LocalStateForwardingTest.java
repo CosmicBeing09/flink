@@ -30,7 +30,7 @@ import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.testutils.MockInputSplitProvider;
 import org.apache.flink.runtime.state.DoneFuture;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
@@ -104,7 +104,7 @@ class LocalStateForwardingTest {
         CheckpointMetaData checkpointMetaData = new CheckpointMetaData(0L, 0L);
         CheckpointMetricsBuilder checkpointMetrics = new CheckpointMetricsBuilder();
 
-        Map<OperatorID, OperatorSnapshotFutures> snapshots = new HashMap<>(1);
+        Map<OPERATOR_ID_PAIR, OperatorSnapshotFutures> snapshots = new HashMap<>(1);
         OperatorSnapshotFutures osFuture = new OperatorSnapshotFutures();
 
         osFuture.setKeyedStateManagedFuture(createSnapshotResult(KeyedStateHandle.class));
@@ -116,7 +116,7 @@ class LocalStateForwardingTest {
         osFuture.setResultSubpartitionStateFuture(
                 createSnapshotCollectionResult(ResultSubpartitionStateHandle.class));
 
-        OperatorID operatorID = new OperatorID();
+        OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
         snapshots.put(operatorID, osFuture);
 
         AsyncCheckpointRunnable checkpointRunnable =

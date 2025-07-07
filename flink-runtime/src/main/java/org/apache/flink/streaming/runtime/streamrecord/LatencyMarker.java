@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.runtime.streamrecord;
 
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 
 /**
  * Special record type carrying a timestamp of its creation time at a source operator and the
@@ -36,12 +36,12 @@ public final class LatencyMarker extends StreamElement {
     /** The time the latency mark is denoting. */
     private final long markedTime;
 
-    private final OperatorID operatorId;
+    private final OPERATOR_ID_PAIR operatorId;
 
     private final int subtaskIndex;
 
     /** Creates a latency mark with the given timestamp. */
-    public LatencyMarker(long markedTime, OperatorID operatorId, int subtaskIndex) {
+    public LatencyMarker(long markedTime, OPERATOR_ID_PAIR operatorId, int subtaskIndex) {
         this.markedTime = markedTime;
         this.operatorId = operatorId;
         this.subtaskIndex = subtaskIndex;
@@ -52,7 +52,7 @@ public final class LatencyMarker extends StreamElement {
         return markedTime;
     }
 
-    public OperatorID getOperatorId() {
+    public OPERATOR_ID_PAIR getOperatorId() {
         return operatorId;
     }
 

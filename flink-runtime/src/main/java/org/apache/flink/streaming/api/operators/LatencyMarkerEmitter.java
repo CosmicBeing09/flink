@@ -19,7 +19,7 @@ package org.apache.flink.streaming.api.operators;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.operators.ProcessingTimeService.ProcessingTimeCallback;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.runtime.streamrecord.LatencyMarker;
 import org.apache.flink.streaming.runtime.tasks.ProcessingTimeService;
 
@@ -34,7 +34,7 @@ class LatencyMarkerEmitter<OUT> {
             ProcessingTimeService processingTimeService,
             EmitAction emitAction,
             long latencyTrackingInterval,
-            OperatorID operatorId,
+            OPERATOR_ID_PAIR operatorId,
             int subtaskIndex) {
         latencyMarkTimer =
                 processingTimeService.scheduleWithFixedDelay(

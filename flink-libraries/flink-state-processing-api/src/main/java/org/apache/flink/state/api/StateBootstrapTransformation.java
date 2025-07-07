@@ -29,7 +29,7 @@ import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.checkpoint.OperatorState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.state.api.output.BootstrapStreamTaskRunner;
 import org.apache.flink.state.api.output.OperatorSubtaskStateReducer;
@@ -123,7 +123,7 @@ public class StateBootstrapTransformation<T> {
      * @return The operator subtask states for this bootstrap transformation.
      */
     DataStream<OperatorState> writeOperatorState(
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             StateBackend stateBackend,
             Configuration config,
             int globalMaxParallelism,
@@ -142,7 +142,7 @@ public class StateBootstrapTransformation<T> {
 
     @VisibleForTesting
     SingleOutputStreamOperator<TaggedOperatorSubtaskState> writeOperatorSubtaskStates(
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             StateBackend stateBackend,
             Path savepointPath,
             int localMaxParallelism) {
@@ -151,7 +151,7 @@ public class StateBootstrapTransformation<T> {
     }
 
     private SingleOutputStreamOperator<TaggedOperatorSubtaskState> writeOperatorSubtaskStates(
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             StateBackend stateBackend,
             Configuration additionalConfig,
             Path savepointPath,
@@ -191,7 +191,7 @@ public class StateBootstrapTransformation<T> {
 
     @VisibleForTesting
     StreamConfig getConfig(
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             StateBackend stateBackend,
             Configuration additionalConfig,
             StreamOperator<TaggedOperatorSubtaskState> operator) {

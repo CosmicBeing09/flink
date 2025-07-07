@@ -41,7 +41,7 @@ import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.externalresource.ExternalResourceInfoProvider;
 import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.state.v2.KeyedStateStoreV2;
 import org.apache.flink.runtime.taskexecutor.GlobalAggregateManager;
@@ -93,7 +93,7 @@ public class StreamingRuntimeContext extends AbstractRuntimeUDFContext {
             Environment env,
             Map<String, Accumulator<?, ?>> accumulators,
             OperatorMetricGroup operatorMetricGroup,
-            OperatorID operatorID,
+            OPERATOR_ID_PAIR operatorID,
             ProcessingTimeService processingTimeService,
             @Nullable KeyedStateStore keyedStateStore,
             ExternalResourceInfoProvider externalResourceInfoProvider) {

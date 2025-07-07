@@ -20,7 +20,7 @@ package org.apache.flink.streaming.runtime.tasks;
 
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.state.CheckpointStreamFactory;
 import org.apache.flink.streaming.api.operators.BoundedMultiInput;
 import org.apache.flink.streaming.api.operators.BoundedOneInput;
@@ -45,13 +45,13 @@ public class TestFinishedOnRestoreStreamOperator
 
     protected static final String MESSAGE = "This should never be called";
 
-    private final OperatorID operatorId;
+    private final OPERATOR_ID_PAIR operatorId;
 
     public TestFinishedOnRestoreStreamOperator() {
-        this.operatorId = new OperatorID();
+        this.operatorId = new OPERATOR_ID_PAIR();
     }
 
-    public TestFinishedOnRestoreStreamOperator(OperatorID operatorId) {
+    public TestFinishedOnRestoreStreamOperator(OPERATOR_ID_PAIR operatorId) {
         this.operatorId = operatorId;
     }
 
@@ -131,7 +131,7 @@ public class TestFinishedOnRestoreStreamOperator
     }
 
     @Override
-    public OperatorID getOperatorID() {
+    public OPERATOR_ID_PAIR getOperatorID() {
         return operatorId;
     }
 

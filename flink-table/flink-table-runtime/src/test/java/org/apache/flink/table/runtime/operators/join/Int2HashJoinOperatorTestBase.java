@@ -21,7 +21,7 @@ package org.apache.flink.table.runtime.operators.join;
 import org.apache.flink.api.common.functions.AbstractRichFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.streaming.api.operators.StreamOperator;
 import org.apache.flink.streaming.api.operators.StreamOperatorFactory;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
@@ -254,7 +254,7 @@ abstract class Int2HashJoinOperatorTestBase implements Serializable {
                     .getStreamConfig()
                     .setStreamOperatorFactory((StreamOperatorFactory<?>) operator);
         }
-        testHarness.getStreamConfig().setOperatorID(new OperatorID());
+        testHarness.getStreamConfig().setOperatorID(new OPERATOR_ID_PAIR());
         testHarness
                 .getStreamConfig()
                 .setManagedMemoryFractionOperatorOfUseCase(ManagedMemoryUseCase.OPERATOR, 0.99);

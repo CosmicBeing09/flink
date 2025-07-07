@@ -45,7 +45,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleEnvironmentBuilder;
 import org.apache.flink.runtime.io.network.TaskEventDispatcher;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.memory.SharedResources;
@@ -232,7 +232,7 @@ class InterruptSensitiveRestoreTest {
                         .build();
 
         JobVertexID jobVertexID = new JobVertexID();
-        OperatorID operatorID = OperatorID.fromJobVertexID(jobVertexID);
+        OPERATOR_ID_PAIR operatorID = OPERATOR_ID_PAIR.fromJobVertexID(jobVertexID);
         streamConfig.setOperatorID(operatorID);
         TaskStateSnapshot stateSnapshot = new TaskStateSnapshot();
         stateSnapshot.putSubtaskStateByOperatorID(operatorID, operatorSubtaskState);

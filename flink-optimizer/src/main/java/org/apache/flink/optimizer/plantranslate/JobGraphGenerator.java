@@ -60,16 +60,8 @@ import org.apache.flink.runtime.iterative.task.IterationHeadTask;
 import org.apache.flink.runtime.iterative.task.IterationIntermediateTask;
 import org.apache.flink.runtime.iterative.task.IterationSynchronizationSinkTask;
 import org.apache.flink.runtime.iterative.task.IterationTailTask;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.operators.BatchTask;
 import org.apache.flink.runtime.operators.CoGroupDriver;
@@ -1019,7 +1011,7 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex(node.getNodeName());
         final TaskConfig config = new TaskConfig(vertex.getConfiguration());
 
-        final OperatorID operatorID = new OperatorID();
+        final OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
 
         vertex.setResources(node.getMinResources(), node.getPreferredResources());
         vertex.setInvokableClass(DataSourceTask.class);
@@ -1044,7 +1036,7 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex(node.getNodeName());
         final TaskConfig config = new TaskConfig(vertex.getConfiguration());
 
-        final OperatorID operatorID = new OperatorID();
+        final OPERATOR_ID_PAIR operatorID = new OPERATOR_ID_PAIR();
 
         vertex.setResources(node.getMinResources(), node.getPreferredResources());
         vertex.setInvokableClass(DataSinkTask.class);

@@ -38,7 +38,7 @@ import org.apache.flink.runtime.io.network.api.StopMode;
 import org.apache.flink.runtime.io.network.api.writer.RecordOrEventCollectingResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriterWithAvailabilityHelper;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
@@ -108,7 +108,7 @@ class TwoInputStreamTaskTest {
         CoStreamMap<String, Integer, String> coMapOperator =
                 new CoStreamMap<>(new TestOpenCloseMapFunction());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         long initialTime = 0L;
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
@@ -162,7 +162,7 @@ class TwoInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, Integer, String> coMapOperator = new CoStreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -284,7 +284,7 @@ class TwoInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, Integer, String> coMapOperator = new CoStreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -380,7 +380,7 @@ class TwoInputStreamTaskTest {
         StreamConfig streamConfig = testHarness.getStreamConfig();
         CoStreamMap<String, Integer, String> coMapOperator = new CoStreamMap<>(new IdentityMap());
         streamConfig.setStreamOperator(coMapOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR());
 
         ConcurrentLinkedQueue<Object> expectedOutput = new ConcurrentLinkedQueue<>();
         long initialTime = 0L;
@@ -467,13 +467,13 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new DuplicatingOperator())
+                .setupOperatorChain(new OPERATOR_ID_PAIR(), new DuplicatingOperator())
                 .chain(
-                        new OperatorID(),
+                        new OPERATOR_ID_PAIR(),
                         new OneInputStreamTaskTest.DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .chain(
-                        new OperatorID(),
+                        new OPERATOR_ID_PAIR(),
                         new OneInputStreamTaskTest.DuplicatingOperator(),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -528,7 +528,7 @@ class TwoInputStreamTaskTest {
 
     @Test
     void testSkipExecutionsIfFinishedOnRestore() throws Exception {
-        OperatorID nonSourceOperatorId = new OperatorID();
+        OPERATOR_ID_PAIR nonSourceOperatorId = new OPERATOR_ID_PAIR();
 
         try (StreamTaskMailboxTestHarness<String> testHarness =
                 new StreamTaskMailboxTestHarnessBuilder<>(
@@ -583,11 +583,11 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         CoStreamMap<String, Integer, String> headOperator = new CoStreamMap<>(new IdentityMap());
-        final OperatorID headOperatorId = new OperatorID();
+        final OPERATOR_ID_PAIR headOperatorId = new OPERATOR_ID_PAIR();
 
         OneInputStreamTaskTest.WatermarkMetricOperator chainedOperator =
                 new OneInputStreamTaskTest.WatermarkMetricOperator();
-        OperatorID chainedOperatorId = new OperatorID();
+        OPERATOR_ID_PAIR chainedOperatorId = new OPERATOR_ID_PAIR();
 
         testHarness
                 .setupOperatorChain(headOperatorId, headOperator)
@@ -605,7 +605,7 @@ class TwoInputStreamTaskTest {
                 new InterceptingTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID id, String name) {
+                            OPERATOR_ID_PAIR id, String name) {
                         if (id.equals(headOperatorId)) {
                             return headOperatorMetricGroup;
                         } else if (id.equals(chainedOperatorId)) {
@@ -715,9 +715,9 @@ class TwoInputStreamTaskTest {
                         BasicTypeInfo.STRING_TYPE_INFO);
 
         testHarness
-                .setupOperatorChain(new OperatorID(), new TestBoundedTwoInputOperator("Operator0"))
+                .setupOperatorChain(new OPERATOR_ID_PAIR(), new TestBoundedTwoInputOperator("Operator0"))
                 .chain(
-                        new OperatorID(),
+                        new OPERATOR_ID_PAIR(),
                         new TestBoundedOneInputStreamOperator("Operator1"),
                         BasicTypeInfo.STRING_TYPE_INFO.createSerializer(new SerializerConfigImpl()))
                 .finish();
@@ -848,7 +848,7 @@ class TwoInputStreamTaskTest {
                         .addInput(BasicTypeInfo.INT_TYPE_INFO)
                         .addInput(BasicTypeInfo.INT_TYPE_INFO)
                         .addAdditionalOutput(partitionWriters)
-                        .setupOperatorChain(new OperatorID(), new PassThroughOperator<>())
+                        .setupOperatorChain(new OPERATOR_ID_PAIR(), new PassThroughOperator<>())
                         .chain(
                                 BasicTypeInfo.INT_TYPE_INFO.createSerializer(
                                         new SerializerConfigImpl()))

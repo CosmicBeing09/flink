@@ -38,7 +38,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.StreamTestSingleInputGate;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.metrics.NoOpMetricRegistry;
 import org.apache.flink.runtime.metrics.groups.AbstractMetricGroup;
@@ -231,7 +231,7 @@ public class StreamTaskTestHarness<OUT> {
         streamConfig.setNumberOfOutputs(1);
         streamConfig.setTypeSerializerOut(outputSerializer);
         streamConfig.setVertexID(0);
-        streamConfig.setOperatorID(new OperatorID(4711L, 123L));
+        streamConfig.setOperatorID(new OPERATOR_ID_PAIR(4711L, 123L));
 
         StreamOperator<OUT> dummyOperator =
                 new AbstractStreamOperator<OUT>() {
@@ -504,12 +504,12 @@ public class StreamTaskTestHarness<OUT> {
     }
 
     public StreamConfigChainer<StreamTaskTestHarness<OUT>> setupOperatorChain(
-            OperatorID headOperatorId, StreamOperator<?> headOperator) {
+            OPERATOR_ID_PAIR headOperatorId, StreamOperator<?> headOperator) {
         return setupOperatorChain(headOperatorId, SimpleOperatorFactory.of(headOperator));
     }
 
     public StreamConfigChainer<StreamTaskTestHarness<OUT>> setupOperatorChain(
-            OperatorID headOperatorId, StreamOperatorFactory<?> headOperatorFactory) {
+            OPERATOR_ID_PAIR headOperatorId, StreamOperatorFactory<?> headOperatorFactory) {
         Preconditions.checkState(!setupCalled, "This harness was already setup.");
         setupCalled = true;
         StreamConfig streamConfig = getStreamConfig();

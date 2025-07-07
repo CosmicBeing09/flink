@@ -19,7 +19,7 @@
 package org.apache.flink.streaming.runtime.tasks;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.operators.coordination.OperatorEventDispatcher;
@@ -44,7 +44,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 @Internal
 public final class OperatorEventDispatcherImpl implements OperatorEventDispatcher {
 
-    private final Map<OperatorID, OperatorEventHandler> handlers;
+    private final Map<OPERATOR_ID_PAIR, OperatorEventHandler> handlers;
 
     private final ClassLoader classLoader;
 
@@ -58,7 +58,7 @@ public final class OperatorEventDispatcherImpl implements OperatorEventDispatche
     }
 
     void dispatchEventToHandlers(
-            OperatorID operatorID, SerializedValue<OperatorEvent> serializedEvent)
+            OPERATOR_ID_PAIR operatorID, SerializedValue<OperatorEvent> serializedEvent)
             throws FlinkException {
         final OperatorEvent evt;
         try {
@@ -76,19 +76,19 @@ public final class OperatorEventDispatcherImpl implements OperatorEventDispatche
     }
 
     @Override
-    public void registerEventHandler(OperatorID operator, OperatorEventHandler handler) {
+    public void registerEventHandler(OPERATOR_ID_PAIR operator, OperatorEventHandler handler) {
         final OperatorEventHandler prior = handlers.putIfAbsent(operator, handler);
         if (prior != null) {
             throw new IllegalStateException("already a handler registered for this operatorId");
         }
     }
 
-    Set<OperatorID> getRegisteredOperators() {
+    Set<OPERATOR_ID_PAIR> getRegisteredOperators() {
         return handlers.keySet();
     }
 
     @Override
-    public OperatorEventGateway getOperatorEventGateway(OperatorID operatorId) {
+    public OperatorEventGateway getOperatorEventGateway(OPERATOR_ID_PAIR operatorId) {
         return new OperatorEventGatewayImpl(toCoordinator, operatorId);
     }
 
@@ -98,10 +98,10 @@ public final class OperatorEventDispatcherImpl implements OperatorEventDispatche
 
         private final TaskOperatorEventGateway toCoordinator;
 
-        private final OperatorID operatorId;
+        private final OPERATOR_ID_PAIR operatorId;
 
         private OperatorEventGatewayImpl(
-                TaskOperatorEventGateway toCoordinator, OperatorID operatorId) {
+                TaskOperatorEventGateway toCoordinator, OPERATOR_ID_PAIR operatorId) {
             this.toCoordinator = toCoordinator;
             this.operatorId = operatorId;
         }

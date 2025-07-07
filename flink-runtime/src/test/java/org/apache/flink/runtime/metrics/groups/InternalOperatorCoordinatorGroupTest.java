@@ -20,7 +20,7 @@ package org.apache.flink.runtime.metrics.groups;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
 import org.apache.flink.runtime.metrics.util.TestingMetricRegistry;
@@ -40,7 +40,7 @@ class InternalOperatorCoordinatorGroupTest {
     void testGenerateScopeDefault() {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
@@ -58,7 +58,7 @@ class InternalOperatorCoordinatorGroupTest {
     void testVariables() {
         final JobID jobId = new JobID();
         final JobVertexID jobVertexId = new JobVertexID();
-        final OperatorID operatorId = new OperatorID();
+        final OPERATOR_ID_PAIR operatorId = new OPERATOR_ID_PAIR();
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")

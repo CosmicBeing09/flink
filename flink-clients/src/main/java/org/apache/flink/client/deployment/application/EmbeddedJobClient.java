@@ -29,7 +29,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.dispatcher.TriggerSavepointMode;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
@@ -153,7 +153,7 @@ public class EmbeddedJobClient implements JobClient, CoordinationRequestGateway 
 
     @Override
     public CompletableFuture<CoordinationResponse> sendCoordinationRequest(
-            OperatorID operatorId, CoordinationRequest request) {
+            OPERATOR_ID_PAIR operatorId, CoordinationRequest request) {
         try {
             SerializedValue<CoordinationRequest> serializedRequest = new SerializedValue<>(request);
             return dispatcherGateway.deliverCoordinationRequestToCoordinator(

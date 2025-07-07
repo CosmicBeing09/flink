@@ -37,7 +37,7 @@ import org.apache.flink.runtime.io.network.api.reader.MutableReader;
 import org.apache.flink.runtime.io.network.api.reader.MutableRecordReader;
 import org.apache.flink.runtime.io.network.partition.consumer.UnionInputGate;
 import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorIOMetricGroup;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
@@ -349,7 +349,7 @@ public class DataSinkTask<IT> extends AbstractInvokable {
         Configuration taskConf = getTaskConfiguration();
         this.config = new TaskConfig(taskConf);
 
-        final Pair<OperatorID, OutputFormat<IT>> operatorIDAndOutputFormat;
+        final Pair<OPERATOR_ID_PAIR, OutputFormat<IT>> operatorIDAndOutputFormat;
         InputOutputFormatContainer formatContainer =
                 new InputOutputFormatContainer(config, userCodeClassLoader);
         try {

@@ -47,7 +47,7 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.tasks.InputSplitProvider;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.memory.MemoryManager;
@@ -432,11 +432,11 @@ public class SavepointEnvironment implements Environment {
     private static final class NoOpTaskOperatorEventGateway implements TaskOperatorEventGateway {
         @Override
         public void sendOperatorEventToCoordinator(
-                OperatorID operator, SerializedValue<OperatorEvent> event) {}
+                OPERATOR_ID_PAIR operator, SerializedValue<OperatorEvent> event) {}
 
         @Override
         public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-                OperatorID operator, SerializedValue<CoordinationRequest> request) {
+                OPERATOR_ID_PAIR operator, SerializedValue<CoordinationRequest> request) {
             return CompletableFuture.completedFuture(null);
         }
     }

@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuild
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.TestingOperatorCoordinator;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -54,8 +54,8 @@ class DefaultOperatorCoordinatorHandlerTest {
     void testRegisterAndStartNewCoordinators() throws Exception {
 
         final JobVertex[] jobVertices = createJobVertices(BLOCKING);
-        OperatorID operatorId1 = OperatorID.fromJobVertexID(jobVertices[0].getID());
-        OperatorID operatorId2 = OperatorID.fromJobVertexID(jobVertices[1].getID());
+        OPERATOR_ID_PAIR operatorId1 = OPERATOR_ID_PAIR.fromJobVertexID(jobVertices[0].getID());
+        OPERATOR_ID_PAIR operatorId2 = OPERATOR_ID_PAIR.fromJobVertexID(jobVertices[1].getID());
 
         ExecutionGraph executionGraph = createDynamicGraph(jobVertices);
         ExecutionJobVertex ejv1 = executionGraph.getJobVertex(jobVertices[0].getID());
@@ -88,12 +88,12 @@ class DefaultOperatorCoordinatorHandlerTest {
         jobVertices[0].addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
-                                OperatorID.fromJobVertexID(jobVertices[0].getID()))));
+                                OPERATOR_ID_PAIR.fromJobVertexID(jobVertices[0].getID()))));
 
         jobVertices[1].addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
-                                OperatorID.fromJobVertexID(jobVertices[1].getID()))));
+                                OPERATOR_ID_PAIR.fromJobVertexID(jobVertices[1].getID()))));
 
         return jobVertices;
     }

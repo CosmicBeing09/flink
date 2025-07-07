@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 
 import javax.annotation.Nullable;
 
@@ -30,29 +30,29 @@ public class OperatorIDPair implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final OperatorID generatedOperatorID;
-    private final OperatorID userDefinedOperatorID;
+    private final OPERATOR_ID_PAIR generatedOperatorID;
+    private final OPERATOR_ID_PAIR userDefinedOperatorID;
 
     private OperatorIDPair(
-            OperatorID generatedOperatorID, @Nullable OperatorID userDefinedOperatorID) {
+            OPERATOR_ID_PAIR generatedOperatorID, @Nullable OPERATOR_ID_PAIR userDefinedOperatorID) {
         this.generatedOperatorID = generatedOperatorID;
         this.userDefinedOperatorID = userDefinedOperatorID;
     }
 
     public static OperatorIDPair of(
-            OperatorID generatedOperatorID, @Nullable OperatorID userDefinedOperatorID) {
+            OPERATOR_ID_PAIR generatedOperatorID, @Nullable OPERATOR_ID_PAIR userDefinedOperatorID) {
         return new OperatorIDPair(generatedOperatorID, userDefinedOperatorID);
     }
 
-    public static OperatorIDPair generatedIDOnly(OperatorID generatedOperatorID) {
+    public static OperatorIDPair generatedIDOnly(OPERATOR_ID_PAIR generatedOperatorID) {
         return new OperatorIDPair(generatedOperatorID, null);
     }
 
-    public OperatorID getGeneratedOperatorID() {
+    public OPERATOR_ID_PAIR getGeneratedOperatorID() {
         return generatedOperatorID;
     }
 
-    public Optional<OperatorID> getUserDefinedOperatorID() {
+    public Optional<OPERATOR_ID_PAIR> getUserDefinedOperatorID() {
         return Optional.ofNullable(userDefinedOperatorID);
     }
 }

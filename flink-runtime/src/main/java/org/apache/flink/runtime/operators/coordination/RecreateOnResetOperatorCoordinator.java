@@ -21,7 +21,7 @@ package org.apache.flink.runtime.operators.coordination;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.metrics.groups.OperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.function.ThrowingConsumer;
 import org.apache.flink.util.function.ThrowingRunnable;
@@ -196,14 +196,14 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
     /** The provider for a private RecreateOnResetOperatorCoordinator. */
     public abstract static class Provider implements OperatorCoordinator.Provider {
         private static final long serialVersionUID = 3002837631612629071L;
-        private final OperatorID operatorID;
+        private final OPERATOR_ID_PAIR operatorID;
 
-        public Provider(OperatorID operatorID) {
+        public Provider(OPERATOR_ID_PAIR operatorID) {
             this.operatorID = operatorID;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             return operatorID;
         }
 
@@ -242,7 +242,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public OPERATOR_ID_PAIR getOperatorId() {
             return context.getOperatorId();
         }
 
@@ -319,7 +319,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
      * </ul>
      */
     private static class DeferrableCoordinator {
-        private final OperatorID operatorId;
+        private final OPERATOR_ID_PAIR operatorId;
         private final BlockingQueue<NamedCall> pendingCalls;
         private QuiesceableContext internalQuiesceableContext;
         private OperatorCoordinator internalCoordinator;
@@ -327,7 +327,7 @@ public class RecreateOnResetOperatorCoordinator implements OperatorCoordinator {
         private boolean closed;
         private volatile boolean failed;
 
-        private DeferrableCoordinator(OperatorID operatorId) {
+        private DeferrableCoordinator(OPERATOR_ID_PAIR operatorId) {
             this.operatorId = operatorId;
             this.pendingCalls = new LinkedBlockingQueue<>();
             this.hasCaughtUp = false;

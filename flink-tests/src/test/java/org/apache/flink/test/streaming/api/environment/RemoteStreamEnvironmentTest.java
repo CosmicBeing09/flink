@@ -33,7 +33,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.client.JobStatusMessage;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.jobmaster.JobResult.Builder;
@@ -300,7 +300,7 @@ public class RemoteStreamEnvironmentTest extends TestLogger {
 
         @Override
         public CompletableFuture<CoordinationResponse> sendCoordinationRequest(
-                JobID jobId, OperatorID operatorId, CoordinationRequest request) {
+                JobID jobId, OPERATOR_ID_PAIR operatorId, CoordinationRequest request) {
             return null;
         }
     }

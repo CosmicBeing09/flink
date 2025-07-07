@@ -39,7 +39,7 @@ import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.jobmaster.JMTMRegistrationSuccess;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.jobmaster.SerializedInputSplit;
@@ -166,12 +166,12 @@ public class TestingJobMasterGatewayBuilder {
             (a, b, c) -> CompletableFuture.completedFuture(new Object());
     private TriFunction<
                     ExecutionAttemptID,
-                    OperatorID,
+            OPERATOR_ID_PAIR,
                     SerializedValue<OperatorEvent>,
                     CompletableFuture<Acknowledge>>
             operatorEventSender = (a, b, c) -> CompletableFuture.completedFuture(Acknowledge.get());
     private BiFunction<
-                    OperatorID,
+            OPERATOR_ID_PAIR,
                     SerializedValue<CoordinationRequest>,
                     CompletableFuture<CoordinationResponse>>
             deliverCoordinationRequestFunction =
@@ -395,7 +395,7 @@ public class TestingJobMasterGatewayBuilder {
     public TestingJobMasterGatewayBuilder setOperatorEventSender(
             TriFunction<
                             ExecutionAttemptID,
-                            OperatorID,
+                    OPERATOR_ID_PAIR,
                             SerializedValue<OperatorEvent>,
                             CompletableFuture<Acknowledge>>
                     operatorEventSender) {
@@ -405,7 +405,7 @@ public class TestingJobMasterGatewayBuilder {
 
     public TestingJobMasterGatewayBuilder setDeliverCoordinationRequestFunction(
             BiFunction<
-                            OperatorID,
+                    OPERATOR_ID_PAIR,
                             SerializedValue<CoordinationRequest>,
                             CompletableFuture<CoordinationResponse>>
                     deliverCoordinationRequestFunction) {

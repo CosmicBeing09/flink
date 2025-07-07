@@ -20,7 +20,7 @@ package org.apache.flink.state.api;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.state.api.runtime.OperatorIDGenerator;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.StringUtils;
@@ -37,16 +37,16 @@ public final class OperatorIdentifier implements Serializable {
     // this is only used for logging purposes
     @Nullable private final String uid;
     // this is the runtime representation of a uid hash
-    private final OperatorID operatorId;
+    private final OPERATOR_ID_PAIR operatorId;
 
-    private OperatorIdentifier(OperatorID operatorId, @Nullable String uid) {
+    private OperatorIdentifier(OPERATOR_ID_PAIR operatorId, @Nullable String uid) {
         this.operatorId = operatorId;
         this.uid = uid;
     }
 
     public static OperatorIdentifier forUidHash(String uidHash) {
         Preconditions.checkNotNull(uidHash);
-        return new OperatorIdentifier(new OperatorID(StringUtils.hexStringToByte(uidHash)), null);
+        return new OperatorIdentifier(new OPERATOR_ID_PAIR(StringUtils.hexStringToByte(uidHash)), null);
     }
 
     public static OperatorIdentifier forUid(String uid) {
@@ -60,7 +60,7 @@ public final class OperatorIdentifier implements Serializable {
     }
 
     @Internal
-    public OperatorID getOperatorId() {
+    public OPERATOR_ID_PAIR getOperatorId() {
         return operatorId;
     }
 

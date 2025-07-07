@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -36,5 +36,5 @@ public interface CoordinationRequestGateway {
      * @return the response from the coordinator
      */
     CompletableFuture<CoordinationResponse> sendCoordinationRequest(
-            OperatorID operatorId, CoordinationRequest request);
+            OPERATOR_ID_PAIR operatorId, CoordinationRequest request);
 }

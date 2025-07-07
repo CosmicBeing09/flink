@@ -22,7 +22,6 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.io.InputSplitSource;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
 import org.apache.flink.runtime.jobmanager.scheduler.CoLocationGroup;
@@ -72,7 +71,7 @@ public class JobVertex implements java.io.Serializable {
      *
      * <p>This is the same order that operators are stored in the {@code StreamTask}.
      */
-    private final List<OperatorIDPair> operatorIDs;
+    private final List<org.apache.flink.runtime.OperatorIDPair> operatorIDs;
 
     /** Produced data sets, one per writer. */
     private final Map<IntermediateDataSetID, IntermediateDataSet> results = new LinkedHashMap<>();
@@ -182,8 +181,8 @@ public class JobVertex implements java.io.Serializable {
     public JobVertex(String name, JobVertexID id) {
         this.name = name == null ? DEFAULT_NAME : name;
         this.id = id == null ? new JobVertexID() : id;
-        OperatorIDPair operatorIDPair =
-                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(this.id));
+        org.apache.flink.runtime.OperatorIDPair operatorIDPair =
+                org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(OPERATOR_ID_PAIR.fromJobVertexID(this.id));
         this.operatorIDs = Collections.singletonList(operatorIDPair);
     }
 
@@ -194,7 +193,7 @@ public class JobVertex implements java.io.Serializable {
      * @param primaryId The id of the job vertex.
      * @param operatorIDPairs The operator ID pairs of the job vertex.
      */
-    public JobVertex(String name, JobVertexID primaryId, List<OperatorIDPair> operatorIDPairs) {
+    public JobVertex(String name, JobVertexID primaryId, List<org.apache.flink.runtime.OperatorIDPair> operatorIDPairs) {
         this.name = name == null ? DEFAULT_NAME : name;
         this.id = primaryId == null ? new JobVertexID() : primaryId;
         this.operatorIDs = Collections.unmodifiableList(operatorIDPairs);
@@ -247,7 +246,7 @@ public class JobVertex implements java.io.Serializable {
         return this.inputs.size();
     }
 
-    public List<OperatorIDPair> getOperatorIDs() {
+    public List<org.apache.flink.runtime.OperatorIDPair> getOperatorIDs() {
         return operatorIDs;
     }
 

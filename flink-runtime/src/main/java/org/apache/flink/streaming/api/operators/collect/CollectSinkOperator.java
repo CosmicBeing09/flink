@@ -18,7 +18,7 @@
 package org.apache.flink.streaming.api.operators.collect;
 
 import org.apache.flink.api.common.typeutils.TypeSerializer;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OPERATOR_ID_PAIR;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.operators.coordination.OperatorEventGateway;
 import org.apache.flink.runtime.operators.coordination.OperatorEventHandler;
@@ -36,7 +36,7 @@ public class CollectSinkOperator<IN> extends StreamSink<IN> implements OperatorE
     private final CollectSinkFunction<IN> sinkFunction;
     // we need operator id to identify the coordinator of this operator,
     // this is only used for in clients so no need to serialize
-    private final transient CompletableFuture<OperatorID> operatorIdFuture;
+    private final transient CompletableFuture<OPERATOR_ID_PAIR> operatorIdFuture;
 
     public CollectSinkOperator(
             TypeSerializer<IN> serializer, long maxBytesPerBatch, String accumulatorName) {
@@ -56,7 +56,7 @@ public class CollectSinkOperator<IN> extends StreamSink<IN> implements OperatorE
         super.close();
     }
 
-    public CompletableFuture<OperatorID> getOperatorIdFuture() {
+    public CompletableFuture<OPERATOR_ID_PAIR> getOperatorIdFuture() {
         return operatorIdFuture;
     }
 
