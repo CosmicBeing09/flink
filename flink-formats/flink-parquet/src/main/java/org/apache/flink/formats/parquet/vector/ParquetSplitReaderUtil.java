@@ -124,11 +124,11 @@ public class ParquetSplitReaderUtil {
                     ColumnVector[] vectors = new ColumnVector[selectedFields.length];
                     for (int i = 0; i < vectors.length; i++) {
                         String name = fullFieldNames[selectedFields[i]];
-                        LogicalType type = fullFieldTypes[selectedFields[i]].getLogicalType();
+                        LogicalType category = fullFieldTypes[selectedFields[i]].getLogicalType();
                         vectors[i] =
                                 partitionSpec.containsKey(name)
                                         ? createVectorFromConstant(
-                                                type, partitionSpec.get(name), batchSize)
+                                        category, partitionSpec.get(name), batchSize)
                                         : readVectors[selNonPartNames.indexOf(name)];
                     }
                     return new VectorizedColumnBatch(vectors);
@@ -150,8 +150,8 @@ public class ParquetSplitReaderUtil {
     }
 
     public static ColumnVector createVectorFromConstant(
-            LogicalType type, Object value, int batchSize) {
-        switch (type.getTypeRoot()) {
+            LogicalType category, Object value, int batchSize) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -207,7 +207,7 @@ public class ParquetSplitReaderUtil {
                 }
                 return lv;
             case DECIMAL:
-                DecimalType decimalType = (DecimalType) type;
+                DecimalType decimalType = (DecimalType) category;
                 int precision = decimalType.getPrecision();
                 int scale = decimalType.getScale();
                 DecimalData decimal =
@@ -268,7 +268,7 @@ public class ParquetSplitReaderUtil {
                 }
                 return tv;
             default:
-                throw new UnsupportedOperationException("Unsupported type: " + type);
+                throw new UnsupportedOperationException("Unsupported type: " + category);
         }
     }
 
