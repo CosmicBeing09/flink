@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  *   <li>Soft-rescaling phase: Rescaling is triggered if the desired amount of resources is
  *       available.
  *   <li>Hard-rescaling phase: Rescaling is triggered if a sufficient amount of resources is
- *       available (its lower threshold is defined by (@code scalingIntervalMax}).
+ *       available (its lower threshold is defined by {@code resourceStabilizationTimeout}).
  * </ol>
  *
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
@@ -62,7 +62,7 @@ public class DefaultRescaleManager implements RescaleManager {
     private final Supplier<Temporal> clock;
 
     @VisibleForTesting final Duration scalingIntervalMin;
-    @VisibleForTesting @Nullable final Duration scalingIntervalMax;
+    @VisibleForTesting @Nullable final Duration resourceStabilizationTimeout;
 
     private final RescaleManager.Context rescaleContext;
 
@@ -102,7 +102,7 @@ public class DefaultRescaleManager implements RescaleManager {
             Supplier<Temporal> clock,
             RescaleManager.Context rescaleContext,
             Duration scalingIntervalMin,
-            @Nullable Duration scalingIntervalMax,
+            @Nullable Duration resourceStabilizationTimeout,
             Duration maxTriggerDelay) {
         this.initializationTime = initializationTime;
         this.clock = clock;
@@ -111,10 +111,11 @@ public class DefaultRescaleManager implements RescaleManager {
         this.triggerFuture = FutureUtils.completedVoidFuture();
 
         Preconditions.checkArgument(
-                scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
+                resourceStabilizationTimeout == null || scalingIntervalMin.compareTo(
+                        resourceStabilizationTimeout) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
         this.scalingIntervalMin = scalingIntervalMin;
-        this.scalingIntervalMax = scalingIntervalMax;
+        this.resourceStabilizationTimeout = resourceStabilizationTimeout;
 
         this.rescaleContext = rescaleContext;
     }
@@ -165,19 +166,19 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
             rescaleContext.rescale();
-        } else if (scalingIntervalMax != null) {
+        } else if (resourceStabilizationTimeout != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
                             + "Last resource added does not meet the configured minimal parallelism change. Forced rescaling will be triggered after {} if the resource is still there.",
-                    scalingIntervalMax);
+                    resourceStabilizationTimeout);
 
             // reasoning for inconsistent scheduling:
             // https://lists.apache.org/thread/m2w2xzfjpxlw63j0k7tfxfgs0rshhwwr
-            if (timeSinceLastRescale().compareTo(scalingIntervalMax) > 0) {
+            if (timeSinceLastRescale().compareTo(resourceStabilizationTimeout) > 0) {
                 rescaleWithSufficientResources();
             } else {
                 rescaleContext.scheduleOperation(
-                        this::rescaleWithSufficientResources, scalingIntervalMax);
+                        this::rescaleWithSufficientResources, resourceStabilizationTimeout);
             }
         }
     }
@@ -186,7 +187,7 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasSufficientResources()) {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
-                    scalingIntervalMax);
+                    resourceStabilizationTimeout);
             rescaleContext.rescale();
         }
     }
