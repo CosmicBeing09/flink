@@ -35,13 +35,13 @@ import java.util.Optional;
 import static org.apache.flink.table.types.logical.utils.LogicalTypeCasts.supportsAvoidingCast;
 
 /**
- * Helper context that deals with adapted arguments.
+ * Helper context that deals with cast arguments.
  *
  * <p>For example, if an argument needs to be casted to a target type, an expression that was a
  * literal before is not a literal anymore in this call context.
  */
 @Internal
-public final class AdaptedCallContext implements CallContext {
+public final class CastCallContext implements CallContext {
 
     private final CallContext originalContext;
 
@@ -49,7 +49,7 @@ public final class AdaptedCallContext implements CallContext {
 
     private List<DataType> expectedArguments;
 
-    public AdaptedCallContext(CallContext originalContext, @Nullable DataType outputDataType) {
+    public CastCallContext(CallContext originalContext, @Nullable DataType outputDataType) {
         this.originalContext = originalContext;
         this.expectedArguments = originalContext.getArgumentDataTypes();
         this.outputDataType = outputDataType;

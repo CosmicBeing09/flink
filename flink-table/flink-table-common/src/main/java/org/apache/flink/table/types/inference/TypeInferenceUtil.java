@@ -26,7 +26,7 @@ import org.apache.flink.table.functions.FunctionDefinition;
 import org.apache.flink.table.functions.TableSemantics;
 import org.apache.flink.table.functions.UserDefinedFunctionHelper;
 import org.apache.flink.table.types.DataType;
-import org.apache.flink.table.types.inference.utils.AdaptedCallContext;
+import org.apache.flink.table.types.inference.utils.CastCallContext;
 import org.apache.flink.table.types.inference.utils.UnknownCallContext;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 
@@ -124,11 +124,11 @@ public final class TypeInferenceUtil {
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final CastCallContext castCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
-        final List<DataType> expectedTypes = adaptedCallContext.getArgumentDataTypes();
+        final List<DataType> expectedTypes = castCallContext.getArgumentDataTypes();
         for (int pos = 0; pos < actualTypes.size(); pos++) {
             final DataType expectedType = expectedTypes.get(pos);
             final DataType actualType = actualTypes.get(pos);
@@ -144,7 +144,7 @@ public final class TypeInferenceUtil {
             }
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     /**
@@ -457,14 +457,14 @@ public final class TypeInferenceUtil {
         return stringBuilder.toString();
     }
 
-    private static AdaptedCallContext inferInputTypes(
+    private static CastCallContext inferInputTypes(
             TypeInference typeInference,
             CallContext callContext,
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
-                new AdaptedCallContext(callContext, outputType);
+        final CastCallContext adaptedCallContext =
+                new CastCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
         final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
