@@ -195,7 +195,7 @@ class ExecutingTest {
     @Test
     public void testTriggerRescaleOnCompletedCheckpoint() throws Exception {
         final AtomicBoolean rescaleTriggered = new AtomicBoolean();
-        final RescaleManager.Factory rescaleManagerFactory =
+        final TransitionToSubsequentStateManager.Factory rescaleManagerFactory =
                 new TestingRescaleManager.Factory(() -> {}, () -> rescaleTriggered.set(true));
         try (MockExecutingContext ctx = new MockExecutingContext()) {
             final Executing testInstance =
@@ -212,7 +212,7 @@ class ExecutingTest {
     @Test
     public void testTriggerRescaleOnFailedCheckpoint() throws Exception {
         final AtomicInteger rescaleTriggerCount = new AtomicInteger();
-        final RescaleManager.Factory rescaleManagerFactory =
+        final TransitionToSubsequentStateManager.Factory rescaleManagerFactory =
                 new TestingRescaleManager.Factory(() -> {}, rescaleTriggerCount::incrementAndGet);
         final int rescaleOnFailedCheckpointsCount = 3;
         try (MockExecutingContext ctx = new MockExecutingContext()) {
@@ -254,7 +254,7 @@ class ExecutingTest {
     @Test
     public void testOnCompletedCheckpointResetsFailedCheckpointCount() throws Exception {
         final AtomicInteger rescaleTriggeredCount = new AtomicInteger();
-        final RescaleManager.Factory rescaleManagerFactory =
+        final TransitionToSubsequentStateManager.Factory rescaleManagerFactory =
                 new TestingRescaleManager.Factory(() -> {}, rescaleTriggeredCount::incrementAndGet);
         final int rescaleOnFailedCheckpointsCount = 3;
         try (MockExecutingContext ctx = new MockExecutingContext()) {
@@ -606,7 +606,7 @@ class ExecutingTest {
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .build(EXECUTOR_EXTENSION.getExecutor());
         private OperatorCoordinatorHandler operatorCoordinatorHandler;
-        private RescaleManager.Factory rescaleManagerFactory =
+        private TransitionToSubsequentStateManager.Factory rescaleManagerFactory =
                 TestingRescaleManager.Factory.noOpFactory();
         private int rescaleOnFailedCheckpointCount = 1;
 
@@ -626,7 +626,7 @@ class ExecutingTest {
         }
 
         public ExecutingStateBuilder setRescaleManagerFactory(
-                RescaleManager.Factory rescaleManagerFactory) {
+                TransitionToSubsequentStateManager.Factory rescaleManagerFactory) {
             this.rescaleManagerFactory = rescaleManagerFactory;
             return this;
         }

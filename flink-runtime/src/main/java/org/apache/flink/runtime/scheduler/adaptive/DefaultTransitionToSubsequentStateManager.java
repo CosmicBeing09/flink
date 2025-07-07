@@ -35,7 +35,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 
 /**
- * {@code DefaultRescaleManager} manages triggering the next rescaling based on when the previous
+ * {@code DefaultTransitionToSubsequentStateManager} manages triggering the next rescaling based on when the previous
  * rescale operation happened and the available resources. It handles the event based on the
  * following phases (in that order):
  *
@@ -54,9 +54,10 @@ import java.util.function.Supplier;
  * @see Executing
  */
 @NotThreadSafe
-public class DefaultRescaleManager implements RescaleManager {
+public class DefaultTransitionToSubsequentStateManager implements TransitionToSubsequentStateManager {
 
-    private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(
+            DefaultTransitionToSubsequentStateManager.class);
 
     private final Temporal initializationTime;
     private final Supplier<Temporal> clock;
@@ -64,7 +65,7 @@ public class DefaultRescaleManager implements RescaleManager {
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
-    private final RescaleManager.Context rescaleContext;
+    private final TransitionToSubsequentStateManager.Context rescaleContext;
 
     private boolean rescaleScheduled = false;
 
@@ -81,9 +82,9 @@ public class DefaultRescaleManager implements RescaleManager {
      */
     private CompletableFuture<Void> triggerFuture;
 
-    DefaultRescaleManager(
+    DefaultTransitionToSubsequentStateManager(
             Temporal initializationTime,
-            RescaleManager.Context rescaleContext,
+            TransitionToSubsequentStateManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -97,10 +98,10 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     @VisibleForTesting
-    DefaultRescaleManager(
+    DefaultTransitionToSubsequentStateManager(
             Temporal initializationTime,
             Supplier<Temporal> clock,
-            RescaleManager.Context rescaleContext,
+            TransitionToSubsequentStateManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -164,7 +165,7 @@ public class DefaultRescaleManager implements RescaleManager {
         rescaleScheduled = false;
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         } else if (scalingIntervalMax != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
@@ -187,11 +188,11 @@ public class DefaultRescaleManager implements RescaleManager {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
                     scalingIntervalMax);
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         }
     }
 
-    public static class Factory implements RescaleManager.Factory {
+    public static class Factory implements TransitionToSubsequentStateManager.Factory {
 
         private final Duration scalingIntervalMin;
         @Nullable private final Duration scalingIntervalMax;
@@ -220,8 +221,8 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
-            return new DefaultRescaleManager(
+        public DefaultTransitionToSubsequentStateManager create(Context rescaleContext, Instant lastRescale) {
+            return new DefaultTransitionToSubsequentStateManager(
                     lastRescale,
                     rescaleContext,
                     scalingIntervalMin,

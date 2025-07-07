@@ -97,7 +97,7 @@ public class AdaptiveSchedulerBuilder {
     /**
      * {@code null} indicates that the default factory will be used based on the set configuration.
      */
-    @Nullable private RescaleManager.Factory rescaleManagerFactory = null;
+    @Nullable private TransitionToSubsequentStateManager.Factory rescaleManagerFactory = null;
 
     private BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
             checkpointStatsTrackerFactory =
@@ -225,7 +225,7 @@ public class AdaptiveSchedulerBuilder {
     }
 
     public AdaptiveSchedulerBuilder setRescaleManagerFactory(
-            @Nullable RescaleManager.Factory rescaleManagerFactory) {
+            @Nullable TransitionToSubsequentStateManager.Factory rescaleManagerFactory) {
         this.rescaleManagerFactory = rescaleManagerFactory;
         return this;
     }
@@ -260,7 +260,7 @@ public class AdaptiveSchedulerBuilder {
         return new AdaptiveScheduler(
                 settings,
                 rescaleManagerFactory == null
-                        ? DefaultRescaleManager.Factory.fromSettings(settings)
+                        ? DefaultTransitionToSubsequentStateManager.Factory.fromSettings(settings)
                         : rescaleManagerFactory,
                 checkpointStatsTrackerFactory,
                 jobGraph,
