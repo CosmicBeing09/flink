@@ -295,7 +295,7 @@ public class AdaptiveScheduler
         }
 
         private final SchedulerExecutionMode executionMode;
-        private final Duration initialResourceAllocationTimeout;
+        private final Duration submissionResourceWaitTimeout;
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
         private final Duration scalingIntervalMin;
@@ -305,7 +305,7 @@ public class AdaptiveScheduler
 
         private Settings(
                 SchedulerExecutionMode executionMode,
-                Duration initialResourceAllocationTimeout,
+                Duration submissionResourceWaitTimeout,
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
@@ -313,7 +313,7 @@ public class AdaptiveScheduler
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
-            this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
+            this.submissionResourceWaitTimeout = submissionResourceWaitTimeout;
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
@@ -326,8 +326,8 @@ public class AdaptiveScheduler
             return executionMode;
         }
 
-        public Duration getInitialResourceAllocationTimeout() {
-            return initialResourceAllocationTimeout;
+        public Duration getSubmissionResourceWaitTimeout() {
+            return submissionResourceWaitTimeout;
         }
 
         public Duration getResourceStabilizationTimeout() {
@@ -1149,7 +1149,7 @@ public class AdaptiveScheduler
                 new WaitingForResources.Factory(
                         this,
                         LOG,
-                        settings.getInitialResourceAllocationTimeout(),
+                        settings.getSubmissionResourceWaitTimeout(),
                         this::createWaitingForResourceStateTransitionManager,
                         previousExecutionGraph));
     }
