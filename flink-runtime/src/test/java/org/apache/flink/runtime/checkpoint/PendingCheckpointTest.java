@@ -84,7 +84,7 @@ class PendingCheckpointTest {
 
     static {
         ExecutionJobVertex jobVertex = mock(ExecutionJobVertex.class);
-        when(jobVertex.getOperatorIDs())
+        when(jobVertex.getOperatorIDPairs())
                 .thenReturn(Collections.singletonList(OperatorIDPair.generatedIDOnly(OPERATOR_ID)));
 
         ExecutionVertex vertex = mock(ExecutionVertex.class);

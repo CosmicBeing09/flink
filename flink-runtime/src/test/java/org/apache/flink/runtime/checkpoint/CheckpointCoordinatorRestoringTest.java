@@ -445,7 +445,7 @@ class CheckpointCoordinatorRestoringTest {
                 new ArrayList<>(newJobVertex2.getParallelism());
         for (int i = 0; i < newJobVertex2.getParallelism(); i++) {
 
-            List<OperatorIDPair> operatorIDs = newJobVertex2.getOperatorIDs();
+            List<OperatorIDPair> operatorIDs = newJobVertex2.getOperatorIDPairs();
 
             KeyGroupsStateHandle originalKeyedStateBackend =
                     generateKeyGroupState(jobVertexID2, newKeyGroupPartitions2.get(i), false);
@@ -794,7 +794,7 @@ class CheckpointCoordinatorRestoringTest {
 
         for (int i = 0; i < newJobVertex1.getParallelism(); i++) {
 
-            final List<OperatorIDPair> operatorIDs = newJobVertex1.getOperatorIDs();
+            final List<OperatorIDPair> operatorIDs = newJobVertex1.getOperatorIDPairs();
 
             JobManagerTaskRestore taskRestore =
                     newJobVertex1
@@ -887,7 +887,7 @@ class CheckpointCoordinatorRestoringTest {
 
         for (int i = 0; i < newJobVertex2.getParallelism(); i++) {
 
-            final List<OperatorIDPair> operatorIDs = newJobVertex2.getOperatorIDs();
+            final List<OperatorIDPair> operatorIDs = newJobVertex2.getOperatorIDPairs();
 
             JobManagerTaskRestore taskRestore =
                     newJobVertex2

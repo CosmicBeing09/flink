@@ -315,7 +315,7 @@ public class ExecutionJobVertex
      *
      * @return list containing the ID pairs of all contained operators
      */
-    public List<OperatorIDPair> getOperatorIDs() {
+    public List<OperatorIDPair> getOperatorIDPairs() {
         return jobVertex.getOperatorIDs();
     }
 

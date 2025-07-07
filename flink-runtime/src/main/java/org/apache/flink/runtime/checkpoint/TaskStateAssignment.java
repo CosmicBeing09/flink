@@ -123,7 +123,7 @@ class TaskStateAssignment {
         subManagedKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
         subRawKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
 
-        final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
+        final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDPairs();
         outputOperatorID = operatorIDs.get(0).getGeneratedOperatorID();
         inputOperatorID = operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID();
 

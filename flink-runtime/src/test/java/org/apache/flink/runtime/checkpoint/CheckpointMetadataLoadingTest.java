@@ -240,7 +240,7 @@ class CheckpointMetadataLoadingTest {
         ExecutionJobVertex vertex = mock(ExecutionJobVertex.class);
         when(vertex.getParallelism()).thenReturn(parallelism);
         when(vertex.getMaxParallelism()).thenReturn(maxParallelism);
-        when(vertex.getOperatorIDs())
+        when(vertex.getOperatorIDPairs())
                 .thenReturn(Collections.singletonList(OperatorIDPair.generatedIDOnly(operatorId)));
 
         if (parallelism != maxParallelism) {

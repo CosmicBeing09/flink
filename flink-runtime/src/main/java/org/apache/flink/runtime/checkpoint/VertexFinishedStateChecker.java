@@ -174,7 +174,7 @@ public class VertexFinishedStateChecker {
         private VertexFinishedState calculateFinishedState(
                 ExecutionJobVertex vertex, Map<OperatorID, OperatorState> operatorStates) {
             Set<VertexFinishedState> operatorFinishedStates =
-                    vertex.getOperatorIDs().stream()
+                    vertex.getOperatorIDPairs().stream()
                             .map(idPair -> checkOperatorFinishedStatus(operatorStates, idPair))
                             .collect(Collectors.toSet());
             if (operatorFinishedStates.size() != 1) {
