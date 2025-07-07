@@ -90,7 +90,7 @@ class BufferEntrySerializerUpgradeTest
         }
 
         @Override
-        public Matcher<BufferEntry<String>> testDataMatcher() {
+        public Matcher<BufferEntry<String>> testDataCondition() {
             return bufferEntry(is("hello"), is(false));
         }
 

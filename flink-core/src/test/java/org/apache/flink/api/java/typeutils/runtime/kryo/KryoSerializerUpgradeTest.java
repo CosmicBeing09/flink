@@ -101,7 +101,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataCondition() {
             return is(new Dog("Hasso"));
         }
 
@@ -130,7 +130,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataCondition() {
             return is(new Dog("Hasso"));
         }
 
@@ -182,7 +182,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataCondition() {
             return is(new Dog("Hasso"));
         }
 
@@ -238,7 +238,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataCondition() {
             return is(new Dog("Hasso"));
         }
 

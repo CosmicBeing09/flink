@@ -105,7 +105,7 @@ public class TwoPhaseCommitSinkStateSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TwoPhaseCommitSinkFunction.State<Integer, String>> testDataMatcher() {
+        public Matcher<TwoPhaseCommitSinkFunction.State<Integer, String>> testDataCondition() {
             TwoPhaseCommitSinkFunction.TransactionHolder<Integer> pendingTransaction =
                     new TwoPhaseCommitSinkFunction.TransactionHolder<>(12, 1523467890);
             List<TwoPhaseCommitSinkFunction.TransactionHolder<Integer>> list = new ArrayList<>();
