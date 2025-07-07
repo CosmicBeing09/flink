@@ -372,7 +372,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                     if (valueList.get(i) == null) {
                         ((HeapFloatVector) lcv.getChild()).setNullAt(i);
                     } else {
-                        ((HeapFloatVector) lcv.getChild()).vector[i] =
+                        ((HeapFloatVector) lcv.getChild()).shortVector[i] =
                                 ((List<Float>) valueList).get(i);
                     }
                 }
