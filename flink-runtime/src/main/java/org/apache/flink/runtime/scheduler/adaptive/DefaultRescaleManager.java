@@ -41,7 +41,7 @@ import java.util.function.Supplier;
  *
  * <ol>
  *   <li>Cooldown phase: No rescaling takes place (its upper threshold is defined by {@code
- *       scalingIntervalMin}.
+ *       cooldownTimeout}.
  *   <li>Soft-rescaling phase: Rescaling is triggered if the desired amount of resources is
  *       available.
  *   <li>Hard-rescaling phase: Rescaling is triggered if a sufficient amount of resources is
@@ -61,7 +61,7 @@ public class DefaultRescaleManager implements RescaleManager {
     private final Temporal initializationTime;
     private final Supplier<Temporal> clock;
 
-    @VisibleForTesting final Duration scalingIntervalMin;
+    @VisibleForTesting final Duration cooldownTimeout;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
     private final RescaleManager.Context rescaleContext;
@@ -84,14 +84,14 @@ public class DefaultRescaleManager implements RescaleManager {
     DefaultRescaleManager(
             Temporal initializationTime,
             RescaleManager.Context rescaleContext,
-            Duration scalingIntervalMin,
+            Duration cooldownTimeout,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this(
                 initializationTime,
                 Instant::now,
                 rescaleContext,
-                scalingIntervalMin,
+                cooldownTimeout,
                 scalingIntervalMax,
                 maxTriggerDelay);
     }
@@ -113,7 +113,7 @@ public class DefaultRescaleManager implements RescaleManager {
         Preconditions.checkArgument(
                 scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
-        this.scalingIntervalMin = scalingIntervalMin;
+        this.cooldownTimeout = scalingIntervalMin;
         this.scalingIntervalMax = scalingIntervalMax;
 
         this.rescaleContext = rescaleContext;
@@ -139,11 +139,11 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private void evaluateChangeEvent() {
-        if (timeSinceLastRescale().compareTo(scalingIntervalMin) > 0) {
+        if (timeSinceLastRescale().compareTo(cooldownTimeout) > 0) {
             maybeRescale();
         } else if (!rescaleScheduled) {
             rescaleScheduled = true;
-            rescaleContext.scheduleOperation(this::maybeRescale, scalingIntervalMin);
+            rescaleContext.scheduleOperation(this::maybeRescale, cooldownTimeout);
         }
     }
 
