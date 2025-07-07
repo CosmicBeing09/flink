@@ -99,7 +99,7 @@ class DefaultLeaderElectionTest {
         final AtomicReference<String> leaderAddressRef = new AtomicReference<>();
         final DefaultLeaderElection.ParentService parentService =
                 TestingAbstractLeaderElectionService.newBuilder()
-                        .setConfirmLeadershipConsumer(
+                        .setConfirmLeadershipAsyncConsumer(
                                 (componentId, leaderSessionID, address) -> {
                                     componentIdRef.set(componentId);
                                     leaderSessionIDRef.set(leaderSessionID);
@@ -111,7 +111,7 @@ class DefaultLeaderElectionTest {
 
             final UUID expectedLeaderSessionID = UUID.randomUUID();
             final String expectedAddress = "random-address";
-            testInstance.confirmLeadership(expectedLeaderSessionID, expectedAddress);
+            testInstance.confirmLeadershipAsync(expectedLeaderSessionID, expectedAddress);
 
             assertThat(componentIdRef).hasValue(DEFAULT_TEST_COMPONENT_ID);
             assertThat(leaderSessionIDRef).hasValue(expectedLeaderSessionID);
@@ -192,19 +192,19 @@ class DefaultLeaderElectionTest {
 
         private final BiConsumerWithException<String, LeaderContender, Exception> registerConsumer;
         private final Consumer<String> removeConsumer;
-        private final TriConsumer<String, UUID, String> confirmLeadershipConsumer;
+        private final TriConsumer<String, UUID, String> confirmLeadershipAsyncConsumer;
         private final BiFunction<String, UUID, Boolean> hasLeadershipFunction;
 
         private TestingAbstractLeaderElectionService(
                 BiConsumerWithException<String, LeaderContender, Exception> registerConsumer,
                 Consumer<String> removeConsumer,
-                TriConsumer<String, UUID, String> confirmLeadershipConsumer,
+                TriConsumer<String, UUID, String> confirmLeadershipAsyncConsumer,
                 BiFunction<String, UUID, Boolean> hasLeadershipFunction) {
             super();
 
             this.registerConsumer = registerConsumer;
             this.removeConsumer = removeConsumer;
-            this.confirmLeadershipConsumer = confirmLeadershipConsumer;
+            this.confirmLeadershipAsyncConsumer = confirmLeadershipAsyncConsumer;
             this.hasLeadershipFunction = hasLeadershipFunction;
         }
 
@@ -219,9 +219,9 @@ class DefaultLeaderElectionTest {
         }
 
         @Override
-        protected void confirmLeadership(
+        protected void confirmLeadershipAsync(
                 String componentId, UUID leaderSessionID, String leaderAddress) {
-            confirmLeadershipConsumer.accept(componentId, leaderSessionID, leaderAddress);
+            confirmLeadershipAsyncConsumer.accept(componentId, leaderSessionID, leaderAddress);
         }
 
         @Override
@@ -236,7 +236,7 @@ class DefaultLeaderElectionTest {
                                 throw new UnsupportedOperationException("register not supported");
                             })
                     .setRemoveConsumer(componentId -> {})
-                    .setConfirmLeadershipConsumer(
+                    .setConfirmLeadershipAsyncConsumer(
                             (componentId, leaderSessionID, address) -> {
                                 throw new UnsupportedOperationException(
                                         "confirmLeadership not supported");
@@ -252,7 +252,7 @@ class DefaultLeaderElectionTest {
 
             private BiConsumerWithException<String, LeaderContender, Exception> registerConsumer;
             private Consumer<String> removeConsumer;
-            private TriConsumer<String, UUID, String> confirmLeadershipConsumer;
+            private TriConsumer<String, UUID, String> confirmLeadershipAsyncConsumer;
             private BiFunction<String, UUID, Boolean> hasLeadershipFunction;
 
             private Builder() {}
@@ -268,9 +268,9 @@ class DefaultLeaderElectionTest {
                 return this;
             }
 
-            public Builder setConfirmLeadershipConsumer(
+            public Builder setConfirmLeadershipAsyncConsumer(
                     TriConsumer<String, UUID, String> confirmLeadershipConsumer) {
-                this.confirmLeadershipConsumer = confirmLeadershipConsumer;
+                this.confirmLeadershipAsyncConsumer = confirmLeadershipConsumer;
                 return this;
             }
 
@@ -284,7 +284,7 @@ class DefaultLeaderElectionTest {
                 return new TestingAbstractLeaderElectionService(
                         registerConsumer,
                         removeConsumer,
-                        confirmLeadershipConsumer,
+                        confirmLeadershipAsyncConsumer,
                         hasLeadershipFunction);
             }
         }
