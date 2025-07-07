@@ -201,7 +201,7 @@ public class ReduceOperatorBase<T, FT extends ReduceFunction<T>>
 
     @Override
     protected List<T> executeOnCollections(
-            List<T> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<T> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         // make sure we can handle empty inputs
         if (inputData.isEmpty()) {
@@ -223,16 +223,16 @@ public class ReduceOperatorBase<T, FT extends ReduceFunction<T>>
         FunctionUtils.openFunction(function, DefaultOpenContext.INSTANCE);
 
         TypeSerializer<T> serializer =
-                getOperatorInfo().getInputType().createSerializer(executionConfig);
+                getOperatorInfo().getInputType().createSerializer(config);
 
         if (inputColumns.length > 0) {
             boolean[] inputOrderings = new boolean[inputColumns.length];
             TypeComparator<T> inputComparator =
                     inputType instanceof AtomicType
-                            ? ((AtomicType<T>) inputType).createComparator(false, executionConfig)
+                            ? ((AtomicType<T>) inputType).createComparator(false, config)
                             : ((CompositeType<T>) inputType)
                                     .createComparator(
-                                            inputColumns, inputOrderings, 0, executionConfig);
+                                            inputColumns, inputOrderings, 0, config);
 
             Map<TypeComparable<T>, T> aggregateMap =
                     new HashMap<TypeComparable<T>, T>(inputData.size() / 10);
