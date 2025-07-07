@@ -1852,7 +1852,7 @@ public class CheckpointCoordinator {
         // Create the new operator states without in-flight data.
         for (OperatorState originalOperatorState : originalOperatorStates.values()) {
             newStates.put(
-                    originalOperatorState.getOperatorID(),
+                    originalOperatorState.getOperatorIdentifier(),
                     originalOperatorState.copyAndDiscardInFlightData());
         }
 

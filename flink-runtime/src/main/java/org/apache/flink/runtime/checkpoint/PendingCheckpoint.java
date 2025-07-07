@@ -465,21 +465,21 @@ public class PendingCheckpoint implements Checkpoint {
             ExecutionVertex vertex,
             TaskStateSnapshot operatorSubtaskStates,
             OperatorIDPair operatorID) {
-        OperatorState operatorState = operatorStates.get(operatorID.getGeneratedOperatorID());
+        OperatorState operatorState = operatorStates.get(operatorID.getOperatorIdentifier());
 
         if (operatorState == null) {
             operatorState =
                     new OperatorState(
-                            operatorID.getGeneratedOperatorID(),
+                            operatorID.getOperatorIdentifier(),
                             vertex.getTotalNumberOfParallelSubtasks(),
                             vertex.getMaxParallelism());
-            operatorStates.put(operatorID.getGeneratedOperatorID(), operatorState);
+            operatorStates.put(operatorID.getOperatorIdentifier(), operatorState);
         }
         OperatorSubtaskState operatorSubtaskState =
                 operatorSubtaskStates == null
                         ? null
                         : operatorSubtaskStates.getSubtaskStateByOperatorID(
-                                operatorID.getGeneratedOperatorID());
+                                operatorID.getOperatorIdentifier());
 
         if (operatorSubtaskState != null) {
             operatorState.putState(vertex.getParallelSubtaskIndex(), operatorSubtaskState);

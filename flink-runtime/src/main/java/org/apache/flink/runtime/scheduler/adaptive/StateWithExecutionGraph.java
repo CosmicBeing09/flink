@@ -235,7 +235,7 @@ abstract class StateWithExecutionGraph implements State {
                 if (checkpointCoordinator != null) {
                     for (OperatorIDPair operatorIDPair : operatorIDPairs) {
                         checkpointCoordinator.setIsProcessingBacklog(
-                                operatorIDPair.getGeneratedOperatorID(), false);
+                                operatorIDPair.getOperatorIdentifier(), false);
                     }
                 }
             }

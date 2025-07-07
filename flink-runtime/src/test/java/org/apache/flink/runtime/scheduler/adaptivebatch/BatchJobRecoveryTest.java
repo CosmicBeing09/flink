@@ -317,7 +317,7 @@ public class BatchJobRecoveryTest {
         jobVertex.addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
-                                jobVertex.getOperatorIDs().get(0).getGeneratedOperatorID())));
+                                jobVertex.getOperatorIDs().get(0).getOperatorIdentifier())));
         AdaptiveBatchScheduler scheduler =
                 createScheduler(
                         jobGraph,
@@ -428,7 +428,7 @@ public class BatchJobRecoveryTest {
         jobVertex.addOperatorCoordinator(
                 new SerializedValue<>(
                         new TestingOperatorCoordinator.Provider(
-                                jobVertex.getOperatorIDs().get(0).getGeneratedOperatorID())));
+                                jobVertex.getOperatorIDs().get(0).getOperatorIdentifier())));
         AdaptiveBatchScheduler scheduler = createScheduler(jobGraph);
 
         runInMainThread(scheduler::startScheduling);

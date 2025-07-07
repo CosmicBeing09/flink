@@ -196,7 +196,7 @@ public class PartiallyFinishedSourcesITCase extends TestLogger {
 
     private boolean matches(OperatorIDPair idPair, String operatorID) {
         return idPair.getUserDefinedOperatorID()
-                .orElse(idPair.getGeneratedOperatorID())
+                .orElse(idPair.getOperatorIdentifier())
                 .toString()
                 .equals(operatorID);
     }

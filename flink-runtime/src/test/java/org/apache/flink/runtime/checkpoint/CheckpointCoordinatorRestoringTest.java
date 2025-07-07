@@ -467,7 +467,7 @@ class CheckpointCoordinatorRestoringTest {
                     new ArrayList<>(operatorIDs.size());
 
             for (int idx = 0; idx < operatorIDs.size(); ++idx) {
-                OperatorID operatorID = operatorIDs.get(idx).getGeneratedOperatorID();
+                OperatorID operatorID = operatorIDs.get(idx).getOperatorIdentifier();
                 OperatorSubtaskState opState =
                         taskStateHandles.getSubtaskStateByOperatorID(operatorID);
                 Collection<OperatorStateHandle> opStateBackend = opState.getManagedOperatorState();
@@ -806,7 +806,7 @@ class CheckpointCoordinatorRestoringTest {
 
             OperatorSubtaskState headOpState =
                     stateSnapshot.getSubtaskStateByOperatorID(
-                            operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID());
+                            operatorIDs.get(operatorIDs.size() - 1).getOperatorIdentifier());
             assertThat(headOpState.getManagedKeyedState()).isEmpty();
             assertThat(headOpState.getRawKeyedState()).isEmpty();
 
@@ -815,7 +815,7 @@ class CheckpointCoordinatorRestoringTest {
                 int operatorIndexInChain = 2;
                 OperatorSubtaskState opState =
                         stateSnapshot.getSubtaskStateByOperatorID(
-                                operatorIDs.get(operatorIndexInChain).getGeneratedOperatorID());
+                                operatorIDs.get(operatorIndexInChain).getOperatorIdentifier());
 
                 assertThat(opState.getManagedOperatorState()).isEmpty();
                 assertThat(opState.getRawOperatorState()).isEmpty();
@@ -825,7 +825,7 @@ class CheckpointCoordinatorRestoringTest {
                 int operatorIndexInChain = 1;
                 OperatorSubtaskState opState =
                         stateSnapshot.getSubtaskStateByOperatorID(
-                                operatorIDs.get(operatorIndexInChain).getGeneratedOperatorID());
+                                operatorIDs.get(operatorIndexInChain).getOperatorIdentifier());
 
                 OperatorStateHandle expectedManagedOpState =
                         generatePartitionableStateHandle(id1.f0, i, 2, 8, false);
@@ -854,7 +854,7 @@ class CheckpointCoordinatorRestoringTest {
                 int operatorIndexInChain = 0;
                 OperatorSubtaskState opState =
                         stateSnapshot.getSubtaskStateByOperatorID(
-                                operatorIDs.get(operatorIndexInChain).getGeneratedOperatorID());
+                                operatorIDs.get(operatorIndexInChain).getOperatorIdentifier());
 
                 OperatorStateHandle expectedManagedOpState =
                         generatePartitionableStateHandle(id2.f0, i, 2, 8, false);
@@ -902,7 +902,7 @@ class CheckpointCoordinatorRestoringTest {
                 int operatorIndexInChain = 1;
                 OperatorSubtaskState opState =
                         stateSnapshot.getSubtaskStateByOperatorID(
-                                operatorIDs.get(operatorIndexInChain).getGeneratedOperatorID());
+                                operatorIDs.get(operatorIndexInChain).getOperatorIdentifier());
 
                 List<Collection<OperatorStateHandle>> actualSubManagedOperatorState =
                         new ArrayList<>(1);
@@ -921,7 +921,7 @@ class CheckpointCoordinatorRestoringTest {
                 int operatorIndexInChain = 0;
                 OperatorSubtaskState opState =
                         stateSnapshot.getSubtaskStateByOperatorID(
-                                operatorIDs.get(operatorIndexInChain).getGeneratedOperatorID());
+                                operatorIDs.get(operatorIndexInChain).getOperatorIdentifier());
                 assertThat(opState.getManagedOperatorState()).isEmpty();
                 assertThat(opState.getRawOperatorState()).isEmpty();
             }
@@ -933,7 +933,7 @@ class CheckpointCoordinatorRestoringTest {
 
             OperatorSubtaskState headOpState =
                     stateSnapshot.getSubtaskStateByOperatorID(
-                            operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID());
+                            operatorIDs.get(operatorIDs.size() - 1).getOperatorIdentifier());
 
             Collection<KeyedStateHandle> keyedStateBackend = headOpState.getManagedKeyedState();
             Collection<KeyedStateHandle> keyGroupStateRaw = headOpState.getRawKeyedState();
@@ -1084,8 +1084,8 @@ class CheckpointCoordinatorRestoringTest {
         CompletedCheckpointStore completedCheckpointStore = new EmbeddedCompletedCheckpointStore();
         Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
-                op1.getGeneratedOperatorID(),
-                new FullyFinishedOperatorState(op1.getGeneratedOperatorID(), 1, 1));
+                op1.getOperatorIdentifier(),
+                new FullyFinishedOperatorState(op1.getOperatorIdentifier(), 1, 1));
         CompletedCheckpoint completedCheckpoint =
                 new CompletedCheckpoint(
                         graph.getJobID(),

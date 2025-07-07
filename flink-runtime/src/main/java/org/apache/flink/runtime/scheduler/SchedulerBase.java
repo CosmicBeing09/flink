@@ -1142,7 +1142,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 if (checkpointCoordinator != null) {
                     for (OperatorIDPair operatorIDPair : operatorIDPairs) {
                         checkpointCoordinator.setIsProcessingBacklog(
-                                operatorIDPair.getGeneratedOperatorID(), false);
+                                operatorIDPair.getOperatorIdentifier(), false);
                     }
                 }
             }

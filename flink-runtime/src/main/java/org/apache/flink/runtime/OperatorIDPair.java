@@ -48,7 +48,7 @@ public class OperatorIDPair implements Serializable {
         return new OperatorIDPair(generatedOperatorID, null);
     }
 
-    public OperatorID getGeneratedOperatorID() {
+    public OperatorID getOperatorIdentifier() {
         return generatedOperatorID;
     }
 

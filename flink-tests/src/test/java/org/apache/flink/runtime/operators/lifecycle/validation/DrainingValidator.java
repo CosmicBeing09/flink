@@ -128,7 +128,7 @@ public class DrainingValidator implements TestOperatorLifecycleValidator {
         for (JobVertex vertex : vertices) {
             for (OperatorIDPair p : vertex.getOperatorIDs()) {
                 OperatorID operatorID =
-                        p.getUserDefinedOperatorID().orElse(p.getGeneratedOperatorID());
+                        p.getUserDefinedOperatorID().orElse(p.getOperatorIdentifier());
                 if (operatorID.toString().equals(operator)) {
                     // warn: this returns the number of network inputs
                     // which may not coincide with logical

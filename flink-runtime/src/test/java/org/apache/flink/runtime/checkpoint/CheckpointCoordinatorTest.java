@@ -1190,8 +1190,8 @@ class CheckpointCoordinatorTest {
                     .isEqualTo(checkpointId);
         }
 
-        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
-        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
+        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
         OperatorSubtaskState subtaskState1 = mock(OperatorSubtaskState.class);
         OperatorSubtaskState subtaskState2 = mock(OperatorSubtaskState.class);
         TaskStateSnapshot taskOperatorSubtaskStates1 =
@@ -1520,9 +1520,9 @@ class CheckpointCoordinatorTest {
                     .isEqualTo(checkpointId1);
         }
 
-        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
-        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
-        OperatorID opID3 = vertex3.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
+        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
+        OperatorID opID3 = vertex3.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
 
         TaskStateSnapshot taskOperatorSubtaskStates11 = spy(new TaskStateSnapshot());
         TaskStateSnapshot taskOperatorSubtaskStates12 = spy(new TaskStateSnapshot());
@@ -1719,7 +1719,7 @@ class CheckpointCoordinatorTest {
                 checkpointCoordinator.getPendingCheckpoints().values().iterator().next();
         assertThat(checkpoint.isDisposed()).isFalse();
 
-        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
 
         TaskStateSnapshot taskOperatorSubtaskStates1 = spy(new TaskStateSnapshot());
         OperatorSubtaskStateMock operatorSubtaskStateMock = new OperatorSubtaskStateMock();
@@ -1862,7 +1862,7 @@ class CheckpointCoordinatorTest {
         long checkpointId = pendingCheckpoint.getCheckpointID();
 
         OperatorID opIDtrigger =
-                vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+                vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
 
         TaskStateSnapshot taskOperatorSubtaskStatesTrigger = spy(new TaskStateSnapshot());
         OperatorSubtaskStateMock subtaskStateMock = new OperatorSubtaskStateMock();
@@ -3436,8 +3436,8 @@ class CheckpointCoordinatorTest {
         ExecutionAttemptID attemptID1 = vertex1.getCurrentExecutionAttempt().getAttemptId();
         ExecutionAttemptID attemptID2 = vertex2.getCurrentExecutionAttempt().getAttemptId();
 
-        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
-        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
+        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
         TaskStateSnapshot taskOperatorSubtaskStates1 = new TaskStateSnapshot();
         TaskStateSnapshot taskOperatorSubtaskStates2 = new TaskStateSnapshot();
         OperatorSubtaskState subtaskState1 = OperatorSubtaskState.builder().build();
@@ -3588,8 +3588,8 @@ class CheckpointCoordinatorTest {
         ExecutionAttemptID attemptID1 = vertex1.getCurrentExecutionAttempt().getAttemptId();
         ExecutionAttemptID attemptID2 = vertex2.getCurrentExecutionAttempt().getAttemptId();
 
-        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
-        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID opID1 = vertex1.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
+        OperatorID opID2 = vertex2.getJobVertex().getOperatorIDs().get(0).getOperatorIdentifier();
         TaskStateSnapshot taskOperatorSubtaskStates1 = new TaskStateSnapshot();
         TaskStateSnapshot taskOperatorSubtaskStates2 = new TaskStateSnapshot();
         OperatorSubtaskState subtaskState1 = OperatorSubtaskState.builder().build();
@@ -4136,7 +4136,7 @@ class CheckpointCoordinatorTest {
             Map<OperatorID, OperatorSubtaskState> opStates = new HashMap<>();
 
             opStates.put(
-                    jobVertex1.getOperatorIDs().get(0).getGeneratedOperatorID(),
+                    jobVertex1.getOperatorIDs().get(0).getOperatorIdentifier(),
                     operatorSubtaskState);
 
             TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot(opStates);
@@ -4304,7 +4304,7 @@ class CheckpointCoordinatorTest {
                         singletonList(HandleAndLocalPath.of(privateState, "private-state-key")));
 
         ExecutionJobVertex jobVertex = graph.getJobVertex(ackVertexID);
-        OperatorID operatorID = jobVertex.getOperatorIDs().get(0).getGeneratedOperatorID();
+        OperatorID operatorID = jobVertex.getOperatorIDs().get(0).getOperatorIdentifier();
         coordinator.receiveAcknowledgeMessage(
                 new AcknowledgeCheckpoint(
                         graph.getJobID(),
