@@ -472,9 +472,9 @@ class ClientTest {
 
         private final Plan plan;
 
-        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final Plan plan) {
+        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final Plan streamGraph) {
             this.clusterClient = checkNotNull(clusterClient);
-            this.plan = checkNotNull(plan);
+            this.plan = checkNotNull(streamGraph);
         }
 
         @Override
