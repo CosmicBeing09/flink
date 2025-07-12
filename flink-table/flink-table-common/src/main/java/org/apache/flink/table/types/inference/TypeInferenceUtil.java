@@ -463,7 +463,7 @@ public final class TypeInferenceUtil {
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
+        final AdaptedCallContext castCallContext =
                 new AdaptedCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
@@ -493,7 +493,7 @@ public final class TypeInferenceUtil {
                                     })
                             .collect(Collectors.toList());
             if (fromStaticArgs.stream().allMatch(Objects::nonNull)) {
-                adaptedCallContext.setExpectedArguments(fromStaticArgs);
+                castCallContext.setExpectedArguments(fromStaticArgs);
             } else if (throwOnFailure) {
                 throw new ValidationException("Invalid input arguments.");
             }
@@ -504,15 +504,15 @@ public final class TypeInferenceUtil {
         final List<DataType> inferredDataTypes =
                 typeInference
                         .getInputTypeStrategy()
-                        .inferInputTypes(adaptedCallContext, throwOnFailure)
+                        .inferInputTypes(castCallContext, throwOnFailure)
                         .orElse(null);
         if (inferredDataTypes != null) {
-            adaptedCallContext.setExpectedArguments(inferredDataTypes);
+            castCallContext.setExpectedArguments(inferredDataTypes);
         } else if (throwOnFailure) {
             throw new ValidationException("Invalid input arguments.");
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     private static StateInfo inferStateInfo(
