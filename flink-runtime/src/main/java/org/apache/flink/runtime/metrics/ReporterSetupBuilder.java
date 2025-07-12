@@ -253,9 +253,9 @@ public class ReporterSetupBuilder<
     }
 
     @VisibleForTesting
-    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter metricFilter) {
+    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, new MetricConfig(), reporter, metricFilter, Collections.emptyMap());
+                reporterName, new MetricConfig(), reporter, reporterFilter, Collections.emptyMap());
     }
 
     @VisibleForTesting
