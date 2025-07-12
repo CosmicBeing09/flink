@@ -315,8 +315,8 @@ public class OverwriteObjects {
 
         LOG.info("Testing cross");
 
-        DataSet<Tuple2<IntValue, IntValue>> small = getDataSet(env, 100, 20);
-        DataSet<Tuple2<IntValue, IntValue>> large = getDataSet(env, 10000, 2000);
+        DataSet<Tuple2<IntValue, IntValue>> small = getDataStream(env, 100, 20);
+        DataSet<Tuple2<IntValue, IntValue>> large = getDataStream(env, 10000, 2000);
 
         // test NESTEDLOOP_BLOCKED_OUTER_FIRST and NESTEDLOOP_BLOCKED_OUTER_SECOND with object reuse
         // enabled
@@ -365,7 +365,7 @@ public class OverwriteObjects {
 
     // --------------------------------------------------------------------------------------------
 
-    private DataSet<Tuple2<IntValue, IntValue>> getDataSet(
+    private DataSet<Tuple2<IntValue, IntValue>> getDataStream(
             ExecutionEnvironment env, int numberOfElements, int keyRange) {
         return env.fromCollection(
                 new TupleIntValueIntValueIterator(numberOfElements, keyRange),
@@ -374,7 +374,7 @@ public class OverwriteObjects {
     }
 
     private DataSet<Tuple2<IntValue, IntValue>> getDataSet(ExecutionEnvironment env) {
-        return getDataSet(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
+        return getDataStream(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
     }
 
     private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataSet(ExecutionEnvironment env) {
