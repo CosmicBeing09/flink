@@ -115,7 +115,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 definition = unresolvedCall.getFunctionDefinition();
             }
 
-            final String name =
+            final String functionName =
                     unresolvedCall
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
@@ -134,7 +134,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                                 .map(
                                         inference ->
                                                 SurroundingInfo.of(
-                                                        name,
+                                                        functionName,
                                                         definition,
                                                         inference,
                                                         argCount,
@@ -155,7 +155,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                             .map(
                                     newInference ->
                                             runTypeInference(
-                                                    name,
+                                                    functionName,
                                                     unresolvedCall,
                                                     newInference,
                                                     resolvedArgs,
@@ -164,7 +164,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                                     () ->
                                             new TableException(
                                                     "Could not get a type inference for function: "
-                                                            + name)));
+                                                            + functionName)));
         }
 
         @Override
