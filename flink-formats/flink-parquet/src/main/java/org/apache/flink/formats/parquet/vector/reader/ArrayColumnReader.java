@@ -135,8 +135,8 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
 
     // Need to be in consistent with that VectorizedPrimitiveColumnReader#readBatchHelper
     // TODO Reduce the duplicated code
-    private Object readPrimitiveTypedRow(LogicalType type) {
-        switch (type.getTypeRoot()) {
+    private Object readPrimitiveTypedRow(LogicalType category) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -172,7 +172,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
                 return dataColumn.readTimestamp();
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported type in the list: " + category);
         }
     }
 
