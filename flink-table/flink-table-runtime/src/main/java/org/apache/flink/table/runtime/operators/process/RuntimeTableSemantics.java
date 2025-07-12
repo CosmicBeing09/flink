@@ -52,7 +52,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
             int inputIndex,
             DataType dataType,
             int[] partitionByColumns,
-            byte[] expectedChanges,
+            byte[] consumedChangelogMode,
             boolean passColumnsThrough,
             boolean hasSetSemantics,
             int timeColumn) {
@@ -60,7 +60,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
         this.inputIndex = inputIndex;
         this.dataType = dataType;
         this.partitionByColumns = partitionByColumns;
-        this.expectedChanges = expectedChanges;
+        this.expectedChanges = consumedChangelogMode;
         this.passColumnsThrough = passColumnsThrough;
         this.hasSetSemantics = hasSetSemantics;
         this.timeColumn = timeColumn;
