@@ -2306,7 +2306,7 @@ public class AdaptiveSchedulerTest {
                                 EXECUTOR_RESOURCE.getExecutor())
                         .setJobMasterConfiguration(config)
                         .setDeclarativeSlotPool(slotPool)
-                        .setRescaleManagerFactory(
+                        .setStateTransitionManagerFactory(
                                 new TestingRescaleManager.Factory(
                                         () -> {},
                                         () -> {
