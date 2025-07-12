@@ -230,7 +230,7 @@ public class AdaptiveScheduler
                 stabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration executingCooldownTimeout =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
 
             final int rescaleOnFailedCheckpointsCount =
@@ -286,7 +286,7 @@ public class AdaptiveScheduler
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    executingCooldownTimeout,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
