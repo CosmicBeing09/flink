@@ -58,16 +58,16 @@ public class InputGateSpecUtils {
                         configuredNetworkBuffersPerChannel,
                         numInputChannels,
                         expectedBuffersPerGate);
-        int minBuffersPerGate =
+        int totalFloatingBuffers =
                 partitionType.isHybridResultPartition() && enableTieredStorage
                         ? TieredStorageUtils.getMinBuffersPerGate()
                         : expectedBuffersPerGate;
-        expectedBuffersPerGate = Math.max(minBuffersPerGate, expectedBuffersPerGate);
+        expectedBuffersPerGate = Math.max(totalFloatingBuffers, expectedBuffersPerGate);
 
         return new GateBuffersSpec(
                 effectiveExclusiveBuffersPerChannel,
                 expectedBuffersPerGate,
-                minBuffersPerGate,
+                totalFloatingBuffers,
                 maxBuffersPerGate);
     }
 
