@@ -258,8 +258,8 @@ public class FileSystemOutputFormat<T>
             return this;
         }
 
-        public Builder<T> setTempPath(Path tmpPath) {
-            this.tmpPath = tmpPath;
+        public Builder<T> setTempPath(Path stagingPath) {
+            this.tmpPath = stagingPath;
             return this;
         }
 
