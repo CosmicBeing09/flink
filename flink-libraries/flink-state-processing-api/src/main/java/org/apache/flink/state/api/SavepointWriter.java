@@ -377,7 +377,7 @@ public class SavepointWriter {
                                 newOperatorState
                                         .getBootstrapTransformation()
                                         .writeOperatorState(
-                                                newOperatorState.getOperatorID(),
+                                                newOperatorState.getOperatorIdentifier(),
                                                 stateBackend,
                                                 config,
                                                 metadata.getMaxParallelism(),

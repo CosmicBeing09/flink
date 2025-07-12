@@ -40,7 +40,7 @@ public class StateBootstrapTransformationWithID<T> {
         this.bootstrapTransformation = Preconditions.checkNotNull(bootstrapTransformation);
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorID getOperatorIdentifier() {
         return operatorID;
     }
 

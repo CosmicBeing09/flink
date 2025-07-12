@@ -56,7 +56,7 @@ class OperatorStateSpecV2 {
     }
 
     private OperatorStateSpecV2(StateBootstrapTransformationWithID<?> transformation) {
-        this.id = transformation.getOperatorID();
+        this.id = transformation.getOperatorIdentifier();
         this.newOperatorStateTransformation = transformation;
         this.existingState = null;
     }
