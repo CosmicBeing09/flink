@@ -195,12 +195,12 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
                 Context context,
                 Logger log,
                 Duration initialResourceAllocationTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration stateTransitionManagerFactory,
                 @Nullable ExecutionGraph previousExecutionGraph) {
             this.context = context;
             this.log = log;
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
-            this.resourceStabilizationTimeout = resourceStabilizationTimeout;
+            this.resourceStabilizationTimeout = stateTransitionManagerFactory;
             this.previousExecutionGraph = previousExecutionGraph;
         }
 
