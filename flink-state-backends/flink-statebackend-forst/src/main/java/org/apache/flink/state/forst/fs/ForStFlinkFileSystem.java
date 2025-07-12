@@ -160,7 +160,7 @@ public class ForStFlinkFileSystem extends FileSystem {
     @Override
     public synchronized ByteBufferReadableFSDataInputStream open(Path path, int bufferSize)
             throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
@@ -184,7 +184,7 @@ public class ForStFlinkFileSystem extends FileSystem {
 
     @Override
     public synchronized ByteBufferReadableFSDataInputStream open(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
@@ -228,26 +228,26 @@ public class ForStFlinkFileSystem extends FileSystem {
 
     @Override
     public synchronized boolean exists(final Path f) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(f);
-        if (realPath == null) {
+        FileMappingManager.RealPath mappingEntry = fileMappingManager.mappingEntry(f);
+        if (mappingEntry == null) {
             return delegateFS.exists(f) && delegateFS.getFileStatus(f).isDir();
         }
 
         boolean status = false;
-        if (realPath.isLocal) {
-            status |= localFS.exists(realPath.path);
+        if (mappingEntry.isLocal) {
+            status |= localFS.exists(mappingEntry.path);
             if (!status) {
                 status = delegateFS.exists(f);
             }
         } else {
-            status = delegateFS.exists(realPath.path);
+            status = delegateFS.exists(mappingEntry.path);
         }
         return status;
     }
 
     @Override
     public synchronized FileStatus getFileStatus(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return localFS.getFileStatus(realPath.path);
@@ -259,7 +259,7 @@ public class ForStFlinkFileSystem extends FileSystem {
     public synchronized BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
             throws IOException {
         Path path = file.getPath();
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             FileStatus localFile = localFS.getFileStatus(realPath.path);
