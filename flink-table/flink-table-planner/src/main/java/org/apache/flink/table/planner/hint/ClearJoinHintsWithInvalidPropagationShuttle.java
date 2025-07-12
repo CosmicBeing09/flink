@@ -107,10 +107,10 @@ public class ClearJoinHintsWithInvalidPropagationShuttle extends JoinHintsRelShu
         // the join hint that need be removed
         private final RelHint joinHintNeedRemove;
 
-        public ClearOuterJoinHintShuttle(RelHint joinHintNeedRemove) {
-            this.joinHintNeedRemove = joinHintNeedRemove;
+        public ClearOuterJoinHintShuttle(RelHint queryHintNeedRemove) {
+            this.joinHintNeedRemove = queryHintNeedRemove;
             this.currentInheritPath = new ArrayDeque<>();
-            this.currentInheritPath.addAll(joinHintNeedRemove.inheritPath);
+            this.currentInheritPath.addAll(queryHintNeedRemove.inheritPath);
         }
 
         @Override
