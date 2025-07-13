@@ -562,7 +562,7 @@ public class ForStKeyedStateBackend<K> implements AsyncKeyedStateBackend<K> {
     }
 
     @VisibleForTesting
-    Path getRemoteBasePath() {
+    Path getPrimaryBasePath() {
         return optionsContainer.getRemoteBasePath();
     }
 

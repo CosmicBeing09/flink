@@ -757,7 +757,7 @@ public class ForStStateBackendConfigTest {
                             IntSerializer.INSTANCE);
             assertTrue(
                     keyedBackend
-                            .getRemoteBasePath()
+                            .getPrimaryBasePath()
                             .toString()
                             .startsWith(configuration.get(ForStOptions.PRIMARY_DIRECTORY)));
         } finally {
