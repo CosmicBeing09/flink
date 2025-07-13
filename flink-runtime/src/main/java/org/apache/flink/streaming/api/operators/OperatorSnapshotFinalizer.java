@@ -62,7 +62,7 @@ public class OperatorSnapshotFinalizer {
         SnapshotResult<OperatorStateHandle> operatorRaw =
                 FutureUtils.runIfNotDoneAndGet(snapshotFutures.getOperatorStateRawFuture());
 
-        SnapshotResult<StateObjectCollection<InputStateHandle>> inputChannel =
+        SnapshotResult<StateObjectCollection<InputStateHandle>> inputState =
                 snapshotFutures.getInputChannelStateFuture().get();
 
         SnapshotResult<StateObjectCollection<OutputStateHandle>> resultSubpartition =
@@ -78,7 +78,7 @@ public class OperatorSnapshotFinalizer {
                                 singletonOrEmpty(keyedManaged.getJobManagerOwnedSnapshot()))
                         .setRawKeyedState(singletonOrEmpty(keyedRaw.getJobManagerOwnedSnapshot()))
                         .setInputChannelState(
-                                emptyIfNull(inputChannel.getJobManagerOwnedSnapshot()))
+                                emptyIfNull(inputState.getJobManagerOwnedSnapshot()))
                         .setResultSubpartitionState(
                                 emptyIfNull(resultSubpartition.getJobManagerOwnedSnapshot()))
                         .build();
@@ -90,7 +90,7 @@ public class OperatorSnapshotFinalizer {
                         .setRawOperatorState(singletonOrEmpty(operatorRaw.getTaskLocalSnapshot()))
                         .setManagedKeyedState(singletonOrEmpty(keyedManaged.getTaskLocalSnapshot()))
                         .setRawKeyedState(singletonOrEmpty(keyedRaw.getTaskLocalSnapshot()))
-                        .setInputChannelState(emptyIfNull(inputChannel.getTaskLocalSnapshot()))
+                        .setInputChannelState(emptyIfNull(inputState.getTaskLocalSnapshot()))
                         .setResultSubpartitionState(
                                 emptyIfNull(resultSubpartition.getTaskLocalSnapshot()))
                         .build();
