@@ -313,7 +313,7 @@ public class DefaultLeaderElectionService extends DefaultLeaderElection.ParentSe
     }
 
     @Override
-    protected void confirmLeadership(
+    protected void confirmLeadershipAsync(
             String componentId, UUID leaderSessionID, String leaderAddress) {
         Preconditions.checkArgument(leaderContenderRegistry.containsKey(componentId));
         LOG.debug(
