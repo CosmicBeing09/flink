@@ -220,10 +220,10 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
+        public DefaultRescaleManager create(Context context, Instant lastRescale) {
             return new DefaultRescaleManager(
                     lastRescale,
-                    rescaleContext,
+                    context,
                     scalingIntervalMin,
                     scalingIntervalMax,
                     maximumDelayForTrigger);
