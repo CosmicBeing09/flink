@@ -48,8 +48,8 @@ public class StandaloneApplicationClusterEntryPointTest {
     }
 
     @Test
-    public void testGenerateJarDir() {
-        String baseDir = StandaloneApplicationClusterEntryPoint.generateJarDir(configuration);
+    public void testGenerateJarsDir() {
+        String baseDir = StandaloneApplicationClusterEntryPoint.generateJarsDir(configuration);
         String expectedDir = String.join(File.separator, new String[] {tempDir.toString()});
         Assertions.assertEquals(expectedDir, baseDir);
     }

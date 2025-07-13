@@ -166,7 +166,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
     }
 
     private static List<File> fetchJarFileForApplicationMode(Configuration configuration) {
-        String targetDir = generateJarDir(configuration);
+        String targetDir = generateJarsDir(configuration);
         return configuration.get(PipelineOptions.JARS).stream()
                 .map(
                         FunctionUtils.uncheckedFunction(
@@ -174,7 +174,7 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
                 .collect(Collectors.toList());
     }
 
-    public static String generateJarDir(Configuration configuration) {
+    public static String generateJarsDir(Configuration configuration) {
         return configuration.get(ArtifactFetchOptions.USER_ARTIFACTS_BASE_DIR);
     }
 }
