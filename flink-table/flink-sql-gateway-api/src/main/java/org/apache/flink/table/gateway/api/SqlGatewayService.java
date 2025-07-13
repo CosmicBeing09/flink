@@ -344,7 +344,7 @@ public interface SqlGatewayService {
             String materializedTableIdentifier,
             boolean isPeriodic,
             @Nullable String scheduleTime,
-            Map<String, String> dynamicOptions,
+            Map<String, String> initConfig,
             Map<String, String> staticPartitions,
             Map<String, String> executionConfig);
 }
