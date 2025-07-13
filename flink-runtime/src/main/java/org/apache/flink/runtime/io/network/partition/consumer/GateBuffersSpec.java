@@ -30,7 +30,7 @@ public class GateBuffersSpec {
 
     private final int minBuffersPerGate;
 
-    private final int maxBuffersPerGate;
+    private final int totalBuffersTargetPerGate;
 
     GateBuffersSpec(
             int effectiveExclusiveBuffersPerChannel,
@@ -40,7 +40,7 @@ public class GateBuffersSpec {
         this.effectiveExclusiveBuffersPerChannel = effectiveExclusiveBuffersPerChannel;
         this.expectedBuffersPerGate = expectedBuffersPerGate;
         this.minBuffersPerGate = minBuffersPerGate;
-        this.maxBuffersPerGate = maxBuffersPerGate;
+        this.totalBuffersTargetPerGate = maxBuffersPerGate;
     }
 
     int getExpectedBuffersPerGate() {
@@ -51,8 +51,8 @@ public class GateBuffersSpec {
         return minBuffersPerGate;
     }
 
-    public int getMaxBuffersPerGate() {
-        return maxBuffersPerGate;
+    public int getTotalBuffersTargetPerGate() {
+        return totalBuffersTargetPerGate;
     }
 
     int getEffectiveExclusiveBuffersPerChannel() {
