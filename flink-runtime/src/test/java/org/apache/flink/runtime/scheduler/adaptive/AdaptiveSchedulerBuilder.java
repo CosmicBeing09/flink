@@ -224,7 +224,7 @@ public class AdaptiveSchedulerBuilder {
         return this;
     }
 
-    public AdaptiveSchedulerBuilder setRescaleManagerFactory(
+    public AdaptiveSchedulerBuilder setStateTransitionManagerFactory(
             @Nullable RescaleManager.Factory rescaleManagerFactory) {
         this.rescaleManagerFactory = rescaleManagerFactory;
         return this;
