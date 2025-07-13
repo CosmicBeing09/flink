@@ -172,7 +172,7 @@ public class SingleInputGateFactory {
                 createBufferPoolFactory(
                         networkBufferPool,
                         gateBuffersSpec.getExpectedBuffersPerGate(),
-                        gateBuffersSpec.getMinBuffersPerGate(),
+                        gateBuffersSpec.getTotalFloatingBuffers(),
                         gateBuffersSpec.getMaxBuffersPerGate());
 
         BufferDecompressor bufferDecompressor = null;
