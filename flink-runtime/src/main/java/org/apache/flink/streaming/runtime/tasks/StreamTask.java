@@ -459,7 +459,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
             environment.setMainMailboxExecutor(mainMailboxExecutor);
             environment.setAsyncOperationsThreadPool(asyncOperationsThreadPool);
 
-            this.stateBackend = createStateBackend();
+            this.stateBackend = createEnv();
             this.checkpointStorage = createCheckpointStorage(stateBackend);
             this.changelogWriterAvailabilityProvider =
                     environment.getTaskStateManager().getStateChangelogStorage() == null
@@ -1617,7 +1617,7 @@ public abstract class StreamTask<OUT, OP extends StreamOperator<OUT>>
     //  State backend
     // ------------------------------------------------------------------------
 
-    private StateBackend createStateBackend() throws Exception {
+    private StateBackend createEnv() throws Exception {
         final StateBackend fromApplication =
                 configuration.getStateBackend(getUserCodeClassLoader());
 
