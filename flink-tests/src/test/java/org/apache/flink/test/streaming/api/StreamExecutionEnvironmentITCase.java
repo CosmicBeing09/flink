@@ -62,22 +62,22 @@ public class StreamExecutionEnvironmentITCase {
         // TestStreamEnvironment that the MiniClusterExtension created. We want to test the
         // behaviour
         // of the base environment, though.
-        StreamExecutionEnvironment env = new StreamExecutionEnvironment(config);
+        StreamExecutionEnvironment streamExecutionEnvironment = new StreamExecutionEnvironment(config);
 
-        env.fromData("hello")
+        streamExecutionEnvironment.fromData("hello")
                 .map(
                         in -> {
                             throw new RuntimeException("Failing");
                         })
                 .print();
 
-        assertThatThrownBy(env::execute).isInstanceOf(ProgramInvocationException.class);
+        assertThatThrownBy(streamExecutionEnvironment::execute).isInstanceOf(ProgramInvocationException.class);
     }
 
     @Test
     @SuppressWarnings("unchecked")
     void testAvroGenericRecordsInFromElementsDoesNotFailDueToKryoFallback() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
         Schema schema = getSchemaFromResources("/avro/user.avsc");
         GenericRecord user1 =
                 new GenericRecordBuilder(schema).set("name", "Foo").set("age", 40).build();
@@ -85,7 +85,7 @@ public class StreamExecutionEnvironmentITCase {
                 new GenericRecordBuilder(schema).set("name", "Bar").set("age", 45).build();
         GenericRecord[] data = {user1, user2};
         DataStream<GenericRecord> stream =
-                env.fromData(new GenericRecordAvroTypeInfo(schema), data);
+                streamExecutionEnvironment.fromData(new GenericRecordAvroTypeInfo(schema), data);
 
         List<GenericRecord> result = stream.executeAndCollect(data.length + 1);
 
