@@ -227,7 +227,7 @@ public class NettyShuffleServiceFactory
                         batchShuffleReadIOExecutor,
                         config.getBlockingSubpartitionType(),
                         config.networkBuffersPerChannel(),
-                        config.floatingNetworkBuffersPerGate(),
+                        config.requiredFloatingBuffers(),
                         config.networkBufferSize(),
                         config.isBatchShuffleCompressionEnabled(),
                         config.getCompressionCodec(),

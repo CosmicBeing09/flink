@@ -74,7 +74,7 @@ class NettyShuffleEnvironmentConfigurationTest {
         assertThat(networkConfig.partitionRequestInitialBackoff()).isEqualTo(100);
         assertThat(networkConfig.partitionRequestMaxBackoff()).isEqualTo(200);
         assertThat(networkConfig.networkBuffersPerChannel()).isEqualTo(10);
-        assertThat(networkConfig.floatingNetworkBuffersPerGate()).isEqualTo(100);
+        assertThat(networkConfig.requiredFloatingBuffers()).isEqualTo(100);
     }
 
     /** Verifies the correlation of sort-merge blocking shuffle config options. */

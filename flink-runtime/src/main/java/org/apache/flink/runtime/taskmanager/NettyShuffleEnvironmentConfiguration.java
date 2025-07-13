@@ -202,7 +202,7 @@ public class NettyShuffleEnvironmentConfiguration {
         return networkBuffersPerChannel;
     }
 
-    public int floatingNetworkBuffersPerGate() {
+    public int requiredFloatingBuffers() {
         return floatingNetworkBuffersPerGate;
     }
 
