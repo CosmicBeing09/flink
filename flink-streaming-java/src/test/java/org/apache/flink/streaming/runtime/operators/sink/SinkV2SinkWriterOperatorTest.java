@@ -151,13 +151,13 @@ class SinkV2SinkWriterOperatorTest {
     }
 
     InspectableSink sinkWithState(boolean withState, String stateName) {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> restoredWriter =
                 new TestSinkV2.DefaultStatefulSinkWriter<>();
         TestSinkV2.Builder<Integer> builder =
                 TestSinkV2.<Integer>newBuilder()
                         .setDefaultCommitter()
                         .setWithPostCommitTopology(true)
-                        .setWriter(sinkWriter);
+                        .setWriter(restoredWriter);
         if (withState) {
             builder.setWriterState(true);
         }
