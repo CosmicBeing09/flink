@@ -48,7 +48,7 @@ public class FileMappingManager {
 
     private final FileSystem localFileSystem;
 
-    private final HashMap<String, MappingEntry> mappingTable;
+    private final HashMap<String, org.apache.flink.state.forst.fs.filemapping.MappingEntry> mappingTable;
 
     private final String remoteBase;
 
@@ -67,18 +67,18 @@ public class FileMappingManager {
     }
 
     /** Create a mapping entry for a file. */
-    public RealPath createFile(Path file) {
+    public MappingEntry createFile(Path file) {
         String fileName = file.toString();
         Preconditions.checkState(!mappingTable.containsKey(fileName));
         if (!fileName.endsWith(SST_SUFFIX) && isParentDir(fileName, remoteBase)) {
             Path localFile = new Path(localBase, file.getName());
             mappingTable.put(
                     fileName,
-                    new MappingEntry(1, localFileSystem, localFile.toString(), true, false));
-            return new RealPath(localFile, true);
+                    new org.apache.flink.state.forst.fs.filemapping.MappingEntry(1, localFileSystem, localFile.toString(), true, false));
+            return new MappingEntry(localFile, true);
         } else {
-            mappingTable.put(fileName, new MappingEntry(1, fileSystem, fileName, false, false));
-            return new RealPath(file, false);
+            mappingTable.put(fileName, new org.apache.flink.state.forst.fs.filemapping.MappingEntry(1, fileSystem, fileName, false, false));
+            return new MappingEntry(file, false);
         }
     }
 
@@ -91,7 +91,7 @@ public class FileMappingManager {
         if (mappingTable.containsKey(dst)) {
             return -1;
         }
-        MappingEntry sourceEntry = mappingTable.get(src);
+        org.apache.flink.state.forst.fs.filemapping.MappingEntry sourceEntry = mappingTable.get(src);
         Preconditions.checkNotNull(sourceEntry);
         sourceEntry.retain();
         mappingTable.putIfAbsent(dst, sourceEntry);
@@ -103,18 +103,18 @@ public class FileMappingManager {
      * Get the real path of a file, the real path maybe a local file or a remote file/dir. Due to
      * the lazy deletion, if the path is a directory, the exists check may have false positives.
      */
-    public RealPath realPath(Path path) {
+    public MappingEntry mappingEntry(Path path) {
         String fileName = path.toString();
-        MappingEntry entry = mappingTable.getOrDefault(fileName, null);
+        org.apache.flink.state.forst.fs.filemapping.MappingEntry entry = mappingTable.getOrDefault(fileName, null);
         if (entry != null) {
-            return new RealPath(new Path(entry.sourcePath), entry.isLocal);
+            return new MappingEntry(new Path(entry.sourcePath), entry.isLocal);
         }
         return null;
     }
 
     public List<String> listByPrefix(String path) {
         List<String> linkedPaths = new ArrayList<>();
-        for (Map.Entry<String, MappingEntry> entry : mappingTable.entrySet()) {
+        for (Map.Entry<String, org.apache.flink.state.forst.fs.filemapping.MappingEntry> entry : mappingTable.entrySet()) {
             if (isParentDir(entry.getKey(), path)) {
                 linkedPaths.add(entry.getKey());
             }
@@ -132,10 +132,10 @@ public class FileMappingManager {
      * @return always return true except for IOException
      */
     public boolean renameFile(String src, String dst) throws IOException {
-        MappingEntry srcEntry = mappingTable.get(src);
+        org.apache.flink.state.forst.fs.filemapping.MappingEntry srcEntry = mappingTable.get(src);
         if (srcEntry != null) { // rename file
             if (mappingTable.containsKey(dst)) {
-                MappingEntry dstEntry = mappingTable.remove(dst);
+                org.apache.flink.state.forst.fs.filemapping.MappingEntry dstEntry = mappingTable.remove(dst);
                 dstEntry.release();
             }
             mappingTable.remove(src);
@@ -145,7 +145,7 @@ public class FileMappingManager {
             // step 1: link all files under src to dst
             List<String> toRename = listByPrefix(src);
             for (String key : toRename) {
-                MappingEntry sourceEntry = mappingTable.get(key);
+                org.apache.flink.state.forst.fs.filemapping.MappingEntry sourceEntry = mappingTable.get(key);
                 sourceEntry.retain();
                 String renamedDst = key.replace(src, dst);
                 LOG.trace("rename: {} -> {}", key, renamedDst);
@@ -173,7 +173,7 @@ public class FileMappingManager {
      */
     public boolean deleteFile(Path file, boolean recursive) throws IOException {
         String fileStr = file.toString();
-        MappingEntry entry = mappingTable.getOrDefault(fileStr, null);
+        org.apache.flink.state.forst.fs.filemapping.MappingEntry entry = mappingTable.getOrDefault(fileStr, null);
         LOG.trace("delete: {}, source:{}", file, entry == null ? "null" : entry.sourcePath);
         // case 1: delete file
         if (entry != null) {
@@ -186,14 +186,14 @@ public class FileMappingManager {
         if (!recursive) {
             throw new IOException(fileStr + "is a directory, delete failed.");
         }
-        MappingEntry parentEntry = new MappingEntry(0, fileSystem, fileStr, false, recursive);
+        org.apache.flink.state.forst.fs.filemapping.MappingEntry parentEntry = new org.apache.flink.state.forst.fs.filemapping.MappingEntry(0, fileSystem, fileStr, false, recursive);
 
         // step 2.1: find all matched entries, mark delete dir as parent dir
-        for (Map.Entry<String, MappingEntry> currentEntry : mappingTable.entrySet()) {
+        for (Map.Entry<String, org.apache.flink.state.forst.fs.filemapping.MappingEntry> currentEntry : mappingTable.entrySet()) {
             if (!isParentDir(currentEntry.getValue().sourcePath, fileStr)) {
                 continue;
             }
-            MappingEntry oldParentDir = currentEntry.getValue().parentDir;
+            org.apache.flink.state.forst.fs.filemapping.MappingEntry oldParentDir = currentEntry.getValue().parentDir;
             if (oldParentDir == null
                     || isParentDir(oldParentDir.sourcePath, fileStr)
                             && !oldParentDir.equals(parentEntry)) {
@@ -216,7 +216,7 @@ public class FileMappingManager {
     }
 
     @VisibleForTesting
-    public MappingEntry mappingEntry(String path) {
+    public org.apache.flink.state.forst.fs.filemapping.MappingEntry mappingEntry(String path) {
         return mappingTable.getOrDefault(path, null);
     }
 
@@ -232,11 +232,11 @@ public class FileMappingManager {
     }
 
     /** A wrapper of real path. */
-    public static class RealPath {
+    public static class MappingEntry {
         public final Path path;
         public final boolean isLocal;
 
-        public RealPath(Path path, boolean isLocal) {
+        public MappingEntry(Path path, boolean isLocal) {
             this.path = path;
             this.isLocal = isLocal;
         }
