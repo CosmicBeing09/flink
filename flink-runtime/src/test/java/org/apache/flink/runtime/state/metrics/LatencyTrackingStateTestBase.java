@@ -47,7 +47,7 @@ import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Test base for latency tracking state. */
+/** Test base for metrics tracking state. */
 abstract class LatencyTrackingStateTestBase<K> {
     protected static final int SAMPLE_INTERVAL = 10;
 
