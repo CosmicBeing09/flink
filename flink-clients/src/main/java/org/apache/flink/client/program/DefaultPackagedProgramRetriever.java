@@ -82,7 +82,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
      *
      * @param userLibDir The user library directory that is used for generating the user classpath
      *     if specified. The system classpath is used if not specified.
-     * @param jarFile The jar archive expected to contain the job class included; {@code null} if
+     * @param jars The jar archive expected to contain the job class included; {@code null} if
      *     the job class is on the system classpath.
      * @param jobClassName The job class to use; if {@code null} the user classpath (or, if not set,
      *     the system classpath) will be scanned for possible main class.
@@ -94,7 +94,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
      */
     public static DefaultPackagedProgramRetriever create(
             @Nullable File userLibDir,
-            @Nullable File jarFile,
+            @Nullable File jars,
             @Nullable String jobClassName,
             String[] programArgs,
             Configuration configuration)
@@ -117,7 +117,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
         final EntryClassInformationProvider entryClassInformationProvider =
                 createEntryClassInformationProvider(
                         userLibDir == null ? null : userClasspaths,
-                        jarFile,
+                        jars,
                         jobClassName,
                         programArgs);
         return new DefaultPackagedProgramRetriever(

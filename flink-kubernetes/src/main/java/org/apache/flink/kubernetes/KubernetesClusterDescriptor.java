@@ -60,7 +60,7 @@ import org.apache.flink.util.Preconditions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -212,8 +212,8 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
         // No need to do pipelineJars validation if it is a PyFlink job.
         if (!(PackagedProgramUtils.isPython(applicationConfiguration.getApplicationClassName())
                 || PackagedProgramUtils.isPython(applicationConfiguration.getProgramArguments()))) {
-            final List<File> pipelineJars =
-                    KubernetesUtils.checkJarFileForApplicationMode(flinkConfig);
+            final List<URI> pipelineJars =
+                    KubernetesUtils.checkJarsForApplicationMode(flinkConfig);
             Preconditions.checkArgument(pipelineJars.size() == 1, "Should only have one jar");
         }
 
