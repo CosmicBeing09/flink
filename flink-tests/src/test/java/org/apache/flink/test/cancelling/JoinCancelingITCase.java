@@ -79,17 +79,17 @@ public class JoinCancelingITCase extends CancelingTestBase {
     }
 
     @Test
-    public void testCancelSortMatchWhileReadingSlowInputs() throws Exception {
+    public void testCancelWhileReadingSlowInputs() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), true);
     }
 
     @Test
-    public void testCancelSortMatchWhileReadingFastInputs() throws Exception {
+    public void testCancelWhileReadingFastInputs() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), false);
     }
 
     @Test
-    public void testCancelSortMatchPriorToFirstRecordReading() throws Exception {
+    public void testCancelPriorToFirstRecordReading() throws Exception {
         executeTask(new StuckInOpenMatcher<Integer>(), false);
     }
 
@@ -122,7 +122,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
     }
 
     @Test
-    public void testCancelSortMatchWhileDoingHeavySorting() throws Exception {
+    public void testCancelWhileDoingHeavySorting() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         HeavyCompareGeneratorInputFormat input = new HeavyCompareGeneratorInputFormat(100);
         DataSet<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
@@ -154,12 +154,12 @@ public class JoinCancelingITCase extends CancelingTestBase {
     // -----------------
 
     @Test
-    public void testCancelSortMatchWhileJoining() throws Exception {
+    public void testCancelWhileJoining() throws Exception {
         executeTaskWithGenerator(new DelayingMatcher<Integer>(), 500, 3, 10 * 1000, 20 * 1000);
     }
 
     @Test
-    public void testCancelSortMatchWithLongCancellingResponse() throws Exception {
+    public void testCancelWithLongCancellingResponse() throws Exception {
         executeTaskWithGenerator(
                 new LongCancelTimeMatcher<Integer>(), 500, 3, 10 * 1000, 10 * 1000);
     }
@@ -168,7 +168,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
     // ---------------------------------
 
     @Test
-    public void testCancelSortMatchWithHighparallelism() throws Exception {
+    public void testCancelWithHighparallelism() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), false, 64);
     }
 
