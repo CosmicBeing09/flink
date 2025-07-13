@@ -208,7 +208,7 @@ public class ExecutionOptions {
      * The size of buffer under async state execution. Async state execution provides a buffer
      * mechanism to reduce state access. When the number of state requests in the buffer exceeds the
      * batch size, a batched state execution would be triggered. Larger batch sizes will bring
-     * higher end-to-end latency, this option works with {@link #ASYNC_STATE_BUFFER_TIMEOUT} to
+     * higher end-to-end latency, this option works with {@link #ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT} to
      * control the frequency of triggering.
      */
     @Experimental
@@ -232,7 +232,7 @@ public class ExecutionOptions {
     @Experimental
     @Documentation.ExcludeFromDocumentation(
             "This is an experimental option, internal use only for now.")
-    public static final ConfigOption<Long> ASYNC_STATE_BUFFER_TIMEOUT =
+    public static final ConfigOption<Long> ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT =
             ConfigOptions.key("execution.async-state.buffer-timeout")
                     .longType()
                     .defaultValue(1000L)
