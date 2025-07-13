@@ -50,7 +50,7 @@ import static org.assertj.core.api.Assertions.entry;
 /** Test for {@link FileSystemOutputFormat}. */
 class FileSystemOutputFormatTest {
 
-    @TempDir private java.nio.file.Path tmpPath;
+    @TempDir private java.nio.file.Path stagingPath;
     @TempDir private java.nio.file.Path outputPath;
 
     private final TestingFinalizationContext finalizationContext = new TestingFinalizationContext();
@@ -95,7 +95,7 @@ class FileSystemOutputFormatTest {
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
                 createSink(false, false, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileContentByPath(stagingPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
@@ -123,7 +123,7 @@ class FileSystemOutputFormatTest {
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
                 createSink(true, false, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileContentByPath(stagingPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
@@ -131,7 +131,7 @@ class FileSystemOutputFormatTest {
         assertThat(content).hasSize(1);
         assertThat(content.values())
                 .containsExactly("a1,1,p1\n" + "a2,2,p1\n" + "a2,2,p2\n" + "a3,3,p1\n");
-        assertThat(new File(tmpPath.toUri())).doesNotExist();
+        assertThat(new File(stagingPath.toUri())).doesNotExist();
     }
 
     @Test
@@ -148,7 +148,7 @@ class FileSystemOutputFormatTest {
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a3", 3), 1L));
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileContentByPath(stagingPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
@@ -156,7 +156,7 @@ class FileSystemOutputFormatTest {
         assertThat(content).hasSize(1);
         assertThat(content.keySet().iterator().next().getParentFile().getName()).isEqualTo("c=p1");
         assertThat(content.values()).containsExactly("a1,1\n" + "a2,2\n" + "a2,2\n" + "a3,3\n");
-        assertThat(new File(tmpPath.toUri())).doesNotExist();
+        assertThat(new File(stagingPath.toUri())).doesNotExist();
     }
 
     @Test
@@ -165,7 +165,7 @@ class FileSystemOutputFormatTest {
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
                 createSink(false, true, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(2);
+            assertThat(getFileContentByPath(stagingPath)).hasSize(2);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
@@ -176,7 +176,7 @@ class FileSystemOutputFormatTest {
         assertThat(sortedContent).hasSize(2);
         assertThat(sortedContent)
                 .contains(entry("c=p1", "a1,1\n" + "a2,2\n" + "a3,3\n"), entry("c=p2", "a2,2\n"));
-        assertThat(new File(tmpPath.toUri())).doesNotExist();
+        assertThat(new File(stagingPath.toUri())).doesNotExist();
     }
 
     @Test
@@ -191,7 +191,7 @@ class FileSystemOutputFormatTest {
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2, "p1"), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a3", 3, "p1"), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2, "p2"), 1L));
-            assertThat(getFileContentByPath(tmpPath)).hasSize(2);
+            assertThat(getFileContentByPath(stagingPath)).hasSize(2);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
@@ -202,7 +202,7 @@ class FileSystemOutputFormatTest {
         assertThat(sortedContent).hasSize(2);
         assertThat(sortedContent.get("c=p1")).isEqualTo("a1,1\n" + "a2,2\n" + "a3,3\n");
         assertThat(sortedContent.get("c=p2")).isEqualTo("a2,2\n");
-        assertThat(new File(tmpPath.toUri())).doesNotExist();
+        assertThat(new File(stagingPath.toUri())).doesNotExist();
     }
 
     private OneInputStreamOperatorTestHarness<Row, Object> createSink(
@@ -220,7 +220,7 @@ class FileSystemOutputFormatTest {
         FileSystemOutputFormat<Row> sink =
                 new FileSystemOutputFormat.Builder<Row>()
                         .setMetaStoreFactory(msFactory)
-                        .setStagingPath(new Path(tmpPath.toString()))
+                        .setStagingPath(new Path(stagingPath.toString()))
                         .setOverwrite(override)
                         .setPartitionColumns(partitionColumns)
                         .setPartitionComputer(

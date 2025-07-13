@@ -450,7 +450,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                 new org.apache.flink.configuration.Configuration();
         catalogTable.getOptions().forEach(conf::setString);
         HadoopFileSystemFactory fsFactory = fsFactory();
-        org.apache.flink.core.fs.Path tmpPath =
+        org.apache.flink.core.fs.Path stagingPath =
                 new org.apache.flink.core.fs.Path(toStagingDir(stagingParentDir, jobConf));
 
         PartitionCommitPolicyFactory partitionCommitPolicyFactory =
@@ -489,7 +489,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                         TypeInformation.of(CoordinatorInput.class),
                         new BatchFileWriter<>(
                                 fsFactory,
-                                tmpPath,
+                                stagingPath,
                                 partitionColumns,
                                 dynamicGrouping,
                                 staticPartitionSpec,
@@ -516,7 +516,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                 partitionCommitPolicyFactory,
                 partitionColumns,
                 staticPartitionSpec,
-                tmpPath,
+                stagingPath,
                 identifier,
                 compactAverageSize,
                 compactTargetSize,
