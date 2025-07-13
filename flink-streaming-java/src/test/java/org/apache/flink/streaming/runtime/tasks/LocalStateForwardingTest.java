@@ -168,7 +168,7 @@ class LocalStateForwardingTest {
                 jmState.getInputChannelState(),
                 tmState.getInputChannelState());
         performCollectionCheck(
-                osFuture.getResultSubpartitionStateFuture(),
+                osFuture.getOutputStateHandleFuture(),
                 jmState.getResultSubpartitionState(),
                 tmState.getResultSubpartitionState());
     }

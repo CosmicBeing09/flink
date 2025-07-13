@@ -65,8 +65,8 @@ public class OperatorSnapshotFinalizer {
         SnapshotResult<StateObjectCollection<InputStateHandle>> inputChannel =
                 snapshotFutures.getInputChannelStateFuture().get();
 
-        SnapshotResult<StateObjectCollection<OutputStateHandle>> resultSubpartition =
-                snapshotFutures.getResultSubpartitionStateFuture().get();
+        SnapshotResult<StateObjectCollection<OutputStateHandle>> outputStateHandle =
+                snapshotFutures.getOutputStateHandleFuture().get();
 
         jobManagerOwnedState =
                 OperatorSubtaskState.builder()
@@ -80,7 +80,7 @@ public class OperatorSnapshotFinalizer {
                         .setInputChannelState(
                                 emptyIfNull(inputChannel.getJobManagerOwnedSnapshot()))
                         .setResultSubpartitionState(
-                                emptyIfNull(resultSubpartition.getJobManagerOwnedSnapshot()))
+                                emptyIfNull(outputStateHandle.getJobManagerOwnedSnapshot()))
                         .build();
 
         taskLocalState =
@@ -92,7 +92,7 @@ public class OperatorSnapshotFinalizer {
                         .setRawKeyedState(singletonOrEmpty(keyedRaw.getTaskLocalSnapshot()))
                         .setInputChannelState(emptyIfNull(inputChannel.getTaskLocalSnapshot()))
                         .setResultSubpartitionState(
-                                emptyIfNull(resultSubpartition.getTaskLocalSnapshot()))
+                                emptyIfNull(outputStateHandle.getTaskLocalSnapshot()))
                         .build();
     }
 

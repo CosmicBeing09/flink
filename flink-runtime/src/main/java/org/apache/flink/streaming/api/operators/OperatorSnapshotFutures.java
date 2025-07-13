@@ -143,7 +143,7 @@ public class OperatorSnapshotFutures {
 
     @Nonnull
     public Future<SnapshotResult<StateObjectCollection<OutputStateHandle>>>
-            getResultSubpartitionStateFuture() {
+    getOutputStateHandleFuture() {
         return resultSubpartitionStateFuture;
     }
 
@@ -164,7 +164,7 @@ public class OperatorSnapshotFutures {
         pairs.add(new Tuple2<>(getOperatorStateManagedFuture(), "raw keyed"));
         pairs.add(new Tuple2<>(getOperatorStateRawFuture(), "raw operator"));
         pairs.add(new Tuple2<>(getInputChannelStateFuture(), "input channel"));
-        pairs.add(new Tuple2<>(getResultSubpartitionStateFuture(), "result subpartition"));
+        pairs.add(new Tuple2<>(getOutputStateHandleFuture(), "result subpartition"));
         final long[] sizeTuple = new long[2];
         try (Closer closer = Closer.create()) {
             for (Tuple2<Future<? extends StateObject>, String> pair : pairs) {

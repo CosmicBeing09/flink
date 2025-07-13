@@ -81,7 +81,7 @@ public class PrioritizedOperatorSubtaskState {
 
     private final List<StateObjectCollection<InputStateHandle>> prioritizedInputChannelState;
 
-    private final List<StateObjectCollection<OutputStateHandle>> prioritizedResultSubpartitionState;
+    private final List<StateObjectCollection<OutputStateHandle>> prioritizedOutputState;
 
     /** Checkpoint id for a restored operator or null if not restored. */
     private final @Nullable Long restoredCheckpointId;
@@ -104,7 +104,7 @@ public class PrioritizedOperatorSubtaskState {
         this.prioritizedManagedKeyedState = prioritizedManagedKeyedState;
         this.prioritizedRawKeyedState = prioritizedRawKeyedState;
         this.prioritizedInputChannelState = prioritizedInputChannelState;
-        this.prioritizedResultSubpartitionState = prioritizedResultSubpartitionState;
+        this.prioritizedOutputState = prioritizedResultSubpartitionState;
         this.restoredCheckpointId = restoredCheckpointId;
     }
 
@@ -191,7 +191,7 @@ public class PrioritizedOperatorSubtaskState {
 
     @Nonnull
     public StateObjectCollection<OutputStateHandle> getPrioritizedResultSubpartitionState() {
-        return lastElement(prioritizedResultSubpartitionState);
+        return lastElement(prioritizedOutputState);
     }
 
     // -----------------------------------------------------------------------------------------------------------------
