@@ -51,7 +51,7 @@ class VectorizedColumnBatchTest {
     void testTyped() throws IOException {
         HeapBooleanVector col0 = new HeapBooleanVector(VECTOR_SIZE);
         for (int i = 0; i < VECTOR_SIZE; i++) {
-            col0.vector[i] = i % 2 == 0;
+            col0.heapShortVector[i] = i % 2 == 0;
         }
 
         HeapBytesVector col1 = new HeapBytesVector(VECTOR_SIZE);
@@ -72,7 +72,7 @@ class VectorizedColumnBatchTest {
 
         HeapFloatVector col4 = new HeapFloatVector(VECTOR_SIZE);
         for (int i = 0; i < VECTOR_SIZE; i++) {
-            col4.vector[i] = i;
+            col4.shortVector[i] = i;
         }
 
         HeapIntVector col5 = new HeapIntVector(VECTOR_SIZE);

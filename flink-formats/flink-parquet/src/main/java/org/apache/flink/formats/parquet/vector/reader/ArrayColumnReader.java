@@ -319,7 +319,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                     if (valueList.get(i) == null) {
                         ((HeapBooleanVector) lcv.getChild()).setNullAt(i);
                     } else {
-                        ((HeapBooleanVector) lcv.getChild()).vector[i] = (boolean) valueList.get(i);
+                        ((HeapBooleanVector) lcv.getChild()).heapShortVector[i] = (boolean) valueList.get(i);
                     }
                 }
                 break;
@@ -337,9 +337,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case SMALLINT:
-                HeapShortVector shortVector = new HeapShortVector(total);
-                shortVector.reset();
-                lcv.setChild(shortVector);
+                HeapShortVector heapShortVector = new HeapShortVector(total);
+                heapShortVector.reset();
+                lcv.setChild(heapShortVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapShortVector) lcv.getChild()).setNullAt(i);
@@ -372,7 +372,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                     if (valueList.get(i) == null) {
                         ((HeapFloatVector) lcv.getChild()).setNullAt(i);
                     } else {
-                        ((HeapFloatVector) lcv.getChild()).vector[i] =
+                        ((HeapFloatVector) lcv.getChild()).shortVector[i] =
                                 ((List<Float>) valueList).get(i);
                     }
                 }

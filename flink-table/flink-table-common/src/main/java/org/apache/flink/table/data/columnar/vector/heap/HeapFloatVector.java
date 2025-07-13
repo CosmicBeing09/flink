@@ -34,7 +34,7 @@ public class HeapFloatVector extends AbstractHeapVector implements WritableFloat
 
     private static final long serialVersionUID = 8928878923550041110L;
 
-    public float[] vector;
+    public float[] shortVector;
 
     /**
      * Don't use this except for testing purposes.
@@ -43,13 +43,13 @@ public class HeapFloatVector extends AbstractHeapVector implements WritableFloat
      */
     public HeapFloatVector(int len) {
         super(len);
-        vector = new float[len];
+        shortVector = new float[len];
     }
 
     @Override
     public float getFloat(int i) {
         if (dictionary == null) {
-            return vector[i];
+            return shortVector[i];
         } else {
             return dictionary.decodeToFloat(dictionaryIds.vector[i]);
         }
@@ -57,35 +57,35 @@ public class HeapFloatVector extends AbstractHeapVector implements WritableFloat
 
     @Override
     public void setFloat(int i, float value) {
-        vector[i] = value;
+        shortVector[i] = value;
     }
 
     @Override
     public void setFloatsFromBinary(int rowId, int count, byte[] src, int srcIndex) {
-        if (rowId + count > vector.length || srcIndex + count * 4L > src.length) {
+        if (rowId + count > shortVector.length || srcIndex + count * 4L > src.length) {
             throw new IndexOutOfBoundsException(
                     String.format(
                             "Index out of bounds, row id is %s, count is %s, binary src index is %s, binary"
                                     + " length is %s, float array src index is %s, float array length is %s.",
-                            rowId, count, srcIndex, src.length, rowId, vector.length));
+                            rowId, count, srcIndex, src.length, rowId, shortVector.length));
         }
         if (LITTLE_ENDIAN) {
             UNSAFE.copyMemory(
                     src,
                     BYTE_ARRAY_OFFSET + srcIndex,
-                    vector,
+                    shortVector,
                     FLOAT_ARRAY_OFFSET + rowId * 4L,
                     count * 4L);
         } else {
             ByteBuffer bb = ByteBuffer.wrap(src).order(ByteOrder.BIG_ENDIAN);
             for (int i = 0; i < count; ++i) {
-                vector[i + rowId] = bb.getFloat(srcIndex + (4 * i));
+                shortVector[i + rowId] = bb.getFloat(srcIndex + (4 * i));
             }
         }
     }
 
     @Override
     public void fill(float value) {
-        Arrays.fill(vector, value);
+        Arrays.fill(shortVector, value);
     }
 }
