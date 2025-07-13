@@ -47,7 +47,7 @@ public class GateBuffersSpec {
         return expectedBuffersPerGate;
     }
 
-    int getMinBuffersPerGate() {
+    int getNumberOfRequiredMemorySegments() {
         return minBuffersPerGate;
     }
 
