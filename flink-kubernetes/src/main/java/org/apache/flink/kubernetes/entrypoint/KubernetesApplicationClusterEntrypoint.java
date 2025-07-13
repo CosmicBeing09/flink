@@ -126,7 +126,7 @@ public final class KubernetesApplicationClusterEntrypoint extends ApplicationClu
         // No need to do pipelineJars validation if it is a PyFlink job.
         if (!(PackagedProgramUtils.isPython(jobClassName)
                 || PackagedProgramUtils.isPython(programArguments))) {
-            final List<File> pipelineJarFiles = fetchJarFileForApplicationMode(configuration);
+            final List<File> pipelineJarFiles = fetchJarsForApplicationMode(configuration);
             Preconditions.checkArgument(pipelineJarFiles.size() == 1, "Should only have one jar");
             return DefaultPackagedProgramRetriever.create(
                     userLibDir,
@@ -141,12 +141,12 @@ public final class KubernetesApplicationClusterEntrypoint extends ApplicationClu
     }
 
     /**
-     * Fetch the user jar from path.
+     * Fetch the user jars from paths.
      *
      * @param configuration Flink Configuration
      * @return User jar File
      */
-    public static List<File> fetchJarFileForApplicationMode(Configuration configuration) {
+    public static List<File> fetchJarsForApplicationMode(Configuration configuration) {
         String targetDir = generateJarDir(configuration);
         return configuration.get(PipelineOptions.JARS).stream()
                 .map(
