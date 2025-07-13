@@ -133,10 +133,10 @@ public class PythonOperatorChainingOptimizer {
             transformationsField.setAccessible(true);
             final List<Transformation<?>> transformations =
                     (List<Transformation<?>>) transformationsField.get(env);
-            final Tuple2<List<Transformation<?>>, Transformation<?>> resultTuple =
+            final Tuple2<List<Transformation<?>>, Transformation<?>> predecessorsTuple =
                     optimize(transformations, transformation);
-            transformationsField.set(env, resultTuple.f0);
-            return resultTuple.f1;
+            transformationsField.set(env, predecessorsTuple.f0);
+            return predecessorsTuple.f1;
         } else {
             return transformation;
         }
