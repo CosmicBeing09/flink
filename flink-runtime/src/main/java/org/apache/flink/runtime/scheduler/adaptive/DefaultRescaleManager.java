@@ -58,7 +58,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
 
-    private final Temporal initializationTime;
+    private final Temporal lastStateTransition;
     private final Supplier<Temporal> clock;
 
     @VisibleForTesting final Duration scalingIntervalMin;
@@ -82,13 +82,13 @@ public class DefaultRescaleManager implements RescaleManager {
     private CompletableFuture<Void> triggerFuture;
 
     DefaultRescaleManager(
-            Temporal initializationTime,
+            Temporal lastStateTransition,
             RescaleManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this(
-                initializationTime,
+                lastStateTransition,
                 Instant::now,
                 rescaleContext,
                 scalingIntervalMin,
@@ -104,7 +104,7 @@ public class DefaultRescaleManager implements RescaleManager {
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
-        this.initializationTime = initializationTime;
+        this.lastStateTransition = initializationTime;
         this.clock = clock;
 
         this.maxTriggerDelay = maxTriggerDelay;
@@ -157,7 +157,7 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private Duration timeSinceLastRescale() {
-        return Duration.between(this.initializationTime, clock.get());
+        return Duration.between(this.lastStateTransition, clock.get());
     }
 
     private void maybeRescale() {
@@ -220,9 +220,9 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
+        public DefaultRescaleManager create(Context rescaleContext, Instant lastStateTransition) {
             return new DefaultRescaleManager(
-                    lastRescale,
+                    lastStateTransition,
                     rescaleContext,
                     scalingIntervalMin,
                     scalingIntervalMax,
