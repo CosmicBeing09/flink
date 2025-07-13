@@ -72,7 +72,7 @@ public class CreateEmbeddedSchedulerWorkflowHandler
         String materializedTableIdentifier =
                 request.getRequestBody().getMaterializedTableIdentifier();
         String cronExpression = request.getRequestBody().getCronExpression();
-        Map<String, String> dynamicOptions = request.getRequestBody().getDynamicOptions();
+        Map<String, String> dynamicOptions = request.getRequestBody().getInitConfig();
         Map<String, String> executionConfig = request.getRequestBody().getExecutionConfig();
         String customScheduleTime = request.getRequestBody().getCustomScheduleTime();
         String restEndpointURL = request.getRequestBody().getRestEndpointUrl();
