@@ -80,7 +80,7 @@ public class PackagedProgram implements AutoCloseable {
 
     // --------------------------------------------------------------------------------------------
 
-    private final URL jarFile;
+    private final URL jars;
 
     private final String[] args;
 
@@ -132,15 +132,15 @@ public class PackagedProgram implements AutoCloseable {
         this.isPython = isPython(entryPointClassName);
 
         // load the jar file if exists
-        this.jarFile = loadJarFile(jarFile);
+        this.jars = loadJarFile(jarFile);
 
-        assert this.jarFile != null || entryPointClassName != null;
+        assert this.jars != null || entryPointClassName != null;
 
         // now that we have an entry point, we can extract the nested jar files (if any)
         this.extractedTempLibraries =
-                this.jarFile == null
+                this.jars == null
                         ? Collections.emptyList()
-                        : extractContainedLibraries(this.jarFile);
+                        : extractContainedLibraries(this.jars);
         this.userCodeClassLoader =
                 ClientUtils.buildUserCodeClassLoader(
                         getJobJarAndDependencies(),
@@ -155,7 +155,7 @@ public class PackagedProgram implements AutoCloseable {
                         // the manifest
                         entryPointClassName != null
                                 ? entryPointClassName
-                                : getEntryPointClassNameFromJar(this.jarFile),
+                                : getEntryPointClassNameFromJar(this.jars),
                         userCodeClassLoader);
 
         if (!hasMainMethod(mainClass)) {
@@ -247,8 +247,8 @@ public class PackagedProgram implements AutoCloseable {
     public List<URL> getJobJarAndDependencies() {
         List<URL> libs = new ArrayList<URL>(extractedTempLibraries.size() + 1);
 
-        if (jarFile != null) {
-            libs.add(jarFile);
+        if (jars != null) {
+            libs.add(jars);
         }
         for (File tmpLib : extractedTempLibraries) {
             try {
