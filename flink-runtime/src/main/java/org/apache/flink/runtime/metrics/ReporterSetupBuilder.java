@@ -30,8 +30,8 @@ import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.Reporter;
 import org.apache.flink.metrics.reporter.MetricReporter;
 import org.apache.flink.metrics.reporter.MetricReporterFactory;
-import org.apache.flink.runtime.metrics.filter.DefaultMetricFilter;
-import org.apache.flink.runtime.metrics.filter.MetricFilter;
+import org.apache.flink.runtime.metrics.filter.DefaultReporterFilter;
+import org.apache.flink.runtime.metrics.filter.ReporterFilter;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
 import org.apache.flink.traces.reporter.TraceReporter;
 import org.apache.flink.traces.reporter.TraceReporterFactory;
@@ -125,7 +125,7 @@ public class ReporterSetupBuilder<
                                     (reporterName,
                                             metricConfig,
                                             traceReporter,
-                                            metricFilter,
+                                     reporterFilter,
                                             additionalVariables) ->
                                             new TraceReporterSetup(
                                                     reporterName,
@@ -156,7 +156,7 @@ public class ReporterSetupBuilder<
                 String reporterName,
                 MetricConfig metricConfig,
                 REPORTER reporter,
-                MetricFilter metricFilter,
+                ReporterFilter reporterFilter,
                 Map<String, String> additionalVariables);
     }
 
@@ -253,9 +253,9 @@ public class ReporterSetupBuilder<
     }
 
     @VisibleForTesting
-    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter metricFilter) {
+    public SETUP forReporter(String reporterName, REPORTER reporter, ReporterFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, new MetricConfig(), reporter, metricFilter, Collections.emptyMap());
+                reporterName, new MetricConfig(), reporter, reporterFilter, Collections.emptyMap());
     }
 
     @VisibleForTesting
@@ -264,7 +264,7 @@ public class ReporterSetupBuilder<
                 reporterName,
                 metricConfig,
                 reporter,
-                MetricFilter.NO_OP_FILTER,
+                ReporterFilter.NO_OP_FILTER,
                 Collections.emptyMap());
     }
 
@@ -273,20 +273,20 @@ public class ReporterSetupBuilder<
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter) {
+            ReporterFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, metricConfig, reporter, metricFilter, Collections.emptyMap());
+                reporterName, metricConfig, reporter, reporterFilter, Collections.emptyMap());
     }
 
     private SETUP createReporterSetup(
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter,
+            ReporterFilter reporterFilter,
             Map<String, String> additionalVariables) {
         reporter.open(metricConfig);
         return reporterSetupInfo.reporterSetupFactory.createReporterSetup(
-                reporterName, metricConfig, reporter, metricFilter, additionalVariables);
+                reporterName, metricConfig, reporter, reporterFilter, additionalVariables);
     }
 
     public List<SETUP> fromConfiguration(
@@ -380,8 +380,8 @@ public class ReporterSetupBuilder<
                 Optional<REPORTER> metricReporterOptional =
                         loadReporter(reporterName, reporterConfig, reporterFactories);
 
-                final MetricFilter metricFilter =
-                        DefaultMetricFilter.fromConfiguration(reporterConfig);
+                final ReporterFilter reporterFilter =
+                        DefaultReporterFilter.fromConfiguration(reporterConfig);
 
                 // massage user variables keys into scope format for parity to variable
                 // exclusion
@@ -402,7 +402,7 @@ public class ReporterSetupBuilder<
                                             reporterName,
                                             metricConfig,
                                             reporter,
-                                            metricFilter,
+                                            reporterFilter,
                                             additionalVariables));
                         });
             } catch (Throwable t) {

@@ -33,7 +33,7 @@ import org.apache.flink.runtime.concurrent.ManuallyTriggeredScheduledExecutorSer
 import org.apache.flink.runtime.metrics.CollectingMetricsReporter.MetricGroupAndName;
 import org.apache.flink.runtime.metrics.dump.MetricDumpSerialization;
 import org.apache.flink.runtime.metrics.dump.MetricQueryService;
-import org.apache.flink.runtime.metrics.filter.DefaultMetricFilter;
+import org.apache.flink.runtime.metrics.filter.DefaultReporterFilter;
 import org.apache.flink.runtime.metrics.groups.MetricGroupTest;
 import org.apache.flink.runtime.metrics.groups.TaskManagerMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
@@ -489,7 +489,7 @@ class MetricRegistryImplTest {
                                 ReporterSetupBuilder.METRIC_SETUP_BUILDER.forReporter(
                                         "test",
                                         reporter,
-                                        DefaultMetricFilter.fromConfiguration(reporterConfig))));
+                                        DefaultReporterFilter.fromConfiguration(reporterConfig))));
 
         registry.register(
                 new TestMeter(), "", new MetricGroupTest.DummyAbstractMetricGroup(registry));
