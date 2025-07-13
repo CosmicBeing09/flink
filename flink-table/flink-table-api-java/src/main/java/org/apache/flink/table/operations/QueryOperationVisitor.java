@@ -43,7 +43,7 @@ public interface QueryOperationVisitor<T> {
 
     T visit(SortQueryOperation sort);
 
-    T visit(CalculatedQueryOperation calculatedTable);
+    T visit(CorrelatedFunctionTableFactory calculatedTable);
 
     T visit(SourceQueryOperation catalogTable);
 
