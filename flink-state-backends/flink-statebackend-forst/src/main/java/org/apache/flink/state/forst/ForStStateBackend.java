@@ -95,7 +95,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         implements ConfigurableStateBackend {
 
-    public static final String REMOTE_SHORTCUT_CHECKPOINT = "checkpoint-dir";
+    public static final String PRIMARY_SHORTCUT_CHECKPOINT = "checkpoint-dir";
 
     private static final long serialVersionUID = 1L;
 
@@ -182,7 +182,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
     /** The recovery claim mode. */
     private RecoveryClaimMode recoveryClaimMode = RecoveryClaimMode.DEFAULT;
 
-    private boolean remoteShareWithCheckpoint;
+    private boolean primaryShareWithCheckpoint;
 
     // ------------------------------------------------------------------------
 
@@ -195,7 +195,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         this.overlapFractionThreshold = UNDEFINED_OVERLAP_FRACTION_THRESHOLD;
         this.useIngestDbRestoreMode = TernaryBoolean.UNDEFINED;
         this.rescalingUseDeleteFilesInRange = TernaryBoolean.UNDEFINED;
-        this.remoteShareWithCheckpoint = false;
+        this.primaryShareWithCheckpoint = false;
     }
 
     /**
@@ -212,14 +212,14 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                         original.memoryConfiguration, config);
         this.memoryConfiguration.validate();
 
-        this.remoteShareWithCheckpoint = false;
+        this.primaryShareWithCheckpoint = false;
         if (original.remoteForStDirectory != null) {
             this.remoteForStDirectory = original.remoteForStDirectory;
         } else {
-            String remoteDirStr = config.get(ForStOptions.REMOTE_DIRECTORY);
-            if (REMOTE_SHORTCUT_CHECKPOINT.equals(remoteDirStr)) {
+            String remoteDirStr = config.get(ForStOptions.PRIMARY_DIRECTORY);
+            if (PRIMARY_SHORTCUT_CHECKPOINT.equals(remoteDirStr)) {
                 this.remoteForStDirectory = null;
-                this.remoteShareWithCheckpoint = true;
+                this.primaryShareWithCheckpoint = true;
             } else {
                 this.remoteForStDirectory = remoteDirStr == null ? null : new Path(remoteDirStr);
             }
@@ -405,17 +405,17 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                 new Path(
                         new File(new File(getNextStoragePath(), jobId.toHexString()), opChildPath)
                                 .getAbsolutePath());
-        Path remoteBasePath = null;
+        Path primaryBasePath = null;
         if (remoteForStDirectory != null) {
-            remoteBasePath =
+            primaryBasePath =
                     new Path(new Path(remoteForStDirectory, jobId.toHexString()), opChildPath);
-        } else if (remoteShareWithCheckpoint) {
+        } else if (primaryShareWithCheckpoint) {
             if (env.getCheckpointStorageAccess() instanceof FsCheckpointStorageAccess) {
                 Path sharedStateDirectory =
                         ((FsCheckpointStorageAccess) env.getCheckpointStorageAccess())
                                 .getSharedStateDirectory();
-                remoteBasePath = new Path(sharedStateDirectory, opChildPath);
-                LOG.info("Set remote ForSt directory to checkpoint directory {}", remoteBasePath);
+                primaryBasePath = new Path(sharedStateDirectory, opChildPath);
+                LOG.info("Set remote ForSt directory to checkpoint directory {}", primaryBasePath);
             } else {
                 LOG.warn(
                         "Remote ForSt directory can't be set, because checkpoint directory isn't on file system.");
@@ -436,7 +436,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                 createOptionsAndResourceContainer(
                         sharedResources,
                         localBasePath,
-                        remoteBasePath,
+                        primaryBasePath,
                         env.getCheckpointStorageAccess(),
                         parameters.getMetricGroup(),
                         nativeMetricOptions.isStatisticsEnabled());
