@@ -152,7 +152,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void rescale() {
+    public void transitionToSubsequentState() {
         context.goToRestarting(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
