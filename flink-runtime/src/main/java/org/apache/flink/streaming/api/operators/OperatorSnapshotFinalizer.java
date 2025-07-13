@@ -20,10 +20,10 @@ package org.apache.flink.streaming.api.operators;
 
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
-import org.apache.flink.runtime.state.InputChannelStateHandle;
+import org.apache.flink.runtime.state.InputStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
-import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
+import org.apache.flink.runtime.state.OutputStateHandle;
 import org.apache.flink.runtime.state.SnapshotResult;
 import org.apache.flink.util.concurrent.FutureUtils;
 
@@ -62,10 +62,10 @@ public class OperatorSnapshotFinalizer {
         SnapshotResult<OperatorStateHandle> operatorRaw =
                 FutureUtils.runIfNotDoneAndGet(snapshotFutures.getOperatorStateRawFuture());
 
-        SnapshotResult<StateObjectCollection<InputChannelStateHandle>> inputChannel =
+        SnapshotResult<StateObjectCollection<InputStateHandle>> inputState =
                 snapshotFutures.getInputChannelStateFuture().get();
 
-        SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>> resultSubpartition =
+        SnapshotResult<StateObjectCollection<OutputStateHandle>> resultSubpartition =
                 snapshotFutures.getResultSubpartitionStateFuture().get();
 
         jobManagerOwnedState =
@@ -78,7 +78,7 @@ public class OperatorSnapshotFinalizer {
                                 singletonOrEmpty(keyedManaged.getJobManagerOwnedSnapshot()))
                         .setRawKeyedState(singletonOrEmpty(keyedRaw.getJobManagerOwnedSnapshot()))
                         .setInputChannelState(
-                                emptyIfNull(inputChannel.getJobManagerOwnedSnapshot()))
+                                emptyIfNull(inputState.getJobManagerOwnedSnapshot()))
                         .setResultSubpartitionState(
                                 emptyIfNull(resultSubpartition.getJobManagerOwnedSnapshot()))
                         .build();
@@ -90,7 +90,7 @@ public class OperatorSnapshotFinalizer {
                         .setRawOperatorState(singletonOrEmpty(operatorRaw.getTaskLocalSnapshot()))
                         .setManagedKeyedState(singletonOrEmpty(keyedManaged.getTaskLocalSnapshot()))
                         .setRawKeyedState(singletonOrEmpty(keyedRaw.getTaskLocalSnapshot()))
-                        .setInputChannelState(emptyIfNull(inputChannel.getTaskLocalSnapshot()))
+                        .setInputChannelState(emptyIfNull(inputState.getTaskLocalSnapshot()))
                         .setResultSubpartitionState(
                                 emptyIfNull(resultSubpartition.getTaskLocalSnapshot()))
                         .build();
