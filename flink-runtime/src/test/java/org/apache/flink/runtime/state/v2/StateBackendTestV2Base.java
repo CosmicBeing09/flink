@@ -219,7 +219,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
         int jobMaxParallelism = 128;
         int aecBatchSize = 1;
         long aecBufferTimeout = 1;
-        int aecMaxInFlightRecords = 1000;
+        int aecStateTotalBufferSize = 1000;
 
         ArrayList<RecordContext<Integer>> recordContexts = new ArrayList<>(mockRecordCount);
 
@@ -248,7 +248,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
                             jobMaxParallelism,
                             aecBatchSize,
                             aecBufferTimeout,
-                            aecMaxInFlightRecords,
+                            aecStateTotalBufferSize,
                             null,
                             null);
             backend.setup(aec);
@@ -342,7 +342,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
                             jobMaxParallelism,
                             aecBatchSize,
                             aecBufferTimeout,
-                            aecMaxInFlightRecords,
+                            aecStateTotalBufferSize,
                             null,
                             null);
             backend.setup(aec);
