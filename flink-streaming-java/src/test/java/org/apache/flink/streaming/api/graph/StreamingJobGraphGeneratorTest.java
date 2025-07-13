@@ -200,10 +200,10 @@ class StreamingJobGraphGeneratorTest {
         // --------- the job graph ---------
 
         StreamGraph streamGraph = env.getStreamGraph();
-        JobGraph jobGraph = streamGraph.getJobGraph();
-        List<JobVertex> verticesSorted = jobGraph.getVerticesSortedTopologicallyFromSources();
+        JobGraph executionPlan = streamGraph.getJobGraph();
+        List<JobVertex> verticesSorted = executionPlan.getVerticesSortedTopologicallyFromSources();
 
-        assertThat(jobGraph.getNumberOfVertices()).isEqualTo(2);
+        assertThat(executionPlan.getNumberOfVertices()).isEqualTo(2);
         assertThat(verticesSorted.get(0).getParallelism()).isEqualTo(1);
         assertThat(verticesSorted.get(1).getParallelism()).isEqualTo(1);
 
