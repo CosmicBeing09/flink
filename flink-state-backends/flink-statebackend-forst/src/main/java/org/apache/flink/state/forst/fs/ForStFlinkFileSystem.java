@@ -158,9 +158,9 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized ByteBufferReadableFSDataInputStream open(Path path, int bufferSize)
+    public synchronized ByteBufferReadableFSDataInputStream open(Path dbFilePath, int bufferSize)
             throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.realPath(dbFilePath);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
@@ -183,8 +183,8 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized ByteBufferReadableFSDataInputStream open(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+    public synchronized ByteBufferReadableFSDataInputStream open(Path dbFilePath) throws IOException {
+        FileMappingManager.RealPath realPath = fileMappingManager.realPath(dbFilePath);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
