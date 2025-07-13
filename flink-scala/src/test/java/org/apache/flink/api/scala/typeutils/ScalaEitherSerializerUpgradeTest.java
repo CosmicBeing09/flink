@@ -94,7 +94,7 @@ class ScalaEitherSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Either<Integer, String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

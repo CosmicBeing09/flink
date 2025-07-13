@@ -98,7 +98,7 @@ class TupleSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Tuple3<String, String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

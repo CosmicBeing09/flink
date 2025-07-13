@@ -88,7 +88,7 @@ class VoidNamespaceSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<VoidNamespace>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<VoidNamespace>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

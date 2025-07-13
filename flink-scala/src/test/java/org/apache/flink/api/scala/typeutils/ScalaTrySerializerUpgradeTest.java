@@ -95,7 +95,7 @@ class ScalaTrySerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Try<String>>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Try<String>>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

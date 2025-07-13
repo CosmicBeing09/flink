@@ -106,7 +106,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -135,7 +135,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(
@@ -187,7 +187,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(
@@ -243,7 +243,7 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(

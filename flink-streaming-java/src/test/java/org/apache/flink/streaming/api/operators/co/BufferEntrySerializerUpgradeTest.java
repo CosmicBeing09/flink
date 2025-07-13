@@ -96,7 +96,7 @@ class BufferEntrySerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<BufferEntry<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

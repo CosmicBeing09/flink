@@ -84,7 +84,7 @@ class ValueSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<NameValue>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<NameValue>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

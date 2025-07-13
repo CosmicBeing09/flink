@@ -99,7 +99,7 @@ class MapSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Map<Integer, String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
