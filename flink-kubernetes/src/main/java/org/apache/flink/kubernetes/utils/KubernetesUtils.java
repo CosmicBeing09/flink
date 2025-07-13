@@ -403,7 +403,7 @@ public class KubernetesUtils {
         return Arrays.asList("bash", "-c", command);
     }
 
-    public static List<URI> checkJarFileForApplicationMode(Configuration configuration) {
+    public static List<URI> checkJarsForApplicationMode(Configuration configuration) {
         return configuration.get(PipelineOptions.JARS).stream()
                 .map(FunctionUtils.uncheckedFunction(PackagedProgramUtils::resolveURI))
                 .collect(Collectors.toList());

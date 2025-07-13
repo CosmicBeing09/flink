@@ -213,7 +213,7 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
         if (!(PackagedProgramUtils.isPython(applicationConfiguration.getApplicationClassName())
                 || PackagedProgramUtils.isPython(applicationConfiguration.getProgramArguments()))) {
             final List<URI> pipelineJars =
-                    KubernetesUtils.checkJarFileForApplicationMode(flinkConfig);
+                    KubernetesUtils.checkJarsForApplicationMode(flinkConfig);
             Preconditions.checkArgument(pipelineJars.size() == 1, "Should only have one jar");
         }
 
