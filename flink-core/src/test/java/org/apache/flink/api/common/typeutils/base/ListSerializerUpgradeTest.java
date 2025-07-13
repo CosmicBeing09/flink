@@ -95,7 +95,7 @@ class ListSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<List<Strin
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<List<String>>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<List<String>>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

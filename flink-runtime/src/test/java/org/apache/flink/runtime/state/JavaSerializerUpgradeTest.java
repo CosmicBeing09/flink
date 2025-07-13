@@ -90,7 +90,7 @@ class JavaSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Serializab
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Serializable>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Serializable>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
