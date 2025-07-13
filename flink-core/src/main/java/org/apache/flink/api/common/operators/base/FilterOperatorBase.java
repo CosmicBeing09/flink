@@ -55,7 +55,7 @@ public class FilterOperatorBase<T, FT extends FlatMapFunction<T, T>>
 
     @Override
     protected List<T> executeOnCollections(
-            List<T> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<T> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         FlatMapFunction<T, T> function = this.userFunction.getUserCodeObject();
 

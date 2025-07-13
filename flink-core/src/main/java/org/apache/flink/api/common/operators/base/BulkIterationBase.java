@@ -305,7 +305,7 @@ public class BulkIterationBase<T> extends SingleInputOperator<T, T, AbstractRich
 
     @Override
     protected List<T> executeOnCollections(
-            List<T> inputData, RuntimeContext runtimeContext, ExecutionConfig executionConfig) {
+            List<T> inputData, RuntimeContext runtimeContext, ExecutionConfig config) {
         throw new UnsupportedOperationException();
     }
 }

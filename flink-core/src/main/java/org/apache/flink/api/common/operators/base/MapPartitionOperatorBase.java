@@ -64,7 +64,7 @@ public class MapPartitionOperatorBase<IN, OUT, FT extends MapPartitionFunction<I
 
     @Override
     protected List<OUT> executeOnCollections(
-            List<IN> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         MapPartitionFunction<IN, OUT> function = this.userFunction.getUserCodeObject();
 
@@ -74,9 +74,9 @@ public class MapPartitionOperatorBase<IN, OUT, FT extends MapPartitionFunction<I
         ArrayList<OUT> result = new ArrayList<OUT>(inputData.size() / 4);
 
         TypeSerializer<IN> inSerializer =
-                getOperatorInfo().getInputType().createSerializer(executionConfig);
+                getOperatorInfo().getInputType().createSerializer(config);
         TypeSerializer<OUT> outSerializer =
-                getOperatorInfo().getOutputType().createSerializer(executionConfig);
+                getOperatorInfo().getOutputType().createSerializer(config);
 
         CopyingIterator<IN> source = new CopyingIterator<IN>(inputData.iterator(), inSerializer);
         CopyingListCollector<OUT> resultCollector =
