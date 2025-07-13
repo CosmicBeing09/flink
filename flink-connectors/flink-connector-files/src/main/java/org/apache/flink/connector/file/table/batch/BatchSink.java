@@ -85,7 +85,7 @@ public class BatchSink {
             PartitionCommitPolicyFactory partitionCommitPolicyFactory,
             String[] partitionColumns,
             LinkedHashMap<String, String> staticPartitionSpec,
-            Path tmpPath,
+            Path stagingPath,
             ObjectIdentifier identifier,
             final long compactAverageSize,
             final long compactTargetSize,
@@ -95,7 +95,7 @@ public class BatchSink {
             final boolean compactParallelismConfigured) {
         SupplierWithException<FileSystem, IOException> fsSupplier =
                 (SupplierWithException<FileSystem, IOException> & Serializable)
-                        () -> fsFactory.create(tmpPath.toUri());
+                        () -> fsFactory.create(stagingPath.toUri());
 
         CompactWriter.Factory<T> writerFactory =
                 CompactBucketWriter.factory(
@@ -126,7 +126,7 @@ public class BatchSink {
                                 metaStoreFactory,
                                 overwrite,
                                 isToLocal,
-                                tmpPath,
+                                stagingPath,
                                 partitionColumns,
                                 staticPartitionSpec,
                                 identifier,

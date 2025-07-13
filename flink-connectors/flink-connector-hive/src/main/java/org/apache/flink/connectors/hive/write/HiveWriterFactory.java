@@ -129,7 +129,7 @@ public class HiveWriterFactory implements Serializable {
     }
 
     /** Create a {@link RecordWriter} from path. */
-    public RecordWriter createRecordWriter(Path path) {
+    public RecordWriter createRecordWriter(Path stagingPath) {
         try {
             checkInitialize();
             JobConf conf = new JobConf(confWrapper.conf());
@@ -160,7 +160,7 @@ public class HiveWriterFactory implements Serializable {
                     recordSerDe.getSerializedClass(),
                     isCompressed,
                     tableProperties,
-                    path);
+                    stagingPath);
         } catch (Exception e) {
             throw new FlinkHiveException(e);
         }
