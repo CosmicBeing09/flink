@@ -2209,7 +2209,7 @@ public class AdaptiveSchedulerTest {
 
         final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
         assertThat(settings.getScalingIntervalMin()).isEqualTo(scalingIntervalMin);
-        assertThat(settings.getScalingResourceStabilizationTimeout())
+        assertThat(settings.getExecutingResourceStabilizationTimeout())
                 .isEqualTo(scalingStabilizationTimeout);
     }
 

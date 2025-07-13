@@ -299,7 +299,7 @@ public class AdaptiveScheduler
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
         private final Duration scalingIntervalMin;
-        private final Duration scalingResourceStabilizationTimeout;
+        private final Duration executingResourceStabilizationTimeout;
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
 
@@ -309,7 +309,7 @@ public class AdaptiveScheduler
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
-                Duration scalingResourceStabilizationTimeout,
+                Duration executingResourceStabilizationTimeout,
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
@@ -317,7 +317,7 @@ public class AdaptiveScheduler
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
-            this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
+            this.executingResourceStabilizationTimeout = executingResourceStabilizationTimeout;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
         }
@@ -342,8 +342,8 @@ public class AdaptiveScheduler
             return scalingIntervalMin;
         }
 
-        public Duration getScalingResourceStabilizationTimeout() {
-            return scalingResourceStabilizationTimeout;
+        public Duration getExecutingResourceStabilizationTimeout() {
+            return executingResourceStabilizationTimeout;
         }
 
         public Duration getMaximumDelayForTriggeringRescale() {
@@ -1202,7 +1202,7 @@ public class AdaptiveScheduler
                 ctx,
                 clock,
                 settings.getScalingIntervalMin(),
-                settings.getScalingResourceStabilizationTimeout(),
+                settings.getExecutingResourceStabilizationTimeout(),
                 settings.getMaximumDelayForTriggeringRescale());
     }
 
