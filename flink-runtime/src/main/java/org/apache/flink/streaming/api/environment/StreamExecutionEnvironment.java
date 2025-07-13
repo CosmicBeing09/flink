@@ -721,8 +721,8 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Deprecated
     @PublicEvolving
-    public StreamExecutionEnvironment setStateBackend(StateBackend backend) {
-        this.defaultStateBackend = Preconditions.checkNotNull(backend);
+    public StreamExecutionEnvironment setStateBackend(StateBackend configuration) {
+        this.defaultStateBackend = Preconditions.checkNotNull(configuration);
         return this;
     }
 
