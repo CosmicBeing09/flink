@@ -118,7 +118,7 @@ public class TwoPhaseCommitSinkStateSerializerUpgradeTest
         public Matcher<
                         TypeSerializerSchemaCompatibility<
                                 TwoPhaseCommitSinkFunction.State<Integer, String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             if (version.isNewerVersionThan(FlinkVersion.v1_13)) {
                 return TypeSerializerMatchers.isCompatibleAsIs();
             } else {

@@ -113,7 +113,7 @@ public class LinkedListSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<LinkedList<Long>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             if (version.isNewerVersionThan(FlinkVersion.v1_13)) {
                 return TypeSerializerMatchers.isCompatibleAsIs();
             } else {
