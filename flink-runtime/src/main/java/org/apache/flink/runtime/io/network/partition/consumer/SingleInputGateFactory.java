@@ -447,11 +447,11 @@ public class SingleInputGateFactory {
     static SupplierWithException<BufferPool, IOException> createBufferPoolFactory(
             BufferPoolFactory bufferPoolFactory,
             int expectedBuffersPerGate,
-            int minBuffersPerGate,
+            int totalFloatingBuffers,
             int maxBuffersPerGate) {
         return () ->
                 bufferPoolFactory.createBufferPool(
-                        expectedBuffersPerGate, minBuffersPerGate, maxBuffersPerGate);
+                        expectedBuffersPerGate, totalFloatingBuffers, maxBuffersPerGate);
     }
 
     /** Statistics of input channels. */
