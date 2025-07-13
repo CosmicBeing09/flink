@@ -129,7 +129,7 @@ class WritableSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<WritableName> testDataMatcher() {
+        public Matcher<WritableName> testDataCondition() {
             WritableName writable = new WritableName();
             writable.setName("flink");
             return is(writable);

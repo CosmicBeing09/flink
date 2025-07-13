@@ -85,7 +85,7 @@ class TimerSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TimerHeapInternalTimer<String, Integer>> testDataMatcher() {
+        public Matcher<TimerHeapInternalTimer<String, Integer>> testDataCondition() {
             return is(new TimerHeapInternalTimer<>(12345, "key", 678));
         }
 

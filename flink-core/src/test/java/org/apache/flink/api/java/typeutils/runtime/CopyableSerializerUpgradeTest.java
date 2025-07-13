@@ -146,7 +146,7 @@ class CopyableSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<SimpleCopyable> testDataMatcher() {
+        public Matcher<SimpleCopyable> testDataCondition() {
             return is(new SimpleCopyable(123456));
         }
 
