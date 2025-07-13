@@ -18,14 +18,13 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -69,9 +68,9 @@ class VertexFinishedStateCheckerTest {
         final JobVertexID jobVertexID1 = new JobVertexID();
         final JobVertexID jobVertexID2 = new JobVertexID();
         // The op1 has uidHash set.
-        OperatorIDPair op1 = OperatorIDPair.of(new OperatorID(), new OperatorID());
-        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        OperatorIDPair op3 = OperatorIDPair.generatedIDOnly(new OperatorID());
+        org.apache.flink.runtime.OperatorIDPair op1 = org.apache.flink.runtime.OperatorIDPair.of(new OperatorIDPair(), new OperatorIDPair());
+        org.apache.flink.runtime.OperatorIDPair op2 = org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(new OperatorIDPair());
+        org.apache.flink.runtime.OperatorIDPair op3 = org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(new OperatorIDPair());
 
         final ExecutionGraph graph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -79,7 +78,7 @@ class VertexFinishedStateCheckerTest {
                         .addJobVertex(jobVertexID1, 1, 1, Arrays.asList(op1, op2), true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
                 useUidHash ? op1.getUserDefinedOperatorID().get() : op1.getGeneratedOperatorID(),
                 new FullyFinishedOperatorState(op1.getGeneratedOperatorID(), 1, 1));
@@ -249,8 +248,8 @@ class VertexFinishedStateCheckerTest {
             Class<? extends Throwable> expectedExceptionalClass,
             String expectedMessage)
             throws Exception {
-        OperatorIDPair op1 = OperatorIDPair.generatedIDOnly(new OperatorID());
-        OperatorIDPair op2 = OperatorIDPair.generatedIDOnly(new OperatorID());
+        org.apache.flink.runtime.OperatorIDPair op1 = org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(new OperatorIDPair());
+        org.apache.flink.runtime.OperatorIDPair op2 = org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(new OperatorIDPair());
         JobVertex vertex1 = new JobVertex(firstVertexName, firstVertexId, singletonList(op1));
         JobVertex vertex2 = new JobVertex(secondVertexName, secondVertexId, singletonList(op2));
         vertex1.setInvokableClass(NoOpInvokable.class);
@@ -269,7 +268,7 @@ class VertexFinishedStateCheckerTest {
                     vertex1, distributionPatterns[i], ResultPartitionType.PIPELINED);
         }
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         operatorStates.put(
                 op1.getGeneratedOperatorID(),
                 createOperatorState(op1.getGeneratedOperatorID(), firstOperatorFinishedState));
@@ -289,7 +288,7 @@ class VertexFinishedStateCheckerTest {
     }
 
     private OperatorState createOperatorState(
-            OperatorID operatorId, VertexFinishedStateChecker.VertexFinishedState finishedState) {
+            OperatorIDPair operatorId, VertexFinishedStateChecker.VertexFinishedState finishedState) {
         switch (finishedState) {
             case ALL_RUNNING:
                 return new OperatorState(operatorId, 2, 2);

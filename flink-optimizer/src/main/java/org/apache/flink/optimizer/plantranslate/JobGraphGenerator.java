@@ -69,7 +69,7 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobGraphUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.operators.BatchTask;
 import org.apache.flink.runtime.operators.CoGroupDriver;
@@ -1019,7 +1019,7 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex(node.getNodeName());
         final TaskConfig config = new TaskConfig(vertex.getConfiguration());
 
-        final OperatorID operatorID = new OperatorID();
+        final OperatorIDPair operatorID = new OperatorIDPair();
 
         vertex.setResources(node.getMinResources(), node.getPreferredResources());
         vertex.setInvokableClass(DataSourceTask.class);
@@ -1044,7 +1044,7 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
         final InputOutputFormatVertex vertex = new InputOutputFormatVertex(node.getNodeName());
         final TaskConfig config = new TaskConfig(vertex.getConfiguration());
 
-        final OperatorID operatorID = new OperatorID();
+        final OperatorIDPair operatorID = new OperatorIDPair();
 
         vertex.setResources(node.getMinResources(), node.getPreferredResources());
         vertex.setInvokableClass(DataSinkTask.class);

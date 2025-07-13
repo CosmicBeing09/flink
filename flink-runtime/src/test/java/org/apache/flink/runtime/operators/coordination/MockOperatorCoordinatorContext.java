@@ -20,7 +20,7 @@ package org.apache.flink.runtime.operators.coordination;
 
 import org.apache.flink.metrics.groups.OperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorCoordinatorMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 
@@ -29,7 +29,7 @@ import java.util.concurrent.CompletableFuture;
 /** A simple implementation of {@link OperatorCoordinator.Context} for testing purposes. */
 public class MockOperatorCoordinatorContext implements OperatorCoordinator.Context {
 
-    private final OperatorID operatorID;
+    private final OperatorIDPair operatorID;
     private final ClassLoader userCodeClassLoader;
     private final int numSubtasks;
     private final CoordinatorStore coordinatorStore = new CoordinatorStoreImpl();
@@ -38,16 +38,16 @@ public class MockOperatorCoordinatorContext implements OperatorCoordinator.Conte
     private Throwable jobFailureReason;
     private final CompletableFuture<Void> jobFailedFuture = new CompletableFuture<>();
 
-    public MockOperatorCoordinatorContext(OperatorID operatorID, int numSubtasks) {
+    public MockOperatorCoordinatorContext(OperatorIDPair operatorID, int numSubtasks) {
         this(operatorID, numSubtasks, MockOperatorCoordinatorContext.class.getClassLoader());
     }
 
-    public MockOperatorCoordinatorContext(OperatorID operatorID, ClassLoader userCodeClassLoader) {
+    public MockOperatorCoordinatorContext(OperatorIDPair operatorID, ClassLoader userCodeClassLoader) {
         this(operatorID, 1, userCodeClassLoader);
     }
 
     public MockOperatorCoordinatorContext(
-            OperatorID operatorID, int numSubtasks, ClassLoader userCodeClassLoader) {
+            OperatorIDPair operatorID, int numSubtasks, ClassLoader userCodeClassLoader) {
         this.operatorID = operatorID;
         this.numSubtasks = numSubtasks;
         this.jobFailed = false;
@@ -56,7 +56,7 @@ public class MockOperatorCoordinatorContext implements OperatorCoordinator.Conte
     }
 
     @Override
-    public OperatorID getOperatorId() {
+    public OperatorIDPair getOperatorId() {
         return operatorID;
     }
 

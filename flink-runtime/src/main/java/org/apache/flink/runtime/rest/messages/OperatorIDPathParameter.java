@@ -18,11 +18,11 @@
 
 package org.apache.flink.runtime.rest.messages;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.util.StringUtils;
 
 /** Path parameter identifying operators. */
-public class OperatorIDPathParameter extends MessagePathParameter<OperatorID> {
+public class OperatorIDPathParameter extends MessagePathParameter<OperatorIDPair> {
 
     public static final String KEY = "operatorid";
 
@@ -31,12 +31,12 @@ public class OperatorIDPathParameter extends MessagePathParameter<OperatorID> {
     }
 
     @Override
-    protected OperatorID convertFromString(String value) throws ConversionException {
-        return new OperatorID(StringUtils.hexStringToByte(value));
+    protected OperatorIDPair convertFromString(String value) throws ConversionException {
+        return new OperatorIDPair(StringUtils.hexStringToByte(value));
     }
 
     @Override
-    protected String convertToString(OperatorID value) {
+    protected String convertToString(OperatorIDPair value) {
         return value.toString();
     }
 

@@ -19,7 +19,6 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointCoordinatorTestingUtils.CheckpointCoordinatorBuilder;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.Execution;
@@ -28,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
@@ -118,7 +117,7 @@ class CheckpointStateRestoreTest {
             final TaskStateSnapshot subtaskStates = new TaskStateSnapshot();
 
             subtaskStates.putSubtaskStateByOperatorID(
-                    OperatorID.fromJobVertexID(statefulId),
+                    OperatorIDPair.fromJobVertexID(statefulId),
                     OperatorSubtaskState.builder()
                             .setManagedKeyedState(serializedKeyGroupStates)
                             .build());
@@ -206,7 +205,7 @@ class CheckpointStateRestoreTest {
         JobVertexID jobVertexId1 = new JobVertexID();
         JobVertexID jobVertexId2 = new JobVertexID();
 
-        OperatorID operatorId1 = OperatorID.fromJobVertexID(jobVertexId1);
+        OperatorIDPair operatorId1 = OperatorIDPair.fromJobVertexID(jobVertexId1);
 
         // 1st JobVertex
         ExecutionVertex vertex11 = mockExecutionVertex(mockExecution(), jobVertexId1, 0, 3);
@@ -230,7 +229,7 @@ class CheckpointStateRestoreTest {
                 new CheckpointCoordinatorBuilder().build(EXECUTOR_RESOURCE.getExecutor());
 
         // --- (2) Checkpoint misses state for a jobVertex (should work) ---
-        Map<OperatorID, OperatorState> checkpointTaskStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> checkpointTaskStates = new HashMap<>();
         {
             OperatorState taskState = new OperatorState(operatorId1, 3, 3);
             taskState.putState(0, OperatorSubtaskState.builder().build());
@@ -260,7 +259,7 @@ class CheckpointStateRestoreTest {
 
         // --- (3) JobVertex missing for task state that is part of the checkpoint ---
         JobVertexID newJobVertexID = new JobVertexID();
-        OperatorID newOperatorID = OperatorID.fromJobVertexID(newJobVertexID);
+        OperatorIDPair newOperatorID = OperatorIDPair.fromJobVertexID(newJobVertexID);
 
         // There is no task for this
         {
@@ -328,10 +327,11 @@ class CheckpointStateRestoreTest {
         when(vertex.getMaxParallelism()).thenReturn(vertices.length);
         when(vertex.getJobVertexId()).thenReturn(id);
         when(vertex.getTaskVertices()).thenReturn(vertices);
-        when(vertex.getOperatorIDs())
+        when(vertex.getOperatorIDPairs())
                 .thenReturn(
                         Collections.singletonList(
-                                OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(id))));
+                                org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(
+                                        OperatorIDPair.fromJobVertexID(id))));
         when(vertex.getProducedDataSets()).thenReturn(new IntermediateResult[0]);
 
         for (ExecutionVertex v : vertices) {

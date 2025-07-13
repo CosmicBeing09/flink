@@ -36,21 +36,11 @@ import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointRetentionPolicy;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatContainer;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -593,7 +583,7 @@ public class StreamingJobGraphGenerator {
 
                 if (targetChainingStrategy == ChainingStrategy.HEAD_WITH_SOURCES
                         && isChainableInput(sourceOutEdge, streamGraph)) {
-                    final OperatorID opId = new OperatorID(hashes.get(sourceNodeId));
+                    final OperatorIDPair opId = new OperatorIDPair(hashes.get(sourceNodeId));
                     final StreamConfig.SourceInputConfig inputConfig =
                             new StreamConfig.SourceInputConfig(sourceOutEdge);
                     final StreamConfig operatorConfig = new StreamConfig(new Configuration());
@@ -739,7 +729,7 @@ public class StreamingJobGraphGenerator {
                     currentNodeId,
                     createChainedPreferredResources(currentNodeId, chainableOutputs));
 
-            OperatorID currentOperatorId =
+            OperatorIDPair currentOperatorId =
                     chainInfo.addNodeToChain(
                             currentNodeId,
                             streamGraph.getStreamNode(currentNodeId).getOperatorName());
@@ -986,14 +976,14 @@ public class StreamingJobGraphGenerator {
 
         List<Tuple2<byte[], byte[]>> chainedOperators =
                 chainInfo.getChainedOperatorHashes(streamNodeId);
-        List<OperatorIDPair> operatorIDPairs = new ArrayList<>();
+        List<org.apache.flink.runtime.OperatorIDPair> operatorIDPairs = new ArrayList<>();
         if (chainedOperators != null) {
             for (Tuple2<byte[], byte[]> chainedOperator : chainedOperators) {
-                OperatorID userDefinedOperatorID =
-                        chainedOperator.f1 == null ? null : new OperatorID(chainedOperator.f1);
+                OperatorIDPair userDefinedOperatorID =
+                        chainedOperator.f1 == null ? null : new OperatorIDPair(chainedOperator.f1);
                 operatorIDPairs.add(
-                        OperatorIDPair.of(
-                                new OperatorID(chainedOperator.f0), userDefinedOperatorID));
+                        org.apache.flink.runtime.OperatorIDPair.of(
+                                new OperatorIDPair(chainedOperator.f0), userDefinedOperatorID));
             }
         }
 
@@ -2157,7 +2147,7 @@ public class StreamingJobGraphGenerator {
             return chainedSources;
         }
 
-        private OperatorID addNodeToChain(int currentNodeId, String operatorName) {
+        private OperatorIDPair addNodeToChain(int currentNodeId, String operatorName) {
             recordChainedNode(currentNodeId);
             StreamNode streamNode = streamGraph.getStreamNode(currentNodeId);
 
@@ -2171,10 +2161,10 @@ public class StreamingJobGraphGenerator {
             }
 
             streamNode
-                    .getCoordinatorProvider(operatorName, new OperatorID(getHash(currentNodeId)))
+                    .getCoordinatorProvider(operatorName, new OperatorIDPair(getHash(currentNodeId)))
                     .map(coordinatorProviders::add);
 
-            return new OperatorID(primaryHashBytes);
+            return new OperatorIDPair(primaryHashBytes);
         }
 
         private void setTransitiveOutEdges(final List<StreamEdge> transitiveOutEdges) {

@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.util.function.SerializableFunction;
 
 import javax.annotation.Nullable;
@@ -235,23 +235,23 @@ public class TestingOperatorCoordinator implements OperatorCoordinator {
 
         private static final long serialVersionUID = 1L;
 
-        private final OperatorID operatorId;
+        private final OperatorIDPair operatorId;
 
         private final SerializableFunction<Context, TestingOperatorCoordinator> factory;
 
-        public Provider(OperatorID operatorId) {
+        public Provider(OperatorIDPair operatorId) {
             this(operatorId, TestingOperatorCoordinator::new);
         }
 
         public Provider(
-                OperatorID operatorId,
+                OperatorIDPair operatorId,
                 SerializableFunction<Context, TestingOperatorCoordinator> factory) {
             this.operatorId = operatorId;
             this.factory = factory;
         }
 
         @Override
-        public OperatorID getOperatorId() {
+        public OperatorIDPair getOperatorId() {
             return operatorId;
         }
 

@@ -28,7 +28,7 @@ import org.apache.flink.api.common.typeutils.base.VoidSerializer;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.state.api.functions.KeyedStateReaderFunction;
@@ -62,7 +62,7 @@ public class KeyedStateInputFormatTest {
 
     @Test
     public void testCreatePartitionedInputSplits() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(new StreamFlatMap<>(new StatefulFunction()));
@@ -83,7 +83,7 @@ public class KeyedStateInputFormatTest {
 
     @Test
     public void testMaxParallelismRespected() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(new StreamFlatMap<>(new StatefulFunction()));
@@ -106,7 +106,7 @@ public class KeyedStateInputFormatTest {
 
     @Test
     public void testReadState() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(new StreamFlatMap<>(new StatefulFunction()));
@@ -131,7 +131,7 @@ public class KeyedStateInputFormatTest {
 
     @Test
     public void testReadMultipleOutputPerKey() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(new StreamFlatMap<>(new StatefulFunction()));
@@ -157,7 +157,7 @@ public class KeyedStateInputFormatTest {
 
     @Test(expected = IOException.class)
     public void testInvalidProcessReaderFunctionFails() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(new StreamFlatMap<>(new StatefulFunction()));
@@ -182,7 +182,7 @@ public class KeyedStateInputFormatTest {
 
     @Test
     public void testReadTime() throws Exception {
-        OperatorID operatorID = OperatorIDGenerator.fromUid("uid");
+        OperatorIDPair operatorID = OperatorIDGenerator.fromUid("uid");
 
         OperatorSubtaskState state =
                 createOperatorSubtaskState(

@@ -30,7 +30,7 @@ import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.dispatcher.TriggerSavepointMode;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -279,7 +279,7 @@ public interface RestfulGateway extends RpcGateway {
      */
     default CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
             JobID jobId,
-            OperatorID operatorId,
+            OperatorIDPair operatorId,
             SerializedValue<CoordinationRequest> serializedRequest,
             @RpcTimeout Time timeout) {
         throw new UnsupportedOperationException();

@@ -40,12 +40,8 @@ import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
 import org.apache.flink.runtime.io.network.partition.DataSetMetaInfo;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
@@ -1184,7 +1180,7 @@ class RestClusterClientTest {
             TestCoordinationRequest<String> request = new TestCoordinationRequest<>(payload);
             try {
                 CompletableFuture<CoordinationResponse> future =
-                        restClusterClient.sendCoordinationRequest(jobId, new OperatorID(), request);
+                        restClusterClient.sendCoordinationRequest(jobId, new OperatorIDPair(), request);
                 TestCoordinationResponse response = (TestCoordinationResponse) future.get();
 
                 assertThat(response.payload).isEqualTo(payload);
@@ -1208,7 +1204,7 @@ class RestClusterClientTest {
                                 () ->
                                         restClusterClient
                                                 .sendCoordinationRequest(
-                                                        jobId, new OperatorID(), request)
+                                                        jobId, new OperatorIDPair(), request)
                                                 .get())
                         .matches(
                                 e ->

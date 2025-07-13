@@ -36,7 +36,7 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterDelegate;
 import org.apache.flink.runtime.io.network.partition.consumer.IndexedInputGate;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
@@ -292,7 +292,7 @@ public abstract class OperatorChain<OUT, OP extends StreamOperator<OUT>>
     public abstract boolean isTaskDeployedAsFinished();
 
     public abstract void dispatchOperatorEvent(
-            OperatorID operator, SerializedValue<OperatorEvent> event) throws FlinkException;
+            OperatorIDPair operator, SerializedValue<OperatorEvent> event) throws FlinkException;
 
     public abstract void prepareSnapshotPreBarrier(long checkpointId) throws Exception;
 
@@ -326,7 +326,7 @@ public abstract class OperatorChain<OUT, OP extends StreamOperator<OUT>>
     public abstract void notifyCheckpointSubsumed(long checkpointId) throws Exception;
 
     public abstract void snapshotState(
-            Map<OperatorID, OperatorSnapshotFutures> operatorSnapshotsInProgress,
+            Map<OperatorIDPair, OperatorSnapshotFutures> operatorSnapshotsInProgress,
             CheckpointMetaData checkpointMetaData,
             CheckpointOptions checkpointOptions,
             Supplier<Boolean> isRunning,

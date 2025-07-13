@@ -31,7 +31,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.PartitionInfo;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmaster.AllocatedSlotReport;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -231,7 +231,7 @@ public class TaskExecutorGatewayDecoratorBase implements TaskExecutorGateway {
 
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-            ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+            ExecutionAttemptID task, OperatorIDPair operator, SerializedValue<OperatorEvent> evt) {
         return originalGateway.sendOperatorEventToTask(task, operator, evt);
     }
 

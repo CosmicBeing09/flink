@@ -18,7 +18,7 @@
 
 package org.apache.flink.table.runtime.operators.hive.script;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.conf.HiveConf;
@@ -46,12 +46,12 @@ public class ScriptProcessBuilder {
 
     private final String script;
     private final JobConf jobConf;
-    private final OperatorID operatorID;
+    private final OperatorIDPair operatorID;
 
     // List of conf entries not to turn into env vars
     transient Set<String> blackListedConfEntries = null;
 
-    public ScriptProcessBuilder(String script, JobConf hiveConf, OperatorID operatorID) {
+    public ScriptProcessBuilder(String script, JobConf hiveConf, OperatorIDPair operatorID) {
         this.script = script;
         this.jobConf = hiveConf;
         this.operatorID = operatorID;

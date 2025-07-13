@@ -24,7 +24,7 @@ import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.execution.CancelTaskException;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.operators.testutils.DummyEnvironment;
 import org.apache.flink.runtime.state.memory.MemoryStateBackend;
 import org.apache.flink.streaming.api.TimeCharacteristic;
@@ -188,7 +188,7 @@ class StreamSourceOperatorWatermarksTest {
         cfg.setStateBackend(new MemoryStateBackend());
 
         cfg.setTimeCharacteristic(timeChar);
-        cfg.setOperatorID(new OperatorID());
+        cfg.setOperatorID(new OperatorIDPair());
 
         Environment env = new DummyEnvironment("MockTwoInputTask", 1, 0);
 
@@ -232,7 +232,7 @@ class StreamSourceOperatorWatermarksTest {
 
         StreamConfig streamConfig = testHarness.getStreamConfig();
         streamConfig.setStreamOperator(sourceOperator);
-        streamConfig.setOperatorID(new OperatorID());
+        streamConfig.setOperatorID(new OperatorIDPair());
         streamConfig.setTimeCharacteristic(TimeCharacteristic.EventTime);
 
         return testHarness;

@@ -20,7 +20,7 @@ package org.apache.flink.streaming.util;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
 import org.apache.flink.runtime.operators.testutils.MockEnvironmentBuilder;
@@ -96,8 +96,8 @@ public class MockStreamingRuntimeContext extends StreamingRuntimeContext {
         }
 
         @Override
-        public OperatorID getOperatorID() {
-            return new OperatorID();
+        public OperatorIDPair getOperatorID() {
+            return new OperatorIDPair();
         }
 
         @Override

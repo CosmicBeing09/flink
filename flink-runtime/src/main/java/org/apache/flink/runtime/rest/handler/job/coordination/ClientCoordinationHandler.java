@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.job.coordination;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.time.Time;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
@@ -74,7 +74,7 @@ public class ClientCoordinationHandler
             @Nonnull RestfulGateway gateway)
             throws RestHandlerException {
         JobID jobId = request.getPathParameter(JobIDPathParameter.class);
-        OperatorID operatorId = request.getPathParameter(OperatorIDPathParameter.class);
+        OperatorIDPair operatorId = request.getPathParameter(OperatorIDPathParameter.class);
         SerializedValue<CoordinationRequest> serializedRequest =
                 request.getRequestBody().getSerializedCoordinationRequest();
         CompletableFuture<CoordinationResponse> responseFuture =

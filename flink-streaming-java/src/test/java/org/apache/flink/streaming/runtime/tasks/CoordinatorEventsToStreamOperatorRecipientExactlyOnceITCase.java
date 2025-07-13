@@ -24,7 +24,7 @@ import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.operators.coordination.CoordinatorEventsExactlyOnceITCase;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -217,11 +217,11 @@ class CoordinatorEventsToStreamOperatorRecipientExactlyOnceITCase
 
         @Override
         public OperatorCoordinator.Provider getCoordinatorProvider(
-                String operatorName, OperatorID operatorID) {
+                String operatorName, OperatorIDPair operatorID) {
             return new OperatorCoordinator.Provider() {
 
                 @Override
-                public OperatorID getOperatorId() {
+                public OperatorIDPair getOperatorId() {
                     return operatorID;
                 }
 

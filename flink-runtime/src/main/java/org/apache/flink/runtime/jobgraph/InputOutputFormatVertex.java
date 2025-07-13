@@ -24,7 +24,6 @@ import org.apache.flink.api.common.io.InitializeOnMaster;
 import org.apache.flink.api.common.io.InputFormat;
 import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.api.common.operators.util.UserCodeWrapper;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.operators.util.TaskConfig;
 
 import java.util.HashMap;
@@ -41,14 +40,14 @@ public class InputOutputFormatVertex extends JobVertex {
 
     private static final long serialVersionUID = 1L;
 
-    private final Map<OperatorID, String> formatDescriptions = new HashMap<>();
+    private final Map<OperatorIDPair, String> formatDescriptions = new HashMap<>();
 
     public InputOutputFormatVertex(String name) {
         super(name);
     }
 
     public InputOutputFormatVertex(
-            String name, JobVertexID id, List<OperatorIDPair> operatorIDPairs) {
+            String name, JobVertexID id, List<org.apache.flink.runtime.OperatorIDPair> operatorIDPairs) {
 
         super(name, id, operatorIDPairs);
     }
@@ -64,13 +63,13 @@ public class InputOutputFormatVertex extends JobVertex {
             Thread.currentThread().setContextClassLoader(loader);
 
             // configure the input format and setup input splits
-            Map<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
+            Map<OperatorIDPair, UserCodeWrapper<? extends InputFormat<?, ?>>> inputFormats =
                     formatContainer.getInputFormats();
             if (inputFormats.size() > 1) {
                 throw new UnsupportedOperationException(
                         "Multiple input formats are not supported in a job vertex.");
             }
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends InputFormat<?, ?>>> entry :
+            for (Map.Entry<OperatorIDPair, UserCodeWrapper<? extends InputFormat<?, ?>>> entry :
                     inputFormats.entrySet()) {
                 final InputFormat<?, ?> inputFormat;
 
@@ -90,9 +89,9 @@ public class InputOutputFormatVertex extends JobVertex {
             }
 
             // configure output formats and invoke initializeGlobal()
-            Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+            Map<OperatorIDPair, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                     formatContainer.getOutputFormats();
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
+            for (Map.Entry<OperatorIDPair, UserCodeWrapper<? extends OutputFormat<?>>> entry :
                     outputFormats.entrySet()) {
                 final OutputFormat<?> outputFormat;
 
@@ -130,9 +129,9 @@ public class InputOutputFormatVertex extends JobVertex {
             Thread.currentThread().setContextClassLoader(loader);
 
             // configure output formats and invoke finalizeGlobal()
-            Map<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
+            Map<OperatorIDPair, UserCodeWrapper<? extends OutputFormat<?>>> outputFormats =
                     formatContainer.getOutputFormats();
-            for (Map.Entry<OperatorID, UserCodeWrapper<? extends OutputFormat<?>>> entry :
+            for (Map.Entry<OperatorIDPair, UserCodeWrapper<? extends OutputFormat<?>>> entry :
                     outputFormats.entrySet()) {
                 final OutputFormat<?> outputFormat;
 
@@ -171,11 +170,11 @@ public class InputOutputFormatVertex extends JobVertex {
         }
     }
 
-    public String getFormatDescription(OperatorID operatorID) {
+    public String getFormatDescription(OperatorIDPair operatorID) {
         return formatDescriptions.get(operatorID);
     }
 
-    public void setFormatDescription(OperatorID operatorID, String formatDescription) {
+    public void setFormatDescription(OperatorIDPair operatorID, String formatDescription) {
         formatDescriptions.put(checkNotNull(operatorID), formatDescription);
     }
 

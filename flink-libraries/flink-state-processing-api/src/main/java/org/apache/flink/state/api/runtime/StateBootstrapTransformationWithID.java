@@ -19,28 +19,28 @@
 package org.apache.flink.state.api.runtime;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.state.api.StateBootstrapTransformation;
 import org.apache.flink.util.Preconditions;
 
 /**
  * A simple container class that represents a newly bootstrapped operator state within savepoints.
- * It wraps the target {@link OperatorID} for the bootstrapped operator, as well as the {@link
+ * It wraps the target {@link OperatorIDPair} for the bootstrapped operator, as well as the {@link
  * StateBootstrapTransformation} that defines how the state is bootstrapped.
  */
 @Internal
 public class StateBootstrapTransformationWithID<T> {
 
-    private final OperatorID operatorID;
+    private final OperatorIDPair operatorID;
     private final StateBootstrapTransformation<T> bootstrapTransformation;
 
     public StateBootstrapTransformationWithID(
-            OperatorID operatorID, StateBootstrapTransformation<T> bootstrapTransformation) {
+            OperatorIDPair operatorID, StateBootstrapTransformation<T> bootstrapTransformation) {
         this.operatorID = Preconditions.checkNotNull(operatorID);
         this.bootstrapTransformation = Preconditions.checkNotNull(bootstrapTransformation);
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorIDPair getOperatorID() {
         return operatorID;
     }
 

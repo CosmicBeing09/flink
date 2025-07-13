@@ -24,7 +24,7 @@ import org.apache.flink.runtime.checkpoint.channel.ChannelStateWriter;
 import org.apache.flink.runtime.checkpoint.channel.InputChannelInfo;
 import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
 import org.apache.flink.runtime.io.network.partition.consumer.CheckpointableInput;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.streaming.api.operators.SourceOperator;
 
 import java.io.IOException;
@@ -150,7 +150,7 @@ public class StreamTaskSourceInput<T> implements StreamTaskInput<T>, Checkpointa
         return CompletableFuture.completedFuture(null);
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorIDPair getOperatorID() {
         return operator.getOperatorID();
     }
 

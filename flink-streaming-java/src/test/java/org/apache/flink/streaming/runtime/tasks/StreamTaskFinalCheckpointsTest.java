@@ -43,7 +43,7 @@ import org.apache.flink.runtime.io.network.partition.PipelinedResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.io.network.partition.consumer.TestInputChannel;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.CheckpointStorageLocationReference;
 import org.apache.flink.runtime.state.StateInitializationContext;
 import org.apache.flink.runtime.taskmanager.TestCheckpointResponder;
@@ -844,7 +844,7 @@ class StreamTaskFinalCheckpointsTest {
      */
     @Test
     void testWaitingForUnalignedChannelStatesIfFinishedOnRestore() throws Exception {
-        OperatorID operatorId = new OperatorID();
+        OperatorIDPair operatorId = new OperatorIDPair();
         try (StreamTaskMailboxTestHarness<String> harness =
                 new StreamTaskMailboxTestHarnessBuilder<>(
                                 OneInputStreamTask::new, BasicTypeInfo.STRING_TYPE_INFO)

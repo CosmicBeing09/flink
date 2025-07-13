@@ -55,11 +55,8 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.PartitionTrackerFactory;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmanager.OnCompletionActions;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmaster.factories.JobManagerJobMetricGroupFactory;
@@ -633,7 +630,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToCoordinator(
             final ExecutionAttemptID task,
-            final OperatorID operatorID,
+            final OperatorIDPair operatorID,
             final SerializedValue<OperatorEvent> serializedEvent) {
 
         try {
@@ -647,7 +644,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     @Override
     public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operatorID, SerializedValue<CoordinationRequest> serializedRequest) {
+            OperatorIDPair operatorID, SerializedValue<CoordinationRequest> serializedRequest) {
         try {
             final CoordinationRequest request = serializedRequest.deserializeValue(userCodeLoader);
             return schedulerNG.deliverCoordinationRequestToCoordinator(operatorID, request);
@@ -974,7 +971,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operatorId,
+            OperatorIDPair operatorId,
             SerializedValue<CoordinationRequest> serializedRequest,
             Time timeout) {
         return this.sendRequestToCoordinator(operatorId, serializedRequest);

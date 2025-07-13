@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.CompositeStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.StateObject;
@@ -48,7 +48,7 @@ public class OperatorState implements CompositeStateHandle {
     private static final long serialVersionUID = -4845578005863201810L;
 
     /** The id of the operator. */
-    private final OperatorID operatorID;
+    private final OperatorIDPair operatorIDPair;
 
     /** The handles to states created by the parallel tasks: subtaskIndex -> subtaskstate. */
     private final Map<Integer, OperatorSubtaskState> operatorSubtaskStates;
@@ -65,7 +65,7 @@ public class OperatorState implements CompositeStateHandle {
      */
     private final int maxParallelism;
 
-    public OperatorState(OperatorID operatorID, int parallelism, int maxParallelism) {
+    public OperatorState(OperatorIDPair operatorIDPair, int parallelism, int maxParallelism) {
         if (parallelism > maxParallelism) {
             throw new IllegalArgumentException(
                     String.format(
@@ -73,7 +73,7 @@ public class OperatorState implements CompositeStateHandle {
                             parallelism, maxParallelism));
         }
 
-        this.operatorID = operatorID;
+        this.operatorIDPair = operatorIDPair;
 
         this.operatorSubtaskStates = CollectionUtil.newHashMapWithExpectedSize(parallelism);
 
@@ -81,8 +81,8 @@ public class OperatorState implements CompositeStateHandle {
         this.maxParallelism = maxParallelism;
     }
 
-    public OperatorID getOperatorID() {
-        return operatorID;
+    public OperatorIDPair getOperatorID() {
+        return operatorIDPair;
     }
 
     public boolean isFullyFinished() {
@@ -145,14 +145,14 @@ public class OperatorState implements CompositeStateHandle {
         return maxParallelism;
     }
 
-    public OperatorState copyWithNewOperatorID(OperatorID newOperatorId) {
+    public OperatorState copyWithNewOperatorID(OperatorIDPair newOperatorId) {
         OperatorState newState = new OperatorState(newOperatorId, parallelism, maxParallelism);
         operatorSubtaskStates.forEach(newState::putState);
         return newState;
     }
 
     public OperatorState copyAndDiscardInFlightData() {
-        OperatorState newState = new OperatorState(operatorID, parallelism, maxParallelism);
+        OperatorState newState = new OperatorState(operatorIDPair, parallelism, maxParallelism);
 
         for (Map.Entry<Integer, OperatorSubtaskState> originalSubtaskStateEntry :
                 operatorSubtaskStates.entrySet()) {
@@ -237,7 +237,7 @@ public class OperatorState implements CompositeStateHandle {
         if (obj instanceof OperatorState) {
             OperatorState other = (OperatorState) obj;
 
-            return operatorID.equals(other.operatorID)
+            return operatorIDPair.equals(other.operatorIDPair)
                     && parallelism == other.parallelism
                     && Objects.equals(coordinatorState, other.coordinatorState)
                     && operatorSubtaskStates.equals(other.operatorSubtaskStates);
@@ -248,7 +248,7 @@ public class OperatorState implements CompositeStateHandle {
 
     @Override
     public int hashCode() {
-        return parallelism + 31 * Objects.hash(operatorID, operatorSubtaskStates);
+        return parallelism + 31 * Objects.hash(operatorIDPair, operatorSubtaskStates);
     }
 
     @Override
@@ -257,7 +257,7 @@ public class OperatorState implements CompositeStateHandle {
         // confuse users that don't care about how we store it internally.
         return "OperatorState("
                 + "operatorID: "
-                + operatorID
+                + operatorIDPair
                 + ", parallelism: "
                 + parallelism
                 + ", maxParallelism: "

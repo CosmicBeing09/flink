@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.SubTaskInitializationMetricsBuilder;
 import org.apache.flink.runtime.checkpoint.filemerging.FileMergingSnapshotManager;
 import org.apache.flink.runtime.checkpoint.filemerging.SubtaskFileMergingManagerRestoreOperation;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.state.AsyncKeyedStateBackend;
 import org.apache.flink.runtime.state.CheckpointableKeyedStateBackend;
@@ -149,7 +149,7 @@ public class StreamTaskStateInitializerImpl implements StreamTaskStateInitialize
 
     @Override
     public StreamOperatorStateContext streamOperatorStateContext(
-            @Nonnull OperatorID operatorID,
+            @Nonnull OperatorIDPair operatorID,
             @Nonnull String operatorClassName,
             @Nonnull ProcessingTimeService processingTimeService,
             @Nonnull KeyContext keyContext,
@@ -334,7 +334,7 @@ public class StreamTaskStateInitializerImpl implements StreamTaskStateInitialize
     }
 
     private void registerRestoredStateToFileMergingManager(
-            JobID jobID, TaskInfo taskInfo, OperatorID operatorID) {
+            JobID jobID, TaskInfo taskInfo, OperatorIDPair operatorID) {
         FileMergingSnapshotManager fileMergingSnapshotManager =
                 taskStateManager.getFileMergingSnapshotManager();
         Optional<Long> restoredCheckpointId = taskStateManager.getRestoreCheckpointId();

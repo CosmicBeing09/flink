@@ -18,14 +18,13 @@
 package org.apache.flink.runtime.scheduler.adaptive.allocator;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpoint;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 
@@ -78,15 +77,15 @@ public class StateSizeEstimates {
 
     /**
      * Map {@link ExecutionVertexID}s to state sizes according to the supplied mappings of operators
-     * to state sizes and {@link JobVertexID}s to {@link OperatorID}s.
+     * to state sizes and {@link JobVertexID}s to {@link OperatorIDPair}s.
      */
     private static Map<ExecutionVertexID, Long> merge(
-            Map<OperatorID, Map<Integer, Long>> operatorsToSubtaskSizes,
-            Map<JobVertexID, Set<OperatorID>> verticesToOperators) {
+            Map<OperatorIDPair, Map<Integer, Long>> operatorsToSubtaskSizes,
+            Map<JobVertexID, Set<OperatorIDPair>> verticesToOperators) {
         Map<ExecutionVertexID, Long> result = new HashMap<>();
-        for (Entry<JobVertexID, Set<OperatorID>> vertexAndOperators :
+        for (Entry<JobVertexID, Set<OperatorIDPair>> vertexAndOperators :
                 verticesToOperators.entrySet()) {
-            for (OperatorID operatorID : vertexAndOperators.getValue()) {
+            for (OperatorIDPair operatorID : vertexAndOperators.getValue()) {
                 for (Entry<Integer, Long> subtaskIdAndSize :
                         operatorsToSubtaskSizes.getOrDefault(operatorID, emptyMap()).entrySet()) {
                     result.merge(
@@ -100,22 +99,22 @@ public class StateSizeEstimates {
         return result;
     }
 
-    private static Map<JobVertexID, Set<OperatorID>> mapVerticesToOperators(
+    private static Map<JobVertexID, Set<OperatorIDPair>> mapVerticesToOperators(
             ExecutionGraph executionGraph) {
         return executionGraph.getAllVertices().entrySet().stream()
                 .collect(toMap(Entry::getKey, e -> getOperatorIDS(e.getValue())));
     }
 
-    private static Set<OperatorID> getOperatorIDS(ExecutionJobVertex v) {
-        return v.getOperatorIDs().stream()
-                .map(OperatorIDPair::getGeneratedOperatorID)
+    private static Set<OperatorIDPair> getOperatorIDS(ExecutionJobVertex v) {
+        return v.getOperatorIDPairs().stream()
+                .map(org.apache.flink.runtime.OperatorIDPair::getGeneratedOperatorID)
                 .collect(Collectors.toSet());
     }
 
-    private static Map<OperatorID, Map<Integer, Long>> fromCompletedCheckpoint(
+    private static Map<OperatorIDPair, Map<Integer, Long>> fromCompletedCheckpoint(
             CompletedCheckpoint cp) {
-        Map<OperatorID, Map<Integer, Long>> result = new HashMap<>();
-        for (Entry<OperatorID, OperatorState> e : cp.getOperatorStates().entrySet()) {
+        Map<OperatorIDPair, Map<Integer, Long>> result = new HashMap<>();
+        for (Entry<OperatorIDPair, OperatorState> e : cp.getOperatorStates().entrySet()) {
             result.put(e.getKey(), calculateStateSizeInBytes(e.getValue()));
         }
         return result;

@@ -26,7 +26,7 @@ import org.apache.flink.runtime.deployment.TaskDeploymentDescriptor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.PartitionInfo;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.rpc.RpcTimeout;
@@ -148,5 +148,5 @@ public interface TaskManagerGateway extends TaskExecutorOperatorEventGateway {
 
     @Override
     CompletableFuture<Acknowledge> sendOperatorEventToTask(
-            ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt);
+            ExecutionAttemptID task, OperatorIDPair operator, SerializedValue<OperatorEvent> evt);
 }
