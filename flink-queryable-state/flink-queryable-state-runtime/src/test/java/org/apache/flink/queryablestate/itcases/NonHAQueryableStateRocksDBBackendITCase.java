@@ -62,7 +62,7 @@ public class NonHAQueryableStateRocksDBBackendITCase extends AbstractQueryableSt
                                     .build());
 
     @Override
-    protected StateBackend createStateBackend() throws Exception {
+    protected StateBackend createEnv() throws Exception {
         return new RocksDBStateBackend(tmpStateBackendDir.toUri().toString());
     }
 
