@@ -122,7 +122,7 @@ public class PartitionOperatorBase<IN> extends SingleInputOperator<IN, IN, NoOpF
 
     @Override
     protected List<IN> executeOnCollections(
-            List<IN> inputData, RuntimeContext runtimeContext, ExecutionConfig executionConfig) {
+            List<IN> inputData, RuntimeContext runtimeContext, ExecutionConfig config) {
         return inputData;
     }
 }
