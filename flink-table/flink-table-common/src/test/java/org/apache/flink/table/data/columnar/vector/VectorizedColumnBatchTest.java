@@ -72,7 +72,7 @@ class VectorizedColumnBatchTest {
 
         HeapFloatVector col4 = new HeapFloatVector(VECTOR_SIZE);
         for (int i = 0; i < VECTOR_SIZE; i++) {
-            col4.vector[i] = i;
+            col4.shortVector[i] = i;
         }
 
         HeapIntVector col5 = new HeapIntVector(VECTOR_SIZE);
