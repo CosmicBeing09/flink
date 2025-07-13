@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryFactory;
@@ -62,7 +62,7 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
                 SharedStateRegistry.DEFAULT_FACTORY,
                 Executors.directExecutor(),
                 /* Using the default mode in tests to detect any breaking changes early. */
-                RestoreMode.DEFAULT);
+                RecoveryClaimMode.DEFAULT);
     }
 
     /**
@@ -76,7 +76,7 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             int maxNumberOfCheckpointsToRetain,
             SharedStateRegistryFactory sharedStateRegistryFactory,
             Executor ioExecutor,
-            RestoreMode restoreMode) {
+            RecoveryClaimMode restoreMode) {
         this(
                 maxNumberOfCheckpointsToRetain,
                 sharedStateRegistryFactory,
@@ -90,7 +90,7 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             SharedStateRegistryFactory sharedStateRegistryFactory,
             ArrayDeque<CompletedCheckpoint> checkpoints,
             Executor ioExecutor,
-            RestoreMode restoreMode) {
+            RecoveryClaimMode restoreMode) {
         super(sharedStateRegistryFactory.create(ioExecutor, checkpoints, restoreMode));
         checkArgument(maxNumberOfCheckpointsToRetain >= 1, "Must retain at least one checkpoint.");
         this.maxNumberOfCheckpointsToRetain = maxNumberOfCheckpointsToRetain;

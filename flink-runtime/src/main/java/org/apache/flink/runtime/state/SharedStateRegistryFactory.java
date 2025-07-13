@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.state;
 
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpoint;
 
 import java.util.Collection;
@@ -38,5 +38,5 @@ public interface SharedStateRegistryFactory {
     SharedStateRegistry create(
             Executor deleteExecutor,
             Collection<CompletedCheckpoint> checkpoints,
-            RestoreMode restoreMode);
+            RecoveryClaimMode restoreMode);
 }

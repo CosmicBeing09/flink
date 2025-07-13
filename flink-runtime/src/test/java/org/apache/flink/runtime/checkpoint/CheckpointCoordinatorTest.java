@@ -21,7 +21,7 @@ package org.apache.flink.runtime.checkpoint;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.FSDataInputStream;
 import org.apache.flink.core.fs.FileSystem;
@@ -2911,7 +2911,7 @@ class CheckpointCoordinatorTest {
 
     @Test
     void testSharedStateRegistrationOnRestore() throws Exception {
-        for (RestoreMode restoreMode : RestoreMode.values()) {
+        for (RecoveryClaimMode restoreMode : RecoveryClaimMode.values()) {
             JobVertexID jobVertexID1 = new JobVertexID();
 
             int parallelism1 = 2;
@@ -3079,7 +3079,7 @@ class CheckpointCoordinatorTest {
             verifyDiscard(
                     sharedHandlesByCheckpoint,
                     cpId ->
-                            restoreMode == RestoreMode.CLAIM && cpId == 0
+                            restoreMode == RecoveryClaimMode.CLAIM && cpId == 0
                                     ? TernaryBoolean.TRUE
                                     : TernaryBoolean.FALSE);
 

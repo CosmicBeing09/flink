@@ -25,7 +25,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.SecurityOptions;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpoint;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpointStore;
 import org.apache.flink.runtime.checkpoint.DefaultCompletedCheckpointStore;
@@ -572,7 +572,7 @@ public class ZooKeeperUtils {
             SharedStateRegistryFactory sharedStateRegistryFactory,
             Executor ioExecutor,
             Executor executor,
-            RestoreMode restoreMode)
+            RecoveryClaimMode restoreMode)
             throws Exception {
 
         checkNotNull(configuration, "Configuration");

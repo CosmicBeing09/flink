@@ -21,7 +21,7 @@ package org.apache.flink.runtime.checkpoint;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.state.SharedStateRegistryFactory;
 
 import javax.annotation.Nullable;
@@ -77,7 +77,7 @@ public class PerJobCheckpointRecoveryFactory<T extends CompletedCheckpointStore>
             int maxNumberOfCheckpointsToRetain,
             SharedStateRegistryFactory sharedStateRegistryFactory,
             Executor ioExecutor,
-            RestoreMode restoreMode) {
+            RecoveryClaimMode restoreMode) {
         return store.compute(
                 jobId,
                 (key, previous) ->
@@ -102,6 +102,6 @@ public class PerJobCheckpointRecoveryFactory<T extends CompletedCheckpointStore>
                 @Nullable StoreType previousStore,
                 SharedStateRegistryFactory sharedStateRegistryFactory,
                 Executor ioExecutor,
-                RestoreMode restoreMode);
+                RecoveryClaimMode restoreMode);
     }
 }

@@ -26,7 +26,7 @@ import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.StateRecoveryOptions;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
@@ -149,7 +149,7 @@ public class JarRunHandler
                                                 request, SavepointPathQueryParameter.class)),
                         effectiveConfiguration.get(StateRecoveryOptions.SAVEPOINT_PATH),
                         log);
-        final RestoreMode restoreMode =
+        final RecoveryClaimMode restoreMode =
                 Optional.ofNullable(requestBody.getRestoreMode())
                         .orElseGet(
                                 () ->
@@ -158,12 +158,12 @@ public class JarRunHandler
         if (requestBody.isDeprecatedRestoreModeHasValue()) {
             log.warn("The option 'restoreMode' is deprecated, please use 'claimMode' instead.");
         }
-        if (restoreMode.equals(RestoreMode.LEGACY)) {
+        if (restoreMode.equals(RecoveryClaimMode.LEGACY)) {
             log.warn(
                     "The {} restore mode is deprecated, please use {} or {} mode instead.",
-                    RestoreMode.LEGACY,
-                    RestoreMode.CLAIM,
-                    RestoreMode.NO_CLAIM);
+                    RecoveryClaimMode.LEGACY,
+                    RecoveryClaimMode.CLAIM,
+                    RecoveryClaimMode.NO_CLAIM);
         }
         final SavepointRestoreSettings savepointRestoreSettings;
         if (savepointPath != null) {

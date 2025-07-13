@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 
 import java.io.Serializable;
@@ -93,7 +93,7 @@ public class CheckpointProperties implements Serializable {
         return forced;
     }
 
-    /** Returns whether the checkpoint should be restored in a {@link RestoreMode#NO_CLAIM} mode. */
+    /** Returns whether the checkpoint should be restored in a {@link RecoveryClaimMode#NO_CLAIM} mode. */
     public boolean isUnclaimed() {
         return unclaimed;
     }
@@ -302,11 +302,11 @@ public class CheckpointProperties implements Serializable {
     }
 
     /**
-     * Creates the checkpoint properties for a snapshot restored in {@link RestoreMode#NO_CLAIM}.
+     * Creates the checkpoint properties for a snapshot restored in {@link RecoveryClaimMode#NO_CLAIM}.
      * Those properties should not be used when triggering a checkpoint/savepoint. They're useful
      * when restoring a {@link CompletedCheckpointStore} after a JM failover.
      *
-     * @return Checkpoint properties for a snapshot restored in {@link RestoreMode#NO_CLAIM}.
+     * @return Checkpoint properties for a snapshot restored in {@link RecoveryClaimMode#NO_CLAIM}.
      */
     public static CheckpointProperties forUnclaimedSnapshot() {
         return new CheckpointProperties(

@@ -33,7 +33,7 @@ import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.StateRecoveryOptions;
 import org.apache.flink.contrib.streaming.state.RocksDBStateBackend;
-import org.apache.flink.core.execution.RestoreMode;
+import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.StateBackend;
@@ -83,11 +83,11 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     private static final int NUM_TASK_MANAGERS = 2;
     private static final int SLOTS_PER_TASK_MANAGER = 2;
 
-    @Parameterized.Parameter public RestoreMode restoreMode;
+    @Parameterized.Parameter public RecoveryClaimMode restoreMode;
 
     @Parameterized.Parameters(name = "RestoreMode = {0}")
     public static Object[] parameters() {
-        return RestoreMode.values();
+        return RecoveryClaimMode.values();
     }
 
     @ClassRule public static TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -313,7 +313,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             String zooKeeperQuorum,
             StateBackend backend,
             boolean localRecovery,
-            RestoreMode restoreMode)
+            RecoveryClaimMode restoreMode)
             throws Exception {
         testExternalizedCheckpoints(
                 checkpointDir,
@@ -332,7 +332,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             StateBackend backend2,
             StateBackend backend3,
             boolean localRecovery,
-            RestoreMode restoreMode)
+            RecoveryClaimMode restoreMode)
             throws Exception {
 
         final Configuration config = new Configuration();
@@ -385,7 +385,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
                             // in CLAIM mode, the previous run is only guaranteed to preserve the
                             // latest checkpoint; in NO_CLAIM/LEGACY, even the initial checkpoints
                             // must remain valid
-                            restoreMode == RestoreMode.CLAIM
+                            restoreMode == RecoveryClaimMode.CLAIM
                                     ? secondExternalCheckpoint
                                     : firstExternalCheckpoint,
                             cluster,
@@ -400,7 +400,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             StateBackend backend,
             @Nullable String externalCheckpoint,
             MiniClusterWithClientResource cluster,
-            RestoreMode restoreMode)
+            RecoveryClaimMode restoreMode)
             throws Exception {
         // complete at least two checkpoints so that the initial checkpoint can be subsumed
         return runJobAndGetExternalizedCheckpoint(
@@ -411,7 +411,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             StateBackend backend,
             @Nullable String externalCheckpoint,
             MiniClusterWithClientResource cluster,
-            RestoreMode restoreMode,
+            RecoveryClaimMode restoreMode,
             Configuration jobConfig,
             int consecutiveCheckpoints,
             boolean retainCheckpoints)
@@ -440,7 +440,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     private static JobGraph getJobGraph(
             StateBackend backend,
             @Nullable String externalCheckpoint,
-            RestoreMode restoreMode,
+            RecoveryClaimMode restoreMode,
             Configuration jobConfig,
             boolean retainCheckpoints) {
         final StreamExecutionEnvironment env =
