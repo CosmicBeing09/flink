@@ -325,7 +325,7 @@ class ResultPartitionTest {
                         .setResultPartitionType(type)
                         .setFileChannelManager(fileChannelManager)
                         .setNetworkBuffersPerChannel(networkBuffersPerChannel)
-                        .setFloatingNetworkBuffersPerGate(requiredFloatingBuffers)
+                        .setRequiredFloatingBuffers(requiredFloatingBuffers)
                         .setNetworkBufferPool(globalPool)
                         .build();
 
