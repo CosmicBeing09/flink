@@ -134,9 +134,9 @@ public class TestCheckpointedInputGateBuilder {
     }
 
     private SingleInputGate buildRemoteGate() throws IOException {
-        int maxUsedBuffers = 10;
+        int requiredFloatingBuffers = 10;
         NetworkBufferPool networkBufferPool =
-                new NetworkBufferPool(numChannels * maxUsedBuffers, 4096);
+                new NetworkBufferPool(numChannels * requiredFloatingBuffers, 4096);
         SingleInputGate gate =
                 new SingleInputGateBuilder()
                         .setChannelFactory(InputChannelBuilder::buildRemoteChannel)
@@ -144,7 +144,7 @@ public class TestCheckpointedInputGateBuilder {
                         .setSegmentProvider(networkBufferPool)
                         .setBufferPoolFactory(
                                 networkBufferPool.createBufferPool(
-                                        numChannels, numChannels, maxUsedBuffers))
+                                        numChannels, numChannels, requiredFloatingBuffers))
                         .setChannelStateWriter(channelStateWriter)
                         .build();
         gate.setup();
