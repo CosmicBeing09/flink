@@ -210,22 +210,22 @@ public class AdaptiveScheduler
                 stabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration cooldownTimeout =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
             final Duration scalingIntervalMax =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX);
             Preconditions.checkState(
-                    !scalingIntervalMin.isNegative(),
+                    !cooldownTimeout.isNegative(),
                     "%s must be positive integer or 0",
                     JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN.key());
             if (scalingIntervalMax != null) {
                 Preconditions.checkState(
-                        scalingIntervalMax.compareTo(scalingIntervalMin) > 0,
+                        scalingIntervalMax.compareTo(cooldownTimeout) > 0,
                         "%s(%d) must be greater than %s(%d)",
                         JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX.key(),
                         scalingIntervalMax,
                         JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN.key(),
-                        scalingIntervalMin);
+                        cooldownTimeout);
             }
 
             final int rescaleOnFailedCheckpointsCount =
@@ -272,7 +272,7 @@ public class AdaptiveScheduler
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    cooldownTimeout,
                     scalingIntervalMax,
                     configuration.get(MIN_PARALLELISM_INCREASE),
                     configuration.get(
@@ -284,7 +284,7 @@ public class AdaptiveScheduler
         private final Duration initialResourceAllocationTimeout;
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
-        private final Duration scalingIntervalMin;
+        private final Duration cooldownTimeout;
         private final Duration scalingIntervalMax;
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
@@ -304,7 +304,7 @@ public class AdaptiveScheduler
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
-            this.scalingIntervalMin = scalingIntervalMin;
+            this.cooldownTimeout = scalingIntervalMin;
             this.scalingIntervalMax = scalingIntervalMax;
             this.minParallelismChangeForDesiredRescale = minParallelismChangeForDesiredRescale;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
@@ -328,7 +328,7 @@ public class AdaptiveScheduler
         }
 
         public Duration getScalingIntervalMin() {
-            return scalingIntervalMin;
+            return cooldownTimeout;
         }
 
         public Duration getScalingIntervalMax() {
