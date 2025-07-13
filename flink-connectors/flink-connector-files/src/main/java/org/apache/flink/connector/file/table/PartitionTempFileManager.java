@@ -66,14 +66,14 @@ public class PartitionTempFileManager {
     private transient int nameCounter = 0;
 
     public PartitionTempFileManager(
-            FileSystemFactory factory, Path tmpPath, int taskNumber, int attemptNumber)
+            FileSystemFactory factory, Path stagingPath, int taskNumber, int attemptNumber)
             throws IOException {
-        this(factory, tmpPath, taskNumber, attemptNumber, new OutputFileConfig("", ""));
+        this(factory, stagingPath, taskNumber, attemptNumber, new OutputFileConfig("", ""));
     }
 
     public PartitionTempFileManager(
             FileSystemFactory factory,
-            Path tmpPath,
+            Path stagingPath,
             int taskNumber,
             int attemptNumber,
             OutputFileConfig outputFileConfig)
@@ -89,7 +89,7 @@ public class PartitionTempFileManager {
                         taskNumber,
                         ATTEMPT_PREFIX,
                         attemptNumber);
-        this.taskTmpDir = new Path(tmpPath, taskTmpDirName);
+        this.taskTmpDir = new Path(stagingPath, taskTmpDirName);
         factory.create(taskTmpDir.toUri()).delete(taskTmpDir, true);
     }
 
