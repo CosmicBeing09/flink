@@ -32,7 +32,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.PartitionInfo;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmaster.AllocatedSlotReport;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -103,7 +103,7 @@ public class TestingTaskExecutorGateway implements TaskExecutorGateway {
 
     private final TriFunction<
                     ExecutionAttemptID,
-                    OperatorID,
+            OperatorIDPair,
                     SerializedValue<OperatorEvent>,
                     CompletableFuture<Acknowledge>>
             operatorEventHandler;
@@ -157,7 +157,7 @@ public class TestingTaskExecutorGateway implements TaskExecutorGateway {
             Consumer<Collection<IntermediateDataSetID>> releaseClusterPartitionsConsumer,
             TriFunction<
                             ExecutionAttemptID,
-                            OperatorID,
+                    OperatorIDPair,
                             SerializedValue<OperatorEvent>,
                             CompletableFuture<Acknowledge>>
                     operatorEventHandler,
@@ -356,7 +356,7 @@ public class TestingTaskExecutorGateway implements TaskExecutorGateway {
 
     @Override
     public CompletableFuture<Acknowledge> sendOperatorEventToTask(
-            ExecutionAttemptID task, OperatorID operator, SerializedValue<OperatorEvent> evt) {
+            ExecutionAttemptID task, OperatorIDPair operator, SerializedValue<OperatorEvent> evt) {
         return operatorEventHandler.apply(task, operator, evt);
     }
 

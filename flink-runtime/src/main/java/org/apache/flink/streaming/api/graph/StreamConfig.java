@@ -29,7 +29,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.operators.util.CorruptConfigurationException;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.StateBackend;
@@ -635,13 +635,13 @@ public class StreamConfig implements Serializable {
         return chainedTaskConfigs;
     }
 
-    public void setOperatorID(OperatorID operatorID) {
+    public void setOperatorID(OperatorIDPair operatorID) {
         this.config.setBytes(OPERATOR_ID, operatorID.getBytes());
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorIDPair getOperatorID() {
         byte[] operatorIDBytes = config.getBytes(OPERATOR_ID, null);
-        return new OperatorID(checkNotNull(operatorIDBytes));
+        return new OperatorIDPair(checkNotNull(operatorIDBytes));
     }
 
     public void setOperatorName(String name) {

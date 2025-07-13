@@ -69,14 +69,8 @@ import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrate
 import org.apache.flink.runtime.failure.DefaultFailureEnricherContext;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.PartitionProducerDisposedException;
 import org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException;
@@ -1014,7 +1008,7 @@ public class AdaptiveScheduler
 
     @Override
     public void deliverOperatorEventToCoordinator(
-            ExecutionAttemptID taskExecution, OperatorID operator, OperatorEvent evt)
+            ExecutionAttemptID taskExecution, OperatorIDPair operator, OperatorEvent evt)
             throws FlinkException {
         final StateWithExecutionGraph stateWithExecutionGraph =
                 state.as(StateWithExecutionGraph.class)
@@ -1028,7 +1022,7 @@ public class AdaptiveScheduler
 
     @Override
     public CompletableFuture<CoordinationResponse> deliverCoordinationRequestToCoordinator(
-            OperatorID operator, CoordinationRequest request) throws FlinkException {
+            OperatorIDPair operator, CoordinationRequest request) throws FlinkException {
         return state.tryCall(
                         StateWithExecutionGraph.class,
                         stateWithExecutionGraph ->

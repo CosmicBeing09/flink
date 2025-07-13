@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeutils.base.array.BytePrimitiveArraySerial
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.runtime.dispatcher.UnavailableDispatcherOperationException;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
 import org.apache.flink.util.ExceptionUtils;
@@ -52,7 +52,7 @@ public class CollectResultFetcher<T> {
 
     private final AbstractCollectResultBuffer<T> buffer;
 
-    private final CompletableFuture<OperatorID> operatorIdFuture;
+    private final CompletableFuture<OperatorIDPair> operatorIdFuture;
     private final String accumulatorName;
     private final int retryMillis;
     private final long resultFetchTimeout;
@@ -65,7 +65,7 @@ public class CollectResultFetcher<T> {
 
     public CollectResultFetcher(
             AbstractCollectResultBuffer<T> buffer,
-            CompletableFuture<OperatorID> operatorIdFuture,
+            CompletableFuture<OperatorIDPair> operatorIdFuture,
             String accumulatorName,
             long resultFetchTimeout) {
         this(buffer, operatorIdFuture, accumulatorName, DEFAULT_RETRY_MILLIS, resultFetchTimeout);
@@ -73,7 +73,7 @@ public class CollectResultFetcher<T> {
 
     CollectResultFetcher(
             AbstractCollectResultBuffer<T> buffer,
-            CompletableFuture<OperatorID> operatorIdFuture,
+            CompletableFuture<OperatorIDPair> operatorIdFuture,
             String accumulatorName,
             int retryMillis,
             long resultFetchTimeout) {
@@ -165,7 +165,7 @@ public class CollectResultFetcher<T> {
             throws InterruptedException, ExecutionException {
         checkJobClientConfigured();
 
-        OperatorID operatorId = operatorIdFuture.getNow(null);
+        OperatorIDPair operatorId = operatorIdFuture.getNow(null);
         Preconditions.checkNotNull(operatorId, "Unknown operator ID. This is a bug.");
 
         CollectCoordinationRequest request = new CollectCoordinationRequest(version, offset);

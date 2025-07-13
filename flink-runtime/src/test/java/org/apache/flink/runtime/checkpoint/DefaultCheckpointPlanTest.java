@@ -19,12 +19,11 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraphCheckpointPlanCalculatorContext;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.TestingStreamStateHandle;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -57,7 +56,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testAbortionIfPartiallyFinishedVertexUsedUnionListState() throws Exception {
         JobVertexID jobVertexId = new JobVertexID();
-        OperatorID operatorId = new OperatorID();
+        OperatorIDPair operatorId = new OperatorIDPair();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -66,7 +65,7 @@ class DefaultCheckpointPlanTest {
                                 2,
                                 2,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(operatorId)),
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(operatorId)),
                                 true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
         ExecutionVertex[] tasks = executionGraph.getJobVertex(jobVertexId).getTaskVertices();
@@ -74,7 +73,7 @@ class DefaultCheckpointPlanTest {
 
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(operatorId, 2, 2);
         operatorState.putState(
                 0, createSubtaskStateWithUnionListState(TempDirUtils.newFile(temporaryFolder)));
@@ -92,7 +91,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testAbortionIfPartiallyOperatorsFinishedVertexUsedUnionListState() throws Exception {
         JobVertexID jobVertexId = new JobVertexID();
-        OperatorID operatorId = new OperatorID();
+        OperatorIDPair operatorId = new OperatorIDPair();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -101,14 +100,14 @@ class DefaultCheckpointPlanTest {
                                 2,
                                 2,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(operatorId)),
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(operatorId)),
                                 true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
         ExecutionVertex[] tasks = executionGraph.getJobVertex(jobVertexId).getTaskVertices();
 
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(operatorId, 2, 2);
         operatorState.putState(
                 0, createSubtaskStateWithUnionListState(TempDirUtils.newFile(temporaryFolder)));
@@ -132,9 +131,9 @@ class DefaultCheckpointPlanTest {
         JobVertexID fullyFinishedVertexId = new JobVertexID();
         JobVertexID finishedOnRestoreVertexId = new JobVertexID();
         JobVertexID partiallyFinishedVertexId = new JobVertexID();
-        OperatorID fullyFinishedOperatorId = new OperatorID();
-        OperatorID finishedOnRestoreOperatorId = new OperatorID();
-        OperatorID partiallyFinishedOperatorId = new OperatorID();
+        OperatorIDPair fullyFinishedOperatorId = new OperatorIDPair();
+        OperatorIDPair finishedOnRestoreOperatorId = new OperatorIDPair();
+        OperatorIDPair partiallyFinishedOperatorId = new OperatorIDPair();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -143,14 +142,14 @@ class DefaultCheckpointPlanTest {
                                 2,
                                 2,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(fullyFinishedOperatorId)),
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(fullyFinishedOperatorId)),
                                 true)
                         .addJobVertex(
                                 finishedOnRestoreVertexId,
                                 2,
                                 2,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(
                                                 finishedOnRestoreOperatorId)),
                                 true)
                         .addJobVertex(
@@ -158,7 +157,7 @@ class DefaultCheckpointPlanTest {
                                 2,
                                 2,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(
                                                 partiallyFinishedOperatorId)),
                                 true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
@@ -176,7 +175,7 @@ class DefaultCheckpointPlanTest {
         Arrays.stream(finishedOnRestoreVertexTasks)
                 .forEach(checkpointPlan::reportTaskFinishedOnRestore);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         checkpointPlan.fulfillFinishedTaskStatus(operatorStates);
 
         assertThat(operatorStates).hasSize(3);
@@ -190,7 +189,7 @@ class DefaultCheckpointPlanTest {
     @Test
     void testFulfillFullyFinishedStatesWithCoordinator() throws Exception {
         JobVertexID finishedJobVertexID = new JobVertexID();
-        OperatorID finishedOperatorID = new OperatorID();
+        OperatorIDPair finishedOperatorID = new OperatorIDPair();
 
         ExecutionGraph executionGraph =
                 new CheckpointCoordinatorTestingUtils.CheckpointExecutionGraphBuilder()
@@ -199,7 +198,7 @@ class DefaultCheckpointPlanTest {
                                 1,
                                 256,
                                 Collections.singletonList(
-                                        OperatorIDPair.generatedIDOnly(finishedOperatorID)),
+                                        org.apache.flink.runtime.OperatorIDPair.generatedIDOnly(finishedOperatorID)),
                                 true)
                         .build(EXECUTOR_EXTENSION.getExecutor());
         executionGraph
@@ -209,7 +208,7 @@ class DefaultCheckpointPlanTest {
                 .markFinished();
         CheckpointPlan checkpointPlan = createCheckpointPlan(executionGraph);
 
-        Map<OperatorID, OperatorState> operatorStates = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorStates = new HashMap<>();
         OperatorState operatorState = new OperatorState(finishedOperatorID, 1, 256);
         operatorState.setCoordinatorState(new TestingStreamStateHandle());
         operatorStates.put(finishedOperatorID, operatorState);

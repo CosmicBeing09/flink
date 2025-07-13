@@ -21,7 +21,7 @@ package org.apache.flink.state.api.runtime.metadata;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.runtime.checkpoint.MasterState;
 import org.apache.flink.runtime.checkpoint.OperatorState;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.state.api.OperatorIdentifier;
 import org.apache.flink.state.api.StateBootstrapTransformation;
 import org.apache.flink.state.api.runtime.StateBootstrapTransformationWithID;
@@ -45,7 +45,7 @@ public class SavepointMetadataV2 {
 
     private final Collection<MasterState> masterStates;
 
-    private final Map<OperatorID, OperatorStateSpecV2> operatorStateIndex;
+    private final Map<OperatorIDPair, OperatorStateSpecV2> operatorStateIndex;
 
     public SavepointMetadataV2(
             int maxParallelism,
@@ -83,7 +83,7 @@ public class SavepointMetadataV2 {
      * @throws IOException If the savepoint does not contain operator state with the given uid.
      */
     public OperatorState getOperatorState(OperatorIdentifier identifier) throws IOException {
-        OperatorID operatorID = identifier.getOperatorId();
+        OperatorIDPair operatorID = identifier.getOperatorId();
 
         OperatorStateSpecV2 operatorState = operatorStateIndex.get(operatorID);
         if (operatorState == null || operatorState.isNewStateTransformation()) {
@@ -104,7 +104,7 @@ public class SavepointMetadataV2 {
 
     public void addOperator(
             OperatorIdentifier identifier, StateBootstrapTransformation<?> transformation) {
-        OperatorID id = identifier.getOperatorId();
+        OperatorIDPair id = identifier.getOperatorId();
 
         if (operatorStateIndex.containsKey(id)) {
             throw new IllegalArgumentException(
@@ -132,7 +132,7 @@ public class SavepointMetadataV2 {
 
     /**
      * @return List of new operator states for the savepoint, represented by their target {@link
-     *     OperatorID} and {@link StateBootstrapTransformation}.
+     *     OperatorIDPair} and {@link StateBootstrapTransformation}.
      */
     public List<StateBootstrapTransformationWithID<?>> getNewOperators() {
         return operatorStateIndex.values().stream()

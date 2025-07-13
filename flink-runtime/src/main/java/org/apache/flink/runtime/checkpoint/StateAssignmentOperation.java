@@ -21,7 +21,6 @@ package org.apache.flink.runtime.checkpoint;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.channel.InputChannelInfo;
 import org.apache.flink.runtime.checkpoint.channel.ResultSubpartitionInfo;
 import org.apache.flink.runtime.executiongraph.Execution;
@@ -31,7 +30,7 @@ import org.apache.flink.runtime.io.network.api.writer.SubtaskStateMapper;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.OperatorInstanceID;
 import org.apache.flink.runtime.state.AbstractChannelStateHandle;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
@@ -70,7 +69,7 @@ public class StateAssignmentOperation {
     private static final Logger LOG = LoggerFactory.getLogger(StateAssignmentOperation.class);
 
     private final Set<ExecutionJobVertex> tasks;
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<OperatorIDPair, OperatorState> operatorStates;
 
     private final long restoreCheckpointId;
     private final boolean allowNonRestoredState;
@@ -87,7 +86,7 @@ public class StateAssignmentOperation {
     public StateAssignmentOperation(
             long restoreCheckpointId,
             Set<ExecutionJobVertex> tasks,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<OperatorIDPair, OperatorState> operatorStates,
             boolean allowNonRestoredState) {
 
         this.restoreCheckpointId = restoreCheckpointId;
@@ -100,16 +99,16 @@ public class StateAssignmentOperation {
     public void assignStates() {
         checkStateMappingCompleteness(allowNonRestoredState, operatorStates, tasks);
 
-        Map<OperatorID, OperatorState> localOperators = new HashMap<>(operatorStates);
+        Map<OperatorIDPair, OperatorState> localOperators = new HashMap<>(operatorStates);
 
         // find the states of all operators belonging to this task and compute additional
         // information in first pass
         for (ExecutionJobVertex executionJobVertex : tasks) {
-            List<OperatorIDPair> operatorIDPairs = executionJobVertex.getOperatorIDs();
-            Map<OperatorID, OperatorState> operatorStates =
+            List<org.apache.flink.runtime.OperatorIDPair> operatorIDPairs = executionJobVertex.getOperatorIDs();
+            Map<OperatorIDPair, OperatorState> operatorStates =
                     CollectionUtil.newHashMapWithExpectedSize(operatorIDPairs.size());
-            for (OperatorIDPair operatorIDPair : operatorIDPairs) {
-                OperatorID operatorID =
+            for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : operatorIDPairs) {
+                OperatorIDPair operatorID =
                         operatorIDPair
                                 .getUserDefinedOperatorID()
                                 .filter(localOperators::containsKey)
@@ -214,7 +213,7 @@ public class StateAssignmentOperation {
     private void assignTaskStateToExecutionJobVertices(TaskStateAssignment assignment) {
         ExecutionJobVertex executionJobVertex = assignment.executionJobVertex;
 
-        List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
+        List<org.apache.flink.runtime.OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
         final int newParallelism = executionJobVertex.getParallelism();
 
         /*
@@ -249,12 +248,12 @@ public class StateAssignmentOperation {
 
     private void assignNonFinishedStateToTask(
             TaskStateAssignment assignment,
-            List<OperatorIDPair> operatorIDs,
+            List<org.apache.flink.runtime.OperatorIDPair> operatorIDs,
             int subTaskIndex,
             Execution currentExecutionAttempt) {
         TaskStateSnapshot taskState = new TaskStateSnapshot(operatorIDs.size(), false);
 
-        for (OperatorIDPair operatorID : operatorIDs) {
+        for (org.apache.flink.runtime.OperatorIDPair operatorID : operatorIDs) {
             OperatorInstanceID instanceID =
                     OperatorInstanceID.of(subTaskIndex, operatorID.getGeneratedOperatorID());
 
@@ -333,14 +332,14 @@ public class StateAssignmentOperation {
     }
 
     public static <T extends StateObject> void reDistributePartitionableStates(
-            Map<OperatorID, OperatorState> oldOperatorStates,
+            Map<OperatorIDPair, OperatorState> oldOperatorStates,
             int newParallelism,
             Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle,
             OperatorStateRepartitioner<T> stateRepartitioner,
             Map<OperatorInstanceID, List<T>> result) {
 
         // The nested list wraps as the level of operator -> subtask -> state object collection
-        Map<OperatorID, List<List<T>>> oldStates =
+        Map<OperatorIDPair, List<List<T>>> oldStates =
                 splitManagedAndRawOperatorStates(oldOperatorStates, extractHandle);
 
         oldOperatorStates.forEach(
@@ -491,10 +490,10 @@ public class StateAssignmentOperation {
     }
 
     private <T extends AbstractChannelStateHandle<?>> void checkForUnsupportedToplogyChanges(
-            Map<OperatorID, OperatorState> oldOperatorStates,
+            Map<OperatorIDPair, OperatorState> oldOperatorStates,
             Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle,
-            OperatorID expectedOperatorID) {
-        final List<OperatorID> unexpectedState =
+            OperatorIDPair expectedOperatorID) {
+        final List<OperatorIDPair> unexpectedState =
                 oldOperatorStates.entrySet().stream()
                         .filter(idAndState -> !idAndState.getKey().equals(expectedOperatorID))
                         .filter(idAndState -> hasChannelState(idAndState.getValue(), extractHandle))
@@ -535,8 +534,8 @@ public class StateAssignmentOperation {
     }
 
     private static <T extends StateObject>
-            Map<OperatorID, List<List<T>>> splitManagedAndRawOperatorStates(
-                    Map<OperatorID, OperatorState> operatorStates,
+            Map<OperatorIDPair, List<List<T>>> splitManagedAndRawOperatorStates(
+                    Map<OperatorIDPair, OperatorState> operatorStates,
                     Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle) {
         return operatorStates.entrySet().stream()
                 .collect(
@@ -741,17 +740,17 @@ public class StateAssignmentOperation {
      */
     private static void checkStateMappingCompleteness(
             boolean allowNonRestoredState,
-            Map<OperatorID, OperatorState> operatorStates,
+            Map<OperatorIDPair, OperatorState> operatorStates,
             Set<ExecutionJobVertex> tasks) {
 
-        Set<OperatorID> allOperatorIDs = new HashSet<>();
+        Set<OperatorIDPair> allOperatorIDs = new HashSet<>();
         for (ExecutionJobVertex executionJobVertex : tasks) {
-            for (OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIDs()) {
+            for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIDs()) {
                 allOperatorIDs.add(operatorIDPair.getGeneratedOperatorID());
                 operatorIDPair.getUserDefinedOperatorID().ifPresent(allOperatorIDs::add);
             }
         }
-        for (Map.Entry<OperatorID, OperatorState> operatorGroupStateEntry :
+        for (Map.Entry<OperatorIDPair, OperatorState> operatorGroupStateEntry :
                 operatorStates.entrySet()) {
             // ----------------------------------------find operator for
             // state---------------------------------------------
@@ -773,7 +772,7 @@ public class StateAssignmentOperation {
     }
 
     public static <T> Map<OperatorInstanceID, List<T>> applyRepartitioner(
-            OperatorID operatorID,
+            OperatorIDPair operatorID,
             OperatorStateRepartitioner<T> opStateRepartitioner,
             List<List<T>> chainOpParallelStates,
             int oldParallelism,
@@ -790,7 +789,7 @@ public class StateAssignmentOperation {
     }
 
     private static <T> Map<OperatorInstanceID, List<T>> toInstanceMap(
-            OperatorID operatorID, List<List<T>> states) {
+            OperatorIDPair operatorID, List<List<T>> states) {
         Map<OperatorInstanceID, List<T>> result =
                 CollectionUtil.newHashMapWithExpectedSize(states.size());
 

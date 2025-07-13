@@ -23,7 +23,7 @@ import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.util.concurrent.Executors;
 
@@ -235,9 +235,9 @@ class TaskLocalStateStoreImplTest {
 
     @Nonnull
     protected TaskStateSnapshot createTaskStateSnapshot() {
-        final Map<OperatorID, OperatorSubtaskState> operatorSubtaskStates = new HashMap<>();
-        operatorSubtaskStates.put(new OperatorID(), OperatorSubtaskState.builder().build());
-        operatorSubtaskStates.put(new OperatorID(), OperatorSubtaskState.builder().build());
+        final Map<OperatorIDPair, OperatorSubtaskState> operatorSubtaskStates = new HashMap<>();
+        operatorSubtaskStates.put(new OperatorIDPair(), OperatorSubtaskState.builder().build());
+        operatorSubtaskStates.put(new OperatorIDPair(), OperatorSubtaskState.builder().build());
         final TaskStateSnapshot taskStateSnapshot = new TaskStateSnapshot(operatorSubtaskStates);
         return taskStateSnapshot;
     }
@@ -281,7 +281,7 @@ class TaskLocalStateStoreImplTest {
     private List<TestingTaskStateSnapshot> storeStates(int count) {
         List<TestingTaskStateSnapshot> taskStateSnapshots = new ArrayList<>(count);
         for (int i = 0; i < count; ++i) {
-            OperatorID operatorID = new OperatorID();
+            OperatorIDPair operatorID = new OperatorIDPair();
             TestingTaskStateSnapshot taskStateSnapshot = new TestingTaskStateSnapshot();
             OperatorSubtaskState operatorSubtaskState = OperatorSubtaskState.builder().build();
             taskStateSnapshot.putSubtaskStateByOperatorID(operatorID, operatorSubtaskState);

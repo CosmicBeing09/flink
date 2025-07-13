@@ -50,7 +50,7 @@ import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmaster.event.ExecutionVertexFinishedEvent;
 import org.apache.flink.runtime.jobmaster.event.FileSystemJobEventStore;
 import org.apache.flink.runtime.jobmaster.event.JobEvent;
@@ -155,7 +155,7 @@ public class BatchJobRecoveryTest {
     private ScheduledExecutor delayedExecutor =
             new ScheduledExecutorServiceAdapter(EXECUTOR_RESOURCE.getExecutor());
 
-    private static final OperatorID OPERATOR_ID = new OperatorID(1234L, 5678L);
+    private static final OperatorIDPair OPERATOR_ID = new OperatorIDPair(1234L, 5678L);
     private static final int NUM_SPLITS = 10;
     private static final int SOURCE_PARALLELISM = 5;
     private static final int MIDDLE_PARALLELISM = 5;

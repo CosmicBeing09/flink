@@ -18,27 +18,27 @@
 
 package org.apache.flink.runtime.operators.coordination;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 
 /** A testing implementation of the {@link OperatorInfo}. */
 public class TestingOperatorInfo implements OperatorInfo {
 
-    private final OperatorID operatorId;
+    private final OperatorIDPair operatorId;
     private final int parallelism;
     private final int maxParallelism;
 
     public TestingOperatorInfo() {
-        this(new OperatorID(), 50, 256);
+        this(new OperatorIDPair(), 50, 256);
     }
 
-    public TestingOperatorInfo(OperatorID operatorId, int parallelism, int maxParallelism) {
+    public TestingOperatorInfo(OperatorIDPair operatorId, int parallelism, int maxParallelism) {
         this.operatorId = operatorId;
         this.parallelism = parallelism;
         this.maxParallelism = maxParallelism;
     }
 
     @Override
-    public OperatorID operatorId() {
+    public OperatorIDPair operatorId() {
         return operatorId;
     }
 

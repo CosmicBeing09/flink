@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestHandler;
@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestJobClient implements JobClient, CoordinationRequestGateway {
 
     private final JobID jobId;
-    private final OperatorID operatorId;
+    private final OperatorIDPair operatorId;
     private final CoordinationRequestHandler handler;
     private final JobInfoProvider infoProvider;
 
@@ -50,7 +50,7 @@ public class TestJobClient implements JobClient, CoordinationRequestGateway {
 
     public TestJobClient(
             JobID jobId,
-            OperatorID operatorId,
+            OperatorIDPair operatorId,
             CoordinationRequestHandler handler,
             JobInfoProvider infoProvider) {
         this.jobId = jobId;
@@ -104,7 +104,7 @@ public class TestJobClient implements JobClient, CoordinationRequestGateway {
 
     @Override
     public CompletableFuture<CoordinationResponse> sendCoordinationRequest(
-            OperatorID operatorId, CoordinationRequest request) {
+            OperatorIDPair operatorId, CoordinationRequest request) {
         if (jobStatus.isGloballyTerminalState()) {
             throw new RuntimeException("Job terminated");
         }

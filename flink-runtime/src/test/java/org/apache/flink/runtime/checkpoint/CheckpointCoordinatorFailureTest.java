@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.messages.checkpoint.AcknowledgeCheckpoint;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.persistence.PossibleInconsistentStateException;
@@ -143,10 +143,10 @@ class CheckpointCoordinatorFailureTest {
                                 .build());
 
         TaskStateSnapshot subtaskState = spy(new TaskStateSnapshot());
-        subtaskState.putSubtaskStateByOperatorID(new OperatorID(), operatorSubtaskState);
+        subtaskState.putSubtaskStateByOperatorID(new OperatorIDPair(), operatorSubtaskState);
 
         when(subtaskState.getSubtaskStateByOperatorID(
-                        OperatorID.fromJobVertexID(vertex.getJobvertexId())))
+                        OperatorIDPair.fromJobVertexID(vertex.getJobvertexId())))
                 .thenReturn(operatorSubtaskState);
 
         AcknowledgeCheckpoint acknowledgeMessage =

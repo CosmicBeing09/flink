@@ -19,12 +19,11 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.operators.coordination.OperatorInfo;
 import org.apache.flink.runtime.state.CheckpointMetadataOutputStream;
 import org.apache.flink.runtime.state.CheckpointStorageLocation;
@@ -94,13 +93,13 @@ public class PendingCheckpoint implements Checkpoint {
 
     private final long checkpointTimestamp;
 
-    private final Map<OperatorID, OperatorState> operatorStates;
+    private final Map<OperatorIDPair, OperatorState> operatorStates;
 
     private final CheckpointPlan checkpointPlan;
 
     private final Map<ExecutionAttemptID, ExecutionVertex> notYetAcknowledgedTasks;
 
-    private final Set<OperatorID> notYetAcknowledgedOperatorCoordinators;
+    private final Set<OperatorIDPair> notYetAcknowledgedOperatorCoordinators;
 
     private final List<MasterState> masterStates;
 
@@ -142,7 +141,7 @@ public class PendingCheckpoint implements Checkpoint {
             long checkpointId,
             long checkpointTimestamp,
             CheckpointPlan checkpointPlan,
-            Collection<OperatorID> operatorCoordinatorsToConfirm,
+            Collection<OperatorIDPair> operatorCoordinatorsToConfirm,
             Collection<String> masterStateIdentifiers,
             CheckpointProperties props,
             CompletableFuture<CompletedCheckpoint> onCompletionPromise,
@@ -227,7 +226,7 @@ public class PendingCheckpoint implements Checkpoint {
         return numAcknowledgedTasks;
     }
 
-    public Map<OperatorID, OperatorState> getOperatorStates() {
+    public Map<OperatorIDPair, OperatorState> getOperatorStates() {
         return operatorStates;
     }
 
@@ -407,8 +406,8 @@ public class PendingCheckpoint implements Checkpoint {
             if (operatorSubtaskStates != null && operatorSubtaskStates.isTaskDeployedAsFinished()) {
                 checkpointPlan.reportTaskFinishedOnRestore(vertex);
             } else {
-                List<OperatorIDPair> operatorIDs = vertex.getJobVertex().getOperatorIDs();
-                for (OperatorIDPair operatorID : operatorIDs) {
+                List<org.apache.flink.runtime.OperatorIDPair> operatorIDs = vertex.getJobVertex().getOperatorIDs();
+                for (org.apache.flink.runtime.OperatorIDPair operatorID : operatorIDs) {
                     updateOperatorState(vertex, operatorSubtaskStates, operatorID);
                 }
 
@@ -464,7 +463,7 @@ public class PendingCheckpoint implements Checkpoint {
     private void updateOperatorState(
             ExecutionVertex vertex,
             TaskStateSnapshot operatorSubtaskStates,
-            OperatorIDPair operatorID) {
+            org.apache.flink.runtime.OperatorIDPair operatorID) {
         OperatorState operatorState = operatorStates.get(operatorID.getGeneratedOperatorID());
 
         if (operatorState == null) {
@@ -494,7 +493,7 @@ public class PendingCheckpoint implements Checkpoint {
                 return TaskAcknowledgeResult.DISCARDED;
             }
 
-            final OperatorID operatorId = coordinatorInfo.operatorId();
+            final OperatorIDPair operatorId = coordinatorInfo.operatorId();
             OperatorState operatorState = operatorStates.get(operatorId);
 
             // sanity check for better error reporting

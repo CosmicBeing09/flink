@@ -18,8 +18,6 @@
 
 package org.apache.flink.runtime;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
-
 import javax.annotation.Nullable;
 
 import java.io.Serializable;
@@ -30,29 +28,29 @@ public class OperatorIDPair implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private final OperatorID generatedOperatorID;
-    private final OperatorID userDefinedOperatorID;
+    private final org.apache.flink.runtime.jobgraph.OperatorIDPair generatedOperatorID;
+    private final org.apache.flink.runtime.jobgraph.OperatorIDPair userDefinedOperatorID;
 
     private OperatorIDPair(
-            OperatorID generatedOperatorID, @Nullable OperatorID userDefinedOperatorID) {
+            org.apache.flink.runtime.jobgraph.OperatorIDPair generatedOperatorID, @Nullable org.apache.flink.runtime.jobgraph.OperatorIDPair userDefinedOperatorID) {
         this.generatedOperatorID = generatedOperatorID;
         this.userDefinedOperatorID = userDefinedOperatorID;
     }
 
     public static OperatorIDPair of(
-            OperatorID generatedOperatorID, @Nullable OperatorID userDefinedOperatorID) {
+            org.apache.flink.runtime.jobgraph.OperatorIDPair generatedOperatorID, @Nullable org.apache.flink.runtime.jobgraph.OperatorIDPair userDefinedOperatorID) {
         return new OperatorIDPair(generatedOperatorID, userDefinedOperatorID);
     }
 
-    public static OperatorIDPair generatedIDOnly(OperatorID generatedOperatorID) {
+    public static OperatorIDPair generatedIDOnly(org.apache.flink.runtime.jobgraph.OperatorIDPair generatedOperatorID) {
         return new OperatorIDPair(generatedOperatorID, null);
     }
 
-    public OperatorID getGeneratedOperatorID() {
+    public org.apache.flink.runtime.jobgraph.OperatorIDPair getGeneratedOperatorID() {
         return generatedOperatorID;
     }
 
-    public Optional<OperatorID> getUserDefinedOperatorID() {
+    public Optional<org.apache.flink.runtime.jobgraph.OperatorIDPair> getUserDefinedOperatorID() {
         return Optional.ofNullable(userDefinedOperatorID);
     }
 }

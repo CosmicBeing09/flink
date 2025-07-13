@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.CompositeStateHandle;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.StateObject;
@@ -48,7 +48,7 @@ public class OperatorState implements CompositeStateHandle {
     private static final long serialVersionUID = -4845578005863201810L;
 
     /** The id of the operator. */
-    private final OperatorID operatorID;
+    private final OperatorIDPair operatorID;
 
     /** The handles to states created by the parallel tasks: subtaskIndex -> subtaskstate. */
     private final Map<Integer, OperatorSubtaskState> operatorSubtaskStates;
@@ -65,7 +65,7 @@ public class OperatorState implements CompositeStateHandle {
      */
     private final int maxParallelism;
 
-    public OperatorState(OperatorID operatorID, int parallelism, int maxParallelism) {
+    public OperatorState(OperatorIDPair operatorID, int parallelism, int maxParallelism) {
         if (parallelism > maxParallelism) {
             throw new IllegalArgumentException(
                     String.format(
@@ -81,7 +81,7 @@ public class OperatorState implements CompositeStateHandle {
         this.maxParallelism = maxParallelism;
     }
 
-    public OperatorID getOperatorID() {
+    public OperatorIDPair getOperatorID() {
         return operatorID;
     }
 
@@ -145,7 +145,7 @@ public class OperatorState implements CompositeStateHandle {
         return maxParallelism;
     }
 
-    public OperatorState copyWithNewOperatorID(OperatorID newOperatorId) {
+    public OperatorState copyWithNewOperatorID(OperatorIDPair newOperatorId) {
         OperatorState newState = new OperatorState(newOperatorId, parallelism, maxParallelism);
         operatorSubtaskStates.forEach(newState::putState);
         return newState;

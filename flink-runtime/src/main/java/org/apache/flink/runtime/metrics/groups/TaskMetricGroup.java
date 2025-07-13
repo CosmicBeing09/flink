@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.metrics.CharacterFilter;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.metrics.MetricRegistry;
 import org.apache.flink.runtime.metrics.dump.QueryScopeInfo;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
@@ -145,11 +145,11 @@ public class TaskMetricGroup extends ComponentMetricGroup<TaskManagerJobMetricGr
     // ------------------------------------------------------------------------
 
     public InternalOperatorMetricGroup getOrAddOperator(String operatorName) {
-        return getOrAddOperator(OperatorID.fromJobVertexID(vertexId), operatorName);
+        return getOrAddOperator(OperatorIDPair.fromJobVertexID(vertexId), operatorName);
     }
 
     public InternalOperatorMetricGroup getOrAddOperator(
-            OperatorID operatorID, String operatorName) {
+            OperatorIDPair operatorID, String operatorName) {
         final String truncatedOperatorName;
         if (operatorName != null && operatorName.length() > METRICS_OPERATOR_NAME_MAX_LENGTH) {
             LOG.warn(

@@ -63,7 +63,7 @@ import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriterWithA
 import org.apache.flink.runtime.io.network.partition.PartitionTestUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.metrics.groups.InternalOperatorMetricGroup;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
@@ -409,7 +409,7 @@ class MultipleInputStreamTaskTest {
                 new UnregisteredMetricGroups.UnregisteredTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID operatorID, String name) {
+                            OperatorIDPair operatorID, String name) {
                         InternalOperatorMetricGroup operatorMetricGroup =
                                 super.getOrAddOperator(operatorID, name);
                         operatorMetrics.put(name, operatorMetricGroup);
@@ -733,8 +733,8 @@ class MultipleInputStreamTaskTest {
     @TestTemplate
     @SuppressWarnings("unchecked")
     void testWatermarkMetrics() throws Exception {
-        OperatorID mainOperatorId = new OperatorID();
-        OperatorID chainedOperatorId = new OperatorID();
+        OperatorIDPair mainOperatorId = new OperatorIDPair();
+        OperatorIDPair chainedOperatorId = new OperatorIDPair();
 
         InterceptingOperatorMetricGroup mainOperatorMetricGroup =
                 new InterceptingOperatorMetricGroup();
@@ -744,7 +744,7 @@ class MultipleInputStreamTaskTest {
                 new InterceptingTaskMetricGroup() {
                     @Override
                     public InternalOperatorMetricGroup getOrAddOperator(
-                            OperatorID id, String name) {
+                            OperatorIDPair id, String name) {
                         if (id.equals(mainOperatorId)) {
                             return mainOperatorMetricGroup;
                         } else if (id.equals(chainedOperatorId)) {
@@ -951,7 +951,7 @@ class MultipleInputStreamTaskTest {
                         .build()) {
             ArrayDeque<Object> expectedOutput = new ArrayDeque<>();
 
-            OperatorID sourceId = new OperatorID();
+            OperatorIDPair sourceId = new OperatorIDPair();
             LatencyMarker latencyMarker = new LatencyMarker(42L, sourceId, 0);
             testHarness.processElement(latencyMarker);
             expectedOutput.add(latencyMarker);
@@ -1078,7 +1078,7 @@ class MultipleInputStreamTaskTest {
 
     @TestTemplate
     void testSkipExecutionsIfFinishedOnRestore() throws Exception {
-        OperatorID nonSourceOperatorId = new OperatorID();
+        OperatorIDPair nonSourceOperatorId = new OperatorIDPair();
 
         try (StreamTaskMailboxTestHarness<String> testHarness =
                 new StreamTaskMailboxTestHarnessBuilder<>(
@@ -1319,7 +1319,7 @@ class MultipleInputStreamTaskTest {
             Boundedness boundedness,
             int... records)
             throws Exception {
-        OperatorID sourceOperatorID = getSourceOperatorID(testHarness, sourceId);
+        OperatorIDPair sourceOperatorID = getSourceOperatorID(testHarness, sourceId);
 
         // Prepare the source split and assign it to the source reader.
         MockSourceSplit split =
@@ -1363,7 +1363,7 @@ class MultipleInputStreamTaskTest {
                 .build();
     }
 
-    private static OperatorID getSourceOperatorID(
+    private static OperatorIDPair getSourceOperatorID(
             StreamTaskMailboxTestHarness<String> testHarness, int sourceId) {
         StreamConfig.InputConfig[] inputs =
                 testHarness

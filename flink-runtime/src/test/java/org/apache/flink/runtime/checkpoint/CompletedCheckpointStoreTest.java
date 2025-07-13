@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.SharedStateRegistry;
 import org.apache.flink.runtime.state.SharedStateRegistryImpl;
 import org.apache.flink.runtime.state.testutils.TestCompletedCheckpointStorageLocation;
@@ -228,9 +228,9 @@ abstract class CompletedCheckpointStoreTest {
 
         int numberOfStates = 4;
 
-        OperatorID operatorID = new OperatorID();
+        OperatorIDPair operatorID = new OperatorIDPair();
 
-        Map<OperatorID, OperatorState> operatorGroupState = new HashMap<>();
+        Map<OperatorIDPair, OperatorState> operatorGroupState = new HashMap<>();
         OperatorState operatorState = new OperatorState(operatorID, numberOfStates, numberOfStates);
         operatorGroupState.put(operatorID, operatorState);
 
@@ -288,7 +288,7 @@ abstract class CompletedCheckpointStoreTest {
                 JobID jobId,
                 long checkpointId,
                 long timestamp,
-                Map<OperatorID, OperatorState> operatorGroupState,
+                Map<OperatorIDPair, OperatorState> operatorGroupState,
                 CheckpointProperties props) {
 
             super(

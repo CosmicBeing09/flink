@@ -24,13 +24,13 @@ import java.util.Objects;
 public class OperatorInstanceID {
 
     private final int subtaskId;
-    private final OperatorID operatorId;
+    private final OperatorIDPair operatorId;
 
-    public static OperatorInstanceID of(int subtaskId, OperatorID operatorID) {
+    public static OperatorInstanceID of(int subtaskId, OperatorIDPair operatorID) {
         return new OperatorInstanceID(subtaskId, operatorID);
     }
 
-    public OperatorInstanceID(int subtaskId, OperatorID operatorId) {
+    public OperatorInstanceID(int subtaskId, OperatorIDPair operatorId) {
         this.subtaskId = subtaskId;
         this.operatorId = operatorId;
     }
@@ -39,7 +39,7 @@ public class OperatorInstanceID {
         return subtaskId;
     }
 
-    public OperatorID getOperatorId() {
+    public OperatorIDPair getOperatorId() {
         return operatorId;
     }
 

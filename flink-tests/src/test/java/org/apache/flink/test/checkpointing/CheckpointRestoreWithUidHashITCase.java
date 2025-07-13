@@ -25,9 +25,8 @@ import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
@@ -119,9 +118,9 @@ public class CheckpointRestoreWithUidHashITCase {
                         .get();
 
         // Get the operator id
-        List<OperatorIDPair> operatorIds =
+        List<org.apache.flink.runtime.OperatorIDPair> operatorIds =
                 firstJob.getVerticesSortedTopologicallyFromSources().get(0).getOperatorIDs();
-        OperatorIDPair sourceOperatorIds = operatorIds.get(operatorIds.size() - 1);
+        org.apache.flink.runtime.OperatorIDPair sourceOperatorIds = operatorIds.get(operatorIds.size() - 1);
 
         JobGraph secondJob =
                 createJobGraph(
@@ -149,7 +148,7 @@ public class CheckpointRestoreWithUidHashITCase {
                         StatefulSourceBehavior.FAIL_AFTER_CHECKPOINT_ON_FIRST_RUN,
                         maxNumber,
                         null,
-                        new OperatorID().toHexString(),
+                        new OperatorIDPair().toHexString(),
                         null);
 
         miniClusterResource.getMiniCluster().executeJobBlocking(jobGraph);

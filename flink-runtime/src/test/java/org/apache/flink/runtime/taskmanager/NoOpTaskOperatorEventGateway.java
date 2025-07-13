@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.taskmanager;
 
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.tasks.TaskOperatorEventGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterOperatorEventGateway;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
@@ -33,11 +33,11 @@ public class NoOpTaskOperatorEventGateway implements TaskOperatorEventGateway {
 
     @Override
     public void sendOperatorEventToCoordinator(
-            OperatorID operatorID, SerializedValue<OperatorEvent> event) {}
+            OperatorIDPair operatorID, SerializedValue<OperatorEvent> event) {}
 
     @Override
     public CompletableFuture<CoordinationResponse> sendRequestToCoordinator(
-            OperatorID operator, SerializedValue<CoordinationRequest> request) {
+            OperatorIDPair operator, SerializedValue<CoordinationRequest> request) {
         return CompletableFuture.completedFuture(null);
     }
 }

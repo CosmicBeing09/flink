@@ -40,7 +40,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.io.network.partition.NoOpJobMasterPartitionTracker;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmaster.DefaultExecutionDeploymentTracker;
 import org.apache.flink.runtime.jobmaster.TestUtils;
@@ -235,7 +235,7 @@ class DefaultExecutionGraphFactoryTest {
     private JobGraph createJobGraphWithSavepoint(
             boolean allowNonRestoredState, long savepointId, int parallelism) throws IOException {
         // create savepoint data
-        final OperatorID operatorID = new OperatorID();
+        final OperatorIDPair operatorID = new OperatorIDPair();
         final File savepointFile =
                 TestUtils.createSavepointWithOperatorState(temporaryFile, savepointId, operatorID);
 

@@ -18,12 +18,11 @@
 
 package org.apache.flink.runtime.checkpoint;
 
-import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.state.OperatorStateHandle;
 
 import java.util.Collection;
@@ -120,7 +119,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     }
 
     @Override
-    public void fulfillFinishedTaskStatus(Map<OperatorID, OperatorState> operatorStates) {
+    public void fulfillFinishedTaskStatus(Map<OperatorIDPair, OperatorState> operatorStates) {
         if (!mayHaveFinishedTasks) {
             return;
         }
@@ -148,7 +147,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      */
     private void checkNoPartlyFinishedVertexUsedUnionListState(
             Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
-            Map<OperatorID, OperatorState> operatorStates) {
+            Map<OperatorIDPair, OperatorState> operatorStates) {
         for (ExecutionJobVertex vertex : partlyFinishedVertex.values()) {
             if (hasUsedUnionListState(vertex, operatorStates)) {
                 throw new PartialFinishingNotSupportedByStateException(
@@ -169,7 +168,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      */
     private void checkNoPartlyOperatorsFinishedVertexUsedUnionListState(
             Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
-            Map<OperatorID, OperatorState> operatorStates) {
+            Map<OperatorIDPair, OperatorState> operatorStates) {
         for (Map.Entry<ExecutionJobVertex, Integer> entry :
                 vertexOperatorsFinishedTasksCount.entrySet()) {
             ExecutionJobVertex vertex = entry.getKey();
@@ -192,8 +191,8 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     }
 
     private boolean hasUsedUnionListState(
-            ExecutionJobVertex vertex, Map<OperatorID, OperatorState> operatorStates) {
-        for (OperatorIDPair operatorIDPair : vertex.getOperatorIDs()) {
+            ExecutionJobVertex vertex, Map<OperatorIDPair, OperatorState> operatorStates) {
+        for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : vertex.getOperatorIDs()) {
             OperatorState operatorState =
                     operatorStates.get(operatorIDPair.getGeneratedOperatorID());
             if (operatorState == null) {
@@ -225,10 +224,10 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     }
 
     private void fulfillFullyFinishedOrFinishedOnRestoreOperatorStates(
-            Map<OperatorID, OperatorState> operatorStates) {
+            Map<OperatorIDPair, OperatorState> operatorStates) {
         // Completes the operator state for the fully finished operators
         for (ExecutionJobVertex jobVertex : fullyFinishedOrFinishedOnRestoreVertices.values()) {
-            for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
+            for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
                 OperatorState operatorState =
                         operatorStates.get(operatorIDPair.getGeneratedOperatorID());
                 checkState(
@@ -246,10 +245,10 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     }
 
     private void fulfillSubtaskStateForPartiallyFinishedOperators(
-            Map<OperatorID, OperatorState> operatorStates) {
+            Map<OperatorIDPair, OperatorState> operatorStates) {
         for (Execution finishedTask : finishedTasks) {
             ExecutionJobVertex jobVertex = finishedTask.getVertex().getJobVertex();
-            for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
+            for (org.apache.flink.runtime.OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
                 OperatorState operatorState =
                         operatorStates.get(operatorIDPair.getGeneratedOperatorID());
 

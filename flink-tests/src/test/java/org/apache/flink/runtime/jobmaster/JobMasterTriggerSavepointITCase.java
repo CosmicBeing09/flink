@@ -33,7 +33,7 @@ import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
@@ -249,7 +249,7 @@ public class JobMasterTriggerSavepointITCase extends AbstractTestBaseJUnit4 {
                 final CheckpointOptions checkpointOptions) {
             final TaskStateSnapshot checkpointStateHandles = new TaskStateSnapshot();
             checkpointStateHandles.putSubtaskStateByOperatorID(
-                    OperatorID.fromJobVertexID(getEnvironment().getJobVertexId()),
+                    OperatorIDPair.fromJobVertexID(getEnvironment().getJobVertexId()),
                     OperatorSubtaskState.builder().build());
 
             getEnvironment()

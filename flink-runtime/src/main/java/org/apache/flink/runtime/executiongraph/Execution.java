@@ -38,7 +38,7 @@ import org.apache.flink.runtime.io.network.partition.JobMasterPartitionTracker;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.OperatorIDPair;
 import org.apache.flink.runtime.jobmanager.slots.TaskManagerGateway;
 import org.apache.flink.runtime.jobmaster.LogicalSlot;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -936,7 +936,7 @@ public class Execution
      * @return True, of the message was sent, false is the task is currently not running.
      */
     public CompletableFuture<Acknowledge> sendOperatorEvent(
-            OperatorID operatorId, SerializedValue<OperatorEvent> event) {
+            OperatorIDPair operatorId, SerializedValue<OperatorEvent> event) {
 
         assertRunningInJobMasterMainThread();
         final LogicalSlot slot = assignedResource;
