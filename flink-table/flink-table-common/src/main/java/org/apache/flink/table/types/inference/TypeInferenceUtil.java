@@ -124,11 +124,11 @@ public final class TypeInferenceUtil {
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final AdaptedCallContext castCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
-        final List<DataType> expectedTypes = adaptedCallContext.getArgumentDataTypes();
+        final List<DataType> expectedTypes = castCallContext.getArgumentDataTypes();
         for (int pos = 0; pos < actualTypes.size(); pos++) {
             final DataType expectedType = expectedTypes.get(pos);
             final DataType actualType = actualTypes.get(pos);
@@ -144,7 +144,7 @@ public final class TypeInferenceUtil {
             }
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     /**
@@ -463,7 +463,7 @@ public final class TypeInferenceUtil {
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
+        final AdaptedCallContext castCallContext =
                 new AdaptedCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
@@ -493,7 +493,7 @@ public final class TypeInferenceUtil {
                                     })
                             .collect(Collectors.toList());
             if (fromStaticArgs.stream().allMatch(Objects::nonNull)) {
-                adaptedCallContext.setExpectedArguments(fromStaticArgs);
+                castCallContext.setExpectedArguments(fromStaticArgs);
             } else if (throwOnFailure) {
                 throw new ValidationException("Invalid input arguments.");
             }
@@ -504,15 +504,15 @@ public final class TypeInferenceUtil {
         final List<DataType> inferredDataTypes =
                 typeInference
                         .getInputTypeStrategy()
-                        .inferInputTypes(adaptedCallContext, throwOnFailure)
+                        .inferInputTypes(castCallContext, throwOnFailure)
                         .orElse(null);
         if (inferredDataTypes != null) {
-            adaptedCallContext.setExpectedArguments(inferredDataTypes);
+            castCallContext.setExpectedArguments(inferredDataTypes);
         } else if (throwOnFailure) {
             throw new ValidationException("Invalid input arguments.");
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     private static StateInfo inferStateInfo(
