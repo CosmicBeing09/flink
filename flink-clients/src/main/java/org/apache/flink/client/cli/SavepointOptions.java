@@ -23,7 +23,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 
 import org.apache.commons.cli.CommandLine;
 
-import static org.apache.flink.client.cli.CliFrontendParser.JAR_OPTION;
+import static org.apache.flink.client.cli.CliFrontendParser.JARS_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SAVEPOINT_DETACHED_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SAVEPOINT_DISPOSE_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SAVEPOINT_FORMAT_OPTION;
@@ -43,7 +43,7 @@ public class SavepointOptions extends CommandLineOptions {
         args = line.getArgs();
         dispose = line.hasOption(SAVEPOINT_DISPOSE_OPTION.getOpt());
         disposeSavepointPath = line.getOptionValue(SAVEPOINT_DISPOSE_OPTION.getOpt());
-        jarFile = line.getOptionValue(JAR_OPTION.getOpt());
+        jarFile = line.getOptionValue(JARS_OPTION.getOpt());
         isDetached = line.hasOption(SAVEPOINT_DETACHED_OPTION.getOpt());
         if (line.hasOption(SAVEPOINT_FORMAT_OPTION)) {
             formatType =

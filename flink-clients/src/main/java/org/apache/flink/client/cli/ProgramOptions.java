@@ -39,7 +39,7 @@ import static org.apache.flink.client.cli.CliFrontendParser.ARGS_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.CLASSPATH_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.CLASS_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.DETACHED_OPTION;
-import static org.apache.flink.client.cli.CliFrontendParser.JAR_OPTION;
+import static org.apache.flink.client.cli.CliFrontendParser.JARS_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.PARALLELISM_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SHUTDOWN_IF_ATTACHED_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.YARN_DETACHED_OPTION;
@@ -77,8 +77,8 @@ public class ProgramOptions extends CommandLineOptions {
                         : null;
 
         this.jarFilePath =
-                line.hasOption(JAR_OPTION.getOpt())
-                        ? line.getOptionValue(JAR_OPTION.getOpt())
+                line.hasOption(JARS_OPTION.getOpt())
+                        ? line.getOptionValue(JARS_OPTION.getOpt())
                         : null;
 
         this.programArgs = extractProgramArgs(line);
@@ -126,7 +126,7 @@ public class ProgramOptions extends CommandLineOptions {
                         ? line.getOptionValues(ARGS_OPTION.getOpt())
                         : line.getArgs();
 
-        if (args.length > 0 && !line.hasOption(JAR_OPTION.getOpt())) {
+        if (args.length > 0 && !line.hasOption(JARS_OPTION.getOpt())) {
             jarFilePath = args[0];
             args = Arrays.copyOfRange(args, 1, args.length);
         }

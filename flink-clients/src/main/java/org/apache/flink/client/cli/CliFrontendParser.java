@@ -49,7 +49,7 @@ public class CliFrontendParser {
                     false,
                     "Show the help message for the CLI Frontend or the action.");
 
-    static final Option JAR_OPTION = new Option("j", "jarfile", true, "Flink program JAR file.");
+    static final Option JARS_OPTION = new Option("j", "jarfile", true, "Flink program JAR file.");
 
     static final Option CLASS_OPTION =
             new Option(
@@ -305,8 +305,8 @@ public class CliFrontendParser {
     static {
         HELP_OPTION.setRequired(false);
 
-        JAR_OPTION.setRequired(false);
-        JAR_OPTION.setArgName("jarfile");
+        JARS_OPTION.setRequired(false);
+        JARS_OPTION.setArgName("jarfile");
 
         CLASS_OPTION.setRequired(false);
         CLASS_OPTION.setArgName("classname");
@@ -382,7 +382,7 @@ public class CliFrontendParser {
     }
 
     private static Options getProgramSpecificOptions(Options options) {
-        options.addOption(JAR_OPTION);
+        options.addOption(JARS_OPTION);
         options.addOption(CLASS_OPTION);
         options.addOption(CLASSPATH_OPTION);
         options.addOption(PARALLELISM_OPTION);
@@ -454,7 +454,7 @@ public class CliFrontendParser {
     static Options getSavepointCommandOptions() {
         return buildGeneralOptions(new Options())
                 .addOption(SAVEPOINT_DISPOSE_OPTION)
-                .addOption(JAR_OPTION)
+                .addOption(JARS_OPTION)
                 .addOption(SAVEPOINT_FORMAT_OPTION)
                 .addOption(SAVEPOINT_DETACHED_OPTION);
     }
@@ -501,7 +501,7 @@ public class CliFrontendParser {
     private static Options getSavepointOptionsWithoutDeprecatedOptions(Options options) {
         return options.addOption(SAVEPOINT_DISPOSE_OPTION)
                 .addOption(SAVEPOINT_FORMAT_OPTION)
-                .addOption(JAR_OPTION)
+                .addOption(JARS_OPTION)
                 .addOption(SAVEPOINT_DETACHED_OPTION);
     }
 
