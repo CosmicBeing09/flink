@@ -283,8 +283,8 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
                         .get(tableArgCall.getInputIndex())
                         .getContainedKinds()
                         .toArray(RowKind[]::new);
-        final byte[] expectedChanges = new byte[kinds.length];
-        IntStream.range(0, kinds.length).forEach(i -> expectedChanges[i] = kinds[i].toByteValue());
+        final byte[] consumedChangelogMode = new byte[kinds.length];
+        IntStream.range(0, kinds.length).forEach(i -> consumedChangelogMode[i] = kinds[i].toByteValue());
         final DataType dataType;
         if (tableArg.getDataType().isPresent()) {
             dataType = tableArg.getDataType().get();
@@ -307,7 +307,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
                 tableArgCall.getInputIndex(),
                 dataType,
                 tableArgCall.getPartitionKeys(),
-                expectedChanges,
+                consumedChangelogMode,
                 tableArg.is(StaticArgumentTrait.PASS_COLUMNS_THROUGH),
                 tableArg.is(StaticArgumentTrait.TABLE_AS_SET),
                 timeColumn);

@@ -40,7 +40,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
     private final int inputIndex;
     private final DataType dataType;
     private final int[] partitionByColumns;
-    private final byte[] expectedChanges;
+    private final byte[] consumedChangelogMode;
     private final boolean passColumnsThrough;
     private final boolean hasSetSemantics;
     private final int timeColumn;
@@ -52,7 +52,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
             int inputIndex,
             DataType dataType,
             int[] partitionByColumns,
-            byte[] expectedChanges,
+            byte[] consumedChangelogMode,
             boolean passColumnsThrough,
             boolean hasSetSemantics,
             int timeColumn) {
@@ -60,7 +60,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
         this.inputIndex = inputIndex;
         this.dataType = dataType;
         this.partitionByColumns = partitionByColumns;
-        this.expectedChanges = expectedChanges;
+        this.consumedChangelogMode = consumedChangelogMode;
         this.passColumnsThrough = passColumnsThrough;
         this.hasSetSemantics = hasSetSemantics;
         this.timeColumn = timeColumn;
@@ -85,7 +85,7 @@ public class RuntimeTableSemantics implements TableSemantics, Serializable {
     public ChangelogMode getChangelogMode() {
         if (changelogMode == null) {
             final ChangelogMode.Builder builder = ChangelogMode.newBuilder();
-            for (byte expectedChange : expectedChanges) {
+            for (byte expectedChange : consumedChangelogMode) {
                 builder.addContainedKind(RowKind.fromByteValue(expectedChange));
             }
             changelogMode = builder.build();
