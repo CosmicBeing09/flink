@@ -30,7 +30,7 @@ import org.apache.flink.metrics.MetricConfig;
 import org.apache.flink.metrics.Reporter;
 import org.apache.flink.metrics.reporter.MetricReporter;
 import org.apache.flink.metrics.reporter.MetricReporterFactory;
-import org.apache.flink.runtime.metrics.filter.DefaultMetricFilter;
+import org.apache.flink.runtime.metrics.filter.DefaultReporterFilter;
 import org.apache.flink.runtime.metrics.filter.MetricFilter;
 import org.apache.flink.runtime.metrics.scope.ScopeFormat;
 import org.apache.flink.traces.reporter.TraceReporter;
@@ -381,7 +381,7 @@ public class ReporterSetupBuilder<
                         loadReporter(reporterName, reporterConfig, reporterFactories);
 
                 final MetricFilter reporterFilter =
-                        DefaultMetricFilter.fromConfiguration(reporterConfig);
+                        DefaultReporterFilter.fromConfiguration(reporterConfig);
 
                 // massage user variables keys into scope format for parity to variable
                 // exclusion
