@@ -99,7 +99,7 @@ class DefaultLeaderElectionTest {
         final AtomicReference<String> leaderAddressRef = new AtomicReference<>();
         final DefaultLeaderElection.ParentService parentService =
                 TestingAbstractLeaderElectionService.newBuilder()
-                        .setConfirmLeadershipConsumer(
+                        .setConfirmLeadershipAsyncConsumer(
                                 (componentId, leaderSessionID, address) -> {
                                     componentIdRef.set(componentId);
                                     leaderSessionIDRef.set(leaderSessionID);
@@ -111,7 +111,7 @@ class DefaultLeaderElectionTest {
 
             final UUID expectedLeaderSessionID = UUID.randomUUID();
             final String expectedAddress = "random-address";
-            testInstance.confirmLeadership(expectedLeaderSessionID, expectedAddress);
+            testInstance.confirmLeadershipAsync(expectedLeaderSessionID, expectedAddress);
 
             assertThat(componentIdRef).hasValue(DEFAULT_TEST_COMPONENT_ID);
             assertThat(leaderSessionIDRef).hasValue(expectedLeaderSessionID);
@@ -219,7 +219,7 @@ class DefaultLeaderElectionTest {
         }
 
         @Override
-        protected void confirmLeadership(
+        protected void confirmLeadershipAsync(
                 String componentId, UUID leaderSessionID, String leaderAddress) {
             confirmLeadershipConsumer.accept(componentId, leaderSessionID, leaderAddress);
         }
@@ -236,7 +236,7 @@ class DefaultLeaderElectionTest {
                                 throw new UnsupportedOperationException("register not supported");
                             })
                     .setRemoveConsumer(componentId -> {})
-                    .setConfirmLeadershipConsumer(
+                    .setConfirmLeadershipAsyncConsumer(
                             (componentId, leaderSessionID, address) -> {
                                 throw new UnsupportedOperationException(
                                         "confirmLeadership not supported");
@@ -268,7 +268,7 @@ class DefaultLeaderElectionTest {
                 return this;
             }
 
-            public Builder setConfirmLeadershipConsumer(
+            public Builder setConfirmLeadershipAsyncConsumer(
                     TriConsumer<String, UUID, String> confirmLeadershipConsumer) {
                 this.confirmLeadershipConsumer = confirmLeadershipConsumer;
                 return this;

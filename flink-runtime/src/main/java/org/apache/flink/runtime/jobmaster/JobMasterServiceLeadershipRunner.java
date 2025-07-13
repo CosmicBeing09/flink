@@ -26,7 +26,6 @@ import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.jobmaster.factories.JobMasterServiceProcessFactory;
 import org.apache.flink.runtime.leaderelection.LeaderContender;
 import org.apache.flink.runtime.leaderelection.LeaderElection;
-import org.apache.flink.runtime.leaderelection.LeadershipLostException;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
@@ -256,26 +255,10 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
         sequentialOperation =
                 sequentialOperation.thenCompose(
                         unused ->
-                                supplyAsyncIfValidLeader(
-                                                leaderSessionId,
-                                                () ->
-                                                        jobResultStore.hasJobResultEntryAsync(
-                                                                getJobID()),
-                                                () ->
-                                                        FutureUtils.completedExceptionally(
-                                                                new LeadershipLostException(
-                                                                        "The leadership is lost.")))
-                                        .handle(
-                                                (hasJobResult, throwable) -> {
-                                                    if (throwable
-                                                            instanceof LeadershipLostException) {
-                                                        printLogIfNotValidLeader(
-                                                                "verify job result entry",
-                                                                leaderSessionId);
-                                                        return null;
-                                                    } else if (throwable != null) {
-                                                        ExceptionUtils.rethrow(throwable);
-                                                    }
+                                jobResultStore
+                                        .hasJobResultEntryAsync(getJobID())
+                                        .thenAccept(
+                                                hasJobResult -> {
                                                     if (hasJobResult) {
                                                         handleJobAlreadyDoneIfValidLeader(
                                                                 leaderSessionId);
@@ -283,7 +266,6 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                                                         createNewJobMasterServiceProcessIfValidLeader(
                                                                 leaderSessionId);
                                                     }
-                                                    return null;
                                                 }));
         handleAsyncOperationError(sequentialOperation, "Could not start the job manager.");
     }
@@ -348,10 +330,10 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                 jobMasterGatewayFuture,
                 "JobMasterGatewayFuture from JobMasterServiceProcess");
         forwardResultFuture(leaderSessionId, jobMasterServiceProcess.getResultFuture());
-        confirmLeadership(leaderSessionId, jobMasterServiceProcess.getLeaderAddressFuture());
+        confirmLeadershipAsync(leaderSessionId, jobMasterServiceProcess.getLeaderAddressFuture());
     }
 
-    private void confirmLeadership(
+    private void confirmLeadershipAsync(
             UUID leaderSessionId, CompletableFuture<String> leaderAddressFuture) {
         FutureUtils.assertNoException(
                 leaderAddressFuture.thenAccept(
@@ -359,7 +341,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                                 runIfStateRunning(
                                         () -> {
                                             LOG.debug("Confirm leadership {}.", leaderSessionId);
-                                            leaderElection.confirmLeadership(
+                                            leaderElection.confirmLeadershipAsync(
                                                     leaderSessionId, address);
                                         },
                                         "confirming leadership")));
@@ -515,19 +497,6 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                 () ->
                         printLogIfNotValidLeader(
                                 noLeaderFallbackCommandDescription, expectedLeaderId));
-    }
-
-    private <T> CompletableFuture<T> supplyAsyncIfValidLeader(
-            UUID expectedLeaderId,
-            Supplier<CompletableFuture<T>> supplier,
-            Supplier<CompletableFuture<T>> noLeaderFallback) {
-        final CompletableFuture<T> resultFuture = new CompletableFuture<>();
-        runIfValidLeader(
-                expectedLeaderId,
-                () -> FutureUtils.forward(supplier.get(), resultFuture),
-                () -> FutureUtils.forward(noLeaderFallback.get(), resultFuture));
-
-        return resultFuture;
     }
 
     @GuardedBy("lock")

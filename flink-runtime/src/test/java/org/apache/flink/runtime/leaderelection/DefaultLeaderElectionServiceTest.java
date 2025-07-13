@@ -1038,7 +1038,7 @@ class DefaultLeaderElectionServiceTest {
                                                 .hasValue(expectedLeaderInformation);
 
                                         // Old confirm call should be ignored.
-                                        ctx.leaderElection.confirmLeadership(
+                                        ctx.leaderElection.confirmLeadershipAsync(
                                                 UUID.randomUUID(), ctx.address);
                                         assertThat(
                                                         leaderElectionService.getLeaderSessionID(
@@ -1069,7 +1069,7 @@ class DefaultLeaderElectionServiceTest {
                             applyToBothContenderContexts(
                                     ctx -> {
                                         // Old confirm call should be ignored.
-                                        ctx.leaderElection.confirmLeadership(
+                                        ctx.leaderElection.confirmLeadershipAsync(
                                                 currentLeaderSessionId, ctx.address);
 
                                         assertThat(
