@@ -292,7 +292,7 @@ public class ForStKeyedStateBackendBuilder<K>
                 logger.warn(
                         "Failed to delete ForSt local base path {}, remote base path {}.",
                         optionsContainer.getLocalBasePath(),
-                        optionsContainer.getRemoteBasePath(),
+                        optionsContainer.getPrimaryBasePath(),
                         ex);
             }
             IOUtils.closeQuietly(optionsContainer);
@@ -311,7 +311,7 @@ public class ForStKeyedStateBackendBuilder<K>
         logger.info(
                 "Finished building ForSt keyed state-backend at local base path: {}, remote base path: {}.",
                 optionsContainer.getLocalBasePath(),
-                optionsContainer.getRemoteBasePath());
+                optionsContainer.getPrimaryBasePath());
         return new ForStKeyedStateBackend<>(
                 backendUID,
                 executionConfig,
@@ -347,7 +347,7 @@ public class ForStKeyedStateBackendBuilder<K>
         // by setting the dbPath to "/" when the dfs directory existed.
         // TODO: use localForStPath as dbPath after ForSt Support mixing local-dir and remote-dir
         Path instanceForStPath =
-                optionsContainer.getRemoteForStPath() == null
+                optionsContainer.getPrimaryForStPath() == null
                         ? optionsContainer.getLocalForStPath()
                         : new Path("/db");
 

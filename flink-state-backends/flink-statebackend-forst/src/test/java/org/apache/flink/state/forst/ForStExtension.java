@@ -191,7 +191,7 @@ public class ForStExtension implements BeforeEachCallback, AfterEachCallback {
         // by setting the dbPath to "/" when the dfs directory existed.
         // TODO: use localForStPath as dbPath after ForSt Support mixing local-dir and remote-dir
         Path instanceForStPath =
-                resourceContainer.getRemoteForStPath() == null
+                resourceContainer.getPrimaryForStPath() == null
                         ? resourceContainer.getLocalForStPath()
                         : new Path("/");
 

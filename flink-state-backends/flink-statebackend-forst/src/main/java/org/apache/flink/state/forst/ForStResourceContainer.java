@@ -320,12 +320,12 @@ public final class ForStResourceContainer implements AutoCloseable {
     }
 
     @Nullable
-    public Path getRemoteBasePath() {
+    public Path getPrimaryBasePath() {
         return remoteBasePath;
     }
 
     @Nullable
-    public Path getRemoteForStPath() {
+    public Path getPrimaryForStPath() {
         return remoteForStPath;
     }
 
