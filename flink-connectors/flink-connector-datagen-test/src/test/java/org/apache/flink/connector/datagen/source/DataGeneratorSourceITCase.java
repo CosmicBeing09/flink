@@ -70,10 +70,11 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Combined results of parallel source readers produce the expected sequence.")
     void testParallelSourceExecution() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
 
-        final DataStream<Long> stream = getGeneratorSourceStream(index -> index, env, 1_000L);
+        final DataStream<Long> stream = getGeneratorSourceStream(index -> index,
+                streamExecutionEnvironment, 1_000L);
 
         final List<Long> result = stream.executeAndCollect(10000);
 
@@ -83,8 +84,8 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Generator function can be instantiated as an anonymous class.")
     void testParallelSourceExecutionWithAnonymousClass() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
 
         GeneratorFunction<Long, Long> generatorFunction =
                 new GeneratorFunction<Long, Long>() {
@@ -95,7 +96,8 @@ class DataGeneratorSourceITCase extends TestLogger {
                     }
                 };
 
-        final DataStream<Long> stream = getGeneratorSourceStream(generatorFunction, env, 1_000L);
+        final DataStream<Long> stream = getGeneratorSourceStream(generatorFunction,
+                streamExecutionEnvironment, 1_000L);
 
         final List<Long> result = stream.executeAndCollect(10000);
 
