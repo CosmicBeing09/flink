@@ -38,12 +38,12 @@ public interface DispatcherGateway extends FencedRpcGateway<DispatcherId>, Restf
     /**
      * Submit a job to the dispatcher.
      *
-     * @param executionPlan ExecutionPlan to submit
+     * @param streamGraph ExecutionPlan to submit
      * @param timeout RPC timeout
      * @return A future acknowledge if the submission succeeded
      */
     CompletableFuture<Acknowledge> submitJob(
-            ExecutionPlan executionPlan, @RpcTimeout Duration timeout);
+            ExecutionPlan streamGraph, @RpcTimeout Duration timeout);
 
     CompletableFuture<Acknowledge> submitFailedJob(
             JobID jobId, String jobName, Throwable exception);
