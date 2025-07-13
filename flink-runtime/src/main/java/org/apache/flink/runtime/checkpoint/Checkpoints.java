@@ -153,7 +153,7 @@ public class Checkpoints {
         // generate mapping from operator to task
         Map<OperatorID, ExecutionJobVertex> operatorToJobVertexMapping = new HashMap<>();
         for (ExecutionJobVertex task : tasks.values()) {
-            for (OperatorIDPair operatorIDPair : task.getOperatorIDs()) {
+            for (OperatorIDPair operatorIDPair : task.getOperatorIdentifier()) {
                 operatorToJobVertexMapping.put(operatorIDPair.getGeneratedOperatorID(), task);
                 operatorIDPair
                         .getUserDefinedOperatorID()
@@ -168,14 +168,14 @@ public class Checkpoints {
         for (OperatorState operatorState : checkpointMetadata.getOperatorStates()) {
 
             ExecutionJobVertex executionJobVertex =
-                    operatorToJobVertexMapping.get(operatorState.getOperatorID());
+                    operatorToJobVertexMapping.get(operatorState.getOperatorIdentifier());
 
             if (executionJobVertex != null) {
 
                 if (executionJobVertex.getMaxParallelism() == operatorState.getMaxParallelism()
                         || executionJobVertex.canRescaleMaxParallelism(
                                 operatorState.getMaxParallelism())) {
-                    operatorStates.put(operatorState.getOperatorID(), operatorState);
+                    operatorStates.put(operatorState.getOperatorIdentifier(), operatorState);
                 } else {
                     String msg =
                             String.format(
@@ -185,7 +185,7 @@ public class Checkpoints {
                                             + "max parallelism %d. This indicates that the program has been changed "
                                             + "in a non-compatible way after the checkpoint/savepoint.",
                                     checkpointMetadata,
-                                    operatorState.getOperatorID(),
+                                    operatorState.getOperatorIdentifier(),
                                     operatorState.getMaxParallelism(),
                                     executionJobVertex.getMaxParallelism());
 
@@ -193,23 +193,23 @@ public class Checkpoints {
                 }
             } else if (allowNonRestoredState) {
                 LOG.info(
-                        "Skipping savepoint state for operator {}.", operatorState.getOperatorID());
+                        "Skipping savepoint state for operator {}.", operatorState.getOperatorIdentifier());
             } else {
                 if (operatorState.getCoordinatorState() != null) {
                     throwNonRestoredStateException(
-                            checkpointPointer, operatorState.getOperatorID());
+                            checkpointPointer, operatorState.getOperatorIdentifier());
                 }
 
                 for (OperatorSubtaskState operatorSubtaskState : operatorState.getStates()) {
                     if (operatorSubtaskState.hasState()) {
                         throwNonRestoredStateException(
-                                checkpointPointer, operatorState.getOperatorID());
+                                checkpointPointer, operatorState.getOperatorIdentifier());
                     }
                 }
 
                 LOG.info(
                         "Skipping empty savepoint state for operator {}.",
-                        operatorState.getOperatorID());
+                        operatorState.getOperatorIdentifier());
             }
         }
 

@@ -156,13 +156,13 @@ public class TestJobDataFlowValidator {
     /**
      * Traverse operators in the chain in the vertex and return the first tracked operator ID. For
      * upstream, start with head, for downstream - with tail (see {@link
-     * JobVertex#getOperatorIDs()}). If a chain doesn't contain any tracked operators return
+     * JobVertex#getOperatorIdentifier()}). If a chain doesn't contain any tracked operators return
      * nothing.
      */
     private static Optional<String> getTrackedOperatorID(
             JobVertex vertex, boolean upstream, TestJobWithDescription testJob) {
         ListIterator<OperatorIDPair> iterator =
-                vertex.getOperatorIDs().listIterator(upstream ? 0 : vertex.getOperatorIDs().size());
+                vertex.getOperatorIdentifier().listIterator(upstream ? 0 : vertex.getOperatorIdentifier().size());
         while (upstream ? iterator.hasNext() : iterator.hasPrevious()) {
             OperatorIDPair idPair = upstream ? iterator.next() : iterator.previous();
             String id =

@@ -247,7 +247,7 @@ public class JobVertex implements java.io.Serializable {
         return this.inputs.size();
     }
 
-    public List<OperatorIDPair> getOperatorIDs() {
+    public List<OperatorIDPair> getOperatorIdentifier() {
         return operatorIDs;
     }
 

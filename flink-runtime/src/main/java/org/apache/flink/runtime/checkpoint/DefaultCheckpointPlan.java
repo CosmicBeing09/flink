@@ -193,7 +193,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
 
     private boolean hasUsedUnionListState(
             ExecutionJobVertex vertex, Map<OperatorID, OperatorState> operatorStates) {
-        for (OperatorIDPair operatorIDPair : vertex.getOperatorIDs()) {
+        for (OperatorIDPair operatorIDPair : vertex.getOperatorIdentifier()) {
             OperatorState operatorState =
                     operatorStates.get(operatorIDPair.getGeneratedOperatorID());
             if (operatorState == null) {
@@ -228,7 +228,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             Map<OperatorID, OperatorState> operatorStates) {
         // Completes the operator state for the fully finished operators
         for (ExecutionJobVertex jobVertex : fullyFinishedOrFinishedOnRestoreVertices.values()) {
-            for (OperatorIDPair operatorID : jobVertex.getOperatorIDs()) {
+            for (OperatorIDPair operatorID : jobVertex.getOperatorIdentifier()) {
                 OperatorState operatorState =
                         operatorStates.get(operatorID.getGeneratedOperatorID());
                 checkState(
@@ -249,7 +249,7 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             Map<OperatorID, OperatorState> operatorStates) {
         for (Execution finishedTask : finishedTasks) {
             ExecutionJobVertex jobVertex = finishedTask.getVertex().getJobVertex();
-            for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
+            for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIdentifier()) {
                 OperatorState operatorState =
                         operatorStates.get(operatorIDPair.getGeneratedOperatorID());
 

@@ -328,7 +328,7 @@ class CheckpointStateRestoreTest {
         when(vertex.getMaxParallelism()).thenReturn(vertices.length);
         when(vertex.getJobVertexId()).thenReturn(id);
         when(vertex.getTaskVertices()).thenReturn(vertices);
-        when(vertex.getOperatorIDs())
+        when(vertex.getOperatorIdentifier())
                 .thenReturn(
                         Collections.singletonList(
                                 OperatorIDPair.generatedIDOnly(OperatorID.fromJobVertexID(id))));

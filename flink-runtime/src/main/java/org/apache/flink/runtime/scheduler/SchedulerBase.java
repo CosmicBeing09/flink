@@ -1136,7 +1136,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 List<OperatorIDPair> operatorIDPairs =
                         executionGraph
                                 .getJobVertex(executionAttemptID.getJobVertexId())
-                                .getOperatorIDs();
+                                .getOperatorIdentifier();
                 CheckpointCoordinator checkpointCoordinator =
                         executionGraph.getCheckpointCoordinator();
                 if (checkpointCoordinator != null) {

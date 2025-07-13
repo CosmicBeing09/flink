@@ -39,7 +39,7 @@ public class OperatorInstanceID {
         return subtaskId;
     }
 
-    public OperatorID getOperatorId() {
+    public OperatorID getOperatorIdentifier() {
         return operatorId;
     }
 

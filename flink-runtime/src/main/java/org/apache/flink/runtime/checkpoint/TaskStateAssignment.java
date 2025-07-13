@@ -123,7 +123,7 @@ class TaskStateAssignment {
         subManagedKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
         subRawKeyedState = CollectionUtil.newHashMapWithExpectedSize(expectedNumberOfSubtasks);
 
-        final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
+        final List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIdentifier();
         outputOperatorID = operatorIDs.get(0).getGeneratedOperatorID();
         inputOperatorID = operatorIDs.get(operatorIDs.size() - 1).getGeneratedOperatorID();
 
@@ -252,7 +252,7 @@ class TaskStateAssignment {
             BiFunction<TaskStateAssignment, Boolean, SubtasksRescaleMapping> mappingRetriever,
             Map<Integer, SubtasksRescaleMapping> subtaskGateOrPartitionMappings,
             Function<Integer, SubtasksRescaleMapping> subtaskMappingCalculator) {
-        if (!expectedOperatorID.equals(instanceID.getOperatorId())) {
+        if (!expectedOperatorID.equals(instanceID.getOperatorIdentifier())) {
             return InflightDataRescalingDescriptor.NO_RESCALE;
         }
 

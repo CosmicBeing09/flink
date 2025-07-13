@@ -315,8 +315,8 @@ public class ExecutionJobVertex
      *
      * @return list containing the ID pairs of all contained operators
      */
-    public List<OperatorIDPair> getOperatorIDs() {
-        return jobVertex.getOperatorIDs();
+    public List<OperatorIDPair> getOperatorIdentifier() {
+        return jobVertex.getOperatorIdentifier();
     }
 
     public void setMaxParallelism(int maxParallelism) {
