@@ -23,9 +23,11 @@ import org.apache.flink.runtime.checkpoint.StateHandleDummyUtil;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.state.DoneFuture;
 import org.apache.flink.runtime.state.InputChannelStateHandle;
+import org.apache.flink.runtime.state.InputStateHandle;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
+import org.apache.flink.runtime.state.OutputStateHandle;
 import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
 import org.apache.flink.runtime.state.SnapshotResult;
 import org.apache.flink.runtime.state.StateObject;
@@ -58,7 +60,7 @@ class OperatorSnapshotFinalizerTest {
                 StateHandleDummyUtil.createNewOperatorStateHandle(2, random);
         InputChannelStateHandle inputChannelTemplate =
                 StateHandleDummyUtil.createNewInputChannelStateHandle(2, random);
-        ResultSubpartitionStateHandle resultSubpartitionTemplate =
+        ResultSubpartitionStateHandle outputTemplate =
                 StateHandleDummyUtil.createNewResultSubpartitionStateHandle(2, random);
 
         SnapshotResult<KeyedStateHandle> manKeyed =
@@ -69,14 +71,14 @@ class OperatorSnapshotFinalizerTest {
                 withLocalState(deepDummyCopy(operatorTemplate), deepDummyCopy(operatorTemplate));
         SnapshotResult<OperatorStateHandle> rawOper =
                 withLocalState(deepDummyCopy(operatorTemplate), deepDummyCopy(operatorTemplate));
-        SnapshotResult<StateObjectCollection<InputChannelStateHandle>> inputChannel =
+        SnapshotResult<StateObjectCollection<InputStateHandle>> inputChannel =
                 withLocalState(
                         singleton(deepDummyCopy(inputChannelTemplate)),
                         singleton(deepDummyCopy(inputChannelTemplate)));
-        SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>> resultSubpartition =
+        SnapshotResult<StateObjectCollection<OutputStateHandle>> output =
                 withLocalState(
-                        singleton(deepDummyCopy(resultSubpartitionTemplate)),
-                        singleton(deepDummyCopy(resultSubpartitionTemplate)));
+                        singleton(deepDummyCopy(outputTemplate)),
+                        singleton(deepDummyCopy(outputTemplate)));
 
         OperatorSnapshotFutures snapshotFutures =
                 new OperatorSnapshotFutures(
@@ -85,7 +87,7 @@ class OperatorSnapshotFinalizerTest {
                         new PseudoNotDoneFuture<>(manOper),
                         new PseudoNotDoneFuture<>(rawOper),
                         new PseudoNotDoneFuture<>(inputChannel),
-                        new PseudoNotDoneFuture<>(resultSubpartition));
+                        new PseudoNotDoneFuture<>(output));
 
         for (Future<?> f : snapshotFutures.getAllFutures()) {
             assertThat(f).isNotDone();
@@ -104,7 +106,7 @@ class OperatorSnapshotFinalizerTest {
         map.put(manOper, headExtractor(OperatorSubtaskState::getManagedOperatorState));
         map.put(rawOper, headExtractor(OperatorSubtaskState::getRawOperatorState));
         map.put(inputChannel, OperatorSubtaskState::getInputChannelState);
-        map.put(resultSubpartition, OperatorSubtaskState::getResultSubpartitionState);
+        map.put(output, OperatorSubtaskState::getResultSubpartitionState);
 
         for (Map.Entry<SnapshotResult<?>, Function<OperatorSubtaskState, ? extends StateObject>> e :
                 map.entrySet()) {

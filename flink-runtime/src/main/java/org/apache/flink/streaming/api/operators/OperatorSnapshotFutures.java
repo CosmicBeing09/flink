@@ -21,10 +21,10 @@ package org.apache.flink.streaming.api.operators;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.checkpoint.StateObjectCollection;
 import org.apache.flink.runtime.state.DoneFuture;
-import org.apache.flink.runtime.state.InputChannelStateHandle;
+import org.apache.flink.runtime.state.InputStateHandle;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.OperatorStateHandle;
-import org.apache.flink.runtime.state.ResultSubpartitionStateHandle;
+import org.apache.flink.runtime.state.OutputStateHandle;
 import org.apache.flink.runtime.state.SnapshotResult;
 import org.apache.flink.runtime.state.StateObject;
 
@@ -51,11 +51,10 @@ public class OperatorSnapshotFutures {
     @Nonnull private RunnableFuture<SnapshotResult<OperatorStateHandle>> operatorStateRawFuture;
 
     @Nonnull
-    private Future<SnapshotResult<StateObjectCollection<InputChannelStateHandle>>>
-            inputChannelStateFuture;
+    private Future<SnapshotResult<StateObjectCollection<InputStateHandle>>> inputChannelStateFuture;
 
     @Nonnull
-    private Future<SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>>>
+    private Future<SnapshotResult<StateObjectCollection<OutputStateHandle>>>
             resultSubpartitionStateFuture;
 
     public OperatorSnapshotFutures() {
@@ -74,10 +73,10 @@ public class OperatorSnapshotFutures {
             @Nonnull RunnableFuture<SnapshotResult<OperatorStateHandle>> operatorStateManagedFuture,
             @Nonnull RunnableFuture<SnapshotResult<OperatorStateHandle>> operatorStateRawFuture,
             @Nonnull
-                    Future<SnapshotResult<StateObjectCollection<InputChannelStateHandle>>>
+                    Future<SnapshotResult<StateObjectCollection<InputStateHandle>>>
                             inputChannelStateFuture,
             @Nonnull
-                    Future<SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>>>
+                    Future<SnapshotResult<StateObjectCollection<OutputStateHandle>>>
                             resultSubpartitionStateFuture) {
         this.keyedStateManagedFuture = keyedStateManagedFuture;
         this.keyedStateRawFuture = keyedStateRawFuture;
@@ -130,27 +129,27 @@ public class OperatorSnapshotFutures {
     }
 
     @Nonnull
-    public Future<SnapshotResult<StateObjectCollection<InputChannelStateHandle>>>
+    public Future<SnapshotResult<StateObjectCollection<InputStateHandle>>>
             getInputChannelStateFuture() {
         return inputChannelStateFuture;
     }
 
     public void setInputChannelStateFuture(
             @Nonnull
-                    Future<SnapshotResult<StateObjectCollection<InputChannelStateHandle>>>
+                    Future<SnapshotResult<StateObjectCollection<InputStateHandle>>>
                             inputChannelStateFuture) {
         this.inputChannelStateFuture = inputChannelStateFuture;
     }
 
     @Nonnull
-    public Future<SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>>>
-            getResultSubpartitionStateFuture() {
+    public Future<SnapshotResult<StateObjectCollection<OutputStateHandle>>>
+    getOutputStateHandleFuture() {
         return resultSubpartitionStateFuture;
     }
 
     public void setResultSubpartitionStateFuture(
             @Nonnull
-                    Future<SnapshotResult<StateObjectCollection<ResultSubpartitionStateHandle>>>
+                    Future<SnapshotResult<StateObjectCollection<OutputStateHandle>>>
                             resultSubpartitionStateFuture) {
         this.resultSubpartitionStateFuture = resultSubpartitionStateFuture;
     }
@@ -165,7 +164,7 @@ public class OperatorSnapshotFutures {
         pairs.add(new Tuple2<>(getOperatorStateManagedFuture(), "raw keyed"));
         pairs.add(new Tuple2<>(getOperatorStateRawFuture(), "raw operator"));
         pairs.add(new Tuple2<>(getInputChannelStateFuture(), "input channel"));
-        pairs.add(new Tuple2<>(getResultSubpartitionStateFuture(), "result subpartition"));
+        pairs.add(new Tuple2<>(getOutputStateHandleFuture(), "result subpartition"));
         final long[] sizeTuple = new long[2];
         try (Closer closer = Closer.create()) {
             for (Tuple2<Future<? extends StateObject>, String> pair : pairs) {

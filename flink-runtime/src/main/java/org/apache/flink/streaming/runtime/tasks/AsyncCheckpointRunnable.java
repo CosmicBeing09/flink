@@ -167,7 +167,7 @@ final class AsyncCheckpointRunnable implements Runnable, Closeable {
             // We should wait for the channels states get completed before continuing,
             // otherwise the alignment of barriers might have not finished yet.
             snapshotInProgress.getInputChannelStateFuture().get();
-            snapshotInProgress.getResultSubpartitionStateFuture().get();
+            snapshotInProgress.getOutputStateHandleFuture().get();
         }
 
         return new SnapshotsFinalizeResult(
