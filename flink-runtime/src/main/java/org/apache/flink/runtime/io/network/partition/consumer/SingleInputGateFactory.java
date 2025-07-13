@@ -128,7 +128,7 @@ public class SingleInputGateFactory {
         this.configuredNetworkBuffersPerChannel =
                 NettyShuffleUtils.getNetworkBuffersPerInputChannel(
                         networkConfig.networkBuffersPerChannel());
-        this.floatingNetworkBuffersPerGate = networkConfig.floatingNetworkBuffersPerGate();
+        this.floatingNetworkBuffersPerGate = networkConfig.requiredFloatingBuffers();
         this.batchShuffleCompressionEnabled = networkConfig.isBatchShuffleCompressionEnabled();
         this.compressionCodec = networkConfig.getCompressionCodec();
         this.networkBufferSize = networkConfig.networkBufferSize();
@@ -171,7 +171,7 @@ public class SingleInputGateFactory {
         SupplierWithException<BufferPool, IOException> bufferPoolFactory =
                 createBufferPoolFactory(
                         networkBufferPool,
-                        gateBuffersSpec.getExpectedBuffersPerGate(),
+                        gateBuffersSpec.getRequiredFloatingBuffers(),
                         gateBuffersSpec.getMinBuffersPerGate(),
                         gateBuffersSpec.getMaxBuffersPerGate());
 

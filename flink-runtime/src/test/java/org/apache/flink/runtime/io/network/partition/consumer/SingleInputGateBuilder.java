@@ -118,7 +118,7 @@ public class SingleInputGateBuilder {
                         environment.getNetworkBufferPool(),
                         1,
                         1,
-                        config.floatingNetworkBuffersPerGate());
+                        config.requiredFloatingBuffers());
         this.segmentProvider = environment.getNetworkBufferPool();
         return this;
     }
