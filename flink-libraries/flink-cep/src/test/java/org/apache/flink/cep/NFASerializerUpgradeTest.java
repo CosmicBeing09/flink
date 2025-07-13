@@ -115,7 +115,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<EventId> testDataMatcher() {
+        public Matcher<EventId> testDataCondition() {
             return is(new EventId(42, 42L));
         }
 
@@ -161,7 +161,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<NodeId> testDataMatcher() {
+        public Matcher<NodeId> testDataCondition() {
             return is(new NodeId(new EventId(42, 42L), "ciao"));
         }
 
@@ -207,7 +207,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<DeweyNumber> testDataMatcher() {
+        public Matcher<DeweyNumber> testDataCondition() {
             return is(new DeweyNumber(42));
         }
 
@@ -254,7 +254,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<SharedBufferEdge> testDataMatcher() {
+        public Matcher<SharedBufferEdge> testDataCondition() {
             return is(
                     new SharedBufferEdge(
                             new NodeId(new EventId(42, 42L), "page"), new DeweyNumber(42)));
@@ -306,7 +306,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<SharedBufferNode> testDataMatcher() {
+        public Matcher<SharedBufferNode> testDataCondition() {
             SharedBufferNode result = new SharedBufferNode();
             result.addEdge(
                     new SharedBufferEdge(
@@ -356,7 +356,7 @@ class NFASerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Obj
         }
 
         @Override
-        public Matcher<NFAState> testDataMatcher() {
+        public Matcher<NFAState> testDataCondition() {
             return is(new NFAState(Collections.emptyList()));
         }
 
