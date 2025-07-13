@@ -461,7 +461,7 @@ public class NetworkBufferPool
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers,
+            int requiredFloatingBuffers,
             int minUsedBuffers,
             int maxUsedBuffers,
             int numSubpartitions,
@@ -469,7 +469,7 @@ public class NetworkBufferPool
             int maxOverdraftBuffersPerGate)
             throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers,
+                requiredFloatingBuffers,
                 minUsedBuffers,
                 maxUsedBuffers,
                 numSubpartitions,
