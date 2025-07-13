@@ -55,7 +55,7 @@ public class FullyFinishedOperatorState extends OperatorState {
     @Override
     public OperatorState copyAndDiscardInFlightData() {
         return new FullyFinishedOperatorState(
-                getOperatorID(), getParallelism(), getMaxParallelism());
+                getOperatorIdentifier(), getParallelism(), getMaxParallelism());
     }
 
     @Override
@@ -76,7 +76,7 @@ public class FullyFinishedOperatorState extends OperatorState {
     public String toString() {
         return "FullyFinishedOperatorState("
                 + "operatorID: "
-                + getOperatorID()
+                + getOperatorIdentifier()
                 + ", parallelism: "
                 + getParallelism()
                 + ", maxParallelism: "

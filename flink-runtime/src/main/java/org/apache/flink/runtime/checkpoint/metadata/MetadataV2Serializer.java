@@ -85,8 +85,8 @@ public class MetadataV2Serializer extends MetadataV2V3SerializerBase implements 
                 "Could not support finished Operator state in state serializers.");
 
         // Operator ID
-        dos.writeLong(operatorState.getOperatorID().getLowerPart());
-        dos.writeLong(operatorState.getOperatorID().getUpperPart());
+        dos.writeLong(operatorState.getOperatorIdentifier().getLowerPart());
+        dos.writeLong(operatorState.getOperatorIdentifier().getUpperPart());
 
         // Parallelism
         int parallelism = operatorState.getParallelism();

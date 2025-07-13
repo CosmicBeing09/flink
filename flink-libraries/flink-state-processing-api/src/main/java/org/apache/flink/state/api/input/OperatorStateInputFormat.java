@@ -153,7 +153,7 @@ abstract class OperatorStateInputFormat<OT> extends RichInputFormat<OT, Operator
         Map<OperatorInstanceID, List<OperatorStateHandle>> newManagedOperatorStates =
                 new HashMap<>();
         reDistributePartitionableStates(
-                singletonMap(operatorState.getOperatorID(), operatorState),
+                singletonMap(operatorState.getOperatorIdentifier(), operatorState),
                 minNumSplits,
                 OperatorSubtaskState::getManagedOperatorState,
                 RoundRobinOperatorStateRepartitioner.INSTANCE,

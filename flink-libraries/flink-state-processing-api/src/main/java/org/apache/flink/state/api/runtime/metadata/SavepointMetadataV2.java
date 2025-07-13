@@ -66,7 +66,7 @@ public class SavepointMetadataV2 {
         initialStates.forEach(
                 existingState ->
                         operatorStateIndex.put(
-                                existingState.getOperatorID(),
+                                existingState.getOperatorIdentifier(),
                                 OperatorStateSpecV2.existing(existingState)));
     }
 
