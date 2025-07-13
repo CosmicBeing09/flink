@@ -229,7 +229,7 @@ abstract class StateWithExecutionGraph implements State {
                 List<OperatorIDPair> operatorIDPairs =
                         executionGraph
                                 .getJobVertex(executionAttemptID.getJobVertexId())
-                                .getOperatorIDs();
+                                .getOperatorIdentifier();
                 CheckpointCoordinator checkpointCoordinator =
                         executionGraph.getCheckpointCoordinator();
                 if (checkpointCoordinator != null) {

@@ -107,7 +107,7 @@ public class StateSizeEstimates {
     }
 
     private static Set<OperatorID> getOperatorIDS(ExecutionJobVertex v) {
-        return v.getOperatorIDs().stream()
+        return v.getOperatorIdentifier().stream()
                 .map(OperatorIDPair::getGeneratedOperatorID)
                 .collect(Collectors.toSet());
     }

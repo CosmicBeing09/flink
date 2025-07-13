@@ -1218,8 +1218,8 @@ class StreamingJobGraphGeneratorTest {
 
         final List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         assertThat(vertices).hasSize(2);
-        assertThat(vertices.get(0).getOperatorIDs()).hasSize(2);
-        assertThat(vertices.get(1).getOperatorIDs()).hasSize(5);
+        assertThat(vertices.get(0).getOperatorIdentifier()).hasSize(2);
+        assertThat(vertices.get(1).getOperatorIdentifier()).hasSize(5);
     }
 
     @ParameterizedTest
@@ -1245,12 +1245,12 @@ class StreamingJobGraphGeneratorTest {
             final List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
             if (chainingOfOperatorsWithDifferentMaxParallelismEnabled) {
                 assertThat(vertices).hasSize(1);
-                assertThat(vertices.get(0).getOperatorIDs()).hasSize(4);
+                assertThat(vertices.get(0).getOperatorIdentifier()).hasSize(4);
             } else {
                 assertThat(vertices).hasSize(3);
-                assertThat(vertices.get(0).getOperatorIDs()).hasSize(2);
-                assertThat(vertices.get(1).getOperatorIDs()).hasSize(1);
-                assertThat(vertices.get(1).getOperatorIDs()).hasSize(1);
+                assertThat(vertices.get(0).getOperatorIdentifier()).hasSize(2);
+                assertThat(vertices.get(1).getOperatorIdentifier()).hasSize(1);
+                assertThat(vertices.get(1).getOperatorIdentifier()).hasSize(1);
             }
         }
     }
@@ -1274,7 +1274,7 @@ class StreamingJobGraphGeneratorTest {
 
         final List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         assertThat(vertices).hasSize(1);
-        assertThat(vertices.get(0).getOperatorIDs()).hasSize(4);
+        assertThat(vertices.get(0).getOperatorIdentifier()).hasSize(4);
     }
 
     @Test

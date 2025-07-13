@@ -126,7 +126,7 @@ public class DrainingValidator implements TestOperatorLifecycleValidator {
         }
         Iterable<JobVertex> vertices = testJob.jobGraph.getVertices();
         for (JobVertex vertex : vertices) {
-            for (OperatorIDPair p : vertex.getOperatorIDs()) {
+            for (OperatorIDPair p : vertex.getOperatorIdentifier()) {
                 OperatorID operatorID =
                         p.getUserDefinedOperatorID().orElse(p.getGeneratedOperatorID());
                 if (operatorID.toString().equals(operator)) {

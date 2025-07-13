@@ -105,7 +105,7 @@ public class StateAssignmentOperation {
         // find the states of all operators belonging to this task and compute additional
         // information in first pass
         for (ExecutionJobVertex executionJobVertex : tasks) {
-            List<OperatorIDPair> operatorIDPairs = executionJobVertex.getOperatorIDs();
+            List<OperatorIDPair> operatorIDPairs = executionJobVertex.getOperatorIdentifier();
             Map<OperatorID, OperatorState> operatorStates =
                     CollectionUtil.newHashMapWithExpectedSize(operatorIDPairs.size());
             for (OperatorIDPair operatorIDPair : operatorIDPairs) {
@@ -214,7 +214,7 @@ public class StateAssignmentOperation {
     private void assignTaskStateToExecutionJobVertices(TaskStateAssignment assignment) {
         ExecutionJobVertex executionJobVertex = assignment.executionJobVertex;
 
-        List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIDs();
+        List<OperatorIDPair> operatorIDs = executionJobVertex.getOperatorIdentifier();
         final int newParallelism = executionJobVertex.getParallelism();
 
         /*
@@ -746,7 +746,7 @@ public class StateAssignmentOperation {
 
         Set<OperatorID> allOperatorIDs = new HashSet<>();
         for (ExecutionJobVertex executionJobVertex : tasks) {
-            for (OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIDs()) {
+            for (OperatorIDPair operatorIDPair : executionJobVertex.getOperatorIdentifier()) {
                 allOperatorIDs.add(operatorIDPair.getGeneratedOperatorID());
                 operatorIDPair.getUserDefinedOperatorID().ifPresent(allOperatorIDs::add);
             }

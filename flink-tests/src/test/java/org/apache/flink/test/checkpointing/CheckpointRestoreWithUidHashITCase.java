@@ -120,7 +120,7 @@ public class CheckpointRestoreWithUidHashITCase {
 
         // Get the operator id
         List<OperatorIDPair> operatorIds =
-                firstJob.getVerticesSortedTopologicallyFromSources().get(0).getOperatorIDs();
+                firstJob.getVerticesSortedTopologicallyFromSources().get(0).getOperatorIdentifier();
         OperatorIDPair sourceOperatorIds = operatorIds.get(operatorIds.size() - 1);
 
         JobGraph secondJob =

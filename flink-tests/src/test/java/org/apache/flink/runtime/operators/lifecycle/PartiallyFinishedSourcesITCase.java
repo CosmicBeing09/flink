@@ -187,7 +187,7 @@ public class PartiallyFinishedSourcesITCase extends TestLogger {
         return stream(testJob.jobGraph.getVertices().spliterator(), false)
                 .filter(
                         v ->
-                                v.getOperatorIDs().stream()
+                                v.getOperatorIdentifier().stream()
                                         .anyMatch(idPair -> matches(idPair, finishingOperatorID)))
                 .findAny()
                 .orElseThrow(() -> new RuntimeException("Vertex not found: " + finishingOperatorID))
