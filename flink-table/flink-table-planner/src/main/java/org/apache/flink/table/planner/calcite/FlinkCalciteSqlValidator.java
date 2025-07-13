@@ -466,11 +466,11 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         }
 
         return call.getOperandList().stream()
-                .map(FlinkCalciteSqlValidator::extractExplicitTable)
+                .map(FlinkCalciteSqlValidator::extractTableOperand)
                 .collect(Collectors.toList());
     }
 
-    private static @Nullable SqlIdentifier extractExplicitTable(SqlNode op) {
+    private static @Nullable SqlIdentifier extractTableOperand(SqlNode op) {
         if (op.getKind() == SqlKind.EXPLICIT_TABLE) {
             final SqlBasicCall opCall = (SqlBasicCall) op;
             if (opCall.operandCount() == 1 && opCall.operand(0) instanceof SqlIdentifier) {
@@ -480,7 +480,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         } else if (op.getKind() == SqlKind.ARGUMENT_ASSIGNMENT) {
             // for TUMBLE(DATA => TABLE t3, ...)
             final SqlBasicCall opCall = (SqlBasicCall) op;
-            return extractExplicitTable(opCall.operand(0));
+            return extractTableOperand(opCall.operand(0));
         }
         return null;
     }
