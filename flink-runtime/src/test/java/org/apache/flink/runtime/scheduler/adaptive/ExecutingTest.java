@@ -824,7 +824,7 @@ class ExecutingTest {
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                boolean forcedRestart,
+                boolean restartWithParallelism,
                 List<ExceptionHistoryEntry> failureCollection) {
             restartingStateValidator.validateInput(
                     new RestartingArguments(
@@ -832,7 +832,7 @@ class ExecutingTest {
                             executionGraphHandler,
                             operatorCoordinatorHandler,
                             backoffTime,
-                            forcedRestart));
+                            restartWithParallelism));
             hadStateTransition = true;
         }
 
@@ -948,17 +948,17 @@ class ExecutingTest {
 
     static class RestartingArguments extends CancellingArguments {
         private final Duration backoffTime;
-        private final boolean forcedRestart;
+        private final boolean restartWithParallelism;
 
         public RestartingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                boolean forcedRestart) {
+                boolean restartWithParallelism) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
             this.backoffTime = backoffTime;
-            this.forcedRestart = forcedRestart;
+            this.restartWithParallelism = restartWithParallelism;
         }
 
         public Duration getBackoffTime() {
@@ -966,7 +966,7 @@ class ExecutingTest {
         }
 
         public boolean isForcedRestart() {
-            return forcedRestart;
+            return restartWithParallelism;
         }
     }
 
