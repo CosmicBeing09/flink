@@ -176,7 +176,7 @@ public class StreamingJobGraphGenerator {
     private final ClassLoader userClassloader;
     private final StreamGraph streamGraph;
 
-    private final JobGraph jobGraph;
+    private final JobGraph executionPlan;
     private final Collection<Integer> builtVertices;
 
     private final StreamGraphHasher defaultStreamGraphHasher;
@@ -199,7 +199,7 @@ public class StreamingJobGraphGenerator {
 
         this.builtVertices = new HashSet<>();
         this.serializationExecutor = Preconditions.checkNotNull(serializationExecutor);
-        jobGraph = new JobGraph(jobID, streamGraph.getJobName());
+        executionPlan = new JobGraph(jobID, streamGraph.getJobName());
 
         // Generate deterministic hashes for the nodes in order to identify them across
         // submission iff they didn't change.
@@ -220,15 +220,15 @@ public class StreamingJobGraphGenerator {
 
     private JobGraph createJobGraph() {
         preValidate(streamGraph, userClassloader);
-        jobGraph.setJobType(streamGraph.getJobType());
-        jobGraph.setDynamic(streamGraph.isDynamic());
+        executionPlan.setJobType(streamGraph.getJobType());
+        executionPlan.setDynamic(streamGraph.isDynamic());
 
-        jobGraph.enableApproximateLocalRecovery(
+        executionPlan.enableApproximateLocalRecovery(
                 streamGraph.getCheckpointConfig().isApproximateLocalRecoveryEnabled());
 
         setChaining();
 
-        if (jobGraph.isDynamic()) {
+        if (executionPlan.isDynamic()) {
             setVertexParallelismsForDynamicGraphIfNecessary();
         }
 
@@ -246,52 +246,52 @@ public class StreamingJobGraphGenerator {
 
         validateHybridShuffleExecuteInBatchMode(jobVertexBuildContext);
 
-        setSlotSharingAndCoLocation(jobGraph, jobVertexBuildContext);
+        setSlotSharingAndCoLocation(executionPlan, jobVertexBuildContext);
 
         setManagedMemoryFraction(jobVertexBuildContext);
 
-        configureCheckpointing(streamGraph, jobGraph);
+        configureCheckpointing(streamGraph, executionPlan);
 
-        jobGraph.setSavepointRestoreSettings(streamGraph.getSavepointRestoreSettings());
+        executionPlan.setSavepointRestoreSettings(streamGraph.getSavepointRestoreSettings());
 
         final Map<String, DistributedCache.DistributedCacheEntry> distributedCacheEntries =
                 JobGraphUtils.prepareUserArtifactEntries(
                         streamGraph.getUserArtifacts().stream()
                                 .collect(Collectors.toMap(e -> e.f0, e -> e.f1)),
-                        jobGraph.getJobID());
+                        executionPlan.getJobID());
 
         for (Map.Entry<String, DistributedCache.DistributedCacheEntry> entry :
                 distributedCacheEntries.entrySet()) {
-            jobGraph.addUserArtifact(entry.getKey(), entry.getValue());
+            executionPlan.addUserArtifact(entry.getKey(), entry.getValue());
         }
 
         // set the ExecutionConfig last when it has been finalized
         try {
-            jobGraph.setExecutionConfig(streamGraph.getExecutionConfig());
+            executionPlan.setExecutionConfig(streamGraph.getExecutionConfig());
         } catch (IOException e) {
             throw new IllegalConfigurationException(
                     "Could not serialize the ExecutionConfig."
                             + "This indicates that non-serializable types (like custom serializers) were registered");
         }
-        jobGraph.setJobConfiguration(streamGraph.getJobConfiguration());
+        executionPlan.setJobConfiguration(streamGraph.getJobConfiguration());
 
-        addVertexIndexPrefixInVertexName(jobVertexBuildContext, new AtomicInteger(0), jobGraph);
+        addVertexIndexPrefixInVertexName(jobVertexBuildContext, new AtomicInteger(0), executionPlan);
 
         setVertexDescription(jobVertexBuildContext);
 
         // Wait for the serialization of operator coordinators and stream config.
         serializeOperatorCoordinatorsAndStreamConfig(
-                jobGraph, serializationExecutor, jobVertexBuildContext);
+                executionPlan, serializationExecutor, jobVertexBuildContext);
 
         if (!streamGraph.getJobStatusHooks().isEmpty()) {
-            jobGraph.setJobStatusHooks(streamGraph.getJobStatusHooks());
+            executionPlan.setJobStatusHooks(streamGraph.getJobStatusHooks());
         }
 
-        return jobGraph;
+        return executionPlan;
     }
 
     public static void serializeOperatorCoordinatorsAndStreamConfig(
-            JobGraph jobGraph,
+            JobGraph executionPlan,
             Executor serializationExecutor,
             JobVertexBuildContext jobVertexBuildContext) {
         try {
@@ -306,7 +306,7 @@ public class StreamingJobGraphGenerator {
                                     .collect(Collectors.toList()))
                     .get();
 
-            waitForSerializationFuturesAndUpdateJobVertices(jobGraph, jobVertexBuildContext);
+            waitForSerializationFuturesAndUpdateJobVertices(executionPlan, jobVertexBuildContext);
         } catch (Exception e) {
             throw new FlinkRuntimeException("Error in serialization.", e);
         }
@@ -1123,7 +1123,7 @@ public class StreamingJobGraphGenerator {
 
         jobVertexBuildContext.addJobVertex(streamNodeId, jobVertex);
         builtVertices.add(streamNodeId);
-        jobGraph.addVertex(jobVertex);
+        executionPlan.addVertex(jobVertex);
 
         jobVertex.setParallelismConfigured(
                 chainInfo.getAllChainedNodes().stream()
