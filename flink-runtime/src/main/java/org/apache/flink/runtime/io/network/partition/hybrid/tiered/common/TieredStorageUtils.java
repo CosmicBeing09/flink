@@ -39,7 +39,7 @@ public class TieredStorageUtils {
 
     private static final int DEFAULT_NUM_BUFFERS_USE_SORT_ACCUMULATOR_THRESHOLD = 512;
 
-    private static final int DEFAULT_MIN_BUFFERS_PER_GATE = 2;
+    private static final int DEFAULT_TOTAL_FLOATING_BUFFERS = 2;
 
     private static final int DEFAULT_MIN_BUFFERS_PER_RESULT_PARTITION = 8;
 
@@ -77,13 +77,13 @@ public class TieredStorageUtils {
     }
 
     /**
-     * Get the number of minimum buffers per input gate. It is only used when
+     * Get the total number of floating buffers available. It is only used when
      * taskmanager.network.hybrid-shuffle.memory-decoupling.enabled is set to true.
      *
      * @return the buffer number.
      */
     public static int getMinBuffersPerGate() {
-        return DEFAULT_MIN_BUFFERS_PER_GATE;
+        return DEFAULT_TOTAL_FLOATING_BUFFERS;
     }
 
     /**
