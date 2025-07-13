@@ -64,7 +64,7 @@ public class DefaultRescaleManager implements RescaleManager {
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
-    private final RescaleManager.Context rescaleContext;
+    private final RescaleManager.Context context;
 
     private boolean rescaleScheduled = false;
 
@@ -83,14 +83,14 @@ public class DefaultRescaleManager implements RescaleManager {
 
     DefaultRescaleManager(
             Temporal initializationTime,
-            RescaleManager.Context rescaleContext,
+            RescaleManager.Context context,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this(
                 initializationTime,
                 Instant::now,
-                rescaleContext,
+                context,
                 scalingIntervalMin,
                 scalingIntervalMax,
                 maxTriggerDelay);
@@ -116,7 +116,7 @@ public class DefaultRescaleManager implements RescaleManager {
         this.scalingIntervalMin = scalingIntervalMin;
         this.scalingIntervalMax = scalingIntervalMax;
 
-        this.rescaleContext = rescaleContext;
+        this.context = rescaleContext;
     }
 
     @Override
@@ -143,14 +143,14 @@ public class DefaultRescaleManager implements RescaleManager {
             maybeRescale();
         } else if (!rescaleScheduled) {
             rescaleScheduled = true;
-            rescaleContext.scheduleOperation(this::maybeRescale, scalingIntervalMin);
+            context.scheduleOperation(this::maybeRescale, scalingIntervalMin);
         }
     }
 
     private CompletableFuture<Void> scheduleOperationWithTrigger(Runnable callback) {
         final CompletableFuture<Void> triggerFuture = new CompletableFuture<>();
         triggerFuture.thenRun(callback);
-        this.rescaleContext.scheduleOperation(
+        this.context.scheduleOperation(
                 () -> triggerFuture.complete(null), this.maxTriggerDelay);
 
         return triggerFuture;
@@ -162,9 +162,9 @@ public class DefaultRescaleManager implements RescaleManager {
 
     private void maybeRescale() {
         rescaleScheduled = false;
-        if (rescaleContext.hasDesiredResources()) {
+        if (context.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
-            rescaleContext.rescale();
+            context.rescale();
         } else if (scalingIntervalMax != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
@@ -176,18 +176,18 @@ public class DefaultRescaleManager implements RescaleManager {
             if (timeSinceLastRescale().compareTo(scalingIntervalMax) > 0) {
                 rescaleWithSufficientResources();
             } else {
-                rescaleContext.scheduleOperation(
+                context.scheduleOperation(
                         this::rescaleWithSufficientResources, scalingIntervalMax);
             }
         }
     }
 
     private void rescaleWithSufficientResources() {
-        if (rescaleContext.hasSufficientResources()) {
+        if (context.hasSufficientResources()) {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
                     scalingIntervalMax);
-            rescaleContext.rescale();
+            context.rescale();
         }
     }
 
@@ -220,10 +220,10 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
+        public DefaultRescaleManager create(Context context, Instant lastRescale) {
             return new DefaultRescaleManager(
                     lastRescale,
-                    rescaleContext,
+                    context,
                     scalingIntervalMin,
                     scalingIntervalMax,
                     maximumDelayForTrigger);
