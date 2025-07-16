@@ -136,7 +136,7 @@ class WritableSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<WritableName>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<WritableName>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
