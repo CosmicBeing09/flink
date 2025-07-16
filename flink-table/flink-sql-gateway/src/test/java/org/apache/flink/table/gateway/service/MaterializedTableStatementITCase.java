@@ -1,4 +1,4 @@
-/*
+/********************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -14,7 +14,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ ********************************************************************************/
 
 package org.apache.flink.table.gateway.service;
 
@@ -238,10 +238,10 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 .isEqualTo(
                         "quartz_job_"
                                 + ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")
-                                        .asSerializableString());
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")
+                                .asSerializableString());
 
         EmbeddedQuartzScheduler embeddedWorkflowScheduler =
                 SQL_GATEWAY_REST_ENDPOINT_EXTENSION
@@ -295,9 +295,9 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         sessionHandle, materializedTableDDL, -1, new Configuration());
 
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service, sessionHandle, materializedTableHandle))
+                () ->
+                        awaitOperationTermination(
+                                service, sessionHandle, materializedTableHandle))
                 .cause()
                 .hasMessageContaining(
                         String.format(
@@ -310,13 +310,13 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
 
         // verify the materialized table is not created
         assertThatThrownBy(
-                        () ->
-                                service.getTable(
-                                        sessionHandle,
-                                        ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")))
+                () ->
+                        service.getTable(
+                                sessionHandle,
+                                ObjectIdentifier.of(
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")))
                 .isInstanceOf(SqlGatewayException.class)
                 .hasMessageContaining("Failed to getTable.");
     }
@@ -362,10 +362,10 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 Duration.ofMillis(pause),
                 "Failed to verify the data in materialized table.");
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table where ds = '2024-01-02'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table where ds = '2024-01-02'")
+                        .size())
                 .isEqualTo(1);
     }
 
@@ -406,11 +406,11 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         new Configuration());
 
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service,
-                                        sessionHandle,
-                                        alterStatementWithUnknownPartitionKeyHandle))
+                () ->
+                        awaitOperationTermination(
+                                service,
+                                sessionHandle,
+                                alterStatementWithUnknownPartitionKeyHandle))
                 .isInstanceOf(SqlExecutionException.class)
                 .rootCause()
                 .isInstanceOf(ValidationException.class)
@@ -435,11 +435,11 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         new Configuration());
 
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service,
-                                        sessionHandle,
-                                        alterStatementWithNonStringPartitionKeyHandle))
+                () ->
+                        awaitOperationTermination(
+                                service,
+                                sessionHandle,
+                                alterStatementWithNonStringPartitionKeyHandle))
                 .isInstanceOf(SqlExecutionException.class)
                 .rootCause()
                 .isInstanceOf(ValidationException.class)
@@ -640,11 +640,11 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 service.executeStatement(
                         sessionHandle, alterMaterializedTableSuspendDDL, -1, new Configuration());
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service,
-                                        sessionHandle,
-                                        alterMaterializedTableSuspendHandle))
+                () ->
+                        awaitOperationTermination(
+                                service,
+                                sessionHandle,
+                                alterMaterializedTableSuspendHandle))
                 .rootCause()
                 .isInstanceOf(ValidationException.class)
                 .hasMessageContaining(
@@ -742,7 +742,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 embeddedWorkflowScheduler
                         .getQuartzScheduler()
                         .getTriggerState(TriggerKey.triggerKey(workflowName, workflowGroup));
-        assertThat(resumedTriggerState).isEqualTo(Trigger.TriggerState.NORMAL);
+        assertThat(resumedTriggerState).isEqualTo(Trigger.Trigger.State.NORMAL);
 
         WorkflowInfo workflowInfo =
                 fromJson((String) jobDetail.getJobDataMap().get(WORKFLOW_INFO), WorkflowInfo.class);
@@ -816,13 +816,13 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
 
         // verify materialized table metadata is removed
         assertThatThrownBy(
-                        () ->
-                                service.getTable(
-                                        sessionHandle,
-                                        ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")))
+                () ->
+                        service.getTable(
+                                sessionHandle,
+                                ObjectIdentifier.of(
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")))
                 .isInstanceOf(SqlGatewayException.class)
                 .hasMessageContaining("Failed to getTable.");
 
@@ -847,9 +847,9 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         sessionHandle, dropNonExistMaterializedTableDDL, -1, new Configuration());
 
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service, sessionHandle, dropNonExistTableHandle))
+                () ->
+                        awaitOperationTermination(
+                                service, sessionHandle, dropNonExistTableHandle))
                 .rootCause()
                 .isInstanceOf(ValidationException.class)
                 .hasMessage(
@@ -894,10 +894,10 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 JobKey.jobKey(
                         "quartz_job_"
                                 + ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")
-                                        .asSerializableString(),
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")
+                                .asSerializableString(),
                         "default_group");
         EmbeddedQuartzScheduler embeddedWorkflowScheduler =
                 SQL_GATEWAY_REST_ENDPOINT_EXTENSION
@@ -916,13 +916,13 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
 
         // verify materialized table metadata is removed
         assertThatThrownBy(
-                        () ->
-                                service.getTable(
-                                        sessionHandle,
-                                        ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")))
+                () ->
+                        service.getTable(
+                                sessionHandle,
+                                ObjectIdentifier.of(
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")))
                 .isInstanceOf(SqlGatewayException.class)
                 .hasMessageContaining("Failed to getTable.");
 
@@ -939,10 +939,10 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                 JobKey.jobKey(
                         "quartz_job_"
                                 + ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")
-                                        .asSerializableString(),
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")
+                                .asSerializableString(),
                         "default_group");
         EmbeddedQuartzScheduler embeddedWorkflowScheduler =
                 SQL_GATEWAY_REST_ENDPOINT_EXTENSION
@@ -964,13 +964,13 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
 
         // verify materialized table metadata is removed
         assertThatThrownBy(
-                        () ->
-                                service.getTable(
-                                        sessionHandle,
-                                        ObjectIdentifier.of(
-                                                fileSystemCatalogName,
-                                                TEST_DEFAULT_DATABASE,
-                                                "users_shops")))
+                () ->
+                        service.getTable(
+                                sessionHandle,
+                                ObjectIdentifier.of(
+                                        fileSystemCatalogName,
+                                        TEST_DEFAULT_DATABASE,
+                                        "users_shops")))
                 .isInstanceOf(SqlGatewayException.class)
                 .hasMessageContaining("Failed to getTable.");
     }
@@ -1019,18 +1019,18 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
 
         // 2. verify the new job overwrite the data
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table where ds = '2024-01-02'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table where ds = '2024-01-02'")
+                        .size())
                 .isEqualTo(getPartitionSize(data, "2024-01-02"));
 
         // 3. verify the data of partition '2024-01-01' is not changed
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table where ds = '2024-01-01'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table where ds = '2024-01-01'")
+                        .size())
                 .isNotEqualTo(getPartitionSize(data, "2024-01-01"));
     }
 
@@ -1083,17 +1083,17 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
         // are
         // both changed
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table_without_partition_options where ds = '2024-01-01'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table_without_partition_options where ds = '2024-01-01'")
+                        .size())
                 .isEqualTo(getPartitionSize(data, "2024-01-01"));
 
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table_without_partition_options where ds = '2024-01-02'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table_without_partition_options where ds = '2024-01-02'")
+                        .size())
                 .isEqualTo(getPartitionSize(data, "2024-01-02"));
     }
 
@@ -1145,17 +1145,17 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
         // for partition with formatter, only the data of partition '2024-01-02' is changed and the
         // data of partition '2024-01-01' is not changed
         assertThat(
-                        fetchTableData(
-                                sessionHandle,
-                                "SELECT * FROM my_materialized_table where ds = '2024-01-02'"))
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table where ds = '2024-01-02'"))
                 .size()
                 .isEqualTo(getPartitionSize(data, "2024-01-02"));
 
         assertThat(
-                        fetchTableData(
-                                        sessionHandle,
-                                        "SELECT * FROM my_materialized_table where ds = '2024-01-01'")
-                                .size())
+                fetchTableData(
+                        sessionHandle,
+                        "SELECT * FROM my_materialized_table where ds = '2024-01-01'")
+                        .size())
                 .isNotEqualTo(getPartitionSize(data, "2024-01-01"));
     }
 
@@ -1186,9 +1186,9 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         Collections.emptyMap(),
                         Collections.emptyMap());
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service, sessionHandle, invalidRefreshTableHandle1))
+                () ->
+                        awaitOperationTermination(
+                                service, sessionHandle, invalidRefreshTableHandle1))
                 .rootCause()
                 .isInstanceOf(ValidationException.class)
                 .hasMessage(
@@ -1213,9 +1213,9 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
                         Collections.emptyMap());
 
         assertThatThrownBy(
-                        () ->
-                                awaitOperationTermination(
-                                        service, sessionHandle, invalidRefreshTableHandle2))
+                () ->
+                        awaitOperationTermination(
+                                service, sessionHandle, invalidRefreshTableHandle2))
                 .rootCause()
                 .isInstanceOf(SqlExecutionException.class)
                 .hasMessage(
@@ -1266,12 +1266,12 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     private static <M extends JobMessageParameters, R extends RequestBody, P extends ResponseBody>
-            P sendJobRequest(
-                    RestClusterClient<?> restClusterClient,
-                    MessageHeaders<R, P, M> headers,
-                    R requestBody,
-                    String jobId)
-                    throws Exception {
+    P sendJobRequest(
+            RestClusterClient<?> restClusterClient,
+            MessageHeaders<R, P, M> headers,
+            R requestBody,
+            String jobId)
+            throws Exception {
         M jobMessageParameters = headers.getUnresolvedMessageParameters();
         jobMessageParameters.jobPathParameter.resolve(JobID.fromHexString(jobId));
 
