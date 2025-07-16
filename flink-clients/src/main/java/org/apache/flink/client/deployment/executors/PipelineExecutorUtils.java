@@ -52,9 +52,10 @@ public class PipelineExecutorUtils {
      *
      * @param pipeline the pipeline whose job graph we are computing.
      * @param configuration the configuration with the necessary information such as jars and
-     *     classpaths to be included, the parallelism of the job and potential savepoint settings
-     *     used to bootstrap its state.
+     *         classpaths to be included, the parallelism of the job and potential savepoint settings
+     *         used to bootstrap its state.
      * @param userClassloader the classloader which can load user classes.
+     *
      * @return the corresponding {@link JobGraph}.
      */
     public static JobGraph getJobGraph(
@@ -67,7 +68,7 @@ public class PipelineExecutorUtils {
 
         final ExecutionConfigAccessor executionConfigAccessor =
                 ExecutionConfigAccessor.fromConfiguration(configuration);
-        final JobGraph jobGraph =
+        final JobGraph executionPlan =
                 FlinkPipelineTranslationUtil.getJobGraph(
                         userClassloader,
                         pipeline,
@@ -76,41 +77,41 @@ public class PipelineExecutorUtils {
 
         configuration
                 .getOptional(PipelineOptionsInternal.PIPELINE_FIXED_JOB_ID)
-                .ifPresent(strJobID -> jobGraph.setJobID(JobID.fromHexString(strJobID)));
+                .ifPresent(strJobID -> executionPlan.setJobID(JobID.fromHexString(strJobID)));
 
         if (configuration.get(DeploymentOptions.ATTACHED)
                 && configuration.get(DeploymentOptions.SHUTDOWN_IF_ATTACHED)) {
-            jobGraph.setInitialClientHeartbeatTimeout(
+            executionPlan.setInitialClientHeartbeatTimeout(
                     configuration.get(ClientOptions.CLIENT_HEARTBEAT_TIMEOUT).toMillis());
         }
 
-        jobGraph.addJars(executionConfigAccessor.getJars());
-        jobGraph.setClasspaths(executionConfigAccessor.getClasspaths());
-        jobGraph.setSavepointRestoreSettings(executionConfigAccessor.getSavepointRestoreSettings());
+        executionPlan.addJars(executionConfigAccessor.getJars());
+        executionPlan.setClasspaths(executionConfigAccessor.getClasspaths());
+        executionPlan.setSavepointRestoreSettings(executionConfigAccessor.getSavepointRestoreSettings());
 
-        return jobGraph;
+        return executionPlan;
     }
 
     /**
      * Notify the {@link DefaultJobCreatedEvent} to job status changed listeners.
      *
      * @param pipeline the pipeline that contains lineage graph information.
-     * @param jobGraph jobGraph that contains job basic info
+     * @param executionPlan executionPlan that contains job basic info
      * @param listeners the list of job status changed listeners
      */
     public static void notifyJobStatusListeners(
             @Nonnull final Pipeline pipeline,
-            @Nonnull final JobGraph jobGraph,
+            @Nonnull final JobGraph executionPlan,
             List<JobStatusChangedListener> listeners) {
         RuntimeExecutionMode executionMode =
-                jobGraph.getJobConfiguration().get(ExecutionOptions.RUNTIME_MODE);
+                executionPlan.getJobConfiguration().get(ExecutionOptions.RUNTIME_MODE);
         listeners.forEach(
                 listener -> {
                     try {
                         listener.onEvent(
                                 new DefaultJobCreatedEvent(
-                                        jobGraph.getJobID(),
-                                        jobGraph.getName(),
+                                        executionPlan.getJobID(),
+                                        executionPlan.getName(),
                                         ((StreamGraph) pipeline).getLineageGraph(),
                                         executionMode));
                     } catch (Throwable e) {
