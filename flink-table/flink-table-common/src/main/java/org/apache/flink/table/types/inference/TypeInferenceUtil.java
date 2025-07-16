@@ -26,7 +26,7 @@ import org.apache.flink.table.functions.FunctionDefinition;
 import org.apache.flink.table.functions.TableSemantics;
 import org.apache.flink.table.functions.UserDefinedFunctionHelper;
 import org.apache.flink.table.types.DataType;
-import org.apache.flink.table.types.inference.utils.AdaptedCallContext;
+import org.apache.flink.table.types.inference.utils.CastCallContext;
 import org.apache.flink.table.types.inference.utils.UnknownCallContext;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 
@@ -79,7 +79,7 @@ public final class TypeInferenceUtil {
      * @param typeInference type inference of the current call
      * @param callContext call context of the current call
      * @param surroundingInfo information about the outer wrapping call of a current function call
-     *     for performing input type inference
+     *         for performing input type inference
      */
     public static Result runTypeInference(
             TypeInference typeInference,
@@ -120,15 +120,16 @@ public final class TypeInferenceUtil {
                                 throw new ValidationException(
                                         String.format(
                                                 "Invalid number of arguments. %d arguments expected after argument expansion but %d passed.",
-                                                staticArgs.size(), actualTypes.size()));
+                                                staticArgs.size(),
+                                                actualTypes.size()));
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final CastCallContext castCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
-        final List<DataType> expectedTypes = adaptedCallContext.getArgumentDataTypes();
+        final List<DataType> expectedTypes = castCallContext.getArgumentDataTypes();
         for (int pos = 0; pos < actualTypes.size(); pos++) {
             final DataType expectedType = expectedTypes.get(pos);
             final DataType actualType = actualTypes.get(pos);
@@ -140,11 +141,13 @@ public final class TypeInferenceUtil {
                 throw new ValidationException(
                         String.format(
                                 "Invalid argument type at position %d. Data type %s expected but %s passed.",
-                                pos, expectedType, actualType));
+                                pos,
+                                expectedType,
+                                actualType));
             }
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     /**
@@ -242,7 +245,8 @@ public final class TypeInferenceUtil {
      * @param argumentCount expected argument count
      * @param actualCount actual argument count
      * @param throwOnFailure if true, the function throws a {@link ValidationException} if the
-     *     actual value does not meet the expected argument count
+     *         actual value does not meet the expected argument count
+     *
      * @return a boolean indicating if expected argument counts match the actual counts
      */
     public static boolean validateArgumentCount(
@@ -253,7 +257,8 @@ public final class TypeInferenceUtil {
                 throw new ValidationException(
                         String.format(
                                 "Invalid number of arguments. At least %d arguments expected but %d passed.",
-                                minCount, actualCount));
+                                minCount,
+                                actualCount));
             }
             return false;
         }
@@ -263,7 +268,8 @@ public final class TypeInferenceUtil {
                 throw new ValidationException(
                         String.format(
                                 "Invalid number of arguments. At most %d arguments expected but %d passed.",
-                                maxCount, actualCount));
+                                maxCount,
+                                actualCount));
             }
             return false;
         }
@@ -405,7 +411,7 @@ public final class TypeInferenceUtil {
             throw createInvalidInputException(typeInference, callContext, e);
         }
 
-        final CallContext adaptedCallContext;
+        final CallContext castCallContext;
         try {
             // use information of surrounding call to determine output type of this call
             final DataType outputType;
@@ -418,7 +424,7 @@ public final class TypeInferenceUtil {
                 outputType = null;
             }
 
-            adaptedCallContext = adaptArguments(typeInference, callContext, outputType);
+            castCallContext = adaptArguments(typeInference, callContext, outputType);
         } catch (ValidationException e) {
             throw createInvalidInputException(typeInference, callContext, e);
         }
@@ -426,12 +432,12 @@ public final class TypeInferenceUtil {
         // infer output type first for better error message
         // (logically state types should be inferred first)
         final DataType outputType =
-                inferOutputType(adaptedCallContext, typeInference.getOutputTypeStrategy());
+                inferOutputType(castCallContext, typeInference.getOutputTypeStrategy());
 
         final LinkedHashMap<String, StateInfo> stateInfos =
-                inferStateInfos(adaptedCallContext, typeInference.getStateTypeStrategies());
+                inferStateInfos(castCallContext, typeInference.getStateTypeStrategies());
 
-        return new Result(adaptedCallContext.getArgumentDataTypes(), stateInfos, outputType);
+        return new Result(castCallContext.getArgumentDataTypes(), stateInfos, outputType);
     }
 
     private static String formatStaticArguments(String name, List<StaticArgument> staticArguments) {
@@ -457,14 +463,14 @@ public final class TypeInferenceUtil {
         return stringBuilder.toString();
     }
 
-    private static AdaptedCallContext inferInputTypes(
+    private static CastCallContext inferInputTypes(
             TypeInference typeInference,
             CallContext callContext,
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
-                new AdaptedCallContext(callContext, outputType);
+        final CastCallContext castCallContext =
+                new CastCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
         final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
@@ -493,7 +499,7 @@ public final class TypeInferenceUtil {
                                     })
                             .collect(Collectors.toList());
             if (fromStaticArgs.stream().allMatch(Objects::nonNull)) {
-                adaptedCallContext.setExpectedArguments(fromStaticArgs);
+                castCallContext.setExpectedArguments(fromStaticArgs);
             } else if (throwOnFailure) {
                 throw new ValidationException("Invalid input arguments.");
             }
@@ -504,15 +510,15 @@ public final class TypeInferenceUtil {
         final List<DataType> inferredDataTypes =
                 typeInference
                         .getInputTypeStrategy()
-                        .inferInputTypes(adaptedCallContext, throwOnFailure)
+                        .inferInputTypes(castCallContext, throwOnFailure)
                         .orElse(null);
         if (inferredDataTypes != null) {
-            adaptedCallContext.setExpectedArguments(inferredDataTypes);
+            castCallContext.setExpectedArguments(inferredDataTypes);
         } else if (throwOnFailure) {
             throw new ValidationException("Invalid input arguments.");
         }
 
-        return adaptedCallContext;
+        return castCallContext;
     }
 
     private static StateInfo inferStateInfo(
