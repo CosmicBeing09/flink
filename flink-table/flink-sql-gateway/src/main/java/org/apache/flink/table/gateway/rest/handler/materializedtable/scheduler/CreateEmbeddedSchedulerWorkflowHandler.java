@@ -45,9 +45,9 @@ import java.util.concurrent.CompletableFuture;
 /** Handler to create workflow in embedded scheduler. */
 public class CreateEmbeddedSchedulerWorkflowHandler
         extends AbstractSqlGatewayRestHandler<
-                CreateEmbeddedSchedulerWorkflowRequestBody,
-                CreateEmbeddedSchedulerWorkflowResponseBody,
-                EmptyMessageParameters> {
+        CreateEmbeddedSchedulerWorkflowRequestBody,
+        CreateEmbeddedSchedulerWorkflowResponseBody,
+        EmptyMessageParameters> {
 
     private final EmbeddedQuartzScheduler quartzScheduler;
 
@@ -56,9 +56,9 @@ public class CreateEmbeddedSchedulerWorkflowHandler
             EmbeddedQuartzScheduler quartzScheduler,
             Map<String, String> responseHeaders,
             MessageHeaders<
-                            CreateEmbeddedSchedulerWorkflowRequestBody,
-                            CreateEmbeddedSchedulerWorkflowResponseBody,
-                            EmptyMessageParameters>
+                    CreateEmbeddedSchedulerWorkflowRequestBody,
+                    CreateEmbeddedSchedulerWorkflowResponseBody,
+                    EmptyMessageParameters>
                     messageHeaders) {
         super(service, responseHeaders, messageHeaders);
         this.quartzScheduler = quartzScheduler;
@@ -72,14 +72,14 @@ public class CreateEmbeddedSchedulerWorkflowHandler
         String materializedTableIdentifier =
                 request.getRequestBody().getMaterializedTableIdentifier();
         String cronExpression = request.getRequestBody().getCronExpression();
-        Map<String, String> dynamicOptions = request.getRequestBody().getDynamicOptions();
+        Map<String, String> getInitConfig = request.getRequestBody().getDynamicOptions();
         Map<String, String> executionConfig = request.getRequestBody().getExecutionConfig();
         String customScheduleTime = request.getRequestBody().getCustomScheduleTime();
         String restEndpointURL = request.getRequestBody().getRestEndpointUrl();
         WorkflowInfo workflowInfo =
                 new WorkflowInfo(
                         materializedTableIdentifier,
-                        dynamicOptions == null ? Collections.emptyMap() : dynamicOptions,
+                        getInitConfig == null ? Collections.emptyMap() : getInitConfig,
                         executionConfig == null ? Collections.emptyMap() : executionConfig,
                         customScheduleTime,
                         restEndpointURL);
