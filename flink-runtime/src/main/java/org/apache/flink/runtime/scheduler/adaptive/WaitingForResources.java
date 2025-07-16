@@ -43,25 +43,28 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
     private final Clock clock;
 
     /** If set, there's an ongoing deadline waiting for a resource stabilization. */
-    @Nullable private Deadline resourceStabilizationDeadline;
+    @Nullable
+    private Deadline resourceStabilizationDeadline;
 
-    private final Duration resourceStabilizationTimeout;
+    private final Duration stateTransitionManagerFactory;
 
-    @Nullable private ScheduledFuture<?> resourceTimeoutFuture;
+    @Nullable
+    private ScheduledFuture<?> resourceTimeoutFuture;
 
-    @Nullable private final ExecutionGraph previousExecutionGraph;
+    @Nullable
+    private final ExecutionGraph previousExecutionGraph;
 
     @VisibleForTesting
     WaitingForResources(
             Context context,
             Logger log,
             Duration initialResourceAllocationTimeout,
-            Duration resourceStabilizationTimeout) {
+            Duration stateTransitionManagerFactory) {
         this(
                 context,
                 log,
                 initialResourceAllocationTimeout,
-                resourceStabilizationTimeout,
+                stateTransitionManagerFactory,
                 SystemClock.getInstance(),
                 null);
     }
@@ -70,18 +73,18 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
             Context context,
             Logger log,
             Duration initialResourceAllocationTimeout,
-            Duration resourceStabilizationTimeout,
+            Duration stateTransitionManagerFactory,
             Clock clock,
             @Nullable ExecutionGraph previousExecutionGraph) {
         super(context, log);
         this.context = Preconditions.checkNotNull(context);
-        this.resourceStabilizationTimeout =
-                Preconditions.checkNotNull(resourceStabilizationTimeout);
+        this.stateTransitionManagerFactory =
+                Preconditions.checkNotNull(stateTransitionManagerFactory);
         this.clock = clock;
         Preconditions.checkNotNull(initialResourceAllocationTimeout);
 
         Preconditions.checkArgument(
-                !resourceStabilizationTimeout.isNegative(),
+                !stateTransitionManagerFactory.isNegative(),
                 "Resource stabilization timeout must not be negative");
 
         // since state transitions are not allowed in state constructors, schedule calls for later.
@@ -125,7 +128,7 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
         if (context.hasSufficientResources()) {
             if (resourceStabilizationDeadline == null) {
                 resourceStabilizationDeadline =
-                        Deadline.fromNowWithClock(resourceStabilizationTimeout, clock);
+                        Deadline.fromNowWithClock(stateTransitionManagerFactory, clock);
             }
             if (resourceStabilizationDeadline.isOverdue()) {
                 createExecutionGraphWithAvailableResources();
@@ -175,9 +178,10 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
          * Runs the given action after a delay if the state at this time equals the expected state.
          *
          * @param expectedState expectedState describes the required state at the time of running
-         *     the action
+         *         the action
          * @param action action to run if the expected state equals the actual state
          * @param delay delay after which to run the action
+         *
          * @return a ScheduledFuture representing pending completion of the task
          */
         ScheduledFuture<?> runIfState(State expectedState, Runnable action, Duration delay);
@@ -188,19 +192,20 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
         private final Context context;
         private final Logger log;
         private final Duration initialResourceAllocationTimeout;
-        private final Duration resourceStabilizationTimeout;
-        @Nullable private final ExecutionGraph previousExecutionGraph;
+        private final Duration stateTransitionManagerFactory;
+        @Nullable
+        private final ExecutionGraph previousExecutionGraph;
 
         public Factory(
                 Context context,
                 Logger log,
                 Duration initialResourceAllocationTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration stateTransitionManagerFactory,
                 @Nullable ExecutionGraph previousExecutionGraph) {
             this.context = context;
             this.log = log;
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
-            this.resourceStabilizationTimeout = resourceStabilizationTimeout;
+            this.stateTransitionManagerFactory = stateTransitionManagerFactory;
             this.previousExecutionGraph = previousExecutionGraph;
         }
 
@@ -213,7 +218,7 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
                     context,
                     log,
                     initialResourceAllocationTimeout,
-                    resourceStabilizationTimeout,
+                    stateTransitionManagerFactory,
                     SystemClock.getInstance(),
                     previousExecutionGraph);
         }
