@@ -162,9 +162,9 @@ public class ProcessTableFunctionTest extends TableTestBase {
         // Function name contains special characters and can thus not be used as UID
         util.addTemporarySystemFunction("f*", TableAsSetFunction.class);
         assertThatThrownBy(
-                        () ->
-                                util.verifyRelPlan(
-                                        "SELECT * FROM `f*`(r => TABLE t PARTITION BY name, i => 1)"))
+                () ->
+                        util.verifyRelPlan(
+                                "SELECT * FROM `f*`(r => TABLE t PARTITION BY name, i => 1)"))
                 .satisfies(
                         anyCauseMatches(
                                 "Could not derive a unique identifier for process table function 'f*'. "
@@ -353,7 +353,8 @@ public class ProcessTableFunctionTest extends TableTestBase {
     /** Testing function. */
     public static class InvalidTypedUpdatingArgFunction extends ProcessTableFunction<String> {
         @SuppressWarnings("unused")
-        public void eval(@ArgumentHint({TABLE_AS_ROW, SUPPORT_UPDATES}) User u, Integer i) {}
+        public void eval(@ArgumentHint({TABLE_AS_ROW, SUPPORT_UPDATES}) User u, Integer i) {
+        }
     }
 
     /** Testing function. */
@@ -361,7 +362,8 @@ public class ProcessTableFunctionTest extends TableTestBase {
         @SuppressWarnings("unused")
         public void eval(
                 @ArgumentHint({TABLE_AS_SET, OPTIONAL_PARTITION_BY}) Row r1,
-                @ArgumentHint({TABLE_AS_SET, OPTIONAL_PARTITION_BY}) Row r2) {}
+                @ArgumentHint({TABLE_AS_SET, OPTIONAL_PARTITION_BY}) Row r2) {
+        }
     }
 
     /** Testing function. */
@@ -381,26 +383,30 @@ public class ProcessTableFunctionTest extends TableTestBase {
         }
 
         @SuppressWarnings("unused")
-        public void eval(Row r) {}
+        public void eval(Row r) {
+        }
     }
 
     /** Testing function. */
     public static class ReservedArgFunction extends ProcessTableFunction<String> {
         @SuppressWarnings("unused")
-        public void eval(String uid) {}
+        public void eval(String uid) {
+        }
     }
 
     /** Testing function. */
     public static class UpdatingPassThrough extends ProcessTableFunction<String> {
         @SuppressWarnings("unused")
         public void eval(
-                @ArgumentHint({TABLE_AS_SET, SUPPORT_UPDATES, PASS_COLUMNS_THROUGH}) Row r) {}
+                @ArgumentHint({TABLE_AS_SET, SUPPORT_UPDATES, PASS_COLUMNS_THROUGH}) Row r) {
+        }
     }
 
     /** Testing function. */
     public static class OptionalUntypedTable extends ProcessTableFunction<String> {
         @SuppressWarnings("unused")
-        public void eval(@ArgumentHint(value = TABLE_AS_ROW, isOptional = true) Row r) {}
+        public void eval(@ArgumentHint(value = TABLE_AS_ROW, isOptional = true) Row r) {
+        }
     }
 
     private static class ErrorSpec {
