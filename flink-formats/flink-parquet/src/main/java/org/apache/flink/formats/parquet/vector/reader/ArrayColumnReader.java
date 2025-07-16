@@ -98,6 +98,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
      * if there is more values to read (true).
      *
      * @param type the element type of array
+     *
      * @return boolean
      */
     private boolean fetchNextValue(LogicalType type) {
@@ -229,6 +230,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
      * @param lcv column vector to do initial setup in data collection time
      * @param valueList collection of values that will be fed into the vector later
      * @param type the element type of array
+     *
      * @return int
      */
     private int collectDataFromParquetPage(
@@ -291,7 +293,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
     }
 
     private void fillColumnVector(
-            LogicalType type, HeapArrayVector lcv, List valueList, int elementNum) {
+            LogicalType type, HeapArrayVector lcv, List<Object> valueList, int elementNum) {
         int total = valueList.size();
         setChildrenInfo(lcv, total, elementNum);
         switch (type.getTypeRoot()) {
@@ -337,9 +339,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case SMALLINT:
-                HeapShortVector shortVector = new HeapShortVector(total);
-                shortVector.reset();
-                lcv.setChild(shortVector);
+                HeapShortVector heapShortVector = new HeapShortVector(total);
+                heapShortVector.reset();
+                lcv.setChild(heapShortVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapShortVector) lcv.getChild()).setNullAt(i);
@@ -428,13 +430,13 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                         for (int i = 0; i < valueList.size(); i++) {
                             if (valueList.get(i) == null) {
                                 ((HeapIntVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapIntVector)
-                                                        ((ParquetDecimalVector) lcv.getChild())
-                                                                .getVector())
-                                                .vector[i] =
+                                        ((ParquetDecimalVector) lcv.getChild())
+                                                .getVector())
+                                        .vector[i] =
                                         ((List<Integer>) valueList).get(i);
                             }
                         }
@@ -446,13 +448,13 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                         for (int i = 0; i < valueList.size(); i++) {
                             if (valueList.get(i) == null) {
                                 ((HeapLongVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapLongVector)
-                                                        ((ParquetDecimalVector) lcv.getChild())
-                                                                .getVector())
-                                                .vector[i] =
+                                        ((ParquetDecimalVector) lcv.getChild())
+                                                .getVector())
+                                        .vector[i] =
                                         ((List<Long>) valueList).get(i);
                             }
                         }
@@ -465,11 +467,11 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                             byte[] src = (byte[]) valueList.get(i);
                             if (valueList.get(i) == null) {
                                 ((HeapBytesVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapBytesVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .appendBytes(i, src, 0, src.length);
                             }
                         }
