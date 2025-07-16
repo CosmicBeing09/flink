@@ -36,9 +36,11 @@ class OperatorStateSpecV2 {
 
     private final OperatorID id;
 
-    @Nullable private final OperatorState existingState;
+    @Nullable
+    private final OperatorState existingState;
 
-    @Nullable private final StateBootstrapTransformationWithID<?> newOperatorStateTransformation;
+    @Nullable
+    private final StateBootstrapTransformationWithID<?> newOperatorStateTransformation;
 
     static OperatorStateSpecV2 existing(OperatorState existingState) {
         return new OperatorStateSpecV2(Preconditions.checkNotNull(existingState));
@@ -50,13 +52,13 @@ class OperatorStateSpecV2 {
     }
 
     private OperatorStateSpecV2(OperatorState existingState) {
-        this.id = existingState.getOperatorID();
+        this.id = existingState.getOperatorIdentifier();
         this.existingState = existingState;
         this.newOperatorStateTransformation = null;
     }
 
     private OperatorStateSpecV2(StateBootstrapTransformationWithID<?> transformation) {
-        this.id = transformation.getOperatorID();
+        this.id = transformation.getOperatorIdentifier();
         this.newOperatorStateTransformation = transformation;
         this.existingState = null;
     }
