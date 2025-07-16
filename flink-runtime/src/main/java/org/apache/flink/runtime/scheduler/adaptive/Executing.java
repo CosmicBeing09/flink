@@ -64,10 +64,11 @@ class Executing extends StateWithExecutionGraph
 
     private final RescalingController sufficientResourcesController;
     private final RescalingController desiredResourcesController;
-    private final RescaleManager rescaleManager;
-    private final int rescaleOnFailedCheckpointCount;
+    private final RescaleManager transitionToSubsequentStateManager;
+    private final int transitionToSubsequentStateOnFailedCheckpointCount;
     // null indicates that there was no change event observed, yet
-    @Nullable private AtomicInteger failedCheckpointCountdown;
+    @Nullable
+    private AtomicInteger failedCheckpointCountdown;
 
     Executing(
             ExecutionGraph executionGraph,
@@ -77,10 +78,10 @@ class Executing extends StateWithExecutionGraph
             Context context,
             ClassLoader userCodeClassLoader,
             List<ExceptionHistoryEntry> failureCollection,
-            RescaleManager.Factory rescaleManagerFactory,
-            int minParallelismChangeForRescale,
-            int rescaleOnFailedCheckpointCount,
-            Instant lastRescale) {
+            RescaleManager.Factory transitionToSubsequentStateManagerFactory,
+            int minParallelismChangeForTransitionToSubsequentState,
+            int transitionToSubsequentStateOnFailedCheckpointCount,
+            Instant lastTransitionToSubsequentState) {
         super(
                 context,
                 executionGraph,
@@ -95,13 +96,16 @@ class Executing extends StateWithExecutionGraph
 
         this.sufficientResourcesController = new EnforceParallelismChangeRescalingController();
         this.desiredResourcesController =
-                new EnforceMinimalIncreaseRescalingController(minParallelismChangeForRescale);
-        this.rescaleManager = rescaleManagerFactory.create(this, lastRescale);
+                new EnforceMinimalIncreaseRescalingController(
+                        minParallelismChangeForTransitionToSubsequentState);
+        this.transitionToSubsequentStateManager = transitionToSubsequentStateManagerFactory.create(
+                this,
+                lastTransitionToSubsequentState);
 
         Preconditions.checkArgument(
-                rescaleOnFailedCheckpointCount > 0,
-                "The rescaleOnFailedCheckpointCount should be larger than 0.");
-        this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
+                transitionToSubsequentStateOnFailedCheckpointCount > 0,
+                "The transitionToSubsequentStateOnFailedCheckpointCount should be larger than 0.");
+        this.transitionToSubsequentStateOnFailedCheckpointCount = transitionToSubsequentStateOnFailedCheckpointCount;
         this.failedCheckpointCountdown = null;
 
         deploy();
@@ -110,23 +114,23 @@ class Executing extends StateWithExecutionGraph
         context.runIfState(
                 this,
                 () -> {
-                    rescaleManager.onChange();
-                    rescaleManager.onTrigger();
+                    transitionToSubsequentStateManager.onChange();
+                    transitionToSubsequentStateManager.onTrigger();
                 },
                 Duration.ZERO);
     }
 
     @Override
     public boolean hasSufficientResources() {
-        return shouldRescale(sufficientResourcesController);
+        return shouldTransitionToSubsequentState(sufficientResourcesController);
     }
 
     @Override
     public boolean hasDesiredResources() {
-        return shouldRescale(desiredResourcesController);
+        return shouldTransitionToSubsequentState(desiredResourcesController);
     }
 
-    private boolean shouldRescale(RescalingController rescalingController) {
+    private boolean shouldTransitionToSubsequentState(RescalingController rescalingController) {
         return context.getAvailableVertexParallelism()
                 .filter(
                         availableVertexParallelism ->
@@ -212,37 +216,37 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public void onNewResourcesAvailable() {
-        rescaleManager.onChange();
+        transitionToSubsequentStateManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
     public void onNewResourceRequirements() {
-        rescaleManager.onChange();
+        transitionToSubsequentStateManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
     public void onCompletedCheckpoint() {
-        triggerPotentialRescale();
+        triggerPotentialTransitionToSubsequentState();
     }
 
     @Override
     public void onFailedCheckpoint() {
         if (this.failedCheckpointCountdown != null
                 && this.failedCheckpointCountdown.decrementAndGet() <= 0) {
-            triggerPotentialRescale();
+            triggerPotentialTransitionToSubsequentState();
         }
     }
 
-    private void triggerPotentialRescale() {
-        rescaleManager.onTrigger();
+    private void triggerPotentialTransitionToSubsequentState() {
+        transitionToSubsequentStateManager.onTrigger();
         this.failedCheckpointCountdown = null;
     }
 
     private void initializeFailedCheckpointCountdownIfUnset() {
         if (failedCheckpointCountdown == null) {
-            this.failedCheckpointCountdown = new AtomicInteger(this.rescaleOnFailedCheckpointCount);
+            this.failedCheckpointCountdown = new AtomicInteger(this.transitionToSubsequentStateOnFailedCheckpointCount);
         }
     }
 
@@ -280,16 +284,17 @@ class Executing extends StateWithExecutionGraph
     /** Context of the {@link Executing} state. */
     interface Context
             extends StateWithExecutionGraph.Context,
-                    StateTransitions.ToCancelling,
-                    StateTransitions.ToFailing,
-                    StateTransitions.ToRestarting,
-                    StateTransitions.ToStopWithSavepoint {
+            StateTransitions.ToCancelling,
+            StateTransitions.ToFailing,
+            StateTransitions.ToRestarting,
+            StateTransitions.ToStopWithSavepoint {
 
         /**
          * Asks how to handle the failure.
          *
          * @param failure failure describing the failure cause
          * @param failureLabels future of labels from error classification.
+         *
          * @return {@link FailureResult} which describes how to handle the failure
          */
         FailureResult howToHandleFailure(
@@ -305,9 +310,10 @@ class Executing extends StateWithExecutionGraph
          * Runs the given action after a delay if the state at this time equals the expected state.
          *
          * @param expectedState expectedState describes the required state at the time of running
-         *     the action
+         *         the action
          * @param action action to run if the expected state equals the actual state
          * @param delay delay after which to run the action
+         *
          * @return a ScheduledFuture representing pending completion of the task
          */
         ScheduledFuture<?> runIfState(State expectedState, Runnable action, Duration delay);
@@ -322,9 +328,9 @@ class Executing extends StateWithExecutionGraph
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
-        private final RescaleManager.Factory rescaleManagerFactory;
-        private final int minParallelismChangeForRescale;
-        private final int rescaleOnFailedCheckpointCount;
+        private final RescaleManager.Factory transitionToSubsequentStateManagerFactory;
+        private final int minParallelismChangeForTransitionToSubsequentState;
+        private final int transitionToSubsequentStateOnFailedCheckpointCount;
 
         Factory(
                 ExecutionGraph executionGraph,
@@ -334,9 +340,9 @@ class Executing extends StateWithExecutionGraph
                 Context context,
                 ClassLoader userCodeClassLoader,
                 List<ExceptionHistoryEntry> failureCollection,
-                RescaleManager.Factory rescaleManagerFactory,
-                int minParallelismChangeForRescale,
-                int rescaleOnFailedCheckpointCount) {
+                RescaleManager.Factory transitionToSubsequentStateManagerFactory,
+                int minParallelismChangeForTransitionToSubsequentState,
+                int transitionToSubsequentStateOnFailedCheckpointCount) {
             this.context = context;
             this.log = log;
             this.executionGraph = executionGraph;
@@ -344,9 +350,9 @@ class Executing extends StateWithExecutionGraph
             this.operatorCoordinatorHandler = operatorCoordinatorHandler;
             this.userCodeClassLoader = userCodeClassLoader;
             this.failureCollection = failureCollection;
-            this.rescaleManagerFactory = rescaleManagerFactory;
-            this.minParallelismChangeForRescale = minParallelismChangeForRescale;
-            this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
+            this.transitionToSubsequentStateManagerFactory = transitionToSubsequentStateManagerFactory;
+            this.minParallelismChangeForTransitionToSubsequentState = minParallelismChangeForTransitionToSubsequentState;
+            this.transitionToSubsequentStateOnFailedCheckpointCount = transitionToSubsequentStateOnFailedCheckpointCount;
         }
 
         public Class<Executing> getStateClass() {
@@ -362,9 +368,9 @@ class Executing extends StateWithExecutionGraph
                     context,
                     userCodeClassLoader,
                     failureCollection,
-                    rescaleManagerFactory,
-                    minParallelismChangeForRescale,
-                    rescaleOnFailedCheckpointCount,
+                    transitionToSubsequentStateManagerFactory,
+                    minParallelismChangeForTransitionToSubsequentState,
+                    transitionToSubsequentStateOnFailedCheckpointCount,
                     Instant.now());
         }
     }
