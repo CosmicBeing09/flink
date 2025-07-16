@@ -1,4 +1,4 @@
-/*
+/*************************************************************************************
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -14,7 +14,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */
+ *************************************************************************************/
 
 package org.apache.flink.api.common;
 
@@ -265,8 +265,8 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
      * parallelism of one (the final reduce to the single result value).
      *
      * @return The parallelism used by operations, unless they override that value. This method
-     *     returns {@link #PARALLELISM_DEFAULT} if the environment's default parallelism should be
-     *     used.
+     *         returns {@link #PARALLELISM_DEFAULT} if the environment's default parallelism should be
+     *         used.
      */
     public int getParallelism() {
         return configuration.get(CoreOptions.DEFAULT_PARALLELISM);
@@ -504,12 +504,12 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
 
     @Experimental
     public long getAsyncStateBufferTimeout() {
-        return configuration.get(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT);
+        return configuration.get(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT);
     }
 
     @Experimental
     public ExecutionConfig setAsyncStateBufferTimeout(long timeout) {
-        configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, timeout);
+        configuration.set(ExecutionOptions.ASYNC_STATE_ACTIVE_BUFFER_TIMEOUT, timeout);
         return this;
     }
 
@@ -678,7 +678,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
 
     /**
      * @return A copy of internal {@link #configuration}. Note it is missing all options that are
-     *     stored as plain java fields in {@link ExecutionConfig}.
+     *         stored as plain java fields in {@link ExecutionConfig}.
      */
     @Internal
     public Configuration toConfiguration() {
