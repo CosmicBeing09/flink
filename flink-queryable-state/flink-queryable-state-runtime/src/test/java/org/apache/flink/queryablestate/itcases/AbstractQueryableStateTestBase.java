@@ -1,4 +1,4 @@
-/*
+/*****
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
@@ -124,12 +124,13 @@ public abstract class AbstractQueryableStateTestBase {
 
     protected static int maxParallelism;
 
-    @TempDir static File classloaderFolder;
+    @TempDir
+    static File classloaderFolder;
 
     @BeforeEach
     void setUp() throws Exception {
         // NOTE: do not use a shared instance for all tests as the tests may break
-        this.stateBackend = createStateBackend();
+        this.stateBackend = createEnv();
 
         assertThat(clusterClient).isNotNull();
 
@@ -142,7 +143,7 @@ public abstract class AbstractQueryableStateTestBase {
      *
      * @return a state backend instance for each unit test
      */
-    protected abstract StateBackend createStateBackend() throws Exception;
+    protected abstract StateBackend createEnv() throws Exception;
 
     /**
      * Runs a simple topology producing random (key, 1) pairs at the sources (where number of keys
@@ -183,7 +184,7 @@ public abstract class AbstractQueryableStateTestBase {
                 .asQueryableState(queryName, reducingState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -225,13 +226,13 @@ public abstract class AbstractQueryableStateTestBase {
                     result.thenAccept(
                             response -> {
                                 assertThatCode(
-                                                () -> {
-                                                    Tuple2<Integer, Long> res = response.get();
-                                                    counts.set(key, res.f1);
-                                                    assertThat(key)
-                                                            .isEqualTo(res.f0.intValue())
-                                                            .withFailMessage("Key mismatch");
-                                                })
+                                        () -> {
+                                            Tuple2<Integer, Long> res = response.get();
+                                            counts.set(key, res.f1);
+                                            assertThat(key)
+                                                    .isEqualTo(res.f0.intValue())
+                                                    .withFailMessage("Key mismatch");
+                                        })
                                         .doesNotThrowAnyException();
                             });
 
@@ -363,7 +364,7 @@ public abstract class AbstractQueryableStateTestBase {
                 .asQueryableState("hakuna", valueState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -418,7 +419,7 @@ public abstract class AbstractQueryableStateTestBase {
                 .asQueryableState(stateName, valueState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -476,7 +477,7 @@ public abstract class AbstractQueryableStateTestBase {
                 .asQueryableState("hakuna", valueState);
 
         try (AutoCancellableJob closableJobGraph =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             clusterClient.submitJob(closableJobGraph.getJobGraph()).get();
 
@@ -485,8 +486,8 @@ public abstract class AbstractQueryableStateTestBase {
 
             while (deadline.hasTimeLeft()
                     && !jobStatusFuture
-                            .get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS)
-                            .equals(JobStatus.RUNNING)) {
+                    .get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS)
+                    .equals(JobStatus.RUNNING)) {
                 Thread.sleep(50);
                 jobStatusFuture = clusterClient.getJobStatus(closableJobGraph.getJobId());
             }
@@ -505,9 +506,9 @@ public abstract class AbstractQueryableStateTestBase {
                             valueState);
 
             assertThatThrownBy(
-                            () ->
-                                    unknownJobFuture.get(
-                                            deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
+                    () ->
+                            unknownJobFuture.get(
+                                    deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
                     .isInstanceOf(ExecutionException.class)
                     .cause()
                     .isInstanceOf(RuntimeException.class)
@@ -525,9 +526,9 @@ public abstract class AbstractQueryableStateTestBase {
                             valueState);
 
             assertThatThrownBy(
-                            () ->
-                                    unknownQSName.get(
-                                            deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
+                    () ->
+                            unknownQSName.get(
+                                    deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
                     .isInstanceOf(ExecutionException.class)
                     .cause()
                     .isInstanceOf(RuntimeException.class)
@@ -574,7 +575,7 @@ public abstract class AbstractQueryableStateTestBase {
                         .asQueryableState("hakuna", valueState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -635,7 +636,7 @@ public abstract class AbstractQueryableStateTestBase {
                         .asQueryableState("hakuna", valueState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -657,7 +658,7 @@ public abstract class AbstractQueryableStateTestBase {
                             executor);
 
             assertThatThrownBy(
-                            () -> future.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
+                    () -> future.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS))
                     .cause()
                     .isInstanceOf(UnknownKeyOrNamespaceException.class);
         }
@@ -700,12 +701,11 @@ public abstract class AbstractQueryableStateTestBase {
                                 })
                         .asQueryableState("matata");
 
-        @SuppressWarnings("unchecked")
-        final ValueStateDescriptor<Tuple2<Integer, Long>> stateDesc =
+        @SuppressWarnings("unchecked") final ValueStateDescriptor<Tuple2<Integer, Long>> stateDesc =
                 (ValueStateDescriptor<Tuple2<Integer, Long>>) queryableState.getStateDescriptor();
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -751,7 +751,7 @@ public abstract class AbstractQueryableStateTestBase {
                 .asQueryableState("jungle", reducingState);
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -851,7 +851,7 @@ public abstract class AbstractQueryableStateTestBase {
                         });
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -950,7 +950,7 @@ public abstract class AbstractQueryableStateTestBase {
                         });
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -1022,7 +1022,7 @@ public abstract class AbstractQueryableStateTestBase {
 
         final AggregatingStateDescriptor<Tuple2<Integer, Long>, String, String>
                 aggrStateDescriptor =
-                        new AggregatingStateDescriptor<>("aggregates", new SumAggr(), String.class);
+                new AggregatingStateDescriptor<>("aggregates", new SumAggr(), String.class);
         aggrStateDescriptor.setQueryable("aggr-queryable");
 
         source.keyBy(
@@ -1040,7 +1040,7 @@ public abstract class AbstractQueryableStateTestBase {
                         new AggregatingTestOperator(aggrStateDescriptor));
 
         try (AutoCancellableJob autoCancellableJob =
-                new AutoCancellableJob(deadline, clusterClient, env)) {
+                     new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
             final JobGraph jobGraph = autoCancellableJob.getJobGraph();
@@ -1194,7 +1194,8 @@ public abstract class AbstractQueryableStateTestBase {
         }
 
         @Override
-        public void notifyCheckpointAborted(long checkpointId) {}
+        public void notifyCheckpointAborted(long checkpointId) {
+        }
     }
 
     /**
@@ -1380,8 +1381,8 @@ public abstract class AbstractQueryableStateTestBase {
                             if (throwable.getCause() instanceof CancellationException
                                     || throwable.getCause() instanceof AssertionError
                                     || (failForUnknownKeyOrNamespace
-                                            && throwable.getCause()
-                                                    instanceof UnknownKeyOrNamespaceException)) {
+                                    && throwable.getCause()
+                                    instanceof UnknownKeyOrNamespaceException)) {
                                 resultFuture.completeExceptionally(throwable.getCause());
                             } else if (deadline.hasTimeLeft()) {
                                 getKvStateIgnoringCertainExceptions(
