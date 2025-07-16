@@ -42,12 +42,14 @@ class DefaultRescaleManagerTest {
     @Test
     void testProperConfiguration() throws ConfigurationException {
         final Duration scalingIntervalMin = Duration.ofMillis(1337);
-        final Duration scalingIntervalMax = Duration.ofMillis(7331);
+        final Duration resourceStabilizationTimeout = Duration.ofMillis(7331);
         final Duration maximumDelayForRescaleTrigger = Duration.ofMillis(4242);
 
         final Configuration configuration = new Configuration();
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
-        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX, scalingIntervalMax);
+        configuration.set(
+                JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX,
+                resourceStabilizationTimeout);
         configuration.set(
                 JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTrigger);
 
@@ -56,7 +58,7 @@ class DefaultRescaleManagerTest {
                                 AdaptiveScheduler.Settings.of(configuration))
                         .create(TestingRescaleManagerContext.stableContext(), Instant.now());
         assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
-        assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
+        assertThat(testInstance.scalingIntervalMax).isEqualTo(resourceStabilizationTimeout);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
     }
 
@@ -65,13 +67,13 @@ class DefaultRescaleManagerTest {
         final Duration cooldownThreshold = Duration.ofMinutes(2);
         final TestingRescaleManagerContext ctx = TestingRescaleManagerContext.stableContext();
         assertThatThrownBy(
-                        () ->
-                                new DefaultRescaleManager(
-                                        Instant.now(),
-                                        ctx,
-                                        cooldownThreshold,
-                                        cooldownThreshold.minusNanos(1),
-                                        Duration.ofHours(5)))
+                () ->
+                        new DefaultRescaleManager(
+                                Instant.now(),
+                                ctx,
+                                cooldownThreshold,
+                                cooldownThreshold.minusNanos(1),
+                                Duration.ofHours(5)))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -358,7 +360,7 @@ class DefaultRescaleManagerTest {
 
     @Test
     void
-            testRevokedSufficientChangeInSoftRescalePhaseWithSubsequentSufficientChangeInHardRescalingPhase() {
+    testRevokedSufficientChangeInSoftRescalePhaseWithSubsequentSufficientChangeInHardRescalingPhase() {
         final TestingRescaleManagerContext ctx =
                 TestingRescaleManagerContext.stableContext().withSufficientRescaling();
         final DefaultRescaleManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
