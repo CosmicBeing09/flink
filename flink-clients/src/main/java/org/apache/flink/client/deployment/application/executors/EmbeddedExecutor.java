@@ -82,10 +82,10 @@ public class EmbeddedExecutor implements PipelineExecutor {
      * Creates a {@link EmbeddedExecutor}.
      *
      * @param submittedJobIds a list that is going to be filled with the job ids of the new jobs
-     *     that will be submitted. This is essentially used to return the submitted job ids to the
-     *     caller.
+     *         that will be submitted. This is essentially used to return the submitted job ids to the
+     *         caller.
      * @param dispatcherGateway the dispatcher of the cluster which is going to be used to submit
-     *     jobs.
+     *         jobs.
      * @param configuration the flink application configuration
      * @param jobClientCreator the job client creator
      */
@@ -139,9 +139,9 @@ public class EmbeddedExecutor implements PipelineExecutor {
             throws MalformedURLException {
         final Duration timeout = configuration.get(ClientOptions.CLIENT_TIMEOUT);
 
-        final JobGraph jobGraph =
+        final JobGraph streamGraph =
                 PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
-        final JobID actualJobId = jobGraph.getJobID();
+        final JobID actualJobId = streamGraph.getJobID();
 
         this.submittedJobIds.add(actualJobId);
         LOG.info("Job {} is submitted.", actualJobId);
@@ -151,7 +151,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
         }
 
         final CompletableFuture<JobID> jobSubmissionFuture =
-                submitJob(configuration, dispatcherGateway, jobGraph, timeout);
+                submitJob(configuration, dispatcherGateway, streamGraph, timeout);
 
         return jobSubmissionFuture
                 .thenApplyAsync(
@@ -178,7 +178,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
                         (jobClient, throwable) -> {
                             if (throwable == null) {
                                 PipelineExecutorUtils.notifyJobStatusListeners(
-                                        pipeline, jobGraph, jobStatusChangedListeners);
+                                        pipeline, streamGraph, jobStatusChangedListeners);
                             } else {
                                 LOG.error(
                                         "Failed to submit job graph to application cluster",
