@@ -162,15 +162,15 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
                 SqlNode operand0 = call.operand(0);
                 if (operand0 instanceof SqlBasicCall
                         && ((SqlBasicCall) operand0).getOperator()
-                                instanceof org.apache.calcite.sql.SqlWindowTableFunction) {
+                        instanceof org.apache.calcite.sql.SqlWindowTableFunction) {
                     return;
                 }
             }
             final SqlNode condition = join.getCondition();
             if (condition != null
                     && (!SqlUtil.isLiteral(condition)
-                            || ((SqlLiteral) condition).getValueAs(Boolean.class)
-                                    != Boolean.TRUE)) {
+                    || ((SqlLiteral) condition).getValueAs(Boolean.class)
+                    != Boolean.TRUE)) {
                 throw new ValidationException(
                         String.format(
                                 "Left outer joins with a table function do not accept a predicate such as %s. "
@@ -287,6 +287,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
      * SqlSnapshot.
      *
      * @param ns The namespace used to find SqlSnapshot
+     *
      * @return SqlSnapshot found in {@param ns}, empty if not found
      */
     private Optional<SqlSnapshot> getSnapShotNode(SqlValidatorNamespace ns) {
@@ -299,7 +300,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
             } else if (enclosingNode instanceof SqlBasicCall
                     && ((SqlBasicCall) enclosingNode).getOperator() instanceof SqlAsOperator
                     && ((SqlBasicCall) enclosingNode).getOperandList().get(0)
-                            instanceof SqlSnapshot) {
+                    instanceof SqlSnapshot) {
                 return Optional.of(
                         (SqlSnapshot) ((SqlBasicCall) enclosingNode).getOperandList().get(0));
             }
@@ -362,7 +363,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         // for this column. Therefore, explicit table expressions (for window TVFs at most one)
         // are captured before rewriting and replaced with a "marker" SqlSelect that contains the
         // descriptor information. The "marker" SqlSelect is considered during column expansion.
-        final List<SqlIdentifier> explicitTableArgs = getExplicitTableOperands(node);
+        final List<SqlIdentifier> extractTableOperands = getExplicitTableOperands(node);
 
         final SqlNode rewritten = super.performUnconditionalRewrites(node, underFrom);
 
@@ -373,7 +374,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         final SqlOperator operator = call.getOperator();
 
         if (operator instanceof SqlWindowTableFunction) {
-            if (explicitTableArgs.stream().allMatch(Objects::isNull)) {
+            if (extractTableOperands.stream().allMatch(Objects::isNull)) {
                 return rewritten;
             }
 
@@ -383,7 +384,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
                             .collect(Collectors.toList());
 
             for (int i = 0; i < call.operandCount(); i++) {
-                final SqlIdentifier tableArg = explicitTableArgs.get(i);
+                final SqlIdentifier tableArg = extractTableOperands.get(i);
                 if (tableArg != null) {
                     final SqlNode opReplacement = new ExplicitTableSqlSelect(tableArg, descriptors);
                     if (call.operand(i).getKind() == SqlKind.ARGUMENT_ASSIGNMENT) {
@@ -466,11 +467,11 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         }
 
         return call.getOperandList().stream()
-                .map(FlinkCalciteSqlValidator::extractExplicitTable)
+                .map(FlinkCalciteSqlValidator::extractTableOperand)
                 .collect(Collectors.toList());
     }
 
-    private static @Nullable SqlIdentifier extractExplicitTable(SqlNode op) {
+    private static @Nullable SqlIdentifier extractTableOperand(SqlNode op) {
         if (op.getKind() == SqlKind.EXPLICIT_TABLE) {
             final SqlBasicCall opCall = (SqlBasicCall) op;
             if (opCall.operandCount() == 1 && opCall.operand(0) instanceof SqlIdentifier) {
@@ -480,7 +481,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         } else if (op.getKind() == SqlKind.ARGUMENT_ASSIGNMENT) {
             // for TUMBLE(DATA => TABLE t3, ...)
             final SqlBasicCall opCall = (SqlBasicCall) op;
-            return extractExplicitTable(opCall.operand(0));
+            return extractTableOperand(opCall.operand(0));
         }
         return null;
     }
