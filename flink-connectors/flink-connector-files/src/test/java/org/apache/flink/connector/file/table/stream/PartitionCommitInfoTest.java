@@ -32,6 +32,8 @@ public class PartitionCommitInfoTest {
         ExecutionConfig executionConfig = new ExecutionConfig();
         executionConfig.disableGenericTypes();
         assertNotNull(
-                TypeInformation.of(PartitionCommitInfo.class).createSerializer(executionConfig));
+                TypeInformation
+                        .of(PartitionCommitInfo.class)
+                        .createSerializerConfig(executionConfig));
     }
 }
