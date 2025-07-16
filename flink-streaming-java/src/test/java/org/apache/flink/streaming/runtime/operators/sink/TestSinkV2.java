@@ -200,15 +200,15 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
     private static class TestSinkV2TwoPhaseCommittingSink<InputT> extends TestSinkV2<InputT>
             implements SupportsCommitter<String> {
         private final DefaultCommitter committer;
-        private final SimpleVersionedSerializer<String> committableSerializer;
+        private final SimpleVersionedSerializer<String> commSerializerFactory;
 
         public TestSinkV2TwoPhaseCommittingSink(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
             super(writer);
             this.committer = committer;
-            this.committableSerializer = committableSerializer;
+            this.commSerializerFactory = commSerializerFactory;
         }
 
         @Override
@@ -224,7 +224,7 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
 
         @Override
         public SimpleVersionedSerializer<String> getCommittableSerializer() {
-            return committableSerializer;
+            return commSerializerFactory;
         }
     }
 
@@ -235,9 +235,9 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
             implements SupportsPostCommitTopology<String> {
         public TestSinkV2WithPostCommitTopology(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
         }
 
         @Override
@@ -252,9 +252,9 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
             implements SupportsPreCommitTopology<String, String> {
         public TestSinkV2WithPreCommitTopology(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
         }
 
         @Override
@@ -282,15 +282,15 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
 
     private static class TestStatefulSinkV2<InputT> extends TestSinkV2WithPostCommitTopology<InputT>
             implements SupportsWriterState<InputT, Integer>,
-                    SupportsWriterState.WithCompatibleState {
+            SupportsWriterState.WithCompatibleState {
         private final String compatibleState;
 
         public TestStatefulSinkV2(
                 DefaultStatefulSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer,
                 String compatibleState) {
-            super(writer, committableSerializer, committer);
+            super(writer, commSerializerFactory, committer);
             this.compatibleState = compatibleState;
         }
 
@@ -414,11 +414,13 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
     /** Base class for testing {@link Committer}. */
     public static class DefaultCommitter implements Committer<String>, Serializable {
 
-        @Nullable protected Queue<CommitRequest<String>> committedData;
+        @Nullable
+        protected Queue<CommitRequest<String>> committedData;
 
         private boolean isClosed;
 
-        @Nullable private final Supplier<Queue<CommitRequest<String>>> queueSupplier;
+        @Nullable
+        private final Supplier<Queue<CommitRequest<String>>> queueSupplier;
 
         public DefaultCommitter() {
             this.committedData = new ConcurrentLinkedQueue<>();
