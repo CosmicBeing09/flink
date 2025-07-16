@@ -58,10 +58,11 @@ class JavaCatalogTableTest extends TableTestBase {
         return Arrays.asList(true, false);
     }
 
-    @Parameter private boolean isStreamingMode;
+    @Parameter
+    private boolean streamingMode;
 
     private TableTestUtil getTestUtil() {
-        if (isStreamingMode) {
+        if (streamingMode) {
             return streamTestUtil(TableConfig.getDefault());
         } else {
             return batchTestUtil(TableConfig.getDefault());
@@ -75,7 +76,7 @@ class JavaCatalogTableTest extends TableTestBase {
         GenericInMemoryCatalog genericInMemoryCatalog = new GenericInMemoryCatalog("in-memory");
         genericInMemoryCatalog.createTable(
                 new ObjectPath("default", "testTable"),
-                new CustomCatalogTable(isStreamingMode),
+                new CustomCatalogTable(streamingMode),
                 false);
         tableEnvironment.registerCatalog("testCatalog", genericInMemoryCatalog);
         tableEnvironment.executeSql(
@@ -92,7 +93,7 @@ class JavaCatalogTableTest extends TableTestBase {
         GenericInMemoryCatalog genericInMemoryCatalog = new GenericInMemoryCatalog("in-memory");
         genericInMemoryCatalog.createTable(
                 new ObjectPath("default", "testTable"),
-                new CustomCatalogTable(isStreamingMode),
+                new CustomCatalogTable(streamingMode),
                 false);
         tableEnvironment.registerCatalog("testCatalog", genericInMemoryCatalog);
 
@@ -107,7 +108,7 @@ class JavaCatalogTableTest extends TableTestBase {
 
     @TestTemplate
     void testResolvingProctimeOfCustomTableSql() throws Exception {
-        if (!isStreamingMode) {
+        if (!streamingMode) {
             // proctime not supported in batch
             return;
         }
@@ -116,7 +117,7 @@ class JavaCatalogTableTest extends TableTestBase {
         GenericInMemoryCatalog genericInMemoryCatalog = new GenericInMemoryCatalog("in-memory");
         genericInMemoryCatalog.createTable(
                 new ObjectPath("default", "testTable"),
-                new CustomCatalogTable(isStreamingMode),
+                new CustomCatalogTable(streamingMode),
                 false);
         tableEnvironment.registerCatalog("testCatalog", genericInMemoryCatalog);
 
@@ -127,7 +128,7 @@ class JavaCatalogTableTest extends TableTestBase {
 
     @TestTemplate
     void testResolvingProctimeOfCustomTableTableApi() throws Exception {
-        if (!isStreamingMode) {
+        if (!streamingMode) {
             // proctime not supported in batch
             return;
         }
@@ -136,7 +137,7 @@ class JavaCatalogTableTest extends TableTestBase {
         GenericInMemoryCatalog genericInMemoryCatalog = new GenericInMemoryCatalog("in-memory");
         genericInMemoryCatalog.createTable(
                 new ObjectPath("default", "testTable"),
-                new CustomCatalogTable(isStreamingMode),
+                new CustomCatalogTable(streamingMode),
                 false);
         tableEnvironment.registerCatalog("testCatalog", genericInMemoryCatalog);
 
@@ -151,10 +152,10 @@ class JavaCatalogTableTest extends TableTestBase {
 
     private static class CustomCatalogTable implements CatalogTable {
 
-        private final boolean isStreamingMode;
+        private final boolean streamingMode;
 
-        private CustomCatalogTable(boolean isStreamingMode) {
-            this.isStreamingMode = isStreamingMode;
+        private CustomCatalogTable(boolean streamingMode) {
+            this.streamingMode = streamingMode;
         }
 
         @Override
@@ -181,7 +182,7 @@ class JavaCatalogTableTest extends TableTestBase {
         public Map<String, String> getOptions() {
             Map<String, String> map = new HashMap<>();
             map.put("connector", "values");
-            map.put("bounded", Boolean.toString(!isStreamingMode));
+            map.put("bounded", Boolean.toString(!streamingMode));
             return map;
         }
 
