@@ -66,7 +66,8 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
             new ChannelStateHandleSerializer();
 
     /** Singleton, not meant to be instantiated. */
-    protected MetadataV3Serializer() {}
+    protected MetadataV3Serializer() {
+    }
 
     @Override
     public int getVersion() {
@@ -141,7 +142,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
             throws IOException {
         super.serializeSubtaskState(subtaskState, dos);
         serializeCollection(
-                subtaskState.getInputChannelState(), dos, this::serializeInputChannelStateHandle);
+                subtaskState.getInputChannelState(), dos, this::serializeInputStateHandle);
         serializeCollection(
                 subtaskState.getResultSubpartitionState(),
                 dos,
@@ -217,14 +218,14 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
 
     @VisibleForTesting
     @Override
-    public void serializeInputChannelStateHandle(InputStateHandle handle, DataOutputStream dos)
+    public void serializeInputStateHandle(InputStateHandle handle, DataOutputStream dos)
             throws IOException {
         channelStateHandleSerializer.serialize(handle, dos);
     }
 
     @VisibleForTesting
     @Override
-    public StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
+    public StateObjectCollection<InputStateHandle> deserializeInputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return deserializeCollection(
                 dis, context, channelStateHandleSerializer::deserializeInputStateHandle);
@@ -292,9 +293,9 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     }
 
     @VisibleForTesting
-    public static StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
+    public static StateObjectCollection<InputStateHandle> deserializeInputStateHandle(
             DataInputStream dis) throws IOException {
-        return INSTANCE.deserializeInputChannelStateHandle(dis, null);
+        return INSTANCE.deserializeInputStateHandle(dis, null);
     }
 
     @VisibleForTesting
