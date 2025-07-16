@@ -49,7 +49,7 @@ import java.util.Iterator;
  */
 public class HadoopMapredCompatWordCount {
 
-    public static void main(String[] args) throws Exception {
+    public static void run(String[] args) throws Exception {
         if (args.length < 2) {
             System.err.println("Usage: WordCount <input path> <result path>");
             return;
@@ -111,10 +111,12 @@ public class HadoopMapredCompatWordCount {
         }
 
         @Override
-        public void configure(JobConf arg0) {}
+        public void configure(JobConf arg0) {
+        }
 
         @Override
-        public void close() throws IOException {}
+        public void close() throws IOException {
+        }
     }
 
     /** A {@link Reducer} to sum counts. */
@@ -136,9 +138,11 @@ public class HadoopMapredCompatWordCount {
         }
 
         @Override
-        public void configure(JobConf arg0) {}
+        public void configure(JobConf arg0) {
+        }
 
         @Override
-        public void close() throws IOException {}
+        public void close() throws IOException {
+        }
     }
 }
