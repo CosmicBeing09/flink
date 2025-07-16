@@ -194,7 +194,7 @@ public class ExecutionOptions {
     @Experimental
     @Documentation.ExcludeFromDocumentation(
             "This is an experimental option, internal use only for now.")
-    public static final ConfigOption<Integer> ASYNC_INFLIGHT_RECORDS_LIMIT =
+    public static final ConfigOption<Integer> ASYNC_STATE_TOTAL_BUFFER_SIZE =
             ConfigOptions.key("execution.async-state.in-flight-records-limit")
                     .intType()
                     .defaultValue(6000)
