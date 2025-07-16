@@ -59,11 +59,11 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
 
     private static final CommandLineParser<StandaloneApplicationClusterConfiguration>
             commandLineParser =
-                    new CommandLineParser<>(
-                            new StandaloneApplicationClusterConfigurationParserFactory());
+            new CommandLineParser<>(
+                    new StandaloneApplicationClusterConfigurationParserFactory());
     private static final String JOB_CLASS_NAME = "foobar";
 
-    private static final String JOB_JAR_FILE = "local:///opt/flink/artifacts/my-flink-job.jar";
+    private static final String JOB_JARS = "local:///opt/flink/artifacts/my-flink-job.jar";
 
     @Test
     void testEntrypointClusterConfigurationToConfigurationParsing() throws FlinkParseException {
@@ -76,22 +76,22 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         final String arg1 = "arg1";
         final String arg2 = "arg2";
         final String[] args = {
-            "--configDir",
-            confDirPath,
-            "--job-id",
-            jobID.toHexString(),
-            "--fromSavepoint",
-            savepointRestoreSettings.getRestorePath(),
-            "--allowNonRestoredState",
-            "--webui-port",
-            String.valueOf(restPort),
-            "--job-classname",
-            JOB_CLASS_NAME,
-            String.format("-D%s=%s", key, value),
-            "--jar-file",
-            JOB_JAR_FILE,
-            arg1,
-            arg2
+                "--configDir",
+                confDirPath,
+                "--job-id",
+                jobID.toHexString(),
+                "--fromSavepoint",
+                savepointRestoreSettings.getRestorePath(),
+                "--allowNonRestoredState",
+                "--webui-port",
+                String.valueOf(restPort),
+                "--job-classname",
+                JOB_CLASS_NAME,
+                String.format("-D%s=%s", key, value),
+                "--jar-file",
+                JOB_JARS,
+                arg1,
+                arg2
         };
 
         final StandaloneApplicationClusterConfiguration clusterConfiguration =
@@ -110,7 +110,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
 
         assertThat(configuration.get(RestOptions.PORT)).isEqualTo(restPort);
         assertThat(configuration.get(DeploymentOptions.TARGET)).isEqualTo(value);
-        assertThat(configuration.get(PipelineOptions.JARS).get(0)).isEqualTo(JOB_JAR_FILE);
+        assertThat(configuration.get(PipelineOptions.JARS).get(0)).isEqualTo(JOB_JARS);
     }
 
     @Test
@@ -139,15 +139,15 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         final String arg1 = "arg1";
         final String arg2 = "arg2";
         final String[] args = {
-            "--configDir",
-            confDirPath,
-            "--webui-port",
-            String.valueOf(restPort),
-            "--job-classname",
-            JOB_CLASS_NAME,
-            String.format("-D%s=%s", key, value),
-            arg1,
-            arg2
+                "--configDir",
+                confDirPath,
+                "--webui-port",
+                String.valueOf(restPort),
+                "--job-classname",
+                JOB_CLASS_NAME,
+                String.format("-D%s=%s", key, value),
+                arg1,
+                arg2
         };
 
         final StandaloneApplicationClusterConfiguration clusterConfiguration =
@@ -212,7 +212,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testSetJobIdManually() throws FlinkParseException {
         final JobID jobId = new JobID();
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", jobId.toString()
+                "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", jobId.toString()
         };
 
         final StandaloneApplicationClusterConfiguration standaloneApplicationClusterConfiguration =
@@ -225,7 +225,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testInvalidJobIdThrows() {
         final String invalidJobId = "0xINVALID";
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", invalidJobId
+                "--configDir", confDirPath, "--job-classname", "foobar", "--job-id", invalidJobId
         };
 
         try {
@@ -244,19 +244,19 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         final String jobClassName = JOB_CLASS_NAME;
         final JobID jobId = new JobID();
         final String savepointRestorePath = "s3://foo/bar";
-        final String jobJarFile = JOB_JAR_FILE;
+        final String jobJars = JOB_JARS;
         final String[] args = {
-            "-c",
-            confDirPath,
-            "-j",
-            jobClassName,
-            "-jid",
-            jobId.toString(),
-            "-s",
-            savepointRestorePath,
-            "-jarfile",
-            jobJarFile,
-            "-n"
+                "-c",
+                confDirPath,
+                "-j",
+                jobClassName,
+                "-jid",
+                jobId.toString(),
+                "-s",
+                savepointRestorePath,
+                "-jarfile",
+                jobJars,
+                "-n"
         };
 
         final StandaloneApplicationClusterConfiguration clusterConfiguration =
@@ -277,7 +277,7 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     void testHostOption() throws FlinkParseException {
         final String hostName = "user-specified-hostname";
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--host", hostName
+                "--configDir", confDirPath, "--job-classname", "foobar", "--host", hostName
         };
         final StandaloneApplicationClusterConfiguration applicationClusterConfiguration =
                 commandLineParser.parse(args);
@@ -287,10 +287,10 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
     @Test
     void testJarFileOption() throws FlinkParseException {
         final String[] args = {
-            "--configDir", confDirPath, "--job-classname", "foobar", "--jar-file", JOB_JAR_FILE
+                "--configDir", confDirPath, "--job-classname", "foobar", "--jar-file", JOB_JARS
         };
         final StandaloneApplicationClusterConfiguration applicationClusterConfiguration =
                 commandLineParser.parse(args);
-        assertThat(applicationClusterConfiguration.getJarFile()).isEqualTo(JOB_JAR_FILE);
+        assertThat(applicationClusterConfiguration.getJarFile()).isEqualTo(JOB_JARS);
     }
 }
