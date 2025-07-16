@@ -86,13 +86,15 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     private final JobStatus state;
 
     /** The job type of the job execution. */
-    @Nullable private final JobType jobType;
+    @Nullable
+    private final JobType jobType;
 
     /**
      * The exception that caused the job to fail. This is set to the first root exception that was
      * not recoverable and triggered job failure
      */
-    @Nullable private final ErrorInfo failureCause;
+    @Nullable
+    private final ErrorInfo failureCause;
 
     // ------ Fields that are only relevant for archived execution graphs ------------
     private final String jsonPlan;
@@ -101,19 +103,26 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     private final boolean isStoppable;
     private final Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators;
 
-    @Nullable private final CheckpointCoordinatorConfiguration jobCheckpointingConfiguration;
+    @Nullable
+    private final CheckpointCoordinatorConfiguration jobCheckpointingConfiguration;
 
-    @Nullable private final CheckpointStatsSnapshot checkpointStatsSnapshot;
+    @Nullable
+    private final CheckpointStatsSnapshot checkpointStatsSnapshot;
 
-    @Nullable private final String stateBackendName;
+    @Nullable
+    private final String stateBackendName;
 
-    @Nullable private final String checkpointStorageName;
+    @Nullable
+    private final String checkpointStorageName;
 
-    @Nullable private final TernaryBoolean stateChangelogEnabled;
+    @Nullable
+    private final TernaryBoolean stateChangelogEnabled;
 
-    @Nullable private final String changelogStorageName;
+    @Nullable
+    private final String changelogStorageName;
 
-    @Nullable private final String streamGraphJson;
+    @Nullable
+    private final String streamGraphJson;
 
     private final int pendingOperatorCount;
 
@@ -166,7 +175,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan;
     }
 
@@ -320,6 +329,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
      * Create a {@link ArchivedExecutionGraph} from the given {@link ExecutionGraph}.
      *
      * @param executionGraph to create the ArchivedExecutionGraph from
+     *
      * @return ArchivedExecutionGraph created from the given ExecutionGraph
      */
     public static ArchivedExecutionGraph createFrom(ExecutionGraph executionGraph) {
@@ -331,7 +341,8 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
      *
      * @param executionGraph to create the ArchivedExecutionGraph from
      * @param statusOverride optionally overrides the JobStatus of the ExecutionGraph with a
-     *     non-globally-terminal state and clears timestamps of globally-terminal states
+     *         non-globally-terminal state and clears timestamps of globally-terminal states
+     *
      * @return ArchivedExecutionGraph created from the given ExecutionGraph
      */
     public static ArchivedExecutionGraph createFrom(
@@ -374,7 +385,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
                 statusOverride == null ? executionGraph.getState() : statusOverride,
                 executionGraph.getJobType(),
                 executionGraph.getFailureInfo(),
-                executionGraph.getJsonPlan(),
+                executionGraph.getPlan(),
                 executionGraph.getAccumulatorResultsStringified(),
                 serializedUserAccumulators,
                 executionGraph.getArchivedExecutionConfig(),
@@ -468,7 +479,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
         final Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators =
                 Collections.emptyMap();
         StringifiedAccumulatorResult[] archivedUserAccumulators =
-                new StringifiedAccumulatorResult[] {};
+                new StringifiedAccumulatorResult[]{};
 
         final long[] timestamps = new long[JobStatus.values().length];
         timestamps[JobStatus.INITIALIZING.ordinal()] = initializationTimestamp;
