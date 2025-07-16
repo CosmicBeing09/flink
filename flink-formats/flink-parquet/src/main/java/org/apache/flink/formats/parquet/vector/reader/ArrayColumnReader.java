@@ -43,7 +43,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Array {@link ColumnReader}. TODO Currently ARRAY type only support non nested case. */
+/** Array {@link ColumnReader}. TODO Currently ARRAY category only support non nested case. */
 public class ArrayColumnReader extends BaseVectorizedColumnReader {
 
     // The value read in last time
@@ -59,10 +59,10 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             ColumnDescriptor descriptor,
             PageReader pageReader,
             boolean isUtcTimestamp,
-            Type type,
+            Type category,
             LogicalType logicalType)
             throws IOException {
-        super(descriptor, pageReader, isUtcTimestamp, type, logicalType);
+        super(descriptor, pageReader, isUtcTimestamp, category, logicalType);
     }
 
     @Override
@@ -97,10 +97,11 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
      * Reads a single value from parquet page, puts it into lastValue. Returns a boolean indicating
      * if there is more values to read (true).
      *
-     * @param type the element type of array
+     * @param category the element category of array
+     *
      * @return boolean
      */
-    private boolean fetchNextValue(LogicalType type) {
+    private boolean fetchNextValue(LogicalType category) {
         int left = readPageIfNeed();
         if (left > 0) {
             // get the values of repetition and definitionLevel
@@ -110,7 +111,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 if (isCurrentPageDictionaryEncoded) {
                     lastValue = dataColumn.readValueDictionaryId();
                 } else {
-                    lastValue = readPrimitiveTypedRow(type);
+                    lastValue = readPrimitiveTypedRow(category);
                 }
             } else {
                 lastValue = null;
@@ -135,8 +136,8 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
 
     // Need to be in consistent with that VectorizedPrimitiveColumnReader#readBatchHelper
     // TODO Reduce the duplicated code
-    private Object readPrimitiveTypedRow(LogicalType type) {
-        switch (type.getTypeRoot()) {
+    private Object readPrimitiveTypedRow(LogicalType category) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -172,16 +173,16 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
                 return dataColumn.readTimestamp();
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported category in the list: " + category);
         }
     }
 
-    private Object dictionaryDecodeValue(LogicalType type, Integer dictionaryValue) {
+    private Object dictionaryDecodeValue(LogicalType category, Integer dictionaryValue) {
         if (dictionaryValue == null) {
             return null;
         }
 
-        switch (type.getTypeRoot()) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -217,7 +218,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
                 return dictionary.readTimestamp(dictionaryValue);
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported category in the list: " + category);
         }
     }
 
@@ -228,11 +229,12 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
      * @param total maximum number of rows to collect
      * @param lcv column vector to do initial setup in data collection time
      * @param valueList collection of values that will be fed into the vector later
-     * @param type the element type of array
+     * @param category the element category of array
+     *
      * @return int
      */
     private int collectDataFromParquetPage(
-            int total, HeapArrayVector lcv, List<Object> valueList, LogicalType type) {
+            int total, HeapArrayVector lcv, List<Object> valueList, LogicalType category) {
         int index = 0;
         /*
          * Here is a nested loop for collecting all values from a parquet page.
@@ -266,9 +268,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 valueList.add(
                         isCurrentPageDictionaryEncoded
-                                ? dictionaryDecodeValue(type, (Integer) lastValue)
+                                ? dictionaryDecodeValue(category, (Integer) lastValue)
                                 : lastValue);
-            } while (fetchNextValue(type) && (repetitionLevel != 0));
+            } while (fetchNextValue(category) && (repetitionLevel != 0));
 
             lcv.getLengths()[index] = valueList.size() - lcv.getOffsets()[index];
             index++;
@@ -291,10 +293,10 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
     }
 
     private void fillColumnVector(
-            LogicalType type, HeapArrayVector lcv, List valueList, int elementNum) {
+            LogicalType category, HeapArrayVector lcv, List<Object> valueList, int elementNum) {
         int total = valueList.size();
         setChildrenInfo(lcv, total, elementNum);
-        switch (type.getTypeRoot()) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -428,13 +430,13 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                         for (int i = 0; i < valueList.size(); i++) {
                             if (valueList.get(i) == null) {
                                 ((HeapIntVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapIntVector)
-                                                        ((ParquetDecimalVector) lcv.getChild())
-                                                                .getVector())
-                                                .vector[i] =
+                                        ((ParquetDecimalVector) lcv.getChild())
+                                                .getVector())
+                                        .vector[i] =
                                         ((List<Integer>) valueList).get(i);
                             }
                         }
@@ -446,13 +448,13 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                         for (int i = 0; i < valueList.size(); i++) {
                             if (valueList.get(i) == null) {
                                 ((HeapLongVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapLongVector)
-                                                        ((ParquetDecimalVector) lcv.getChild())
-                                                                .getVector())
-                                                .vector[i] =
+                                        ((ParquetDecimalVector) lcv.getChild())
+                                                .getVector())
+                                        .vector[i] =
                                         ((List<Long>) valueList).get(i);
                             }
                         }
@@ -465,11 +467,11 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                             byte[] src = (byte[]) valueList.get(i);
                             if (valueList.get(i) == null) {
                                 ((HeapBytesVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .setNullAt(i);
                             } else {
                                 ((HeapBytesVector)
-                                                ((ParquetDecimalVector) lcv.getChild()).getVector())
+                                        ((ParquetDecimalVector) lcv.getChild()).getVector())
                                         .appendBytes(i, src, 0, src.length);
                             }
                         }
@@ -477,7 +479,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported category in the list: " + category);
         }
     }
 }
