@@ -98,8 +98,8 @@ class SinkV2SinkWriterOperatorTest {
         Sink<Integer> sink3 = sink.getSink();
         final OneInputStreamOperatorTestHarness<Integer, CommittableMessage<Integer>>
                 compatibleWriterOperator =
-                        new OneInputStreamOperatorTestHarness<>(
-                                new SinkWriterOperatorFactory<>(sink3));
+                new OneInputStreamOperatorTestHarness<>(
+                        new SinkWriterOperatorFactory<>(sink3));
 
         // load the state from previous sink
         compatibleWriterOperator.initializeState(previousSinkState);
@@ -117,8 +117,8 @@ class SinkV2SinkWriterOperatorTest {
                 sinkWithState(stateful, CompatibleStateSinkOperator.SINK_STATE_NAME);
         final OneInputStreamOperatorTestHarness<Integer, CommittableMessage<Integer>>
                 restoredSinkOperator =
-                        new OneInputStreamOperatorTestHarness<>(
-                                new SinkWriterOperatorFactory<>(sink2.getSink()));
+                new OneInputStreamOperatorTestHarness<>(
+                        new SinkWriterOperatorFactory<>(sink2.getSink()));
 
         restoredSinkOperator.initializeState(snapshot);
         assertThat(sink.getRecordCountFromState()).isEqualTo(stateful ? expectedState : 0);
@@ -127,37 +127,37 @@ class SinkV2SinkWriterOperatorTest {
     }
 
     InspectableSink sinkWithoutCommitter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter = new TestSinkV2.DefaultSinkWriter<>();
-        return new InspectableSink(TestSinkV2.<Integer>newBuilder().setWriter(sinkWriter).build());
+        TestSinkV2.DefaultSinkWriter<Integer> writer = new TestSinkV2.DefaultSinkWriter<>();
+        return new InspectableSink(TestSinkV2.<Integer>newBuilder().setWriter(writer).build());
     }
 
     InspectableSink sinkWithCommitter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> writer =
                 new TestSinkV2.DefaultCommittingSinkWriter<>();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(writer)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithTimeBasedWriter() {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter = new TimeBasedBufferingSinkWriter();
+        TestSinkV2.DefaultSinkWriter<Integer> writer = new TimeBasedBufferingSinkWriter();
         return new InspectableSink(
                 TestSinkV2.<Integer>newBuilder()
-                        .setWriter(sinkWriter)
+                        .setWriter(writer)
                         .setDefaultCommitter()
                         .build());
     }
 
     InspectableSink sinkWithState(boolean withState, String stateName) {
-        TestSinkV2.DefaultSinkWriter<Integer> sinkWriter =
+        TestSinkV2.DefaultSinkWriter<Integer> writer =
                 new TestSinkV2.DefaultStatefulSinkWriter<>();
         TestSinkV2.Builder<Integer> builder =
                 TestSinkV2.<Integer>newBuilder()
                         .setDefaultCommitter()
                         .setWithPostCommitTopology(true)
-                        .setWriter(sinkWriter);
+                        .setWriter(writer);
         if (withState) {
             builder.setWriterState(true);
         }
@@ -302,8 +302,8 @@ class SinkV2SinkWriterOperatorTest {
         final InspectableSink restoredSink = sinkWithState(stateful, null);
         final OneInputStreamOperatorTestHarness<Integer, CommittableMessage<Integer>>
                 restoredTestHarness =
-                        new OneInputStreamOperatorTestHarness<>(
-                                new SinkWriterOperatorFactory<>(restoredSink.getSink()));
+                new OneInputStreamOperatorTestHarness<>(
+                        new SinkWriterOperatorFactory<>(restoredSink.getSink()));
 
         restoredTestHarness.initializeState(snapshot);
         restoredTestHarness.open();
