@@ -85,53 +85,54 @@ public class ReporterSetupBuilder<
     /** Builder for metric reporter. */
     public static final ReporterSetupBuilder<MetricReporter, ReporterSetup, MetricReporterFactory>
             METRIC_SETUP_BUILDER =
-                    new ReporterSetupBuilder<>(
-                            new ReporterSetupInfo<>(
-                                    MetricReporter.class,
-                                    MetricReporterFactory.class,
-                                    ConfigConstants.METRICS_REPORTER_PREFIX,
-                                    MetricOptions.REPORTER_FACTORY_CLASS,
-                                    MetricOptions.REPORTERS_LIST,
-                                    MetricOptions.REPORTER_ADDITIONAL_VARIABLES,
-                                    createReporterClassPattern(
-                                            Pattern.quote(ConfigConstants.METRICS_REPORTER_PREFIX),
-                                            '('
-                                                    + Pattern.quote(
-                                                            MetricOptions.REPORTER_FACTORY_CLASS
-                                                                    .key())
-                                                    + ')'),
-                                    LIST_PATTERN,
-                                    MetricReporterFactory::createMetricReporter,
-                                    ReporterSetup::new));
+            new ReporterSetupBuilder<>(
+                    new ReporterSetupInfo<>(
+                            MetricReporter.class,
+                            MetricReporterFactory.class,
+                            ConfigConstants.METRICS_REPORTER_PREFIX,
+                            MetricOptions.REPORTER_FACTORY_CLASS,
+                            MetricOptions.REPORTERS_LIST,
+                            MetricOptions.REPORTER_ADDITIONAL_VARIABLES,
+                            createReporterClassPattern(
+                                    Pattern.quote(ConfigConstants.METRICS_REPORTER_PREFIX),
+                                    '('
+                                            + Pattern.quote(
+                                            MetricOptions.REPORTER_FACTORY_CLASS
+                                                    .key())
+                                            + ')'),
+                            LIST_PATTERN,
+                            MetricReporterFactory::createMetricReporter,
+                            ReporterSetup::new));
 
     /** Builder for span/trace reporter. */
     public static final ReporterSetupBuilder<
-                    TraceReporter, TraceReporterSetup, TraceReporterFactory>
+            TraceReporter, TraceReporterSetup, TraceReporterFactory>
             TRACE_SETUP_BUILDER =
-                    new ReporterSetupBuilder<>(
-                            new ReporterSetupInfo<>(
-                                    TraceReporter.class,
-                                    TraceReporterFactory.class,
-                                    ConfigConstants.EVENTS_REPORTER_PREFIX,
-                                    TraceOptions.REPORTER_FACTORY_CLASS,
-                                    TraceOptions.TRACE_REPORTERS_LIST,
-                                    TraceOptions.REPORTER_ADDITIONAL_VARIABLES,
-                                    createReporterClassPattern(
-                                            Pattern.quote(ConfigConstants.TRACES_REPORTER_PREFIX),
-                                            Pattern.quote(
-                                                    TraceOptions.REPORTER_FACTORY_CLASS.key())),
-                                    LIST_PATTERN,
-                                    TraceReporterFactory::createTraceReporter,
-                                    (reporterName,
+            new ReporterSetupBuilder<>(
+                    new ReporterSetupInfo<>(
+                            TraceReporter.class,
+                            TraceReporterFactory.class,
+                            ConfigConstants.EVENTS_REPORTER_PREFIX,
+                            TraceOptions.REPORTER_FACTORY_CLASS,
+                            TraceOptions.TRACE_REPORTERS_LIST,
+                            TraceOptions.REPORTER_ADDITIONAL_VARIABLES,
+                            createReporterClassPattern(
+                                    Pattern.quote(ConfigConstants.TRACES_REPORTER_PREFIX),
+                                    Pattern.quote(
+                                            TraceOptions.REPORTER_FACTORY_CLASS.key())),
+                            LIST_PATTERN,
+                            TraceReporterFactory::createTraceReporter,
+                            (
+                                    reporterName,
+                                    metricConfig,
+                                    traceReporter,
+                                    reporterFilter,
+                                    additionalVariables) ->
+                                    new TraceReporterSetup(
+                                            reporterName,
                                             metricConfig,
                                             traceReporter,
-                                            metricFilter,
-                                            additionalVariables) ->
-                                            new TraceReporterSetup(
-                                                    reporterName,
-                                                    metricConfig,
-                                                    traceReporter,
-                                                    additionalVariables)));
+                                            additionalVariables)));
 
     /**
      * Functional interface to unify access to different reporter factories that don't have a proper
@@ -156,7 +157,7 @@ public class ReporterSetupBuilder<
                 String reporterName,
                 MetricConfig metricConfig,
                 REPORTER reporter,
-                MetricFilter metricFilter,
+                MetricFilter reporterFilter,
                 Map<String, String> additionalVariables);
     }
 
@@ -253,9 +254,9 @@ public class ReporterSetupBuilder<
     }
 
     @VisibleForTesting
-    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter metricFilter) {
+    public SETUP forReporter(String reporterName, REPORTER reporter, MetricFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, new MetricConfig(), reporter, metricFilter, Collections.emptyMap());
+                reporterName, new MetricConfig(), reporter, reporterFilter, Collections.emptyMap());
     }
 
     @VisibleForTesting
@@ -273,20 +274,20 @@ public class ReporterSetupBuilder<
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter) {
+            MetricFilter reporterFilter) {
         return createReporterSetup(
-                reporterName, metricConfig, reporter, metricFilter, Collections.emptyMap());
+                reporterName, metricConfig, reporter, reporterFilter, Collections.emptyMap());
     }
 
     private SETUP createReporterSetup(
             String reporterName,
             MetricConfig metricConfig,
             REPORTER reporter,
-            MetricFilter metricFilter,
+            MetricFilter reporterFilter,
             Map<String, String> additionalVariables) {
         reporter.open(metricConfig);
         return reporterSetupInfo.reporterSetupFactory.createReporterSetup(
-                reporterName, metricConfig, reporter, metricFilter, additionalVariables);
+                reporterName, metricConfig, reporter, reporterFilter, additionalVariables);
     }
 
     public List<SETUP> fromConfiguration(
@@ -329,11 +330,11 @@ public class ReporterSetupBuilder<
                             reporterSetupInfo.factoryTypeClass.getSimpleName(),
                             factoryClassName,
                             new File(
-                                            factory.getClass()
-                                                    .getProtectionDomain()
-                                                    .getCodeSource()
-                                                    .getLocation()
-                                                    .toURI())
+                                    factory.getClass()
+                                            .getProtectionDomain()
+                                            .getCodeSource()
+                                            .getLocation()
+                                            .toURI())
                                     .getCanonicalPath());
                 } else {
                     LOG.warn(
@@ -359,7 +360,7 @@ public class ReporterSetupBuilder<
         final Spliterator<REPORTER_FACTORY> factoryIteratorPlugins =
                 pluginManager != null
                         ? Spliterators.spliteratorUnknownSize(
-                                pluginManager.load(reporterSetupInfo.factoryTypeClass), 0)
+                        pluginManager.load(reporterSetupInfo.factoryTypeClass), 0)
                         : Spliterators.emptySpliterator();
 
         return Stream.concat(
@@ -380,7 +381,7 @@ public class ReporterSetupBuilder<
                 Optional<REPORTER> metricReporterOptional =
                         loadReporter(reporterName, reporterConfig, reporterFactories);
 
-                final MetricFilter metricFilter =
+                final MetricFilter reporterFilter =
                         DefaultMetricFilter.fromConfiguration(reporterConfig);
 
                 // massage user variables keys into scope format for parity to variable
@@ -402,7 +403,7 @@ public class ReporterSetupBuilder<
                                             reporterName,
                                             metricConfig,
                                             reporter,
-                                            metricFilter,
+                                            reporterFilter,
                                             additionalVariables));
                         });
             } catch (Throwable t) {
