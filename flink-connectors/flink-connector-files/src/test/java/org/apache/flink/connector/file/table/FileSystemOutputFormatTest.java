@@ -50,24 +50,26 @@ import static org.assertj.core.api.Assertions.entry;
 /** Test for {@link FileSystemOutputFormat}. */
 class FileSystemOutputFormatTest {
 
-    @TempDir private java.nio.file.Path tmpPath;
-    @TempDir private java.nio.file.Path outputPath;
+    @TempDir
+    private java.nio.file.Path tmpPath;
+    @TempDir
+    private java.nio.file.Path outputPath;
 
     private final TestingFinalizationContext finalizationContext = new TestingFinalizationContext();
 
-    private static Map<File, String> getFileContentByPath(java.nio.file.Path directory)
+    private static Map<File, String> getFileFileToContentByPath(java.nio.file.Path directory)
             throws IOException {
-        Map<File, String> contents = new HashMap<>(4);
+        Map<File, String> fileToContents = new HashMap<>(4);
 
         if (Files.notExists(directory) || !Files.isDirectory(directory)) {
-            return contents;
+            return fileToContents;
         }
 
         final Collection<File> filesInBucket = FileUtils.listFiles(directory.toFile(), null, true);
         for (File file : filesInBucket) {
-            contents.put(file, FileUtils.readFileToString(file));
+            fileToContents.put(file, FileUtils.readFileToString(file));
         }
-        return contents;
+        return fileToContents;
     }
 
     @BeforeEach
@@ -83,7 +85,12 @@ class FileSystemOutputFormatTest {
     @Test
     void testClosingWithoutInput() throws Exception {
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(false, false, false, new LinkedHashMap<>(), new AtomicReference<>())) {
+                     createSink(
+                             false,
+                             false,
+                             false,
+                             new LinkedHashMap<>(),
+                             new AtomicReference<>())) {
             testHarness.setup();
             testHarness.open();
         }
@@ -93,14 +100,14 @@ class FileSystemOutputFormatTest {
     void testNonPartition() throws Exception {
         AtomicReference<FileSystemOutputFormat<Row>> ref = new AtomicReference<>();
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(false, false, false, new LinkedHashMap<>(), ref)) {
+                     createSink(false, false, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileFileToContentByPath(tmpPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        assertThat(content.values())
+        Map<File, String> fileToContent = getFileFileToContentByPath(outputPath);
+        assertThat(fileToContent.values())
                 .containsExactly("a1,1,p1\n" + "a2,2,p1\n" + "a2,2,p2\n" + "a3,3,p1\n");
     }
 
@@ -121,15 +128,15 @@ class FileSystemOutputFormatTest {
 
         AtomicReference<FileSystemOutputFormat<Row>> ref = new AtomicReference<>();
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(true, false, false, new LinkedHashMap<>(), ref)) {
+                     createSink(true, false, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileFileToContentByPath(tmpPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        assertThat(content).hasSize(1);
-        assertThat(content.values())
+        Map<File, String> fileToContent = getFileFileToContentByPath(outputPath);
+        assertThat(fileToContent).hasSize(1);
+        assertThat(fileToContent.values())
                 .containsExactly("a1,1,p1\n" + "a2,2,p1\n" + "a2,2,p2\n" + "a3,3,p1\n");
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
@@ -140,7 +147,7 @@ class FileSystemOutputFormatTest {
         LinkedHashMap<String, String> staticParts = new LinkedHashMap<>();
         staticParts.put("c", "p1");
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(false, true, false, staticParts, ref)) {
+                     createSink(false, true, false, staticParts, ref)) {
             testHarness.setup();
             testHarness.open();
 
@@ -148,14 +155,16 @@ class FileSystemOutputFormatTest {
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a3", 3), 1L));
-            assertThat(getFileContentByPath(tmpPath)).hasSize(1);
+            assertThat(getFileFileToContentByPath(tmpPath)).hasSize(1);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        assertThat(content).hasSize(1);
-        assertThat(content.keySet().iterator().next().getParentFile().getName()).isEqualTo("c=p1");
-        assertThat(content.values()).containsExactly("a1,1\n" + "a2,2\n" + "a2,2\n" + "a3,3\n");
+        Map<File, String> fileToContent = getFileFileToContentByPath(outputPath);
+        assertThat(fileToContent).hasSize(1);
+        assertThat(fileToContent.keySet().iterator().next().getParentFile().getName()).isEqualTo(
+                "c=p1");
+        assertThat(fileToContent.values()).containsExactly(
+                "a1,1\n" + "a2,2\n" + "a2,2\n" + "a3,3\n");
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
 
@@ -163,18 +172,20 @@ class FileSystemOutputFormatTest {
     void testDynamicPartition() throws Exception {
         AtomicReference<FileSystemOutputFormat<Row>> ref = new AtomicReference<>();
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(false, true, false, new LinkedHashMap<>(), ref)) {
+                     createSink(false, true, false, new LinkedHashMap<>(), ref)) {
             writeUnorderedRecords(testHarness);
-            assertThat(getFileContentByPath(tmpPath)).hasSize(2);
+            assertThat(getFileFileToContentByPath(tmpPath)).hasSize(2);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        Map<String, String> sortedContent = new TreeMap<>();
-        content.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
+        Map<File, String> fileToContent = getFileFileToContentByPath(outputPath);
+        Map<String, String> sortedFileToContent = new TreeMap<>();
+        fileToContent.forEach((file, s) -> sortedFileToContent.put(
+                file.getParentFile().getName(),
+                s));
 
-        assertThat(sortedContent).hasSize(2);
-        assertThat(sortedContent)
+        assertThat(sortedFileToContent).hasSize(2);
+        assertThat(sortedFileToContent)
                 .contains(entry("c=p1", "a1,1\n" + "a2,2\n" + "a3,3\n"), entry("c=p2", "a2,2\n"));
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
@@ -183,7 +194,7 @@ class FileSystemOutputFormatTest {
     void testGroupedDynamicPartition() throws Exception {
         AtomicReference<FileSystemOutputFormat<Row>> ref = new AtomicReference<>();
         try (OneInputStreamOperatorTestHarness<Row, Object> testHarness =
-                createSink(false, true, true, new LinkedHashMap<>(), ref)) {
+                     createSink(false, true, true, new LinkedHashMap<>(), ref)) {
             testHarness.setup();
             testHarness.open();
 
@@ -191,17 +202,19 @@ class FileSystemOutputFormatTest {
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2, "p1"), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a3", 3, "p1"), 1L));
             testHarness.processElement(new StreamRecord<>(Row.of("a2", 2, "p2"), 1L));
-            assertThat(getFileContentByPath(tmpPath)).hasSize(2);
+            assertThat(getFileFileToContentByPath(tmpPath)).hasSize(2);
         }
 
         ref.get().finalizeGlobal(finalizationContext);
-        Map<File, String> content = getFileContentByPath(outputPath);
-        Map<String, String> sortedContent = new TreeMap<>();
-        content.forEach((file, s) -> sortedContent.put(file.getParentFile().getName(), s));
+        Map<File, String> fileToContent = getFileFileToContentByPath(outputPath);
+        Map<String, String> sortedFileToContent = new TreeMap<>();
+        fileToContent.forEach((file, s) -> sortedFileToContent.put(
+                file.getParentFile().getName(),
+                s));
 
-        assertThat(sortedContent).hasSize(2);
-        assertThat(sortedContent.get("c=p1")).isEqualTo("a1,1\n" + "a2,2\n" + "a3,3\n");
-        assertThat(sortedContent.get("c=p2")).isEqualTo("a2,2\n");
+        assertThat(sortedFileToContent).hasSize(2);
+        assertThat(sortedFileToContent.get("c=p1")).isEqualTo("a1,1\n" + "a2,2\n" + "a3,3\n");
+        assertThat(sortedFileToContent.get("c=p2")).isEqualTo("a2,2\n");
         assertThat(new File(tmpPath.toUri())).doesNotExist();
     }
 
@@ -212,8 +225,8 @@ class FileSystemOutputFormatTest {
             LinkedHashMap<String, String> staticPartitions,
             AtomicReference<FileSystemOutputFormat<Row>> sinkRef)
             throws Exception {
-        String[] columnNames = new String[] {"a", "b", "c"};
-        String[] partitionColumns = partition ? new String[] {"c"} : new String[0];
+        String[] columnNames = new String[]{"a", "b", "c"};
+        String[] partitionColumns = partition ? new String[]{"c"} : new String[0];
 
         TableMetaStoreFactory msFactory =
                 new FileSystemCommitterTest.TestMetaStoreFactory(new Path(outputPath.toString()));
