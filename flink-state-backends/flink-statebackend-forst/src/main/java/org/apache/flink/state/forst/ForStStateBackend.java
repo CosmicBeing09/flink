@@ -114,24 +114,28 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
     // -- configuration values, set in the application / configuration
 
     /**
-     * Base paths for ForSt remote directory, as configured. Null if not yet set, in which case the
+     * Base paths for ForSt primary directory, as configured. Null if not yet set, in which case the
      * configuration values will be used. The configuration will fallback to local directory by
      * default. TODO: fallback to checkpoint directory if not configured.
      */
-    @Nullable private Path remoteForStDirectory;
+    @Nullable
+    private Path primaryForStDirectory;
 
     /**
      * Base paths for ForSt directory, as configured. Null if not yet set, in which case the
      * configuration values will be used. The configuration defaults to the TaskManager's temp
      * directories.
      */
-    @Nullable private File[] localForStDirectories;
+    @Nullable
+    private File[] localForStDirectories;
 
     /** The configurable options. */
-    @Nullable private ReadableConfig configurableOptions;
+    @Nullable
+    private ReadableConfig configurableOptions;
 
     /** The options factory to create the ForSt options in the cluster. */
-    @Nullable private ForStOptionsFactory forStOptionsFactory;
+    @Nullable
+    private ForStOptionsFactory forStOptionsFactory;
 
     /** The configuration for memory settings (pool sizes, etc.). */
     private final ForStMemoryConfiguration memoryConfiguration;
@@ -213,15 +217,15 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         this.memoryConfiguration.validate();
 
         this.remoteShareWithCheckpoint = false;
-        if (original.remoteForStDirectory != null) {
-            this.remoteForStDirectory = original.remoteForStDirectory;
+        if (original.primaryForStDirectory != null) {
+            this.primaryForStDirectory = original.primaryForStDirectory;
         } else {
-            String remoteDirStr = config.get(ForStOptions.REMOTE_DIRECTORY);
+            String remoteDirStr = config.get(ForStOptions.PRIMARY_DIRECTORY);
             if (REMOTE_SHORTCUT_CHECKPOINT.equals(remoteDirStr)) {
-                this.remoteForStDirectory = null;
+                this.primaryForStDirectory = null;
                 this.remoteShareWithCheckpoint = true;
             } else {
-                this.remoteForStDirectory = remoteDirStr == null ? null : new Path(remoteDirStr);
+                this.primaryForStDirectory = remoteDirStr == null ? null : new Path(remoteDirStr);
             }
         }
 
@@ -307,6 +311,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
      *
      * @param config The configuration.
      * @param classLoader The class loader.
+     *
      * @return The re-configured variant of the state backend
      */
     @Override
@@ -330,7 +335,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
 
         // initialize the paths where the local ForSt files should be stored
         if (localForStDirectories == null) {
-            initializedDbBasePaths = new File[] {env.getTaskManagerInfo().getTmpWorkingDirectory()};
+            initializedDbBasePaths = new File[]{env.getTaskManagerInfo().getTmpWorkingDirectory()};
         } else {
             List<File> dirs = new ArrayList<>(localForStDirectories.length);
             StringBuilder errorMessage = new StringBuilder();
@@ -406,9 +411,9 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                         new File(new File(getNextStoragePath(), jobId.toHexString()), opChildPath)
                                 .getAbsolutePath());
         Path remoteBasePath = null;
-        if (remoteForStDirectory != null) {
+        if (primaryForStDirectory != null) {
             remoteBasePath =
-                    new Path(new Path(remoteForStDirectory, jobId.toHexString()), opChildPath);
+                    new Path(new Path(primaryForStDirectory, jobId.toHexString()), opChildPath);
         } else if (remoteShareWithCheckpoint) {
             if (env.getCheckpointStorageAccess() instanceof FsCheckpointStorageAccess) {
                 Path sharedStateDirectory =
@@ -443,20 +448,20 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
 
         ForStKeyedStateBackendBuilder<K> builder =
                 new ForStKeyedStateBackendBuilder<>(
-                                parameters.getOperatorIdentifier(),
-                                env.getUserCodeClassLoader().asClassLoader(),
-                                resourceContainer,
-                                stateName -> resourceContainer.getColumnOptions(),
-                                parameters.getKeySerializer(),
-                                parameters.getNumberOfKeyGroups(),
-                                parameters.getKeyGroupRange(),
-                                env.getExecutionConfig(),
-                                priorityQueueConfig,
-                                parameters.getTtlTimeProvider(),
-                                parameters.getMetricGroup(),
-                                parameters.getCustomInitializationMetrics(),
-                                parameters.getStateHandles(),
-                                parameters.getCancelStreamRegistry())
+                        parameters.getOperatorIdentifier(),
+                        env.getUserCodeClassLoader().asClassLoader(),
+                        resourceContainer,
+                        stateName -> resourceContainer.getColumnOptions(),
+                        parameters.getKeySerializer(),
+                        parameters.getNumberOfKeyGroups(),
+                        parameters.getKeyGroupRange(),
+                        env.getExecutionConfig(),
+                        priorityQueueConfig,
+                        parameters.getTtlTimeProvider(),
+                        parameters.getMetricGroup(),
+                        parameters.getCustomInitializationMetrics(),
+                        parameters.getStateHandles(),
+                        parameters.getCancelStreamRegistry())
                         // TODO: remove after support more snapshot strategy
                         .setEnableIncrementalCheckpointing(true)
                         .setNativeMetricOptions(
@@ -495,13 +500,13 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         Path instanceBasePath =
                 new Path(
                         new File(
-                                        getNextStoragePath(),
-                                        "job_"
-                                                + jobId
-                                                + "_op_"
-                                                + fileCompatibleIdentifier
-                                                + "_uuid_"
-                                                + UUID.randomUUID())
+                                getNextStoragePath(),
+                                "job_"
+                                        + jobId
+                                        + "_op_"
+                                        + fileCompatibleIdentifier
+                                        + "_uuid_"
+                                        + UUID.randomUUID())
                                 .getAbsolutePath());
 
         LocalRecoveryConfig localRecoveryConfig =
@@ -534,25 +539,25 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                 latencyTrackingConfigBuilder.setMetricGroup(parameters.getMetricGroup()).build();
         ForStSyncKeyedStateBackendBuilder<K> builder =
                 new ForStSyncKeyedStateBackendBuilder<>(
-                                parameters.getOperatorIdentifier(),
-                                env.getUserCodeClassLoader().asClassLoader(),
-                                instanceBasePath,
-                                resourceContainer,
-                                stateName -> resourceContainer.getColumnOptions(),
-                                parameters.getKvStateRegistry(),
-                                parameters.getKeySerializer(),
-                                parameters.getNumberOfKeyGroups(),
-                                parameters.getKeyGroupRange(),
-                                executionConfig,
-                                localRecoveryConfig,
-                                priorityQueueConfig,
-                                parameters.getTtlTimeProvider(),
-                                latencyTrackingStateConfig,
-                                parameters.getMetricGroup(),
-                                parameters.getCustomInitializationMetrics(),
-                                parameters.getStateHandles(),
-                                keyGroupCompressionDecorator,
-                                parameters.getCancelStreamRegistry())
+                        parameters.getOperatorIdentifier(),
+                        env.getUserCodeClassLoader().asClassLoader(),
+                        instanceBasePath,
+                        resourceContainer,
+                        stateName -> resourceContainer.getColumnOptions(),
+                        parameters.getKvStateRegistry(),
+                        parameters.getKeySerializer(),
+                        parameters.getNumberOfKeyGroups(),
+                        parameters.getKeyGroupRange(),
+                        executionConfig,
+                        localRecoveryConfig,
+                        priorityQueueConfig,
+                        parameters.getTtlTimeProvider(),
+                        latencyTrackingStateConfig,
+                        parameters.getMetricGroup(),
+                        parameters.getCustomInitializationMetrics(),
+                        parameters.getStateHandles(),
+                        keyGroupCompressionDecorator,
+                        parameters.getCancelStreamRegistry())
                         .setNativeMetricOptions(
                                 resourceContainer.getMemoryWatcherOptions(nativeMetricOptions))
                         .setOverlapFractionThreshold(
@@ -576,11 +581,11 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         // ForSt, too.
         final boolean asyncSnapshots = true;
         return new DefaultOperatorStateBackendBuilder(
-                        parameters.getEnv().getUserCodeClassLoader().asClassLoader(),
-                        parameters.getEnv().getExecutionConfig(),
-                        asyncSnapshots,
-                        parameters.getStateHandles(),
-                        parameters.getCancelStreamRegistry())
+                parameters.getEnv().getUserCodeClassLoader().asClassLoader(),
+                parameters.getEnv().getExecutionConfig(),
+                asyncSnapshots,
+                parameters.getStateHandles(),
+                parameters.getCancelStreamRegistry())
                 .build();
     }
 
@@ -652,7 +657,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
      * @param path The path where the local ForSt database files are stored.
      */
     public void setLocalDbStoragePath(String path) {
-        setLocalDbStoragePaths(path == null ? null : new String[] {path});
+        setLocalDbStoragePaths(path == null ? null : new String[]{path});
     }
 
     /**
@@ -822,8 +827,8 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         return "ForStStateBackend{"
                 + ", localForStDirectories="
                 + Arrays.toString(localForStDirectories)
-                + ", remoteForStDirectory="
-                + remoteForStDirectory
+                + ", primaryForStDirectory="
+                + primaryForStDirectory
                 + '}';
     }
 
