@@ -20,7 +20,7 @@ package org.apache.flink.table.operations.utils;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.table.operations.AggregateQueryOperation;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
+import org.apache.flink.table.operations.CorrelatedFunctionTableOperation;
 import org.apache.flink.table.operations.DistinctQueryOperation;
 import org.apache.flink.table.operations.FilterQueryOperation;
 import org.apache.flink.table.operations.JoinQueryOperation;
@@ -83,8 +83,8 @@ public abstract class QueryOperationDefaultVisitor<T> implements QueryOperationV
     }
 
     @Override
-    public T visit(CalculatedQueryOperation calculatedTable) {
-        return defaultMethod(calculatedTable);
+    public T visit(CorrelatedFunctionTableOperation correlatedFunctionTable) {
+        return defaultMethod(correlatedFunctionTable);
     }
 
     @Override
