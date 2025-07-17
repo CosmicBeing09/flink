@@ -49,10 +49,10 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     private static final long serialVersionUID = 2545865801947537790L;
 
     private final boolean parallelMode;
-    private final Object lock = new Object();
+    private final Object checkpointCleanupLock = new Object();
 
     @GuardedBy("lock")
-    private int numberOfCheckpointsToClean;
+    private int pendingCheckpointCleanupCount;
 
     @GuardedBy("lock")
     @Nullable
@@ -71,8 +71,8 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     }
 
     int getNumberOfCheckpointsToClean() {
-        synchronized (lock) {
-            return numberOfCheckpointsToClean;
+        synchronized (checkpointCleanupLock) {
+            return pendingCheckpointCleanupCount;
         }
     }
 
@@ -119,7 +119,7 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
      * @param completedCheckpoint which is subsumed.
      */
     public void addSubsumedCheckpoint(CompletedCheckpoint completedCheckpoint) {
-        synchronized (lock) {
+        synchronized (checkpointCleanupLock) {
             subsumedCheckpoints.add(completedCheckpoint);
         }
     }
@@ -134,7 +134,7 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
      */
     public void cleanSubsumedCheckpoints(
             long upTo, Set<Long> stillInUse, Runnable postCleanAction, Executor executor) {
-        synchronized (lock) {
+        synchronized (checkpointCleanupLock) {
             Iterator<CompletedCheckpoint> iterator = subsumedCheckpoints.iterator();
             while (iterator.hasNext()) {
                 CompletedCheckpoint checkpoint = iterator.next();
@@ -162,28 +162,28 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     }
 
     private void incrementNumberOfCheckpointsToClean() {
-        synchronized (lock) {
+        synchronized (checkpointCleanupLock) {
             checkState(cleanUpFuture == null, "CheckpointsCleaner has already been closed");
-            numberOfCheckpointsToClean++;
+            pendingCheckpointCleanupCount++;
         }
     }
 
     private void decrementNumberOfCheckpointsToClean() {
-        synchronized (lock) {
-            numberOfCheckpointsToClean--;
+        synchronized (checkpointCleanupLock) {
+            pendingCheckpointCleanupCount--;
             maybeCompleteCloseUnsafe();
         }
     }
 
     private void maybeCompleteCloseUnsafe() {
-        if (numberOfCheckpointsToClean == 0 && cleanUpFuture != null) {
+        if (pendingCheckpointCleanupCount == 0 && cleanUpFuture != null) {
             cleanUpFuture.complete(null);
         }
     }
 
     @Override
     public CompletableFuture<Void> closeAsync() {
-        synchronized (lock) {
+        synchronized (checkpointCleanupLock) {
             if (cleanUpFuture == null) {
                 cleanUpFuture = new CompletableFuture<>();
             }
