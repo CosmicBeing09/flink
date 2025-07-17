@@ -101,7 +101,7 @@ public class OperationExpressionsUtils {
      */
     public static CategorizedExpressions extractAggregationsAndProperties(
             List<Expression> expressions) {
-        AggregationAndPropertiesSplitter splitter = new AggregationAndPropertiesSplitter();
+        ExpressionCategorizationSplitter splitter = new ExpressionCategorizationSplitter();
         expressions.forEach(expr -> expr.accept(splitter));
 
         List<Expression> projections =
@@ -109,7 +109,7 @@ public class OperationExpressionsUtils {
                         .map(
                                 expr ->
                                         expr.accept(
-                                                new AggregationAndPropertiesReplacer(
+                                                new ExpressionCategorizationReplacer(
                                                         splitter.aggregates, splitter.properties)))
                         .collect(Collectors.toList());
 
@@ -125,7 +125,7 @@ public class OperationExpressionsUtils {
                 .collect(Collectors.toList());
     }
 
-    private static class AggregationAndPropertiesSplitter
+    private static class ExpressionCategorizationSplitter
             extends ApiExpressionDefaultVisitor<Void> {
 
         private int uniqueId = 0;
@@ -157,13 +157,13 @@ public class OperationExpressionsUtils {
         }
     }
 
-    private static class AggregationAndPropertiesReplacer
+    private static class ExpressionCategorizationReplacer
             extends ApiExpressionDefaultVisitor<Expression> {
 
         private final Map<Expression, String> aggregates;
         private final Map<Expression, String> properties;
 
-        private AggregationAndPropertiesReplacer(
+        private ExpressionCategorizationReplacer(
                 Map<Expression, String> aggregates, Map<Expression, String> properties) {
             this.aggregates = aggregates;
             this.properties = properties;
