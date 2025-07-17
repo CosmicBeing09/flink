@@ -31,15 +31,15 @@ import java.util.Map;
 
 /** Describes a relational operation that was created from applying a {@link TableFunction}. */
 @Internal
-public class CalculatedQueryOperation implements QueryOperation {
+public class LateralTableQueryOperation implements QueryOperation {
 
-    public static final String INPUT_ALIAS = "$$T_LAT";
+    public static final String LATERAL_TABLE_ALIAS = "$$T_LAT";
 
     private final ContextResolvedFunction resolvedFunction;
     private final List<ResolvedExpression> arguments;
     private final ResolvedSchema resolvedSchema;
 
-    public CalculatedQueryOperation(
+    public LateralTableQueryOperation(
             ContextResolvedFunction resolvedFunction,
             List<ResolvedExpression> arguments,
             ResolvedSchema resolvedSchema) {
@@ -80,7 +80,7 @@ public class CalculatedQueryOperation implements QueryOperation {
                 resolvedFunction
                         .toCallExpression(arguments, resolvedSchema.toPhysicalRowDataType())
                         .asSerializableString(),
-                INPUT_ALIAS,
+                LATERAL_TABLE_ALIAS,
                 OperationUtils.formatSelectColumns(resolvedSchema, null));
     }
 
