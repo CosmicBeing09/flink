@@ -302,7 +302,7 @@ public class MetricOptions {
                     .withDescription(
                             "Defines the scope format string that is applied to all metrics scoped to an operator. Only effective when a identifier-based reporter is configured");
 
-    public static final ConfigOption<Duration> LATENCY_INTERVAL =
+    public static final ConfigOption<Duration> SOURCE_LATENCY_EMIT_INTERVAL =
             key("metrics.latency.interval")
                     .durationType()
                     .defaultValue(Duration.ofMillis(0L))
@@ -311,7 +311,7 @@ public class MetricOptions {
                                     + " Disables latency tracking if set to 0 or a negative value. Enabling this feature can significantly"
                                     + " impact the performance of the cluster.");
 
-    public static final ConfigOption<String> LATENCY_SOURCE_GRANULARITY =
+    public static final ConfigOption<String> LATENCY_SOURCE_METRIC_GRANULARITY =
             key("metrics.latency.granularity")
                     .stringType()
                     .defaultValue("operator")

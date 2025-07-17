@@ -159,7 +159,7 @@ public abstract class AbstractStreamOperatorV2<OUT>
             }
 
             final String configuredGranularity =
-                    taskManagerConfig.get(MetricOptions.LATENCY_SOURCE_GRANULARITY);
+                    taskManagerConfig.get(MetricOptions.LATENCY_SOURCE_METRIC_GRANULARITY);
             LatencyStats.Granularity granularity;
             try {
                 granularity =
@@ -170,7 +170,7 @@ public abstract class AbstractStreamOperatorV2<OUT>
                 LOG.warn(
                         "Configured value {} option for {} is invalid. Defaulting to {}.",
                         configuredGranularity,
-                        MetricOptions.LATENCY_SOURCE_GRANULARITY.key(),
+                        MetricOptions.LATENCY_SOURCE_METRIC_GRANULARITY.key(),
                         granularity);
             }
             MetricGroup taskMetricGroup = this.metrics.getTaskMetricGroup();
