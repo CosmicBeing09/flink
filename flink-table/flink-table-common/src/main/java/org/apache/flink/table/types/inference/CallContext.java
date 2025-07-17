@@ -42,7 +42,7 @@ public interface CallContext {
     FunctionDefinition getFunctionDefinition();
 
     /** Returns whether the argument at the given position is a value literal. */
-    boolean isArgumentLiteral(int pos);
+    boolean isArgumentLiteral(int argumentIndex);
 
     /**
      * Returns {@code true} if the argument at the given position is a literal and {@code null},
@@ -51,7 +51,7 @@ public interface CallContext {
      *
      * <p>Use {@link #isArgumentLiteral(int)} before to check if the argument is actually a literal.
      */
-    boolean isArgumentNull(int pos);
+    boolean isArgumentNull(int argumentIndex);
 
     /**
      * Returns the literal value of the argument at the given position, given that the argument is a

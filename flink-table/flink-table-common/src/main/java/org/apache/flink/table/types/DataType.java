@@ -211,17 +211,17 @@ public abstract class DataType implements AbstractDataType<DataType>, Serializab
      * deeper layers as we don't know whether the data type is used for input or output declaration.
      */
     private static <C> Class<C> performEarlyClassValidation(
-            LogicalType logicalType, Class<C> candidate) {
+            LogicalType logicalType, Class<C> conversionCandidate) {
 
-        if (candidate != null
-                && !logicalType.supportsInputConversion(candidate)
-                && !logicalType.supportsOutputConversion(candidate)) {
+        if (conversionCandidate != null
+                && !logicalType.supportsInputConversion(conversionCandidate)
+                && !logicalType.supportsOutputConversion(conversionCandidate)) {
             throw new ValidationException(
                     String.format(
                             "Logical type '%s' does not support a conversion from or to class '%s'.",
-                            logicalType.asSummaryString(), candidate.getName()));
+                            logicalType.asSummaryString(), conversionCandidate.getName()));
         }
-        return candidate;
+        return conversionCandidate;
     }
 
     private static Class<?> ensureConversionClass(

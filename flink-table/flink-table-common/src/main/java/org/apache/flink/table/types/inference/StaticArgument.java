@@ -54,7 +54,7 @@ public class StaticArgument {
 
     private final String name;
     private final @Nullable DataType dataType;
-    private final @Nullable Class<?> conversionClass;
+    private final @Nullable Class<?> typeConversionClass;
     private final boolean isOptional;
     private final EnumSet<StaticArgumentTrait> traits;
 
@@ -66,7 +66,7 @@ public class StaticArgument {
             EnumSet<StaticArgumentTrait> traits) {
         this.name = Preconditions.checkNotNull(name, "Name must not be null.");
         this.dataType = dataType;
-        this.conversionClass = conversionClass;
+        this.typeConversionClass = conversionClass;
         this.isOptional = isOptional;
         this.traits = Preconditions.checkNotNull(traits, "Traits must not be null.");
         checkName();
@@ -163,7 +163,7 @@ public class StaticArgument {
     }
 
     public Optional<Class<?>> getConversionClass() {
-        return Optional.ofNullable(conversionClass);
+        return Optional.ofNullable(typeConversionClass);
     }
 
     public boolean isOptional() {
@@ -214,13 +214,13 @@ public class StaticArgument {
         return isOptional == that.isOptional
                 && Objects.equals(name, that.name)
                 && Objects.equals(dataType, that.dataType)
-                && Objects.equals(conversionClass, that.conversionClass)
+                && Objects.equals(typeConversionClass, that.typeConversionClass)
                 && Objects.equals(traits, that.traits);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, dataType, conversionClass, isOptional, traits);
+        return Objects.hash(name, dataType, typeConversionClass, isOptional, traits);
     }
 
     private void checkName() {
@@ -283,15 +283,15 @@ public class StaticArgument {
     }
 
     private void checkPolymorphicTableType() {
-        if (dataType != null || conversionClass == null) {
+        if (dataType != null || typeConversionClass == null) {
             return;
         }
-        if (!DUMMY_ROW_TYPE.supportsInputConversion(conversionClass)) {
+        if (!DUMMY_ROW_TYPE.supportsInputConversion(typeConversionClass)) {
             throw new ValidationException(
                     String.format(
                             "Invalid conversion class '%s' for argument '%s'. "
                                     + "Polymorphic, untyped table arguments must use a row class.",
-                            conversionClass.getName(), name));
+                            typeConversionClass.getName(), name));
         }
     }
 

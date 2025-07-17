@@ -88,7 +88,7 @@ public final class TypeInferenceReturnInference implements SqlReturnTypeInferenc
                     definition,
                     callBinding,
                     expectedOutputType,
-                    typeInference.getStaticArguments().orElse(null));
+                    typeInference.getStaticArgumentList().orElse(null));
         } else {
             return new OperatorBindingCallContext(dataTypeFactory, definition, binding, null);
         }

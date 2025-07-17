@@ -98,7 +98,7 @@ public final class TypeInferenceOperandChecker
                         definition,
                         callBinding,
                         null,
-                        typeInference.getStaticArguments().orElse(null));
+                        typeInference.getStaticArgumentList().orElse(null));
         try {
             return checkOperandTypesOrError(callBinding, callContext);
         } catch (ValidationException e) {
@@ -128,10 +128,10 @@ public final class TypeInferenceOperandChecker
 
     @Override
     public boolean isOptional(int i) {
-        if (typeInference.getStaticArguments().isEmpty()) {
+        if (typeInference.getStaticArgumentList().isEmpty()) {
             return false;
         }
-        final List<StaticArgument> staticArgs = typeInference.getStaticArguments().get();
+        final List<StaticArgument> staticArgs = typeInference.getStaticArgumentList().get();
         return staticArgs.get(i).isOptional();
     }
 
@@ -142,7 +142,7 @@ public final class TypeInferenceOperandChecker
         // For now, we only fall back to Calcite's logic if an argument is optional
         // (i.e. the default for functions like PTFs with optional 'uid' argument).
         return typeInference
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .map(args -> args.stream().anyMatch(StaticArgument::isOptional))
                 .orElse(false);
     }
@@ -150,7 +150,7 @@ public final class TypeInferenceOperandChecker
     @Override
     public List<RelDataType> paramTypes(RelDataTypeFactory typeFactory) {
         return typeInference
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .map(
                         args ->
                                 args.stream()
@@ -166,7 +166,7 @@ public final class TypeInferenceOperandChecker
     @Override
     public List<String> paramNames() {
         return typeInference
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .map(
                         args ->
                                 args.stream()
@@ -256,13 +256,13 @@ public final class TypeInferenceOperandChecker
     }
 
     private static ArgumentCount deriveArgumentCount(TypeInference typeInference) {
-        final int staticArgs = typeInference.getStaticArguments().map(List::size).orElse(-1);
+        final int staticArgs = typeInference.getStaticArgumentList().map(List::size).orElse(-1);
         if (staticArgs == -1) {
             return typeInference.getInputTypeStrategy().getArgumentCount();
         }
         final int optionalArgs =
                 typeInference
-                        .getStaticArguments()
+                        .getStaticArgumentList()
                         .map(args -> (int) args.stream().filter(StaticArgument::isOptional).count())
                         .orElse(0);
         return ConstantArgumentCount.between(staticArgs - optionalArgs, staticArgs);

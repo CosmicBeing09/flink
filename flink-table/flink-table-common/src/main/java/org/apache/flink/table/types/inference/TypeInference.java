@@ -55,7 +55,7 @@ public final class TypeInference {
     static final Predicate<String> PARAMETER_NAME_FORMAT =
             Pattern.compile("^[a-zA-Z_$][a-zA-Z_$0-9]*$").asPredicate();
 
-    private final @Nullable List<StaticArgument> staticArguments;
+    private final @Nullable List<StaticArgument> staticArgumentList;
     private final InputTypeStrategy inputTypeStrategy;
     private final LinkedHashMap<String, StateTypeStrategy> stateTypeStrategies;
     private final TypeStrategy outputTypeStrategy;
@@ -65,7 +65,7 @@ public final class TypeInference {
             InputTypeStrategy inputTypeStrategy,
             LinkedHashMap<String, StateTypeStrategy> stateTypeStrategies,
             TypeStrategy outputTypeStrategy) {
-        this.staticArguments = staticArguments;
+        this.staticArgumentList = staticArguments;
         this.inputTypeStrategy = inputTypeStrategy;
         this.stateTypeStrategies = stateTypeStrategies;
         this.outputTypeStrategy = outputTypeStrategy;
@@ -77,8 +77,8 @@ public final class TypeInference {
         return new TypeInference.Builder();
     }
 
-    public Optional<List<StaticArgument>> getStaticArguments() {
-        return Optional.ofNullable(staticArguments);
+    public Optional<List<StaticArgument>> getStaticArgumentList() {
+        return Optional.ofNullable(staticArgumentList);
     }
 
     public InputTypeStrategy getInputTypeStrategy() {
@@ -94,11 +94,11 @@ public final class TypeInference {
     }
 
     /**
-     * @deprecated Use {@link #getStaticArguments()} instead.
+     * @deprecated Use {@link #getStaticArgumentList()} instead.
      */
     @Deprecated
     public Optional<List<String>> getNamedArguments() {
-        return Optional.ofNullable(staticArguments)
+        return Optional.ofNullable(staticArgumentList)
                 .map(
                         args ->
                                 args.stream()
@@ -107,11 +107,11 @@ public final class TypeInference {
     }
 
     /**
-     * @deprecated Use {@link #getStaticArguments()} instead.
+     * @deprecated Use {@link #getStaticArgumentList()} instead.
      */
     @Deprecated
     public Optional<List<DataType>> getTypedArguments() {
-        return Optional.ofNullable(staticArguments)
+        return Optional.ofNullable(staticArgumentList)
                 .map(
                         args ->
                                 args.stream()
@@ -126,11 +126,11 @@ public final class TypeInference {
     }
 
     /**
-     * @deprecated Use {@link #getStaticArguments()} instead.
+     * @deprecated Use {@link #getStaticArgumentList()} instead.
      */
     @Deprecated
     public Optional<List<Boolean>> getOptionalArguments() {
-        return Optional.ofNullable(staticArguments)
+        return Optional.ofNullable(staticArgumentList)
                 .map(
                         args ->
                                 args.stream()

@@ -26,7 +26,7 @@ import org.apache.flink.table.functions.FunctionDefinition;
 import org.apache.flink.table.functions.TableSemantics;
 import org.apache.flink.table.functions.UserDefinedFunctionHelper;
 import org.apache.flink.table.types.DataType;
-import org.apache.flink.table.types.inference.utils.AdaptedCallContext;
+import org.apache.flink.table.types.inference.utils.CastCallContext;
 import org.apache.flink.table.types.inference.utils.UnknownCallContext;
 import org.apache.flink.table.types.logical.LogicalTypeRoot;
 
@@ -113,7 +113,7 @@ public final class TypeInferenceUtil {
         final List<DataType> actualTypes = callContext.getArgumentDataTypes();
 
         typeInference
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .ifPresent(
                         staticArgs -> {
                             if (actualTypes.size() != staticArgs.size()) {
@@ -124,7 +124,7 @@ public final class TypeInferenceUtil {
                             }
                         });
 
-        final AdaptedCallContext adaptedCallContext =
+        final CastCallContext adaptedCallContext =
                 inferInputTypes(typeInference, callContext, outputType, throwOnInferInputFailure);
 
         // final check if the call is valid after casting
@@ -175,10 +175,10 @@ public final class TypeInferenceUtil {
             CallContext callContext, LinkedHashMap<String, StateTypeStrategy> stateTypeStrategies) {
         return stateTypeStrategies.entrySet().stream()
                 .map(
-                        e ->
+                        stateEntry ->
                                 Map.entry(
-                                        e.getKey(),
-                                        inferStateInfo(callContext, e.getKey(), e.getValue())))
+                                        stateEntry.getKey(),
+                                        inferStateInfo(callContext, stateEntry.getKey(), stateEntry.getValue())))
                 .collect(
                         Collectors.toMap(
                                 Map.Entry::getKey,
@@ -191,7 +191,7 @@ public final class TypeInferenceUtil {
     public static String generateSignature(
             TypeInference typeInference, String name, FunctionDefinition definition) {
         final List<StaticArgument> staticArguments =
-                typeInference.getStaticArguments().orElse(null);
+                typeInference.getStaticArgumentList().orElse(null);
         if (staticArguments != null) {
             return formatStaticArguments(name, staticArguments);
         }
@@ -442,9 +442,9 @@ public final class TypeInferenceUtil {
         return String.format("%s(%s)", name, arguments);
     }
 
-    private static String formatSignature(String name, Signature s) {
+    private static String formatSignature(String name, Signature signature) {
         final String arguments =
-                s.getArguments().stream()
+                signature.getArguments().stream()
                         .map(TypeInferenceUtil::formatArgument)
                         .collect(Collectors.joining(", "));
         return String.format("%s(%s)", name, arguments);
@@ -457,17 +457,17 @@ public final class TypeInferenceUtil {
         return stringBuilder.toString();
     }
 
-    private static AdaptedCallContext inferInputTypes(
+    private static CastCallContext inferInputTypes(
             TypeInference typeInference,
             CallContext callContext,
             @Nullable DataType outputType,
             boolean throwOnFailure) {
 
-        final AdaptedCallContext adaptedCallContext =
-                new AdaptedCallContext(callContext, outputType);
+        final CastCallContext adaptedCallContext =
+                new CastCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
-        final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
+        final List<StaticArgument> staticArgs = typeInference.getStaticArgumentList().orElse(null);
         if (staticArgs != null) {
             final List<DataType> fromStaticArgs =
                     IntStream.range(0, staticArgs.size())

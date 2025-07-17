@@ -106,22 +106,23 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition;
+            final FunctionDefinition functionDefinition;
             // clean functions that were not registered in a catalog
             if (!unresolvedCall.getFunctionIdentifier().isPresent()) {
-                definition =
+                functionDefinition =
                         prepareInlineUserDefinedFunction(unresolvedCall.getFunctionDefinition());
             } else {
-                definition = unresolvedCall.getFunctionDefinition();
+                functionDefinition = unresolvedCall.getFunctionDefinition();
             }
 
             final String name =
                     unresolvedCall
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
-                            .orElseGet(definition::toString);
+                            .orElseGet(functionDefinition::toString);
 
-            final Optional<TypeInference> typeInference = getOptionalTypeInference(definition);
+            final Optional<TypeInference> optionalTypeInference = getOptionalTypeInference(
+                    functionDefinition);
 
             // resolve the children with information from the current call
             final List<ResolvedExpression> resolvedArgs = new ArrayList<>();
@@ -130,12 +131,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             for (int i = 0; i < argCount; i++) {
                 final int currentPos = i;
                 final SurroundingInfo surroundingInfo =
-                        typeInference
+                        optionalTypeInference
                                 .map(
                                         inference ->
                                                 SurroundingInfo.of(
                                                         name,
-                                                        definition,
+                                                        functionDefinition,
                                                         inference,
                                                         argCount,
                                                         currentPos,
@@ -146,12 +147,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 resolvedArgs.addAll(unresolvedCall.getChildren().get(i).accept(childResolver));
             }
 
-            if (definition == BuiltInFunctionDefinitions.FLATTEN) {
+            if (functionDefinition == BuiltInFunctionDefinitions.FLATTEN) {
                 return executeFlatten(resolvedArgs);
             }
 
             return Collections.singletonList(
-                    typeInference
+                    optionalTypeInference
                             .map(
                                     newInference ->
                                             runTypeInference(
@@ -238,10 +239,10 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         /** Temporary method until all calls define a type inference. */
         private Optional<TypeInference> getOptionalTypeInference(FunctionDefinition definition) {
-            final TypeInference inference =
+            final TypeInference typeInference =
                     definition.getTypeInference(resolutionContext.typeFactory());
-            if (inference.getOutputTypeStrategy() != TypeStrategies.MISSING) {
-                return Optional.of(inference);
+            if (typeInference.getOutputTypeStrategy() != TypeStrategies.MISSING) {
+                return Optional.of(typeInference);
             } else {
                 return Optional.empty();
             }
@@ -254,10 +255,10 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 List<ResolvedExpression> resolvedArgs,
                 @Nullable SurroundingInfo surroundingInfo) {
 
-            final Result inferenceResult =
+            final Result typeInferenceResult =
                     TypeInferenceUtil.runTypeInference(
                             inference,
-                            new TableApiCallContext(
+                            new CallContextAdapter(
                                     resolutionContext.typeFactory(),
                                     name,
                                     unresolvedCall.getFunctionDefinition(),
@@ -266,9 +267,9 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                             surroundingInfo);
 
             final List<ResolvedExpression> adaptedArguments =
-                    adaptArguments(inferenceResult, resolvedArgs);
+                    adaptArguments(typeInferenceResult, resolvedArgs);
 
-            return unresolvedCall.resolve(adaptedArguments, inferenceResult.getOutputDataType());
+            return unresolvedCall.resolve(adaptedArguments, typeInferenceResult.getOutputDataType());
         }
 
         /** Adapts the arguments according to the properties of the {@link Result}. */
@@ -296,48 +297,48 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         /** Validates and cleans an inline, unregistered {@link UserDefinedFunction}. */
-        private FunctionDefinition prepareInlineUserDefinedFunction(FunctionDefinition definition) {
-            if (definition instanceof ScalarFunctionDefinition) {
-                final ScalarFunctionDefinition sf = (ScalarFunctionDefinition) definition;
+        private FunctionDefinition prepareInlineUserDefinedFunction(FunctionDefinition functionDef) {
+            if (functionDef instanceof ScalarFunctionDefinition) {
+                final ScalarFunctionDefinition scalarFunctionDef = (ScalarFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), sf.getScalarFunction());
-                return new ScalarFunctionDefinition(sf.getName(), sf.getScalarFunction());
-            } else if (definition instanceof TableFunctionDefinition) {
-                final TableFunctionDefinition tf = (TableFunctionDefinition) definition;
+                        resolutionContext.configuration(), scalarFunctionDef.getScalarFunction());
+                return new ScalarFunctionDefinition(scalarFunctionDef.getName(), scalarFunctionDef.getScalarFunction());
+            } else if (functionDef instanceof TableFunctionDefinition) {
+                final TableFunctionDefinition tableFunctionDef = (TableFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), tf.getTableFunction());
+                        resolutionContext.configuration(), tableFunctionDef.getTableFunction());
                 return new TableFunctionDefinition(
-                        tf.getName(), tf.getTableFunction(), tf.getResultType());
-            } else if (definition instanceof AggregateFunctionDefinition) {
-                final AggregateFunctionDefinition af = (AggregateFunctionDefinition) definition;
+                        tableFunctionDef.getName(), tableFunctionDef.getTableFunction(), tableFunctionDef.getResultType());
+            } else if (functionDef instanceof AggregateFunctionDefinition) {
+                final AggregateFunctionDefinition aggregateFunctionDef = (AggregateFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), af.getAggregateFunction());
+                        resolutionContext.configuration(), aggregateFunctionDef.getAggregateFunction());
                 return new AggregateFunctionDefinition(
-                        af.getName(),
-                        af.getAggregateFunction(),
-                        af.getResultTypeInfo(),
-                        af.getAccumulatorTypeInfo());
-            } else if (definition instanceof TableAggregateFunctionDefinition) {
-                final TableAggregateFunctionDefinition taf =
-                        (TableAggregateFunctionDefinition) definition;
+                        aggregateFunctionDef.getName(),
+                        aggregateFunctionDef.getAggregateFunction(),
+                        aggregateFunctionDef.getResultTypeInfo(),
+                        aggregateFunctionDef.getAccumulatorTypeInfo());
+            } else if (functionDef instanceof TableAggregateFunctionDefinition) {
+                final TableAggregateFunctionDefinition tableAggregateFunctionDef =
+                        (TableAggregateFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), taf.getTableAggregateFunction());
+                        resolutionContext.configuration(), tableAggregateFunctionDef.getTableAggregateFunction());
                 return new TableAggregateFunctionDefinition(
-                        taf.getName(),
-                        taf.getTableAggregateFunction(),
-                        taf.getResultTypeInfo(),
-                        taf.getAccumulatorTypeInfo());
-            } else if (definition instanceof UserDefinedFunction) {
+                        tableAggregateFunctionDef.getName(),
+                        tableAggregateFunctionDef.getTableAggregateFunction(),
+                        tableAggregateFunctionDef.getResultTypeInfo(),
+                        tableAggregateFunctionDef.getAccumulatorTypeInfo());
+            } else if (functionDef instanceof UserDefinedFunction) {
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), (UserDefinedFunction) definition);
+                        resolutionContext.configuration(), (UserDefinedFunction) functionDef);
             }
-            return definition;
+            return functionDef;
         }
     }
 
     // --------------------------------------------------------------------------------------------
 
-    private static class TableApiCallContext implements CallContext {
+    private static class CallContextAdapter implements CallContext {
 
         private final DataTypeFactory typeFactory;
 
@@ -349,7 +350,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         private final boolean isGroupedAggregation;
 
-        public TableApiCallContext(
+        public CallContextAdapter(
                 DataTypeFactory typeFactory,
                 String name,
                 FunctionDefinition definition,
