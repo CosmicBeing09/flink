@@ -145,7 +145,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
         serializeCollection(
                 subtaskState.getResultSubpartitionState(),
                 dos,
-                this::serializeResultSubpartitionStateHandle);
+                this::serializeOutputStateHandle);
     }
 
     @Override
@@ -202,7 +202,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
 
     @VisibleForTesting
     @Override
-    public void serializeResultSubpartitionStateHandle(
+    public void serializeOutputStateHandle(
             OutputStateHandle handle, DataOutputStream dos) throws IOException {
         channelStateHandleSerializer.serialize(handle, dos);
     }
