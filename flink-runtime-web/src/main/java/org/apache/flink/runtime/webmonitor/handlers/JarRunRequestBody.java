@@ -104,7 +104,7 @@ public class JarRunRequestBody extends JarRequestBody {
                     Boolean allowNonRestoredState,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_PATH) String savepointPath,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_RESTORE_MODE)
-                    RestoreMode deprecatedRestoreMode,
+                    RestoreMode deprecatedRecoveryClaimMode,
             @Nullable @JsonProperty(FIELD_NAME_SAVEPOINT_CLAIM_MODE) RestoreMode restoreMode,
             @Nullable @JsonProperty(FIELD_NAME_FLINK_CONFIGURATION)
                     Map<String, String> flinkConfiguration) {
@@ -117,7 +117,7 @@ public class JarRunRequestBody extends JarRequestBody {
                 flinkConfiguration);
         this.allowNonRestoredState = allowNonRestoredState;
         this.savepointPath = savepointPath;
-        this.deprecatedRestoreMode = deprecatedRestoreMode;
+        this.deprecatedRestoreMode = deprecatedRecoveryClaimMode;
         this.restoreMode = restoreMode;
     }
 
