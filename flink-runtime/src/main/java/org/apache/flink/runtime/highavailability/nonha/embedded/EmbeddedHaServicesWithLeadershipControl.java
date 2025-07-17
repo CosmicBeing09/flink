@@ -80,7 +80,7 @@ public class EmbeddedHaServicesWithLeadershipControl extends EmbeddedHaServices
     @Override
     public CompletableFuture<Void> grantDispatcherLeadership() {
         final EmbeddedLeaderService dispatcherLeaderService = getDispatcherLeaderService();
-        return dispatcherLeaderService.grantLeadership();
+        return dispatcherLeaderService.grantLeadershipAsync();
     }
 
     @Override
@@ -92,7 +92,7 @@ public class EmbeddedHaServicesWithLeadershipControl extends EmbeddedHaServices
     @Override
     public CompletableFuture<Void> grantJobMasterLeadership(JobID jobId) {
         final EmbeddedLeaderService jobMasterLeaderService = getJobManagerLeaderService(jobId);
-        return jobMasterLeaderService.grantLeadership();
+        return jobMasterLeaderService.grantLeadershipAsync();
     }
 
     @Override
@@ -106,7 +106,7 @@ public class EmbeddedHaServicesWithLeadershipControl extends EmbeddedHaServices
     public CompletableFuture<Void> grantResourceManagerLeadership() {
         final EmbeddedLeaderService resourceManagerLeaderService =
                 getResourceManagerLeaderService();
-        return resourceManagerLeaderService.grantLeadership();
+        return resourceManagerLeaderService.grantLeadershipAsync();
     }
 
     @Override

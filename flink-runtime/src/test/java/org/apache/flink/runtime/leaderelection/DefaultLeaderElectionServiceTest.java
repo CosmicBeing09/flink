@@ -794,7 +794,7 @@ class DefaultLeaderElectionServiceTest {
     }
 
     @Test
-    void testHasLeadershipWithLeadershipLostAndRevokeEventProcessed() throws Exception {
+    void testHasLeadershipAsyncWithLeadershipLostAndRevokeEventProcessed() throws Exception {
         new Context() {
             {
                 runTestWithSynchronousEventHandling(
