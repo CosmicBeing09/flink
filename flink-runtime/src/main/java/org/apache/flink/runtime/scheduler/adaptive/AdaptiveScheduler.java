@@ -309,7 +309,7 @@ public class AdaptiveScheduler
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
-                Duration scalingResourceStabilizationTimeout,
+                Duration executingResourceStabilizationTimeout,
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
@@ -317,7 +317,7 @@ public class AdaptiveScheduler
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
-            this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
+            this.scalingResourceStabilizationTimeout = executingResourceStabilizationTimeout;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
         }
