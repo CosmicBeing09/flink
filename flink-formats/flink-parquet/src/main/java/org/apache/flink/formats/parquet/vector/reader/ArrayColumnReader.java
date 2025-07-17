@@ -405,9 +405,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 break;
             case TIMESTAMP_WITHOUT_TIME_ZONE:
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
-                HeapTimestampVector timestampVector = new HeapTimestampVector(total);
-                timestampVector.reset();
-                lcv.setChild(timestampVector);
+                HeapTimestampVector heapTimestampVector = new HeapTimestampVector(total);
+                heapTimestampVector.reset();
+                lcv.setChild(heapTimestampVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapTimestampVector) lcv.getChild()).setNullAt(i);
