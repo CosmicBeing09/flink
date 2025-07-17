@@ -99,7 +99,7 @@ class StopWithSavepointTest {
 
             ctx.setExpectFailing(
                     failingArguments -> {
-                        assertThat(failingArguments.getExecutionGraph().getState())
+                        assertThat(failingArguments.getExecutionGraph().getJobStatus())
                                 .isEqualTo(JobStatus.FAILED);
                         assertThat(failingArguments.getFailureCause())
                                 .satisfies(
@@ -127,7 +127,7 @@ class StopWithSavepointTest {
 
             ctx.setExpectFailing(
                     failingArguments -> {
-                        assertThat(failingArguments.getExecutionGraph().getState())
+                        assertThat(failingArguments.getExecutionGraph().getJobStatus())
                                 .isEqualTo(JobStatus.FAILED);
                         assertThat(failingArguments.getFailureCause())
                                 .satisfies(FlinkAssertions.anyCauseMatches(FlinkException.class));
@@ -180,7 +180,7 @@ class StopWithSavepointTest {
             StopWithSavepoint sws = createStopWithSavepoint(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph -> {
-                        assertThat(archivedExecutionGraph.getState())
+                        assertThat(archivedExecutionGraph.getJobStatus())
                                 .isEqualTo(JobStatus.SUSPENDED);
                     });
 
@@ -322,7 +322,7 @@ class StopWithSavepointTest {
             ctx.setStopWithSavepoint(sws);
             ctx.setExpectExecuting(
                     executingArguments ->
-                            assertThat(executingArguments.getExecutionGraph().getState())
+                            assertThat(executingArguments.getExecutionGraph().getJobStatus())
                                     .isEqualTo(JobStatus.RUNNING));
 
             savepointFuture.completeExceptionally(new RuntimeException("Test error"));

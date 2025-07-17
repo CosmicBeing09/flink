@@ -122,7 +122,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public JobStatus getState() {
+    public JobStatus getJobStatus() {
         return state;
     }
 
@@ -179,7 +179,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getExecutionPlanAsJson() {
         return "";
     }
 

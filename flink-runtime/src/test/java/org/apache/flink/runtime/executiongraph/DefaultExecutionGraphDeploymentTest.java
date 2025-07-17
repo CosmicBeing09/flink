@@ -480,7 +480,7 @@ class DefaultExecutionGraphDeploymentTest {
         scheduler.updateTaskExecutionState(
                 new TaskExecutionState(attemptID, ExecutionState.FINISHED, null));
 
-        assertThat(eg.getState()).isEqualTo(JobStatus.FAILED);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.FAILED);
     }
 
     // ------------------------------------------------------------------------

@@ -165,7 +165,7 @@ public class ArchivedExecutionGraphTest {
                         null,
                         System.currentTimeMillis());
 
-        assertThat(suspendedExecutionGraph.getState()).isEqualTo(JobStatus.SUSPENDED);
+        assertThat(suspendedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.SUSPENDED);
         assertThat(suspendedExecutionGraph.getFailureInfo()).isNotNull();
     }
 
@@ -243,7 +243,7 @@ public class ArchivedExecutionGraphTest {
         ArchivedExecutionGraph archivedGraph =
                 ArchivedExecutionGraph.createFrom(runtimeGraph, JobStatus.RESTARTING);
 
-        assertThat(archivedGraph.getState()).isEqualTo(JobStatus.RESTARTING);
+        assertThat(archivedGraph.getJobStatus()).isEqualTo(JobStatus.RESTARTING);
         assertThat(archivedGraph.getStatusTimestamp(JobStatus.FAILED)).isEqualTo(0L);
     }
 
@@ -253,10 +253,10 @@ public class ArchivedExecutionGraphTest {
         // -------------------------------------------------------------------------------------------------------------
         // ExecutionGraph
         // -------------------------------------------------------------------------------------------------------------
-        assertThat(runtimeGraph.getJsonPlan()).isEqualTo(archivedGraph.getJsonPlan());
+        assertThat(runtimeGraph.getExecutionPlanAsJson()).isEqualTo(archivedGraph.getExecutionPlanAsJson());
         assertThat(runtimeGraph.getJobID()).isEqualTo(archivedGraph.getJobID());
         assertThat(runtimeGraph.getJobName()).isEqualTo(archivedGraph.getJobName());
-        assertThat(runtimeGraph.getState()).isEqualTo(archivedGraph.getState());
+        assertThat(runtimeGraph.getJobStatus()).isEqualTo(archivedGraph.getJobStatus());
         assertThat(runtimeGraph.getFailureInfo().getExceptionAsString())
                 .isEqualTo(archivedGraph.getFailureInfo().getExceptionAsString());
         assertThat(runtimeGraph.getStatusTimestamp(JobStatus.CREATED))

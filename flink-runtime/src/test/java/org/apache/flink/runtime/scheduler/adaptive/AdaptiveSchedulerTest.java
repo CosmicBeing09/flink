@@ -435,7 +435,7 @@ public class AdaptiveSchedulerTest {
 
         assertThat(
                         JacksonMapperFactory.createObjectMapper()
-                                .readTree(executionGraph.getJsonPlan())
+                                .readTree(executionGraph.getExecutionPlanAsJson())
                                 .get("nodes")
                                 .size())
                 .isOne();
@@ -2333,7 +2333,7 @@ public class AdaptiveSchedulerTest {
         return CompletableFuture.supplyAsync(
                 () -> {
                     ArchivedExecutionGraph graph = null;
-                    while (graph == null || graph.getState() != JobStatus.RUNNING) {
+                    while (graph == null || graph.getJobStatus() != JobStatus.RUNNING) {
                         graph = scheduler.requestJob().getArchivedExecutionGraph();
                     }
                     return graph;

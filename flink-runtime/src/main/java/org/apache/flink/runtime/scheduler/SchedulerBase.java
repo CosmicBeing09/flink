@@ -845,7 +845,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public JobStatus requestJobStatus() {
-        return executionGraph.getState();
+        return executionGraph.getJobStatus();
     }
 
     @Override

@@ -100,7 +100,7 @@ class ExecutionGraphCoLocationRestartTest {
         final ExecutionGraph eg = scheduler.getExecutionGraph();
 
         // enable the queued scheduling for the slot pool
-        assertThat(eg.getState()).isEqualTo(JobStatus.CREATED);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.CREATED);
 
         scheduler.startScheduling();
 
@@ -108,14 +108,14 @@ class ExecutionGraphCoLocationRestartTest {
                 ExecutionGraphTestUtils.isInExecutionState(ExecutionState.DEPLOYING);
         ExecutionGraphTestUtils.waitForAllExecutionsPredicate(eg, isDeploying, timeout);
 
-        assertThat(eg.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         // sanity checks
         validateConstraints(eg);
 
         eg.getAllExecutionVertices().iterator().next().fail(new FlinkException("Test exception"));
 
-        assertThat(eg.getState()).isEqualTo(JobStatus.RESTARTING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RESTARTING);
 
         // trigger registration of restartTasks(...) callback to cancelFuture before completing the
         // cancellation. This ensures the restarting actions to be performed in main thread.
@@ -137,7 +137,7 @@ class ExecutionGraphCoLocationRestartTest {
 
         ExecutionGraphTestUtils.finishAllVertices(eg);
 
-        assertThat(eg.getState()).isEqualTo(FINISHED);
+        assertThat(eg.getJobStatus()).isEqualTo(FINISHED);
     }
 
     private void validateConstraints(ExecutionGraph eg) {

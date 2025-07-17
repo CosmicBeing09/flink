@@ -1421,10 +1421,10 @@ public class AdaptiveScheduler
         LOG.info(
                 "Job {} reached terminal state {}.",
                 archivedExecutionGraph.getJobID(),
-                archivedExecutionGraph.getState(),
+                archivedExecutionGraph.getJobStatus(),
                 optionalFailure);
 
-        jobTerminationFuture.complete(archivedExecutionGraph.getState());
+        jobTerminationFuture.complete(archivedExecutionGraph.getJobStatus());
     }
 
     @Override

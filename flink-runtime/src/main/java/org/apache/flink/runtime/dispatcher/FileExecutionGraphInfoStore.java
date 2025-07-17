@@ -162,7 +162,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
 
         final ArchivedExecutionGraph archivedExecutionGraph =
                 executionGraphInfo.getArchivedExecutionGraph();
-        final JobStatus jobStatus = archivedExecutionGraph.getState();
+        final JobStatus jobStatus = archivedExecutionGraph.getJobStatus();
         final String jobName = archivedExecutionGraph.getJobName();
 
         Preconditions.checkArgument(

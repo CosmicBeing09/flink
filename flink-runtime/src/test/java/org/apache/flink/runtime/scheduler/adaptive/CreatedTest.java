@@ -52,7 +52,7 @@ class CreatedTest {
     void testJobInformation() {
         Created created = new Created(ctx, LOG);
         ArchivedExecutionGraph job = created.getJob();
-        assertThat(job.getState()).isEqualTo(JobStatus.INITIALIZING);
+        assertThat(job.getJobStatus()).isEqualTo(JobStatus.INITIALIZING);
     }
 
     static class MockCreatedContext extends MockStateWithoutExecutionGraphContext

@@ -182,7 +182,7 @@ abstract class StateWithExecutionGraph implements State {
      */
     protected void suspend(Throwable cause, @Nullable JobStatus statusOverride) {
         executionGraph.suspend(cause);
-        Preconditions.checkState(executionGraph.getState().isTerminalState());
+        Preconditions.checkState(executionGraph.getJobStatus().isTerminalState());
         context.goToFinished(ArchivedExecutionGraph.createFrom(executionGraph, statusOverride));
     }
 

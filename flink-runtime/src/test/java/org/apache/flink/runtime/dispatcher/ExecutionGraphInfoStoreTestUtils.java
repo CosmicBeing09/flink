@@ -120,9 +120,9 @@ public class ExecutionGraphInfoStoreTestUtils {
                     && Objects.equals(thisExecutionGraph.getJobID(), thatExecutionGraph.getJobID())
                     && Objects.equals(
                             thisExecutionGraph.getJobName(), thatExecutionGraph.getJobName())
-                    && thisExecutionGraph.getState() == thatExecutionGraph.getState()
+                    && thisExecutionGraph.getJobStatus() == thatExecutionGraph.getJobStatus()
                     && Objects.equals(
-                            thisExecutionGraph.getJsonPlan(), thatExecutionGraph.getJsonPlan())
+                            thisExecutionGraph.getExecutionPlanAsJson(), thatExecutionGraph.getExecutionPlanAsJson())
                     && Objects.equals(
                             thisExecutionGraph.getAccumulatorsSerialized(),
                             thatExecutionGraph.getAccumulatorsSerialized())

@@ -44,7 +44,7 @@ class CheckpointSchedulingProvider implements CheckpointScheduling {
             // periodic checkpoints are disabled). The only situation where it can be null is when
             // the job reached a terminal state.
             checkState(
-                    executionGraph.getState().isTerminalState(),
+                    executionGraph.getJobStatus().isTerminalState(),
                     "CheckpointCoordinator is only allowed to be null if we are in a terminal state.");
             return;
         }

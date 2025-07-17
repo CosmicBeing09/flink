@@ -217,7 +217,7 @@ public class JobResult implements Serializable {
      */
     public static JobResult createFrom(AccessExecutionGraph accessExecutionGraph) {
         final JobID jobId = accessExecutionGraph.getJobID();
-        final JobStatus jobStatus = accessExecutionGraph.getState();
+        final JobStatus jobStatus = accessExecutionGraph.getJobStatus();
 
         checkArgument(
                 jobStatus.isTerminalState(),
@@ -233,7 +233,7 @@ public class JobResult implements Serializable {
         final JobResult.Builder builder = new JobResult.Builder();
         builder.jobId(jobId);
 
-        builder.applicationStatus(ApplicationStatus.fromJobStatus(accessExecutionGraph.getState()));
+        builder.applicationStatus(ApplicationStatus.fromJobStatus(accessExecutionGraph.getJobStatus()));
 
         final long netRuntime =
                 accessExecutionGraph.getStatusTimestamp(jobStatus)

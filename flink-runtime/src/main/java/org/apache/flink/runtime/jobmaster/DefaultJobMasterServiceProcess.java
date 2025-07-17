@@ -215,7 +215,7 @@ public class DefaultJobMasterServiceProcess
                 "Job {} under leader id {} reached a globally terminal state {}.",
                 jobId,
                 leaderSessionId,
-                executionGraphInfo.getArchivedExecutionGraph().getState());
+                executionGraphInfo.getArchivedExecutionGraph().getJobStatus());
         resultFuture.complete(JobManagerRunnerResult.forSuccess(executionGraphInfo));
     }
 

@@ -264,7 +264,7 @@ class DefaultJobMasterServiceProcessTest {
                 .isCompletedWithValueMatching(JobManagerRunnerResult::isSuccess)
                 .isCompletedWithValueMatching(
                         r ->
-                                r.getExecutionGraphInfo().getArchivedExecutionGraph().getState()
+                                r.getExecutionGraphInfo().getArchivedExecutionGraph().getJobStatus()
                                         == JobStatus.FINISHED);
     }
 

@@ -114,7 +114,7 @@ public class MemoryExecutionGraphInfoStore implements ExecutionGraphInfoStore {
         Collection<JobStatus> allJobStatus =
                 serializableExecutionGraphInfos.asMap().values().stream()
                         .map(ExecutionGraphInfo::getArchivedExecutionGraph)
-                        .map(ArchivedExecutionGraph::getState)
+                        .map(ArchivedExecutionGraph::getJobStatus)
                         .collect(Collectors.toList());
 
         return JobsOverview.create(allJobStatus);

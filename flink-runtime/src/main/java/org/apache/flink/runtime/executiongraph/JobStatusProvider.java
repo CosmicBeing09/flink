@@ -28,7 +28,7 @@ public interface JobStatusProvider {
      *
      * @return job status for this execution graph
      */
-    JobStatus getState();
+    JobStatus getJobStatus();
 
     /**
      * Returns the timestamp for the given {@link JobStatus}.

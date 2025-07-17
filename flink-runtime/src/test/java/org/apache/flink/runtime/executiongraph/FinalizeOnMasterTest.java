@@ -69,7 +69,7 @@ class FinalizeOnMasterTest {
 
         final ExecutionGraph eg = scheduler.getExecutionGraph();
 
-        assertThat(eg.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         ExecutionGraphTestUtils.switchAllVerticesToRunning(eg);
 
@@ -98,7 +98,7 @@ class FinalizeOnMasterTest {
 
         final ExecutionGraph eg = scheduler.getExecutionGraph();
 
-        assertThat(eg.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         ExecutionGraphTestUtils.switchAllVerticesToRunning(eg);
 

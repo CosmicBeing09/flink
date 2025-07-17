@@ -614,7 +614,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         // get failure cause
         ArchivedExecutionGraph execGraph =
                 dispatcherGateway.requestJob(jobGraph.getJobID(), TIMEOUT).get();
-        assertThat(execGraph.getState(), is(JobStatus.FAILED));
+        assertThat(execGraph.getJobStatus(), is(JobStatus.FAILED));
 
         Assert.assertNotNull(execGraph.getFailureInfo());
         Throwable throwable =
@@ -1036,7 +1036,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                                         .requestExecutionGraphInfo(jobId, TIMEOUT)
                                         .get()
                                         .getArchivedExecutionGraph()
-                                        .getState();
+                                        .getJobStatus();
                         return status == JobStatus.SUSPENDED;
                     },
                     5L);
@@ -1329,7 +1329,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                 dispatcherGateway.requestJob(failedJobId, TIMEOUT).get();
         Assertions.assertThat(archivedExecutionGraph.getJobID()).isEqualTo(failedJobId);
         Assertions.assertThat(archivedExecutionGraph.getJobName()).isEqualTo(failedJobName);
-        Assertions.assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
+        Assertions.assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED);
         Assertions.assertThat(archivedExecutionGraph.getFailureInfo())
                 .isNotNull()
                 .extracting(ErrorInfo::getException)

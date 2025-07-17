@@ -254,7 +254,7 @@ class ExecutionVertexCancelTest {
         scheduler.startScheduling();
 
         ExecutionGraphTestUtils.switchAllVerticesToRunning(graph);
-        assertThat(graph.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(graph.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         final ExecutionVertex[] vertices =
                 graph.getVerticesTopologically().iterator().next().getTaskVertices();

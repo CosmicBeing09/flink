@@ -78,7 +78,7 @@ public class ExecutionGraphTestUtils {
                         ? Long.MAX_VALUE
                         : System.nanoTime() + (maxWaitMillis * 1_000_000);
 
-        while (eg.getState() != status && System.nanoTime() < deadline) {
+        while (eg.getJobStatus() != status && System.nanoTime() < deadline) {
             try {
                 Thread.sleep(2);
             } catch (InterruptedException ignored) {
@@ -89,7 +89,7 @@ public class ExecutionGraphTestUtils {
             throw new TimeoutException(
                     String.format(
                             "The job did not reach status %s in time. Current status is %s.",
-                            status, eg.getState()));
+                            status, eg.getJobStatus()));
         }
     }
 

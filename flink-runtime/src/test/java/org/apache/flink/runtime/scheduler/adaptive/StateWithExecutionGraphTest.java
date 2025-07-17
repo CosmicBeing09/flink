@@ -60,7 +60,7 @@ class StateWithExecutionGraphTest {
 
             context.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
 
             // transition to FAILED
@@ -69,7 +69,7 @@ class StateWithExecutionGraphTest {
                     System.currentTimeMillis());
             testingExecutionGraph.completeTerminationFuture(JobStatus.FAILED);
 
-            assertThat(testingExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
+            assertThat(testingExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED);
 
             // As long as we don't execute StateWithExecutionGraph#onGloballyTerminalState
             // immediately when reaching a globally terminal state or if don't immediately leave
@@ -105,7 +105,7 @@ class StateWithExecutionGraphTest {
                     createStateWithExecutionGraph(context);
 
             context.setExpectFinished(
-                    aeg -> assertThat(aeg.getState()).isEqualTo(JobStatus.SUSPENDED));
+                    aeg -> assertThat(aeg.getJobStatus()).isEqualTo(JobStatus.SUSPENDED));
 
             stateWithExecutionGraph.suspend(new RuntimeException());
         }
@@ -216,7 +216,7 @@ class StateWithExecutionGraphTest {
 
         @Override
         public JobStatus getJobStatus() {
-            return getExecutionGraph().getState();
+            return getExecutionGraph().getJobStatus();
         }
 
         @Override

@@ -167,7 +167,7 @@ public class JobDetails implements Serializable {
     }
 
     public static JobDetails createDetailsForJob(AccessExecutionGraph job) {
-        JobStatus status = job.getState();
+        JobStatus status = job.getJobStatus();
 
         long started = job.getStatusTimestamp(JobStatus.INITIALIZING);
         long finished = status.isGloballyTerminalState() ? job.getStatusTimestamp(status) : -1L;

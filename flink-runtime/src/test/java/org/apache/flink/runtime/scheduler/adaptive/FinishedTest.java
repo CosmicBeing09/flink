@@ -40,21 +40,21 @@ class FinishedTest {
         MockFinishedContext ctx = new MockFinishedContext();
         createFinishedState(ctx);
 
-        assertThat(ctx.getArchivedExecutionGraph().getState()).isEqualTo(testJobStatus);
+        assertThat(ctx.getArchivedExecutionGraph().getJobStatus()).isEqualTo(testJobStatus);
     }
 
     @Test
     void testCancelIgnored() {
         MockFinishedContext ctx = new MockFinishedContext();
         createFinishedState(ctx).cancel();
-        assertThat(ctx.getArchivedExecutionGraph().getState()).isEqualTo(testJobStatus);
+        assertThat(ctx.getArchivedExecutionGraph().getJobStatus()).isEqualTo(testJobStatus);
     }
 
     @Test
     void testSuspendIgnored() {
         MockFinishedContext ctx = new MockFinishedContext();
         createFinishedState(ctx).suspend(new RuntimeException());
-        assertThat(ctx.getArchivedExecutionGraph().getState()).isEqualTo(testJobStatus);
+        assertThat(ctx.getArchivedExecutionGraph().getJobStatus()).isEqualTo(testJobStatus);
     }
 
     @Test
@@ -63,7 +63,7 @@ class FinishedTest {
         createFinishedState(ctx)
                 .handleGlobalFailure(
                         new RuntimeException(), FailureEnricherUtils.EMPTY_FAILURE_LABELS);
-        assertThat(ctx.getArchivedExecutionGraph().getState()).isEqualTo(testJobStatus);
+        assertThat(ctx.getArchivedExecutionGraph().getJobStatus()).isEqualTo(testJobStatus);
     }
 
     @Test

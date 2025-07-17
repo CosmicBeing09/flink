@@ -53,7 +53,7 @@ class RestartingTest {
                     new StateTrackingMockExecutionGraph();
             createRestartingState(ctx, mockExecutionGraph);
 
-            assertThat(mockExecutionGraph.getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(mockExecutionGraph.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
         }
     }
 
@@ -97,7 +97,7 @@ class RestartingTest {
 
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             final Throwable cause = new RuntimeException("suspend");
             restarting.suspend(cause);
@@ -126,10 +126,10 @@ class RestartingTest {
             mockExecutionGraph.completeTerminationFuture(JobStatus.CANCELED);
 
             // this is just a sanity check for the test
-            assertThat(restarting.getExecutionGraph().getState()).isEqualTo(JobStatus.CANCELED);
+            assertThat(restarting.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.CANCELED);
 
             assertThat(restarting.getJobStatus()).isEqualTo(JobStatus.RESTARTING);
-            assertThat(restarting.getJob().getState()).isEqualTo(JobStatus.RESTARTING);
+            assertThat(restarting.getJob().getJobStatus()).isEqualTo(JobStatus.RESTARTING);
             assertThat(restarting.getJob().getStatusTimestamp(JobStatus.CANCELED)).isZero();
         }
     }

@@ -131,7 +131,7 @@ class ExecutingTest {
                     new ExecutingStateBuilder().setExecutionGraph(executionGraph).build(ctx);
 
             assertThat(mockExecutionVertex.isDeployCalled()).isTrue();
-            assertThat(executionGraph.getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executionGraph.getJobStatus()).isEqualTo(JobStatus.RUNNING);
         }
     }
 
@@ -170,7 +170,7 @@ class ExecutingTest {
                             try (MockExecutingContext ctx = new MockExecutingContext()) {
                                 ExecutionGraph notRunningExecutionGraph =
                                         new StateTrackingMockExecutionGraph();
-                                assertThat(notRunningExecutionGraph.getState())
+                                assertThat(notRunningExecutionGraph.getJobStatus())
                                         .isNotEqualTo(JobStatus.RUNNING);
 
                                 new Executing(
@@ -365,7 +365,7 @@ class ExecutingTest {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
 
             // transition EG into terminal state, which will notify the Executing state about the
@@ -381,7 +381,7 @@ class ExecutingTest {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             exec.suspend(new RuntimeException("suspend"));
         }
@@ -566,10 +566,10 @@ class ExecutingTest {
             finishingMockExecutionGraph.completeTerminationFuture(JobStatus.FINISHED);
 
             // this is just a sanity check for the test
-            assertThat(executing.getExecutionGraph().getState()).isEqualTo(JobStatus.FINISHED);
+            assertThat(executing.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.FINISHED);
 
             assertThat(executing.getJobStatus()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executing.getJob().getJobStatus()).isEqualTo(JobStatus.RUNNING);
             assertThat(executing.getJob().getStatusTimestamp(JobStatus.FINISHED)).isZero();
         }
     }

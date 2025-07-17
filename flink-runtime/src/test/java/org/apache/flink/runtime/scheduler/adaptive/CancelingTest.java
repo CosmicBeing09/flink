@@ -48,7 +48,7 @@ class CancelingTest {
                     new StateTrackingMockExecutionGraph();
             createCancelingState(ctx, stateTrackingMockExecutionGraph);
 
-            assertThat(stateTrackingMockExecutionGraph.getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(stateTrackingMockExecutionGraph.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
         }
     }
 
@@ -58,10 +58,10 @@ class CancelingTest {
             StateTrackingMockExecutionGraph stateTrackingMockExecutionGraph =
                     new StateTrackingMockExecutionGraph();
             Canceling canceling = createCancelingState(ctx, stateTrackingMockExecutionGraph);
-            assertThat(stateTrackingMockExecutionGraph.getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(stateTrackingMockExecutionGraph.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.CANCELED));
             // this transitions the EG from CANCELLING to CANCELLED.
             stateTrackingMockExecutionGraph.completeTerminationFuture(JobStatus.CANCELED);
@@ -74,7 +74,7 @@ class CancelingTest {
             Canceling canceling = createCancelingState(ctx, new StateTrackingMockExecutionGraph());
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             canceling.suspend(new RuntimeException("suspend"));
         }
@@ -133,10 +133,10 @@ class CancelingTest {
             meg.completeTerminationFuture(JobStatus.CANCELED);
 
             // this is just a sanity check for the test
-            assertThat(meg.getState()).isEqualTo(JobStatus.CANCELED);
+            assertThat(meg.getJobStatus()).isEqualTo(JobStatus.CANCELED);
 
             assertThat(canceling.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
-            assertThat(canceling.getJob().getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(canceling.getJob().getJobStatus()).isEqualTo(JobStatus.CANCELLING);
             assertThat(canceling.getJob().getStatusTimestamp(JobStatus.CANCELED)).isZero();
         }
     }

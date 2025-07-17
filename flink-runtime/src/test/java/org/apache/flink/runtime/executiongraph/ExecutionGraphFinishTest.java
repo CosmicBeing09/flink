@@ -76,16 +76,16 @@ class ExecutionGraphFinishTest {
         // test getNumExecutionVertexFinished
         senderVertices.get(0).getCurrentExecutionAttempt().markFinished();
         assertThat(sender.getNumExecutionVertexFinished()).isOne();
-        assertThat(eg.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         senderVertices.get(1).getCurrentExecutionAttempt().markFinished();
         assertThat(sender.getNumExecutionVertexFinished()).isEqualTo(2);
-        assertThat(eg.getState()).isEqualTo(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.RUNNING);
 
         // test job finishes
         receiverVertices.get(0).getCurrentExecutionAttempt().markFinished();
         receiverVertices.get(1).getCurrentExecutionAttempt().markFinished();
         assertThat(eg.getNumFinishedVertices()).isEqualTo(4);
-        assertThat(eg.getState()).isEqualTo(JobStatus.FINISHED);
+        assertThat(eg.getJobStatus()).isEqualTo(JobStatus.FINISHED);
     }
 }

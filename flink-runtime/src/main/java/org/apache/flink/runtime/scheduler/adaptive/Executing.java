@@ -91,7 +91,7 @@ class Executing extends StateWithExecutionGraph
                 failureCollection);
         this.context = context;
         Preconditions.checkState(
-                executionGraph.getState() == JobStatus.RUNNING, "Assuming running execution graph");
+                executionGraph.getJobStatus() == JobStatus.RUNNING, "Assuming running execution graph");
 
         this.parallelismDecreaseRescalingController = new EnforceParallelismChangeRescalingController();
         this.minimalParallelismIncreaseRescalingController =

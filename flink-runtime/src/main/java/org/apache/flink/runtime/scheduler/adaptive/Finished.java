@@ -48,7 +48,7 @@ class Finished implements State {
 
     @Override
     public JobStatus getJobStatus() {
-        return archivedExecutionGraph.getState();
+        return archivedExecutionGraph.getJobStatus();
     }
 
     @Override

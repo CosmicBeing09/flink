@@ -39,7 +39,7 @@ public class JobStatusStore implements JobStatusListener, JobStatusProvider {
     }
 
     @Override
-    public JobStatus getState() {
+    public JobStatus getJobStatus() {
         return jobStatus;
     }
 

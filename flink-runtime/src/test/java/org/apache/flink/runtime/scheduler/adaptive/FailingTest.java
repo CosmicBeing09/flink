@@ -55,7 +55,7 @@ class FailingTest {
 
             createFailingState(ctx, meg);
 
-            assertThat(meg.getState()).isEqualTo(JobStatus.FAILING);
+            assertThat(meg.getJobStatus()).isEqualTo(JobStatus.FAILING);
             ctx.assertNoStateTransition();
         }
     }
@@ -67,7 +67,7 @@ class FailingTest {
             Failing failing = createFailingState(ctx, meg);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
             meg.completeTerminationFuture(JobStatus.FAILED);
         }
@@ -90,7 +90,7 @@ class FailingTest {
             Failing failing = createFailingState(ctx, meg);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             failing.suspend(new RuntimeException("suspend"));
         }
@@ -140,10 +140,10 @@ class FailingTest {
             meg.completeTerminationFuture(JobStatus.FAILED);
 
             // this is just a sanity check for the test
-            assertThat(meg.getState()).isEqualTo(JobStatus.FAILED);
+            assertThat(meg.getJobStatus()).isEqualTo(JobStatus.FAILED);
 
             assertThat(failing.getJobStatus()).isEqualTo(JobStatus.FAILING);
-            assertThat(failing.getJob().getState()).isEqualTo(JobStatus.FAILING);
+            assertThat(failing.getJob().getJobStatus()).isEqualTo(JobStatus.FAILING);
             assertThat(failing.getJob().getStatusTimestamp(JobStatus.FAILED)).isZero();
         }
     }

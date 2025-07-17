@@ -196,7 +196,7 @@ public class DefaultBatchJobRecoveryHandler
 
     @Override
     public boolean isRecovering() {
-        return context.getExecutionGraph().getState() == JobStatus.RECONCILING;
+        return context.getExecutionGraph().getJobStatus() == JobStatus.RECONCILING;
     }
 
     private void restoreShuffleMaster(List<ShuffleMasterSnapshot> snapshots) {

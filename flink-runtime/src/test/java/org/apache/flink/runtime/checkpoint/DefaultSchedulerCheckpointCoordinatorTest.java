@@ -178,7 +178,7 @@ class DefaultSchedulerCheckpointCoordinatorTest {
 
         scheduler.closeAsync().get();
 
-        assertThat(graph.getState()).isEqualTo(JobStatus.SUSPENDED);
+        assertThat(graph.getJobStatus()).isEqualTo(JobStatus.SUSPENDED);
         assertThat(checkpointCoordinator.isShutdown()).isTrue();
         assertThat(counterShutdownFuture).isCompletedWithValue(JobStatus.SUSPENDED);
         assertThat(storeShutdownFuture).isCompletedWithValue(JobStatus.SUSPENDED);

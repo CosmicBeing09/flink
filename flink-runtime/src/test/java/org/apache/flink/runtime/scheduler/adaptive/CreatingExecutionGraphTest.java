@@ -72,7 +72,7 @@ class CreatingExecutionGraphTest {
 
         context.setExpectFinished(
                 archivedExecutionGraph ->
-                        assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED));
+                        assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED));
 
         executionGraphWithVertexParallelismFuture.completeExceptionally(
                 new FlinkException("Test exception"));
@@ -98,7 +98,7 @@ class CreatingExecutionGraphTest {
 
         executionGraphWithVertexParallelismFuture.complete(getGraph(executionGraph));
 
-        assertThat(executionGraph.getState()).isEqualTo(JobStatus.INITIALIZING);
+        assertThat(executionGraph.getJobStatus()).isEqualTo(JobStatus.INITIALIZING);
     }
 
     @Test
