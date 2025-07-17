@@ -45,7 +45,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /** Default handler for the {@link OperatorCoordinator OperatorCoordinators}. */
-public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHandler {
+public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorManager {
     private final ExecutionGraph executionGraph;
 
     private final Map<OperatorID, OperatorCoordinatorHolder> coordinatorMap;
@@ -71,7 +71,7 @@ public class DefaultOperatorCoordinatorHandler implements OperatorCoordinatorHan
     }
 
     @Override
-    public void initializeOperatorCoordinators(ComponentMainThreadExecutor mainThreadExecutor) {
+    public void setupOperatorCoordinators(ComponentMainThreadExecutor mainThreadExecutor) {
         for (OperatorCoordinatorHolder coordinatorHolder : coordinatorMap.values()) {
             coordinatorHolder.lazyInitialize(
                     globalFailureHandler,

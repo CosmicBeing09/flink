@@ -61,7 +61,7 @@ import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
@@ -605,7 +605,7 @@ class ExecutingTest {
         private ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .build(EXECUTOR_EXTENSION.getExecutor());
-        private OperatorCoordinatorHandler operatorCoordinatorHandler;
+        private OperatorCoordinatorManager operatorCoordinatorHandler;
         private RescaleManager.Factory rescaleManagerFactory =
                 TestingRescaleManager.Factory.noOpFactory();
         private int rescaleOnFailedCheckpointCount = 1;
@@ -620,7 +620,7 @@ class ExecutingTest {
         }
 
         public ExecutingStateBuilder setOperatorCoordinatorHandler(
-                OperatorCoordinatorHandler operatorCoordinatorHandler) {
+                OperatorCoordinatorManager operatorCoordinatorHandler) {
             this.operatorCoordinatorHandler = operatorCoordinatorHandler;
             return this;
         }
@@ -710,7 +710,7 @@ class ExecutingTest {
         public void goToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(
                     new CancellingArguments(
@@ -733,7 +733,7 @@ class ExecutingTest {
         public void goToRestarting(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Duration backoffTime,
                 List<ExceptionHistoryEntry> failureCollection) {
             restartingStateValidator.validateInput(
@@ -749,7 +749,7 @@ class ExecutingTest {
         public void goToFailing(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Throwable failureCause,
                 List<ExceptionHistoryEntry> failureCollection) {
             failingStateValidator.validateInput(
@@ -765,7 +765,7 @@ class ExecutingTest {
         public CompletableFuture<String> goToStopWithSavepoint(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -805,12 +805,12 @@ class ExecutingTest {
     static class CancellingArguments {
         private final ExecutionGraph executionGraph;
         private final ExecutionGraphHandler executionGraphHandler;
-        private final OperatorCoordinatorHandler operatorCoordinatorHandle;
+        private final OperatorCoordinatorManager operatorCoordinatorHandle;
 
         public CancellingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandle) {
+                OperatorCoordinatorManager operatorCoordinatorHandle) {
             this.executionGraph = executionGraph;
             this.executionGraphHandler = executionGraphHandler;
             this.operatorCoordinatorHandle = operatorCoordinatorHandle;
@@ -824,7 +824,7 @@ class ExecutingTest {
             return executionGraphHandler;
         }
 
-        public OperatorCoordinatorHandler getOperatorCoordinatorHandle() {
+        public OperatorCoordinatorManager getOperatorCoordinatorHandle() {
             return operatorCoordinatorHandle;
         }
     }
@@ -836,7 +836,7 @@ class ExecutingTest {
         public StopWithSavepointArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandle,
+                OperatorCoordinatorManager operatorCoordinatorHandle,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandle);
@@ -851,7 +851,7 @@ class ExecutingTest {
         public RestartingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Duration backoffTime) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
             this.backoffTime = backoffTime;
@@ -868,7 +868,7 @@ class ExecutingTest {
         public FailingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Throwable failureCause) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
             this.failureCause = failureCause;

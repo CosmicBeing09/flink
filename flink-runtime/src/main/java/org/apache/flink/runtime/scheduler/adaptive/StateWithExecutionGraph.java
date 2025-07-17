@@ -53,7 +53,7 @@ import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.KvStateHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.VertexEndOfDataListener;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
@@ -89,7 +89,7 @@ abstract class StateWithExecutionGraph implements State {
 
     private final ExecutionGraphHandler executionGraphHandler;
 
-    private final OperatorCoordinatorHandler operatorCoordinatorHandler;
+    private final OperatorCoordinatorManager operatorCoordinatorHandler;
 
     private final KvStateHandler kvStateHandler;
 
@@ -105,7 +105,7 @@ abstract class StateWithExecutionGraph implements State {
             Context context,
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             Logger logger,
             ClassLoader userClassCodeLoader,
             List<ExceptionHistoryEntry> failureCollection) {
@@ -145,7 +145,7 @@ abstract class StateWithExecutionGraph implements State {
         return executionGraph.getJobID();
     }
 
-    protected OperatorCoordinatorHandler getOperatorCoordinatorHandler() {
+    protected OperatorCoordinatorManager getOperatorCoordinatorHandler() {
         return operatorCoordinatorHandler;
     }
 

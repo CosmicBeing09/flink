@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.TestingAccessExecution;
 
 import org.junit.jupiter.api.Test;
@@ -149,7 +149,7 @@ class CancelingTest {
                         log,
                         ctx.getMainThreadExecutor(),
                         ctx.getMainThreadExecutor());
-        final OperatorCoordinatorHandler operatorCoordinatorHandler =
+        final OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
         executionGraph.transitionToRunning();
         Canceling canceling =

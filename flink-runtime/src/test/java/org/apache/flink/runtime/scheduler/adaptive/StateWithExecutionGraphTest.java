@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.util.FlinkException;
 
 import org.junit.jupiter.api.Test;
@@ -150,14 +150,14 @@ class StateWithExecutionGraphTest {
 
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context,
-            OperatorCoordinatorHandler operatorCoordinatorHandler) {
+            OperatorCoordinatorManager operatorCoordinatorHandler) {
         final ExecutionGraph executionGraph = new StateTrackingMockExecutionGraph();
         return createStateWithExecutionGraph(context, executionGraph, operatorCoordinatorHandler);
     }
 
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context, ExecutionGraph executionGraph) {
-        final OperatorCoordinatorHandler operatorCoordinatorHandler =
+        final OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
         return createStateWithExecutionGraph(context, executionGraph, operatorCoordinatorHandler);
     }
@@ -165,7 +165,7 @@ class StateWithExecutionGraphTest {
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context,
             ExecutionGraph executionGraph,
-            OperatorCoordinatorHandler operatorCoordinatorHandler) {
+            OperatorCoordinatorManager operatorCoordinatorHandler) {
 
         final ExecutionGraphHandler executionGraphHandler =
                 new ExecutionGraphHandler(
@@ -194,7 +194,7 @@ class StateWithExecutionGraphTest {
                 Context context,
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Logger logger,
                 ClassLoader userCodeClassLoader) {
             super(

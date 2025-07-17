@@ -32,14 +32,14 @@ import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
 /** Handler for the {@link OperatorCoordinator OperatorCoordinators}. */
-public interface OperatorCoordinatorHandler {
+public interface OperatorCoordinatorManager {
 
     /**
      * Initialize operator coordinators.
      *
      * @param mainThreadExecutor Executor for submitting work to the main thread.
      */
-    void initializeOperatorCoordinators(ComponentMainThreadExecutor mainThreadExecutor);
+    void setupOperatorCoordinators(ComponentMainThreadExecutor mainThreadExecutor);
 
     /** Start all operator coordinators. */
     void startAllOperatorCoordinators();

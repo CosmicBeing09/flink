@@ -32,7 +32,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.runtime.scheduler.adaptive.scalingpolicy.EnforceMinimalIncreaseRescalingController;
 import org.apache.flink.runtime.scheduler.adaptive.scalingpolicy.EnforceParallelismChangeRescalingController;
@@ -62,8 +62,8 @@ class Executing extends StateWithExecutionGraph
 
     private final Context context;
 
-    private final RescalingController sufficientResourcesController;
-    private final RescalingController desiredResourcesController;
+    private final RescalingController parallelismDecreaseRescalingController;
+    private final RescalingController minimalParallelismIncreaseRescalingController;
     private final RescaleManager rescaleManager;
     private final int maxFailedCheckpointsBeforeRescale;
     // null indicates that there was no change event observed, yet
@@ -72,7 +72,7 @@ class Executing extends StateWithExecutionGraph
     Executing(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             Logger logger,
             Context context,
             ClassLoader userCodeClassLoader,
@@ -93,8 +93,8 @@ class Executing extends StateWithExecutionGraph
         Preconditions.checkState(
                 executionGraph.getState() == JobStatus.RUNNING, "Assuming running execution graph");
 
-        this.sufficientResourcesController = new EnforceParallelismChangeRescalingController();
-        this.desiredResourcesController =
+        this.parallelismDecreaseRescalingController = new EnforceParallelismChangeRescalingController();
+        this.minimalParallelismIncreaseRescalingController =
                 new EnforceMinimalIncreaseRescalingController(minParallelismChangeForRescale);
         this.rescaleManager = rescaleManagerFactory.create(this, lastRescale);
 
@@ -118,12 +118,12 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public boolean hasSufficientResources() {
-        return shouldRescale(sufficientResourcesController);
+        return shouldRescale(parallelismDecreaseRescalingController);
     }
 
     @Override
     public boolean hasDesiredResources() {
-        return shouldRescale(desiredResourcesController);
+        return shouldRescale(minimalParallelismIncreaseRescalingController);
     }
 
     private boolean shouldRescale(RescalingController rescalingController) {
@@ -319,7 +319,7 @@ class Executing extends StateWithExecutionGraph
         private final Logger log;
         private final ExecutionGraph executionGraph;
         private final ExecutionGraphHandler executionGraphHandler;
-        private final OperatorCoordinatorHandler operatorCoordinatorHandler;
+        private final OperatorCoordinatorManager operatorCoordinatorHandler;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
         private final RescaleManager.Factory rescaleManagerFactory;
@@ -329,7 +329,7 @@ class Executing extends StateWithExecutionGraph
         Factory(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Logger log,
                 Context context,
                 ClassLoader userCodeClassLoader,

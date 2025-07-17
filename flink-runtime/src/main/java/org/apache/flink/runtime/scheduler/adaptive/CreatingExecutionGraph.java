@@ -30,7 +30,7 @@ import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.scheduler.DefaultOperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.util.IterableUtils;
 import org.apache.flink.util.Preconditions;
@@ -119,9 +119,9 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                                 context.getMainThreadExecutor());
                 // Operator coordinator outlives the current state, so we need to use context as a
                 // global failure handler.
-                final OperatorCoordinatorHandler operatorCoordinatorHandler =
+                final OperatorCoordinatorManager operatorCoordinatorHandler =
                         operatorCoordinatorHandlerFactory.create(executionGraph, context);
-                operatorCoordinatorHandler.initializeOperatorCoordinators(
+                operatorCoordinatorHandler.setupOperatorCoordinators(
                         context.getMainThreadExecutor());
                 final String updatedPlan =
                         JsonPlanGenerator.generatePlan(
@@ -215,15 +215,15 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
     interface OperatorCoordinatorHandlerFactory {
 
         /**
-         * Creates a new {@link OperatorCoordinatorHandler}. This interface is primarily intended
+         * Creates a new {@link OperatorCoordinatorManager}. This interface is primarily intended
          * for easier testing.
          *
          * @param executionGraph Current execution graph, that contains operator coordinators that
          *     we want to start.
          * @param globalFailureHandler Global failure handler.
-         * @return An {@link OperatorCoordinatorHandler} instance.
+         * @return An {@link OperatorCoordinatorManager} instance.
          */
-        OperatorCoordinatorHandler create(
+        OperatorCoordinatorManager create(
                 ExecutionGraph executionGraph, GlobalFailureHandler globalFailureHandler);
     }
 
