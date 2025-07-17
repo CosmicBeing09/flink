@@ -130,9 +130,9 @@ class NetworkBufferPoolTest {
         BufferPool boundedPool = globalPool.createBufferPool(1, 1, 1);
         BufferPool nonFixedPool = globalPool.createBufferPool(5, 5, Integer.MAX_VALUE);
 
-        assertThat(fixedPool.getExpectedNumberOfMemorySegments()).isEqualTo(2);
-        assertThat(boundedPool.getExpectedNumberOfMemorySegments()).isOne();
-        assertThat(nonFixedPool.getExpectedNumberOfMemorySegments()).isEqualTo(5);
+        assertThat(fixedPool.getNumberOfRequiredMemorySegments()).isEqualTo(2);
+        assertThat(boundedPool.getNumberOfRequiredMemorySegments()).isOne();
+        assertThat(nonFixedPool.getNumberOfRequiredMemorySegments()).isEqualTo(5);
 
         // actually, the buffer pool sizes may be different due to rounding and based on the
         // internal order of

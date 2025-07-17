@@ -101,7 +101,7 @@ public class LocalBufferPool implements BufferPool {
      * all {@link LocalBufferPool}s, so typically this value is used as a weight to allocate buffers
      * to each {@link LocalBufferPool}.
      */
-    private final int expectedNumberOfMemorySegments;
+    private final int requiredNumberOfMemorySegments;
 
     /** The number of guaranteed (minimum number of) memory segments of this buffer pool. */
     private final int minNumberOfMemorySegments;
@@ -191,7 +191,7 @@ public class LocalBufferPool implements BufferPool {
      * with a minimal and maximal number of network buffers being available.
      *
      * @param networkBufferPool global network buffer pool to get buffers from
-     * @param expectedNumberOfMemorySegments expected number of network buffers
+     * @param requiredNumberOfMemorySegments required number of network buffers
      * @param minNumberOfMemorySegments minimum number of network buffers
      * @param maxNumberOfMemorySegments maximum number of network buffers to allocate
      * @param numberOfSubpartitions number of subpartitions
@@ -200,7 +200,7 @@ public class LocalBufferPool implements BufferPool {
      */
     LocalBufferPool(
             NetworkBufferPool networkBufferPool,
-            int expectedNumberOfMemorySegments,
+            int requiredNumberOfMemorySegments,
             int minNumberOfMemorySegments,
             int maxNumberOfMemorySegments,
             int numberOfSubpartitions,
@@ -212,25 +212,25 @@ public class LocalBufferPool implements BufferPool {
                 minNumberOfMemorySegments);
 
         checkArgument(
-                expectedNumberOfMemorySegments >= minNumberOfMemorySegments,
+                requiredNumberOfMemorySegments >= minNumberOfMemorySegments,
                 "Minimum number of memory segments (%s) should not be larger than expected (%s).",
                 minNumberOfMemorySegments,
-                expectedNumberOfMemorySegments);
+                requiredNumberOfMemorySegments);
 
         checkArgument(
-                maxNumberOfMemorySegments >= expectedNumberOfMemorySegments,
+                maxNumberOfMemorySegments >= requiredNumberOfMemorySegments,
                 "Maximum number of memory segments (%s) should not be smaller than expected (%s).",
                 maxNumberOfMemorySegments,
-                expectedNumberOfMemorySegments);
+                requiredNumberOfMemorySegments);
 
         LOG.debug(
                 "Using a local buffer pool who has the minimum-expected-maximum number of buffers as {}-{}-{}.",
                 minNumberOfMemorySegments,
-                expectedNumberOfMemorySegments,
+                requiredNumberOfMemorySegments,
                 maxNumberOfMemorySegments);
 
         this.networkBufferPool = networkBufferPool;
-        this.expectedNumberOfMemorySegments = expectedNumberOfMemorySegments;
+        this.requiredNumberOfMemorySegments = requiredNumberOfMemorySegments;
         this.currentPoolSize = minNumberOfMemorySegments;
         this.minNumberOfMemorySegments = minNumberOfMemorySegments;
         this.maxNumberOfMemorySegments = maxNumberOfMemorySegments;
@@ -293,8 +293,8 @@ public class LocalBufferPool implements BufferPool {
     }
 
     @Override
-    public int getExpectedNumberOfMemorySegments() {
-        return expectedNumberOfMemorySegments;
+    public int getNumberOfRequiredMemorySegments() {
+        return requiredNumberOfMemorySegments;
     }
 
     @Override
@@ -312,13 +312,13 @@ public class LocalBufferPool implements BufferPool {
      *
      * @return the same value as {@link #getMaxNumberOfMemorySegments()} for bounded pools. For
      *     unbounded pools it returns an approximation based upon {@link
-     *     #getExpectedNumberOfMemorySegments()}
+     *     #getNumberOfRequiredMemorySegments()}
      */
     public int getEstimatedNumberOfRequestedMemorySegments() {
         if (maxNumberOfMemorySegments < NetworkBufferPool.UNBOUNDED_POOL_SIZE) {
             return maxNumberOfMemorySegments;
         } else {
-            return getExpectedNumberOfMemorySegments();
+            return getNumberOfRequiredMemorySegments();
         }
     }
 
@@ -736,7 +736,7 @@ public class LocalBufferPool implements BufferPool {
                     currentPoolSize,
                     numberOfRequestedMemorySegments,
                     availableMemorySegments.size(),
-                    expectedNumberOfMemorySegments,
+                    requiredNumberOfMemorySegments,
                     minNumberOfMemorySegments,
                     maxNumberOfMemorySegments,
                     registeredListeners.size(),
