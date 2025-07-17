@@ -60,7 +60,7 @@ class DefaultOperatorCoordinatorHandlerTest {
         ExecutionGraph executionGraph = createDynamicGraph(jobVertices);
         ExecutionJobVertex ejv1 = executionGraph.getJobVertex(jobVertices[0].getID());
         ExecutionJobVertex ejv2 = executionGraph.getJobVertex(jobVertices[1].getID());
-        executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        executionGraph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
         executionGraph.initializeJobVertex(ejv1, 0L);
 

@@ -150,7 +150,7 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
     }
 
     private void createExecutionGraphWithAvailableResources() {
-        context.goToCreatingExecutionGraph(previousExecutionGraph);
+        context.transitionToCreatingExecutionGraph(previousExecutionGraph);
     }
 
     /** Context of the {@link WaitingForResources} state. */

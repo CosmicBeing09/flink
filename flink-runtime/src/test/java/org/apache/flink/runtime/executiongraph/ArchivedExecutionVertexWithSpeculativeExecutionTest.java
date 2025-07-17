@@ -122,7 +122,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
         final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
-        eg.transitionToRunning();
+        eg.transitionToRunningState();
 
         ExecutionJobVertex jv = eg.getJobVertex(jobVertex.getID());
         assertThat(jv).isNotNull();
@@ -216,7 +216,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         executionGraph.setInternalTaskFailuresListener(internalFailuresListener);
-        executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        executionGraph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
         return executionGraph;
     }

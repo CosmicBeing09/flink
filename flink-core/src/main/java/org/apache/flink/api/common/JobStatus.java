@@ -27,52 +27,52 @@ public enum JobStatus {
      * The job has been received by the Dispatcher, and is waiting for the job manager to receive
      * leadership and to be created.
      */
-    INITIALIZING(TerminalState.NON_TERMINAL),
+    INITIALIZING(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /** Job is newly created, no task has started to run. */
-    CREATED(TerminalState.NON_TERMINAL),
+    CREATED(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /** Some tasks are scheduled or running, some may be pending, some may be finished. */
-    RUNNING(TerminalState.NON_TERMINAL),
+    RUNNING(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /** The job has failed and is currently waiting for the cleanup to complete. */
-    FAILING(TerminalState.NON_TERMINAL),
+    FAILING(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /** The job has failed with a non-recoverable task failure. */
-    FAILED(TerminalState.GLOBALLY),
+    FAILED(JobTerminalStateKind.GLOBALLY),
 
     /** Job is being cancelled. */
-    CANCELLING(TerminalState.NON_TERMINAL),
+    CANCELLING(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /** Job has been cancelled. */
-    CANCELED(TerminalState.GLOBALLY),
+    CANCELED(JobTerminalStateKind.GLOBALLY),
 
     /** All of the job's tasks have successfully finished. */
-    FINISHED(TerminalState.GLOBALLY),
+    FINISHED(JobTerminalStateKind.GLOBALLY),
 
     /** The job is currently undergoing a reset and total restart. */
-    RESTARTING(TerminalState.NON_TERMINAL),
+    RESTARTING(JobTerminalStateKind.NON_TERMINAL_STATE),
 
     /**
      * The job has been suspended which means that it has been stopped but not been removed from a
      * potential HA job store.
      */
-    SUSPENDED(TerminalState.LOCALLY),
+    SUSPENDED(JobTerminalStateKind.LOCALLY),
 
     /** The job is currently reconciling and waits for task execution report to recover state. */
-    RECONCILING(TerminalState.NON_TERMINAL);
+    RECONCILING(JobTerminalStateKind.NON_TERMINAL_STATE);
 
     // --------------------------------------------------------------------------------------------
 
-    private enum TerminalState {
-        NON_TERMINAL,
+    private enum JobTerminalStateKind {
+        NON_TERMINAL_STATE,
         LOCALLY,
         GLOBALLY
     }
 
-    private final TerminalState terminalState;
+    private final JobTerminalStateKind terminalState;
 
-    JobStatus(TerminalState terminalState) {
+    JobStatus(JobTerminalStateKind terminalState) {
         this.terminalState = terminalState;
     }
 
@@ -87,7 +87,7 @@ public enum JobStatus {
      * @return True, if this job status is globally terminal, false otherwise.
      */
     public boolean isGloballyTerminalState() {
-        return terminalState == TerminalState.GLOBALLY;
+        return terminalState == JobTerminalStateKind.GLOBALLY;
     }
 
     /**
@@ -101,6 +101,6 @@ public enum JobStatus {
      * @return True, if this job status is terminal, false otherwise.
      */
     public boolean isTerminalState() {
-        return terminalState != TerminalState.NON_TERMINAL;
+        return terminalState != JobTerminalStateKind.NON_TERMINAL_STATE;
     }
 }

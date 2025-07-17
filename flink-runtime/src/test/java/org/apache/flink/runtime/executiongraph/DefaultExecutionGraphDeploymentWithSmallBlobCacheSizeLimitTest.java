@@ -186,7 +186,7 @@ class DefaultExecutionGraphDeploymentWithSmallBlobCacheSizeLimitTest
                         .setBlobWriter(blobWriter)
                         .build(executor);
 
-        eg.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        eg.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
         return eg;
     }

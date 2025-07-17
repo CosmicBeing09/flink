@@ -97,7 +97,7 @@ class FailoverStrategyCheckpointCoordinatorTest {
                         mock(CheckpointStatsTracker.class));
 
         // switch current execution's state to running to allow checkpoint could be triggered.
-        graph.transitionToRunning();
+        graph.transitionToRunningState();
         graph.getAllExecutionVertices()
                 .forEach(
                         task ->

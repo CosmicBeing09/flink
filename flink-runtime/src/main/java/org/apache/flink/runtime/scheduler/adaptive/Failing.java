@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.util.Preconditions;
 
@@ -40,7 +40,7 @@ class Failing extends StateWithExecutionGraph {
             Context context,
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             Logger logger,
             Throwable failureCause,
             ClassLoader userCodeClassLoader,
@@ -65,7 +65,7 @@ class Failing extends StateWithExecutionGraph {
 
     @Override
     public void cancel() {
-        context.goToCanceling(
+        context.transitionToCanceling(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
                 getOperatorCoordinatorHandler(),
@@ -92,7 +92,7 @@ class Failing extends StateWithExecutionGraph {
         private final Logger log;
         private final ExecutionGraph executionGraph;
         private final ExecutionGraphHandler executionGraphHandler;
-        private final OperatorCoordinatorHandler operatorCoordinatorHandler;
+        private final OperatorCoordinatorManager operatorCoordinatorHandler;
         private final Throwable failureCause;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
@@ -101,7 +101,7 @@ class Failing extends StateWithExecutionGraph {
                 Context context,
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Logger log,
                 Throwable failureCause,
                 ClassLoader userCodeClassLoader,

@@ -94,7 +94,7 @@ public class MemoryExecutionGraphInfoStoreTest extends TestLogger {
         final List<JobStatus> jobStatuses =
                 executionGraphInfos.stream()
                         .map(ExecutionGraphInfo::getArchivedExecutionGraph)
-                        .map(ArchivedExecutionGraph::getState)
+                        .map(ArchivedExecutionGraph::getJobStatus)
                         .collect(Collectors.toList());
 
         final JobsOverview expectedJobsOverview = JobsOverview.create(jobStatuses);

@@ -252,7 +252,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
         } else {
             tryComputeSourceParallelismThenRunAsync(
                     (Void value, Throwable throwable) -> {
-                        if (getExecutionGraph().getState() == JobStatus.CREATED) {
+                        if (getExecutionGraph().getJobStatus() == JobStatus.CREATED) {
                             initializeVerticesIfPossible();
                             super.startSchedulingInternal();
                         }

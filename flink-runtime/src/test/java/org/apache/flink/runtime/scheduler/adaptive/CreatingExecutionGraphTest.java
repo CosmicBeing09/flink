@@ -27,7 +27,7 @@ import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.Executors;
@@ -72,7 +72,7 @@ class CreatingExecutionGraphTest {
 
         context.setExpectFinished(
                 archivedExecutionGraph ->
-                        assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED));
+                        assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED));
 
         executionGraphWithVertexParallelismFuture.completeExceptionally(
                 new FlinkException("Test exception"));
@@ -98,7 +98,7 @@ class CreatingExecutionGraphTest {
 
         executionGraphWithVertexParallelismFuture.complete(getGraph(executionGraph));
 
-        assertThat(executionGraph.getState()).isEqualTo(JobStatus.INITIALIZING);
+        assertThat(executionGraph.getJobStatus()).isEqualTo(JobStatus.INITIALIZING);
     }
 
     @Test
@@ -157,7 +157,7 @@ class CreatingExecutionGraphTest {
                 executionGraphWithVertexParallelism.getExecutionGraph());
     }
 
-    private static OperatorCoordinatorHandler createTestingOperatorCoordinatorHandler(
+    private static OperatorCoordinatorManager createTestingOperatorCoordinatorHandler(
             ExecutionGraph executionGraph, GlobalFailureHandler globalFailureHandler) {
         return new TestingOperatorCoordinatorHandler();
     }
@@ -204,7 +204,7 @@ class CreatingExecutionGraphTest {
         public void goToExecuting(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             executingStateValidator.validateInput(executionGraph);
             registerStateTransition();

@@ -47,7 +47,7 @@ public class UpTimeGauge implements Gauge<Long> {
 
     @Override
     public Long getValue() {
-        final JobStatus status = jobStatusProvider.getState();
+        final JobStatus status = jobStatusProvider.getJobStatus();
 
         if (status == JobStatus.RUNNING) {
             // running right now - report the uptime

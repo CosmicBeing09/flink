@@ -61,7 +61,7 @@ import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
@@ -131,7 +131,7 @@ class ExecutingTest {
                     new ExecutingStateBuilder().setExecutionGraph(executionGraph).build(ctx);
 
             assertThat(mockExecutionVertex.isDeployCalled()).isTrue();
-            assertThat(executionGraph.getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executionGraph.getJobStatus()).isEqualTo(JobStatus.RUNNING);
         }
     }
 
@@ -142,7 +142,7 @@ class ExecutingTest {
                     new MockExecutionJobVertex(MockExecutionVertex::new);
             ExecutionGraph executionGraph =
                     new MockExecutionGraph(() -> Collections.singletonList(mockExecutionJobVertex));
-            executionGraph.transitionToRunning();
+            executionGraph.transitionToRunningState();
             final MockExecutionVertex mockExecutionVertex =
                     (MockExecutionVertex) mockExecutionJobVertex.getMockExecutionVertex();
             mockExecutionVertex.setMockedExecutionState(ExecutionState.RUNNING);
@@ -170,7 +170,7 @@ class ExecutingTest {
                             try (MockExecutingContext ctx = new MockExecutingContext()) {
                                 ExecutionGraph notRunningExecutionGraph =
                                         new StateTrackingMockExecutionGraph();
-                                assertThat(notRunningExecutionGraph.getState())
+                                assertThat(notRunningExecutionGraph.getJobStatus())
                                         .isNotEqualTo(JobStatus.RUNNING);
 
                                 new Executing(
@@ -365,7 +365,7 @@ class ExecutingTest {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
 
             // transition EG into terminal state, which will notify the Executing state about the
@@ -381,7 +381,7 @@ class ExecutingTest {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             exec.suspend(new RuntimeException("suspend"));
         }
@@ -566,10 +566,10 @@ class ExecutingTest {
             finishingMockExecutionGraph.completeTerminationFuture(JobStatus.FINISHED);
 
             // this is just a sanity check for the test
-            assertThat(executing.getExecutionGraph().getState()).isEqualTo(JobStatus.FINISHED);
+            assertThat(executing.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.FINISHED);
 
             assertThat(executing.getJobStatus()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executing.getJob().getJobStatus()).isEqualTo(JobStatus.RUNNING);
             assertThat(executing.getJob().getStatusTimestamp(JobStatus.FINISHED)).isZero();
         }
     }
@@ -605,7 +605,7 @@ class ExecutingTest {
         private ExecutionGraph executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .build(EXECUTOR_EXTENSION.getExecutor());
-        private OperatorCoordinatorHandler operatorCoordinatorHandler;
+        private OperatorCoordinatorManager operatorCoordinatorHandler;
         private RescaleManager.Factory rescaleManagerFactory =
                 TestingRescaleManager.Factory.noOpFactory();
         private int rescaleOnFailedCheckpointCount = 1;
@@ -620,7 +620,7 @@ class ExecutingTest {
         }
 
         public ExecutingStateBuilder setOperatorCoordinatorHandler(
-                OperatorCoordinatorHandler operatorCoordinatorHandler) {
+                OperatorCoordinatorManager operatorCoordinatorHandler) {
             this.operatorCoordinatorHandler = operatorCoordinatorHandler;
             return this;
         }
@@ -638,7 +638,7 @@ class ExecutingTest {
         }
 
         private Executing build(MockExecutingContext ctx) {
-            executionGraph.transitionToRunning();
+            executionGraph.transitionToRunningState();
 
             try {
                 return new Executing(
@@ -707,10 +707,10 @@ class ExecutingTest {
         // --------- Interface Implementations ------- //
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(
                     new CancellingArguments(
@@ -733,7 +733,7 @@ class ExecutingTest {
         public void goToRestarting(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Duration backoffTime,
                 List<ExceptionHistoryEntry> failureCollection) {
             restartingStateValidator.validateInput(
@@ -749,7 +749,7 @@ class ExecutingTest {
         public void goToFailing(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Throwable failureCause,
                 List<ExceptionHistoryEntry> failureCollection) {
             failingStateValidator.validateInput(
@@ -765,7 +765,7 @@ class ExecutingTest {
         public CompletableFuture<String> goToStopWithSavepoint(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -805,12 +805,12 @@ class ExecutingTest {
     static class CancellingArguments {
         private final ExecutionGraph executionGraph;
         private final ExecutionGraphHandler executionGraphHandler;
-        private final OperatorCoordinatorHandler operatorCoordinatorHandle;
+        private final OperatorCoordinatorManager operatorCoordinatorHandle;
 
         public CancellingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandle) {
+                OperatorCoordinatorManager operatorCoordinatorHandle) {
             this.executionGraph = executionGraph;
             this.executionGraphHandler = executionGraphHandler;
             this.operatorCoordinatorHandle = operatorCoordinatorHandle;
@@ -824,7 +824,7 @@ class ExecutingTest {
             return executionGraphHandler;
         }
 
-        public OperatorCoordinatorHandler getOperatorCoordinatorHandle() {
+        public OperatorCoordinatorManager getOperatorCoordinatorHandle() {
             return operatorCoordinatorHandle;
         }
     }
@@ -836,7 +836,7 @@ class ExecutingTest {
         public StopWithSavepointArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandle,
+                OperatorCoordinatorManager operatorCoordinatorHandle,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandle);
@@ -851,7 +851,7 @@ class ExecutingTest {
         public RestartingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Duration backoffTime) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
             this.backoffTime = backoffTime;
@@ -868,7 +868,7 @@ class ExecutingTest {
         public FailingArguments(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Throwable failureCause) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
             this.failureCause = failureCause;

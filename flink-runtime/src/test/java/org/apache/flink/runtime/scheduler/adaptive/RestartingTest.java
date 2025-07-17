@@ -25,7 +25,7 @@ import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 
@@ -53,7 +53,7 @@ class RestartingTest {
                     new StateTrackingMockExecutionGraph();
             createRestartingState(ctx, mockExecutionGraph);
 
-            assertThat(mockExecutionGraph.getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(mockExecutionGraph.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
         }
     }
 
@@ -97,7 +97,7 @@ class RestartingTest {
 
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             final Throwable cause = new RuntimeException("suspend");
             restarting.suspend(cause);
@@ -126,10 +126,10 @@ class RestartingTest {
             mockExecutionGraph.completeTerminationFuture(JobStatus.CANCELED);
 
             // this is just a sanity check for the test
-            assertThat(restarting.getExecutionGraph().getState()).isEqualTo(JobStatus.CANCELED);
+            assertThat(restarting.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.CANCELED);
 
             assertThat(restarting.getJobStatus()).isEqualTo(JobStatus.RESTARTING);
-            assertThat(restarting.getJob().getState()).isEqualTo(JobStatus.RESTARTING);
+            assertThat(restarting.getJob().getJobStatus()).isEqualTo(JobStatus.RESTARTING);
             assertThat(restarting.getJob().getStatusTimestamp(JobStatus.CANCELED)).isZero();
         }
     }
@@ -142,9 +142,9 @@ class RestartingTest {
                         log,
                         ctx.getMainThreadExecutor(),
                         ctx.getMainThreadExecutor());
-        final OperatorCoordinatorHandler operatorCoordinatorHandler =
+        final OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
-        executionGraph.transitionToRunning();
+        executionGraph.transitionToRunningState();
         return new Restarting(
                 ctx,
                 executionGraph,
@@ -179,10 +179,10 @@ class RestartingTest {
         }
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(
                     new ExecutingTest.CancellingArguments(

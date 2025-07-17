@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.stopwithsavepoint.StopWithSavepointStoppingException;
 import org.apache.flink.util.FlinkException;
@@ -98,7 +98,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
             Context context,
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             Logger logger,
             ClassLoader userCodeClassLoader,
@@ -165,7 +165,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
     @Override
     public void cancel() {
         operationFailureCause = new FlinkException("The job was cancelled.");
-        context.goToCanceling(
+        context.transitionToCanceling(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
                 getOperatorCoordinatorHandler(),
@@ -306,7 +306,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
         private final ExecutionGraphHandler executionGraphHandler;
 
-        private final OperatorCoordinatorHandler operatorCoordinatorHandler;
+        private final OperatorCoordinatorManager operatorCoordinatorHandler;
 
         private final CheckpointScheduling checkpointScheduling;
 
@@ -322,7 +322,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
                 Context context,
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 Logger logger,
                 ClassLoader userCodeClassLoader,

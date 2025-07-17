@@ -122,7 +122,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public JobStatus getState() {
+    public JobStatus getJobStatus() {
         return state;
     }
 
@@ -152,7 +152,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public void transitionToRunning() {
+    public void transitionToRunningState() {
         transitionToState(JobStatus.RUNNING);
     }
 
@@ -179,7 +179,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getExecutionPlanAsJson() {
         return "";
     }
 
@@ -261,7 +261,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     }
 
     @Override
-    public void start(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor) {}
+    public void startExecutionGraph(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor) {}
 
     @Override
     public void setInternalTaskFailuresListener(

@@ -159,7 +159,7 @@ class TaskExecutorITCase {
         return () -> {
             final AccessExecutionGraph executionGraph = executionGraphFutureSupplier.get().join();
             return allExecutionsRunning.test(executionGraph)
-                    && executionGraph.getState() == JobStatus.RUNNING;
+                    && executionGraph.getJobStatus() == JobStatus.RUNNING;
         };
     }
 

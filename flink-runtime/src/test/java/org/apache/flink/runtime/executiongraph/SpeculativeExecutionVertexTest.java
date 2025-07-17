@@ -139,7 +139,7 @@ class SpeculativeExecutionVertexTest {
         final JobVertex jobVertex = ExecutionGraphTestUtils.createNoOpVertex(1);
         final JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(jobVertex);
         final ExecutionGraph eg = createExecutionGraph(jobGraph);
-        eg.transitionToRunning();
+        eg.transitionToRunningState();
 
         final SpeculativeExecutionVertex ev =
                 (SpeculativeExecutionVertex)
@@ -151,11 +151,11 @@ class SpeculativeExecutionVertexTest {
         e1.transitionState(ExecutionState.RUNNING);
         e1.markFinished();
         assertThat(terminationFuture).isNotDone();
-        assertThat(eg.getState()).isSameAs(JobStatus.RUNNING);
+        assertThat(eg.getJobStatus()).isSameAs(JobStatus.RUNNING);
 
         e2.cancel();
         assertThat(terminationFuture).isDone();
-        assertThat(eg.getState()).isSameAs(JobStatus.FINISHED);
+        assertThat(eg.getJobStatus()).isSameAs(JobStatus.FINISHED);
     }
 
     @Test
@@ -292,7 +292,7 @@ class SpeculativeExecutionVertexTest {
                         .build(EXECUTOR_RESOURCE.getExecutor());
 
         executionGraph.setInternalTaskFailuresListener(internalFailuresListener);
-        executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        executionGraph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
         return executionGraph;
     }

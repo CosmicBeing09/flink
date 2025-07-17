@@ -101,7 +101,7 @@ import org.apache.flink.runtime.scheduler.ExecutionGraphFactory;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.scheduler.JobStatusStore;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
 import org.apache.flink.runtime.scheduler.SchedulerUtils;
@@ -1164,7 +1164,7 @@ public class AdaptiveScheduler
     public void goToExecuting(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             List<ExceptionHistoryEntry> failureCollection) {
         transitionToState(
                 new Executing.Factory(
@@ -1181,10 +1181,10 @@ public class AdaptiveScheduler
     }
 
     @Override
-    public void goToCanceling(
+    public void transitionToCanceling(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             List<ExceptionHistoryEntry> failureCollection) {
 
         transitionToState(
@@ -1202,7 +1202,7 @@ public class AdaptiveScheduler
     public void goToRestarting(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             Duration backoffTime,
             List<ExceptionHistoryEntry> failureCollection) {
 
@@ -1233,7 +1233,7 @@ public class AdaptiveScheduler
     public void goToFailing(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             Throwable failureCause,
             List<ExceptionHistoryEntry> failureCollection) {
         transitionToState(
@@ -1252,7 +1252,7 @@ public class AdaptiveScheduler
     public CompletableFuture<String> goToStopWithSavepoint(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
-            OperatorCoordinatorHandler operatorCoordinatorHandler,
+            OperatorCoordinatorManager operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             CompletableFuture<String> savepointFuture,
             List<ExceptionHistoryEntry> failureCollection) {
@@ -1278,7 +1278,7 @@ public class AdaptiveScheduler
     }
 
     @Override
-    public void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
+    public void transitionToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
         final CompletableFuture<CreatingExecutionGraph.ExecutionGraphWithVertexParallelism>
                 executionGraphWithAvailableResourcesFuture =
                         createExecutionGraphWithAvailableResourcesAsync(previousExecutionGraph);
@@ -1337,7 +1337,7 @@ public class AdaptiveScheduler
         final ExecutionGraph executionGraph =
                 executionGraphWithVertexParallelism.getExecutionGraph();
 
-        executionGraph.start(componentMainThreadExecutor);
+        executionGraph.startExecutionGraph(componentMainThreadExecutor);
 
         executionGraph.setInternalTaskFailuresListener(
                 new UpdateSchedulerNgOnInternalFailuresListener(this));
@@ -1421,10 +1421,10 @@ public class AdaptiveScheduler
         LOG.info(
                 "Job {} reached terminal state {}.",
                 archivedExecutionGraph.getJobID(),
-                archivedExecutionGraph.getState(),
+                archivedExecutionGraph.getJobStatus(),
                 optionalFailure);
 
-        jobTerminationFuture.complete(archivedExecutionGraph.getState());
+        jobTerminationFuture.complete(archivedExecutionGraph.getJobStatus());
     }
 
     @Override

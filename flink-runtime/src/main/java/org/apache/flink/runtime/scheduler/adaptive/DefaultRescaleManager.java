@@ -58,8 +58,8 @@ public class DefaultRescaleManager implements RescaleManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
 
-    private final Temporal initializationTime;
-    private final Supplier<Temporal> clock;
+    private final Temporal lastRescaleTime;
+    private final Supplier<Temporal> timeProvider;
 
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
@@ -77,7 +77,7 @@ public class DefaultRescaleManager implements RescaleManager {
      * scheduled operation.
      *
      * <p>{@code triggerFuture} can be used to trigger the callback even earlier (before the
-     * scheduled delay has passed). See {@link #onTrigger()}.
+     * scheduled delay has passed). See {@link #evaluateRescaleTrigger()}.
      */
     private CompletableFuture<Void> triggerFuture;
 
@@ -104,8 +104,8 @@ public class DefaultRescaleManager implements RescaleManager {
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
-        this.initializationTime = initializationTime;
-        this.clock = clock;
+        this.lastRescaleTime = initializationTime;
+        this.timeProvider = clock;
 
         this.maxTriggerDelay = maxTriggerDelay;
         this.triggerFuture = FutureUtils.completedVoidFuture();
@@ -120,14 +120,14 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     @Override
-    public void onChange() {
+    public void onEnvironmentChange() {
         if (this.triggerFuture.isDone()) {
             this.triggerFuture = scheduleOperationWithTrigger(this::evaluateChangeEvent);
         }
     }
 
     @Override
-    public void onTrigger() {
+    public void evaluateRescaleTrigger() {
         if (!this.triggerFuture.isDone()) {
             this.triggerFuture.complete(null);
             LOG.debug(
@@ -157,14 +157,14 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private Duration timeSinceLastRescale() {
-        return Duration.between(this.initializationTime, clock.get());
+        return Duration.between(this.lastRescaleTime, timeProvider.get());
     }
 
     private void maybeRescale() {
         rescaleScheduled = false;
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         } else if (scalingIntervalMax != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
@@ -187,7 +187,7 @@ public class DefaultRescaleManager implements RescaleManager {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
                     scalingIntervalMax);
-            rescaleContext.rescale();
+            rescaleContext.transitionToSubsequentState();
         }
     }
 

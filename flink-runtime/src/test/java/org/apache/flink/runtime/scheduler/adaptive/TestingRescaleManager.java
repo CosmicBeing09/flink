@@ -31,12 +31,12 @@ public class TestingRescaleManager implements RescaleManager {
     }
 
     @Override
-    public void onChange() {
+    public void onEnvironmentChange() {
         this.onChangeRunnable.run();
     }
 
     @Override
-    public void onTrigger() {
+    public void evaluateRescaleTrigger() {
         this.onTriggerRunnable.run();
     }
 

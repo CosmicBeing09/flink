@@ -52,7 +52,7 @@ public class DownTimeGauge implements Gauge<Long> {
 
     @Override
     public Long getValue() {
-        final JobStatus status = jobStatusProvider.getState();
+        final JobStatus status = jobStatusProvider.getJobStatus();
 
         // not running any more -> finished or not on leader
         if (status.isTerminalState()) {

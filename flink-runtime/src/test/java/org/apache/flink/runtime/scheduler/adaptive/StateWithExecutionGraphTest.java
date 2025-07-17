@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.util.FlinkException;
 
 import org.junit.jupiter.api.Test;
@@ -53,14 +53,14 @@ class StateWithExecutionGraphTest {
                 new MockStateWithExecutionGraphContext()) {
             final StateTrackingMockExecutionGraph testingExecutionGraph =
                     new StateTrackingMockExecutionGraph();
-            testingExecutionGraph.transitionToRunning();
+            testingExecutionGraph.transitionToRunningState();
 
             final TestingStateWithExecutionGraph stateWithExecutionGraph =
                     createStateWithExecutionGraph(context, testingExecutionGraph);
 
             context.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
 
             // transition to FAILED
@@ -69,7 +69,7 @@ class StateWithExecutionGraphTest {
                     System.currentTimeMillis());
             testingExecutionGraph.completeTerminationFuture(JobStatus.FAILED);
 
-            assertThat(testingExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
+            assertThat(testingExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED);
 
             // As long as we don't execute StateWithExecutionGraph#onGloballyTerminalState
             // immediately when reaching a globally terminal state or if don't immediately leave
@@ -105,7 +105,7 @@ class StateWithExecutionGraphTest {
                     createStateWithExecutionGraph(context);
 
             context.setExpectFinished(
-                    aeg -> assertThat(aeg.getState()).isEqualTo(JobStatus.SUSPENDED));
+                    aeg -> assertThat(aeg.getJobStatus()).isEqualTo(JobStatus.SUSPENDED));
 
             stateWithExecutionGraph.suspend(new RuntimeException());
         }
@@ -150,14 +150,14 @@ class StateWithExecutionGraphTest {
 
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context,
-            OperatorCoordinatorHandler operatorCoordinatorHandler) {
+            OperatorCoordinatorManager operatorCoordinatorHandler) {
         final ExecutionGraph executionGraph = new StateTrackingMockExecutionGraph();
         return createStateWithExecutionGraph(context, executionGraph, operatorCoordinatorHandler);
     }
 
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context, ExecutionGraph executionGraph) {
-        final OperatorCoordinatorHandler operatorCoordinatorHandler =
+        final OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
         return createStateWithExecutionGraph(context, executionGraph, operatorCoordinatorHandler);
     }
@@ -165,7 +165,7 @@ class StateWithExecutionGraphTest {
     private TestingStateWithExecutionGraph createStateWithExecutionGraph(
             MockStateWithExecutionGraphContext context,
             ExecutionGraph executionGraph,
-            OperatorCoordinatorHandler operatorCoordinatorHandler) {
+            OperatorCoordinatorManager operatorCoordinatorHandler) {
 
         final ExecutionGraphHandler executionGraphHandler =
                 new ExecutionGraphHandler(
@@ -174,7 +174,7 @@ class StateWithExecutionGraphTest {
                         context.getMainThreadExecutor(),
                         context.getMainThreadExecutor());
 
-        executionGraph.transitionToRunning();
+        executionGraph.transitionToRunningState();
 
         return new TestingStateWithExecutionGraph(
                 context,
@@ -194,7 +194,7 @@ class StateWithExecutionGraphTest {
                 Context context,
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Logger logger,
                 ClassLoader userCodeClassLoader) {
             super(
@@ -216,7 +216,7 @@ class StateWithExecutionGraphTest {
 
         @Override
         public JobStatus getJobStatus() {
-            return getExecutionGraph().getState();
+            return getExecutionGraph().getJobStatus();
         }
 
         @Override

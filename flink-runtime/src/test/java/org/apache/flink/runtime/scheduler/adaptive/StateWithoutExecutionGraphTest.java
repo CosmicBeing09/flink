@@ -43,7 +43,7 @@ class StateWithoutExecutionGraphTest {
 
         ctx.setExpectFinished(
                 archivedExecutionGraph -> {
-                    assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.CANCELED);
+                    assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.CANCELED);
                     assertThat(archivedExecutionGraph.getFailureInfo()).isNull();
                 });
         state.cancel();
@@ -56,7 +56,7 @@ class StateWithoutExecutionGraphTest {
 
         ctx.setExpectFinished(
                 archivedExecutionGraph -> {
-                    assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.SUSPENDED);
+                    assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.SUSPENDED);
                     assertThat(archivedExecutionGraph.getFailureInfo()).isNotNull();
                     assertThat(
                                     archivedExecutionGraph
@@ -76,7 +76,7 @@ class StateWithoutExecutionGraphTest {
 
         ctx.setExpectFinished(
                 archivedExecutionGraph -> {
-                    assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
+                    assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED);
                     assertThat(archivedExecutionGraph.getFailureInfo()).isNotNull();
                     assertThat(
                                     archivedExecutionGraph

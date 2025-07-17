@@ -25,7 +25,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.TestingAccessExecution;
@@ -55,7 +55,7 @@ class FailingTest {
 
             createFailingState(ctx, meg);
 
-            assertThat(meg.getState()).isEqualTo(JobStatus.FAILING);
+            assertThat(meg.getJobStatus()).isEqualTo(JobStatus.FAILING);
             ctx.assertNoStateTransition();
         }
     }
@@ -67,7 +67,7 @@ class FailingTest {
             Failing failing = createFailingState(ctx, meg);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.FAILED));
             meg.completeTerminationFuture(JobStatus.FAILED);
         }
@@ -90,7 +90,7 @@ class FailingTest {
             Failing failing = createFailingState(ctx, meg);
             ctx.setExpectFinished(
                     archivedExecutionGraph ->
-                            assertThat(archivedExecutionGraph.getState())
+                            assertThat(archivedExecutionGraph.getJobStatus())
                                     .isEqualTo(JobStatus.SUSPENDED));
             failing.suspend(new RuntimeException("suspend"));
         }
@@ -140,10 +140,10 @@ class FailingTest {
             meg.completeTerminationFuture(JobStatus.FAILED);
 
             // this is just a sanity check for the test
-            assertThat(meg.getState()).isEqualTo(JobStatus.FAILED);
+            assertThat(meg.getJobStatus()).isEqualTo(JobStatus.FAILED);
 
             assertThat(failing.getJobStatus()).isEqualTo(JobStatus.FAILING);
-            assertThat(failing.getJob().getState()).isEqualTo(JobStatus.FAILING);
+            assertThat(failing.getJob().getJobStatus()).isEqualTo(JobStatus.FAILING);
             assertThat(failing.getJob().getStatusTimestamp(JobStatus.FAILED)).isZero();
         }
     }
@@ -155,9 +155,9 @@ class FailingTest {
                         log,
                         ctx.getMainThreadExecutor(),
                         ctx.getMainThreadExecutor());
-        final OperatorCoordinatorHandler operatorCoordinatorHandler =
+        final OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
-        executionGraph.transitionToRunning();
+        executionGraph.transitionToRunningState();
         return new Failing(
                 ctx,
                 executionGraph,
@@ -183,10 +183,10 @@ class FailingTest {
         public void archiveFailure(RootExceptionHistoryEntry failure) {}
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(
                     new ExecutingTest.CancellingArguments(

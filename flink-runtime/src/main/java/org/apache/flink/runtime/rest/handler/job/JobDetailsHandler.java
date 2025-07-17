@@ -104,8 +104,8 @@ public class JobDetailsHandler
         final long now = System.currentTimeMillis();
         final long startTime = executionGraph.getStatusTimestamp(JobStatus.INITIALIZING);
         final long endTime =
-                executionGraph.getState().isGloballyTerminalState()
-                        ? executionGraph.getStatusTimestamp(executionGraph.getState())
+                executionGraph.getJobStatus().isGloballyTerminalState()
+                        ? executionGraph.getStatusTimestamp(executionGraph.getJobStatus())
                         : -1L;
         final long duration = (endTime > 0L ? endTime : now) - startTime;
 
@@ -145,7 +145,7 @@ public class JobDetailsHandler
                 executionGraph.getJobID(),
                 executionGraph.getJobName(),
                 executionGraph.isStoppable(),
-                executionGraph.getState(),
+                executionGraph.getJobStatus(),
                 executionGraph.getJobType(),
                 startTime,
                 endTime,
@@ -155,7 +155,7 @@ public class JobDetailsHandler
                 timestamps,
                 jobVertexInfos,
                 jobVerticesPerStateMap,
-                new JobPlanInfo.RawJson(executionGraph.getJsonPlan()));
+                new JobPlanInfo.RawJson(executionGraph.getExecutionPlanAsJson()));
     }
 
     private static JobDetailsInfo.JobVertexDetailsInfo createJobVertexDetailsInfo(

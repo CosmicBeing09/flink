@@ -723,7 +723,7 @@ public class CheckpointCoordinatorTestingUtils {
             ExecutionGraph executionGraph =
                     ExecutionGraphTestUtils.createExecutionGraph(
                             executorService, allVertices.toArray(new JobVertex[0]));
-            executionGraph.start(mainThreadExecutor);
+            executionGraph.startExecutionGraph(mainThreadExecutor);
 
             if (taskManagerGateway != null) {
                 executionGraph
@@ -739,7 +739,7 @@ public class CheckpointCoordinatorTestingUtils {
             }
 
             if (transitToRunning) {
-                executionGraph.transitionToRunning();
+                executionGraph.transitionToRunningState();
                 executionGraph
                         .getAllExecutionVertices()
                         .forEach(

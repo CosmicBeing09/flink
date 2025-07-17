@@ -27,7 +27,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
-import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
+import org.apache.flink.runtime.scheduler.OperatorCoordinatorManager;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.TestingAccessExecution;
 import org.apache.flink.runtime.scheduler.stopwithsavepoint.StopWithSavepointStoppingException;
@@ -99,7 +99,7 @@ class StopWithSavepointTest {
 
             ctx.setExpectFailing(
                     failingArguments -> {
-                        assertThat(failingArguments.getExecutionGraph().getState())
+                        assertThat(failingArguments.getExecutionGraph().getJobStatus())
                                 .isEqualTo(JobStatus.FAILED);
                         assertThat(failingArguments.getFailureCause())
                                 .satisfies(
@@ -127,7 +127,7 @@ class StopWithSavepointTest {
 
             ctx.setExpectFailing(
                     failingArguments -> {
-                        assertThat(failingArguments.getExecutionGraph().getState())
+                        assertThat(failingArguments.getExecutionGraph().getJobStatus())
                                 .isEqualTo(JobStatus.FAILED);
                         assertThat(failingArguments.getFailureCause())
                                 .satisfies(FlinkAssertions.anyCauseMatches(FlinkException.class));
@@ -180,7 +180,7 @@ class StopWithSavepointTest {
             StopWithSavepoint sws = createStopWithSavepoint(ctx);
             ctx.setExpectFinished(
                     archivedExecutionGraph -> {
-                        assertThat(archivedExecutionGraph.getState())
+                        assertThat(archivedExecutionGraph.getJobStatus())
                                 .isEqualTo(JobStatus.SUSPENDED);
                     });
 
@@ -322,7 +322,7 @@ class StopWithSavepointTest {
             ctx.setStopWithSavepoint(sws);
             ctx.setExpectExecuting(
                     executingArguments ->
-                            assertThat(executingArguments.getExecutionGraph().getState())
+                            assertThat(executingArguments.getExecutionGraph().getJobStatus())
                                     .isEqualTo(JobStatus.RUNNING));
 
             savepointFuture.completeExceptionally(new RuntimeException("Test error"));
@@ -482,10 +482,10 @@ class StopWithSavepointTest {
                         LOG,
                         ctx.getMainThreadExecutor(),
                         ctx.getMainThreadExecutor());
-        OperatorCoordinatorHandler operatorCoordinatorHandler =
+        OperatorCoordinatorManager operatorCoordinatorHandler =
                 new TestingOperatorCoordinatorHandler();
 
-        executionGraph.transitionToRunning();
+        executionGraph.transitionToRunningState();
 
         return new StopWithSavepoint(
                 ctx,
@@ -554,10 +554,10 @@ class StopWithSavepointTest {
         }
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
                 throw new IllegalStateException("Only one state transition is allowed.");
@@ -574,7 +574,7 @@ class StopWithSavepointTest {
         public void goToRestarting(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Duration backoffTime,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
@@ -594,7 +594,7 @@ class StopWithSavepointTest {
         public void goToFailing(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 Throwable failureCause,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
@@ -614,7 +614,7 @@ class StopWithSavepointTest {
         public void goToExecuting(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
-                OperatorCoordinatorHandler operatorCoordinatorHandler,
+                OperatorCoordinatorManager operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
                 throw new IllegalStateException("Only one state transition is allowed.");

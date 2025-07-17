@@ -78,7 +78,7 @@ import java.util.concurrent.CompletableFuture;
  */
 public interface ExecutionGraph extends AccessExecutionGraph {
 
-    void start(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor);
+    void startExecutionGraph(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor);
 
     SchedulingTopology getSchedulingTopology();
 
@@ -156,7 +156,7 @@ public interface ExecutionGraph extends AccessExecutionGraph {
             List<JobVertex> topologicallySorted, JobManagerJobMetricGroup jobManagerJobMetricGroup)
             throws JobException;
 
-    void transitionToRunning();
+    void transitionToRunningState();
 
     void cancel();
 

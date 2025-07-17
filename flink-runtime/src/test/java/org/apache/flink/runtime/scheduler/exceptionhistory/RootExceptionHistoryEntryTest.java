@@ -70,7 +70,7 @@ class RootExceptionHistoryEntryTest {
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setJobGraph(jobGraph)
                         .build(EXECUTOR_RESOURCE.getExecutor());
-        executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        executionGraph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
     }
 
     @Test

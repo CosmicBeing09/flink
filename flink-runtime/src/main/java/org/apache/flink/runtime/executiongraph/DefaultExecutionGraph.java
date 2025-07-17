@@ -414,7 +414,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public void start(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor) {
+    public void startExecutionGraph(@Nonnull ComponentMainThreadExecutor jobMasterMainThreadExecutor) {
         this.jobMasterMainThreadExecutor = jobMasterMainThreadExecutor;
     }
 
@@ -609,7 +609,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getExecutionPlanAsJson() {
         return jsonPlan;
     }
 
@@ -639,7 +639,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public JobStatus getState() {
+    public JobStatus getJobStatus() {
         return state;
     }
 
@@ -963,7 +963,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public void transitionToRunning() {
+    public void transitionToRunningState() {
         if (!transitionState(JobStatus.CREATED, JobStatus.RUNNING)) {
             throw new IllegalStateException(
                     "Job may only be scheduled from state " + JobStatus.CREATED);

@@ -45,7 +45,7 @@ public interface AccessExecutionGraph extends JobStatusProvider {
      *
      * @return job plan as a JSON string
      */
-    String getJsonPlan();
+    String getExecutionPlanAsJson();
 
     /**
      * Returns the {@link JobID} for this execution graph.
@@ -66,7 +66,7 @@ public interface AccessExecutionGraph extends JobStatusProvider {
      *
      * @return job status for this execution graph
      */
-    JobStatus getState();
+    JobStatus getJobStatus();
 
     /**
      * Returns the {@link JobType} for this execution graph.

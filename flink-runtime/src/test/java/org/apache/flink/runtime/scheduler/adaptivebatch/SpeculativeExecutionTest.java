@@ -328,7 +328,7 @@ class SpeculativeExecutionTest {
                                 new Exception("Forced failure for testing.")));
         scheduler.updateTaskExecutionState(failedState);
 
-        assertThat(scheduler.getExecutionGraph().getState()).isEqualTo(JobStatus.FAILING);
+        assertThat(scheduler.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.FAILING);
     }
 
     @Test
@@ -345,7 +345,7 @@ class SpeculativeExecutionTest {
                 createFailedTaskExecutionState(attempt1.getAttemptId());
         scheduler.updateTaskExecutionState(failedState);
 
-        assertThat(scheduler.getExecutionGraph().getState()).isEqualTo(JobStatus.FAILING);
+        assertThat(scheduler.getExecutionGraph().getJobStatus()).isEqualTo(JobStatus.FAILING);
     }
 
     static Stream<ResultPartitionType> supportedResultPartitionType() {

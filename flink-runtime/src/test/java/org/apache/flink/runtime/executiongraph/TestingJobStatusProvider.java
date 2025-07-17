@@ -50,7 +50,7 @@ class TestingJobStatusProvider implements JobStatusProvider {
     }
 
     @Override
-    public JobStatus getState() {
+    public JobStatus getJobStatus() {
         return statusSupplier.get();
     }
 

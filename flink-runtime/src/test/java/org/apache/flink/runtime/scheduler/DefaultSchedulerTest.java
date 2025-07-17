@@ -533,7 +533,7 @@ public class DefaultSchedulerTest {
 
         assertThat(testExecutionOperations.getDeployedVertices())
                 .contains(sourceExecutionVertexId, sinkExecutionVertexId);
-        assertThat(scheduler.requestJob().getArchivedExecutionGraph().getState())
+        assertThat(scheduler.requestJob().getArchivedExecutionGraph().getJobStatus())
                 .isEqualTo(JobStatus.RUNNING);
     }
 

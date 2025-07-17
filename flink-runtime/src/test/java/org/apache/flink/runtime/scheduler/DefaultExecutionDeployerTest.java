@@ -331,7 +331,7 @@ class DefaultExecutionDeployerTest {
                         .build(executor);
 
         executionGraph.setInternalTaskFailuresListener(new TestingInternalFailuresListener());
-        executionGraph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        executionGraph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
 
         return executionGraph;
     }

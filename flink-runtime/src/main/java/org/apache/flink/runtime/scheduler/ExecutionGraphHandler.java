@@ -74,7 +74,7 @@ public class ExecutionGraphHandler {
 
     public void reportCheckpointMetrics(
             ExecutionAttemptID attemptId, long id, CheckpointMetrics metrics) {
-        processCheckpointCoordinatorMessage(
+        handleCheckpointCoordinatorCommand(
                 "ReportCheckpointStats",
                 coordinator -> coordinator.reportCheckpointMetrics(id, attemptId, metrics));
     }
@@ -90,7 +90,7 @@ public class ExecutionGraphHandler {
             return;
         }
 
-        processCheckpointCoordinatorMessage(
+        handleCheckpointCoordinatorCommand(
                 "ReportInitializationMetrics",
                 coordinator ->
                         coordinator.reportInitializationMetrics(
@@ -103,7 +103,7 @@ public class ExecutionGraphHandler {
             final long checkpointId,
             final CheckpointMetrics checkpointMetrics,
             final TaskStateSnapshot checkpointState) {
-        processCheckpointCoordinatorMessage(
+        handleCheckpointCoordinatorCommand(
                 "AcknowledgeCheckpoint",
                 coordinator ->
                         coordinator.receiveAcknowledgeMessage(
@@ -113,19 +113,19 @@ public class ExecutionGraphHandler {
                                         checkpointId,
                                         checkpointMetrics,
                                         checkpointState),
-                                retrieveTaskManagerLocation(executionAttemptID)));
+                                getTaskManagerLocationString(executionAttemptID)));
     }
 
     public void declineCheckpoint(final DeclineCheckpoint decline) {
-        processCheckpointCoordinatorMessage(
+        handleCheckpointCoordinatorCommand(
                 "DeclineCheckpoint",
                 coordinator ->
                         coordinator.receiveDeclineMessage(
                                 decline,
-                                retrieveTaskManagerLocation(decline.getTaskExecutionId())));
+                                getTaskManagerLocationString(decline.getTaskExecutionId())));
     }
 
-    private void processCheckpointCoordinatorMessage(
+    private void handleCheckpointCoordinatorCommand(
             String messageType, ThrowingConsumer<CheckpointCoordinator, Exception> process) {
         mainThreadExecutor.assertRunningInMainThread();
 
@@ -144,7 +144,7 @@ public class ExecutionGraphHandler {
         } else {
             String errorMessage =
                     "Received " + messageType + " message for job {} with no CheckpointCoordinator";
-            if (executionGraph.getState() == JobStatus.RUNNING) {
+            if (executionGraph.getJobStatus() == JobStatus.RUNNING) {
                 log.error(errorMessage, executionGraph.getJobID());
             } else {
                 log.debug(errorMessage, executionGraph.getJobID());
@@ -152,7 +152,7 @@ public class ExecutionGraphHandler {
         }
     }
 
-    private String retrieveTaskManagerLocation(ExecutionAttemptID executionAttemptID) {
+    private String getTaskManagerLocationString(ExecutionAttemptID executionAttemptID) {
         final Optional<Execution> currentExecution =
                 Optional.ofNullable(
                         executionGraph.getRegisteredExecutions().get(executionAttemptID));

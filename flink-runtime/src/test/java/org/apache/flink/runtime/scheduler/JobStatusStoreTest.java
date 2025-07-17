@@ -30,7 +30,7 @@ class JobStatusStoreTest {
     @Test
     void initialState() {
         final JobStatusStore store = new JobStatusStore(0);
-        assertThat(store.getState(), is(JobStatus.INITIALIZING));
+        assertThat(store.getJobStatus(), is(JobStatus.INITIALIZING));
     }
 
     @Test
@@ -53,7 +53,7 @@ class JobStatusStoreTest {
         final JobStatusStore store = new JobStatusStore(0L);
         store.jobStatusChanges(new JobID(), JobStatus.RUNNING, 1L);
 
-        assertThat(store.getState(), is(JobStatus.RUNNING));
+        assertThat(store.getJobStatus(), is(JobStatus.RUNNING));
     }
 
     @Test

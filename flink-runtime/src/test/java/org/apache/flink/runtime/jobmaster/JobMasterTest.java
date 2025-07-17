@@ -2481,7 +2481,7 @@ class JobMasterTest {
                             .get()
                             .getArchivedExecutionGraph();
 
-            assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
+            assertThat(archivedExecutionGraph.getJobStatus()).isEqualTo(JobStatus.FAILED);
         }
     }
 

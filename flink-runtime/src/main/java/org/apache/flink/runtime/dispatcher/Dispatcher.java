@@ -823,7 +823,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
         final ExecutionGraphInfo executionGraphInfo = executionGraphInfoStore.get(jobId);
         if (executionGraphInfo != null) {
-            final JobStatus jobStatus = executionGraphInfo.getArchivedExecutionGraph().getState();
+            final JobStatus jobStatus = executionGraphInfo.getArchivedExecutionGraph().getJobStatus();
             if (jobStatus == JobStatus.CANCELED) {
                 return CompletableFuture.completedFuture(Acknowledge.get());
             } else {
@@ -1332,7 +1332,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
             ExecutionGraphInfo executionGraphInfo) {
         final ArchivedExecutionGraph archivedExecutionGraph =
                 executionGraphInfo.getArchivedExecutionGraph();
-        final JobStatus terminalJobStatus = archivedExecutionGraph.getState();
+        final JobStatus terminalJobStatus = archivedExecutionGraph.getJobStatus();
         Preconditions.checkArgument(
                 terminalJobStatus.isTerminalState(),
                 "Job %s is in state %s which is not terminal.",
@@ -1382,7 +1382,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         final AccessExecutionGraph archivedExecutionGraph =
                 executionGraphInfo.getArchivedExecutionGraph();
 
-        final JobStatus terminalJobStatus = archivedExecutionGraph.getState();
+        final JobStatus terminalJobStatus = archivedExecutionGraph.getJobStatus();
         Preconditions.checkArgument(
                 terminalJobStatus.isGloballyTerminalState(),
                 "Job %s is in state %s which is not globally terminal.",

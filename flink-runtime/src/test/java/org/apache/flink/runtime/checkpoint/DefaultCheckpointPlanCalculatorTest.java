@@ -305,8 +305,8 @@ class DefaultCheckpointPlanCalculatorTest {
         ExecutionGraph graph =
                 ExecutionGraphTestUtils.createExecutionGraph(
                         EXECUTOR_EXTENSION.getExecutor(), jobVertices);
-        graph.start(ComponentMainThreadExecutorServiceAdapter.forMainThread());
-        graph.transitionToRunning();
+        graph.startExecutionGraph(ComponentMainThreadExecutorServiceAdapter.forMainThread());
+        graph.transitionToRunningState();
         graph.getAllExecutionVertices()
                 .forEach(
                         task ->

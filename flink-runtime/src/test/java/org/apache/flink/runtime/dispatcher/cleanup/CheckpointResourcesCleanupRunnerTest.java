@@ -447,7 +447,7 @@ class CheckpointResourcesCleanupRunnerTest {
                 System.currentTimeMillis(),
                 actualExecutionGraph ->
                         actualExecutionGraph
-                                .getState()
+                                .getJobStatus()
                                 .equals(jobResult.getApplicationStatus().deriveJobStatus()));
     }
 

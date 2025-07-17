@@ -209,15 +209,15 @@ public class CommonTestUtils {
         waitUntilCondition(
                 () -> {
                     final AccessExecutionGraph graph = executionGraphSupplier.get();
-                    if (graph.getState().isGloballyTerminalState()) {
+                    if (graph.getJobStatus().isGloballyTerminalState()) {
                         final ErrorInfo failureInfo = graph.getFailureInfo();
                         fail(
                                 format(
                                         "Graph is in globally terminal state (%s)",
-                                        graph.getState()),
+                                        graph.getJobStatus()),
                                 failureInfo != null ? failureInfo.getException() : null);
                     }
-                    return graph.getState() == JobStatus.RUNNING
+                    return graph.getJobStatus() == JobStatus.RUNNING
                             && graph.getAllVertices().values().stream()
                                     .allMatch(
                                             jobVertex ->
@@ -322,7 +322,7 @@ public class CommonTestUtils {
         waitUntilCondition(
                 () -> {
                     AccessExecutionGraph graph = getGraph(miniCluster, job);
-                    if (graph.getState() != JobStatus.RUNNING) {
+                    if (graph.getJobStatus() != JobStatus.RUNNING) {
                         return false;
                     }
                     Stream<AccessExecutionVertex> vertexStream =
@@ -385,11 +385,11 @@ public class CommonTestUtils {
                     final CheckpointStatsSnapshot snapshot = graph.getCheckpointStatsSnapshot();
                     if (condition.test(snapshot)) {
                         return true;
-                    } else if (graph.getState().isGloballyTerminalState()) {
+                    } else if (graph.getJobStatus().isGloballyTerminalState()) {
                         checkState(
                                 graph.getFailureInfo() != null,
                                 "Job terminated (state=%s) before completing the requested checkpoint(s).",
-                                graph.getState());
+                                graph.getJobStatus());
                         throw graph.getFailureInfo().getException();
                     }
                     return false;
