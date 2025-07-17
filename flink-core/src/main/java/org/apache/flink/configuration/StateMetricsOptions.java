@@ -22,10 +22,10 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.annotation.docs.Documentation;
 
 /**
- * A collection of all configuration options that relate to the latency tracking for state access.
+ * A collection of all configuration options that relate to the metrics tracking for state access.
  */
 @PublicEvolving
-public class StateLatencyTrackOptions {
+public class StateMetricsOptions {
 
     @Documentation.Section(Documentation.Sections.STATE_LATENCY_TRACKING)
     public static final ConfigOption<Boolean> LATENCY_TRACK_ENABLED =

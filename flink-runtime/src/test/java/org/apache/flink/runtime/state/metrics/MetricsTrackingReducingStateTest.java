@@ -33,8 +33,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link LatencyTrackingReducingState}. */
-class LatencyTrackingReducingStateTest extends LatencyTrackingStateTestBase<Integer> {
+/** Tests for {@link MetricsTrackingReducingState}. */
+class MetricsTrackingReducingStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
     ReducingStateDescriptor<Long> getStateDescriptor() {
@@ -56,11 +56,11 @@ class LatencyTrackingReducingStateTest extends LatencyTrackingStateTestBase<Inte
     void testLatencyTrackingReducingState() throws Exception {
         AbstractKeyedStateBackend<Integer> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            LatencyTrackingReducingState<Integer, VoidNamespace, Long> latencyTrackingState =
-                    (LatencyTrackingReducingState)
+            MetricsTrackingReducingState<Integer, VoidNamespace, Long> latencyTrackingState =
+                    (MetricsTrackingReducingState)
                             createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            LatencyTrackingReducingState.ReducingStateLatencyMetrics latencyTrackingStateMetric =
+            MetricsTrackingReducingState.ReducingStateLatencyMetrics latencyTrackingStateMetric =
                     latencyTrackingState.getLatencyTrackingStateMetric();
 
             assertThat(latencyTrackingStateMetric.getAddCount()).isZero();

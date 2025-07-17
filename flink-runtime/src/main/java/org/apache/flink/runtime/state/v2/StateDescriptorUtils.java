@@ -18,6 +18,7 @@
 
 package org.apache.flink.runtime.state.v2;
 
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.v2.AggregatingStateDescriptor;
 import org.apache.flink.api.common.state.v2.ListStateDescriptor;
 import org.apache.flink.api.common.state.v2.MapStateDescriptor;
@@ -107,15 +108,15 @@ public class StateDescriptorUtils {
     }
 
     public static <IN, ACC, OUT>
-            org.apache.flink.api.common.state.AggregatingStateDescriptor<IN, ACC, OUT>
+    MetricsStateDescriptor<IN, ACC, OUT>
                     transformFromV2ToV1(AggregatingStateDescriptor<IN, ACC, OUT> stateDescriptor) {
         if (stateDescriptor.isSerializerInitialized()) {
-            return new org.apache.flink.api.common.state.AggregatingStateDescriptor<>(
+            return new MetricsStateDescriptor<>(
                     stateDescriptor.getStateId(),
                     stateDescriptor.getAggregateFunction(),
                     stateDescriptor.getSerializer());
         } else {
-            return new org.apache.flink.api.common.state.AggregatingStateDescriptor<>(
+            return new MetricsStateDescriptor<>(
                     stateDescriptor.getStateId(),
                     stateDescriptor.getAggregateFunction(),
                     stateDescriptor.getTypeInformation());

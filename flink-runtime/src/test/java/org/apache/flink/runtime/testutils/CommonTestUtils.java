@@ -33,7 +33,7 @@ import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.FlinkException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,13 +140,13 @@ public class CommonTestUtils {
         }
     }
 
-    public static void waitUntilCondition(SupplierWithException<Boolean, Exception> condition)
+    public static void waitUntilCondition(SupplierWithMetrics<Boolean, Exception> condition)
             throws Exception {
         waitUntilCondition(condition, RETRY_INTERVAL);
     }
 
     public static void waitUntilCondition(
-            SupplierWithException<Boolean, Exception> condition, long retryIntervalMillis)
+            SupplierWithMetrics<Boolean, Exception> condition, long retryIntervalMillis)
             throws Exception {
         while (!condition.get()) {
             Thread.sleep(retryIntervalMillis);
@@ -154,13 +154,13 @@ public class CommonTestUtils {
     }
 
     public static void waitUntilCondition(
-            SupplierWithException<Boolean, Exception> condition, int retryAttempts)
+            SupplierWithMetrics<Boolean, Exception> condition, int retryAttempts)
             throws Exception {
         waitUntilCondition(condition, RETRY_INTERVAL, retryAttempts);
     }
 
     public static void waitUntilCondition(
-            SupplierWithException<Boolean, Exception> condition,
+            SupplierWithMetrics<Boolean, Exception> condition,
             long retryIntervalMillis,
             int retryAttempts)
             throws Exception {
@@ -188,7 +188,7 @@ public class CommonTestUtils {
     }
 
     public static void waitForAllTaskRunning(
-            SupplierWithException<AccessExecutionGraph, Exception> executionGraphSupplier,
+            SupplierWithMetrics<AccessExecutionGraph, Exception> executionGraphSupplier,
             boolean allowFinished)
             throws Exception {
         Predicate<AccessExecutionVertex> subtaskPredicate =
@@ -227,7 +227,7 @@ public class CommonTestUtils {
     }
 
     public static void waitForAllTaskRunning(
-            SupplierWithException<JobDetailsInfo, Exception> jobDetailsSupplier) throws Exception {
+            SupplierWithMetrics<JobDetailsInfo, Exception> jobDetailsSupplier) throws Exception {
         waitUntilCondition(
                 () -> {
                     final JobDetailsInfo jobDetailsInfo = jobDetailsSupplier.get();
@@ -249,7 +249,7 @@ public class CommonTestUtils {
     }
 
     public static void waitForNoTaskRunning(
-            SupplierWithException<JobDetailsInfo, Exception> jobDetailsSupplier) throws Exception {
+            SupplierWithMetrics<JobDetailsInfo, Exception> jobDetailsSupplier) throws Exception {
         waitUntilCondition(
                 () -> {
                     final Map<ExecutionState, Integer> state =
@@ -260,7 +260,7 @@ public class CommonTestUtils {
     }
 
     public static void waitUntilJobManagerIsInitialized(
-            SupplierWithException<JobStatus, Exception> jobStatusSupplier) throws Exception {
+            SupplierWithMetrics<JobStatus, Exception> jobStatusSupplier) throws Exception {
         waitUntilCondition(() -> jobStatusSupplier.get() != JobStatus.INITIALIZING, 20L);
     }
 

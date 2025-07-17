@@ -27,7 +27,7 @@ import org.apache.flink.runtime.io.network.NettyShuffleEnvironment;
 import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.io.network.buffer.NetworkBufferPool;
 import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -79,7 +79,7 @@ public class ResultPartitionBuilder {
     private int networkBufferSize = 1;
 
     @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
-    private Optional<SupplierWithException<BufferPool, IOException>> bufferPoolFactory =
+    private Optional<SupplierWithMetrics<BufferPool, IOException>> bufferPoolFactory =
             Optional.empty();
 
     private boolean blockingShuffleCompressionEnabled = false;
@@ -175,7 +175,7 @@ public class ResultPartitionBuilder {
     }
 
     public ResultPartitionBuilder setBufferPoolFactory(
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory) {
         this.bufferPoolFactory = Optional.of(bufferPoolFactory);
         return this;
     }
@@ -245,7 +245,7 @@ public class ResultPartitionBuilder {
                         maxOverdraftBuffersPerGate,
                         null);
 
-        SupplierWithException<BufferPool, IOException> factory =
+        SupplierWithMetrics<BufferPool, IOException> factory =
                 bufferPoolFactory.orElseGet(
                         () ->
                                 resultPartitionFactory.createBufferPoolFactory(

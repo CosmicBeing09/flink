@@ -21,14 +21,14 @@ package org.apache.flink.util.function;
 import org.apache.flink.annotation.Public;
 
 /**
- * A functional interface for a {@link java.util.function.Supplier} that may throw exceptions.
+ * A functional interface for a {@link java.util.function.Supplier} that supplies metrics and may throw exceptions.
  *
  * @param <R> The type of the result of the supplier.
  * @param <E> The type of Exceptions thrown by this function.
  */
 @Public
 @FunctionalInterface
-public interface SupplierWithException<R, E extends Throwable> {
+public interface SupplierWithMetrics<R, E extends Throwable> {
 
     /**
      * Gets the result of this supplier.

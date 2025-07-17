@@ -26,7 +26,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.taskmanager.CheckpointResponder;
 import org.apache.flink.runtime.taskmanager.TaskManagerActions;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -50,7 +50,7 @@ public final class DefaultJobTable implements JobTable {
     @Override
     public <E extends Exception> Job getOrCreateJob(
             JobID jobId,
-            SupplierWithException<? extends JobTable.JobServices, E> jobServicesSupplier)
+            SupplierWithMetrics<? extends JobServices, E> jobServicesSupplier)
             throws E {
         JobOrConnection job = jobs.get(jobId);
 

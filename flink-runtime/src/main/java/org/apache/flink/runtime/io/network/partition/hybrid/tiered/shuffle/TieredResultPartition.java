@@ -44,7 +44,7 @@ import org.apache.flink.runtime.io.network.partition.hybrid.tiered.storage.Tiere
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.storage.TieredStorageResourceRegistry;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -85,7 +85,7 @@ public class TieredResultPartition extends ResultPartition {
             int numTargetKeyGroups,
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory,
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory,
             TieredStorageProducerClient tieredStorageProducerClient,
             TieredStorageResourceRegistry tieredStorageResourceRegistry,
             TieredStorageNettyServiceImpl nettyService,

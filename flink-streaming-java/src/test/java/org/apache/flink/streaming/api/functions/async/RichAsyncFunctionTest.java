@@ -24,11 +24,8 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.IterationRuntimeContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 
@@ -170,7 +167,7 @@ class RichAsyncFunctionTest {
         assertThatThrownBy(
                         () ->
                                 runtimeContext.getAggregatingState(
-                                        new AggregatingStateDescriptor<>(
+                                        new MetricsStateDescriptor<>(
                                                 "foobar",
                                                 new AggregateFunction<Integer, Integer, Integer>() {
 

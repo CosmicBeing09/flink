@@ -33,7 +33,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferCompressor;
 import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.io.network.buffer.NetworkBuffer;
 import org.apache.flink.util.IOUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -146,7 +146,7 @@ public class SortMergeResultPartition extends ResultPartition {
             ResultPartitionManager partitionManager,
             String resultFileBasePath,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory) {
 
         super(
                 owningTaskName,

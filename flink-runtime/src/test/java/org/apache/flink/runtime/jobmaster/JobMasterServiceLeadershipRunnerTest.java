@@ -51,7 +51,7 @@ import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import org.junit.jupiter.api.AfterEach;
@@ -797,7 +797,7 @@ class JobMasterServiceLeadershipRunnerTest {
             final UUID leaderSessionID = UUID.randomUUID();
             defaultLeaderElectionService.onGrantLeadership(leaderSessionID);
 
-            final SupplierWithException<Boolean, Exception> confirmationForSessionIdReceived =
+            final SupplierWithMetrics<Boolean, Exception> confirmationForSessionIdReceived =
                     () ->
                             storedLeaderInformation
                                     .get()

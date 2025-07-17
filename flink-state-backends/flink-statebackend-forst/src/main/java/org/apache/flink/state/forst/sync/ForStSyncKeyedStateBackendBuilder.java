@@ -399,7 +399,7 @@ public class ForStSyncKeyedStateBackendBuilder<K> extends AbstractKeyedStateBack
                 this.keySerializerProvider.currentSchemaSerializer(),
                 this.executionConfig,
                 this.ttlTimeProvider,
-                latencyTrackingStateConfig,
+                metricsTrackingStateConfig,
                 db,
                 kvStateInformation,
                 registeredPQStates,

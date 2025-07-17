@@ -23,7 +23,7 @@ import org.apache.flink.api.common.time.Deadline;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FatalExitExceptionHandler;
 import org.apache.flink.util.function.RunnableWithException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -929,7 +929,7 @@ public class FutureUtils {
     }
 
     /**
-     * Returns a future which is completed with the result of the {@link SupplierWithException}.
+     * Returns a future which is completed with the result of the {@link SupplierWithMetrics}.
      *
      * @param supplier to provide the future's value
      * @param executor to execute the supplier
@@ -937,7 +937,7 @@ public class FutureUtils {
      * @return Future which is completed with the value of the supplier
      */
     public static <T> CompletableFuture<T> supplyAsync(
-            SupplierWithException<T, ?> supplier, Executor executor) {
+            SupplierWithMetrics<T, ?> supplier, Executor executor) {
         return CompletableFuture.supplyAsync(
                 () -> {
                     try {

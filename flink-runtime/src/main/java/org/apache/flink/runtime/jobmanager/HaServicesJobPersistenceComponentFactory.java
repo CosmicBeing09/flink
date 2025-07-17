@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobmanager;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.util.FlinkRuntimeException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 /**
  * {@link JobPersistenceComponentFactory} implementation which creates a {@link ExecutionPlanStore}
@@ -45,7 +45,7 @@ public class HaServicesJobPersistenceComponentFactory implements JobPersistenceC
         return create(highAvailabilityServices::getJobResultStore, JobResultStore.class);
     }
 
-    private <T> T create(SupplierWithException<T, ? extends Exception> supplier, Class<T> clazz) {
+    private <T> T create(SupplierWithMetrics<T, ? extends Exception> supplier, Class<T> clazz) {
         try {
             return supplier.get();
         } catch (Exception e) {

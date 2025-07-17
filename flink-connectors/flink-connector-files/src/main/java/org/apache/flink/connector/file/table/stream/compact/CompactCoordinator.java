@@ -41,7 +41,7 @@ import org.apache.flink.runtime.state.StateSnapshotContext;
 import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -81,7 +81,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CoordinatorOutput
 
     private static final Logger LOG = LoggerFactory.getLogger(CompactCoordinator.class);
 
-    private final SupplierWithException<FileSystem, IOException> fsFactory;
+    private final SupplierWithMetrics<FileSystem, IOException> fsFactory;
     private final long targetFileSize;
 
     private transient FileSystem fileSystem;
@@ -93,7 +93,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CoordinatorOutput
     private transient TaskTracker inputTaskTracker;
 
     public CompactCoordinator(
-            SupplierWithException<FileSystem, IOException> fsFactory, long targetFileSize) {
+            SupplierWithMetrics<FileSystem, IOException> fsFactory, long targetFileSize) {
         this.fsFactory = fsFactory;
         this.targetFileSize = targetFileSize;
     }

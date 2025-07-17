@@ -28,7 +28,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferConsumer;
 import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.metrics.TimerGauge;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -76,7 +76,7 @@ public abstract class BufferWritingResultPartition extends ResultPartition {
             int numTargetKeyGroups,
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory) {
 
         super(
                 owningTaskName,

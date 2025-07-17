@@ -49,7 +49,7 @@ import org.apache.flink.util.IOUtils;
 import org.apache.flink.util.clock.Clock;
 import org.apache.flink.util.clock.SystemClock;
 import org.apache.flink.util.function.BiFunctionWithException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,7 +201,7 @@ class SubtaskCheckpointCoordinatorImpl implements SubtaskCheckpointCoordinator {
 
     public static ChannelStateWriter openChannelStateWriter(
             String taskName,
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerView,
             Environment env,
             int maxSubtasksPerChannelStateFile) {

@@ -17,13 +17,8 @@
 
 package org.apache.flink.state.changelog.restore;
 
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.StateDescriptor;
-import org.apache.flink.api.common.state.StateTtlConfig;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.base.ListSerializer;
 import org.apache.flink.api.common.typeutils.base.MapSerializer;
 import org.apache.flink.api.java.typeutils.runtime.DataInputViewStream;
@@ -184,7 +179,7 @@ class ChangelogBackendLogApplier {
                         meta.getName(),
                         ((ListSerializer) meta.getStateSerializer()).getElementSerializer());
             case AGGREGATING:
-                return new AggregatingStateDescriptor(
+                return new MetricsStateDescriptor(
                         meta.getName(), delegateAggregateFunction(), meta.getStateSerializer());
             case REDUCING:
                 return new ReducingStateDescriptor(

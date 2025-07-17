@@ -36,7 +36,7 @@ import org.apache.flink.runtime.throughput.BufferDebloatConfiguration;
 import org.apache.flink.runtime.throughput.BufferDebloater;
 import org.apache.flink.runtime.throughput.ThroughputCalculator;
 import org.apache.flink.util.clock.SystemClock;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -75,7 +75,7 @@ public class SingleInputGateBuilder {
     @Nullable
     private BiFunction<InputChannelBuilder, SingleInputGate, InputChannel> channelFactory = null;
 
-    private SupplierWithException<BufferPool, IOException> bufferPoolFactory = NoOpBufferPool::new;
+    private SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory = NoOpBufferPool::new;
     private BufferDebloatConfiguration bufferDebloatConfiguration =
             BufferDebloatConfiguration.fromConfiguration(new Configuration());
     private Function<BufferDebloatConfiguration, ThroughputCalculator> createThroughputCalculator =

@@ -41,7 +41,7 @@ import org.apache.flink.streaming.api.operators.BoundedOneInput;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -73,7 +73,7 @@ public class CompactOperator<T> extends AbstractStreamOperator<PartitionCommitIn
 
     public static final String COMPACTED_PREFIX = "compacted-";
 
-    private final SupplierWithException<FileSystem, IOException> fsFactory;
+    private final SupplierWithMetrics<FileSystem, IOException> fsFactory;
     private final CompactReader.Factory<T> readerFactory;
     private final CompactWriter.Factory<T> writerFactory;
 
@@ -86,7 +86,7 @@ public class CompactOperator<T> extends AbstractStreamOperator<PartitionCommitIn
     private transient Set<String> partitions;
 
     public CompactOperator(
-            SupplierWithException<FileSystem, IOException> fsFactory,
+            SupplierWithMetrics<FileSystem, IOException> fsFactory,
             CompactReader.Factory<T> readerFactory,
             CompactWriter.Factory<T> writerFactory) {
         this.fsFactory = fsFactory;

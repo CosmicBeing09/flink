@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.VoidNamespace;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +35,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link LatencyTrackingMapState}. */
-class LatencyTrackingMapStateTest extends LatencyTrackingStateTestBase<Integer> {
+/** Tests for {@link MetricsTrackingMapState}. */
+class MetricsTrackingMapStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
     MapStateDescriptor<Integer, Double> getStateDescriptor() {
@@ -58,11 +58,11 @@ class LatencyTrackingMapStateTest extends LatencyTrackingStateTestBase<Integer> 
     void testLatencyTrackingMapState() throws Exception {
         AbstractKeyedStateBackend<Integer> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            LatencyTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState =
-                    (LatencyTrackingMapState)
+            MetricsTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState =
+                    (MetricsTrackingMapState)
                             createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            LatencyTrackingMapState.MapStateLatencyMetrics latencyTrackingStateMetric =
+            MetricsTrackingMapState.MapStateMetrics latencyTrackingStateMetric =
                     latencyTrackingState.getLatencyTrackingStateMetric();
 
             assertThat(latencyTrackingStateMetric.getContainsCount()).isZero();
@@ -130,11 +130,11 @@ class LatencyTrackingMapStateTest extends LatencyTrackingStateTestBase<Integer> 
     void testLatencyTrackingMapStateIterator() throws Exception {
         AbstractKeyedStateBackend<Integer> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            LatencyTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState =
-                    (LatencyTrackingMapState)
+            MetricsTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState =
+                    (MetricsTrackingMapState)
                             createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            LatencyTrackingMapState.MapStateLatencyMetrics latencyTrackingStateMetric =
+            MetricsTrackingMapState.MapStateMetrics latencyTrackingStateMetric =
                     latencyTrackingState.getLatencyTrackingStateMetric();
 
             setCurrentKey(keyedBackend);
@@ -168,9 +168,9 @@ class LatencyTrackingMapStateTest extends LatencyTrackingStateTestBase<Integer> 
     }
 
     private <E> void verifyIterator(
-            LatencyTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState,
-            LatencyTrackingMapState.MapStateLatencyMetrics latencyTrackingStateMetric,
-            SupplierWithException<Iterator<E>, Exception> iteratorSupplier,
+            MetricsTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState,
+            MetricsTrackingMapState.MapStateMetrics latencyTrackingStateMetric,
+            SupplierWithMetrics<Iterator<E>, Exception> iteratorSupplier,
             boolean removeIterator)
             throws Exception {
         ThreadLocalRandom random = ThreadLocalRandom.current();

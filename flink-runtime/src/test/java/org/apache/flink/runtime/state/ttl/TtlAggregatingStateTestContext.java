@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.state.ttl;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.api.common.typeutils.base.LongSerializer;
@@ -50,7 +50,7 @@ class TtlAggregatingStateTestContext
     @Override
     public <US extends State, SV> StateDescriptor<US, SV> createStateDescriptor() {
         return (StateDescriptor<US, SV>)
-                new AggregatingStateDescriptor<>(getName(), AGGREGATE, LongSerializer.INSTANCE);
+                new MetricsStateDescriptor<>(getName(), AGGREGATE, LongSerializer.INSTANCE);
     }
 
     @Override

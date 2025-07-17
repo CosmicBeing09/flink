@@ -65,7 +65,7 @@ import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.NetUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -752,7 +752,7 @@ class JMFailoverITCase {
         }
     }
 
-    private static void tryWaitUntilCondition(SupplierWithException<Boolean, Exception> condition) {
+    private static void tryWaitUntilCondition(SupplierWithMetrics<Boolean, Exception> condition) {
         try {
             CommonTestUtils.waitUntilCondition(condition);
         } catch (Exception exception) {

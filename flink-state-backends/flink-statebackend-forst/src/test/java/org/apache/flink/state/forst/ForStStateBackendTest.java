@@ -37,7 +37,7 @@ import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.TestTemplate;
@@ -63,11 +63,11 @@ class ForStStateBackendTest extends StateBackendTestBase<ForStStateBackend> {
         return Arrays.asList(
                 new Object[][] {
                     {
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 JobManagerCheckpointStorage::new
                     },
                     {
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 () -> {
                                     String checkpointPath =
                                             TempDirUtils.newFolder(tempFolder).toURI().toString();
@@ -78,7 +78,7 @@ class ForStStateBackendTest extends StateBackendTestBase<ForStStateBackend> {
                 });
     }
 
-    @Parameter public SupplierWithException<CheckpointStorage, IOException> storageSupplier;
+    @Parameter public SupplierWithMetrics<CheckpointStorage, IOException> storageSupplier;
 
     @Override
     protected CheckpointStorage getCheckpointStorage() throws Exception {

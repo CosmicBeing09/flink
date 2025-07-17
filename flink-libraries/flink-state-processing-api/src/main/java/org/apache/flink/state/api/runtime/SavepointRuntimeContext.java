@@ -31,7 +31,7 @@ import org.apache.flink.api.common.externalresource.ExternalResourceInfo;
 import org.apache.flink.api.common.functions.BroadcastVariableInitializer;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.KeyedStateStore;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
@@ -213,7 +213,7 @@ public final class SavepointRuntimeContext implements RuntimeContext {
 
     @Override
     public <IN, ACC, OUT> AggregatingState<IN, OUT> getAggregatingState(
-            AggregatingStateDescriptor<IN, ACC, OUT> stateProperties) {
+            MetricsStateDescriptor<IN, ACC, OUT> stateProperties) {
         if (!stateRegistrationAllowed) {
             throw new RuntimeException(REGISTRATION_EXCEPTION_MSG);
         }

@@ -21,7 +21,7 @@ package org.apache.flink.runtime.state.ttl;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.util.FlinkRuntimeException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingConsumer;
 
 import javax.annotation.Nonnull;
@@ -50,7 +50,7 @@ abstract class AbstractTtlState<K, N, SV, TTLSV, S extends InternalKvState<K, N,
     }
 
     <SE extends Throwable, CE extends Throwable, T> T getWithTtlCheckAndUpdate(
-            SupplierWithException<TtlValue<T>, SE> getter,
+            SupplierWithMetrics<TtlValue<T>, SE> getter,
             ThrowingConsumer<TtlValue<T>, CE> updater)
             throws SE, CE {
         return getWithTtlCheckAndUpdate(getter, updater, original::clear);

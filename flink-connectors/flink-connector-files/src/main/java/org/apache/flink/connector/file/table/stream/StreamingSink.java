@@ -42,7 +42,7 @@ import org.apache.flink.streaming.api.functions.sink.filesystem.legacy.Streaming
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.table.catalog.ObjectIdentifier;
 import org.apache.flink.table.connector.ProviderContext;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -101,8 +101,8 @@ public class StreamingSink {
             boolean parallelismConfigured) {
         CompactFileWriter<T> writer = new CompactFileWriter<>(bucketCheckInterval, bucketsBuilder);
 
-        SupplierWithException<FileSystem, IOException> fsSupplier =
-                (SupplierWithException<FileSystem, IOException> & Serializable)
+        SupplierWithMetrics<FileSystem, IOException> fsSupplier =
+                (SupplierWithMetrics<FileSystem, IOException> & Serializable)
                         () -> fsFactory.create(path.toUri());
 
         CompactCoordinator coordinator = new CompactCoordinator(fsSupplier, targetFileSize);
@@ -126,7 +126,7 @@ public class StreamingSink {
 
         CompactWriter.Factory<T> writerFactory =
                 CompactBucketWriter.factory(
-                        (SupplierWithException<BucketWriter<T, String>, IOException> & Serializable)
+                        (SupplierWithMetrics<BucketWriter<T, String>, IOException> & Serializable)
                                 bucketsBuilder::createBucketWriter);
 
         CompactOperator<T> compacter =

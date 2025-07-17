@@ -20,7 +20,7 @@ package org.apache.flink.streaming.api.operators.sorted.state;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -69,7 +69,7 @@ class BatchExecutionKeyAggregatingState<K, N, IN, ACC, OUT>
         return (IS)
                 new BatchExecutionKeyAggregatingState<>(
                         stateDesc.getDefaultValue(),
-                        ((AggregatingStateDescriptor<T, SV, ?>) stateDesc).getAggregateFunction(),
+                        ((MetricsStateDescriptor<T, SV, ?>) stateDesc).getAggregateFunction(),
                         keySerializer,
                         namespaceSerializer,
                         stateDesc.getSerializer());

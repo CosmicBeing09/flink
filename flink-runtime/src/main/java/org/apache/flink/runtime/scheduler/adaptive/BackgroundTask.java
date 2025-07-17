@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
@@ -47,7 +47,7 @@ final class BackgroundTask<T> {
 
     private BackgroundTask(
             CompletableFuture<Void> previousTerminationFuture,
-            SupplierWithException<? extends T, ? extends Exception> task,
+            SupplierWithMetrics<? extends T, ? extends Exception> task,
             Executor executor) {
         resultFuture =
                 previousTerminationFuture.thenApplyAsync(
@@ -101,7 +101,7 @@ final class BackgroundTask<T> {
      * @return new {@link BackgroundTask} representing the new task to execute
      */
     <V> BackgroundTask<V> runAfter(
-            SupplierWithException<? extends V, ? extends Exception> task, Executor executor) {
+            SupplierWithMetrics<? extends V, ? extends Exception> task, Executor executor) {
         return new BackgroundTask<>(terminationFuture, task, executor);
     }
 
@@ -124,7 +124,7 @@ final class BackgroundTask<T> {
      * @return initial {@link BackgroundTask} representing the task to execute
      */
     static <V> BackgroundTask<V> initialBackgroundTask(
-            SupplierWithException<? extends V, ? extends Exception> task, Executor executor) {
+            SupplierWithMetrics<? extends V, ? extends Exception> task, Executor executor) {
         return new BackgroundTask<>(FutureUtils.completedVoidFuture(), task, executor);
     }
 }

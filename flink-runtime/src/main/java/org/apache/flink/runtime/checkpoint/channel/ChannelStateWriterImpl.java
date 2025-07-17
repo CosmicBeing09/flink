@@ -26,7 +26,7 @@ import org.apache.flink.runtime.state.CheckpointStateOutputStream;
 import org.apache.flink.runtime.state.CheckpointStorageWorkerView;
 import org.apache.flink.util.CloseableIterator;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +88,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
             JobVertexID jobVertexID,
             String taskName,
             int subtaskIndex,
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerViewSupplier,
             ChannelStateWriteRequestExecutorFactory channelStateExecutorFactory,
             int maxSubtasksPerChannelStateFile) {
@@ -115,7 +115,7 @@ public class ChannelStateWriterImpl implements ChannelStateWriter {
             JobVertexID jobVertexID,
             String taskName,
             int subtaskIndex,
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerViewSupplier,
             int maxCheckpoints,
             ChannelStateWriteRequestExecutorFactory channelStateExecutorFactory,

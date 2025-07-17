@@ -23,7 +23,7 @@ import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.IllegalConfigurationException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,20 +295,20 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     private FSDataOutputStream createOutputStream(
-            final SupplierWithException<FSDataOutputStream, IOException> streamOpener)
+            final SupplierWithMetrics<FSDataOutputStream, IOException> streamOpener)
             throws IOException {
 
-        final SupplierWithException<OutStream, IOException> wrappedStreamOpener =
+        final SupplierWithMetrics<OutStream, IOException> wrappedStreamOpener =
                 () -> new OutStream(streamOpener.get(), this);
 
         return createStream(wrappedStreamOpener, openOutputStreams, true);
     }
 
     private FSDataInputStream createInputStream(
-            final SupplierWithException<FSDataInputStream, IOException> streamOpener)
+            final SupplierWithMetrics<FSDataInputStream, IOException> streamOpener)
             throws IOException {
 
-        final SupplierWithException<InStream, IOException> wrappedStreamOpener =
+        final SupplierWithMetrics<InStream, IOException> wrappedStreamOpener =
                 () -> new InStream(streamOpener.get(), this);
 
         return createStream(wrappedStreamOpener, openInputStreams, false);
@@ -384,7 +384,7 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     // ------------------------------------------------------------------------
 
     private <T extends StreamWithTimeout> T createStream(
-            final SupplierWithException<T, IOException> streamOpener,
+            final SupplierWithMetrics<T, IOException> streamOpener,
             final HashSet<T> openStreams,
             final boolean output)
             throws IOException {

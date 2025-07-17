@@ -21,7 +21,7 @@
 package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
@@ -34,12 +34,12 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link LatencyTrackingAggregatingState}. */
-class LatencyTrackingAggregatingStateTest extends LatencyTrackingStateTestBase<Integer> {
+/** Tests for {@link MetricsTrackingAggregatingState}. */
+class LatencyTrackingAggregatingStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
-    AggregatingStateDescriptor<Long, Long, Long> getStateDescriptor() {
-        return new AggregatingStateDescriptor<>(
+    MetricsStateDescriptor<Long, Long, Long> getStateDescriptor() {
+        return new MetricsStateDescriptor<>(
                 "aggregate",
                 new AggregateFunction<Long, Long, Long>() {
                     private static final long serialVersionUID = 1L;
@@ -82,12 +82,12 @@ class LatencyTrackingAggregatingStateTest extends LatencyTrackingStateTestBase<I
     void testLatencyTrackingAggregatingState() throws Exception {
         AbstractKeyedStateBackend<Integer> keyedBackend = createKeyedBackend(getKeySerializer());
         try {
-            LatencyTrackingAggregatingState<Integer, VoidNamespace, Long, Long, Long>
+            MetricsTrackingAggregatingState<Integer, VoidNamespace, Long, Long, Long>
                     latencyTrackingState =
-                            (LatencyTrackingAggregatingState)
+                            (MetricsTrackingAggregatingState)
                                     createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            LatencyTrackingAggregatingState.AggregatingStateLatencyMetrics
+            MetricsTrackingAggregatingState.AggregatingStateLatencyMetrics
                     latencyTrackingStateMetric =
                             latencyTrackingState.getLatencyTrackingStateMetric();
 

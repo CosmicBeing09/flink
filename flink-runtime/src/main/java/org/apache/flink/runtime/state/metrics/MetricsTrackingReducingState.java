@@ -30,19 +30,19 @@ import java.util.Collection;
  * @param <N> The type of the namespace
  * @param <T> Type of the user value of state
  */
-class LatencyTrackingReducingState<K, N, T>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                T,
-                InternalReducingState<K, N, T>,
-                LatencyTrackingReducingState.ReducingStateLatencyMetrics>
+class MetricsTrackingReducingState<K, N, T>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        T,
+                        InternalReducingState<K, N, T>,
+                        MetricsTrackingReducingState.ReducingStateLatencyMetrics>
         implements InternalReducingState<K, N, T> {
 
-    LatencyTrackingReducingState(
+    MetricsTrackingReducingState(
             String stateName,
             InternalReducingState<K, N, T> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new ReducingStateLatencyMetrics(
@@ -55,8 +55,8 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public T get() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
-            return trackLatencyWithException(
+        if (metricsTrackingStateMetric.trackLatencyOnGet()) {
+            return trackMetricWithException(
                     () -> original.get(), ReducingStateLatencyMetrics.REDUCING_STATE_GET_LATENCY);
         } else {
             return original.get();
@@ -65,7 +65,7 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public void add(T value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAdd()) {
+        if (metricsTrackingStateMetric.trackLatencyOnAdd()) {
             trackLatencyWithException(
                     () -> original.add(value),
                     ReducingStateLatencyMetrics.REDUCING_STATE_ADD_LATENCY);
@@ -86,7 +86,7 @@ class LatencyTrackingReducingState<K, N, T>
 
     @Override
     public void mergeNamespaces(N target, Collection<N> sources) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnMergeNamespace()) {
+        if (metricsTrackingStateMetric.trackLatencyOnMergeNamespace()) {
             trackLatencyWithException(
                     () -> original.mergeNamespaces(target, sources),
                     ReducingStateLatencyMetrics.REDUCING_STATE_MERGE_NAMESPACES_LATENCY);
@@ -95,7 +95,7 @@ class LatencyTrackingReducingState<K, N, T>
         }
     }
 
-    protected static class ReducingStateLatencyMetrics extends StateLatencyMetricBase {
+    protected static class ReducingStateLatencyMetrics extends StateMetricBase {
         private static final String REDUCING_STATE_GET_LATENCY = "reducingStateGetLatency";
         private static final String REDUCING_STATE_ADD_LATENCY = "reducingStateAddLatency";
         private static final String REDUCING_STATE_MERGE_NAMESPACES_LATENCY =

@@ -21,14 +21,14 @@ package org.apache.flink.runtime.state.metrics;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.runtime.state.internal.InternalKvState;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import java.io.IOException;
 import java.util.function.Supplier;
 
 /**
- * Abstract implementation of latency tracking state.
+ * Abstract implementation of metric tracking state.
  *
  * @param <K> The type of key the state is associated to
  * @param <N> The type of the namespace
@@ -36,16 +36,16 @@ import java.util.function.Supplier;
  * @param <S> Type of the internal kv state
  * @param <LSM> Type of the latency tracking state metrics
  */
-class AbstractLatencyTrackState<
-                K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateLatencyMetricBase>
+class AbstractMetricsTrackState<
+                K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateMetricBase>
         implements InternalKvState<K, N, V> {
 
     protected S original;
-    protected LSM latencyTrackingStateMetric;
+    protected LSM metricsTrackingStateMetric;
 
-    AbstractLatencyTrackState(S original, LSM latencyTrackingStateMetric) {
+    AbstractMetricsTrackState(S original, LSM latencyTrackingStateMetric) {
         this.original = original;
-        this.latencyTrackingStateMetric = latencyTrackingStateMetric;
+        this.metricsTrackingStateMetric = latencyTrackingStateMetric;
     }
 
     @Override
@@ -90,8 +90,8 @@ class AbstractLatencyTrackState<
 
     @Override
     public void clear() {
-        if (latencyTrackingStateMetric.trackLatencyOnClear()) {
-            trackLatency(original::clear, StateLatencyMetricBase.STATE_CLEAR_LATENCY);
+        if (metricsTrackingStateMetric.trackLatencyOnClear()) {
+            trackLatency(original::clear, StateMetricBase.STATE_CLEAR_LATENCY);
         } else {
             original.clear();
         }
@@ -101,17 +101,17 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
     protected <T> T trackLatencyWithIOException(
-            SupplierWithException<T, IOException> supplier, String latencyLabel)
+            SupplierWithMetrics<T, IOException> supplier, String latencyLabel)
             throws IOException {
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
@@ -120,15 +120,15 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
-    protected <T> T trackLatencyWithException(
-            SupplierWithException<T, Exception> supplier, String latencyLabel) throws Exception {
+    protected <T> T trackMetricWithException(
+            SupplierWithMetrics<T, Exception> supplier, String latencyLabel) throws Exception {
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
@@ -137,18 +137,18 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
     protected void trackLatency(Runnable runnable, String latencyLabel) {
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
     @VisibleForTesting
     LSM getLatencyTrackingStateMetric() {
-        return latencyTrackingStateMetric;
+        return metricsTrackingStateMetric;
     }
 }

@@ -36,7 +36,7 @@ import org.apache.flink.runtime.io.network.util.TestBufferFactory;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.throughput.ThroughputCalculator;
 import org.apache.flink.util.clock.SystemClock;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 
@@ -350,7 +350,7 @@ public class InputGateFairnessTest {
 
     private static class FairnessVerifyingInputGate extends SingleInputGate {
         private static final int BUFFER_SIZE = 32 * 1024;
-        private static final SupplierWithException<BufferPool, IOException>
+        private static final SupplierWithMetrics<BufferPool, IOException>
                 STUB_BUFFER_POOL_FACTORY = NoOpBufferPool::new;
 
         private final PrioritizedDeque<InputChannel> channelsWithData;

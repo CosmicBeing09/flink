@@ -24,7 +24,7 @@ import org.apache.flink.runtime.state.RetrievableStateHandle;
 import org.apache.flink.util.function.BiFunctionWithException;
 import org.apache.flink.util.function.FunctionWithException;
 import org.apache.flink.util.function.RunnableWithException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingConsumer;
 
 import javax.annotation.Nullable;
@@ -48,9 +48,9 @@ public class TestingStateHandleStore<T extends Serializable>
             replaceConsumer;
     private final FunctionWithException<String, IntegerResourceVersion, Exception> existsFunction;
     private final FunctionWithException<String, RetrievableStateHandle<T>, Exception> getFunction;
-    private final SupplierWithException<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
+    private final SupplierWithMetrics<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
             getAllSupplier;
-    private final SupplierWithException<Collection<String>, Exception> getAllHandlesSupplier;
+    private final SupplierWithMetrics<Collection<String>, Exception> getAllHandlesSupplier;
     private final FunctionWithException<String, Boolean, Exception> removeFunction;
     private final RunnableWithException clearEntriesRunnable;
     private final ThrowingConsumer<String, Exception> releaseConsumer;
@@ -61,9 +61,9 @@ public class TestingStateHandleStore<T extends Serializable>
             ThrowingConsumer<Tuple3<String, IntegerResourceVersion, T>, Exception> replaceConsumer,
             FunctionWithException<String, IntegerResourceVersion, Exception> existsFunction,
             FunctionWithException<String, RetrievableStateHandle<T>, Exception> getFunction,
-            SupplierWithException<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
+            SupplierWithMetrics<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
                     getAllSupplier,
-            SupplierWithException<Collection<String>, Exception> getAllHandlesSupplier,
+            SupplierWithMetrics<Collection<String>, Exception> getAllHandlesSupplier,
             FunctionWithException<String, Boolean, Exception> removeFunction,
             RunnableWithException clearEntriesRunnable,
             ThrowingConsumer<String, Exception> releaseConsumer,
@@ -148,9 +148,9 @@ public class TestingStateHandleStore<T extends Serializable>
                 ignore -> IntegerResourceVersion.notExisting();
         private FunctionWithException<String, RetrievableStateHandle<T>, Exception> getFunction =
                 ignore -> null;
-        private SupplierWithException<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
+        private SupplierWithMetrics<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
                 getAllSupplier = Collections::emptyList;
-        private SupplierWithException<Collection<String>, Exception> getAllHandlesSupplier =
+        private SupplierWithMetrics<Collection<String>, Exception> getAllHandlesSupplier =
                 Collections::emptyList;
         private FunctionWithException<String, Boolean, Exception> removeFunction = ignore -> false;
         private RunnableWithException clearEntriesRunnable = () -> {};
@@ -187,14 +187,14 @@ public class TestingStateHandleStore<T extends Serializable>
         }
 
         public Builder<T> setGetAllSupplier(
-                SupplierWithException<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
+                SupplierWithMetrics<List<Tuple2<RetrievableStateHandle<T>, String>>, Exception>
                         getAllSupplier) {
             this.getAllSupplier = getAllSupplier;
             return this;
         }
 
         public Builder<T> setGetAllHandlesSupplier(
-                SupplierWithException<Collection<String>, Exception> getAllHandlesSupplier) {
+                SupplierWithMetrics<Collection<String>, Exception> getAllHandlesSupplier) {
             this.getAllHandlesSupplier = getAllHandlesSupplier;
             return this;
         }

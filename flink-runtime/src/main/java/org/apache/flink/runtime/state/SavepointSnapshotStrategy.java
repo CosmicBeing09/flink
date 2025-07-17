@@ -21,7 +21,7 @@ package org.apache.flink.runtime.state;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.SavepointType;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,7 +75,7 @@ public class SavepointSnapshotStrategy<K>
             return registry -> SnapshotResult.empty();
         }
 
-        final SupplierWithException<CheckpointStreamWithResultProvider, Exception>
+        final SupplierWithMetrics<CheckpointStreamWithResultProvider, Exception>
                 checkpointStreamSupplier = () -> createSimpleStream(streamFactory);
 
         return new FullSnapshotAsyncWriter<>(

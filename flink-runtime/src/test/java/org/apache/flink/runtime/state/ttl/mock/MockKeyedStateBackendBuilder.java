@@ -28,7 +28,7 @@ import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.StateSnapshotTransformer;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.runtime.state.ttl.mock.MockKeyedStateBackend.MockSnapshotSupplier;
 
@@ -55,7 +55,7 @@ public class MockKeyedStateBackendBuilder<K> extends AbstractKeyedStateBackendBu
             KeyGroupRange keyGroupRange,
             ExecutionConfig executionConfig,
             TtlTimeProvider ttlTimeProvider,
-            LatencyTrackingStateConfig latencyTrackingStateConfig,
+            MetricsTrackingStateConfig metricsTrackingStateConfig,
             @Nonnull Collection<KeyedStateHandle> stateHandles,
             StreamCompressionDecorator keyGroupCompressionDecorator,
             CloseableRegistry cancelStreamRegistry,
@@ -68,7 +68,7 @@ public class MockKeyedStateBackendBuilder<K> extends AbstractKeyedStateBackendBu
                 keyGroupRange,
                 executionConfig,
                 ttlTimeProvider,
-                latencyTrackingStateConfig,
+                metricsTrackingStateConfig,
                 stateHandles,
                 keyGroupCompressionDecorator,
                 cancelStreamRegistry);
@@ -88,7 +88,7 @@ public class MockKeyedStateBackendBuilder<K> extends AbstractKeyedStateBackendBu
                 userCodeClassLoader,
                 executionConfig,
                 ttlTimeProvider,
-                latencyTrackingStateConfig,
+                metricsTrackingStateConfig,
                 stateValues,
                 stateSnapshotFilters,
                 cancelStreamRegistry,

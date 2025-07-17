@@ -36,7 +36,7 @@ import org.apache.flink.runtime.shuffle.ShuffleDescriptor;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.ProcessorArchitecture;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -159,7 +159,7 @@ public class ResultPartitionFactory {
             int maxParallelism,
             boolean isBroadcast,
             ShuffleDescriptor shuffleDescriptor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory,
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory,
             boolean isNumberOfPartitionConsumerUndefined) {
         BufferCompressor bufferCompressor = null;
         if (type.supportCompression() && batchShuffleCompressionEnabled) {
@@ -343,7 +343,7 @@ public class ResultPartitionFactory {
      * regression if processing input is based on at-least one buffer available on output side.
      */
     @VisibleForTesting
-    SupplierWithException<BufferPool, IOException> createBufferPoolFactory(
+    SupplierWithMetrics<BufferPool, IOException> createBufferPoolFactory(
             int numberOfSubpartitions, ResultPartitionType type) {
         boolean enableTieredStorage = tieredResultPartitionFactory != null;
         int tieredStorageExclusiveBuffers =

@@ -24,12 +24,8 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.AppendingState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.State;
-import org.apache.flink.api.common.state.StateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.v2.StateFuture;
 import org.apache.flink.api.common.state.v2.StateIterator;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -297,8 +293,8 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new InternalIterableWindowFunction<>(
                             new AggregateApplyWindowFunction<>(aggregateFunction, windowFunction)));
         } else {
-            AggregatingStateDescriptor<T, ACC, V> stateDesc =
-                    new AggregatingStateDescriptor<>(
+            MetricsStateDescriptor<T, ACC, V> stateDesc =
+                    new MetricsStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             aggregateFunction,
                             accumulatorType.createSerializer(config.getSerializerConfig()));
@@ -355,8 +351,8 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new InternalAggregateProcessWindowFunction<>(
                             aggregateFunction, windowFunction));
         } else {
-            AggregatingStateDescriptor<T, ACC, V> stateDesc =
-                    new AggregatingStateDescriptor<>(
+            MetricsStateDescriptor<T, ACC, V> stateDesc =
+                    new MetricsStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             aggregateFunction,
                             accumulatorType.createSerializer(config.getSerializerConfig()));

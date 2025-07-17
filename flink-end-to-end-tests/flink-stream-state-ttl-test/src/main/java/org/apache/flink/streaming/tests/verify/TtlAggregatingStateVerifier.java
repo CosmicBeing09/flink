@@ -20,7 +20,7 @@ package org.apache.flink.streaming.tests.verify;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
@@ -33,14 +33,14 @@ import java.util.List;
 
 class TtlAggregatingStateVerifier
         extends AbstractTtlStateVerifier<
-                AggregatingStateDescriptor<Integer, Long, String>,
+        MetricsStateDescriptor<Integer, Long, String>,
                 AggregatingState<Integer, String>,
                 Long,
                 Integer,
                 String> {
     TtlAggregatingStateVerifier() {
         super(
-                new AggregatingStateDescriptor<>(
+                new MetricsStateDescriptor<>(
                         TtlAggregatingStateVerifier.class.getSimpleName(),
                         AGG_FUNC,
                         LongSerializer.INSTANCE));

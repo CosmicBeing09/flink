@@ -55,7 +55,7 @@ import org.apache.flink.runtime.throughput.BufferDebloatConfiguration;
 import org.apache.flink.runtime.throughput.BufferDebloater;
 import org.apache.flink.runtime.throughput.ThroughputCalculator;
 import org.apache.flink.util.clock.SystemClock;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -158,7 +158,7 @@ public class SingleInputGateFactory {
                         igdd.getConsumedPartitionType(),
                         igdd.getNumConsumedShuffleDescriptors(),
                         tieredStorageConfiguration != null);
-        SupplierWithException<BufferPool, IOException> bufferPoolFactory =
+        SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory =
                 createBufferPoolFactory(
                         networkBufferPool,
                         gateBuffersSpec.getRequiredFloatingBuffers(),
@@ -393,7 +393,7 @@ public class SingleInputGateFactory {
     }
 
     @VisibleForTesting
-    static SupplierWithException<BufferPool, IOException> createBufferPoolFactory(
+    static SupplierWithMetrics<BufferPool, IOException> createBufferPoolFactory(
             BufferPoolFactory bufferPoolFactory,
             int minFloatingBuffersPerGate,
             int maxFloatingBuffersPerGate) {

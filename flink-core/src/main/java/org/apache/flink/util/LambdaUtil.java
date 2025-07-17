@@ -18,7 +18,7 @@
 
 package org.apache.flink.util;
 
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingConsumer;
 import org.apache.flink.util.function.ThrowingRunnable;
 
@@ -88,7 +88,7 @@ public final class LambdaUtil {
      * what it was before after the runnable completed.
      */
     public static <R, E extends Throwable> R withContextClassLoader(
-            final ClassLoader cl, final SupplierWithException<R, E> s) throws E {
+            final ClassLoader cl, final SupplierWithMetrics<R, E> s) throws E {
 
         try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(cl)) {
             return s.get();

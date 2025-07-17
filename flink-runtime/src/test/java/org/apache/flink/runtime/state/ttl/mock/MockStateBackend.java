@@ -33,7 +33,7 @@ import org.apache.flink.runtime.state.SnapshotResources;
 import org.apache.flink.runtime.state.SnapshotResult;
 import org.apache.flink.runtime.state.SnapshotStrategy;
 import org.apache.flink.runtime.state.SnapshotStrategyRunner;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.mock.MockKeyedStateBackend.MockSnapshotSupplier;
 
 import javax.annotation.Nonnull;
@@ -64,7 +64,7 @@ public class MockStateBackend extends AbstractStateBackend {
                         parameters.getKeyGroupRange(),
                         parameters.getEnv().getExecutionConfig(),
                         parameters.getTtlTimeProvider(),
-                        LatencyTrackingStateConfig.disabled(),
+                        MetricsTrackingStateConfig.disabled(),
                         parameters.getStateHandles(),
                         AbstractStateBackend.getCompressionDecorator(
                                 parameters.getEnv().getExecutionConfig()),

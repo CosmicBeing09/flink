@@ -26,7 +26,7 @@ import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.TestTemplate;
@@ -51,11 +51,11 @@ public class HashMapStateBackendTest extends StateBackendTestBase<HashMapStateBa
         return Arrays.asList(
                 new Object[][] {
                     {
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 JobManagerCheckpointStorage::new
                     },
                     {
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 () -> {
                                     String checkpointPath =
                                             TempDirUtils.newFolder(tempFolder).toURI().toString();
@@ -66,7 +66,7 @@ public class HashMapStateBackendTest extends StateBackendTestBase<HashMapStateBa
                 });
     }
 
-    @Parameter public SupplierWithException<CheckpointStorage, IOException> storageSupplier;
+    @Parameter public SupplierWithMetrics<CheckpointStorage, IOException> storageSupplier;
 
     @Override
     protected ConfigurableStateBackend getStateBackend() {

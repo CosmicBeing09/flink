@@ -37,7 +37,7 @@ import org.apache.flink.runtime.rest.HttpHeader;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkUserCodeClassLoaders;
 import org.apache.flink.util.SerializedThrowable;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -122,8 +122,8 @@ public enum ClientUtils {
      * @throws JobInitializationException If the initialization failed
      */
     public static void waitUntilJobInitializationFinished(
-            SupplierWithException<JobStatus, Exception> jobStatusSupplier,
-            SupplierWithException<JobResult, Exception> jobResultSupplier,
+            SupplierWithMetrics<JobStatus, Exception> jobStatusSupplier,
+            SupplierWithMetrics<JobResult, Exception> jobResultSupplier,
             ClassLoader userCodeClassloader)
             throws JobInitializationException {
         LOG.debug("Wait until job initialization is finished");

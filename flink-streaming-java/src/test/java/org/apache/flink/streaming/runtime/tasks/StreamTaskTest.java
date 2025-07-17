@@ -147,7 +147,7 @@ import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.concurrent.TestingUncaughtExceptionHandler;
 import org.apache.flink.util.function.BiConsumerWithException;
 import org.apache.flink.util.function.RunnableWithException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -1735,7 +1735,7 @@ public class StreamTaskTest {
                     mockEnvironment.getMetricGroup().getIOMetricGroup().getMailboxLatency();
             AtomicInteger maxMailboxSize = new AtomicInteger(-1);
             final int minMeasurements = 2;
-            SupplierWithException<StreamTask, Exception> task =
+            SupplierWithMetrics<StreamTask, Exception> task =
                     () ->
                             new StreamTask<Object, StreamOperator<Object>>(mockEnvironment) {
                                 @Override
@@ -1974,7 +1974,7 @@ public class StreamTaskTest {
     }
 
     private static <T extends StreamTask<?, ?>> RunningTask<T> runTask(
-            SupplierWithException<T, Exception> taskFactory) throws Exception {
+            SupplierWithMetrics<T, Exception> taskFactory) throws Exception {
         CompletableFuture<T> taskCreationFuture = new CompletableFuture<>();
         CompletableFuture<Void> invocationFuture =
                 CompletableFuture.runAsync(

@@ -25,7 +25,7 @@ import org.apache.flink.runtime.jobmaster.JobMasterGateway;
 import org.apache.flink.runtime.jobmaster.JobMasterId;
 import org.apache.flink.runtime.taskmanager.CheckpointResponder;
 import org.apache.flink.runtime.taskmanager.TaskManagerActions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -59,7 +59,7 @@ public interface JobTable extends AutoCloseable {
      */
     <E extends Exception> Job getOrCreateJob(
             JobID jobId,
-            SupplierWithException<? extends JobTable.JobServices, E> jobServicesSupplier)
+            SupplierWithMetrics<? extends JobServices, E> jobServicesSupplier)
             throws E;
 
     /**

@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.state.ttl.mock;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -53,8 +53,8 @@ class MockInternalAggregatingState<K, N, IN, ACC, OUT>
     @SuppressWarnings({"unchecked", "unused"})
     static <IN, OUT, N, ACC, S extends State, IS extends S> IS createState(
             TypeSerializer<N> namespaceSerializer, StateDescriptor<S, ACC> stateDesc) {
-        AggregatingStateDescriptor<IN, ACC, OUT> aggregatingStateDesc =
-                (AggregatingStateDescriptor<IN, ACC, OUT>) stateDesc;
+        MetricsStateDescriptor<IN, ACC, OUT> aggregatingStateDesc =
+                (MetricsStateDescriptor<IN, ACC, OUT>) stateDesc;
         return (IS) new MockInternalAggregatingState<>(aggregatingStateDesc.getAggregateFunction());
     }
 }

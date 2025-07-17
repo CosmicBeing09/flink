@@ -19,28 +19,28 @@
 package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.StateLatencyTrackOptions;
+import org.apache.flink.configuration.StateMetricsOptions;
 import org.apache.flink.metrics.groups.UnregisteredMetricsGroup;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link LatencyTrackingStateConfig}. */
-class LatencyTrackingStateConfigTest {
+/** Tests for {@link MetricsTrackingStateConfig}. */
+class MetricsTrackingStateConfigTest {
 
     @Test
     void testDefaultDisabledLatencyTrackingStateConfig() {
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
-                LatencyTrackingStateConfig.newBuilder().build();
-        assertThat(latencyTrackingStateConfig.isEnabled()).isFalse();
+        MetricsTrackingStateConfig metricsTrackingStateConfig =
+                MetricsTrackingStateConfig.newBuilder().build();
+        assertThat(metricsTrackingStateConfig.isEnabled()).isFalse();
     }
 
     @Test
     void testDefaultEnabledLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
-                LatencyTrackingStateConfig.newBuilder()
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
+                MetricsTrackingStateConfig.newBuilder()
                         .setEnabled(true)
                         .setMetricGroup(metricsGroup)
                         .build();
@@ -48,22 +48,22 @@ class LatencyTrackingStateConfigTest {
         assertThat(latencyTrackingStateConfig.getSampleInterval())
                 .isEqualTo(
                         (int)
-                                StateLatencyTrackOptions.LATENCY_TRACK_SAMPLE_INTERVAL
+                                StateMetricsOptions.LATENCY_TRACK_SAMPLE_INTERVAL
                                         .defaultValue());
         assertThat(latencyTrackingStateConfig.getHistorySize())
                 .isEqualTo(
-                        (long) StateLatencyTrackOptions.LATENCY_TRACK_HISTORY_SIZE.defaultValue());
+                        (long) StateMetricsOptions.LATENCY_TRACK_HISTORY_SIZE.defaultValue());
         assertThat(latencyTrackingStateConfig.isStateNameAsVariable())
                 .isEqualTo(
-                        StateLatencyTrackOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE
+                        StateMetricsOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE
                                 .defaultValue());
     }
 
     @Test
     void testSetLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
-                LatencyTrackingStateConfig.newBuilder()
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
+                MetricsTrackingStateConfig.newBuilder()
                         .setMetricGroup(metricsGroup)
                         .setEnabled(true)
                         .setSampleInterval(10)
@@ -76,12 +76,12 @@ class LatencyTrackingStateConfigTest {
 
     @Test
     void testConfigureFromReadableConfig() {
-        LatencyTrackingStateConfig.Builder builder = LatencyTrackingStateConfig.newBuilder();
+        MetricsTrackingStateConfig.Builder builder = MetricsTrackingStateConfig.newBuilder();
         Configuration configuration = new Configuration();
-        configuration.set(StateLatencyTrackOptions.LATENCY_TRACK_ENABLED, true);
-        configuration.set(StateLatencyTrackOptions.LATENCY_TRACK_SAMPLE_INTERVAL, 10);
-        configuration.set(StateLatencyTrackOptions.LATENCY_TRACK_HISTORY_SIZE, 500);
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
+        configuration.set(StateMetricsOptions.LATENCY_TRACK_ENABLED, true);
+        configuration.set(StateMetricsOptions.LATENCY_TRACK_SAMPLE_INTERVAL, 10);
+        configuration.set(StateMetricsOptions.LATENCY_TRACK_HISTORY_SIZE, 500);
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
                 builder.configure(configuration)
                         .setMetricGroup(new UnregisteredMetricsGroup())
                         .build();

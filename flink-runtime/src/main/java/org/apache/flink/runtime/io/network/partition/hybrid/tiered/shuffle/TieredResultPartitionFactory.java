@@ -43,7 +43,7 @@ import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierFact
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierProducerAgent;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.TierShuffleDescriptor;
 import org.apache.flink.runtime.io.network.partition.hybrid.tiered.tier.memory.MemoryTierFactory;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -96,7 +96,7 @@ public class TieredResultPartitionFactory {
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
             List<TierShuffleDescriptor> tierShuffleDescriptors,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory,
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory,
             FileChannelManager fileChannelManager,
             BatchShuffleReadBufferPool batchShuffleReadBufferPool,
             ScheduledExecutorService batchShuffleReadIOExecutor,

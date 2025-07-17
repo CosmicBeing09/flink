@@ -31,18 +31,18 @@ import java.io.IOException;
  * @param <T> Type of the user value of state
  */
 class LatencyTrackingValueState<K, N, T>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                T,
-                InternalValueState<K, N, T>,
-                LatencyTrackingValueState.ValueStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        T,
+                        InternalValueState<K, N, T>,
+                        LatencyTrackingValueState.ValueStateLatencyMetrics>
         implements InternalValueState<K, N, T> {
 
     public LatencyTrackingValueState(
             String stateName,
             InternalValueState<K, N, T> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new ValueStateLatencyMetrics(
@@ -55,7 +55,7 @@ class LatencyTrackingValueState<K, N, T>
 
     @Override
     public T value() throws IOException {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (metricsTrackingStateMetric.trackLatencyOnGet()) {
             return trackLatencyWithIOException(
                     () -> original.value(), ValueStateLatencyMetrics.VALUE_STATE_GET_LATENCY);
         } else {
@@ -65,7 +65,7 @@ class LatencyTrackingValueState<K, N, T>
 
     @Override
     public void update(T value) throws IOException {
-        if (latencyTrackingStateMetric.trackLatencyOnUpdate()) {
+        if (metricsTrackingStateMetric.trackLatencyOnUpdate()) {
             trackLatencyWithIOException(
                     () -> original.update(value),
                     ValueStateLatencyMetrics.VALUE_STATE_UPDATE_LATENCY);
@@ -74,7 +74,7 @@ class LatencyTrackingValueState<K, N, T>
         }
     }
 
-    static class ValueStateLatencyMetrics extends StateLatencyMetricBase {
+    static class ValueStateLatencyMetrics extends StateMetricBase {
         private static final String VALUE_STATE_GET_LATENCY = "valueStateGetLatency";
         private static final String VALUE_STATE_UPDATE_LATENCY = "valueStateUpdateLatency";
 

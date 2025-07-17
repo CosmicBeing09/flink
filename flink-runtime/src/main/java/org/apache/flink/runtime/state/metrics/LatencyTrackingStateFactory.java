@@ -28,25 +28,25 @@ import org.apache.flink.runtime.state.internal.InternalMapState;
 import org.apache.flink.runtime.state.internal.InternalReducingState;
 import org.apache.flink.runtime.state.internal.InternalValueState;
 import org.apache.flink.util.FlinkRuntimeException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/** Factory to create {@link AbstractLatencyTrackState}. */
+/** Factory to create {@link AbstractMetricsTrackState}. */
 public class LatencyTrackingStateFactory<
         K, N, V, S extends State, IS extends InternalKvState<K, N, ?>> {
 
     private final InternalKvState<K, N, ?> kvState;
     private final StateDescriptor<S, V> stateDescriptor;
-    private final LatencyTrackingStateConfig latencyTrackingStateConfig;
-    private final Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> stateFactories;
+    private final MetricsTrackingStateConfig latencyTrackingStateConfig;
+    private final Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> stateFactories;
 
     private LatencyTrackingStateFactory(
             InternalKvState<K, N, ?> kvState,
             StateDescriptor<S, V> stateDescriptor,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         this.kvState = kvState;
         this.stateDescriptor = stateDescriptor;
         this.latencyTrackingStateConfig = latencyTrackingStateConfig;
@@ -58,7 +58,7 @@ public class LatencyTrackingStateFactory<
             InternalKvState<K, N, ?> createStateAndWrapWithLatencyTrackingIfEnabled(
                     InternalKvState<K, N, ?> kvState,
                     StateDescriptor<S, V> stateDescriptor,
-                    LatencyTrackingStateConfig latencyTrackingStateConfig)
+                    MetricsTrackingStateConfig latencyTrackingStateConfig)
                     throws Exception {
         if (latencyTrackingStateConfig.isEnabled()) {
             return new LatencyTrackingStateFactory<>(
@@ -68,29 +68,29 @@ public class LatencyTrackingStateFactory<
         return kvState;
     }
 
-    private Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> createStateFactories() {
+    private Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> createStateFactories() {
         return Stream.of(
                         Tuple2.of(
                                 StateDescriptor.Type.VALUE,
-                                (SupplierWithException<IS, Exception>) this::createValueState),
+                                (SupplierWithMetrics<IS, Exception>) this::createValueState),
                         Tuple2.of(
                                 StateDescriptor.Type.LIST,
-                                (SupplierWithException<IS, Exception>) this::createListState),
+                                (SupplierWithMetrics<IS, Exception>) this::createListState),
                         Tuple2.of(
                                 StateDescriptor.Type.MAP,
-                                (SupplierWithException<IS, Exception>) this::createMapState),
+                                (SupplierWithMetrics<IS, Exception>) this::createMapState),
                         Tuple2.of(
                                 StateDescriptor.Type.REDUCING,
-                                (SupplierWithException<IS, Exception>) this::createReducingState),
+                                (SupplierWithMetrics<IS, Exception>) this::createReducingState),
                         Tuple2.of(
                                 StateDescriptor.Type.AGGREGATING,
-                                (SupplierWithException<IS, Exception>)
+                                (SupplierWithMetrics<IS, Exception>)
                                         this::createAggregatingState))
                 .collect(Collectors.toMap(t -> t.f0, t -> t.f1));
     }
 
     private IS createState() throws Exception {
-        SupplierWithException<IS, Exception> stateFactory =
+        SupplierWithMetrics<IS, Exception> stateFactory =
                 stateFactories.get(stateDescriptor.getType());
         if (stateFactory == null) {
             String message =
@@ -123,7 +123,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private <UK, UV> IS createMapState() {
         return (IS)
-                new LatencyTrackingMapState<>(
+                new MetricsTrackingMapState<>(
                         stateDescriptor.getName(),
                         (InternalMapState<K, N, UK, UV>) kvState,
                         latencyTrackingStateConfig);
@@ -132,7 +132,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private IS createReducingState() {
         return (IS)
-                new LatencyTrackingReducingState<>(
+                new MetricsTrackingReducingState<>(
                         stateDescriptor.getName(),
                         (InternalReducingState<K, N, V>) kvState,
                         latencyTrackingStateConfig);
@@ -141,7 +141,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private <IN, SV, OUT> IS createAggregatingState() {
         return (IS)
-                new LatencyTrackingAggregatingState<>(
+                new MetricsTrackingAggregatingState<>(
                         stateDescriptor.getName(),
                         (InternalAggregatingState<K, N, IN, SV, OUT>) kvState,
                         latencyTrackingStateConfig);

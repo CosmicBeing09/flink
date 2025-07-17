@@ -485,7 +485,7 @@ public class RocksDBKeyedStateBackendBuilder<K> extends AbstractKeyedStateBacken
                 this.keySerializerProvider.currentSchemaSerializer(),
                 this.executionConfig,
                 this.ttlTimeProvider,
-                latencyTrackingStateConfig,
+                metricsTrackingStateConfig,
                 db,
                 kvStateInformation,
                 registeredPQStates,

@@ -21,7 +21,7 @@
 package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
@@ -57,9 +57,9 @@ public class LatencyTrackingStateFactoryTest {
         return Arrays.asList(true, false);
     }
 
-    private LatencyTrackingStateConfig getLatencyTrackingStateConfig() {
+    private MetricsTrackingStateConfig getLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        return LatencyTrackingStateConfig.newBuilder()
+        return MetricsTrackingStateConfig.newBuilder()
                 .setEnabled(enableLatencyTracking)
                 .setMetricGroup(metricsGroup)
                 .build();
@@ -107,7 +107,7 @@ public class LatencyTrackingStateFactoryTest {
                 LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         mapState, mapStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingMapState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingMapState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(mapState);
         }
@@ -123,7 +123,7 @@ public class LatencyTrackingStateFactoryTest {
                 LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         reducingState, reducingStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingReducingState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingReducingState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(reducingState);
         }
@@ -134,8 +134,8 @@ public class LatencyTrackingStateFactoryTest {
     <K, N> void testTrackAggregatingState() throws Exception {
         InternalAggregatingState<K, N, Long, Long, Long> aggregatingState =
                 mock(InternalAggregatingState.class);
-        AggregatingStateDescriptor<Long, Long, Long> aggregatingStateDescriptor =
-                new AggregatingStateDescriptor<>(
+        MetricsStateDescriptor<Long, Long, Long> aggregatingStateDescriptor =
+                new MetricsStateDescriptor<>(
                         "aggregate",
                         new AggregateFunction<Long, Long, Long>() {
                             private static final long serialVersionUID = 1L;
@@ -167,7 +167,7 @@ public class LatencyTrackingStateFactoryTest {
                         aggregatingStateDescriptor,
                         getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingAggregatingState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingAggregatingState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(aggregatingState);
         }

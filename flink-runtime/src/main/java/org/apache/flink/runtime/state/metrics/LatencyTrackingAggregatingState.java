@@ -33,18 +33,18 @@ import java.util.Collection;
  * @param <OUT> Type of the value extracted from the state
  */
 class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
-        extends AbstractLatencyTrackState<
-                K,
-                N,
-                ACC,
-                InternalAggregatingState<K, N, IN, ACC, OUT>,
-                LatencyTrackingAggregatingState.AggregatingStateLatencyMetrics>
+        extends AbstractMetricsTrackState<
+                        K,
+                        N,
+                        ACC,
+                        InternalAggregatingState<K, N, IN, ACC, OUT>,
+                        LatencyTrackingAggregatingState.AggregatingStateLatencyMetrics>
         implements InternalAggregatingState<K, N, IN, ACC, OUT> {
 
     LatencyTrackingAggregatingState(
             String stateName,
             InternalAggregatingState<K, N, IN, ACC, OUT> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new AggregatingStateLatencyMetrics(
@@ -57,8 +57,8 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
 
     @Override
     public OUT get() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
-            return trackLatencyWithException(
+        if (metricsTrackingStateMetric.trackLatencyOnGet()) {
+            return trackMetricWithException(
                     () -> original.get(),
                     AggregatingStateLatencyMetrics.AGGREGATING_STATE_GET_LATENCY);
         } else {
@@ -68,7 +68,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
 
     @Override
     public void add(IN value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnAdd()) {
+        if (metricsTrackingStateMetric.trackLatencyOnAdd()) {
             trackLatencyWithException(
                     () -> original.add(value),
                     AggregatingStateLatencyMetrics.AGGREGATING_STATE_ADD_LATENCY);
@@ -89,7 +89,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
 
     @Override
     public void mergeNamespaces(N target, Collection<N> sources) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnMergeNamespace()) {
+        if (metricsTrackingStateMetric.trackLatencyOnMergeNamespace()) {
             trackLatencyWithException(
                     () -> original.mergeNamespaces(target, sources),
                     AggregatingStateLatencyMetrics.AGGREGATING_STATE_MERGE_NAMESPACES_LATENCY);
@@ -98,7 +98,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
         }
     }
 
-    static class AggregatingStateLatencyMetrics extends StateLatencyMetricBase {
+    static class AggregatingStateLatencyMetrics extends StateMetricBase {
         private static final String AGGREGATING_STATE_GET_LATENCY = "aggregatingStateGetLatency";
         private static final String AGGREGATING_STATE_ADD_LATENCY = "aggregatingStateAddLatency";
         private static final String AGGREGATING_STATE_MERGE_NAMESPACES_LATENCY =

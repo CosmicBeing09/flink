@@ -20,7 +20,7 @@ package org.apache.flink.state.rocksdb;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -176,7 +176,7 @@ class RocksDBAggregatingState<K, N, T, ACC, R>
                         registerResult.f1.getNamespaceSerializer(),
                         registerResult.f1.getStateSerializer(),
                         stateDesc.getDefaultValue(),
-                        ((AggregatingStateDescriptor<?, SV, ?>) stateDesc).getAggregateFunction(),
+                        ((MetricsStateDescriptor<?, SV, ?>) stateDesc).getAggregateFunction(),
                         backend);
     }
 
@@ -189,7 +189,7 @@ class RocksDBAggregatingState<K, N, T, ACC, R>
         return (IS)
                 ((RocksDBAggregatingState<K, N, ?, SV, ?>) existingState)
                         .setAggFunction(
-                                ((AggregatingStateDescriptor) stateDesc).getAggregateFunction())
+                                ((MetricsStateDescriptor) stateDesc).getAggregateFunction())
                         .setNamespaceSerializer(registerResult.f1.getNamespaceSerializer())
                         .setValueSerializer(registerResult.f1.getStateSerializer())
                         .setDefaultValue(stateDesc.getDefaultValue())
