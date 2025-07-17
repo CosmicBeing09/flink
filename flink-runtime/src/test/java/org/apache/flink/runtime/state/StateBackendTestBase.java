@@ -38,7 +38,7 @@ import org.apache.flink.api.java.typeutils.runtime.PojoSerializer;
 import org.apache.flink.api.java.typeutils.runtime.kryo.JavaSerializer;
 import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.StateLatencyTrackOptions;
+import org.apache.flink.configuration.StateMetricsOptions;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 import org.apache.flink.core.testutils.CheckedThread;
@@ -264,7 +264,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     void testEnableStateLatencyTracking() throws Exception {
         ConfigurableStateBackend stateBackend = getStateBackend();
         Configuration config = new Configuration();
-        config.set(StateLatencyTrackOptions.LATENCY_TRACK_ENABLED, true);
+        config.set(StateMetricsOptions.LATENCY_TRACK_ENABLED, true);
         StateBackend configuredBackend =
                 stateBackend.configure(config, Thread.currentThread().getContextClassLoader());
         KeyGroupRange groupRange = new KeyGroupRange(0, 1);

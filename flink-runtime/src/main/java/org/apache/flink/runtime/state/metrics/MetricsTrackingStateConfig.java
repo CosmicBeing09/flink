@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.configuration.StateLatencyTrackOptions;
+import org.apache.flink.configuration.StateMetricsOptions;
 import org.apache.flink.metrics.MetricGroup;
 import org.apache.flink.util.Preconditions;
 
@@ -86,13 +86,13 @@ public class MetricsTrackingStateConfig {
     public static class Builder implements Serializable {
         private static final long serialVersionUID = 1L;
 
-        private boolean enabled = StateLatencyTrackOptions.LATENCY_TRACK_ENABLED.defaultValue();
+        private boolean enabled = StateMetricsOptions.LATENCY_TRACK_ENABLED.defaultValue();
         private int sampleInterval =
-                StateLatencyTrackOptions.LATENCY_TRACK_SAMPLE_INTERVAL.defaultValue();
+                StateMetricsOptions.LATENCY_TRACK_SAMPLE_INTERVAL.defaultValue();
         private int historySize =
-                StateLatencyTrackOptions.LATENCY_TRACK_HISTORY_SIZE.defaultValue();
+                StateMetricsOptions.LATENCY_TRACK_HISTORY_SIZE.defaultValue();
         private boolean stateNameAsVariable =
-                StateLatencyTrackOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE.defaultValue();
+                StateMetricsOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE.defaultValue();
         private MetricGroup metricGroup;
 
         public Builder setEnabled(boolean enabled) {
@@ -121,13 +121,13 @@ public class MetricsTrackingStateConfig {
         }
 
         public Builder configure(ReadableConfig config) {
-            this.setEnabled(config.get(StateLatencyTrackOptions.LATENCY_TRACK_ENABLED))
+            this.setEnabled(config.get(StateMetricsOptions.LATENCY_TRACK_ENABLED))
                     .setSampleInterval(
-                            config.get(StateLatencyTrackOptions.LATENCY_TRACK_SAMPLE_INTERVAL))
-                    .setHistorySize(config.get(StateLatencyTrackOptions.LATENCY_TRACK_HISTORY_SIZE))
+                            config.get(StateMetricsOptions.LATENCY_TRACK_SAMPLE_INTERVAL))
+                    .setHistorySize(config.get(StateMetricsOptions.LATENCY_TRACK_HISTORY_SIZE))
                     .setStateNameAsVariable(
                             config.get(
-                                    StateLatencyTrackOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE));
+                                    StateMetricsOptions.LATENCY_TRACK_STATE_NAME_AS_VARIABLE));
             return this;
         }
 
