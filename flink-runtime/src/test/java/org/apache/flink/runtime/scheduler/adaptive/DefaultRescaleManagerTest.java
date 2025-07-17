@@ -99,7 +99,7 @@ class DefaultRescaleManagerTest {
                 TestingRescaleManagerContext.stableContext().withDesiredRescaling();
         final DefaultRescaleManager testInstance = testInstanceCreator.apply(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertThat(ctx.rescaleWasTriggered())
                 .as(
@@ -115,11 +115,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 softScalePossibleCtx.createTestInstanceInCooldownPhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(softScalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(softScalePossibleCtx);
 
@@ -135,11 +135,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 desiredRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(desiredRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertFinalStateWithRescale(desiredRescalePossibleCtx);
     }
@@ -151,11 +151,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 desiredRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(desiredRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertFinalStateWithRescale(desiredRescalePossibleCtx);
     }
@@ -167,11 +167,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInCooldownPhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(noRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(noRescalePossibleCtx);
 
@@ -196,11 +196,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(noRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(noRescalePossibleCtx);
 
@@ -215,17 +215,17 @@ class DefaultRescaleManagerTest {
     }
 
     @Test
-    void testNoResaleInHardRescalePhase() {
+    void testNoRescaleInHardRescalingPhase() {
         final TestingRescaleManagerContext noRescalePossibleCtx =
                 TestingRescaleManagerContext.stableContext();
         final DefaultRescaleManager testInstance =
                 noRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(noRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertThat(noRescalePossibleCtx.rescaleWasTriggered())
                 .as("No rescaling should have happened even in the hard-rescaling phase.")
@@ -242,11 +242,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInCooldownPhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(hardRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(hardRescalePossibleCtx);
 
@@ -266,11 +266,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInSoftRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(hardRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(hardRescalePossibleCtx);
 
@@ -286,11 +286,11 @@ class DefaultRescaleManagerTest {
         final DefaultRescaleManager testInstance =
                 hardRescalePossibleCtx.createTestInstanceInHardRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(hardRescalePossibleCtx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertFinalStateWithRescale(hardRescalePossibleCtx);
     }
@@ -301,11 +301,11 @@ class DefaultRescaleManagerTest {
                 TestingRescaleManagerContext.stableContext().withSufficientRescaling();
         final DefaultRescaleManager testInstance = ctx.createTestInstanceInCooldownPhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(ctx);
 
@@ -313,11 +313,11 @@ class DefaultRescaleManagerTest {
 
         ctx.withDesiredRescaling();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertThat(ctx.rescaleWasTriggered()).isTrue();
         assertThat(ctx.numberOfTasksWaiting())
@@ -332,11 +332,11 @@ class DefaultRescaleManagerTest {
                 TestingRescaleManagerContext.stableContext().withSufficientRescaling();
         final DefaultRescaleManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(ctx);
 
@@ -347,11 +347,11 @@ class DefaultRescaleManagerTest {
 
         ctx.withDesiredRescaling();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertThat(ctx.rescaleWasTriggered()).isTrue();
     }
@@ -363,11 +363,11 @@ class DefaultRescaleManagerTest {
                 TestingRescaleManagerContext.stableContext().withSufficientRescaling();
         final DefaultRescaleManager testInstance = ctx.createTestInstanceInSoftRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(ctx);
 
@@ -378,11 +378,11 @@ class DefaultRescaleManagerTest {
 
         ctx.revertAnyParallelismImprovements();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertIntermediateStateWithoutRescale(ctx);
 
@@ -404,11 +404,11 @@ class DefaultRescaleManagerTest {
 
         ctx.withSufficientRescaling();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertFinalStateWithRescale(ctx);
     }
@@ -418,22 +418,22 @@ class DefaultRescaleManagerTest {
         final TestingRescaleManagerContext ctx = TestingRescaleManagerContext.stableContext();
         final DefaultRescaleManager testInstance = ctx.createTestInstanceInHardRescalePhase();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertThat(ctx.rescaleWasTriggered()).isFalse();
         assertThat(ctx.additionalTasksWaiting()).isTrue();
 
         ctx.withSufficientRescaling();
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChange();
 
         assertIntermediateStateWithoutRescale(ctx);
 
-        testInstance.onTrigger();
+        testInstance.evaluateRescaleTrigger();
 
         assertFinalStateWithRescale(ctx);
     }
@@ -463,7 +463,7 @@ class DefaultRescaleManagerTest {
     private static class TestingRescaleManagerContext implements RescaleManager.Context {
 
         // default configuration values to allow for easy transitioning between the phases
-        private static final Duration SCALING_MIN = Duration.ofHours(1);
+        private static final Duration DEFAULT_SCALING_INTERVAL_MIN = Duration.ofHours(1);
         private static final Duration SCALING_MAX = Duration.ofHours(2);
 
         // configuration that defines what kind of rescaling would be possible
@@ -580,12 +580,12 @@ class DefaultRescaleManagerTest {
                             // clock that returns the time based on the configured elapsedTime
                             () -> Objects.requireNonNull(initializationTime).plus(elapsedTime),
                             this,
-                            SCALING_MIN,
+                            DEFAULT_SCALING_INTERVAL_MIN,
                             SCALING_MAX,
                             Duration.ofHours(5)) {
                         @Override
-                        public void onChange() {
-                            super.onChange();
+                        public void onEnvironmentChange() {
+                            super.onEnvironmentChange();
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
@@ -593,8 +593,8 @@ class DefaultRescaleManagerTest {
                         }
 
                         @Override
-                        public void onTrigger() {
-                            super.onTrigger();
+                        public void evaluateRescaleTrigger() {
+                            super.evaluateRescaleTrigger();
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
@@ -615,7 +615,7 @@ class DefaultRescaleManagerTest {
          * phase.
          */
         public void transitionIntoCooldownTimeframe() {
-            this.elapsedTime = SCALING_MIN.dividedBy(2);
+            this.elapsedTime = DEFAULT_SCALING_INTERVAL_MIN.dividedBy(2);
             this.triggerOutdatedTasks();
         }
 
@@ -626,7 +626,7 @@ class DefaultRescaleManagerTest {
         public void transitionIntoSoftScalingTimeframe() {
             // the state transition is scheduled based on the current event's time rather than the
             // initializationTime
-            this.elapsedTime = elapsedTime.plus(SCALING_MIN);
+            this.elapsedTime = elapsedTime.plus(DEFAULT_SCALING_INTERVAL_MIN);
 
             // make sure that we're still below the scalingIntervalMax
             this.elapsedTime = elapsedTime.plus(SCALING_MAX.minus(elapsedTime).dividedBy(2));

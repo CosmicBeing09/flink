@@ -25,13 +25,13 @@ import java.time.Instant;
 public interface RescaleManager {
 
     /** Is called if the environment changed in a way that a rescaling could be considered. */
-    void onChange();
+    void onEnvironmentChange();
 
     /**
      * Is called when any previous observed environment changes shall be verified possibly
      * triggering a rescale operation.
      */
-    void onTrigger();
+    void evaluateRescaleTrigger();
 
     /**
      * The interface that can be used by the {@code RescaleManager} to communicate with the
