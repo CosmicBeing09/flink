@@ -148,7 +148,7 @@ public class AdaptiveSchedulerBuilder {
         return this;
     }
 
-    public AdaptiveSchedulerBuilder setCheckpointCleaner(
+    public AdaptiveSchedulerBuilder setCheckpointsCleaner(
             final CheckpointsCleaner checkpointsCleaner) {
         this.checkpointsCleaner = checkpointsCleaner;
         return this;

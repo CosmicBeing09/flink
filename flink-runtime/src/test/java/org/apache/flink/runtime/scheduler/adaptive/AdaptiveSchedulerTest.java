@@ -1126,7 +1126,7 @@ public class AdaptiveSchedulerTest {
                                         singleNoOpJobGraph(),
                                         mainThreadExecutor,
                                         EXECUTOR_RESOURCE.getExecutor())
-                                .setCheckpointCleaner(checkpointsCleaner)
+                                .setCheckpointsCleaner(checkpointsCleaner)
                                 .build());
     }
 
@@ -1804,7 +1804,7 @@ public class AdaptiveSchedulerTest {
         Consumer<AdaptiveSchedulerBuilder> setupScheduler =
                 builder ->
                         builder.setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                                .setCheckpointCleaner(checkpointCleaner);
+                                .setCheckpointsCleaner(checkpointCleaner);
 
         BiConsumer<AdaptiveScheduler, List<ExecutionAttemptID>> testLogic =
                 (scheduler, attemptIds) -> {
@@ -2132,7 +2132,7 @@ public class AdaptiveSchedulerTest {
                                                     .forSingleThreadExecutor(executorService),
                                             EXECUTOR_RESOURCE.getExecutor())
                                     .setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                                    .setCheckpointCleaner(checkpointCleaner)
+                                    .setCheckpointsCleaner(checkpointCleaner)
                                     .build();
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -2849,7 +2849,7 @@ public class AdaptiveSchedulerTest {
                             .setJobMasterConfiguration(configuration)
                             .setDeclarativeSlotPool(declarativeSlotPool)
                             .setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                            .setCheckpointCleaner(checkpointCleaner)
+                            .setCheckpointsCleaner(checkpointCleaner)
                             .setFailureEnrichers(failureEnrichers);
             schedulerModifier.accept(builder);
             final AdaptiveScheduler scheduler = builder.build();
