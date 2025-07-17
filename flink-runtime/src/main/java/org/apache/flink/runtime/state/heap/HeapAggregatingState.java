@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state.heap;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -146,7 +146,7 @@ class HeapAggregatingState<K, N, IN, ACC, OUT> extends AbstractHeapMergingState<
                         stateTable.getStateSerializer(),
                         stateTable.getNamespaceSerializer(),
                         stateDesc.getDefaultValue(),
-                        ((AggregatingStateDescriptor<T, SV, ?>) stateDesc).getAggregateFunction());
+                        ((MetricsStateDescriptor<T, SV, ?>) stateDesc).getAggregateFunction());
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -155,7 +155,7 @@ class HeapAggregatingState<K, N, IN, ACC, OUT> extends AbstractHeapMergingState<
         return (IS)
                 ((HeapAggregatingState<K, N, T, SV, ?>) existingState)
                         .setAggregateFunction(
-                                ((AggregatingStateDescriptor) stateDesc).getAggregateFunction())
+                                ((MetricsStateDescriptor) stateDesc).getAggregateFunction())
                         .setNamespaceSerializer(stateTable.getNamespaceSerializer())
                         .setValueSerializer(stateTable.getStateSerializer())
                         .setDefaultValue(stateDesc.getDefaultValue());

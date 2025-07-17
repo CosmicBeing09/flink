@@ -25,14 +25,8 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.SerializerFactory;
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.StateDescriptor;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
@@ -148,13 +142,13 @@ class StreamingRuntimeContextTest {
         AggregateFunction<String, TaskInfo, String> aggregate =
                 (AggregateFunction<String, TaskInfo, String>) mock(AggregateFunction.class);
 
-        AggregatingStateDescriptor<String, TaskInfo, String> descr =
-                new AggregatingStateDescriptor<>("name", aggregate, TaskInfo.class);
+        MetricsStateDescriptor<String, TaskInfo, String> descr =
+                new MetricsStateDescriptor<>("name", aggregate, TaskInfo.class);
 
         context.getAggregatingState(descr);
 
-        AggregatingStateDescriptor<?, ?, ?> descrIntercepted =
-                (AggregatingStateDescriptor<?, ?, ?>) descriptorCapture.get();
+        MetricsStateDescriptor<?, ?, ?> descrIntercepted =
+                (MetricsStateDescriptor<?, ?, ?>) descriptorCapture.get();
         TypeSerializer<?> serializer = descrIntercepted.getSerializer();
 
         // check that the Path class is really registered, i.e., the execution config was applied

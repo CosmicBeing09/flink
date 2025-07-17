@@ -21,7 +21,7 @@
 package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
@@ -38,8 +38,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LatencyTrackingAggregatingStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
-    AggregatingStateDescriptor<Long, Long, Long> getStateDescriptor() {
-        return new AggregatingStateDescriptor<>(
+    MetricsStateDescriptor<Long, Long, Long> getStateDescriptor() {
+        return new MetricsStateDescriptor<>(
                 "aggregate",
                 new AggregateFunction<Long, Long, Long>() {
                     private static final long serialVersionUID = 1L;

@@ -22,15 +22,8 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.KeyedStateStore;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.State;
-import org.apache.flink.api.common.state.StateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -102,7 +95,7 @@ public class WindowReaderOperator<S extends State, KEY, IN, W extends Window, OU
                     TypeInformation<ACC> accumulatorType) {
 
         StateDescriptor<AggregatingState<T, R>, ACC> descriptor =
-                new AggregatingStateDescriptor<>(WINDOW_STATE_NAME, function, accumulatorType);
+                new MetricsStateDescriptor<>(WINDOW_STATE_NAME, function, accumulatorType);
         return new WindowReaderOperator<>(
                 readerFunction,
                 keyType,

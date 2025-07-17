@@ -20,19 +20,8 @@ package org.apache.flink.runtime.state;
 
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.functions.SerializerFactory;
-import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.KeyedStateStore;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.State;
-import org.apache.flink.api.common.state.StateDescriptor;
-import org.apache.flink.api.common.state.ValueState;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.util.Preconditions;
 
 import javax.annotation.Nonnull;
@@ -117,7 +106,7 @@ public class DefaultKeyedStateStore implements KeyedStateStore {
 
     @Override
     public <IN, ACC, OUT> AggregatingState<IN, OUT> getAggregatingState(
-            AggregatingStateDescriptor<IN, ACC, OUT> stateProperties) {
+            MetricsStateDescriptor<IN, ACC, OUT> stateProperties) {
         requireNonNull(stateProperties, "The state properties must not be null");
         try {
             stateProperties.initializeSerializerUnlessSet(serializerFactory);

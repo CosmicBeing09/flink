@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.CheckpointListener;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
@@ -993,9 +993,9 @@ public abstract class AbstractQueryableStateTestBase {
         DataStream<Tuple2<Integer, Long>> source =
                 env.addSource(new TestAscendingValueSource(numElements));
 
-        final AggregatingStateDescriptor<Tuple2<Integer, Long>, String, String>
+        final MetricsStateDescriptor<Tuple2<Integer, Long>, String, String>
                 aggrStateDescriptor =
-                        new AggregatingStateDescriptor<>("aggregates", new SumAggr(), String.class);
+                        new MetricsStateDescriptor<>("aggregates", new SumAggr(), String.class);
         aggrStateDescriptor.setQueryable("aggr-queryable");
 
         source.keyBy(
@@ -1182,12 +1182,12 @@ public abstract class AbstractQueryableStateTestBase {
 
         private static final long serialVersionUID = 1L;
 
-        private final AggregatingStateDescriptor<Tuple2<Integer, Long>, String, String>
+        private final MetricsStateDescriptor<Tuple2<Integer, Long>, String, String>
                 stateDescriptor;
         private transient AggregatingState<Tuple2<Integer, Long>, String> state;
 
         AggregatingTestOperator(
-                AggregatingStateDescriptor<Tuple2<Integer, Long>, String, String> stateDesc) {
+                MetricsStateDescriptor<Tuple2<Integer, Long>, String, String> stateDesc) {
             this.stateDescriptor = stateDesc;
         }
 

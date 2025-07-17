@@ -21,7 +21,7 @@ package org.apache.flink.queryablestate.client.state;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -35,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /** Tests the {@link ImmutableAggregatingStateTest}. */
 class ImmutableAggregatingStateTest {
 
-    private final AggregatingStateDescriptor<Long, String, String> aggrStateDesc =
-            new AggregatingStateDescriptor<>("test", new SumAggr(), String.class);
+    private final MetricsStateDescriptor<Long, String, String> aggrStateDesc =
+            new MetricsStateDescriptor<>("test", new SumAggr(), String.class);
 
     private AggregatingState<Long, String> aggrState;
 

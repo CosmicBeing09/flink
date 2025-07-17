@@ -33,7 +33,7 @@ import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.RuntimeContext;
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListState;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.MapState;
@@ -220,7 +220,7 @@ public abstract class AbstractRuntimeUDFContext implements RuntimeContext {
     @Override
     @PublicEvolving
     public <IN, ACC, OUT> AggregatingState<IN, OUT> getAggregatingState(
-            AggregatingStateDescriptor<IN, ACC, OUT> stateProperties) {
+            MetricsStateDescriptor<IN, ACC, OUT> stateProperties) {
         throw new UnsupportedOperationException(
                 "This state is only accessible by functions executed on a KeyedStream");
     }

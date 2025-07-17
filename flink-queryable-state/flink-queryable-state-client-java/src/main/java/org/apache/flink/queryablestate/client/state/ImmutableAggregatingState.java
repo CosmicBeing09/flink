@@ -19,7 +19,7 @@
 package org.apache.flink.queryablestate.client.state;
 
 import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
 import org.apache.flink.queryablestate.client.state.serialization.KvStateSerializer;
@@ -32,7 +32,7 @@ import java.io.IOException;
  *
  * <p>This is the type of the result returned when querying Flink's keyed state using the {@link
  * org.apache.flink.queryablestate.client.QueryableStateClient Queryable State Client} and providing
- * an {@link AggregatingStateDescriptor}.
+ * an {@link MetricsStateDescriptor}.
  */
 public final class ImmutableAggregatingState<IN, OUT> extends ImmutableState
         implements AggregatingState<IN, OUT> {
@@ -65,7 +65,7 @@ public final class ImmutableAggregatingState<IN, OUT> extends ImmutableState
                 KvStateSerializer.deserializeValue(
                         serializedState, stateDescriptor.getSerializer());
         final OUT state =
-                ((AggregatingStateDescriptor<?, ACC, OUT>) stateDescriptor)
+                ((MetricsStateDescriptor<?, ACC, OUT>) stateDescriptor)
                         .getAggregateFunction()
                         .getResult(accumulator);
         return (S) new ImmutableAggregatingState<>(state);

@@ -23,7 +23,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -720,8 +720,8 @@ public class AllWindowedStream<T, W extends Window> {
                             lateDataOutputTag);
 
         } else {
-            AggregatingStateDescriptor<T, ACC, V> stateDesc =
-                    new AggregatingStateDescriptor<>(
+            MetricsStateDescriptor<T, ACC, V> stateDesc =
+                    new MetricsStateDescriptor<>(
                             "window-contents",
                             aggregateFunction,
                             accumulatorType.createSerializer(
@@ -895,8 +895,8 @@ public class AllWindowedStream<T, W extends Window> {
                             lateDataOutputTag);
 
         } else {
-            AggregatingStateDescriptor<T, ACC, V> stateDesc =
-                    new AggregatingStateDescriptor<>(
+            MetricsStateDescriptor<T, ACC, V> stateDesc =
+                    new MetricsStateDescriptor<>(
                             "window-contents",
                             aggregateFunction,
                             accumulatorType.createSerializer(

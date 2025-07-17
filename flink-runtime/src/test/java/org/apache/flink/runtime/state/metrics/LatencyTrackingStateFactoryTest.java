@@ -21,7 +21,7 @@
 package org.apache.flink.runtime.state.metrics;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
@@ -134,8 +134,8 @@ public class LatencyTrackingStateFactoryTest {
     <K, N> void testTrackAggregatingState() throws Exception {
         InternalAggregatingState<K, N, Long, Long, Long> aggregatingState =
                 mock(InternalAggregatingState.class);
-        AggregatingStateDescriptor<Long, Long, Long> aggregatingStateDescriptor =
-                new AggregatingStateDescriptor<>(
+        MetricsStateDescriptor<Long, Long, Long> aggregatingStateDescriptor =
+                new MetricsStateDescriptor<>(
                         "aggregate",
                         new AggregateFunction<Long, Long, Long>() {
                             private static final long serialVersionUID = 1L;

@@ -26,7 +26,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * A StateDescriptor for {@link AggregatingState}.
+ * A StateDescriptor for {@link MetricsState}.
  *
  * <p>The type internally stored in the state is the type of the {@code Accumulator} of the {@code
  * AggregateFunction}.
@@ -36,7 +36,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * @param <OUT> The type of the values that are returned from the state.
  */
 @PublicEvolving
-public class AggregatingStateDescriptor<IN, ACC, OUT>
+public class MetricsStateDescriptor<IN, ACC, OUT>
         extends StateDescriptor<AggregatingState<IN, OUT>, ACC> {
     private static final long serialVersionUID = 1L;
 
@@ -54,7 +54,7 @@ public class AggregatingStateDescriptor<IN, ACC, OUT>
      * @param aggFunction The {@code AggregateFunction} used to aggregate the state.
      * @param stateType The type of the accumulator. The accumulator is stored in the state.
      */
-    public AggregatingStateDescriptor(
+    public MetricsStateDescriptor(
             String name, AggregateFunction<IN, ACC, OUT> aggFunction, Class<ACC> stateType) {
 
         super(name, stateType, null);
@@ -68,7 +68,7 @@ public class AggregatingStateDescriptor<IN, ACC, OUT>
      * @param aggFunction The {@code AggregateFunction} used to aggregate the state.
      * @param stateType The type of the accumulator. The accumulator is stored in the state.
      */
-    public AggregatingStateDescriptor(
+    public MetricsStateDescriptor(
             String name,
             AggregateFunction<IN, ACC, OUT> aggFunction,
             TypeInformation<ACC> stateType) {
@@ -85,7 +85,7 @@ public class AggregatingStateDescriptor<IN, ACC, OUT>
      * @param typeSerializer The serializer for the accumulator. The accumulator is stored in the
      *     state.
      */
-    public AggregatingStateDescriptor(
+    public MetricsStateDescriptor(
             String name,
             AggregateFunction<IN, ACC, OUT> aggFunction,
             TypeSerializer<ACC> typeSerializer) {

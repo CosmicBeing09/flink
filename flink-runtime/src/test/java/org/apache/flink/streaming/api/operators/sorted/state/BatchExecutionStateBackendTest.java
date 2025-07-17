@@ -21,16 +21,8 @@ package org.apache.flink.streaming.api.operators.sorted.state;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.ValueState;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
@@ -689,8 +681,8 @@ class BatchExecutionStateBackendTest {
     @Test
     void testAggregatingStateAddAndGetWithMutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         try (CheckpointableKeyedStateBackend<String> keyedBackend =
@@ -732,8 +724,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithMutableAccumulatorOverThreeNamespaces() throws Exception {
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -777,8 +769,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithMutableAccumulatorWithEmpty() throws Exception {
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -820,8 +812,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithMutableAccumulatorEmpty() throws Exception {
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -846,8 +838,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithMutableAccumulatorInTargetNamespace() throws Exception {
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -887,8 +879,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithMutableAccumulatorInASingleNamespace() throws Exception {
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -929,8 +921,8 @@ class BatchExecutionStateBackendTest {
     @Test
     void testAggregatingStateAddAndGetWithImmutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         try (CheckpointableKeyedStateBackend<String> keyedBackend =
@@ -969,8 +961,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithImmutableAccumulatorOverThreeNamespaces() throws Exception {
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;
@@ -1014,8 +1006,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithImmutableAccumulatorWithEmpty() throws Exception {
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;
@@ -1057,8 +1049,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithImmutableAccumulatorEmpty() throws Exception {
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;
@@ -1083,8 +1075,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithImmutableAccumulatorInTargetNamespace() throws Exception {
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;
@@ -1124,8 +1116,8 @@ class BatchExecutionStateBackendTest {
 
     @Test
     void testAggregatingStateMergingWithImmutableAccumulatorInASingleNamespace() throws Exception {
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;

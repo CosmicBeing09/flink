@@ -17,7 +17,7 @@
 
 package org.apache.flink.state.changelog;
 
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.MapStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
@@ -101,7 +101,7 @@ public class ChangelogDelegateStateTest {
     @Test
     public void testDelegatingAggregatingState() throws Exception {
         testDelegatingState(
-                new AggregatingStateDescriptor<>(
+                new MetricsStateDescriptor<>(
                         "my-state",
                         new StateBackendTestBase.MutableAggregatingAddingFunction(),
                         StateBackendTestBase.MutableLong.class),

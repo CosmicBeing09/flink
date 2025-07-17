@@ -26,11 +26,8 @@ import org.apache.flink.api.common.functions.BroadcastVariableInitializer;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RuntimeContext;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.cep.Event;
 import org.apache.flink.cep.functions.PatternProcessFunction;
 import org.apache.flink.cep.nfa.NFA;
@@ -176,7 +173,7 @@ public class CepRuntimeContextTest extends TestLogger {
 
         try {
             runtimeContext.getAggregatingState(
-                    new AggregatingStateDescriptor<>(
+                    new MetricsStateDescriptor<>(
                             "foobar", mock(AggregateFunction.class), Integer.class));
             fail("Expected getAggregatingState to fail with unsupported operation exception.");
         } catch (UnsupportedOperationException e) {

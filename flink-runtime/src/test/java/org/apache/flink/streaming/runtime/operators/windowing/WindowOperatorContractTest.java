@@ -19,12 +19,8 @@
 package org.apache.flink.streaming.runtime.operators.windowing;
 
 import org.apache.flink.api.common.functions.AggregateFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.KeyedStateStore;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.streaming.api.watermark.Watermark;
@@ -3104,18 +3100,18 @@ abstract class WindowOperatorContractTest {
                                                 globalKeyedStateStore.getState(
                                                         globalValueStateDescriptor));
 
-                                AggregatingStateDescriptor<String, String, String>
+                                MetricsStateDescriptor<String, String, String>
                                         windowAggStateDesc =
-                                                new AggregatingStateDescriptor<
-                                                        String, String, String>(
+                                                new MetricsStateDescriptor<
+                                                                                                        String, String, String>(
                                                         "windowAgg",
                                                         new NoOpAggregateFunction(),
                                                         String.class);
 
-                                AggregatingStateDescriptor<String, String, String>
+                                MetricsStateDescriptor<String, String, String>
                                         globalAggStateDesc =
-                                                new AggregatingStateDescriptor<
-                                                        String, String, String>(
+                                                new MetricsStateDescriptor<
+                                                                                                        String, String, String>(
                                                         "globalAgg",
                                                         new NoOpAggregateFunction(),
                                                         String.class);

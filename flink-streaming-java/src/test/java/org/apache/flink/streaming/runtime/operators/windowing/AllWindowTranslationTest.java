@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichAggregateFunction;
 import org.apache.flink.api.common.functions.RichReduceFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -629,7 +629,7 @@ class AllWindowTranslationTest {
 
         assertThat(winOperator.getTrigger()).isInstanceOf(EventTimeTrigger.class);
         assertThat(winOperator.getWindowAssigner()).isInstanceOf(SlidingEventTimeWindows.class);
-        assertThat(winOperator.getStateDescriptor()).isInstanceOf(AggregatingStateDescriptor.class);
+        assertThat(winOperator.getStateDescriptor()).isInstanceOf(MetricsStateDescriptor.class);
 
         processElementAndEnsureOutput(
                 winOperator,
@@ -664,7 +664,7 @@ class AllWindowTranslationTest {
         assertThat(winOperator.getTrigger()).isInstanceOf(ProcessingTimeTrigger.class);
         assertThat(winOperator.getWindowAssigner())
                 .isInstanceOf(SlidingProcessingTimeWindows.class);
-        assertThat(winOperator.getStateDescriptor()).isInstanceOf(AggregatingStateDescriptor.class);
+        assertThat(winOperator.getStateDescriptor()).isInstanceOf(MetricsStateDescriptor.class);
 
         processElementAndEnsureOutput(
                 winOperator,
@@ -697,7 +697,7 @@ class AllWindowTranslationTest {
 
         assertThat(winOperator.getTrigger()).isInstanceOf(EventTimeTrigger.class);
         assertThat(winOperator.getWindowAssigner()).isInstanceOf(TumblingEventTimeWindows.class);
-        assertThat(winOperator.getStateDescriptor()).isInstanceOf(AggregatingStateDescriptor.class);
+        assertThat(winOperator.getStateDescriptor()).isInstanceOf(MetricsStateDescriptor.class);
 
         processElementAndEnsureOutput(
                 winOperator,
@@ -731,7 +731,7 @@ class AllWindowTranslationTest {
         assertThat(winOperator.getTrigger()).isInstanceOf(ProcessingTimeTrigger.class);
         assertThat(winOperator.getWindowAssigner())
                 .isInstanceOf(TumblingProcessingTimeWindows.class);
-        assertThat(winOperator.getStateDescriptor()).isInstanceOf(AggregatingStateDescriptor.class);
+        assertThat(winOperator.getStateDescriptor()).isInstanceOf(MetricsStateDescriptor.class);
 
         processElementAndEnsureOutput(
                 winOperator,

@@ -188,7 +188,7 @@ public interface KeyedStateStore {
      */
     @PublicEvolving
     <IN, ACC, OUT> AggregatingState<IN, OUT> getAggregatingState(
-            AggregatingStateDescriptor<IN, ACC, OUT> stateProperties);
+            MetricsStateDescriptor<IN, ACC, OUT> stateProperties);
 
     /**
      * Gets a handle to the system's key/value map state. This state is similar to the state

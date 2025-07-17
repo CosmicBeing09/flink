@@ -18,14 +18,8 @@
 
 package org.apache.flink.runtime.state.ttl;
 
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.State;
-import org.apache.flink.api.common.state.StateDescriptor;
-import org.apache.flink.api.common.state.StateTtlConfig;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeutils.CompositeSerializer;
 import org.apache.flink.api.common.typeutils.CompositeTypeSerializerSnapshot;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
@@ -191,13 +185,13 @@ public class TtlStateFactory<K, N, SV, TTLSV, S extends State, IS extends S> {
 
     @SuppressWarnings("unchecked")
     private <IN, OUT> IS createAggregatingState() throws Exception {
-        AggregatingStateDescriptor<IN, SV, OUT> aggregatingStateDescriptor =
-                (AggregatingStateDescriptor<IN, SV, OUT>) stateDesc;
+        MetricsStateDescriptor<IN, SV, OUT> aggregatingStateDescriptor =
+                (MetricsStateDescriptor<IN, SV, OUT>) stateDesc;
         TtlAggregateFunction<IN, SV, OUT> ttlAggregateFunction =
                 new TtlAggregateFunction<>(
                         aggregatingStateDescriptor.getAggregateFunction(), ttlConfig, timeProvider);
-        AggregatingStateDescriptor<IN, TtlValue<SV>, OUT> ttlDescriptor =
-                new AggregatingStateDescriptor<>(
+        MetricsStateDescriptor<IN, TtlValue<SV>, OUT> ttlDescriptor =
+                new MetricsStateDescriptor<>(
                         stateDesc.getName(),
                         ttlAggregateFunction,
                         stateDesc.getSerializer() instanceof TtlSerializer

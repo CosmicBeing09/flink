@@ -21,7 +21,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.state.ReducingStateDescriptor;
 import org.apache.flink.api.common.state.State;
 import org.apache.flink.api.common.state.StateDescriptor;
@@ -81,8 +81,8 @@ public class FunctionDelegationHelper {
     private static <F extends Function> F tryGetFunction(StateDescriptor<?, ?> stateDescriptor) {
         if (stateDescriptor instanceof ReducingStateDescriptor) {
             return (F) ((ReducingStateDescriptor) stateDescriptor).getReduceFunction();
-        } else if (stateDescriptor instanceof AggregatingStateDescriptor) {
-            return (F) ((AggregatingStateDescriptor) stateDescriptor).getAggregateFunction();
+        } else if (stateDescriptor instanceof MetricsStateDescriptor) {
+            return (F) ((MetricsStateDescriptor) stateDescriptor).getAggregateFunction();
         } else {
             return null;
         }

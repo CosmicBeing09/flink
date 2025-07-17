@@ -22,18 +22,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.functions.AggregateFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
-import org.apache.flink.api.common.state.AggregatingState;
-import org.apache.flink.api.common.state.AggregatingStateDescriptor;
-import org.apache.flink.api.common.state.ListState;
-import org.apache.flink.api.common.state.ListStateDescriptor;
-import org.apache.flink.api.common.state.MapState;
-import org.apache.flink.api.common.state.MapStateDescriptor;
-import org.apache.flink.api.common.state.ReducingState;
-import org.apache.flink.api.common.state.ReducingStateDescriptor;
-import org.apache.flink.api.common.state.StateDescriptor;
-import org.apache.flink.api.common.state.StateTtlConfig;
-import org.apache.flink.api.common.state.ValueState;
-import org.apache.flink.api.common.state.ValueStateDescriptor;
+import org.apache.flink.api.common.state.*;
+import org.apache.flink.api.common.state.MetricsStateDescriptor;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.DoubleSerializer;
@@ -2825,8 +2815,8 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testAggregatingStateAddAndGetWithMutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         CheckpointableKeyedStateBackend<String> keyedBackend =
@@ -2884,8 +2874,8 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testAggregatingStateMergingWithMutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, MutableLong, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, MutableLong, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new MutableAggregatingAddingFunction(), MutableLong.class);
 
         final Integer namespace1 = 1;
@@ -3006,8 +2996,8 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testAggregatingStateAddAndGetWithImmutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         CheckpointableKeyedStateBackend<String> keyedBackend =
@@ -3065,8 +3055,8 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     @TestTemplate
     void testAggregatingStateMergingWithImmutableAccumulator() throws Exception {
 
-        final AggregatingStateDescriptor<Long, Long, Long> stateDescr =
-                new AggregatingStateDescriptor<>(
+        final MetricsStateDescriptor<Long, Long, Long> stateDescr =
+                new MetricsStateDescriptor<>(
                         "my-state", new ImmutableAggregatingAddingFunction(), Long.class);
 
         final Integer namespace1 = 1;
