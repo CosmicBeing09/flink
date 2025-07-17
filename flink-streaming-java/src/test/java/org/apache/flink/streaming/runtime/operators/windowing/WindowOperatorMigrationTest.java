@@ -94,7 +94,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
     }
 
     @SnapshotsGenerator
-    public void writeSessionWindowsWithCountTriggerSnapshot(
+    public void writeSessionWindowsWithCountTriggerOutput(
             FlinkVersion flinkGenerateSavepointVersion) throws Exception {
         final int sessionSize = 3;
 
@@ -225,7 +225,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
     }
 
     @SnapshotsGenerator
-    public void writeSessionWindowsWithCountTriggerInMintConditionSnapshot(
+    public void writeSessionWindowsWithCountTriggerInMintConditionOutput(
             FlinkVersion flinkGenerateSavepointVersion) throws Exception {
 
         final int sessionSize = 3;
