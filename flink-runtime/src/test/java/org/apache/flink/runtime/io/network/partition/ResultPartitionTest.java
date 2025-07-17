@@ -333,7 +333,7 @@ class ResultPartitionTest {
             partition.setup();
             BufferPool bufferPool = partition.getBufferPool();
             // verify the amount of buffers in created local pool
-            assertThat(bufferPool.getExpectedNumberOfMemorySegments())
+            assertThat(bufferPool.getNumberOfRequiredMemorySegments())
                     .isEqualTo(partition.getNumberOfSubpartitions() + 1);
             if (type.isBounded()) {
                 final int maxNumBuffers =
