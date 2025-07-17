@@ -85,7 +85,7 @@ class StreamElementSerializerUpgradeTest
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         @Override
-        public Matcher<StreamElement> testDataMatcher() {
+        public Matcher<StreamElement> testDataCondition() {
             return (Matcher) streamRecord(is("key"), is(123456L));
         }
 

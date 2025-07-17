@@ -88,7 +88,7 @@ class ScalaEitherSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Either<Integer, String>> testDataMatcher() {
+        public Matcher<Either<Integer, String>> testDataCondition() {
             return is(new Right<>("Hello world"));
         }
 

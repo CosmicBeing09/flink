@@ -67,7 +67,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<boolean[]> testDataMatcher() {
+        public Matcher<boolean[]> testDataCondition() {
             boolean[] expected = new boolean[2];
             expected[0] = true;
             expected[1] = false;
@@ -117,7 +117,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<byte[]> testDataMatcher() {
+        public Matcher<byte[]> testDataCondition() {
             byte[] expected = new byte[10];
             for (int i = 0; i < expected.length; ++i) {
                 expected[i] = (byte) i;
@@ -168,7 +168,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<char[]> testDataMatcher() {
+        public Matcher<char[]> testDataCondition() {
             char[] data = new char[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = (char) i;
@@ -219,7 +219,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<double[]> testDataMatcher() {
+        public Matcher<double[]> testDataCondition() {
             double[] data = new double[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i + 0.1f;
@@ -270,7 +270,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<float[]> testDataMatcher() {
+        public Matcher<float[]> testDataCondition() {
             float[] data = new float[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i + 0.2f;
@@ -321,7 +321,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<int[]> testDataMatcher() {
+        public Matcher<int[]> testDataCondition() {
             int[] data = new int[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i;
@@ -372,7 +372,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<long[]> testDataMatcher() {
+        public Matcher<long[]> testDataCondition() {
             long[] data = new long[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i;
@@ -423,7 +423,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<short[]> testDataMatcher() {
+        public Matcher<short[]> testDataCondition() {
             short[] data = new short[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = (short) i;
@@ -474,7 +474,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<String[]> testDataMatcher() {
+        public Matcher<String[]> testDataCondition() {
             String[] data = new String[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = String.valueOf(i);

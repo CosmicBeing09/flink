@@ -95,7 +95,7 @@ class UnionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TaggedUnion<String, Long>> testDataMatcher() {
+        public Matcher<TaggedUnion<String, Long>> testDataCondition() {
             return is(TaggedUnion.one("flink"));
         }
 
@@ -139,7 +139,7 @@ class UnionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TaggedUnion<String, Long>> testDataMatcher() {
+        public Matcher<TaggedUnion<String, Long>> testDataCondition() {
             return is(TaggedUnion.two(23456L));
         }
 

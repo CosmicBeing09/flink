@@ -80,7 +80,7 @@ class TtlSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TtlValue<String>> testDataMatcher() {
+        public Matcher<TtlValue<String>> testDataCondition() {
             return ttlValue(is("hello Gordon"), is(13L));
         }
 

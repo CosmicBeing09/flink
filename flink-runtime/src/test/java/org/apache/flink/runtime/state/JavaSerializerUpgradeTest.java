@@ -85,7 +85,7 @@ class JavaSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Serializab
         }
 
         @Override
-        public Matcher<Serializable> testDataMatcher() {
+        public Matcher<Serializable> testDataCondition() {
             return is(26);
         }
 

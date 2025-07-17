@@ -77,7 +77,7 @@ class ValueSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<NameValue> testDataMatcher() {
+        public Matcher<NameValue> testDataCondition() {
             NameValue value = new NameValue();
             value.setName("klion26");
             return is(value);

@@ -83,7 +83,7 @@ class VoidNamespaceSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<VoidNamespace> testDataMatcher() {
+        public Matcher<VoidNamespace> testDataCondition() {
             return is(VoidNamespace.INSTANCE);
         }
 

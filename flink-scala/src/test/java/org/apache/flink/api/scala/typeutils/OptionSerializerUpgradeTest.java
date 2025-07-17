@@ -89,7 +89,7 @@ class OptionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Option<String>> testDataMatcher() {
+        public Matcher<Option<String>> testDataCondition() {
             return is(Option.empty());
         }
 

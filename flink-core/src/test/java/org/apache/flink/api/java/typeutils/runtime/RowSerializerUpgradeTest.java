@@ -114,7 +114,7 @@ public class RowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Row,
         }
 
         @Override
-        public Matcher<Row> testDataMatcher() {
+        public Matcher<Row> testDataCondition() {
             Row row = new Row(RowKind.INSERT, 4);
             row.setField(0, null);
             row.setField(1, 42L);

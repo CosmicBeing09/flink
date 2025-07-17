@@ -90,7 +90,7 @@ class ScalaTrySerializerUpgradeTest
 
         @SuppressWarnings("unchecked")
         @Override
-        public Matcher<Try<String>> testDataMatcher() {
+        public Matcher<Try<String>> testDataCondition() {
             return is(new Failure(new SpecifiedException("Specified exception for ScalaTry.")));
         }
 

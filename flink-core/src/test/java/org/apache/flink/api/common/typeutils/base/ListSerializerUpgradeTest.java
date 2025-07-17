@@ -87,7 +87,7 @@ class ListSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<List<Strin
         }
 
         @Override
-        public Matcher<List<String>> testDataMatcher() {
+        public Matcher<List<String>> testDataCondition() {
             List<String> data = new ArrayList<>(2);
             data.add("Apache");
             data.add("Flink");

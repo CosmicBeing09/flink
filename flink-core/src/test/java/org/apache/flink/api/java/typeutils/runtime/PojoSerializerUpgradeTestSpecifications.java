@@ -234,7 +234,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(new StaticSchemaPojo("Gordon", 27, StaticSchemaPojo.Color.BLUE, false));
         }
 
@@ -348,7 +348,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<PojoAfterSchemaUpgrade> testDataMatcher() {
+        public Matcher<PojoAfterSchemaUpgrade> testDataCondition() {
             return is(new PojoAfterSchemaUpgrade("Gordon", 27, null, false));
         }
 
@@ -422,7 +422,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<PojoWithStringField> testDataMatcher() {
+        public Matcher<PojoWithStringField> testDataCondition() {
             throw new UnsupportedOperationException();
         }
 
@@ -565,7 +565,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<BasePojo> testDataMatcher() {
+        public Matcher<BasePojo> testDataCondition() {
             return is(new SubclassPojoAfterSchemaUpgrade(911108, "Gordon", true, 0, 0.0));
         }
 
@@ -648,7 +648,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(
                     new SubclassPojoWithStringField(
                             "gt", 7, StaticSchemaPojo.Color.BLUE, false, "911108"));
@@ -697,7 +697,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(
                     new StaticSchemaPojoSubclassA(
                             "gt", 7, StaticSchemaPojo.Color.BLUE, false, 911108));
@@ -754,7 +754,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
 
             return is(
                     new StaticSchemaPojoSubclassB(
@@ -811,7 +811,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(
                     new StaticSchemaPojoSubclassB(
                             "gt", 7, StaticSchemaPojo.Color.BLUE, false, true));
@@ -866,7 +866,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(
                     new StaticSchemaPojoSubclassA(
                             "gt", 7, StaticSchemaPojo.Color.BLUE, false, 911108));
@@ -922,7 +922,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StaticSchemaPojo> testDataMatcher() {
+        public Matcher<StaticSchemaPojo> testDataCondition() {
             return is(
                     new StaticSchemaPojoSubclassB(
                             "gt", 7, StaticSchemaPojo.Color.BLUE, false, true));

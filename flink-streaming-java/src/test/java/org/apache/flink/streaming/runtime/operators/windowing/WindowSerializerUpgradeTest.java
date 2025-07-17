@@ -90,7 +90,7 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<TimeWindow> testDataMatcher() {
+        public Matcher<TimeWindow> testDataCondition() {
             return is(new TimeWindow(12345, 67890));
         }
 
@@ -133,7 +133,7 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<GlobalWindow> testDataMatcher() {
+        public Matcher<GlobalWindow> testDataCondition() {
             return is(GlobalWindow.get());
         }
 

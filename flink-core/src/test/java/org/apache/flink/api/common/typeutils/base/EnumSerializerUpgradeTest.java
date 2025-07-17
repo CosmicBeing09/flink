@@ -112,7 +112,7 @@ class EnumSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<TestEnum, 
         }
 
         @Override
-        public Matcher<TestEnum> testDataMatcher() {
+        public Matcher<TestEnum> testDataCondition() {
             return is(EMMA);
         }
 
@@ -176,7 +176,7 @@ class EnumSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<TestEnum, 
         }
 
         @Override
-        public Matcher<EnumAfter> testDataMatcher() {
+        public Matcher<EnumAfter> testDataCondition() {
             return is(EnumAfter.EMMA);
         }
 

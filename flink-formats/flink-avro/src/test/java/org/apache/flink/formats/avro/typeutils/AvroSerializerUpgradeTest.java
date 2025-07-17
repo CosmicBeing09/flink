@@ -99,7 +99,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<GenericRecord> testDataMatcher() {
+        public Matcher<GenericRecord> testDataCondition() {
             GenericData.Record record = new GenericData.Record(Address.getClassSchema());
             record.put("num", 239);
             record.put("street", "Baker Street");
@@ -161,7 +161,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Address> testDataMatcher() {
+        public Matcher<Address> testDataCondition() {
             Address addr = new Address();
             addr.setNum(239);
             addr.setStreet("Baker Street");

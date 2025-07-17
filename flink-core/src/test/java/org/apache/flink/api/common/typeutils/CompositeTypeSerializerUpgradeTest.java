@@ -90,7 +90,7 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
         }
 
         @Override
-        public Matcher<Either<String, Integer>> testDataMatcher() {
+        public Matcher<Either<String, Integer>> testDataCondition() {
             return is(new Either.Left<>("ApacheFlink"));
         }
 
@@ -134,7 +134,7 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
         }
 
         @Override
-        public Matcher<String[]> testDataMatcher() {
+        public Matcher<String[]> testDataCondition() {
             String[] data = {"Apache", "Flink"};
             return is(data);
         }

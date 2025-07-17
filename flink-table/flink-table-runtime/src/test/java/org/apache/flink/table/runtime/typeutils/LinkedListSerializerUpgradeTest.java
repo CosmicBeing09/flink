@@ -101,7 +101,7 @@ public class LinkedListSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<LinkedList<Long>> testDataMatcher() {
+        public Matcher<LinkedList<Long>> testDataCondition() {
             LinkedList<Long> list = new LinkedList<>();
             list.add(42L);
             list.add(-42L);

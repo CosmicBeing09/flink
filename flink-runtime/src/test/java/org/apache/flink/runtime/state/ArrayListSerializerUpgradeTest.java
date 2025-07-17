@@ -86,7 +86,7 @@ class ArrayListSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<ArrayList<String>> testDataMatcher() {
+        public Matcher<ArrayList<String>> testDataCondition() {
             ArrayList<String> data = new ArrayList<>(2);
             data.add("Apache");
             data.add("Flink");
