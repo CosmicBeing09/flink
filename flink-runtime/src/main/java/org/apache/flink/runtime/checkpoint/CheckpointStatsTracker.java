@@ -63,9 +63,9 @@ public interface CheckpointStatsTracker {
     }
 
     void reportRestoredCheckpoint(
-            long checkpointID,
+            long restoredCheckpointId,
             CheckpointProperties properties,
-            String externalPath,
+            String restoredDataExternalPath,
             long stateSize);
 
     /**
