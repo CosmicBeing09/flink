@@ -44,7 +44,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
     LatencyTrackingAggregatingState(
             String stateName,
             InternalAggregatingState<K, N, IN, ACC, OUT> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new AggregatingStateLatencyMetrics(

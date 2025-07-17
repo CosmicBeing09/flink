@@ -43,7 +43,7 @@ import org.apache.flink.runtime.state.StateBackend;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSetFactory;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSnapshotRestoreWrapper;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.runtime.taskmanager.AsyncExceptionHandler;
 import org.apache.flink.state.forst.ForStConfigurableOptions;
@@ -156,7 +156,7 @@ public class ForStSyncKeyedStateBackendBuilder<K> extends AbstractKeyedStateBack
             LocalRecoveryConfig localRecoveryConfig,
             ForStPriorityQueueConfig priorityQueueConfig,
             TtlTimeProvider ttlTimeProvider,
-            LatencyTrackingStateConfig latencyTrackingStateConfig,
+            MetricsTrackingStateConfig latencyTrackingStateConfig,
             MetricGroup metricGroup,
             StateBackend.CustomInitializationMetrics customInitializationMetrics,
             @Nonnull Collection<KeyedStateHandle> stateHandles,
@@ -202,7 +202,7 @@ public class ForStSyncKeyedStateBackendBuilder<K> extends AbstractKeyedStateBack
             LocalRecoveryConfig localRecoveryConfig,
             ForStPriorityQueueConfig forStPriorityQueueConfig,
             TtlTimeProvider ttlTimeProvider,
-            LatencyTrackingStateConfig latencyTrackingStateConfig,
+            MetricsTrackingStateConfig latencyTrackingStateConfig,
             MetricGroup metricGroup,
             @Nonnull Collection<KeyedStateHandle> stateHandles,
             StreamCompressionDecorator keyGroupCompressionDecorator,

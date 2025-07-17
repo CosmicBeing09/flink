@@ -35,18 +35,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /** Factory to create {@link AbstractLatencyTrackState}. */
-public class LatencyTrackingStateFactory<
+public class MetricsTrackingStateFactory<
         K, N, V, S extends State, IS extends InternalKvState<K, N, ?>> {
 
     private final InternalKvState<K, N, ?> kvState;
     private final StateDescriptor<S, V> stateDescriptor;
-    private final LatencyTrackingStateConfig latencyTrackingStateConfig;
+    private final MetricsTrackingStateConfig latencyTrackingStateConfig;
     private final Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> stateFactories;
 
-    private LatencyTrackingStateFactory(
+    private MetricsTrackingStateFactory(
             InternalKvState<K, N, ?> kvState,
             StateDescriptor<S, V> stateDescriptor,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         this.kvState = kvState;
         this.stateDescriptor = stateDescriptor;
         this.latencyTrackingStateConfig = latencyTrackingStateConfig;
@@ -58,10 +58,10 @@ public class LatencyTrackingStateFactory<
             InternalKvState<K, N, ?> createStateAndWrapWithLatencyTrackingIfEnabled(
                     InternalKvState<K, N, ?> kvState,
                     StateDescriptor<S, V> stateDescriptor,
-                    LatencyTrackingStateConfig latencyTrackingStateConfig)
+                    MetricsTrackingStateConfig latencyTrackingStateConfig)
                     throws Exception {
         if (latencyTrackingStateConfig.isEnabled()) {
-            return new LatencyTrackingStateFactory<>(
+            return new MetricsTrackingStateFactory<>(
                             kvState, stateDescriptor, latencyTrackingStateConfig)
                     .createState();
         }
@@ -96,7 +96,7 @@ public class LatencyTrackingStateFactory<
             String message =
                     String.format(
                             "State %s is not supported by %s",
-                            stateDescriptor.getClass(), LatencyTrackingStateFactory.class);
+                            stateDescriptor.getClass(), MetricsTrackingStateFactory.class);
             throw new FlinkRuntimeException(message);
         }
         return stateFactory.get();
@@ -123,7 +123,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private <UK, UV> IS createMapState() {
         return (IS)
-                new LatencyTrackingMapState<>(
+                new MetricsTrackingMapState<>(
                         stateDescriptor.getName(),
                         (InternalMapState<K, N, UK, UV>) kvState,
                         latencyTrackingStateConfig);

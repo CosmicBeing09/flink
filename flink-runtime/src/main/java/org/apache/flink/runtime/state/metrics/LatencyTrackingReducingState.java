@@ -42,7 +42,7 @@ class LatencyTrackingReducingState<K, N, T>
     LatencyTrackingReducingState(
             String stateName,
             InternalReducingState<K, N, T> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new ReducingStateLatencyMetrics(
