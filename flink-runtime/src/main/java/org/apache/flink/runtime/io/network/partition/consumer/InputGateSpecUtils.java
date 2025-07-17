@@ -36,7 +36,7 @@ public class InputGateSpecUtils {
     public static GateBuffersSpec createGateBuffersSpec(
             Optional<Integer> configuredMaxRequiredBuffersPerGate,
             int configuredNetworkBuffersPerChannel,
-            int configuredFloatingNetworkBuffersPerGate,
+            int floatingBuffersPerGate,
             ResultPartitionType partitionType,
             int numInputChannels,
             boolean enableTieredStorage) {
@@ -46,11 +46,11 @@ public class InputGateSpecUtils {
         int targetExpectedBuffersPerGate =
                 getExpectedBuffersTargetPerGate(
                         numInputChannels, configuredNetworkBuffersPerChannel);
-        int maxBuffersPerGate =
-                getMaxBuffersPerGate(
+        int totalBuffersPerGate =
+                getTotalBuffersPerGate(
                         numInputChannels,
                         configuredNetworkBuffersPerChannel,
-                        configuredFloatingNetworkBuffersPerGate);
+                        floatingBuffersPerGate);
         int expectedBuffersPerGate =
                 Math.min(maxRequiredBuffersThresholdPerGate, targetExpectedBuffersPerGate);
         int effectiveExclusiveBuffersPerChannel =
@@ -68,7 +68,7 @@ public class InputGateSpecUtils {
                 effectiveExclusiveBuffersPerChannel,
                 expectedBuffersPerGate,
                 minBuffersPerGate,
-                maxBuffersPerGate);
+                totalBuffersPerGate);
     }
 
     @VisibleForTesting
@@ -111,11 +111,11 @@ public class InputGateSpecUtils {
     }
 
     /** */
-    private static int getMaxBuffersPerGate(
+    private static int getTotalBuffersPerGate(
             int numInputChannels,
             int configuredNetworkBuffersPerChannel,
-            int configuredFloatingBuffersPerGate) {
+            int floatingBuffersPerGate) {
         return numInputChannels * configuredNetworkBuffersPerChannel
-                + configuredFloatingBuffersPerGate;
+                + floatingBuffersPerGate;
     }
 }
