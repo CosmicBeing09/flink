@@ -49,7 +49,7 @@ import org.apache.flink.runtime.io.network.partition.consumer.SingleInputGateBui
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.state.storage.JobManagerCheckpointStorage;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 
@@ -216,7 +216,7 @@ class ChannelPersistenceITCase {
     }
 
     private <T> byte[] collectBytes(
-            SupplierWithException<Optional<T>, Exception> entrySupplier,
+            SupplierWithMetrics<Optional<T>, Exception> entrySupplier,
             Function<T, Buffer> bufferExtractor)
             throws Exception {
         ArrayList<Buffer> buffers = new ArrayList<>();

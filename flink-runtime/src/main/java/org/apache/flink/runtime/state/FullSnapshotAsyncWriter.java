@@ -24,7 +24,7 @@ import org.apache.flink.core.memory.DataOutputView;
 import org.apache.flink.core.memory.DataOutputViewStreamWrapper;
 import org.apache.flink.runtime.checkpoint.SnapshotType;
 import org.apache.flink.util.IOUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nonnull;
 
@@ -47,7 +47,7 @@ public class FullSnapshotAsyncWriter<K>
 
     /** Supplier for the stream into which we write the snapshot. */
     @Nonnull
-    private final SupplierWithException<CheckpointStreamWithResultProvider, Exception>
+    private final SupplierWithMetrics<CheckpointStreamWithResultProvider, Exception>
             checkpointStreamSupplier;
 
     @Nonnull private final FullSnapshotResources<K> snapshotResources;
@@ -56,7 +56,7 @@ public class FullSnapshotAsyncWriter<K>
     public FullSnapshotAsyncWriter(
             @Nonnull SnapshotType snapshotType,
             @Nonnull
-                    SupplierWithException<CheckpointStreamWithResultProvider, Exception>
+            SupplierWithMetrics<CheckpointStreamWithResultProvider, Exception>
                             checkpointStreamSupplier,
             @Nonnull FullSnapshotResources<K> snapshotResources) {
 

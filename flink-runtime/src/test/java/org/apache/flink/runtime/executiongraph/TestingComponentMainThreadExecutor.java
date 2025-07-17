@@ -22,7 +22,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.util.ExecutorUtils;
 import org.apache.flink.util.function.FunctionUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -51,7 +51,7 @@ public class TestingComponentMainThreadExecutor {
      * Executes the given supplier with the main thread executor until completion, returns the
      * result or a exception. This method blocks until the execution is complete.
      */
-    public <U> U execute(@Nonnull SupplierWithException<U, Throwable> supplierWithException) {
+    public <U> U execute(@Nonnull SupplierWithMetrics<U, Throwable> supplierWithException) {
         return CompletableFuture.supplyAsync(
                         FunctionUtils.uncheckedSupplier(supplierWithException), mainThreadExecutor)
                 .join();

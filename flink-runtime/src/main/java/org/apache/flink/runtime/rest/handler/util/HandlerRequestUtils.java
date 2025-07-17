@@ -23,7 +23,7 @@ import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.MessageParameters;
 import org.apache.flink.runtime.rest.messages.MessageQueryParameter;
 import org.apache.flink.runtime.rest.messages.RequestBody;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus;
 
@@ -81,7 +81,7 @@ public class HandlerRequestUtils {
      */
     public static <T> T fromRequestBodyOrQueryParameter(
             T requestValue,
-            SupplierWithException<T, RestHandlerException> queryParameterExtractor,
+            SupplierWithMetrics<T, RestHandlerException> queryParameterExtractor,
             T defaultValue,
             Logger log)
             throws RestHandlerException {

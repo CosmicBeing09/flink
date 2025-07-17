@@ -57,7 +57,7 @@ import org.apache.flink.runtime.throughput.BufferDebloater;
 import org.apache.flink.runtime.throughput.ThroughputCalculator;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -199,7 +199,7 @@ public class SingleInputGate extends IndexedInputGate {
     /** A timer to retrigger local partition requests. Only initialized if actually needed. */
     private Timer retriggerLocalRequestTimer;
 
-    private final SupplierWithException<BufferPool, IOException> bufferPoolFactory;
+    private final SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory;
 
     private final CompletableFuture<Void> closeFuture;
 
@@ -250,7 +250,7 @@ public class SingleInputGate extends IndexedInputGate {
             final ResultPartitionType consumedPartitionType,
             int numberOfInputChannels,
             PartitionProducerStateProvider partitionProducerStateProvider,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory,
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory,
             @Nullable BufferDecompressor bufferDecompressor,
             MemorySegmentProvider memorySegmentProvider,
             int segmentSize,

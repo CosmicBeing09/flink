@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.runtime.state.AbstractKeyedStateBackend;
 import org.apache.flink.runtime.state.VoidNamespace;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 
@@ -170,7 +170,7 @@ class MetricsTrackingMapStateTest extends MetricsTrackingStateTestBase<Integer> 
     private <E> void verifyIterator(
             MetricsTrackingMapState<Integer, VoidNamespace, Long, Double> latencyTrackingState,
             MetricsTrackingMapState.MapStateMetrics latencyTrackingStateMetric,
-            SupplierWithException<Iterator<E>, Exception> iteratorSupplier,
+            SupplierWithMetrics<Iterator<E>, Exception> iteratorSupplier,
             boolean removeIterator)
             throws Exception {
         ThreadLocalRandom random = ThreadLocalRandom.current();

@@ -39,7 +39,7 @@ import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.util.RestartStrategyUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -147,7 +147,7 @@ class TaskExecutorITCase {
         return jobResultFuture;
     }
 
-    private static SupplierWithException<Boolean, Exception> jobIsRunning(
+    private static SupplierWithMetrics<Boolean, Exception> jobIsRunning(
             Supplier<CompletableFuture<? extends AccessExecutionGraph>>
                     executionGraphFutureSupplier) {
         final Predicate<AccessExecution> runningOrFinished =

@@ -31,7 +31,7 @@ import org.apache.flink.runtime.taskexecutor.exceptions.SlotAllocationException;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingConsumer;
 import org.apache.flink.util.function.TriFunctionWithException;
 
@@ -687,7 +687,7 @@ class TaskSlotTableImplTest {
     }
 
     private static void runInMainThread(
-            SupplierWithException<TaskSlotTableImpl<TaskSlotPayload>, Exception>
+            SupplierWithMetrics<TaskSlotTableImpl<TaskSlotPayload>, Exception>
                     taskSlotTableFactory,
             ThrowingConsumer<TaskSlotTableImpl<TaskSlotPayload>, ? extends Exception> callback)
             throws Exception {

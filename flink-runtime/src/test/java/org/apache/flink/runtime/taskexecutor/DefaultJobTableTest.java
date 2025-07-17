@@ -24,7 +24,7 @@ import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.jobmaster.utils.TestingJobMasterGatewayBuilder;
 import org.apache.flink.runtime.taskmanager.NoOpCheckpointResponder;
 import org.apache.flink.runtime.taskmanager.NoOpTaskManagerActions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /** Tests for the {@link DefaultJobTable}. */
 class DefaultJobTableTest {
 
-    private static final SupplierWithException<JobTable.JobServices, RuntimeException>
+    private static final SupplierWithMetrics<JobTable.JobServices, RuntimeException>
             DEFAULT_JOB_SERVICES_SUPPLIER = () -> TestingJobServices.newBuilder().build();
 
     private final JobID jobId = new JobID();

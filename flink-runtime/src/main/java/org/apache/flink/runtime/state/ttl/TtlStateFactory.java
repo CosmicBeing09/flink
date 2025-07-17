@@ -33,7 +33,7 @@ import org.apache.flink.runtime.state.StateSnapshotTransformer.StateSnapshotTran
 import org.apache.flink.runtime.state.internal.InternalKvState;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,7 +64,7 @@ public class TtlStateFactory<K, N, SV, TTLSV, S extends State, IS extends S> {
                 : stateBackend.createOrUpdateInternalState(namespaceSerializer, stateDesc);
     }
 
-    private final Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> stateFactories;
+    private final Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> stateFactories;
 
     @Nonnull private final TypeSerializer<N> namespaceSerializer;
     @Nonnull private final StateDescriptor<S, SV> stateDesc;
@@ -89,30 +89,30 @@ public class TtlStateFactory<K, N, SV, TTLSV, S extends State, IS extends S> {
         this.incrementalCleanup = getTtlIncrementalCleanup();
     }
 
-    private Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> createStateFactories() {
+    private Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> createStateFactories() {
         return Stream.of(
                         Tuple2.of(
                                 StateDescriptor.Type.VALUE,
-                                (SupplierWithException<IS, Exception>) this::createValueState),
+                                (SupplierWithMetrics<IS, Exception>) this::createValueState),
                         Tuple2.of(
                                 StateDescriptor.Type.LIST,
-                                (SupplierWithException<IS, Exception>) this::createListState),
+                                (SupplierWithMetrics<IS, Exception>) this::createListState),
                         Tuple2.of(
                                 StateDescriptor.Type.MAP,
-                                (SupplierWithException<IS, Exception>) this::createMapState),
+                                (SupplierWithMetrics<IS, Exception>) this::createMapState),
                         Tuple2.of(
                                 StateDescriptor.Type.REDUCING,
-                                (SupplierWithException<IS, Exception>) this::createReducingState),
+                                (SupplierWithMetrics<IS, Exception>) this::createReducingState),
                         Tuple2.of(
                                 StateDescriptor.Type.AGGREGATING,
-                                (SupplierWithException<IS, Exception>)
+                                (SupplierWithMetrics<IS, Exception>)
                                         this::createAggregatingState))
                 .collect(Collectors.toMap(t -> t.f0, t -> t.f1));
     }
 
     @SuppressWarnings("unchecked")
     private IS createState() throws Exception {
-        SupplierWithException<IS, Exception> stateFactory = stateFactories.get(stateDesc.getType());
+        SupplierWithMetrics<IS, Exception> stateFactory = stateFactories.get(stateDesc.getType());
         if (stateFactory == null) {
             String message =
                     String.format(

@@ -65,7 +65,7 @@ import org.apache.flink.streaming.runtime.tasks.mailbox.MailboxProcessor;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.function.FunctionWithException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.File;
 import java.io.IOException;
@@ -520,12 +520,12 @@ public class StreamTaskTestHarness<OUT> {
 
     class TaskThread extends Thread {
 
-        private final SupplierWithException<? extends StreamTask<OUT, ?>, Exception> taskFactory;
+        private final SupplierWithMetrics<? extends StreamTask<OUT, ?>, Exception> taskFactory;
         private volatile StreamTask<OUT, ?> task;
 
         private volatile Throwable error;
 
-        TaskThread(SupplierWithException<? extends StreamTask<OUT, ?>, Exception> taskFactory) {
+        TaskThread(SupplierWithMetrics<? extends StreamTask<OUT, ?>, Exception> taskFactory) {
             super("Task Thread");
             this.taskFactory = taskFactory;
         }

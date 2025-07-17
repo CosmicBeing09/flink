@@ -21,7 +21,7 @@ package org.apache.flink.runtime.state.metrics;
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.runtime.state.internal.InternalKvState;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import java.io.IOException;
@@ -106,7 +106,7 @@ class AbstractMetricsTrackState<
     }
 
     protected <T> T trackLatencyWithIOException(
-            SupplierWithException<T, IOException> supplier, String latencyLabel)
+            SupplierWithMetrics<T, IOException> supplier, String latencyLabel)
             throws IOException {
         long startTime = System.nanoTime();
         T result = supplier.get();
@@ -124,7 +124,7 @@ class AbstractMetricsTrackState<
     }
 
     protected <T> T trackMetricWithException(
-            SupplierWithException<T, Exception> supplier, String latencyLabel) throws Exception {
+            SupplierWithMetrics<T, Exception> supplier, String latencyLabel) throws Exception {
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;

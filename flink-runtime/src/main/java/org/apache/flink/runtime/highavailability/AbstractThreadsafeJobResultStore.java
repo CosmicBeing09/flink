@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import org.slf4j.Logger;
@@ -141,11 +141,11 @@ public abstract class AbstractThreadsafeJobResultStore implements JobResultStore
     }
 
     private <T> CompletableFuture<T> withReadLockAsync(
-            SupplierWithException<T, IOException> runnable) {
+            SupplierWithMetrics<T, IOException> runnable) {
         return FutureUtils.supplyAsync(() -> withReadLock(runnable), ioExecutor);
     }
 
-    private <T> T withReadLock(SupplierWithException<T, IOException> supplier) throws IOException {
+    private <T> T withReadLock(SupplierWithMetrics<T, IOException> supplier) throws IOException {
         readWriteLock.readLock().lock();
         try {
             return supplier.get();

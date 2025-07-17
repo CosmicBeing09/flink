@@ -32,7 +32,7 @@ import org.apache.flink.runtime.mailbox.SyncMailboxExecutor;
 import org.apache.flink.streaming.runtime.io.checkpointing.CheckpointedInputGate;
 import org.apache.flink.streaming.runtime.io.checkpointing.TestBarrierHandlerFactory;
 import org.apache.flink.streaming.runtime.tasks.mailbox.MailboxProcessor;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -45,7 +45,7 @@ public class TestCheckpointedInputGateBuilder {
     private final TestBarrierHandlerFactory barrierHandlerFactory;
 
     private ChannelStateWriter channelStateWriter = new RecordingChannelStateWriter();
-    private SupplierWithException<SingleInputGate, IOException> gateBuilder = this::buildTestGate;
+    private SupplierWithMetrics<SingleInputGate, IOException> gateBuilder = this::buildTestGate;
     private MailboxExecutor mailboxExecutor;
 
     public TestCheckpointedInputGateBuilder(

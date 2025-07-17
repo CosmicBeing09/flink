@@ -28,7 +28,7 @@ import org.apache.flink.runtime.state.internal.InternalMapState;
 import org.apache.flink.runtime.state.internal.InternalReducingState;
 import org.apache.flink.runtime.state.internal.InternalValueState;
 import org.apache.flink.util.FlinkRuntimeException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,7 +41,7 @@ public class LatencyTrackingStateFactory<
     private final InternalKvState<K, N, ?> kvState;
     private final StateDescriptor<S, V> stateDescriptor;
     private final MetricsTrackingStateConfig latencyTrackingStateConfig;
-    private final Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> stateFactories;
+    private final Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> stateFactories;
 
     private LatencyTrackingStateFactory(
             InternalKvState<K, N, ?> kvState,
@@ -68,29 +68,29 @@ public class LatencyTrackingStateFactory<
         return kvState;
     }
 
-    private Map<StateDescriptor.Type, SupplierWithException<IS, Exception>> createStateFactories() {
+    private Map<StateDescriptor.Type, SupplierWithMetrics<IS, Exception>> createStateFactories() {
         return Stream.of(
                         Tuple2.of(
                                 StateDescriptor.Type.VALUE,
-                                (SupplierWithException<IS, Exception>) this::createValueState),
+                                (SupplierWithMetrics<IS, Exception>) this::createValueState),
                         Tuple2.of(
                                 StateDescriptor.Type.LIST,
-                                (SupplierWithException<IS, Exception>) this::createListState),
+                                (SupplierWithMetrics<IS, Exception>) this::createListState),
                         Tuple2.of(
                                 StateDescriptor.Type.MAP,
-                                (SupplierWithException<IS, Exception>) this::createMapState),
+                                (SupplierWithMetrics<IS, Exception>) this::createMapState),
                         Tuple2.of(
                                 StateDescriptor.Type.REDUCING,
-                                (SupplierWithException<IS, Exception>) this::createReducingState),
+                                (SupplierWithMetrics<IS, Exception>) this::createReducingState),
                         Tuple2.of(
                                 StateDescriptor.Type.AGGREGATING,
-                                (SupplierWithException<IS, Exception>)
+                                (SupplierWithMetrics<IS, Exception>)
                                         this::createAggregatingState))
                 .collect(Collectors.toMap(t -> t.f0, t -> t.f1));
     }
 
     private IS createState() throws Exception {
-        SupplierWithException<IS, Exception> stateFactory =
+        SupplierWithMetrics<IS, Exception> stateFactory =
                 stateFactories.get(stateDescriptor.getType());
         if (stateFactory == null) {
             String message =

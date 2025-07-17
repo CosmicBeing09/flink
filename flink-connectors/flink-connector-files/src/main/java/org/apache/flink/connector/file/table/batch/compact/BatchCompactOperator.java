@@ -32,7 +32,7 @@ import org.apache.flink.streaming.api.operators.BoundedOneInput;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,7 +60,7 @@ public class BatchCompactOperator<T> extends AbstractStreamOperator<CompactOutpu
     public static final String COMPACTED_PREFIX = "compacted-";
     public static final String ATTEMPT_PREFIX = "attempt-";
 
-    private final SupplierWithException<FileSystem, IOException> fsFactory;
+    private final SupplierWithMetrics<FileSystem, IOException> fsFactory;
     private final CompactReader.Factory<T> readerFactory;
     private final CompactWriter.Factory<T> writerFactory;
 
@@ -68,7 +68,7 @@ public class BatchCompactOperator<T> extends AbstractStreamOperator<CompactOutpu
     private transient Map<String, List<Path>> compactedFiles;
 
     public BatchCompactOperator(
-            SupplierWithException<FileSystem, IOException> fsFactory,
+            SupplierWithMetrics<FileSystem, IOException> fsFactory,
             CompactReader.Factory<T> readerFactory,
             CompactWriter.Factory<T> writerFactory) {
         this.fsFactory = fsFactory;

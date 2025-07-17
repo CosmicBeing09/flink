@@ -39,7 +39,7 @@ import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.StreamStateHandle;
 import org.apache.flink.runtime.state.UncompressedStreamCompressionDecorator;
 import org.apache.flink.runtime.state.metainfo.StateMetaInfoSnapshot;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nonnull;
 
@@ -117,7 +117,7 @@ class HeapSnapshotStrategy<K>
                                 UncompressedStreamCompressionDecorator.INSTANCE,
                                 keyGroupCompressionDecorator));
 
-        final SupplierWithException<CheckpointStreamWithResultProvider, Exception>
+        final SupplierWithMetrics<CheckpointStreamWithResultProvider, Exception>
                 checkpointStreamSupplier =
                         localRecoveryConfig.isLocalBackupEnabled()
                                         && !checkpointOptions.getCheckpointType().isSavepoint()

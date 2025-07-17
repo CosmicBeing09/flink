@@ -18,7 +18,7 @@
 package org.apache.flink.runtime.concurrent;
 
 import org.apache.flink.util.concurrent.Executors;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import org.junit.jupiter.api.Test;
@@ -78,7 +78,7 @@ class ClassLoadingUtilsTest {
 
     @Test
     void testRunSupplierWithContextClassLoader() throws Exception {
-        SupplierWithException<ClassLoader, Exception> runnable =
+        SupplierWithMetrics<ClassLoader, Exception> runnable =
                 () -> Thread.currentThread().getContextClassLoader();
 
         final ClassLoader contextClassLoader =

@@ -98,14 +98,14 @@ public class FunctionUtils {
     }
 
     /**
-     * Converts a {@link SupplierWithException} into a {@link Supplier} which throws all checked
+     * Converts a {@link SupplierWithMetrics} into a {@link Supplier} which throws all checked
      * exceptions as unchecked.
      *
      * @param supplierWithException to convert into a {@link Supplier}
      * @return {@link Supplier} which throws all checked exceptions as unchecked.
      */
     public static <T> Supplier<T> uncheckedSupplier(
-            SupplierWithException<T, ?> supplierWithException) {
+            SupplierWithMetrics<T, ?> supplierWithException) {
         return () -> {
             T result = null;
             try {

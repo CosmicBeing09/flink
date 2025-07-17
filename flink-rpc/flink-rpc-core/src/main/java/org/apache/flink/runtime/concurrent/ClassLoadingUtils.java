@@ -19,7 +19,7 @@ package org.apache.flink.runtime.concurrent;
 
 import org.apache.flink.util.TemporaryClassLoaderContext;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import java.util.concurrent.CompletableFuture;
@@ -77,7 +77,7 @@ public class ClassLoadingUtils {
      * @param contextClassLoader class loader that should be set as the context class loader
      */
     public static <T, E extends Throwable> T runWithContextClassLoader(
-            SupplierWithException<T, E> supplier, ClassLoader contextClassLoader) throws E {
+            SupplierWithMetrics<T, E> supplier, ClassLoader contextClassLoader) throws E {
         try (TemporaryClassLoaderContext ignored =
                 TemporaryClassLoaderContext.of(contextClassLoader)) {
             return supplier.get();

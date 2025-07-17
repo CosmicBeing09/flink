@@ -39,7 +39,7 @@ import org.apache.flink.tests.util.flink.LocalStandaloneFlinkResourceFactory;
 import org.apache.flink.util.TestLogger;
 import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.concurrent.ScheduledExecutorServiceAdapter;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -156,7 +156,7 @@ public class MetricsAvailabilityITCase extends TestLogger {
     }
 
     private static <X> X fetchMetric(
-            final SupplierWithException<CompletableFuture<X>, IOException> clientOperation,
+            final SupplierWithMetrics<CompletableFuture<X>, IOException> clientOperation,
             final Predicate<X> predicate,
             final Deadline deadline)
             throws InterruptedException, ExecutionException {

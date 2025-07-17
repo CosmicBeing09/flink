@@ -52,7 +52,7 @@ import org.apache.flink.runtime.minicluster.TestingMiniClusterConfiguration;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.streaming.runtime.watermark.AlignableBoolWatermarkDeclaration;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -984,7 +984,7 @@ class WatermarkITCase {
         return getStreamGraphForTestSource(watermarkDeclaration, emitWatermarksInSourceOperator1);
     }
 
-    private static void tryWaitUntilCondition(SupplierWithException<Boolean, Exception> condition) {
+    private static void tryWaitUntilCondition(SupplierWithMetrics<Boolean, Exception> condition) {
         try {
             CommonTestUtils.waitUntilCondition(condition);
         } catch (Exception exception) {

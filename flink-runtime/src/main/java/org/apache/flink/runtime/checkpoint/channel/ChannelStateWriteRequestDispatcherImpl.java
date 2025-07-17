@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint.channel;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageWorkerView;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +43,7 @@ final class ChannelStateWriteRequestDispatcherImpl implements ChannelStateWriteR
     private static final Logger LOG =
             LoggerFactory.getLogger(ChannelStateWriteRequestDispatcherImpl.class);
 
-    private final SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+    private final SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
             checkpointStorageWorkerViewSupplier;
     private CheckpointStorageWorkerView streamFactoryResolver;
 
@@ -75,7 +75,7 @@ final class ChannelStateWriteRequestDispatcherImpl implements ChannelStateWriteR
     private ChannelStateCheckpointWriter writer;
 
     ChannelStateWriteRequestDispatcherImpl(
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerViewSupplier,
             ChannelStateSerializer serializer) {
         this.checkpointStorageWorkerViewSupplier = checkpointStorageWorkerViewSupplier;

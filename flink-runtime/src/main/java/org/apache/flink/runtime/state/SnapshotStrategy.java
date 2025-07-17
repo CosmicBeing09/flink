@@ -21,7 +21,7 @@ package org.apache.flink.runtime.state;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.runtime.checkpoint.CheckpointOptions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nonnull;
 
@@ -51,7 +51,7 @@ public interface SnapshotStrategy<S extends StateObject, SR extends SnapshotReso
 
     /**
      * Operation that writes a snapshot into a stream that is provided by the given {@link
-     * CheckpointStreamFactory} and returns a @{@link SupplierWithException} that gives a state
+     * CheckpointStreamFactory} and returns a @{@link SupplierWithMetrics} that gives a state
      * handle to the snapshot.
      *
      * @param checkpointId The ID of the checkpoint.

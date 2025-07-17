@@ -24,7 +24,7 @@ import org.apache.flink.runtime.highavailability.JobResultEntry;
 import org.apache.flink.runtime.highavailability.JobResultStore;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.util.concurrent.FutureUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -58,7 +58,7 @@ public class TestingJobResultStore implements JobResultStore {
     private final Function<JobID, CompletableFuture<Boolean>> hasJobResultEntryFunction;
     private final Function<JobID, CompletableFuture<Boolean>> hasDirtyJobResultEntryFunction;
     private final Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction;
-    private final SupplierWithException<Set<JobResult>, ? extends IOException>
+    private final SupplierWithMetrics<Set<JobResult>, ? extends IOException>
             getDirtyResultsSupplier;
 
     private TestingJobResultStore(
@@ -67,7 +67,7 @@ public class TestingJobResultStore implements JobResultStore {
             Function<JobID, CompletableFuture<Boolean>> hasJobResultEntryFunction,
             Function<JobID, CompletableFuture<Boolean>> hasDirtyJobResultEntryFunction,
             Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction,
-            SupplierWithException<Set<JobResult>, ? extends IOException> getDirtyResultsSupplier) {
+            SupplierWithMetrics<Set<JobResult>, ? extends IOException> getDirtyResultsSupplier) {
         this.createDirtyResultConsumer = createDirtyResultConsumer;
         this.markResultAsCleanConsumer = markResultAsCleanConsumer;
         this.hasJobResultEntryFunction = hasJobResultEntryFunction;
@@ -125,7 +125,7 @@ public class TestingJobResultStore implements JobResultStore {
         private Function<JobID, CompletableFuture<Boolean>> hasCleanJobResultEntryFunction =
                 jobID -> CompletableFuture.completedFuture(false);
 
-        private SupplierWithException<Set<JobResult>, ? extends IOException>
+        private SupplierWithMetrics<Set<JobResult>, ? extends IOException>
                 getDirtyResultsSupplier = Collections::emptySet;
 
         public Builder withCreateDirtyResultConsumer(
@@ -159,7 +159,7 @@ public class TestingJobResultStore implements JobResultStore {
         }
 
         public Builder withGetDirtyResultsSupplier(
-                SupplierWithException<Set<JobResult>, ? extends IOException>
+                SupplierWithMetrics<Set<JobResult>, ? extends IOException>
                         getDirtyResultsSupplier) {
             this.getDirtyResultsSupplier = getDirtyResultsSupplier;
             return this;

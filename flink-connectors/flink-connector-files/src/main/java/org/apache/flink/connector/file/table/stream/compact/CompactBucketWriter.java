@@ -21,7 +21,7 @@ package org.apache.flink.connector.file.table.stream.compact;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.api.functions.sink.filesystem.BucketWriter;
 import org.apache.flink.streaming.api.functions.sink.filesystem.InProgressFileWriter;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 
@@ -50,18 +50,18 @@ public class CompactBucketWriter<T> implements CompactWriter<T> {
     }
 
     public static <T> CompactWriter.Factory<T> factory(
-            SupplierWithException<BucketWriter<T, String>, IOException> factory) {
+            SupplierWithMetrics<BucketWriter<T, String>, IOException> factory) {
         return new Factory<>(factory);
     }
 
     /** Factory to create {@link CompactBucketWriter}. */
     private static class Factory<T> implements CompactWriter.Factory<T> {
 
-        private final SupplierWithException<BucketWriter<T, String>, IOException> factory;
+        private final SupplierWithMetrics<BucketWriter<T, String>, IOException> factory;
 
         private BucketWriter<T, String> bucketWriter;
 
-        public Factory(SupplierWithException<BucketWriter<T, String>, IOException> factory) {
+        public Factory(SupplierWithMetrics<BucketWriter<T, String>, IOException> factory) {
             this.factory = factory;
         }
 

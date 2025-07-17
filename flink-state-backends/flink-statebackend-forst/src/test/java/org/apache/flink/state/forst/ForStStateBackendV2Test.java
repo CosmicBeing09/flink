@@ -38,7 +38,7 @@ import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.junit.jupiter.api.TestTemplate;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,10 +73,10 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
     @TempDir private static java.nio.file.Path tempFolderForForStLocal;
     @TempDir private static java.nio.file.Path tempFolderForForstRemote;
 
-    private static final SupplierWithException<CheckpointStorage, IOException>
+    private static final SupplierWithMetrics<CheckpointStorage, IOException>
             jobManagerCheckpointStorage = JobManagerCheckpointStorage::new;
 
-    private static final SupplierWithException<CheckpointStorage, IOException>
+    private static final SupplierWithMetrics<CheckpointStorage, IOException>
             filesystemCheckpointStorage =
                     () -> {
                         String checkpointPath =
@@ -84,7 +84,7 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
                         return new FileSystemCheckpointStorage(new Path(checkpointPath), 0, -1);
                     };
 
-    private static final SupplierWithException<CheckpointStorage, IOException>
+    private static final SupplierWithMetrics<CheckpointStorage, IOException>
             dbReusableCheckpointStorage =
                     () -> {
                         String checkpointPath = "file://" + tempFolderForForstRemote.toString();
@@ -152,7 +152,7 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
     public boolean useDeleteFileInRange;
 
     @Parameter(4)
-    public SupplierWithException<CheckpointStorage, IOException> storageSupplier;
+    public SupplierWithMetrics<CheckpointStorage, IOException> storageSupplier;
 
     @Parameter(5)
     public RestoreMode restoreMode;

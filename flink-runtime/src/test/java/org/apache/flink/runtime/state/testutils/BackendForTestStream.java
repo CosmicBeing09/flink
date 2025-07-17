@@ -32,7 +32,7 @@ import org.apache.flink.runtime.state.CompletedCheckpointStorageLocation;
 import org.apache.flink.runtime.state.StreamStateHandle;
 import org.apache.flink.runtime.state.filesystem.AbstractFsCheckpointStorageAccess;
 import org.apache.flink.runtime.state.hashmap.HashMapStateBackend;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 
@@ -76,7 +76,7 @@ public class BackendForTestStream extends HashMapStateBackend implements Checkpo
     // ------------------------------------------------------------------------
 
     public interface StreamFactory
-            extends SupplierWithException<CheckpointStateOutputStream, IOException>,
+            extends SupplierWithMetrics<CheckpointStateOutputStream, IOException>,
                     java.io.Serializable {}
 
     // ------------------------------------------------------------------------

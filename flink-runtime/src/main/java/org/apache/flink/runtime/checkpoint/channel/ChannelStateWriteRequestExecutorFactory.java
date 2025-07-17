@@ -20,7 +20,7 @@ package org.apache.flink.runtime.checkpoint.channel;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.state.CheckpointStorageWorkerView;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.concurrent.GuardedBy;
 
@@ -45,7 +45,7 @@ public class ChannelStateWriteRequestExecutorFactory {
     public ChannelStateWriteRequestExecutor getOrCreateExecutor(
             JobVertexID jobVertexID,
             int subtaskIndex,
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerViewSupplier,
             int maxSubtasksPerChannelStateFile) {
         return getOrCreateExecutor(
@@ -63,7 +63,7 @@ public class ChannelStateWriteRequestExecutorFactory {
     ChannelStateWriteRequestExecutor getOrCreateExecutor(
             JobVertexID jobVertexID,
             int subtaskIndex,
-            SupplierWithException<CheckpointStorageWorkerView, ? extends IOException>
+            SupplierWithMetrics<CheckpointStorageWorkerView, ? extends IOException>
                     checkpointStorageWorkerViewSupplier,
             int maxSubtasksPerChannelStateFile,
             boolean startExecutor) {

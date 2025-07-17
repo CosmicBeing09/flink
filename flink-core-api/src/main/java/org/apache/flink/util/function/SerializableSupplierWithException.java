@@ -23,7 +23,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import java.io.Serializable;
 
 /**
- * A serializable {@link SupplierWithException}.
+ * A serializable {@link SupplierWithMetrics}.
  *
  * @param <T> the type of results supplied by this supplier
  * @param <E> the type of Exceptions thrown by this function.
@@ -31,4 +31,4 @@ import java.io.Serializable;
 @PublicEvolving
 @FunctionalInterface
 public interface SerializableSupplierWithException<T, E extends Throwable>
-        extends SupplierWithException<T, E>, Serializable {}
+        extends SupplierWithMetrics<T, E>, Serializable {}

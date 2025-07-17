@@ -61,7 +61,7 @@ import org.apache.flink.testutils.junit.utils.TempDirUtils;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.FlinkRuntimeException;
 import org.apache.flink.util.IOUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
@@ -129,19 +129,19 @@ public class EmbeddedRocksDBStateBackendTest
                 new Object[][] {
                     {
                         true,
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 JobManagerCheckpointStorage::new,
                         false
                     },
                     {
                         true,
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 JobManagerCheckpointStorage::new,
                         true
                     },
                     {
                         false,
-                        (SupplierWithException<CheckpointStorage, IOException>)
+                        (SupplierWithMetrics<CheckpointStorage, IOException>)
                                 () -> {
                                     String checkpointPath =
                                             TempDirUtils.newFolder(tempFolder).toURI().toString();
@@ -157,7 +157,7 @@ public class EmbeddedRocksDBStateBackendTest
     public boolean enableIncrementalCheckpointing;
 
     @Parameter(value = 1)
-    public SupplierWithException<CheckpointStorage, IOException> storageSupplier;
+    public SupplierWithMetrics<CheckpointStorage, IOException> storageSupplier;
 
     @Parameter(value = 2)
     public boolean useIngestDB;

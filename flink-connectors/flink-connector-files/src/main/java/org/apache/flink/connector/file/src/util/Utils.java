@@ -22,7 +22,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.connector.file.src.reader.BulkFormat;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.IOUtils;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingRunnable;
 
 import java.io.Closeable;
@@ -38,7 +38,7 @@ public final class Utils {
      * exception happens during that, the given closable is quietly closed.
      */
     public static <E> E doWithCleanupOnException(
-            final Closeable toCleanUp, final SupplierWithException<E, IOException> code)
+            final Closeable toCleanUp, final SupplierWithMetrics<E, IOException> code)
             throws IOException {
 
         try {
@@ -60,7 +60,7 @@ public final class Utils {
 
         doWithCleanupOnException(
                 toCleanUp,
-                (SupplierWithException<Void, IOException>)
+                (SupplierWithMetrics<Void, IOException>)
                         () -> {
                             code.run();
                             return null;

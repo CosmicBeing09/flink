@@ -29,7 +29,7 @@ import org.apache.flink.runtime.io.network.buffer.BufferConsumer;
 import org.apache.flink.runtime.io.network.buffer.BufferPool;
 import org.apache.flink.runtime.io.network.logger.NetworkActionsLogger;
 import org.apache.flink.runtime.io.network.partition.consumer.EndOfChannelStateEvent;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.GuardedBy;
@@ -114,7 +114,7 @@ public class PipelinedResultPartition extends BufferWritingResultPartition
             int numTargetKeyGroups,
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory) {
 
         super(
                 owningTaskName,

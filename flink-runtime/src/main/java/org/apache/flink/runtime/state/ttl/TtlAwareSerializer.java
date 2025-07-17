@@ -24,7 +24,7 @@ import org.apache.flink.api.common.typeutils.base.ListSerializer;
 import org.apache.flink.api.common.typeutils.base.MapSerializer;
 import org.apache.flink.core.memory.DataInputView;
 import org.apache.flink.core.memory.DataOutputView;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.List;
@@ -131,7 +131,7 @@ public class TtlAwareSerializer<T, S extends TypeSerializer<T>> extends TypeSeri
     @SuppressWarnings("unchecked")
     public void migrateValueFromPriorSerializer(
             TtlAwareSerializer<T, ?> priorTtlAwareSerializer,
-            SupplierWithException<T, IOException> inputSupplier,
+            SupplierWithMetrics<T, IOException> inputSupplier,
             DataOutputView target,
             TtlTimeProvider ttlTimeProvider)
             throws IOException {

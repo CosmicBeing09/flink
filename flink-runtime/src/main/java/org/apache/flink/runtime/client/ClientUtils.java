@@ -25,7 +25,7 @@ import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -48,7 +48,7 @@ public enum ClientUtils {
      */
     public static void extractAndUploadExecutionPlanFiles(
             ExecutionPlan executionPlan,
-            SupplierWithException<BlobClient, IOException> clientSupplier)
+            SupplierWithMetrics<BlobClient, IOException> clientSupplier)
             throws FlinkException {
         List<Path> userJars = executionPlan.getUserJars();
         Collection<Tuple2<String, Path>> userArtifacts =
@@ -77,7 +77,7 @@ public enum ClientUtils {
             ExecutionPlan executionPlan,
             Collection<Path> userJars,
             Collection<Tuple2<String, org.apache.flink.core.fs.Path>> userArtifacts,
-            SupplierWithException<BlobClient, IOException> clientSupplier)
+            SupplierWithMetrics<BlobClient, IOException> clientSupplier)
             throws FlinkException {
         if (!userJars.isEmpty() || !userArtifacts.isEmpty()) {
             try (BlobClient client = clientSupplier.get()) {

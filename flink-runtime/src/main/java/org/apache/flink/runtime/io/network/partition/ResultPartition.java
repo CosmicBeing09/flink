@@ -35,7 +35,7 @@ import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.metrics.groups.TaskIOMetricGroup;
 import org.apache.flink.runtime.taskexecutor.TaskExecutor;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -104,7 +104,7 @@ public abstract class ResultPartition implements ResultPartitionWriter {
 
     private volatile Throwable cause;
 
-    private final SupplierWithException<BufferPool, IOException> bufferPoolFactory;
+    private final SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory;
 
     /** Used to compress buffer to reduce IO. */
     @Nullable protected final BufferCompressor bufferCompressor;
@@ -126,7 +126,7 @@ public abstract class ResultPartition implements ResultPartitionWriter {
             int numTargetKeyGroups,
             ResultPartitionManager partitionManager,
             @Nullable BufferCompressor bufferCompressor,
-            SupplierWithException<BufferPool, IOException> bufferPoolFactory) {
+            SupplierWithMetrics<BufferPool, IOException> bufferPoolFactory) {
 
         this.owningTaskName = checkNotNull(owningTaskName);
         Preconditions.checkArgument(0 <= partitionIndex, "The partition index must be positive.");

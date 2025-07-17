@@ -43,7 +43,7 @@ import org.apache.flink.table.catalog.ObjectIdentifier;
 import org.apache.flink.table.connector.sink.DynamicTableSink;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.types.Row;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -93,13 +93,13 @@ public class BatchSink {
             boolean overwrite,
             final int compactParallelism,
             final boolean compactParallelismConfigured) {
-        SupplierWithException<FileSystem, IOException> fsSupplier =
-                (SupplierWithException<FileSystem, IOException> & Serializable)
+        SupplierWithMetrics<FileSystem, IOException> fsSupplier =
+                (SupplierWithMetrics<FileSystem, IOException> & Serializable)
                         () -> fsFactory.create(tmpPath.toUri());
 
         CompactWriter.Factory<T> writerFactory =
                 CompactBucketWriter.factory(
-                        (SupplierWithException<BucketWriter<T, String>, IOException> & Serializable)
+                        (SupplierWithMetrics<BucketWriter<T, String>, IOException> & Serializable)
                                 builder::createBucketWriter);
 
         SingleOutputStreamOperator<CompactMessages.CompactOutput> transform =

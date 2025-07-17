@@ -29,7 +29,7 @@ import org.apache.flink.streaming.api.operators.AbstractStreamOperator;
 import org.apache.flink.streaming.api.operators.BoundedOneInput;
 import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,7 +52,7 @@ public class BatchCompactCoordinator extends AbstractStreamOperator<CoordinatorO
 
     private static final long serialVersionUID = 1L;
 
-    private final SupplierWithException<FileSystem, IOException> fsFactory;
+    private final SupplierWithMetrics<FileSystem, IOException> fsFactory;
     private final long compactAverageSize;
     private final long compactTargetSize;
 
@@ -63,7 +63,7 @@ public class BatchCompactCoordinator extends AbstractStreamOperator<CoordinatorO
     private transient StreamRecord<CoordinatorOutput> element;
 
     public BatchCompactCoordinator(
-            SupplierWithException<FileSystem, IOException> fsFactory,
+            SupplierWithMetrics<FileSystem, IOException> fsFactory,
             long compactAverageSize,
             long compactTargetSize) {
         this.fsFactory = fsFactory;

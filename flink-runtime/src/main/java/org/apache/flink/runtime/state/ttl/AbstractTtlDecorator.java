@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state.ttl;
 
 import org.apache.flink.api.common.state.StateTtlConfig;
 import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.function.SupplierWithException;
+import org.apache.flink.util.function.SupplierWithMetrics;
 import org.apache.flink.util.function.ThrowingConsumer;
 import org.apache.flink.util.function.ThrowingRunnable;
 
@@ -81,7 +81,7 @@ public abstract class AbstractTtlDecorator<T> {
 
     public <SE extends Throwable, CE extends Throwable, CLE extends Throwable, V>
             V getWithTtlCheckAndUpdate(
-                    SupplierWithException<TtlValue<V>, SE> getter,
+                    SupplierWithMetrics<TtlValue<V>, SE> getter,
                     ThrowingConsumer<TtlValue<V>, CE> updater,
                     ThrowingRunnable<CLE> stateClear)
                     throws SE, CE, CLE {
@@ -91,7 +91,7 @@ public abstract class AbstractTtlDecorator<T> {
 
     public <SE extends Throwable, CE extends Throwable, CLE extends Throwable, V>
             TtlValue<V> getWrappedWithTtlCheckAndUpdate(
-                    SupplierWithException<TtlValue<V>, SE> getter,
+                    SupplierWithMetrics<TtlValue<V>, SE> getter,
                     ThrowingConsumer<TtlValue<V>, CE> updater,
                     ThrowingRunnable<CLE> stateClear)
                     throws SE, CE, CLE {
