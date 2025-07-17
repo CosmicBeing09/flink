@@ -79,7 +79,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
     }
 
     @Test
-    public void testCancelSortMatchWhileReadingSlowInputs() throws Exception {
+    public void testCancelWhileReadingSlowInputs() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), true);
     }
 
