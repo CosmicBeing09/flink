@@ -30,16 +30,16 @@ import java.util.Collection;
  * @param <N> The type of the namespace
  * @param <T> Type of the user value of state
  */
-class LatencyTrackingReducingState<K, N, T>
+class MetricsTrackingReducingState<K, N, T>
         extends AbstractMetricsTrackState<
                         K,
                         N,
                         T,
                         InternalReducingState<K, N, T>,
-                        LatencyTrackingReducingState.ReducingStateLatencyMetrics>
+                        MetricsTrackingReducingState.ReducingStateLatencyMetrics>
         implements InternalReducingState<K, N, T> {
 
-    LatencyTrackingReducingState(
+    MetricsTrackingReducingState(
             String stateName,
             InternalReducingState<K, N, T> original,
             MetricsTrackingStateConfig latencyTrackingStateConfig) {

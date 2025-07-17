@@ -132,7 +132,7 @@ public class LatencyTrackingStateFactory<
     @SuppressWarnings({"unchecked"})
     private IS createReducingState() {
         return (IS)
-                new LatencyTrackingReducingState<>(
+                new MetricsTrackingReducingState<>(
                         stateDescriptor.getName(),
                         (InternalReducingState<K, N, V>) kvState,
                         latencyTrackingStateConfig);

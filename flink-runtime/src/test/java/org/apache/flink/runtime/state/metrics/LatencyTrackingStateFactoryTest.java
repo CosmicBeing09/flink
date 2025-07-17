@@ -123,7 +123,7 @@ public class LatencyTrackingStateFactoryTest {
                 LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         reducingState, reducingStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingReducingState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingReducingState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(reducingState);
         }

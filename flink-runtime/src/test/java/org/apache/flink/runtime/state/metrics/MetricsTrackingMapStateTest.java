@@ -36,7 +36,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link MetricsTrackingMapState}. */
-class LatencyTrackingMapStateTest extends LatencyTrackingStateTestBase<Integer> {
+class MetricsTrackingMapStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
     MapStateDescriptor<Integer, Double> getStateDescriptor() {

@@ -48,7 +48,7 @@ import java.util.Collections;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Test base for latency tracking state. */
-abstract class LatencyTrackingStateTestBase<K> {
+abstract class MetricsTrackingStateTestBase<K> {
     protected static final int SAMPLE_INTERVAL = 10;
 
     protected AbstractKeyedStateBackend<K> createKeyedBackend(TypeSerializer<K> keySerializer)

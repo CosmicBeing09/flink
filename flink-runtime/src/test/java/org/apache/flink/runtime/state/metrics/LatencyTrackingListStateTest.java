@@ -34,7 +34,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link LatencyTrackingListState}. */
-class LatencyTrackingListStateTest extends LatencyTrackingStateTestBase<Integer> {
+class LatencyTrackingListStateTest extends MetricsTrackingStateTestBase<Integer> {
     @Override
     @SuppressWarnings("unchecked")
     ListStateDescriptor<Long> getStateDescriptor() {
