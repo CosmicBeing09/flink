@@ -29,8 +29,8 @@ import org.apache.flink.util.ExceptionUtils;
 /** Starts a Flink mini cluster as a resource and registers the StreamExecutionEnvironment. */
 public class MiniClusterWithClientResource extends MiniClusterResource {
 
-    private ClusterClient<?> clusterClient;
-    private RestClusterClient<MiniClusterClient.MiniClusterId> restClusterClient;
+    private ClusterClient<?> client;
+    private RestClusterClient<MiniClusterClient.MiniClusterId> restClient;
 
     private TestStreamEnvironment streamExecutionEnvironment;
 
@@ -40,7 +40,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
     }
 
     public ClusterClient<?> getClusterClient() {
-        return clusterClient;
+        return client;
     }
 
     /**
@@ -49,7 +49,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
      * needs.
      */
     public RestClusterClient<?> getRestClusterClient() throws Exception {
-        return restClusterClient;
+        return restClient;
     }
 
     public TestStreamEnvironment getTestStreamEnvironment() {
@@ -60,8 +60,8 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
     public void before() throws Exception {
         super.before();
 
-        clusterClient = createMiniClusterClient();
-        restClusterClient = createRestClusterClient();
+        client = createMiniClusterClient();
+        restClient = createRestClusterClient();
 
         TestStreamEnvironment.setAsContext(getMiniCluster(), getNumberSlots());
         streamExecutionEnvironment = new TestStreamEnvironment(getMiniCluster(), getNumberSlots());
@@ -74,25 +74,25 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
 
         Exception exception = null;
 
-        if (clusterClient != null) {
+        if (client != null) {
             try {
-                clusterClient.close();
+                client.close();
             } catch (Exception e) {
                 exception = e;
             }
         }
 
-        clusterClient = null;
+        client = null;
 
-        if (restClusterClient != null) {
+        if (restClient != null) {
             try {
-                restClusterClient.close();
+                restClient.close();
             } catch (Exception e) {
                 exception = ExceptionUtils.firstOrSuppressed(e, exception);
             }
         }
 
-        restClusterClient = null;
+        restClient = null;
 
         super.after();
 

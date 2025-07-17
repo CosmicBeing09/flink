@@ -116,20 +116,20 @@ public class JobDetailsHandler
             timestamps.put(jobStatus, executionGraph.getStatusTimestamp(jobStatus));
         }
 
-        Collection<JobDetailsInfo.JobVertexDetailsInfo> jobVertexInfos =
+        Collection<JobDetailsInfo.JobVertexDetailsInfo> vertexDetails =
                 new ArrayList<>(executionGraph.getAllVertices().size());
         int[] jobVerticesPerState = new int[ExecutionState.values().length];
 
-        for (AccessExecutionJobVertex accessExecutionJobVertex :
+        for (AccessExecutionJobVertex jobVertex :
                 executionGraph.getVerticesTopologically()) {
             final JobDetailsInfo.JobVertexDetailsInfo vertexDetailsInfo =
                     createJobVertexDetailsInfo(
-                            accessExecutionJobVertex,
+                            jobVertex,
                             now,
                             executionGraph.getJobID(),
                             metricFetcher);
 
-            jobVertexInfos.add(vertexDetailsInfo);
+            vertexDetails.add(vertexDetailsInfo);
             jobVerticesPerState[vertexDetailsInfo.getExecutionState().ordinal()]++;
         }
 
@@ -158,7 +158,7 @@ public class JobDetailsHandler
                 executionGraph.getArchivedExecutionConfig().getMaxParallelism(),
                 now,
                 timestamps,
-                jobVertexInfos,
+                vertexDetails,
                 jobVerticesPerStateMap,
                 new JobPlanInfo.RawJson(executionGraph.getPlan()),
                 streamGraphJson,
