@@ -338,7 +338,7 @@ public class AdaptiveScheduler
             return slotIdleTimeout;
         }
 
-        public Duration getScalingIntervalMin() {
+        public Duration getExecutingCooldownTimeout() {
             return scalingIntervalMin;
         }
 
@@ -1201,7 +1201,7 @@ public class AdaptiveScheduler
         return stateTransitionManagerFactory.create(
                 ctx,
                 clock,
-                settings.getScalingIntervalMin(),
+                settings.getExecutingCooldownTimeout(),
                 settings.getScalingResourceStabilizationTimeout(),
                 settings.getMaximumDelayForTriggeringRescale());
     }
