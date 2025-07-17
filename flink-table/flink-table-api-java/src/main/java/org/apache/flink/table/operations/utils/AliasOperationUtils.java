@@ -87,7 +87,7 @@ final class AliasOperationUtils {
         @Override
         public ValueLiteralExpression visit(ValueLiteralExpression valueLiteral) {
             String name =
-                    ExpressionUtils.extractValue(valueLiteral, String.class)
+                    ExpressionUtils.extractLiteralValue(valueLiteral, String.class)
                             .orElseThrow(
                                     () ->
                                             new ValidationException(

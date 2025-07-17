@@ -40,7 +40,7 @@ class GetConverter extends CustomizedConverter {
         RexNode child = context.toRexNode(call.getChildren().get(0));
         ValueLiteralExpression keyLiteral = (ValueLiteralExpression) call.getChildren().get(1);
         Optional<Integer> indexOptional =
-                ExpressionUtils.extractValue(keyLiteral, String.class)
+                ExpressionUtils.extractLiteralValue(keyLiteral, String.class)
                         .map(child.getType().getFieldNames()::indexOf);
         int index = indexOptional.orElseGet(() -> extractValue(keyLiteral, Integer.class));
         return context.getRelBuilder().getRexBuilder().makeFieldAccess(child, index);

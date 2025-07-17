@@ -21,6 +21,7 @@ package org.apache.flink.table.operations.utils;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.table.expressions.CallExpression;
 import org.apache.flink.table.expressions.Expression;
+import org.apache.flink.table.expressions.ExpressionUtils;
 import org.apache.flink.table.expressions.FieldReferenceExpression;
 import org.apache.flink.table.expressions.LocalReferenceExpression;
 import org.apache.flink.table.expressions.LookupCallExpression;
@@ -44,7 +45,6 @@ import static org.apache.flink.table.expressions.ApiExpressionUtils.isFunctionOf
 import static org.apache.flink.table.expressions.ApiExpressionUtils.unresolvedCall;
 import static org.apache.flink.table.expressions.ApiExpressionUtils.unresolvedRef;
 import static org.apache.flink.table.expressions.ApiExpressionUtils.valueLiteral;
-import static org.apache.flink.table.expressions.ExpressionUtils.extractValue;
 import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.WINDOW_PROPERTIES;
 import static org.apache.flink.table.functions.FunctionKind.AGGREGATE;
@@ -253,7 +253,7 @@ public class OperationExpressionsUtils {
         @Override
         public Optional<String> visit(UnresolvedCallExpression unresolvedCall) {
             if (unresolvedCall.getFunctionDefinition() == AS) {
-                return extractValue(unresolvedCall.getChildren().get(1), String.class);
+                return ExpressionUtils.extractLiteralValue(unresolvedCall.getChildren().get(1), String.class);
             } else {
                 return Optional.empty();
             }
@@ -262,7 +262,7 @@ public class OperationExpressionsUtils {
         @Override
         public Optional<String> visit(CallExpression call) {
             if (call.getFunctionDefinition() == AS) {
-                return extractValue(call.getChildren().get(1), String.class);
+                return ExpressionUtils.extractLiteralValue(call.getChildren().get(1), String.class);
             } else {
                 return Optional.empty();
             }

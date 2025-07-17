@@ -160,7 +160,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
 
         @Override
         public List<UnresolvedReferenceExpression> visit(ValueLiteralExpression valueLiteral) {
-            return ExpressionUtils.extractValue(valueLiteral, Integer.class)
+            return ExpressionUtils.extractLiteralValue(valueLiteral, Integer.class)
                     .map(i -> Collections.singletonList(inputFieldReferences.get(i - 1)))
                     .orElseGet(() -> defaultMethod(valueLiteral));
         }
@@ -179,14 +179,14 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
         public List<UnresolvedReferenceExpression> visit(UnresolvedCallExpression unresolvedCall) {
             if (isIndexRangeCall(unresolvedCall)) {
                 int start =
-                        ExpressionUtils.extractValue(
+                        ExpressionUtils.extractLiteralValue(
                                         unresolvedCall.getChildren().get(0), Integer.class)
                                 .orElseThrow(
                                         () ->
                                                 new ValidationException(
                                                         "Constant integer value expected."));
                 int end =
-                        ExpressionUtils.extractValue(
+                        ExpressionUtils.extractLiteralValue(
                                         unresolvedCall.getChildren().get(1), Integer.class)
                                 .orElseThrow(
                                         () ->

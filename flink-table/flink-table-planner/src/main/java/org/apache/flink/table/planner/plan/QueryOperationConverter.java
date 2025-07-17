@@ -34,6 +34,7 @@ import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.expressions.CallExpression;
 import org.apache.flink.table.expressions.Expression;
 import org.apache.flink.table.expressions.ExpressionDefaultVisitor;
+import org.apache.flink.table.expressions.ExpressionUtils;
 import org.apache.flink.table.expressions.FieldReferenceExpression;
 import org.apache.flink.table.expressions.ResolvedExpression;
 import org.apache.flink.table.expressions.ValueLiteralExpression;
@@ -121,7 +122,6 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.flink.table.expressions.ApiExpressionUtils.isFunctionOfKind;
-import static org.apache.flink.table.expressions.ExpressionUtils.extractValue;
 import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 import static org.apache.flink.table.functions.FunctionKind.AGGREGATE;
 import static org.apache.flink.table.functions.FunctionKind.TABLE_AGGREGATE;
@@ -711,7 +711,8 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         public AggCall visit(CallExpression unresolvedCall) {
             if (unresolvedCall.getFunctionDefinition() == AS) {
                 String aggregateName =
-                        extractValue(unresolvedCall.getChildren().get(1), String.class)
+                        ExpressionUtils
+                                .extractLiteralValue(unresolvedCall.getChildren().get(1), String.class)
                                 .orElseThrow(() -> new TableException("Unexpected name."));
 
                 Expression aggregate = unresolvedCall.getChildren().get(0);

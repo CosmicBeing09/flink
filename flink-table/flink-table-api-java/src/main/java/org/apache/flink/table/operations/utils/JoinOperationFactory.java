@@ -80,7 +80,7 @@ final class JoinOperationFactory {
             JoinType joinType,
             ResolvedExpression condition,
             boolean correlated) {
-        boolean alwaysTrue = ExpressionUtils.extractValue(condition, Boolean.class).orElse(false);
+        boolean alwaysTrue = ExpressionUtils.extractLiteralValue(condition, Boolean.class).orElse(false);
 
         if (alwaysTrue) {
             return;

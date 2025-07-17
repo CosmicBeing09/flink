@@ -667,7 +667,7 @@ public final class OperationTreeBuilder {
                     .stream()
                     .map(
                             ex ->
-                                    ExpressionUtils.extractValue(ex, String.class)
+                                    ExpressionUtils.extractLiteralValue(ex, String.class)
                                             .orElseThrow(
                                                     () ->
                                                             new TableException(

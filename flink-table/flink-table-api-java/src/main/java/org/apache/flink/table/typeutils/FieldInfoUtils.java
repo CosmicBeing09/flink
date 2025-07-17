@@ -733,7 +733,7 @@ public class FieldInfoUtils {
     }
 
     private static String extractAlias(Expression aliasExpr) {
-        return ExpressionUtils.extractValue(aliasExpr, String.class)
+        return ExpressionUtils.extractLiteralValue(aliasExpr, String.class)
                 .orElseThrow(
                         () ->
                                 new TableException(
