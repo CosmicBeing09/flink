@@ -31,7 +31,7 @@ import org.apache.flink.runtime.state.KeyedStateBackendParametersImpl;
 import org.apache.flink.runtime.state.KeyedStateHandle;
 import org.apache.flink.runtime.state.TestLocalRecoveryConfig;
 import org.apache.flink.runtime.state.UncompressedStreamCompressionDecorator;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 
 import org.rocksdb.ColumnFamilyHandle;
@@ -99,7 +99,7 @@ public final class RocksDBTestUtils {
                 TestLocalRecoveryConfig.disabled(),
                 RocksDBPriorityQueueConfig.buildWithPriorityQueueType(queueStateType),
                 TtlTimeProvider.DEFAULT,
-                LatencyTrackingStateConfig.disabled(),
+                MetricsTrackingStateConfig.disabled(),
                 new UnregisteredMetricsGroup(),
                 (key, value) -> {},
                 stateHandles,
@@ -131,7 +131,7 @@ public final class RocksDBTestUtils {
                 RocksDBPriorityQueueConfig.buildWithPriorityQueueType(
                         EmbeddedRocksDBStateBackend.PriorityQueueStateType.HEAP),
                 TtlTimeProvider.DEFAULT,
-                LatencyTrackingStateConfig.disabled(),
+                MetricsTrackingStateConfig.disabled(),
                 new UnregisteredMetricsGroup(),
                 Collections.emptyList(),
                 UncompressedStreamCompressionDecorator.INSTANCE,

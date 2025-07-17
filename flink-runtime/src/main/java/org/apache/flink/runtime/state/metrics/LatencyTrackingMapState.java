@@ -44,7 +44,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
     LatencyTrackingMapState(
             String stateName,
             InternalMapState<K, N, UK, UV> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new MapStateLatencyMetrics(

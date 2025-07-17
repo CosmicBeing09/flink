@@ -46,7 +46,7 @@ import java.util.Collection;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
 
-/** Tests for {@link LatencyTrackingStateFactory}. */
+/** Tests for {@link MetricsTrackingStateFactory}. */
 @ExtendWith(ParameterizedTestExtension.class)
 public class LatencyTrackingStateFactoryTest {
 
@@ -57,9 +57,9 @@ public class LatencyTrackingStateFactoryTest {
         return Arrays.asList(true, false);
     }
 
-    private LatencyTrackingStateConfig getLatencyTrackingStateConfig() {
+    private MetricsTrackingStateConfig getLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        return LatencyTrackingStateConfig.newBuilder()
+        return MetricsTrackingStateConfig.newBuilder()
                 .setEnabled(enableLatencyTracking)
                 .setMetricGroup(metricsGroup)
                 .build();
@@ -72,7 +72,7 @@ public class LatencyTrackingStateFactoryTest {
         ValueStateDescriptor<String> valueStateDescriptor =
                 new ValueStateDescriptor<>("value", String.class);
         InternalKvState<K, ?, ?> latencyTrackingState =
-                LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
+                MetricsTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         valueState, valueStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
             assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingValueState.class);
@@ -88,7 +88,7 @@ public class LatencyTrackingStateFactoryTest {
         ListStateDescriptor<String> listStateDescriptor =
                 new ListStateDescriptor<>("list", String.class);
         InternalKvState<K, N, ?> latencyTrackingState =
-                LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
+                MetricsTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         listState, listStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
             assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingListState.class);
@@ -104,7 +104,7 @@ public class LatencyTrackingStateFactoryTest {
         MapStateDescriptor<String, Long> mapStateDescriptor =
                 new MapStateDescriptor<>("map", String.class, Long.class);
         InternalKvState<K, N, ?> latencyTrackingState =
-                LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
+                MetricsTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         mapState, mapStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
             assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingMapState.class);
@@ -120,7 +120,7 @@ public class LatencyTrackingStateFactoryTest {
         ReducingStateDescriptor<Long> reducingStateDescriptor =
                 new ReducingStateDescriptor<>("reducing", Long::sum, Long.class);
         InternalKvState<K, N, ?> latencyTrackingState =
-                LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
+                MetricsTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         reducingState, reducingStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
             assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingReducingState.class);
@@ -162,7 +162,7 @@ public class LatencyTrackingStateFactoryTest {
                         },
                         Long.class);
         InternalKvState<K, N, ?> latencyTrackingState =
-                LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
+                MetricsTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         aggregatingState,
                         aggregatingStateDescriptor,
                         getLatencyTrackingStateConfig());

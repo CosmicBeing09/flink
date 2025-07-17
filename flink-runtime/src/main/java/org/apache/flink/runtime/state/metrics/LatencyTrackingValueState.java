@@ -42,7 +42,7 @@ class LatencyTrackingValueState<K, N, T>
     public LatencyTrackingValueState(
             String stateName,
             InternalValueState<K, N, T> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new ValueStateLatencyMetrics(

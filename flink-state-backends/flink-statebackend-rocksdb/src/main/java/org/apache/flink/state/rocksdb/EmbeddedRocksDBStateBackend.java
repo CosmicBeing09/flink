@@ -40,7 +40,7 @@ import org.apache.flink.runtime.state.DefaultOperatorStateBackendBuilder;
 import org.apache.flink.runtime.state.LocalRecoveryConfig;
 import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.state.rocksdb.RocksDBMemoryControllerUtils.RocksDBMemoryFactory;
 import org.apache.flink.state.rocksdb.sstmerge.RocksDBManualCompactionConfig;
 import org.apache.flink.util.AbstractID;
@@ -490,7 +490,7 @@ public class EmbeddedRocksDBStateBackend extends AbstractManagedMemoryStateBacke
         StreamCompressionDecorator keyGroupCompressionDecorator =
                 getCompressionDecorator(executionConfig);
 
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
                 latencyTrackingConfigBuilder.setMetricGroup(parameters.getMetricGroup()).build();
         RocksDBKeyedStateBackendBuilder<K> builder =
                 new RocksDBKeyedStateBackendBuilder<>(

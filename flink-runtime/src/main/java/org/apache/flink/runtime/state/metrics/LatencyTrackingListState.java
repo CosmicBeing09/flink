@@ -43,7 +43,7 @@ class LatencyTrackingListState<K, N, T>
     LatencyTrackingListState(
             String stateName,
             InternalListState<K, N, T> original,
-            LatencyTrackingStateConfig latencyTrackingStateConfig) {
+            MetricsTrackingStateConfig latencyTrackingStateConfig) {
         super(
                 original,
                 new ListStateLatencyMetrics(

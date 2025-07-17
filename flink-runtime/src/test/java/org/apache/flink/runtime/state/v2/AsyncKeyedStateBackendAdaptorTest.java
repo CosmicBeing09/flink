@@ -41,7 +41,7 @@ import org.apache.flink.runtime.state.VoidNamespace;
 import org.apache.flink.runtime.state.VoidNamespaceSerializer;
 import org.apache.flink.runtime.state.heap.HeapKeyedStateBackendBuilder;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSetFactory;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 import org.apache.flink.runtime.state.v2.adaptor.AsyncKeyedStateBackendAdaptor;
 import org.apache.flink.runtime.state.v2.internal.InternalAggregatingState;
@@ -441,7 +441,7 @@ public class AsyncKeyedStateBackendAdaptorTest {
                         new KeyGroupRange(0, 127),
                         executionConfig,
                         TtlTimeProvider.DEFAULT,
-                        LatencyTrackingStateConfig.disabled(),
+                        MetricsTrackingStateConfig.disabled(),
                         Collections.EMPTY_LIST,
                         AbstractStateBackend.getCompressionDecorator(executionConfig),
                         TestLocalRecoveryConfig.disabled(),
