@@ -299,9 +299,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case VARCHAR:
             case BINARY:
             case VARBINARY:
-                HeapBytesVector bytesVector = new HeapBytesVector(total);
-                bytesVector.reset();
-                lcv.setChild(bytesVector);
+                HeapBytesVector heapBytesVector = new HeapBytesVector(total);
+                heapBytesVector.reset();
+                lcv.setChild(heapBytesVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     byte[] src = (byte[]) valueList.get(i);
                     if (src == null) {
@@ -312,9 +312,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case BOOLEAN:
-                HeapBooleanVector booleanVector = new HeapBooleanVector(total);
-                booleanVector.reset();
-                lcv.setChild(booleanVector);
+                HeapBooleanVector heapBooleanVector = new HeapBooleanVector(total);
+                heapBooleanVector.reset();
+                lcv.setChild(heapBooleanVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapBooleanVector) lcv.getChild()).setNullAt(i);
@@ -324,9 +324,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case TINYINT:
-                HeapByteVector byteVector = new HeapByteVector(total);
-                byteVector.reset();
-                lcv.setChild(byteVector);
+                HeapByteVector heapByteVector = new HeapByteVector(total);
+                heapByteVector.reset();
+                lcv.setChild(heapByteVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapByteVector) lcv.getChild()).setNullAt(i);
@@ -337,9 +337,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case SMALLINT:
-                HeapShortVector shortVector = new HeapShortVector(total);
-                shortVector.reset();
-                lcv.setChild(shortVector);
+                HeapShortVector heapShortVector = new HeapShortVector(total);
+                heapShortVector.reset();
+                lcv.setChild(heapShortVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapShortVector) lcv.getChild()).setNullAt(i);
@@ -352,9 +352,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case INTEGER:
             case DATE:
             case TIME_WITHOUT_TIME_ZONE:
-                HeapIntVector intVector = new HeapIntVector(total);
-                intVector.reset();
-                lcv.setChild(intVector);
+                HeapIntVector heapIntVector = new HeapIntVector(total);
+                heapIntVector.reset();
+                lcv.setChild(heapIntVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapIntVector) lcv.getChild()).setNullAt(i);
@@ -365,9 +365,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case FLOAT:
-                HeapFloatVector floatVector = new HeapFloatVector(total);
-                floatVector.reset();
-                lcv.setChild(floatVector);
+                HeapFloatVector heapFloatVector = new HeapFloatVector(total);
+                heapFloatVector.reset();
+                lcv.setChild(heapFloatVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapFloatVector) lcv.getChild()).setNullAt(i);
@@ -378,9 +378,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case BIGINT:
-                HeapLongVector longVector = new HeapLongVector(total);
-                longVector.reset();
-                lcv.setChild(longVector);
+                HeapLongVector heapLongVector = new HeapLongVector(total);
+                heapLongVector.reset();
+                lcv.setChild(heapLongVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapLongVector) lcv.getChild()).setNullAt(i);
@@ -391,9 +391,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 }
                 break;
             case DOUBLE:
-                HeapDoubleVector doubleVector = new HeapDoubleVector(total);
-                doubleVector.reset();
-                lcv.setChild(doubleVector);
+                HeapDoubleVector heapDoubleVector = new HeapDoubleVector(total);
+                heapDoubleVector.reset();
+                lcv.setChild(heapDoubleVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapDoubleVector) lcv.getChild()).setNullAt(i);
@@ -405,9 +405,9 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 break;
             case TIMESTAMP_WITHOUT_TIME_ZONE:
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
-                HeapTimestampVector timestampVector = new HeapTimestampVector(total);
-                timestampVector.reset();
-                lcv.setChild(timestampVector);
+                HeapTimestampVector heapTimestampVector = new HeapTimestampVector(total);
+                heapTimestampVector.reset();
+                lcv.setChild(heapTimestampVector);
                 for (int i = 0; i < valueList.size(); i++) {
                     if (valueList.get(i) == null) {
                         ((HeapTimestampVector) lcv.getChild()).setNullAt(i);
