@@ -91,7 +91,7 @@ class TimerSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TimerHeapInternalTimer<String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

@@ -90,7 +90,7 @@ class LockableTypeSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Lockable<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

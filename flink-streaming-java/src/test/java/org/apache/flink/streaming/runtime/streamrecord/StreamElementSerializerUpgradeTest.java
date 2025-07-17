@@ -90,7 +90,7 @@ class StreamElementSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<StreamElement>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<StreamElement>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
