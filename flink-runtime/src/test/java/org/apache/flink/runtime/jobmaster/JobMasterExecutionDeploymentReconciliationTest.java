@@ -150,7 +150,7 @@ class JobMasterExecutionDeploymentReconciliationTest {
                             onCompletionActions
                                     .getJobReachedGloballyTerminalStateFuture()
                                     .get()
-                                    .getArchivedExecutionGraph()
+                                    .getExecutionGraph()
                                     .getState())
                     .isEqualTo(JobStatus.FAILED);
         }

@@ -109,7 +109,7 @@ public class MemoryExecutionGraphInfoStore implements ExecutionGraphInfoStore {
     public JobsOverview getStoredJobsOverview() {
         Collection<JobStatus> allJobStatus =
                 serializableExecutionGraphInfos.asMap().values().stream()
-                        .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                        .map(ExecutionGraphInfo::getExecutionGraph)
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
@@ -119,7 +119,7 @@ public class MemoryExecutionGraphInfoStore implements ExecutionGraphInfoStore {
     @Override
     public Collection<JobDetails> getAvailableJobDetails() {
         return serializableExecutionGraphInfos.asMap().values().stream()
-                .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                .map(ExecutionGraphInfo::getExecutionGraph)
                 .map(JobDetails::createDetailsForJob)
                 .collect(Collectors.toList());
     }
@@ -132,7 +132,7 @@ public class MemoryExecutionGraphInfoStore implements ExecutionGraphInfoStore {
 
         if (archivedExecutionGraphInfo != null) {
             return JobDetails.createDetailsForJob(
-                    archivedExecutionGraphInfo.getArchivedExecutionGraph());
+                    archivedExecutionGraphInfo.getExecutionGraph());
         } else {
             return null;
         }

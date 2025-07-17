@@ -452,7 +452,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .join();
 
@@ -509,7 +509,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .join();
 
@@ -532,7 +532,7 @@ public class AdaptiveSchedulerTest {
         final long initializationTimestamp =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getStatusTimestamp(JobStatus.INITIALIZING);
 
         assertThat(initializationTimestamp).isEqualTo(expectedInitializationTimestamp);
@@ -947,7 +947,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .get();
 
@@ -1528,7 +1528,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .get();
 
@@ -2577,7 +2577,7 @@ public class AdaptiveSchedulerTest {
                 () -> {
                     ArchivedExecutionGraph graph = null;
                     while (graph == null || graph.getState() != JobStatus.RUNNING) {
-                        graph = scheduler.requestJob().getArchivedExecutionGraph();
+                        graph = scheduler.requestJob().getExecutionGraph();
                     }
                     return graph;
                 },
@@ -2889,7 +2889,7 @@ public class AdaptiveSchedulerTest {
                                 vertexFuture.complete(
                                         scheduler
                                                 .requestJob()
-                                                .getArchivedExecutionGraph()
+                                                .getExecutionGraph()
                                                 .getAllExecutionVertices()));
                 final Iterable<ArchivedExecutionVertex> executionVertices = vertexFuture.get();
                 final List<ExecutionAttemptID> attemptIds =

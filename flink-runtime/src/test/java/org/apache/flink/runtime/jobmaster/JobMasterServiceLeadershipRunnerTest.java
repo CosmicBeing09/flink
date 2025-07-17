@@ -380,7 +380,7 @@ class JobMasterServiceLeadershipRunnerTest {
                         jobManagerRunner
                                 .requestJob(TESTING_TIMEOUT)
                                 .get()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getState())
                 .isEqualTo(JobStatus.INITIALIZING);
 
@@ -522,7 +522,7 @@ class JobMasterServiceLeadershipRunnerTest {
                             assertThat(result.isSuccess()).isTrue();
                             assertThat(
                                             result.getExecutionGraphInfo()
-                                                    .getArchivedExecutionGraph()
+                                                    .getExecutionGraph()
                                                     .getState())
                                     .isEqualTo(JobStatus.SUSPENDED);
                         });
@@ -694,7 +694,7 @@ class JobMasterServiceLeadershipRunnerTest {
                     jobManagerRunner.getResultFuture();
 
             JobManagerRunnerResult result = resultFuture.get();
-            assertThat(result.getExecutionGraphInfo().getArchivedExecutionGraph().getState())
+            assertThat(result.getExecutionGraphInfo().getExecutionGraph().getState())
                     .isEqualTo(JobStatus.FAILED);
         }
     }
@@ -849,7 +849,7 @@ class JobMasterServiceLeadershipRunnerTest {
         assertThat(
                         jobManagerRunnerResult
                                 .getExecutionGraphInfo()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getState())
                 .isEqualTo(JobStatus.SUSPENDED);
     }

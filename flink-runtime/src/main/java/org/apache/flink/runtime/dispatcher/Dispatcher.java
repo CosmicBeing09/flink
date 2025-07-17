@@ -816,7 +816,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
         final ExecutionGraphInfo executionGraphInfo = executionGraphInfoStore.get(jobId);
         if (executionGraphInfo != null) {
-            final JobStatus jobStatus = executionGraphInfo.getArchivedExecutionGraph().getState();
+            final JobStatus jobStatus = executionGraphInfo.getExecutionGraph().getState();
             if (jobStatus == JobStatus.CANCELED) {
                 return CompletableFuture.completedFuture(Acknowledge.get());
             } else {
@@ -939,7 +939,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 .exceptionally(
                         t ->
                                 getExecutionGraphInfoFromStore(t, jobId)
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getCheckpointStatsSnapshot());
     }
 
@@ -952,7 +952,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 return FutureUtils.completedExceptionally(new FlinkJobNotFoundException(jobId));
             } else {
                 return CompletableFuture.completedFuture(
-                        JobResult.createFrom(executionGraphInfo.getArchivedExecutionGraph()));
+                        JobResult.createFrom(executionGraphInfo.getExecutionGraph()));
             }
         }
 
@@ -964,7 +964,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                                 JobResult.createFrom(
                                         jobManagerRunnerResult
                                                 .getExecutionGraphInfo()
-                                                .getArchivedExecutionGraph()));
+                                                .getExecutionGraph()));
     }
 
     @Override
@@ -1181,7 +1181,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                             final Map<JobVertexID, Integer> maxParallelismPerJobVertex =
                                     new HashMap<>();
                             for (ArchivedExecutionJobVertex vertex :
-                                    job.getArchivedExecutionGraph().getVerticesTopologically()) {
+                                    job.getExecutionGraph().getVerticesTopologically()) {
                                 maxParallelismPerJobVertex.put(
                                         vertex.getJobVertexId(), vertex.getMaxParallelism());
                             }
@@ -1343,7 +1343,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     protected CompletableFuture<CleanupJobState> jobReachedTerminalState(
             ExecutionGraphInfo executionGraphInfo) {
         final ArchivedExecutionGraph archivedExecutionGraph =
-                executionGraphInfo.getArchivedExecutionGraph();
+                executionGraphInfo.getExecutionGraph();
         final JobStatus terminalJobStatus = archivedExecutionGraph.getState();
         Preconditions.checkArgument(
                 terminalJobStatus.isTerminalState(),
@@ -1392,7 +1392,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         final JobID jobId = executionGraphInfo.getJobId();
 
         final AccessExecutionGraph archivedExecutionGraph =
-                executionGraphInfo.getArchivedExecutionGraph();
+                executionGraphInfo.getExecutionGraph();
 
         final JobStatus terminalJobStatus = archivedExecutionGraph.getState();
         Preconditions.checkArgument(
@@ -1471,8 +1471,8 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
         } catch (IOException e) {
             log.info(
                     "Could not store completed job {}({}).",
-                    executionGraphInfo.getArchivedExecutionGraph().getJobName(),
-                    executionGraphInfo.getArchivedExecutionGraph().getJobID(),
+                    executionGraphInfo.getExecutionGraph().getJobName(),
+                    executionGraphInfo.getExecutionGraph().getJobID(),
                     e);
         }
     }
@@ -1487,14 +1487,14 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                             if (throwable != null) {
                                 log.info(
                                         "Could not archive completed job {}({}) to the history server.",
-                                        executionGraphInfo.getArchivedExecutionGraph().getJobName(),
-                                        executionGraphInfo.getArchivedExecutionGraph().getJobID(),
+                                        executionGraphInfo.getExecutionGraph().getJobName(),
+                                        executionGraphInfo.getExecutionGraph().getJobID(),
                                         throwable);
                             }
                             return Acknowledge.get();
                         },
                         getMainThreadExecutor(
-                                executionGraphInfo.getArchivedExecutionGraph().getJobID()));
+                                executionGraphInfo.getExecutionGraph().getJobID()));
     }
 
     private void jobMasterFailed(JobID jobId, Throwable cause) {

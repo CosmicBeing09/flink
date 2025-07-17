@@ -1182,7 +1182,7 @@ class JobMasterTest {
     private static Collection<AccessExecution> getExecutions(
             final JobMasterGateway jobMasterGateway) {
         final ArchivedExecutionGraph archivedExecutionGraph =
-                requestExecutionGraph(jobMasterGateway).getArchivedExecutionGraph();
+                requestExecutionGraph(jobMasterGateway).getExecutionGraph();
 
         return archivedExecutionGraph.getAllVertices().values().stream()
                 .flatMap(vertex -> Arrays.stream(vertex.getTaskVertices()))
@@ -1193,7 +1193,7 @@ class JobMasterTest {
     private static List<AccessExecution> getExecutions(
             final JobMasterGateway jobMasterGateway, final JobVertexID jobVertexId) {
         final ArchivedExecutionGraph archivedExecutionGraph =
-                requestExecutionGraph(jobMasterGateway).getArchivedExecutionGraph();
+                requestExecutionGraph(jobMasterGateway).getExecutionGraph();
 
         return Optional.ofNullable(archivedExecutionGraph.getAllVertices().get(jobVertexId))
                 .map(
@@ -2556,7 +2556,7 @@ class JobMasterTest {
                     onCompletionActions
                             .getJobReachedGloballyTerminalStateFuture()
                             .get()
-                            .getArchivedExecutionGraph();
+                            .getExecutionGraph();
 
             assertThat(archivedExecutionGraph.getState()).isEqualTo(JobStatus.FAILED);
         }

@@ -109,7 +109,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
 
         final List<JobStatus> jobStatuses =
                 executionGraphInfos.stream()
-                        .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                        .map(ExecutionGraphInfo::getExecutionGraph)
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 

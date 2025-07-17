@@ -204,7 +204,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
         return requestJob(timeout)
                 .thenApply(
                         executionGraphInfo ->
-                                executionGraphInfo.getArchivedExecutionGraph().getState());
+                                executionGraphInfo.getExecutionGraph().getState());
     }
 
     @Override
@@ -213,7 +213,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
                 .thenApply(
                         executionGraphInfo ->
                                 JobDetails.createDetailsForJob(
-                                        executionGraphInfo.getArchivedExecutionGraph()));
+                                        executionGraphInfo.getExecutionGraph()));
     }
 
     @Override

@@ -114,8 +114,8 @@ public class ExecutionGraphInfoStoreTestUtils {
             ExecutionGraphInfo that = (ExecutionGraphInfo) o;
 
             ArchivedExecutionGraph thisExecutionGraph =
-                    expectedExecutionGraphInfo.getArchivedExecutionGraph();
-            ArchivedExecutionGraph thatExecutionGraph = that.getArchivedExecutionGraph();
+                    expectedExecutionGraphInfo.getExecutionGraph();
+            ArchivedExecutionGraph thatExecutionGraph = that.getExecutionGraph();
             return thisExecutionGraph.isStoppable() == thatExecutionGraph.isStoppable()
                     && Objects.equals(thisExecutionGraph.getJobID(), thatExecutionGraph.getJobID())
                     && Objects.equals(
@@ -146,7 +146,7 @@ public class ExecutionGraphInfoStoreTestUtils {
     static Collection<JobDetails> generateJobDetails(
             Collection<ExecutionGraphInfo> executionGraphInfos) {
         return executionGraphInfos.stream()
-                .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                .map(ExecutionGraphInfo::getExecutionGraph)
                 .map(JobDetails::createDetailsForJob)
                 .collect(Collectors.toList());
     }

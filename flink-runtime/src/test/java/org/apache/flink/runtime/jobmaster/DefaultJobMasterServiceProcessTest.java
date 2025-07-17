@@ -85,7 +85,7 @@ class DefaultJobMasterServiceProcessTest {
 
         final JobManagerRunnerResult result = serviceProcess.getResultFuture().get();
         final ErrorInfo executionGraphFailure =
-                result.getExecutionGraphInfo().getArchivedExecutionGraph().getFailureInfo();
+                result.getExecutionGraphInfo().getExecutionGraph().getFailureInfo();
 
         assertThat(executionGraphFailure).isNotNull();
         assertInitializationException(
@@ -264,7 +264,7 @@ class DefaultJobMasterServiceProcessTest {
                 .isCompletedWithValueMatching(JobManagerRunnerResult::isSuccess)
                 .isCompletedWithValueMatching(
                         r ->
-                                r.getExecutionGraphInfo().getArchivedExecutionGraph().getState()
+                                r.getExecutionGraphInfo().getExecutionGraph().getState()
                                         == JobStatus.FINISHED);
     }
 

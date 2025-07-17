@@ -168,7 +168,7 @@ public class SchedulerTestingUtils {
         return StreamSupport.stream(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices()
                                 .spliterator(),
                         false)

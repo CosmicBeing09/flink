@@ -47,11 +47,11 @@ class ExecutionGraphInfoTest {
                         System.currentTimeMillis());
 
         final ExecutionGraphInfo executionGraphInfo = new ExecutionGraphInfo(executionGraph);
-        assertThat(executionGraphInfo.getArchivedExecutionGraph().getJobType())
+        assertThat(executionGraphInfo.getExecutionGraph().getJobType())
                 .isEqualTo(JobType.STREAMING);
 
         final ErrorInfo failureInfo =
-                executionGraphInfo.getArchivedExecutionGraph().getFailureInfo();
+                executionGraphInfo.getExecutionGraph().getFailureInfo();
 
         final RootExceptionHistoryEntry actualEntry =
                 Iterables.getOnlyElement(executionGraphInfo.getExceptionHistory());

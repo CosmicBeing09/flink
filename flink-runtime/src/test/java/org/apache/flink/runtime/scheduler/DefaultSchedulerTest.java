@@ -242,7 +242,7 @@ public class DefaultSchedulerTest {
 
         final ExecutionGraphInfo executionGraphInfo = scheduler.requestJob();
         final ArchivedExecutionGraph archivedExecutionGraph =
-                executionGraphInfo.getArchivedExecutionGraph();
+                executionGraphInfo.getExecutionGraph();
 
         // ensure all statuses are set in the ExecutionGraph
         assertThat(archivedExecutionGraph.getStatusTimestamp(JobStatus.INITIALIZING))
@@ -349,7 +349,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 archivedExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -386,7 +386,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -417,7 +417,7 @@ public class DefaultSchedulerTest {
         Throwable failureCause =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getFailureInfo()
                         .getException()
                         .deserializeError(DefaultSchedulerTest.class.getClassLoader());
@@ -483,7 +483,7 @@ public class DefaultSchedulerTest {
         final Iterator<ArchivedExecutionVertex> vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         final ArchivedExecutionVertex ev11 = vertexIterator.next();
@@ -521,7 +521,7 @@ public class DefaultSchedulerTest {
         final ArchivedExecutionVertex sourceExecutionVertex =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator()
                         .next();
@@ -535,7 +535,7 @@ public class DefaultSchedulerTest {
 
         assertThat(testExecutionOperations.getDeployedVertices())
                 .contains(sourceExecutionVertexId, sinkExecutionVertexId);
-        assertThat(scheduler.requestJob().getArchivedExecutionGraph().getState())
+        assertThat(scheduler.requestJob().getExecutionGraph().getState())
                 .isEqualTo(JobStatus.RUNNING);
     }
 
@@ -580,7 +580,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -637,7 +637,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -662,7 +662,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -692,7 +692,7 @@ public class DefaultSchedulerTest {
                 StreamSupport.stream(
                                 scheduler
                                         .requestJob()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getAllExecutionVertices()
                                         .spliterator(),
                                 false)
@@ -773,7 +773,7 @@ public class DefaultSchedulerTest {
         final Iterator<ArchivedExecutionVertex> vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         final ArchivedExecutionVertex v1 = vertexIterator.next();
@@ -814,7 +814,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -848,7 +848,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -908,7 +908,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -959,7 +959,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -1054,7 +1054,7 @@ public class DefaultSchedulerTest {
         final Iterator<ArchivedExecutionVertex> vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         final ExecutionAttemptID attemptId1 =
@@ -1089,7 +1089,7 @@ public class DefaultSchedulerTest {
         final Iterator<ArchivedExecutionVertex> vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         final ExecutionAttemptID attemptId1 =
@@ -1123,7 +1123,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();
@@ -1134,7 +1134,7 @@ public class DefaultSchedulerTest {
                         attemptId, ExecutionState.FAILED, new RuntimeException(exceptionMessage)));
 
         final ErrorInfo failureInfo =
-                scheduler.requestJob().getArchivedExecutionGraph().getFailureInfo();
+                scheduler.requestJob().getExecutionGraph().getFailureInfo();
         assertThat(failureInfo).isNotNull();
         assertThat(failureInfo.getExceptionAsString()).contains(exceptionMessage);
     }
@@ -1155,7 +1155,7 @@ public class DefaultSchedulerTest {
         Iterator<ArchivedExecutionVertex> vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         ArchivedExecutionVertex v1 = vertexIterator.next();
@@ -1172,7 +1172,7 @@ public class DefaultSchedulerTest {
         vertexIterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         v1 = vertexIterator.next();
@@ -1242,7 +1242,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                                 scheduler
                                         .requestJob()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getAllExecutionVertices())
                         .getCurrentExecutionAttempt()
                         .getAttemptId();
@@ -1289,7 +1289,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final RuntimeException restartableException = new RuntimeException("restartable exception");
         final long updateStateTriggeringRestartTimestamp =
@@ -1307,7 +1307,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                                 scheduler
                                         .requestJob()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getAllExecutionVertices())
                         .getCurrentExecutionAttempt()
                         .getAttemptId();
@@ -1350,7 +1350,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                                 scheduler
                                         .requestJob()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getAllExecutionVertices())
                         .getCurrentExecutionAttempt()
                         .getAttemptId();
@@ -1362,7 +1362,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
 
         // Make sure FailureEnricher is triggered
@@ -1419,7 +1419,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
 
         // pending slot request timeout triggers a task failure that needs to be processed
@@ -1538,7 +1538,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                                 scheduler
                                         .requestJob()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getAllExecutionVertices())
                         .getCurrentExecutionAttempt()
                         .getAttemptId();
@@ -1549,7 +1549,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final RuntimeException exception = new RuntimeException("relevant exception");
         final long relevantTimestamp =
@@ -1752,7 +1752,7 @@ public class DefaultSchedulerTest {
         final ArchivedExecutionVertex sourceExecutionVertex =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator()
                         .next();
@@ -1847,7 +1847,7 @@ public class DefaultSchedulerTest {
         final Iterator<ArchivedExecutionVertex> iterator =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getAllExecutionVertices()
                         .iterator();
         final ExecutionAttemptID sourceAttemptId =
@@ -1915,7 +1915,7 @@ public class DefaultSchedulerTest {
                 Iterables.getOnlyElement(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices());
         final ExecutionAttemptID attemptId =
                 onlyExecutionVertex.getCurrentExecutionAttempt().getAttemptId();

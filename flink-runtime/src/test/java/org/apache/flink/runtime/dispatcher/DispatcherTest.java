@@ -1014,7 +1014,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
                                 dispatcherGateway
                                         .requestExecutionGraphInfo(jobId, TIMEOUT)
                                         .get()
-                                        .getArchivedExecutionGraph()
+                                        .getExecutionGraph()
                                         .getState();
                         return status == JobStatus.SUSPENDED;
                     },

@@ -156,7 +156,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
         final JobID jobId = executionGraphInfo.getJobId();
 
         final ArchivedExecutionGraph archivedExecutionGraph =
-                executionGraphInfo.getArchivedExecutionGraph();
+                executionGraphInfo.getExecutionGraph();
         final JobStatus jobStatus = archivedExecutionGraph.getState();
         final String jobName = archivedExecutionGraph.getJobName();
 
@@ -243,7 +243,7 @@ public class FileExecutionGraphInfoStore implements ExecutionGraphInfoStore {
                     "Could not find execution graph information file for {}. Estimating the size instead.",
                     jobId);
             final ArchivedExecutionGraph serializableExecutionGraph =
-                    serializableExecutionGraphInfo.getArchivedExecutionGraph();
+                    serializableExecutionGraphInfo.getExecutionGraph();
             return serializableExecutionGraph.getAllVertices().size() * 1000
                     + serializableExecutionGraph.getAccumulatorsSerialized().size() * 1000;
         }
