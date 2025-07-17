@@ -41,20 +41,20 @@ public class InputGateSpecUtils {
             int numInputChannels,
             boolean enableTieredStorage) {
         int maxRequiredBuffersThresholdPerGate =
-                getEffectiveMaxRequiredBuffersPerGate(
+                calculateEffectiveMaxRequiredBuffersPerGate(
                         partitionType, configuredMaxRequiredBuffersPerGate, enableTieredStorage);
         int targetExpectedBuffersPerGate =
-                getExpectedBuffersTargetPerGate(
+                calculateExpectedBuffersPerGate(
                         numInputChannels, configuredNetworkBuffersPerChannel);
         int maxBuffersPerGate =
-                getMaxBuffersPerGate(
+                calculateTotalBuffersPerGate(
                         numInputChannels,
                         configuredNetworkBuffersPerChannel,
                         configuredFloatingNetworkBuffersPerGate);
         int expectedBuffersPerGate =
                 Math.min(maxRequiredBuffersThresholdPerGate, targetExpectedBuffersPerGate);
         int effectiveExclusiveBuffersPerChannel =
-                getExclusiveBuffersPerChannel(
+                calculateExclusiveBuffersPerChannel(
                         configuredNetworkBuffersPerChannel,
                         numInputChannels,
                         expectedBuffersPerGate);
@@ -72,7 +72,7 @@ public class InputGateSpecUtils {
     }
 
     @VisibleForTesting
-    static int getEffectiveMaxRequiredBuffersPerGate(
+    static int calculateEffectiveMaxRequiredBuffersPerGate(
             ResultPartitionType partitionType,
             Optional<Integer> configuredMaxRequiredBuffersPerGate,
             boolean enableTieredStorage) {
@@ -94,7 +94,7 @@ public class InputGateSpecUtils {
      * value to ensure that the number of required buffers per gate is not more than the given
      * requiredBuffersPerGate.}.
      */
-    private static int getExclusiveBuffersPerChannel(
+    private static int calculateExclusiveBuffersPerChannel(
             int configuredNetworkBuffersPerChannel,
             int numInputChannels,
             int requiredBuffersPerGate) {
@@ -105,13 +105,13 @@ public class InputGateSpecUtils {
                 (requiredBuffersPerGate - 1) / numInputChannels);
     }
 
-    private static int getExpectedBuffersTargetPerGate(
+    private static int calculateExpectedBuffersPerGate(
             int numInputChannels, int configuredNetworkBuffersPerChannel) {
         return numInputChannels * configuredNetworkBuffersPerChannel + 1;
     }
 
     /** */
-    private static int getMaxBuffersPerGate(
+    private static int calculateTotalBuffersPerGate(
             int numInputChannels,
             int configuredNetworkBuffersPerChannel,
             int configuredFloatingBuffersPerGate) {
