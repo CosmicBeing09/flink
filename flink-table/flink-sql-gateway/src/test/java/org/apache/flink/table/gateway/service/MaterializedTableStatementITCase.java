@@ -322,7 +322,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testAlterMaterializedTableRefresh() throws Exception {
+    void testAlterMaterializedTableRefreshInContinuousMode() throws Exception {
         long timeout = Duration.ofSeconds(20).toMillis();
         long pause = Duration.ofSeconds(2).toMillis();
 
@@ -450,7 +450,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testAlterMaterializedTableSuspendAndResume(@TempDir Path temporaryPath) throws Exception {
+    void testAlterMaterializedTableSuspendAndResumeInContinuousMode(@TempDir Path temporaryPath) throws Exception {
         String materializedTableDDL =
                 "CREATE MATERIALIZED TABLE users_shops"
                         + " PARTITIONED BY (ds)\n"
@@ -593,7 +593,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testAlterMaterializedTableWithoutSavepointDirConfigured() throws Exception {
+    void testAlterMaterializedTableWithoutSavepointDirConfiguredInContinuousMode() throws Exception {
         String materializedTableDDL =
                 "CREATE MATERIALIZED TABLE users_shops"
                         + " PARTITIONED BY (ds)\n"
@@ -751,7 +751,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testDropMaterializedTable() throws Exception {
+    void testDropMaterializedTableInContinuousMode() throws Exception {
         String materializedTableDDL =
                 "CREATE MATERIALIZED TABLE users_shops"
                         + " PARTITIONED BY (ds)\n"
@@ -976,7 +976,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testRefreshMaterializedTableWithStaticPartition() throws Exception {
+    void testRefreshMaterializedTableWithStaticPartitionInContinuousMode() throws Exception {
         List<Row> data = new ArrayList<>();
         data.add(Row.of(1L, 1L, 1L, "2024-01-01"));
         data.add(Row.of(2L, 2L, 2L, "2024-01-02"));
@@ -1035,7 +1035,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testPeriodicRefreshMaterializedTableWithoutPartitionOptions() throws Exception {
+    void testPeriodicRefreshMaterializedTableWithoutPartitionOptionsInContinuousMode() throws Exception {
         List<Row> data = new ArrayList<>();
         data.add(Row.of(1L, 1L, 1L, "2024-01-01"));
         data.add(Row.of(2L, 2L, 2L, "2024-01-02"));
@@ -1098,7 +1098,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testPeriodicRefreshMaterializedTableWithPartitionOptions() throws Exception {
+    void testPeriodicRefreshMaterializedTableWithPartitionOptionsInContinuousMode() throws Exception {
         List<Row> data = new ArrayList<>();
         data.add(Row.of(1L, 1L, 1L, "2024-01-01"));
         data.add(Row.of(2L, 2L, 2L, "2024-01-02"));
@@ -1160,7 +1160,7 @@ public class MaterializedTableStatementITCase extends AbstractMaterializedTableS
     }
 
     @Test
-    void testRefreshMaterializedTableWithInvalidParameter() throws Exception {
+    void testRefreshMaterializedTableWithInvalidParameterInContinuousMode() throws Exception {
         List<Row> data = new ArrayList<>();
         data.add(Row.of(1L, 1L, 1L, "2024-01-01"));
         data.add(Row.of(2L, 2L, 2L, "2024-01-02"));
