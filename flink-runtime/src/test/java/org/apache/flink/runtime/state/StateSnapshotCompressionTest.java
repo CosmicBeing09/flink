@@ -49,7 +49,7 @@ class StateSnapshotCompressionTest {
     void testCompressionConfiguration() throws BackendBuildingException {
 
         ExecutionConfig executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(true);
+        executionConfig.setSnapshotCompressionEnabled(true);
 
         AbstractKeyedStateBackend<String> stateBackend =
                 getStringHeapKeyedStateBackend(executionConfig);
@@ -65,7 +65,7 @@ class StateSnapshotCompressionTest {
         }
 
         executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(false);
+        executionConfig.setSnapshotCompressionEnabled(false);
 
         stateBackend = getStringHeapKeyedStateBackend(executionConfig);
 
@@ -119,7 +119,7 @@ class StateSnapshotCompressionTest {
     private void snapshotRestoreRoundtrip(boolean useCompression) throws Exception {
 
         ExecutionConfig executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(useCompression);
+        executionConfig.setSnapshotCompressionEnabled(useCompression);
 
         KeyedStateHandle stateHandle;
 

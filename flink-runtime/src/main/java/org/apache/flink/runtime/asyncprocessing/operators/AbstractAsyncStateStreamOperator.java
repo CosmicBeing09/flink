@@ -105,7 +105,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
                 environment.getExecutionConfig().getAsyncInflightRecordsLimit();
         final int asyncBufferSize = environment.getExecutionConfig().getAsyncStateBufferSize();
         final long asyncBufferTimeout =
-                environment.getExecutionConfig().getAsyncStateBufferTimeout();
+                environment.getExecutionConfig().getAsyncStateBufferTimeoutMillis();
 
         this.declarationManager = new DeclarationManager();
         if (isAsyncStateProcessingEnabled()) {
