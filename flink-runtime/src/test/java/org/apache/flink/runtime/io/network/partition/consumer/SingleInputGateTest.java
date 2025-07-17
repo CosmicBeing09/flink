@@ -173,7 +173,7 @@ class SingleInputGateTest extends InputGateTestBase {
 
             // after setup
             assertThat(inputGate.getBufferPool()).isNotNull();
-            assertThat(inputGate.getBufferPool().getExpectedNumberOfMemorySegments()).isEqualTo(1);
+            assertThat(inputGate.getBufferPool().getNumberOfRequiredMemorySegments()).isEqualTo(1);
             for (InputChannel inputChannel : inputGate.inputChannels()) {
                 if (inputChannel instanceof RemoteRecoveredInputChannel) {
                     assertThat(
@@ -190,7 +190,7 @@ class SingleInputGateTest extends InputGateTestBase {
 
             inputGate.convertRecoveredInputChannels();
             assertThat(inputGate.getBufferPool()).isNotNull();
-            assertThat(inputGate.getBufferPool().getExpectedNumberOfMemorySegments()).isEqualTo(1);
+            assertThat(inputGate.getBufferPool().getNumberOfRequiredMemorySegments()).isEqualTo(1);
             for (InputChannel inputChannel : inputGate.inputChannels()) {
                 if (inputChannel instanceof RemoteInputChannel) {
                     assertThat(((RemoteInputChannel) inputChannel).getNumberOfAvailableBuffers())
@@ -971,7 +971,7 @@ class SingleInputGateTest extends InputGateTestBase {
         // test setup
         gate.setup();
         assertThat(gate.getBufferPool()).isNotNull();
-        assertThat(gate.getBufferPool().getExpectedNumberOfMemorySegments())
+        assertThat(gate.getBufferPool().getNumberOfRequiredMemorySegments())
                 .isEqualTo(gate.getInputChannels().size() * 2 + 1);
 
         gate.finishReadRecoveredState();
@@ -1280,7 +1280,7 @@ class SingleInputGateTest extends InputGateTestBase {
         } else {
             minBuffersPerGate = 2 * partitionIds.length * subpartitionRandSize + 1;
         }
-        assertThat(gate.getBufferPool().getExpectedNumberOfMemorySegments())
+        assertThat(gate.getBufferPool().getNumberOfRequiredMemorySegments())
                 .isEqualTo(minBuffersPerGate);
         assertThat(gate.getBufferPool().getMaxNumberOfMemorySegments())
                 .isEqualTo(maxBuffersPerGate);
