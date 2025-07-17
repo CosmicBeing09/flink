@@ -94,10 +94,10 @@ public class MiniClusterResource extends ExternalResource {
     }
 
     /**
-     * @deprecated use {@link #getRestAddress()} instead
+     * @deprecated use {@link #getDeprecatedRestAddress()} instead
      */
     @Deprecated
-    public URI getRestAddres() {
+    public URI getDeprecatedRestAddress() {
         return getRestAddress();
     }
 
