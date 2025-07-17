@@ -316,11 +316,11 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         private RelNode convertLegacyTableFunction(
-                LateralTableQueryOperation calculatedTable,
+                LateralTableQueryOperation lateralTableOp,
                 TableFunctionDefinition functionDefinition,
                 List<RexNode> parameters,
                 FlinkTypeFactory typeFactory) {
-            List<String> fieldNames = calculatedTable.getResolvedSchema().getColumnNames();
+            List<String> fieldNames = lateralTableOp.getResolvedSchema().getColumnNames();
 
             TableFunction<?> tableFunction = functionDefinition.getTableFunction();
             DataType resultType = fromLegacyInfoToDataType(functionDefinition.getResultType());
@@ -330,7 +330,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
 
             final TableSqlFunction sqlFunction =
                     new TableSqlFunction(
-                            calculatedTable.getResolvedFunction().getIdentifier().orElse(null),
+                            lateralTableOp.getResolvedFunction().getIdentifier().orElse(null),
                             tableFunction.toString(),
                             tableFunction,
                             resultType,
