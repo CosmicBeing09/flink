@@ -221,22 +221,22 @@ public class AdaptiveScheduler
                 throws ConfigurationException {
             final SchedulerExecutionMode executionMode =
                     configuration.get(JobManagerOptions.SCHEDULER_MODE);
-            Duration allocationTimeoutDefault =
+            Duration initialResourceAllocationTimeoutDefault =
                     JobManagerOptions.RESOURCE_WAIT_TIMEOUT.defaultValue();
-            Duration stabilizationTimeoutDefault =
+            Duration initialResourceStabilizationTimeoutDefault =
                     JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT.defaultValue();
             if (executionMode == SchedulerExecutionMode.REACTIVE) {
-                allocationTimeoutDefault = Duration.ofMillis(-1);
-                stabilizationTimeoutDefault = Duration.ZERO;
+                initialResourceAllocationTimeoutDefault = Duration.ofMillis(-1);
+                initialResourceStabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration executingCooldownIntervalMin =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
 
-            final int rescaleOnFailedCheckpointsCount =
+            final int rescaleOnFailedCheckpointCount =
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALE_ON_FAILED_CHECKPOINTS_COUNT);
-            if (rescaleOnFailedCheckpointsCount < 1) {
+            if (rescaleOnFailedCheckpointCount < 1) {
                 throw new ConfigurationException(
                         String.format(
                                 "%s should have a value of 1 or higher.",
@@ -245,7 +245,7 @@ public class AdaptiveScheduler
             }
 
             // default value generation is documented in JobManagerOption
-            final Duration maximumDelayForRescaleTriggerDefault =
+            final Duration maximumDelayForTriggeringRescaleDefault =
                     checkpointingConfiguration != null
                                     && checkpointingConfiguration
                                             .getCheckpointCoordinatorConfiguration()
@@ -262,7 +262,7 @@ public class AdaptiveScheduler
                             // Incrementing the default value should help avoiding causing this kind
                             // of confusing race condition.
                             ? Duration.ofMillis(
-                                    (rescaleOnFailedCheckpointsCount + 1)
+                                    (rescaleOnFailedCheckpointCount + 1)
                                             * checkpointingConfiguration
                                                     .getCheckpointCoordinatorConfiguration()
                                                     .getCheckpointInterval())
@@ -281,17 +281,18 @@ public class AdaptiveScheduler
                     executionMode,
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_WAIT_TIMEOUT)
-                            .orElse(allocationTimeoutDefault),
+                            .orElse(initialResourceAllocationTimeoutDefault),
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
-                            .orElse(stabilizationTimeoutDefault),
+                            .orElse(initialResourceStabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    executingCooldownIntervalMin,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
-                            MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTriggerDefault),
-                    rescaleOnFailedCheckpointsCount);
+                            MAXIMUM_DELAY_FOR_SCALE_TRIGGER,
+                            maximumDelayForTriggeringRescaleDefault),
+                    rescaleOnFailedCheckpointCount);
         }
 
         private final SchedulerExecutionMode executionMode;
@@ -338,7 +339,7 @@ public class AdaptiveScheduler
             return slotIdleTimeout;
         }
 
-        public Duration getScalingIntervalMin() {
+        public Duration getExecutingCooldownTimeout() {
             return scalingIntervalMin;
         }
 
@@ -1201,7 +1202,7 @@ public class AdaptiveScheduler
         return stateTransitionManagerFactory.create(
                 ctx,
                 clock,
-                settings.getScalingIntervalMin(),
+                settings.getExecutingCooldownTimeout(),
                 settings.getScalingResourceStabilizationTimeout(),
                 settings.getMaximumDelayForTriggeringRescale());
     }
