@@ -528,7 +528,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                         new ScheduledExecutorServiceAdapter(checkpointCoordinatorTimer),
                         failureManager,
                         createCheckpointPlanCalculator(
-                                chkConfig.isEnableCheckpointsAfterTasksFinish()),
+                                chkConfig.areCheckpointsEnabledAfterFinish()),
                         checkpointStatsTracker);
 
         // register the master hooks on the checkpoint coordinator

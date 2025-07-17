@@ -141,7 +141,7 @@ public class CheckpointConfigHandler
                     checkpointCoordinatorConfiguration.isUnalignedCheckpointsEnabled(),
                     checkpointCoordinatorConfiguration.getTolerableCheckpointFailureNumber(),
                     checkpointCoordinatorConfiguration.getAlignedCheckpointTimeout(),
-                    checkpointCoordinatorConfiguration.isEnableCheckpointsAfterTasksFinish(),
+                    checkpointCoordinatorConfiguration.areCheckpointsEnabledAfterFinish(),
                     stateChangelogEnabled,
                     periodicMaterializeIntervalMillis,
                     changelogStorageName);

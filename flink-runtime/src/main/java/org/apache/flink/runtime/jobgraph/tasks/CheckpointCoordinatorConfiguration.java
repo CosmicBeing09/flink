@@ -69,7 +69,7 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
 
     private final long checkpointIdOfIgnoredInFlightData;
 
-    private final boolean enableCheckpointsAfterTasksFinish;
+    private final boolean checkpointsEnabledAfterFinish;
 
     /**
      * @deprecated use {@link #builder()}.
@@ -143,7 +143,7 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
         this.isUnalignedCheckpointsEnabled = isUnalignedCheckpointsEnabled;
         this.alignedCheckpointTimeout = alignedCheckpointTimeout;
         this.checkpointIdOfIgnoredInFlightData = checkpointIdOfIgnoredInFlightData;
-        this.enableCheckpointsAfterTasksFinish = enableCheckpointsAfterTasksFinish;
+        this.checkpointsEnabledAfterFinish = enableCheckpointsAfterTasksFinish;
     }
 
     public long getCheckpointInterval() {
@@ -194,8 +194,8 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
         return checkpointIdOfIgnoredInFlightData;
     }
 
-    public boolean isEnableCheckpointsAfterTasksFinish() {
-        return enableCheckpointsAfterTasksFinish;
+    public boolean areCheckpointsEnabledAfterFinish() {
+        return checkpointsEnabledAfterFinish;
     }
 
     @Override
@@ -217,7 +217,7 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
                 && checkpointRetentionPolicy == that.checkpointRetentionPolicy
                 && tolerableCheckpointFailureNumber == that.tolerableCheckpointFailureNumber
                 && checkpointIdOfIgnoredInFlightData == that.checkpointIdOfIgnoredInFlightData
-                && enableCheckpointsAfterTasksFinish == that.enableCheckpointsAfterTasksFinish;
+                && checkpointsEnabledAfterFinish == that.checkpointsEnabledAfterFinish;
     }
 
     @Override
@@ -233,7 +233,7 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
                 alignedCheckpointTimeout,
                 tolerableCheckpointFailureNumber,
                 checkpointIdOfIgnoredInFlightData,
-                enableCheckpointsAfterTasksFinish);
+                checkpointsEnabledAfterFinish);
     }
 
     @Override
@@ -260,7 +260,7 @@ public class CheckpointCoordinatorConfiguration implements Serializable {
                 + ", checkpointIdOfIgnoredInFlightData="
                 + checkpointIdOfIgnoredInFlightData
                 + ", enableCheckpointsAfterTasksFinish="
-                + enableCheckpointsAfterTasksFinish
+                + checkpointsEnabledAfterFinish
                 + '}';
     }
 

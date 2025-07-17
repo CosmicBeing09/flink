@@ -1135,7 +1135,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 && jobGraph.isCheckpointingEnabled()
                 && jobGraph.getCheckpointingSettings()
                         .getCheckpointCoordinatorConfiguration()
-                        .isEnableCheckpointsAfterTasksFinish()) {
+                        .areCheckpointsEnabledAfterFinish()) {
             vertexEndOfDataListener.recordTaskEndOfData(executionAttemptID);
             if (vertexEndOfDataListener.areAllTasksOfJobVertexEndOfData(
                     executionAttemptID.getJobVertexId())) {
