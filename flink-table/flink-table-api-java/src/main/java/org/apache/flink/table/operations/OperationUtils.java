@@ -58,20 +58,20 @@ public class OperationUtils {
 
         Pattern pattern = Pattern.compile("('([^']|'')*')|\\n");
         Matcher matcher = pattern.matcher(item);
-        StringBuffer output = new StringBuffer();
+        StringBuffer indentedBuffer = new StringBuffer();
 
         while (matcher.find()) {
             final String group = matcher.group();
             if (group.startsWith("'")) {
-                matcher.appendReplacement(output, Matcher.quoteReplacement(group));
+                matcher.appendReplacement(indentedBuffer, Matcher.quoteReplacement(group));
             } else {
                 String replaced = group.replaceAll("\n", "\n" + OPERATION_INDENT);
-                matcher.appendReplacement(output, Matcher.quoteReplacement(replaced));
+                matcher.appendReplacement(indentedBuffer, Matcher.quoteReplacement(replaced));
             }
         }
-        matcher.appendTail(output);
+        matcher.appendTail(indentedBuffer);
 
-        return "\n" + OPERATION_INDENT + output;
+        return "\n" + OPERATION_INDENT + indentedBuffer;
     }
 
     /**
@@ -104,12 +104,12 @@ public class OperationUtils {
                         .map(entry -> formatParameter(entry.getKey(), entry.getValue()))
                         .collect(Collectors.joining(", "));
 
-        final StringBuilder stringBuilder = new StringBuilder();
+        final StringBuilder operationDescriptionBuilder = new StringBuilder();
 
-        stringBuilder.append(operationName).append(":");
+        operationDescriptionBuilder.append(operationName).append(":");
 
         if (!StringUtils.isNullOrWhitespaceOnly(description)) {
-            stringBuilder.append(" (").append(description).append(")");
+            operationDescriptionBuilder.append(" (").append(description).append(")");
         }
 
         String childrenDescription =
@@ -117,7 +117,7 @@ public class OperationUtils {
                         .map(child -> OperationUtils.indent(childToString.apply(child)))
                         .collect(Collectors.joining());
 
-        return stringBuilder.append(childrenDescription).toString();
+        return operationDescriptionBuilder.append(childrenDescription).toString();
     }
 
     public static String formatSelectColumns(ResolvedSchema schema, @Nullable String inputAlias) {
