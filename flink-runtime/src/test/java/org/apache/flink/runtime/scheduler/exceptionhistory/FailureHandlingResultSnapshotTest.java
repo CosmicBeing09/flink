@@ -142,7 +142,7 @@ class FailureHandlingResultSnapshotTest {
 
         assertThat(actualException).isInstanceOf(FlinkException.class);
         assertThat(actualException)
-                .hasMessageContaining(ErrorInfo.handleMissingThrowable(null).getMessage());
+                .hasMessageContaining(ErrorInfo.ensureCause(null).getMessage());
         assertThat(testInstance.getTimestamp()).isEqualTo(rootCauseTimestamp);
         assertThat(testInstance.getRootCauseExecution()).isPresent();
         assertThat(testInstance.getRootCauseExecution().get())

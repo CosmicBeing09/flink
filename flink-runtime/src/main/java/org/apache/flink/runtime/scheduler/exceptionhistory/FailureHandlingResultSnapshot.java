@@ -82,7 +82,7 @@ public class FailureHandlingResultSnapshot {
 
         return new FailureHandlingResultSnapshot(
                 rootCauseExecution,
-                ErrorInfo.handleMissingThrowable(failureHandlingResult.getError()),
+                ErrorInfo.ensureCause(failureHandlingResult.getError()),
                 failureHandlingResult.getTimestamp(),
                 failureHandlingResult.getFailureLabels(),
                 concurrentlyFailedExecutions,

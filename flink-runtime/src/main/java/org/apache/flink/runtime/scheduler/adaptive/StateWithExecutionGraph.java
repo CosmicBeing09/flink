@@ -425,7 +425,7 @@ abstract class StateWithExecutionGraph implements State {
                 failureCollection.add(
                         ExceptionHistoryEntry.create(execution, taskName, failureLabels));
                 onFailure(
-                        ErrorInfo.handleMissingThrowable(
+                        ErrorInfo.ensureCause(
                                 taskExecutionStateTransition.getError(userCodeClassLoader)),
                         failureLabels);
             }
