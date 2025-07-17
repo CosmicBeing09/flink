@@ -28,11 +28,8 @@ import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.configuration.WebOptions;
 import org.apache.flink.runtime.client.JobStatusMessage;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.rest.messages.job.coordination.ClientCoordinationRequestBody;
@@ -316,7 +313,7 @@ class WebFrontendITCase {
         sender.setParallelism(2);
         sender.setInvokableClass(BlockingInvokable.class);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .setJobName("Stoppable streaming test job")
                         .addJobVertex(sender)
@@ -386,7 +383,7 @@ class WebFrontendITCase {
         sender.setParallelism(2);
         sender.setInvokableClass(BlockingInvokable.class);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
 
         clusterClient.submitJob(jobGraph).get();
 
@@ -435,7 +432,7 @@ class WebFrontendITCase {
         sender.addOperatorCoordinator(
                 new SerializedValue<>(new CollectSinkOperatorCoordinator.Provider(opId, 10_000)));
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
 
         clusterClient.submitJob(jobGraph).get();
 
@@ -487,7 +484,7 @@ class WebFrontendITCase {
         sender.setParallelism(2);
         sender.setInvokableClass(BlockingInvokable.class);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(sender);
         final JobID jid = jobGraph.getJobID();
 
         clusterClient.submitJob(jobGraph).get();

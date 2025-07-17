@@ -23,7 +23,7 @@ import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.FlinkPipelineTranslationUtil;
 import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -60,7 +60,7 @@ public enum PackagedProgramUtils {
             "org.apache.flink.client.python.PythonDriver";
 
     /**
-     * Creates a {@link JobGraph} with a specified {@link JobID} from the given {@link
+     * Creates a {@link ExecutionPlan} with a specified {@link JobID} from the given {@link
      * PackagedProgram}.
      *
      * @param packagedProgram to extract the JobGraph from
@@ -70,7 +70,7 @@ public enum PackagedProgramUtils {
      * @return JobGraph extracted from the PackagedProgram
      * @throws ProgramInvocationException if the JobGraph generation failed
      */
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             PackagedProgram packagedProgram,
             Configuration configuration,
             int defaultParallelism,
@@ -80,7 +80,7 @@ public enum PackagedProgramUtils {
         final Pipeline pipeline =
                 getPipelineFromProgram(
                         packagedProgram, configuration, defaultParallelism, suppressOutput);
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 FlinkPipelineTranslationUtil.getJobGraphUnderUserClassLoader(
                         packagedProgram.getUserCodeClassLoader(),
                         pipeline,
@@ -97,7 +97,7 @@ public enum PackagedProgramUtils {
     }
 
     /**
-     * Creates a {@link JobGraph} with a random {@link JobID} from the given {@link
+     * Creates a {@link ExecutionPlan} with a random {@link JobID} from the given {@link
      * PackagedProgram}.
      *
      * @param packagedProgram to extract the JobGraph from
@@ -107,7 +107,7 @@ public enum PackagedProgramUtils {
      * @return JobGraph extracted from the PackagedProgram
      * @throws ProgramInvocationException if the JobGraph generation failed
      */
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             PackagedProgram packagedProgram,
             Configuration configuration,
             int defaultParallelism,

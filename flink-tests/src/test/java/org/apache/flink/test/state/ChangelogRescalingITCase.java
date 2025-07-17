@@ -32,7 +32,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.io.InputStatus;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStreamUtils;
@@ -160,14 +160,14 @@ public class ChangelogRescalingITCase extends TestLogger {
         cluster.getClusterClient().cancel(jobID2).get();
     }
 
-    private JobID submit(Configuration conf, Consumer<JobGraph> updateGraph)
+    private JobID submit(Configuration conf, Consumer<ExecutionPlan> updateGraph)
             throws InterruptedException, ExecutionException {
-        JobGraph jobGraph = createJobGraph(conf);
+        ExecutionPlan jobGraph = createJobGraph(conf);
         updateGraph.accept(jobGraph);
         return cluster.getClusterClient().submitJob(jobGraph).get();
     }
 
-    private JobGraph createJobGraph(Configuration conf) {
+    private ExecutionPlan createJobGraph(Configuration conf) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
         SingleOutputStreamOperator<TestEvent> map =
                 env.fromSource(

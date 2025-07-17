@@ -25,7 +25,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.operators.lifecycle.TestJobWithDescription;
 import org.apache.flink.runtime.operators.lifecycle.command.TestCommandDispatcher;
 import org.apache.flink.runtime.operators.lifecycle.event.TestEventQueue;
@@ -245,7 +245,7 @@ public class TestJobBuilders {
                     operatorsNumberOfInputs.put(mapTwoInput, 2);
                     operatorsNumberOfInputs.put(multipleInput, 2);
 
-                    JobGraph jobGraph =
+                    ExecutionPlan jobGraph =
                             stateBackend != null
                                     ? StateBackendUtils.configureStateBackendAndGetJobGraph(
                                             env, stateBackend)

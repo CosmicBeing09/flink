@@ -50,7 +50,7 @@ import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.checkpoint.CheckpointException;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
@@ -210,7 +210,7 @@ public class SavepointITCase extends TestLogger {
                         .transform("pass-through", BasicTypeInfo.LONG_TYPE_INFO, operator);
         stream.sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         final JobID jobId = jobGraph.getJobID();
 
         MiniClusterWithClientResource cluster = clusterFactory.get();
@@ -255,7 +255,7 @@ public class SavepointITCase extends TestLogger {
                 // different parallelism to break chaining and add some concurrent tasks
                 .setParallelism(sinkParallelism);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         cluster.before();
         try {
@@ -319,7 +319,7 @@ public class SavepointITCase extends TestLogger {
                 // different parallelism to break chaining and add some concurrent tasks
                 .setParallelism(sinkParallelism);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         cluster.before();
         try {
@@ -509,7 +509,7 @@ public class SavepointITCase extends TestLogger {
                         })
                 .setParallelism(1);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         MiniClusterWithClientResource cluster =
                 new MiniClusterWithClientResource(
@@ -617,7 +617,7 @@ public class SavepointITCase extends TestLogger {
 
     private String submitJobAndTakeSavepoint(
             MiniClusterResourceFactory clusterFactory, int parallelism) throws Exception {
-        final JobGraph jobGraph = createJobGraph(parallelism, 0, 1000);
+        final ExecutionPlan jobGraph = createJobGraph(parallelism, 0, 1000);
         final JobID jobId = jobGraph.getJobID();
         StatefulCounter.resetForTest(parallelism);
 
@@ -686,7 +686,7 @@ public class SavepointITCase extends TestLogger {
             SavepointRestoreSettings savepointRestoreSettings,
             PostCancelChecker postCancelChecks)
             throws Exception {
-        final JobGraph jobGraph = createJobGraph(parallelism, 0, 1000);
+        final ExecutionPlan jobGraph = createJobGraph(parallelism, 0, 1000);
         jobGraph.setSavepointRestoreSettings(savepointRestoreSettings);
         final JobID jobId = jobGraph.getJobID();
         StatefulCounter.resetForTest(parallelism);
@@ -775,7 +775,7 @@ public class SavepointITCase extends TestLogger {
         vertex.setInvokableClass(BlockingNoOpInvokable.class);
         vertex.setParallelism(1);
 
-        final JobGraph graph = JobGraphTestUtils.streamingJobGraph(vertex);
+        final ExecutionPlan graph = JobGraphTestUtils.streamingJobGraph(vertex);
 
         try {
             client.submitJob(graph).get();
@@ -802,7 +802,7 @@ public class SavepointITCase extends TestLogger {
 
         env.addSource(new IntegerStreamSource()).sinkTo(new DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         Configuration config = getFileBasedCheckpointsConfig();
         config.addAll(jobGraph.getJobConfiguration());
@@ -917,7 +917,7 @@ public class SavepointITCase extends TestLogger {
 
             stream.sinkTo(new DiscardingSink<>());
 
-            final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+            final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
             final JobID jobId = jobGraph.getJobID();
 
             MiniClusterWithClientResource cluster = clusterFactory.get();
@@ -970,7 +970,7 @@ public class SavepointITCase extends TestLogger {
             // Submit the job
             // Long delay to ensure that the test times out if the job
             // manager tries to restart the job.
-            final JobGraph jobGraph = createJobGraph(parallelism, numberOfRetries, 3600000);
+            final ExecutionPlan jobGraph = createJobGraph(parallelism, numberOfRetries, 3600000);
 
             // Set non-existing savepoint path
             jobGraph.setSavepointRestoreSettings(SavepointRestoreSettings.forPath("unknown path"));
@@ -1047,7 +1047,7 @@ public class SavepointITCase extends TestLogger {
                 .name("Infinite test source")
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         cluster.before();
         try {
@@ -1146,7 +1146,7 @@ public class SavepointITCase extends TestLogger {
                         })
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         cluster.before();
         try {
@@ -1264,7 +1264,7 @@ public class SavepointITCase extends TestLogger {
                     .map(value -> 2 * value)
                     .sinkTo(new DiscardingSink<>());
 
-            JobGraph originalJobGraph = env.getStreamGraph().getJobGraph();
+            ExecutionPlan originalJobGraph = env.getStreamGraph().getJobGraph();
 
             JobID jobID = client.submitJob(originalJobGraph).get();
 
@@ -1312,7 +1312,7 @@ public class SavepointITCase extends TestLogger {
                     .map(value -> value)
                     .sinkTo(new DiscardingSink<>());
 
-            JobGraph modifiedJobGraph = env.getStreamGraph().getJobGraph();
+            ExecutionPlan modifiedJobGraph = env.getStreamGraph().getJobGraph();
 
             // Set the savepoint path
             modifiedJobGraph.setSavepointRestoreSettings(
@@ -1347,7 +1347,7 @@ public class SavepointITCase extends TestLogger {
     // ------------------------------------------------------------------------
 
     /** Creates a streaming JobGraph from the StreamEnvironment. */
-    private JobGraph createJobGraph(int parallelism, int numberOfRetries, long restartDelay) {
+    private ExecutionPlan createJobGraph(int parallelism, int numberOfRetries, long restartDelay) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);

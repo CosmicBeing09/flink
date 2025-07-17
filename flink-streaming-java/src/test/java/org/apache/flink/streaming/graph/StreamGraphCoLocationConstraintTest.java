@@ -18,7 +18,7 @@
 
 package org.apache.flink.streaming.graph;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
@@ -54,7 +54,7 @@ class StreamGraphCoLocationConstraintTest {
         result.getTransformation().setCoLocationGroupKey("group2");
 
         // get the graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         assertThat(jobGraph.getNumberOfVertices()).isEqualTo(4);
 
         List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();

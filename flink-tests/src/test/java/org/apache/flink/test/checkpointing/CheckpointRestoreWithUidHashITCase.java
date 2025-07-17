@@ -25,7 +25,7 @@ import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.OperatorIDPair;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -93,7 +93,7 @@ public class CheckpointRestoreWithUidHashITCase {
         final int maxNumber = 100;
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        JobGraph firstJob =
+        ExecutionPlan firstJob =
                 createJobGraph(
                         env,
                         StatefulSourceBehavior.HOLD_AFTER_CHECKPOINT_ON_FIRST_RUN,
@@ -123,7 +123,7 @@ public class CheckpointRestoreWithUidHashITCase {
                 firstJob.getVerticesSortedTopologicallyFromSources().get(0).getOperatorIDs();
         OperatorIDPair sourceOperatorIds = operatorIds.get(operatorIds.size() - 1);
 
-        JobGraph secondJob =
+        ExecutionPlan secondJob =
                 createJobGraph(
                         env,
                         StatefulSourceBehavior.PROCESS_ONLY,
@@ -143,7 +143,7 @@ public class CheckpointRestoreWithUidHashITCase {
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 2, 500L);
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         env,
                         StatefulSourceBehavior.FAIL_AFTER_CHECKPOINT_ON_FIRST_RUN,
@@ -156,7 +156,7 @@ public class CheckpointRestoreWithUidHashITCase {
         assertThat(result.get(), contains(IntStream.range(0, maxNumber).boxed().toArray()));
     }
 
-    private JobGraph createJobGraph(
+    private ExecutionPlan createJobGraph(
             StreamExecutionEnvironment env,
             StatefulSourceBehavior behavior,
             int maxNumber,
@@ -178,7 +178,7 @@ public class CheckpointRestoreWithUidHashITCase {
         }
 
         source.addSink(new CollectSink(result)).setParallelism(1);
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         if (savepointPath != null) {
             jobGraph.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath, false));

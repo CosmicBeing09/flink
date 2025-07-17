@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.configuration.PipelineOptionsInternal;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.util.ChildFirstClassLoader;
 import org.apache.flink.util.FileUtils;
@@ -203,7 +203,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         ClasspathProviderExtension.parametersForTestJob(expectedSuffix),
                         new Configuration());
 
-        final JobGraph jobGraph = retrieveJobGraph(retriever, configuration);
+        final ExecutionPlan jobGraph = retrieveJobGraph(retriever, configuration);
 
         assertThat(jobGraph.getName())
                 .isEqualTo(
@@ -228,7 +228,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         ClasspathProviderExtension.parametersForTestJob(expectedSuffix),
                         new Configuration());
 
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getName())
                 .isEqualTo(
@@ -250,7 +250,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         ClasspathProviderExtension.parametersForTestJob(expectedSuffix),
                         new Configuration());
 
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getName())
                 .isEqualTo(testJobEntryClassClasspathProvider.getJobClassName() + "-suffix");
@@ -275,7 +275,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         ClasspathProviderExtension.parametersForTestJob(expectedSuffix),
                         new Configuration());
 
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, configuration);
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, configuration);
 
         assertThat(jobGraph.getSavepointRestoreSettings()).isEqualTo(savepointRestoreSettings);
         assertThat(jobGraph.getJobID()).isEqualTo(jobId);
@@ -398,7 +398,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
         final List<String> actualClasspath =
                 jobGraph.getClasspaths().stream().map(URL::toString).collect(Collectors.toList());
 
@@ -418,7 +418,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         singleEntryClassClasspathProvider.getJobClassName(),
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
         final List<String> actualClasspath =
                 jobGraph.getClasspaths().stream().map(URL::toString).collect(Collectors.toList());
 
@@ -446,7 +446,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         singleEntryClassClasspathProvider.getJobClassName(),
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         configuration);
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
         assertThat(jobGraph.getClasspaths()).isEqualTo(expectedMergedURLs);
     }
 
@@ -460,7 +460,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getUserJars())
                 .contains(
@@ -480,7 +480,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getUserJars())
                 .contains(
@@ -507,7 +507,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getUserJars())
                 .contains(
@@ -535,7 +535,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getUserJars())
                 .contains(
@@ -563,7 +563,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         null,
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         assertThat(jobGraph.getUserJars())
                 .contains(
@@ -594,7 +594,7 @@ class DefaultPackagedProgramRetrieverITCase {
                         multipleEntryClassesClasspathProvider.getJobClassName(),
                         ClasspathProviderExtension.parametersForTestJob("suffix"),
                         new Configuration());
-        final JobGraph jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
+        final ExecutionPlan jobGraph = retrieveJobGraph(retrieverUnderTest, new Configuration());
 
         final List<String> actualClasspath =
                 jobGraph.getClasspaths().stream().map(URL::toString).collect(Collectors.toList());
@@ -650,7 +650,7 @@ class DefaultPackagedProgramRetrieverITCase {
                 .isInstanceOf(FlinkUserCodeClassLoaders.ParentFirstClassLoader.class);
     }
 
-    private JobGraph retrieveJobGraph(
+    private ExecutionPlan retrieveJobGraph(
             PackagedProgramRetriever retrieverUnderTest, Configuration configuration)
             throws FlinkException, ProgramInvocationException, MalformedURLException {
         final PackagedProgram packagedProgram = retrieverUnderTest.getPackagedProgram();

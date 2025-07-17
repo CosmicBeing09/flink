@@ -31,7 +31,7 @@ import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
@@ -108,7 +108,7 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
     private static String storageDir;
 
     private YarnTestJob.StopJobSignal stopJobSignal;
-    private JobGraph job;
+    private ExecutionPlan job;
 
     @BeforeAll
     static void setup(@TempDir File tempDir) throws Exception {
@@ -150,7 +150,7 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
 
     /**
      * Tests that Yarn will restart a killed {@link YarnSessionClusterEntrypoint} which will then
-     * resume a persisted {@link JobGraph}.
+     * resume a persisted {@link ExecutionPlan}.
      */
     @Test
     void testKillYarnSessionClusterEntrypoint() throws Exception {

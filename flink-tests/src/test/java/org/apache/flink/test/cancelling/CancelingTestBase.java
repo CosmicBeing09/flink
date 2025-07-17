@@ -26,7 +26,7 @@ import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.testutils.TestingUtils;
@@ -88,7 +88,7 @@ public abstract class CancelingTestBase extends TestLogger {
     // --------------------------------------------------------------------------------------------
 
     protected void runAndCancelJob(
-            JobGraph jobGraph, final int msecsTillCanceling, int maxTimeTillCanceled)
+            ExecutionPlan jobGraph, final int msecsTillCanceling, int maxTimeTillCanceled)
             throws Exception {
         // submit job
         final long rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION).toMillis();

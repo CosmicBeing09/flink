@@ -29,7 +29,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.configuration.StateBackendOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
@@ -153,7 +153,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
             MiniCluster miniCluster)
             throws Exception {
         try {
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithKeyedState(
                             parallelism,
                             maxParallelism,
@@ -185,7 +185,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
             String restorePath)
             throws Exception {
         try {
-            JobGraph scaledJobGraph =
+            ExecutionPlan scaledJobGraph =
                     createJobGraphWithKeyedState(
                             restoreParallelism,
                             maxParallelism,
@@ -219,7 +219,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
         }
     }
 
-    private JobGraph createJobGraphWithKeyedState(
+    private ExecutionPlan createJobGraphWithKeyedState(
             int parallelism,
             int maxParallelism,
             int numberKeys,

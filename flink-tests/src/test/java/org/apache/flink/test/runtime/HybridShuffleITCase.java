@@ -22,7 +22,7 @@ import org.apache.flink.api.common.BatchShuffleMode;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
@@ -47,7 +47,7 @@ class HybridShuffleITCase extends BatchShuffleITCaseBase {
     void testHybridFullExchanges() throws Exception {
         final int numRecordsToSend = 10000;
         Configuration configuration = configureHybridOptions(getConfiguration(), false);
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         numRecordsToSend, false, configuration, enableAdaptiveAutoParallelism);
         executeJob(jobGraph, configuration, numRecordsToSend);
@@ -57,7 +57,7 @@ class HybridShuffleITCase extends BatchShuffleITCaseBase {
     void testHybridSelectiveExchanges() throws Exception {
         final int numRecordsToSend = 10000;
         Configuration configuration = configureHybridOptions(getConfiguration(), true);
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         numRecordsToSend, false, configuration, enableAdaptiveAutoParallelism);
         executeJob(jobGraph, configuration, numRecordsToSend);
@@ -67,7 +67,7 @@ class HybridShuffleITCase extends BatchShuffleITCaseBase {
     void testHybridFullExchangesRestart() throws Exception {
         final int numRecordsToSend = 10;
         Configuration configuration = configureHybridOptions(getConfiguration(), false);
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         numRecordsToSend, true, configuration, enableAdaptiveAutoParallelism);
         executeJob(jobGraph, configuration, numRecordsToSend);
@@ -77,7 +77,7 @@ class HybridShuffleITCase extends BatchShuffleITCaseBase {
     void testHybridSelectiveExchangesRestart() throws Exception {
         final int numRecordsToSend = 10;
         Configuration configuration = configureHybridOptions(getConfiguration(), true);
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraph(
                         numRecordsToSend, true, configuration, enableAdaptiveAutoParallelism);
         executeJob(jobGraph, configuration, numRecordsToSend);

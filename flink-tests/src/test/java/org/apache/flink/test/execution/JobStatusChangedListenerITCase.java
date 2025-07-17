@@ -29,7 +29,7 @@ import org.apache.flink.core.execution.JobExecutionStatusEvent;
 import org.apache.flink.core.execution.JobStatusChangedEvent;
 import org.apache.flink.core.execution.JobStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusChangedListenerFactory;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -141,7 +141,7 @@ public class JobStatusChangedListenerITCase extends TestLogger {
             env.addSource(new FastFailureSourceFunction()).addSink(new SleepingSink());
 
             StreamGraph streamGraph = env.getStreamGraph();
-            JobGraph jobGraph = streamGraph.getJobGraph();
+            ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
             ClusterClient<?> client = MINI_CLUSTER.getClusterClient();
             JobID jobID = client.submitJob(jobGraph).get();
@@ -175,7 +175,7 @@ public class JobStatusChangedListenerITCase extends TestLogger {
             source.addSink(new SleepingSink());
 
             StreamGraph streamGraph = env.getStreamGraph();
-            JobGraph jobGraph = streamGraph.getJobGraph();
+            ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
             verifyLineageGraph(streamGraph.getLineageGraph());
             ClusterClient<?> client = MINI_CLUSTER.getClusterClient();

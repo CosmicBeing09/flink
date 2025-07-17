@@ -18,7 +18,7 @@
 
 package org.apache.flink.yarn.testjob;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
@@ -37,7 +37,7 @@ import static org.apache.flink.util.Preconditions.checkState;
  */
 public class YarnTestJob {
 
-    public static JobGraph stoppableJob(final StopJobSignal stopJobSignal) {
+    public static ExecutionPlan stoppableJob(final StopJobSignal stopJobSignal) {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         env.addSource(new InfiniteSourceFunction(stopJobSignal))

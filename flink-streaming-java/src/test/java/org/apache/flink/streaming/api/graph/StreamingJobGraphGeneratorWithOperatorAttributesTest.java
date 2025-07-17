@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -85,7 +85,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("Map"), 0);
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -136,7 +136,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
         env.disableOperatorChaining();
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph(false));
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph(false));
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -187,7 +187,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("transform"), 0);
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);

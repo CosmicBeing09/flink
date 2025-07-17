@@ -22,7 +22,7 @@ import org.apache.flink.changelog.fs.FsStateChangelogStorageFactory;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -119,7 +119,7 @@ public class ChangelogCompatibilityITCase {
     }
 
     private Optional<String> runAndStoreIfAllowed() throws Exception {
-        JobGraph initialGraph = addGraph(initEnvironment());
+        ExecutionPlan initialGraph = addGraph(initEnvironment());
         try {
             String location = tryCheckpointAndStop(initialGraph);
             if (!testCase.allowStore) {
@@ -148,7 +148,7 @@ public class ChangelogCompatibilityITCase {
         return env;
     }
 
-    private JobGraph addGraph(StreamExecutionEnvironment env) {
+    private ExecutionPlan addGraph(StreamExecutionEnvironment env) {
         env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE)
                 .countWindowAll(37) // any stateful transformation suffices
                 .reduce((ReduceFunction<Long>) Long::sum) // overflow is fine, result is discarded
@@ -156,7 +156,7 @@ public class ChangelogCompatibilityITCase {
         return env.getStreamGraph().getJobGraph();
     }
 
-    private String tryCheckpointAndStop(JobGraph jobGraph) throws Exception {
+    private String tryCheckpointAndStop(ExecutionPlan jobGraph) throws Exception {
         ClusterClient<?> client = miniClusterResource.getClusterClient();
         submit(jobGraph, client);
         if (testCase.restoreSource == RestoreSource.CHECKPOINT) {
@@ -187,7 +187,7 @@ public class ChangelogCompatibilityITCase {
         conf.set(FILE_MERGING_ENABLED, false);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
         env.enableChangelogStateBackend(testCase.restoreWithChangelog);
-        JobGraph jobGraph = addGraph(env);
+        ExecutionPlan jobGraph = addGraph(env);
         jobGraph.setSavepointRestoreSettings(forPath(location));
 
         if (tryRun(jobGraph) != testCase.allowRestore) {
@@ -195,7 +195,7 @@ public class ChangelogCompatibilityITCase {
         }
     }
 
-    private boolean tryRun(JobGraph jobGraph) {
+    private boolean tryRun(ExecutionPlan jobGraph) {
         try {
             submit(jobGraph, miniClusterResource.getClusterClient());
             miniClusterResource.getClusterClient().cancel(jobGraph.getJobID()).get();
@@ -282,7 +282,7 @@ public class ChangelogCompatibilityITCase {
         CHECKPOINT
     }
 
-    private void submit(JobGraph jobGraph, ClusterClient<?> client) throws Exception {
+    private void submit(ExecutionPlan jobGraph, ClusterClient<?> client) throws Exception {
         client.submitJob(jobGraph).get();
         waitForAllTaskRunning(miniClusterResource.getMiniCluster(), jobGraph.getJobID(), true);
     }

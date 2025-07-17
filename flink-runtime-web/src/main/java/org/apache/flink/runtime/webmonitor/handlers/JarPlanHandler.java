@@ -20,7 +20,7 @@ package org.apache.flink.runtime.webmonitor.handlers;
 
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.rest.handler.AbstractRestHandler;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
@@ -53,7 +53,7 @@ public class JarPlanHandler
 
     private final Executor executor;
 
-    private final Function<JobGraph, JobPlanInfo> planGenerator;
+    private final Function<ExecutionPlan, JobPlanInfo> planGenerator;
 
     public JarPlanHandler(
             final GatewayRetriever<? extends RestfulGateway> leaderRetriever,
@@ -84,7 +84,7 @@ public class JarPlanHandler
             final Path jarDir,
             final Configuration configuration,
             final Executor executor,
-            final Function<JobGraph, JobPlanInfo> planGenerator) {
+            final Function<ExecutionPlan, JobPlanInfo> planGenerator) {
         super(leaderRetriever, timeout, responseHeaders, messageHeaders);
         this.jarDir = requireNonNull(jarDir);
         this.configuration = requireNonNull(configuration);
@@ -105,7 +105,7 @@ public class JarPlanHandler
                 () -> {
                     try (PackagedProgram packagedProgram =
                             context.toPackagedProgram(effectiveConfiguration)) {
-                        final JobGraph jobGraph =
+                        final ExecutionPlan jobGraph =
                                 context.toJobGraph(packagedProgram, effectiveConfiguration, true);
                         return planGenerator.apply(jobGraph);
                     }

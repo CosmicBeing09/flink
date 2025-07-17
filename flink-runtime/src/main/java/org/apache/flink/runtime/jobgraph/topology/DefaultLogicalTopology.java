@@ -21,7 +21,7 @@ package org.apache.flink.runtime.jobgraph.topology;
 import org.apache.flink.runtime.executiongraph.failover.LogicalPipelinedRegionComputeUtil;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSet;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 
@@ -36,7 +36,7 @@ import java.util.function.Function;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** Default implementation of {@link LogicalTopology}. It is an adapter of {@link JobGraph}. */
+/** Default implementation of {@link LogicalTopology}. It is an adapter of {@link ExecutionPlan}. */
 public class DefaultLogicalTopology implements LogicalTopology {
 
     private final List<DefaultLogicalVertex> verticesSorted;
@@ -55,7 +55,7 @@ public class DefaultLogicalTopology implements LogicalTopology {
         buildVerticesAndResults(jobVertices);
     }
 
-    public static DefaultLogicalTopology fromJobGraph(final JobGraph jobGraph) {
+    public static DefaultLogicalTopology fromJobGraph(final ExecutionPlan jobGraph) {
         checkNotNull(jobGraph);
 
         return fromTopologicallySortedJobVertices(

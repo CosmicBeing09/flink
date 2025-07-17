@@ -22,17 +22,17 @@ package org.apache.flink.client;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 
 /**
- * Utility for transforming {@link Pipeline FlinkPipelines} into a {@link JobGraph}. This uses
+ * Utility for transforming {@link Pipeline FlinkPipelines} into a {@link ExecutionPlan}. This uses
  * reflection or service discovery to find the right {@link FlinkPipelineTranslator} for a given
  * subclass of {@link Pipeline}.
  */
 public final class FlinkPipelineTranslationUtil {
 
-    /** Transmogrifies the given {@link Pipeline} to a {@link JobGraph}. */
-    public static JobGraph getJobGraph(
+    /** Transmogrifies the given {@link Pipeline} to a {@link ExecutionPlan}. */
+    public static ExecutionPlan getJobGraph(
             ClassLoader userClassloader,
             Pipeline pipeline,
             Configuration optimizerConfiguration,
@@ -41,7 +41,7 @@ public final class FlinkPipelineTranslationUtil {
         FlinkPipelineTranslator pipelineTranslator =
                 getPipelineTranslator(userClassloader, pipeline);
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 pipelineTranslator.translateToJobGraph(
                         pipeline, optimizerConfiguration, defaultParallelism);
 
@@ -56,9 +56,9 @@ public final class FlinkPipelineTranslationUtil {
     }
 
     /**
-     * Transmogrifies the given {@link Pipeline} under the userClassloader to a {@link JobGraph}.
+     * Transmogrifies the given {@link Pipeline} under the userClassloader to a {@link ExecutionPlan}.
      */
-    public static JobGraph getJobGraphUnderUserClassLoader(
+    public static ExecutionPlan getJobGraphUnderUserClassLoader(
             final ClassLoader userClassloader,
             final Pipeline pipeline,
             final Configuration configuration,

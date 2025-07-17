@@ -29,7 +29,7 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.api.writer.ResultPartitionWriter;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -88,11 +88,11 @@ public class ShuffleCompressionITCase {
                 NettyShuffleEnvironmentOptions.CompressionCodec.NONE);
         configuration.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofMinutes(1));
 
-        JobGraph jobGraph = createJobGraph(ResultPartitionType.BLOCKING);
+        ExecutionPlan jobGraph = createJobGraph(ResultPartitionType.BLOCKING);
         JobGraphRunningUtil.execute(jobGraph, configuration, NUM_TASKMANAGERS, NUM_SLOTS);
     }
 
-    private static JobGraph createJobGraph(ResultPartitionType resultPartitionType)
+    private static ExecutionPlan createJobGraph(ResultPartitionType resultPartitionType)
             throws IOException {
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 

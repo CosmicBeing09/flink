@@ -29,7 +29,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointRetentionPolicy;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
@@ -83,7 +83,7 @@ public class JobMasterTriggerSavepointITCase extends AbstractTestBaseJUnit4 {
 
     private Path savepointDirectory;
     private MiniClusterClient clusterClient;
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
 
     private void setUpWithCheckpointInterval(long checkpointInterval) throws Exception {
         invokeLatch = new CountDownLatch(1);

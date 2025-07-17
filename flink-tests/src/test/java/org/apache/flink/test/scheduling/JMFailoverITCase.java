@@ -45,7 +45,7 @@ import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
 import org.apache.flink.runtime.io.network.partition.PartitionedFile;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -165,7 +165,7 @@ class JMFailoverITCase {
 
     @Test
     void testRecoverFromJMFailover() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph();
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
@@ -188,7 +188,7 @@ class JMFailoverITCase {
 
     @Test
     void testSourceNotAllFinished() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph();
 
         // blocking source 0
         SourceTail.blockSubTasks(0);
@@ -228,7 +228,7 @@ class JMFailoverITCase {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT, Duration.ZERO);
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(configuration);
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph(configuration);
 
         // blocking all sink
         StubRecordSink.blockSubTasks(0, 1, 2, 3);
@@ -251,7 +251,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundTwice() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph();
 
         // blocking map 0 and map 1.
         StubMapFunction.blockSubTasks(0, 1);
@@ -286,7 +286,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorNotSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph(false);
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph(false);
 
         // blocking all map task
         StubMapFunction2.blockSubTasks(0, 1, 2, 3);
@@ -312,7 +312,7 @@ class JMFailoverITCase {
 
     @Test
     void testPartitionNotFoundAndOperatorCoordinatorSupportBatchSnapshot() throws Exception {
-        JobGraph jobGraph = prepareEnvAndGetJobGraph();
+        ExecutionPlan jobGraph = prepareEnvAndGetJobGraph();
 
         // blocking map 0.
         StubMapFunction.blockSubTasks(0);
@@ -336,7 +336,7 @@ class JMFailoverITCase {
         checkCountResults();
     }
 
-    private JobGraph prepareEnvAndGetJobGraph() throws Exception {
+    private ExecutionPlan prepareEnvAndGetJobGraph() throws Exception {
         Configuration configuration = new Configuration();
         configuration.set(
                 BatchExecutionOptions.JOB_RECOVERY_PREVIOUS_WORKER_RECOVERY_TIMEOUT,
@@ -344,11 +344,11 @@ class JMFailoverITCase {
         return prepareEnvAndGetJobGraph(configuration, true);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(Configuration config) throws Exception {
+    private ExecutionPlan prepareEnvAndGetJobGraph(Configuration config) throws Exception {
         return prepareEnvAndGetJobGraph(config, true);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(boolean operatorCoordinatorsSupportsBatchSnapshot)
+    private ExecutionPlan prepareEnvAndGetJobGraph(boolean operatorCoordinatorsSupportsBatchSnapshot)
             throws Exception {
         Configuration configuration = new Configuration();
         configuration.set(
@@ -357,7 +357,7 @@ class JMFailoverITCase {
         return prepareEnvAndGetJobGraph(configuration, operatorCoordinatorsSupportsBatchSnapshot);
     }
 
-    private JobGraph prepareEnvAndGetJobGraph(
+    private ExecutionPlan prepareEnvAndGetJobGraph(
             Configuration config, boolean operatorCoordinatorsSupportsBatchSnapshot)
             throws Exception {
         flinkCluster =
@@ -446,7 +446,7 @@ class JMFailoverITCase {
                 new File(flinkConfiguration.get(CoreOptions.TMP_DIRS)));
     }
 
-    private JobGraph createJobGraph(StreamExecutionEnvironment env, String jobName) {
+    private ExecutionPlan createJobGraph(StreamExecutionEnvironment env, String jobName) {
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
                 new TupleTypeInfo<>(BasicTypeInfo.INT_TYPE_INFO, BasicTypeInfo.INT_TYPE_INFO);
 
@@ -471,7 +471,7 @@ class JMFailoverITCase {
         return StreamingJobGraphGenerator.createJobGraph(streamGraph);
     }
 
-    private JobGraph createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
+    private ExecutionPlan createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
             StreamExecutionEnvironment env, String jobName) throws Exception {
 
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =

@@ -26,7 +26,7 @@ import org.apache.flink.configuration.MetricOptions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.metrics.jmx.JMXReporterFactory;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -95,7 +95,7 @@ class JMXJobManagerMetricTest {
                     new JobCheckpointingSettings(
                             CheckpointCoordinatorConfiguration.builder().build(), null);
 
-            final JobGraph jobGraph =
+            final ExecutionPlan jobGraph =
                     JobGraphBuilder.newStreamingJobGraphBuilder()
                             .setJobName("TestingJob")
                             .addJobVertex(sourceJobVertex)

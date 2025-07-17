@@ -28,7 +28,7 @@ import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.contrib.streaming.state.RocksDBMemoryControllerUtils.RocksDBMemoryFactory;
 import org.apache.flink.contrib.streaming.state.RocksDBOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -115,7 +115,7 @@ public class TaskManagerWideRocksDbMemorySharingITCase extends TestLogger {
         }
     }
 
-    private JobGraph dag(RocksDBMemoryFactory memoryFactory) {
+    private ExecutionPlan dag(RocksDBMemoryFactory memoryFactory) {
         Configuration configuration = new Configuration();
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);

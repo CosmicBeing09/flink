@@ -24,7 +24,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -41,7 +41,7 @@ class BatchExecutionFileSinkITCase extends FileSinkITBase {
      * -> File Sink]. The Failover Map is introduced to ensure the failover would always restart the
      * file writer so the data would be re-written.
      */
-    protected JobGraph createJobGraph(boolean triggerFailover, String path) {
+    protected ExecutionPlan createJobGraph(boolean triggerFailover, String path) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);

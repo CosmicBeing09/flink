@@ -26,7 +26,7 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -121,12 +121,12 @@ class YARNITCase extends YarnTestBase {
     void testPerJobWithArchive(@TempDir File tempDir) throws Exception {
         final Configuration flinkConfig =
                 createDefaultConfiguration(YarnConfigOptions.UserJarInclusion.DISABLED);
-        final JobGraph archiveJobGraph =
+        final ExecutionPlan archiveJobGraph =
                 YarnTestArchiveJob.getArchiveJobGraph(tempDir, flinkConfig);
         runTest(() -> deployPerJob(flinkConfig, archiveJobGraph, true));
     }
 
-    private void deployPerJob(Configuration configuration, JobGraph jobGraph, boolean withDist)
+    private void deployPerJob(Configuration configuration, ExecutionPlan jobGraph, boolean withDist)
             throws Exception {
         jobGraph.setJobType(JobType.STREAMING);
         try (final YarnClusterDescriptor yarnClusterDescriptor =
@@ -200,7 +200,7 @@ class YARNITCase extends YarnTestBase {
         }
     }
 
-    private JobGraph getTestingJobGraph() {
+    private ExecutionPlan getTestingJobGraph() {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
 

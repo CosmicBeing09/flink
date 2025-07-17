@@ -35,7 +35,7 @@ import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.checkpoint.OperatorState;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.IncrementalRemoteKeyedStateHandle;
 import org.apache.flink.runtime.state.KeyGroupsStateHandle;
@@ -293,7 +293,7 @@ public class SavepointFormatITCase extends TestLogger {
         final org.apache.flink.core.fs.Path newPath =
                 new org.apache.flink.core.fs.Path(renamedSavepointDir.toUri().toString());
         (new org.apache.flink.core.fs.Path(savepointPath).getFileSystem()).rename(oldPath, newPath);
-        final JobGraph jobGraph = createJobGraph(config);
+        final ExecutionPlan jobGraph = createJobGraph(config);
         jobGraph.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(
                         renamedSavepointDir.toUri().toString(), false, RecoveryClaimMode.CLAIM));
@@ -310,7 +310,7 @@ public class SavepointFormatITCase extends TestLogger {
             int checkpointBeforeSavepoint,
             Configuration config)
             throws Exception {
-        final JobGraph jobGraph = createJobGraph(config);
+        final ExecutionPlan jobGraph = createJobGraph(config);
 
         final JobID jobId = jobGraph.getJobID();
         ClusterClient<?> client = cluster.getClusterClient();
@@ -326,7 +326,7 @@ public class SavepointFormatITCase extends TestLogger {
                 .get();
     }
 
-    private static JobGraph createJobGraph(Configuration config) {
+    private static ExecutionPlan createJobGraph(Configuration config) {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(
                         /* pass configuration to prevent any conflicting randomization*/

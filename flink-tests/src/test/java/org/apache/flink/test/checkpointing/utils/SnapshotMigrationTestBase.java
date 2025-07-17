@@ -31,7 +31,7 @@ import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.StateBackendLoader;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -265,7 +265,7 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         ClusterClient<?> client = miniClusterResource.getClusterClient();
 
         // Submit the job
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         JobID jobID = client.submitJob(jobGraph).get();
 
@@ -343,7 +343,7 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         ClusterClient<?> client = miniClusterResource.getClusterClient();
 
         // Submit the job
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         jobGraph.setSavepointRestoreSettings(SavepointRestoreSettings.forPath(snapshotPath));
 

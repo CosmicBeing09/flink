@@ -17,7 +17,7 @@
 
 package org.apache.flink.runtime.operators.lifecycle;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.operators.lifecycle.command.TestCommandDispatcher;
 import org.apache.flink.runtime.operators.lifecycle.event.TestEventQueue;
 
@@ -28,9 +28,9 @@ import static java.util.Collections.unmodifiableMap;
 import static java.util.Collections.unmodifiableSet;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** Test {@link JobGraph} with description to allow control its execution and validation. */
+/** Test {@link ExecutionPlan} with description to allow control its execution and validation. */
 public class TestJobWithDescription {
-    public final JobGraph jobGraph;
+    public final ExecutionPlan jobGraph;
     public final Set<String> sources;
     public final Set<String> operatorsWithLifecycleTracking;
     public final Set<String> operatorsWithDataFlowTracking;
@@ -39,7 +39,7 @@ public class TestJobWithDescription {
     public final TestCommandDispatcher commandQueue;
 
     public TestJobWithDescription(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Set<String> sources,
             Set<String> operatorsWithLifecycleTracking,
             Set<String> operatorsWithDataFlowTracking,

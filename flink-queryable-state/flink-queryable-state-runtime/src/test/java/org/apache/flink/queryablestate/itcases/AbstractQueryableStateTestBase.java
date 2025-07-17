@@ -48,7 +48,7 @@ import org.apache.flink.queryablestate.client.QueryableStateClient;
 import org.apache.flink.queryablestate.client.VoidNamespace;
 import org.apache.flink.queryablestate.client.VoidNamespaceSerializer;
 import org.apache.flink.queryablestate.exceptions.UnknownKeyOrNamespaceException;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.QueryableStateStream;
@@ -178,7 +178,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -293,7 +293,7 @@ public abstract class AbstractQueryableStateTestBase {
                         .asQueryableState(queryName);
 
         // Submit the job graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         clusterClient
                 .submitJob(jobGraph)
@@ -354,7 +354,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
             executeValueQuery(deadline, client, jobId, "hakuna", valueState, numElements);
@@ -406,7 +406,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
             jobGraph.setClasspaths(Arrays.asList(userClassLoader.getURLs()));
 
             clusterClient.submitJob(jobGraph).get();
@@ -558,7 +558,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             long expected = numElements;
 
@@ -617,7 +617,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -685,7 +685,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
             executeValueQuery(deadline, client, jobId, "matata", stateDesc, numElements);
@@ -729,7 +729,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -831,7 +831,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -928,7 +928,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -1016,7 +1016,7 @@ public abstract class AbstractQueryableStateTestBase {
                 new AutoCancellableJob(deadline, clusterClient, env)) {
 
             final JobID jobId = autoCancellableJob.getJobId();
-            final JobGraph jobGraph = autoCancellableJob.getJobGraph();
+            final ExecutionPlan jobGraph = autoCancellableJob.getJobGraph();
 
             clusterClient.submitJob(jobGraph).get();
 
@@ -1261,7 +1261,7 @@ public abstract class AbstractQueryableStateTestBase {
     private static class AutoCancellableJob implements AutoCloseable {
 
         private final ClusterClient<?> clusterClient;
-        private final JobGraph jobGraph;
+        private final ExecutionPlan jobGraph;
 
         private final JobID jobId;
 
@@ -1281,7 +1281,7 @@ public abstract class AbstractQueryableStateTestBase {
             this.deadline = deadline;
         }
 
-        JobGraph getJobGraph() {
+        ExecutionPlan getJobGraph() {
             return jobGraph;
         }
 

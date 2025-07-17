@@ -20,7 +20,7 @@ package org.apache.flink.streaming.runtime.partitioner;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -39,7 +39,7 @@ class ForwardForUnspecifiedPartitionerTest {
 
     @Test
     void testConvertToForwardPartitioner() {
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 StreamPartitionerTestUtils.createJobGraph(
                         "group1", "group1", new ForwardForUnspecifiedPartitioner<>());
         List<JobVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
@@ -53,7 +53,7 @@ class ForwardForUnspecifiedPartitionerTest {
 
     @Test
     void testConvertToRescalePartitioner() {
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 StreamPartitionerTestUtils.createJobGraph(
                         "group1", "group2", new ForwardForUnspecifiedPartitioner<>());
         List<JobVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();

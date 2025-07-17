@@ -25,7 +25,7 @@ import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -112,7 +112,7 @@ class ClientHeartbeatTest {
                             return miniCluster;
                         });
 
-        JobGraph cancellableJobGraph = getCancellableJobGraph();
+        ExecutionPlan cancellableJobGraph = getCancellableJobGraph();
         // Enable heartbeat only when both execution.attached and
         // execution.shutdown-on-attached-exit are true.
         if (configuration.get(DeploymentOptions.ATTACHED)
@@ -124,7 +124,7 @@ class ClientHeartbeatTest {
                 .get();
     }
 
-    private static JobGraph getCancellableJobGraph() {
+    private static ExecutionPlan getCancellableJobGraph() {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(WaitingCancelableInvokable.class);
         jobVertex.setParallelism(1);

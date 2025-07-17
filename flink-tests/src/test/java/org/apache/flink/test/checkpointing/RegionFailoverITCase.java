@@ -42,7 +42,7 @@ import org.apache.flink.runtime.checkpoint.StandaloneCompletedCheckpointStore;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServicesFactory;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
@@ -143,7 +143,7 @@ public class RegionFailoverITCase extends TestLogger {
     @Test(timeout = 60000)
     public void testMultiRegionFailover() {
         try {
-            JobGraph jobGraph = createJobGraph();
+            ExecutionPlan jobGraph = createJobGraph();
             ClusterClient<?> client = cluster.getClusterClient();
             submitJobAndWaitForResult(client, jobGraph, getClass().getClassLoader());
             verifyAfterJobExecuted();
@@ -167,7 +167,7 @@ public class RegionFailoverITCase extends TestLogger {
         assertEquals(NUM_ELEMENTS / 2, keyCount);
     }
 
-    private JobGraph createJobGraph() {
+    private ExecutionPlan createJobGraph() {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(NUM_OF_REGIONS);

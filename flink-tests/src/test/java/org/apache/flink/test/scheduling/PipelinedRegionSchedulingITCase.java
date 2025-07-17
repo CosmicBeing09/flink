@@ -31,7 +31,7 @@ import org.apache.flink.runtime.io.network.partition.PartitionException;
 import org.apache.flink.runtime.io.network.partition.PartitionNotFoundException;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -105,7 +105,7 @@ public class PipelinedRegionSchedulingITCase extends TestLogger {
     }
 
     private JobResult executeSchedulingTest(
-            JobGraph jobGraph, int numSlots, Configuration configuration) throws Exception {
+            ExecutionPlan jobGraph, int numSlots, Configuration configuration) throws Exception {
         configuration.set(JobManagerOptions.SLOT_REQUEST_TIMEOUT, Duration.ofMillis(30000L));
         configuration.set(JobManagerOptions.SCHEDULER, JobManagerOptions.SchedulerType.Default);
 
@@ -135,7 +135,7 @@ public class PipelinedRegionSchedulingITCase extends TestLogger {
         }
     }
 
-    private JobGraph createJobGraph(final int parallelism) {
+    private ExecutionPlan createJobGraph(final int parallelism) {
         final SlotSharingGroup group1 = new SlotSharingGroup();
         final JobVertex source1 = new JobVertex("source1");
         source1.setInvokableClass(PipelinedSender.class);
@@ -161,7 +161,7 @@ public class PipelinedRegionSchedulingITCase extends TestLogger {
         return JobGraphTestUtils.batchJobGraph(source1, source2, sink);
     }
 
-    private JobGraph createJobGraphWithThreeStages(final int parallelism) {
+    private ExecutionPlan createJobGraphWithThreeStages(final int parallelism) {
         final SlotSharingGroup group1 = new SlotSharingGroup();
         final JobVertex source = new JobVertex("source");
         source.setInvokableClass(NoOpInvokable.class);

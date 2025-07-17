@@ -19,7 +19,7 @@
 package org.apache.flink.state.api.runtime;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -59,7 +59,7 @@ public class OperatorIDGeneratorTest {
                 .disableChaining()
                 .sinkTo(new DiscardingSink<>());
 
-        JobGraph graph =
+        ExecutionPlan graph =
                 env.getStreamGraph().getJobGraph(env.getClass().getClassLoader(), new JobID());
         JobVertex vertex =
                 StreamSupport.stream(graph.getVertices().spliterator(), false)

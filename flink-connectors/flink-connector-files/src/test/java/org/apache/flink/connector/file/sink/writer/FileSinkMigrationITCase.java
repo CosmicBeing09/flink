@@ -28,7 +28,7 @@ import org.apache.flink.connector.file.sink.utils.IntegerFileSinkTestDataUtils;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
@@ -118,18 +118,18 @@ class FileSinkMigrationITCase {
                         .setNumSlotsPerTaskManager(4)
                         .build();
 
-        JobGraph streamingFileSinkJobGraph = createStreamingFileSinkJobGraph(outputPath);
+        ExecutionPlan streamingFileSinkJobGraph = createStreamingFileSinkJobGraph(outputPath);
         String savepointPath =
                 executeAndTakeSavepoint(cfg, streamingFileSinkJobGraph, savepointBasePath);
 
-        JobGraph fileSinkJobGraph = createFileSinkJobGraph(outputPath);
+        ExecutionPlan fileSinkJobGraph = createFileSinkJobGraph(outputPath);
         loadSavepointAndExecute(cfg, fileSinkJobGraph, savepointPath);
 
         IntegerFileSinkTestDataUtils.checkIntegerSequenceSinkOutput(
                 outputPath, NUM_RECORDS, NUM_BUCKETS, NUM_SOURCES);
     }
 
-    private JobGraph createStreamingFileSinkJobGraph(String outputPath) {
+    private ExecutionPlan createStreamingFileSinkJobGraph(String outputPath) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 
@@ -150,7 +150,7 @@ class FileSinkMigrationITCase {
         return env.getStreamGraph().getJobGraph();
     }
 
-    private JobGraph createFileSinkJobGraph(String outputPath) {
+    private ExecutionPlan createFileSinkJobGraph(String outputPath) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 
@@ -172,7 +172,7 @@ class FileSinkMigrationITCase {
     }
 
     private String executeAndTakeSavepoint(
-            MiniClusterConfiguration cfg, JobGraph jobGraph, String savepointBasePath)
+            MiniClusterConfiguration cfg, ExecutionPlan jobGraph, String savepointBasePath)
             throws Exception {
         try (MiniCluster miniCluster = new MiniCluster(cfg)) {
             miniCluster.start();
@@ -190,7 +190,7 @@ class FileSinkMigrationITCase {
     }
 
     private void loadSavepointAndExecute(
-            MiniClusterConfiguration cfg, JobGraph jobGraph, String savepointPath)
+            MiniClusterConfiguration cfg, ExecutionPlan jobGraph, String savepointPath)
             throws Exception {
         jobGraph.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepointPath, false));

@@ -28,7 +28,7 @@ import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionVertex;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -133,7 +133,7 @@ public class DefaultSchedulerLocalRecoveryITCase extends TestLogger {
 
             MiniClusterClient miniClusterClient = new MiniClusterClient(configuration, miniCluster);
 
-            JobGraph jobGraph = createJobGraph(parallelism);
+            ExecutionPlan jobGraph = createJobGraph(parallelism);
 
             // wait for the submission to succeed
             JobID jobId = miniClusterClient.submitJob(jobGraph).get(TIMEOUT, TimeUnit.SECONDS);
@@ -166,12 +166,12 @@ public class DefaultSchedulerLocalRecoveryITCase extends TestLogger {
                 () -> miniCluster.getExecutionGraph(jobId).get(TIMEOUT, TimeUnit.SECONDS), false);
     }
 
-    private JobGraph createJobGraph(int parallelism) throws IOException {
+    private ExecutionPlan createJobGraph(int parallelism) throws IOException {
         final JobVertex source = new JobVertex("v1");
         source.setInvokableClass(WaitingCancelableInvokable.class);
         source.setParallelism(parallelism);
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(source))
                         .build();
