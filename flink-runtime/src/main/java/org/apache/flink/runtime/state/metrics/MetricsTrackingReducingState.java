@@ -95,7 +95,7 @@ class MetricsTrackingReducingState<K, N, T>
         }
     }
 
-    protected static class ReducingStateLatencyMetrics extends StateLatencyMetricBase {
+    protected static class ReducingStateLatencyMetrics extends StateMetricBase {
         private static final String REDUCING_STATE_GET_LATENCY = "reducingStateGetLatency";
         private static final String REDUCING_STATE_ADD_LATENCY = "reducingStateAddLatency";
         private static final String REDUCING_STATE_MERGE_NAMESPACES_LATENCY =

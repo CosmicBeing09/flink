@@ -90,7 +90,7 @@ abstract class MetricsTrackingStateTestBase<K> {
                     V,
                     S extends InternalKvState<K, N, V>,
                     S2 extends State,
-                    LSM extends StateLatencyMetricBase>
+                    LSM extends StateMetricBase>
     AbstractMetricsTrackState<K, N, V, S, LSM> createLatencyTrackingState(
                     AbstractKeyedStateBackend<K> keyedBackend,
                     StateDescriptor<S2, V> stateDescriptor)
@@ -117,7 +117,7 @@ abstract class MetricsTrackingStateTestBase<K> {
             AbstractMetricsTrackState latencyTrackingState =
                     createLatencyTrackingState(keyedBackend, getStateDescriptor());
             latencyTrackingState.setCurrentNamespace(VoidNamespace.INSTANCE);
-            StateLatencyMetricBase latencyTrackingStateMetric =
+            StateMetricBase latencyTrackingStateMetric =
                     latencyTrackingState.getLatencyTrackingStateMetric();
 
             assertThat(latencyTrackingStateMetric.getClearCount()).isZero();

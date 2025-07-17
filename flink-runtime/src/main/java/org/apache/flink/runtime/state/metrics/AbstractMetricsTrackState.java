@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.function.Supplier;
 
 /**
- * Abstract implementation of latency tracking state.
+ * Abstract implementation of metric tracking state.
  *
  * @param <K> The type of key the state is associated to
  * @param <N> The type of the namespace
@@ -37,7 +37,7 @@ import java.util.function.Supplier;
  * @param <LSM> Type of the latency tracking state metrics
  */
 class AbstractMetricsTrackState<
-                K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateLatencyMetricBase>
+                K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateMetricBase>
         implements InternalKvState<K, N, V> {
 
     protected S original;
@@ -91,7 +91,7 @@ class AbstractMetricsTrackState<
     @Override
     public void clear() {
         if (metricsTrackingStateMetric.trackLatencyOnClear()) {
-            trackLatency(original::clear, StateLatencyMetricBase.STATE_CLEAR_LATENCY);
+            trackLatency(original::clear, StateMetricBase.STATE_CLEAR_LATENCY);
         } else {
             original.clear();
         }

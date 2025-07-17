@@ -117,7 +117,7 @@ class LatencyTrackingListState<K, N, T>
         }
     }
 
-    static class ListStateLatencyMetrics extends StateLatencyMetricBase {
+    static class ListStateLatencyMetrics extends StateMetricBase {
         private static final String LIST_STATE_GET_LATENCY = "listStateGetLatency";
         private static final String LIST_STATE_ADD_LATENCY = "listStateAddLatency";
         private static final String LIST_STATE_ADD_ALL_LATENCY = "listStateAddAllLatency";

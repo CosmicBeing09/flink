@@ -212,7 +212,7 @@ class MetricsTrackingMapState<K, N, UK, UV>
         }
     }
 
-    static class MapStateMetrics extends StateLatencyMetricBase {
+    static class MapStateMetrics extends StateMetricBase {
         private static final String MAP_STATE_GET_LATENCY = "mapStateGetLatency";
         private static final String MAP_STATE_PUT_LATENCY = "mapStatePutLatency";
         private static final String MAP_STATE_PUT_ALL_LATENCY = "mapStatePutAllLatency";

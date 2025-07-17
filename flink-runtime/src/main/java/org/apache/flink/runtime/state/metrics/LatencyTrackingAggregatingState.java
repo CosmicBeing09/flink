@@ -98,7 +98,7 @@ class LatencyTrackingAggregatingState<K, N, IN, ACC, OUT>
         }
     }
 
-    static class AggregatingStateLatencyMetrics extends StateLatencyMetricBase {
+    static class AggregatingStateLatencyMetrics extends StateMetricBase {
         private static final String AGGREGATING_STATE_GET_LATENCY = "aggregatingStateGetLatency";
         private static final String AGGREGATING_STATE_ADD_LATENCY = "aggregatingStateAddLatency";
         private static final String AGGREGATING_STATE_MERGE_NAMESPACES_LATENCY =

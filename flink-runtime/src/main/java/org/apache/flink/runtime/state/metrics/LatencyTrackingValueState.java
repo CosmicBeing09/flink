@@ -74,7 +74,7 @@ class LatencyTrackingValueState<K, N, T>
         }
     }
 
-    static class ValueStateLatencyMetrics extends StateLatencyMetricBase {
+    static class ValueStateLatencyMetrics extends StateMetricBase {
         private static final String VALUE_STATE_GET_LATENCY = "valueStateGetLatency";
         private static final String VALUE_STATE_UPDATE_LATENCY = "valueStateUpdateLatency";
 
