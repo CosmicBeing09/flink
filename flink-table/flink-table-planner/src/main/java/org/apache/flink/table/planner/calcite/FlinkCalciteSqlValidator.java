@@ -98,7 +98,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
 
     // Enables CallContext#getOutputDataType() when validating SQL expressions.
-    private SqlNode sqlNodeForExpectedOutputType;
+    private SqlNode expectedOutputNode;
     private RelDataType expectedOutputType;
 
     private final RelOptCluster relOptCluster;
@@ -114,12 +114,12 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
             SqlValidatorCatalogReader catalogReader,
             RelDataTypeFactory typeFactory,
             SqlValidator.Config config,
-            RelOptTable.ToRelContext toRelcontext,
+            RelOptTable.ToRelContext toRelContext,
             RelOptCluster relOptCluster,
             FrameworkConfig frameworkConfig) {
         super(opTab, catalogReader, typeFactory, config);
         this.relOptCluster = relOptCluster;
-        this.toRelContext = toRelcontext;
+        this.toRelContext = toRelContext;
         this.frameworkConfig = frameworkConfig;
         this.columnExpansionStrategies =
                 ShortcutUtils.unwrapTableConfig(relOptCluster)
@@ -127,12 +127,12 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
     }
 
     public void setExpectedOutputType(SqlNode sqlNode, RelDataType expectedOutputType) {
-        this.sqlNodeForExpectedOutputType = sqlNode;
+        this.expectedOutputNode = sqlNode;
         this.expectedOutputType = expectedOutputType;
     }
 
     public Optional<RelDataType> getExpectedOutputType(SqlNode sqlNode) {
-        if (sqlNode == sqlNodeForExpectedOutputType) {
+        if (sqlNode == expectedOutputNode) {
             return Optional.of(expectedOutputType);
         }
         return Optional.empty();
@@ -201,7 +201,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         // Since time travel only supports constant expressions, we need to ensure that the period
         // of
         // snapshot is not an identifier.
-        Optional<SqlSnapshot> snapshot = getSnapShotNode(ns);
+        Optional<SqlSnapshot> snapshot = getSnapshotNode(ns);
         if (usingScope != null
                 && snapshot.isPresent()
                 && !(hasInputReference(snapshot.get().getPeriod()))) {
@@ -255,7 +255,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
                             .toInstant()
                             .toEpochMilli();
 
-            SchemaVersion schemaVersion = TimestampSchemaVersion.of(timeTravelTimestamp);
+            SchemaVersion schemaVersion = TimestampSchemaVersion.forTimestamp(timeTravelTimestamp);
             IdentifierNamespace identifierNamespace = (IdentifierNamespace) ns;
             ns =
                     new IdentifierSnapshotNamespace(
@@ -289,7 +289,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
      * @param ns The namespace used to find SqlSnapshot
      * @return SqlSnapshot found in {@param ns}, empty if not found
      */
-    private Optional<SqlSnapshot> getSnapShotNode(SqlValidatorNamespace ns) {
+    private Optional<SqlSnapshot> getSnapshotNode(SqlValidatorNamespace ns) {
         if (ns instanceof IdentifierNamespace) {
             SqlNode enclosingNode = ns.getEnclosingNode();
             // FOR SYSTEM_TIME AS OF [expression]
@@ -337,7 +337,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
                 final Column column = resolvedSchema.getColumn(columnName).orElse(null);
                 if (qualified.suffix().size() == 1 && column != null) {
                     if (includeExpandedColumn(column, columnExpansionStrategies)
-                            || declaredDescriptorColumn(scope, column)) {
+                            || isDescriptorColumnDeclared(scope, column)) {
                         super.addToSelectList(
                                 list, aliases, fieldList, exp, scope, includeSystemVars);
                     }
@@ -362,7 +362,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         // for this column. Therefore, explicit table expressions (for window TVFs at most one)
         // are captured before rewriting and replaced with a "marker" SqlSelect that contains the
         // descriptor information. The "marker" SqlSelect is considered during column expansion.
-        final List<SqlIdentifier> explicitTableArgs = getExplicitTableOperands(node);
+        final List<SqlIdentifier> explicitTableArgs = getTableOperands(node);
 
         final SqlNode rewritten = super.performUnconditionalRewrites(node, underFrom);
 
@@ -436,7 +436,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
      * Returns whether the given column has been declared in a {@link SqlKind#DESCRIPTOR} next to a
      * {@link SqlKind#EXPLICIT_TABLE} within TVF operands.
      */
-    private static boolean declaredDescriptorColumn(SelectScope scope, Column column) {
+    private static boolean isDescriptorColumnDeclared(SelectScope scope, Column column) {
         if (!(scope.getNode() instanceof ExplicitTableSqlSelect)) {
             return false;
         }
@@ -450,7 +450,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
      * Returns all {@link SqlKind#EXPLICIT_TABLE} operands within TVF operands. A list entry is
      * {@code null} if the operand is not an {@link SqlKind#EXPLICIT_TABLE}.
      */
-    private static List<SqlIdentifier> getExplicitTableOperands(SqlNode node) {
+    private static List<SqlIdentifier> getTableOperands(SqlNode node) {
         if (!(node instanceof SqlBasicCall)) {
             return null;
         }

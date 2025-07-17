@@ -34,10 +34,10 @@ import javax.annotation.Nullable;
 public final class CatalogManagerMocks {
 
     public static final String DEFAULT_CATALOG =
-            TableConfigOptions.TABLE_CATALOG_NAME.defaultValue();
+            TableConfigOptions.CATALOG_NAME.defaultValue();
 
     public static final String DEFAULT_DATABASE =
-            TableConfigOptions.TABLE_DATABASE_NAME.defaultValue();
+            TableConfigOptions.DATABASE_NAME.defaultValue();
 
     public static CatalogManager createEmptyCatalogManager() {
         return createCatalogManager(null, null);

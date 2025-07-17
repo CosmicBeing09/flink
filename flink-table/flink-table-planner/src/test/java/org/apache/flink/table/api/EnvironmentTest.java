@@ -75,25 +75,25 @@ class EnvironmentTest {
     @Test
     void testEnvironmentSettings() throws ExecutionException, InterruptedException {
         Configuration conf = new Configuration();
-        conf.set(TableConfigOptions.TABLE_CATALOG_NAME, "myCatalog");
+        conf.set(TableConfigOptions.CATALOG_NAME, "myCatalog");
         EnvironmentSettings settings =
                 EnvironmentSettings.newInstance().withConfiguration(conf).build();
 
         TableEnvironment tEnv = TableEnvironment.create(settings);
-        assertThat(tEnv.getConfig().get(TableConfigOptions.TABLE_CATALOG_NAME))
+        assertThat(tEnv.getConfig().get(TableConfigOptions.CATALOG_NAME))
                 .isEqualTo("myCatalog");
         assertThat(tEnv.getCurrentCatalog()).isEqualTo("myCatalog");
 
         StreamTableEnvironment stEnv =
                 StreamTableEnvironment.create(
                         StreamExecutionEnvironment.getExecutionEnvironment(), settings);
-        assertThat(stEnv.getConfig().get(TableConfigOptions.TABLE_CATALOG_NAME))
+        assertThat(stEnv.getConfig().get(TableConfigOptions.CATALOG_NAME))
                 .isEqualTo("myCatalog");
 
         stEnv.getConfig()
                 .set(
-                        TableConfigOptions.TABLE_CATALOG_NAME,
-                        TableConfigOptions.TABLE_CATALOG_NAME.defaultValue());
+                        TableConfigOptions.CATALOG_NAME,
+                        TableConfigOptions.CATALOG_NAME.defaultValue());
         assertThat(stEnv.getCurrentCatalog()).isEqualTo("myCatalog");
     }
 

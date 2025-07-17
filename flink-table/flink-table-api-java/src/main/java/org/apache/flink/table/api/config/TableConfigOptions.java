@@ -43,7 +43,7 @@ public class TableConfigOptions {
     private TableConfigOptions() {}
 
     @Documentation.TableOption(execMode = Documentation.ExecMode.BATCH_STREAMING)
-    public static final ConfigOption<String> TABLE_CATALOG_NAME =
+    public static final ConfigOption<String> CATALOG_NAME =
             key("table.builtin-catalog-name")
                     .stringType()
                     .defaultValue("default_catalog")
@@ -52,7 +52,7 @@ public class TableConfigOptions {
                                     + "instantiating a TableEnvironment.");
 
     @Documentation.TableOption(execMode = Documentation.ExecMode.BATCH_STREAMING)
-    public static final ConfigOption<String> TABLE_DATABASE_NAME =
+    public static final ConfigOption<String> DATABASE_NAME =
             key("table.builtin-database-name")
                     .stringType()
                     .defaultValue("default_database")

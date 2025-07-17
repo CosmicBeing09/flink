@@ -432,7 +432,7 @@ public class SqlToRelConverter {
      * @param increment if true, increment the count
      * @return the current count before the optional increment
      */
-    public int getDynamicParamCountInExplain(boolean increment) {
+    public int getExplainDynamicParamCount(boolean increment) {
         int retVal = explainParamCount;
         if (increment) {
             ++explainParamCount;
@@ -3016,7 +3016,7 @@ public class SqlToRelConverter {
                     tableRef instanceof SqlBasicCall
                             ? ((SqlBasicCall) tableRef).operand(0)
                             : ((SqlTableRef) tableRef).operand(0);
-            SchemaVersion schemaVersion = TimestampSchemaVersion.of(timeTravelTimestamp);
+            SchemaVersion schemaVersion = TimestampSchemaVersion.forTimestamp(timeTravelTimestamp);
             convertIdentifier(bb, sqlIdentifier, null, null, schemaVersion);
         } else {
             convertFrom(bb, expr);

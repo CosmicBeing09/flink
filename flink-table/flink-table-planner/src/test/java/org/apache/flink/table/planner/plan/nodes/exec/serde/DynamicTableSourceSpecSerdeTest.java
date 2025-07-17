@@ -117,8 +117,8 @@ public class DynamicTableSourceSpecSerdeTest {
                 new DynamicTableSourceSpec(
                         ContextResolvedTable.temporary(
                                 ObjectIdentifier.of(
-                                        TableConfigOptions.TABLE_CATALOG_NAME.defaultValue(),
-                                        TableConfigOptions.TABLE_DATABASE_NAME.defaultValue(),
+                                        TableConfigOptions.CATALOG_NAME.defaultValue(),
+                                        TableConfigOptions.DATABASE_NAME.defaultValue(),
                                         "MyTable"),
                                 new ResolvedCatalogTable(catalogTable1, resolvedSchema1)),
                         null);
@@ -159,8 +159,8 @@ public class DynamicTableSourceSpecSerdeTest {
                 new DynamicTableSourceSpec(
                         ContextResolvedTable.temporary(
                                 ObjectIdentifier.of(
-                                        TableConfigOptions.TABLE_CATALOG_NAME.defaultValue(),
-                                        TableConfigOptions.TABLE_DATABASE_NAME.defaultValue(),
+                                        TableConfigOptions.CATALOG_NAME.defaultValue(),
+                                        TableConfigOptions.DATABASE_NAME.defaultValue(),
                                         "MyTable"),
                                 new ResolvedCatalogTable(catalogTable2, resolvedSchema2)),
                         Arrays.asList(
@@ -289,8 +289,8 @@ public class DynamicTableSourceSpecSerdeTest {
         // Test model
         ObjectIdentifier identifier =
                 ObjectIdentifier.of(
-                        TableConfigOptions.TABLE_CATALOG_NAME.defaultValue(),
-                        TableConfigOptions.TABLE_DATABASE_NAME.defaultValue(),
+                        TableConfigOptions.CATALOG_NAME.defaultValue(),
+                        TableConfigOptions.DATABASE_NAME.defaultValue(),
                         "my_table");
 
         String formatPrefix = FactoryUtil.getFormatPrefix(FORMAT, TestFormatFactory.IDENTIFIER);

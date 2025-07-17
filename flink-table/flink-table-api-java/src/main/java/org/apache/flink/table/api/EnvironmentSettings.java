@@ -31,8 +31,8 @@ import javax.annotation.Nullable;
 import static org.apache.flink.api.common.RuntimeExecutionMode.BATCH;
 import static org.apache.flink.api.common.RuntimeExecutionMode.STREAMING;
 import static org.apache.flink.configuration.ExecutionOptions.RUNTIME_MODE;
-import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_CATALOG_NAME;
-import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_DATABASE_NAME;
+import static org.apache.flink.table.api.config.TableConfigOptions.CATALOG_NAME;
+import static org.apache.flink.table.api.config.TableConfigOptions.DATABASE_NAME;
 
 /**
  * Defines all parameters that initialize a table environment. Those parameters are used only during
@@ -136,7 +136,7 @@ public class EnvironmentSettings {
      * TableEnvironment}.
      */
     public String getBuiltInCatalogName() {
-        return configuration.get(TABLE_CATALOG_NAME);
+        return configuration.get(CATALOG_NAME);
     }
 
     /**
@@ -144,7 +144,7 @@ public class EnvironmentSettings {
      * instantiating a {@link TableEnvironment}.
      */
     public String getBuiltInDatabaseName() {
-        return configuration.get(TABLE_DATABASE_NAME);
+        return configuration.get(DATABASE_NAME);
     }
 
     /** Tells if the {@link TableEnvironment} should work in a batch or streaming mode. */
@@ -202,10 +202,10 @@ public class EnvironmentSettings {
          * <p>It will also be the initial value for the current catalog which can be altered via
          * {@link TableEnvironment#useCatalog(String)}.
          *
-         * <p>Default: {@link TableConfigOptions#TABLE_DATABASE_NAME}{@code .defaultValue()}.
+         * <p>Default: {@link TableConfigOptions#DATABASE_NAME}{@code .defaultValue()}.
          */
         public Builder withBuiltInCatalogName(String builtInCatalogName) {
-            configuration.set(TABLE_CATALOG_NAME, builtInCatalogName);
+            configuration.set(CATALOG_NAME, builtInCatalogName);
             return this;
         }
 
@@ -221,10 +221,10 @@ public class EnvironmentSettings {
          * <p>It will also be the initial value for the current database which can be altered via
          * {@link TableEnvironment#useDatabase(String)}.
          *
-         * <p>Default: {@link TableConfigOptions#TABLE_DATABASE_NAME}{@code .defaultValue()}.
+         * <p>Default: {@link TableConfigOptions#DATABASE_NAME}{@code .defaultValue()}.
          */
         public Builder withBuiltInDatabaseName(String builtInDatabaseName) {
-            configuration.set(TABLE_DATABASE_NAME, builtInDatabaseName);
+            configuration.set(DATABASE_NAME, builtInDatabaseName);
             return this;
         }
 

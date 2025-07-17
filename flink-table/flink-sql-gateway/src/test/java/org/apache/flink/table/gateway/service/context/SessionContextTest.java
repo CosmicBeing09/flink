@@ -50,7 +50,7 @@ import static org.apache.flink.configuration.PipelineOptions.MAX_PARALLELISM;
 import static org.apache.flink.configuration.PipelineOptions.NAME;
 import static org.apache.flink.configuration.PipelineOptions.OBJECT_REUSE;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_CATALOG_MODIFICATION_LISTENERS;
-import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_CATALOG_NAME;
+import static org.apache.flink.table.api.config.TableConfigOptions.CATALOG_NAME;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_SQL_DIALECT;
 import static org.apache.flink.table.catalog.CommonCatalogOptions.TABLE_CATALOG_STORE_KIND;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -233,7 +233,7 @@ class SessionContextTest {
                 .isEqualTo("default_catalog");
         context1.close();
 
-        flinkConfig.set(TABLE_CATALOG_NAME, "cat1");
+        flinkConfig.set(CATALOG_NAME, "cat1");
         SessionContext context2 = createSessionContext(flinkConfig);
         assertThat(context2.getSessionState().catalogManager.getCurrentCatalog()).isEqualTo("cat1");
         context2.close();

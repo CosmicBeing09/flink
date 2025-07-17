@@ -54,7 +54,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Internal
 public final class ContextResolvedTable {
 
-    private static final AtomicInteger uniqueId = new AtomicInteger(0);
+    private static final AtomicInteger idCounter = new AtomicInteger(0);
 
     private final ObjectIdentifier objectIdentifier;
     private final @Nullable Catalog catalog;
@@ -77,7 +77,7 @@ public final class ContextResolvedTable {
     public static ContextResolvedTable anonymous(ResolvedCatalogBaseTable<?> resolvedTable) {
         return new ContextResolvedTable(
                 ObjectIdentifier.ofAnonymous(
-                        generateAnonymousStringIdentifier(null, resolvedTable)),
+                        generateAnonymousIdentifier(null, resolvedTable)),
                 null,
                 resolvedTable,
                 true);
@@ -87,7 +87,7 @@ public final class ContextResolvedTable {
             String hint, ResolvedCatalogBaseTable<?> resolvedTable) {
         return new ContextResolvedTable(
                 ObjectIdentifier.ofAnonymous(
-                        generateAnonymousStringIdentifier(hint, resolvedTable)),
+                        generateAnonymousIdentifier(hint, resolvedTable)),
                 null,
                 resolvedTable,
                 true);
@@ -197,7 +197,7 @@ public final class ContextResolvedTable {
      * helpful toString for anonymous tables. It's only to help users to debug, and its return value
      * should not be relied on.
      */
-    private static String generateAnonymousStringIdentifier(
+    private static String generateAnonymousIdentifier(
             @Nullable String hint, ResolvedCatalogBaseTable<?> resolvedTable) {
         // Planner can do some fancy optimizations' logic squashing two sources together in the same
         // operator. Because this logic is string based, anonymous tables still need some kind of
@@ -209,7 +209,7 @@ public final class ContextResolvedTable {
             }
         }
 
-        int id = uniqueId.incrementAndGet();
+        int id = idCounter.incrementAndGet();
         if (hint == null) {
             return "*anonymous$" + id + "*";
         }

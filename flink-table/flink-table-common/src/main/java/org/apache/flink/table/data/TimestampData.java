@@ -44,20 +44,20 @@ public final class TimestampData implements Comparable<TimestampData> {
     private static final long MILLIS_PER_DAY = 86400000; // = 24 * 60 * 60 * 1000
 
     // this field holds the integral second and the milli-of-second
-    private final long millisecond;
+    private final long milliseconds;
 
     // this field holds the nano-of-millisecond
     private final int nanoOfMillisecond;
 
     private TimestampData(long millisecond, int nanoOfMillisecond) {
         Preconditions.checkArgument(nanoOfMillisecond >= 0 && nanoOfMillisecond <= 999_999);
-        this.millisecond = millisecond;
+        this.milliseconds = millisecond;
         this.nanoOfMillisecond = nanoOfMillisecond;
     }
 
     /** Returns the number of milliseconds since {@code 1970-01-01 00:00:00}. */
     public long getMillisecond() {
-        return millisecond;
+        return milliseconds;
     }
 
     /**
@@ -76,8 +76,8 @@ public final class TimestampData implements Comparable<TimestampData> {
 
     /** Converts this {@link TimestampData} object to a {@link LocalDateTime}. */
     public LocalDateTime toLocalDateTime() {
-        int date = (int) (millisecond / MILLIS_PER_DAY);
-        int time = (int) (millisecond % MILLIS_PER_DAY);
+        int date = (int) (milliseconds / MILLIS_PER_DAY);
+        int time = (int) (milliseconds % MILLIS_PER_DAY);
         if (time < 0) {
             --date;
             time += MILLIS_PER_DAY;
@@ -90,8 +90,8 @@ public final class TimestampData implements Comparable<TimestampData> {
 
     /** Converts this {@link TimestampData} object to a {@link Instant}. */
     public Instant toInstant() {
-        long epochSecond = millisecond / 1000;
-        int milliOfSecond = (int) (millisecond % 1000);
+        long epochSecond = milliseconds / 1000;
+        int milliOfSecond = (int) (milliseconds % 1000);
         if (milliOfSecond < 0) {
             --epochSecond;
             milliOfSecond += 1000;
@@ -102,7 +102,7 @@ public final class TimestampData implements Comparable<TimestampData> {
 
     @Override
     public int compareTo(TimestampData that) {
-        int cmp = Long.compare(this.millisecond, that.millisecond);
+        int cmp = Long.compare(this.milliseconds, that.milliseconds);
         if (cmp == 0) {
             cmp = this.nanoOfMillisecond - that.nanoOfMillisecond;
         }
@@ -115,7 +115,7 @@ public final class TimestampData implements Comparable<TimestampData> {
             return false;
         }
         TimestampData that = (TimestampData) obj;
-        return this.millisecond == that.millisecond
+        return this.milliseconds == that.milliseconds
                 && this.nanoOfMillisecond == that.nanoOfMillisecond;
     }
 
@@ -126,7 +126,7 @@ public final class TimestampData implements Comparable<TimestampData> {
 
     @Override
     public int hashCode() {
-        int ret = (int) millisecond ^ (int) (millisecond >> 32);
+        int ret = (int) milliseconds ^ (int) (milliseconds >> 32);
         return 31 * ret + nanoOfMillisecond;
     }
 
