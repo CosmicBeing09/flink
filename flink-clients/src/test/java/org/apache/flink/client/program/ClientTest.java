@@ -41,7 +41,7 @@ import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -258,7 +258,7 @@ class ClientTest {
     void shouldSubmitToJobClient() {
         final ClusterClient<?> clusterClient =
                 new MiniClusterClient(new Configuration(), MINI_CLUSTER_RESOURCE.getMiniCluster());
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
         jobGraph.addJars(Collections.emptyList());
         jobGraph.setClasspaths(Collections.emptyList());
@@ -496,7 +496,7 @@ class ClientTest {
                 public PipelineExecutor getExecutor(@Nonnull Configuration configuration) {
                     return (pipeline, config, classLoader) -> {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
-                        final JobGraph jobGraph = streamGraph.getJobGraph();
+                        final ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
                         final ExecutionConfigAccessor accessor =
                                 ExecutionConfigAccessor.fromConfiguration(config);

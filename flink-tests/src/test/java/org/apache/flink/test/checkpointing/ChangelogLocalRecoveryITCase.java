@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.configuration.StateChangelogOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -121,7 +121,7 @@ public class ChangelogLocalRecoveryITCase extends TestLogger {
         cluster.after();
     }
 
-    private JobGraph buildJobGraph(StreamExecutionEnvironment env) {
+    private ExecutionPlan buildJobGraph(StreamExecutionEnvironment env) {
         env.addSource(new InfiniteIntegerSource())
                 .setParallelism(1)
                 .keyBy(element -> element)
@@ -136,7 +136,7 @@ public class ChangelogLocalRecoveryITCase extends TestLogger {
         File checkpointFolder = TEMPORARY_FOLDER.newFolder();
         MiniCluster miniCluster = cluster.getMiniCluster();
         StreamExecutionEnvironment env1 = getEnv(configuration, checkpointFolder, true, 200, 800);
-        JobGraph firstJobGraph = buildJobGraph(env1);
+        ExecutionPlan firstJobGraph = buildJobGraph(env1);
 
         miniCluster.submitJob(firstJobGraph).get();
         waitForAllTaskRunning(miniCluster, firstJobGraph.getJobID(), false);

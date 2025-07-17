@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.connector.source.lib.NumberSequenceSource;
 import org.apache.flink.client.program.ClusterClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -92,7 +92,7 @@ public class JobCancelingITCase extends TestLogger {
                 .addSink(new SleepingSink());
 
         StreamGraph streamGraph = env.getStreamGraph();
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
         ClusterClient<?> client = MINI_CLUSTER.getClusterClient();
         JobID jobID = client.submitJob(jobGraph).get();

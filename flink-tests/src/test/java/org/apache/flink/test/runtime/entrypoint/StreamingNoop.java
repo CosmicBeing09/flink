@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.runtime.entrypoint;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.FileMonitoringFunction;
@@ -50,7 +50,7 @@ public class StreamingNoop {
                 .sinkTo(new DiscardingSink<>());
 
         // generate a job graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         File jobGraphFile = new File(params.get("output", "job.graph"));
         try (FileOutputStream output = new FileOutputStream(jobGraphFile);
                 ObjectOutputStream obOutput = new ObjectOutputStream(output)) {

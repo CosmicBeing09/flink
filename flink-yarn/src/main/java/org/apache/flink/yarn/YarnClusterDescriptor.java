@@ -50,7 +50,7 @@ import org.apache.flink.core.plugin.PluginUtils;
 import org.apache.flink.runtime.clusterframework.BootstrapTools;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypoint;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypointUtils;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.jobmanager.JobManagerProcessSpec;
 import org.apache.flink.runtime.jobmanager.JobManagerProcessUtils;
@@ -551,7 +551,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
     @Override
     public ClusterClientProvider<ApplicationId> deployJobCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
+            ClusterSpecification clusterSpecification, ExecutionPlan jobGraph, boolean detached)
             throws ClusterDeploymentException {
 
         LOG.warn(
@@ -601,7 +601,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
             ClusterSpecification clusterSpecification,
             String applicationName,
             String yarnClusterEntrypoint,
-            @Nullable JobGraph jobGraph,
+            @Nullable ExecutionPlan jobGraph,
             boolean detached)
             throws Exception {
 
@@ -853,7 +853,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
             Configuration configuration,
             String applicationName,
             String yarnClusterEntrypoint,
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             YarnClient yarnClient,
             YarnClientApplication yarnApplication,
             ClusterSpecification clusterSpecification)

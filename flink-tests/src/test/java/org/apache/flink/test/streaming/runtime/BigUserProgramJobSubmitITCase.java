@@ -20,7 +20,7 @@ package org.apache.flink.test.streaming.runtime;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.client.deployment.StandaloneClusterId;
 import org.apache.flink.client.program.rest.RestClusterClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -85,7 +85,7 @@ public class BigUserProgramJobSubmitITCase extends TestLogger {
                         })
                 .addSink(resultSink);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
 
         final RestClusterClient<StandaloneClusterId> restClusterClient =
                 new RestClusterClient<>(

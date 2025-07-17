@@ -26,7 +26,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.core.testutils.CheckedThread;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -85,7 +85,7 @@ public class JobRetrievalITCase extends TestLogger {
         imalock.setInvokableClass(SemaphoreInvokable.class);
         imalock.setParallelism(1);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(imalock);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(imalock);
         final JobID jobId = jobGraph.getJobID();
 
         // acquire the lock to make sure that the job cannot complete until the job client

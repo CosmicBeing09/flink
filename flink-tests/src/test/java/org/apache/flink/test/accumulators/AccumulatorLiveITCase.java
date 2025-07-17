@@ -30,7 +30,7 @@ import org.apache.flink.configuration.HeartbeatManagerOptions;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.testutils.CheckedThread;
 import org.apache.flink.core.testutils.OneShotLatch;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.minicluster.MiniClusterJobClient;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -130,12 +130,12 @@ public class AccumulatorLiveITCase extends TestLogger {
                 .writeUsingOutputFormat(new DummyOutputFormat())
                 .disableChaining();
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         submitJobAndVerifyResults(jobGraph);
     }
 
-    private static void submitJobAndVerifyResults(JobGraph jobGraph) throws Exception {
+    private static void submitJobAndVerifyResults(ExecutionPlan jobGraph) throws Exception {
         Deadline deadline = Deadline.now().plus(Duration.ofSeconds(30));
 
         final ClusterClient<?> client = MINI_CLUSTER_RESOURCE.getClusterClient();
@@ -167,7 +167,7 @@ public class AccumulatorLiveITCase extends TestLogger {
         }
     }
 
-    private static void verifyResults(JobGraph jobGraph, Deadline deadline, ClusterClient<?> client)
+    private static void verifyResults(ExecutionPlan jobGraph, Deadline deadline, ClusterClient<?> client)
             throws InterruptedException, java.util.concurrent.ExecutionException,
                     java.util.concurrent.TimeoutException {
         FutureUtils.retrySuccessfulWithDelay(

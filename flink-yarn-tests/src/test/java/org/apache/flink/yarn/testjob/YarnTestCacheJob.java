@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
@@ -43,7 +43,7 @@ public class YarnTestCacheJob {
     private static final List<String> LIST = ImmutableList.of("test1", "test2");
     private static final String TEST_DIRECTORY_NAME = "test_directory";
 
-    public static JobGraph getDistributedCacheJobGraph(File testDirectory) {
+    public static ExecutionPlan getDistributedCacheJobGraph(File testDirectory) {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         final String cacheFilePath =

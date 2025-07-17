@@ -24,7 +24,7 @@ import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.WebOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -113,7 +113,7 @@ class RescaleOnCheckpointITCase {
         env.setParallelism(BEFORE_RESCALE_PARALLELISM);
         env.fromSequence(0, Integer.MAX_VALUE).sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         final Iterator<JobVertex> jobVertexIterator = jobGraph.getVertices().iterator();
         assertThat(jobVertexIterator.hasNext())
                 .as("There needs to be at least one JobVertex.")

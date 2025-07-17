@@ -34,7 +34,7 @@ import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterJobClient;
@@ -170,7 +170,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
         public CompletableFuture<JobClient> execute(
                 Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassLoader)
                 throws Exception {
-            final JobGraph jobGraph =
+            final ExecutionPlan jobGraph =
                     PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassLoader);
             if (jobGraph.getSavepointRestoreSettings() == SavepointRestoreSettings.none()
                     && pipeline instanceof StreamGraph) {

@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.WebOptions;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
@@ -86,7 +86,7 @@ public class UpdateJobResourceRequirementsITCase {
         final int parallelismAfterRescaling = 2;
         jobVertex.setParallelism(initialParallelism);
         jobVertex.setInvokableClass(BlockingNoOpInvokable.class);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
 
         runRescalingTest(
                 jobGraph,
@@ -114,7 +114,7 @@ public class UpdateJobResourceRequirementsITCase {
         jobVertex1.setSlotSharingGroup(slotSharingGroup);
         jobVertex2.setSlotSharingGroup(slotSharingGroup);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
 
         runRescalingTest(
                 jobGraph,
@@ -146,7 +146,7 @@ public class UpdateJobResourceRequirementsITCase {
         jobVertex1.setSlotSharingGroup(new SlotSharingGroup());
         jobVertex2.setSlotSharingGroup(new SlotSharingGroup());
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
 
         runRescalingTest(
                 jobGraph,
@@ -170,7 +170,7 @@ public class UpdateJobResourceRequirementsITCase {
         jobVertex.setParallelism(initialRunningTasks);
         jobVertex.setInvokableClass(BlockingNoOpInvokable.class);
 
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
 
         runRescalingTest(
                 jobGraph,
@@ -183,7 +183,7 @@ public class UpdateJobResourceRequirementsITCase {
     }
 
     private void runRescalingTest(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             JobResourceRequirements newJobVertexParallelism,
             int initialRunningTasks,
             int runningTasksAfterRescale,

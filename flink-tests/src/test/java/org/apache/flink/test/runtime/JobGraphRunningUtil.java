@@ -23,16 +23,16 @@ import org.apache.flink.client.program.MiniClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 
-/** Utils to run {@link JobGraph} on {@link MiniCluster}. */
+/** Utils to run {@link ExecutionPlan} on {@link MiniCluster}. */
 public class JobGraphRunningUtil {
 
     public static void execute(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Configuration configuration,
             int numTaskManagers,
             int numSlotsPerTaskManager)

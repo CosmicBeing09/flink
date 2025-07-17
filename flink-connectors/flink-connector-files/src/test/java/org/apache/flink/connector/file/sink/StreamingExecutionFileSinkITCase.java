@@ -25,7 +25,7 @@ import org.apache.flink.api.common.state.ListStateDescriptor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
@@ -72,7 +72,7 @@ class StreamingExecutionFileSinkITCase extends FileSinkITBase {
      * Sink]. The source would trigger failover if required.
      */
     @Override
-    protected JobGraph createJobGraph(boolean triggerFailover, String path) {
+    protected ExecutionPlan createJobGraph(boolean triggerFailover, String path) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.STREAMING);

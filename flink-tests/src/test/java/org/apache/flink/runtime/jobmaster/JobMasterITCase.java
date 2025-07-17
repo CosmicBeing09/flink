@@ -27,7 +27,7 @@ import org.apache.flink.api.connector.source.SourceSplit;
 import org.apache.flink.api.connector.source.SplitEnumerator;
 import org.apache.flink.api.connector.source.SplitEnumeratorContext;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -54,7 +54,7 @@ public class JobMasterITCase extends TestLogger {
                                 .setNumberSlotsPerTaskManager(1)
                                 .build());
         miniCluster.before();
-        JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
 
         try {
             miniCluster.getMiniCluster().submitJob(jobGraph).get();

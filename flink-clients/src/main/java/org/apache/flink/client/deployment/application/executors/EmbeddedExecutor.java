@@ -32,8 +32,7 @@ import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.runtime.blob.BlobClient;
 import org.apache.flink.runtime.client.ClientUtils;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.streaming.api.graph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.ExecutorThreadFactory;
 import org.apache.flink.util.function.FunctionUtils;
@@ -139,7 +138,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
             throws MalformedURLException {
         final Duration timeout = configuration.get(ClientOptions.CLIENT_TIMEOUT);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
         final JobID actualJobId = jobGraph.getJobID();
 
@@ -190,7 +189,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
     private static CompletableFuture<JobID> submitJob(
             final Configuration configuration,
             final DispatcherGateway dispatcherGateway,
-            final ExecutionPlan executionPlan,
+            final org.apache.flink.streaming.api.graph.ExecutionPlan executionPlan,
             final Duration rpcTimeout) {
         checkNotNull(executionPlan);
 

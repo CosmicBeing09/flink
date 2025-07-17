@@ -40,16 +40,9 @@ import org.apache.flink.runtime.OperatorIDPair;
 import org.apache.flink.runtime.checkpoint.CheckpointRetentionPolicy;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.InputOutputFormatVertex;
-import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobEdge;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphUtils;
-import org.apache.flink.runtime.jobgraph.JobType;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
+import org.apache.flink.runtime.jobgraph.ExecutionPlanUtils;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroup;
 import org.apache.flink.runtime.jobgraph.forwardgroup.ForwardGroupComputeUtil;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
@@ -132,7 +125,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
-/** The StreamingJobGraphGenerator converts a {@link StreamGraph} into a {@link JobGraph}. */
+/** The StreamingJobGraphGenerator converts a {@link StreamGraph} into a {@link ExecutionPlan}. */
 @Internal
 public class StreamingJobGraphGenerator {
 
@@ -141,7 +134,7 @@ public class StreamingJobGraphGenerator {
     // ------------------------------------------------------------------------
 
     @VisibleForTesting
-    public static JobGraph createJobGraph(StreamGraph streamGraph) {
+    public static ExecutionPlan createJobGraph(StreamGraph streamGraph) {
         return new StreamingJobGraphGenerator(
                         Thread.currentThread().getContextClassLoader(),
                         streamGraph,
@@ -150,7 +143,7 @@ public class StreamingJobGraphGenerator {
                 .createJobGraph();
     }
 
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             ClassLoader userClassLoader, StreamGraph streamGraph, @Nullable JobID jobID) {
         // TODO Currently, we construct a new thread pool for the compilation of each job. In the
         // future, we may refactor the job submission framework and make it reusable across jobs.
@@ -176,7 +169,7 @@ public class StreamingJobGraphGenerator {
     private final ClassLoader userClassloader;
     private final StreamGraph streamGraph;
 
-    private final JobGraph jobGraph;
+    private final ExecutionPlan jobGraph;
     private final Collection<Integer> builtVertices;
 
     private final StreamGraphHasher defaultStreamGraphHasher;
@@ -199,7 +192,7 @@ public class StreamingJobGraphGenerator {
 
         this.builtVertices = new HashSet<>();
         this.serializationExecutor = Preconditions.checkNotNull(serializationExecutor);
-        jobGraph = new JobGraph(jobID, streamGraph.getJobName());
+        jobGraph = new ExecutionPlan(jobID, streamGraph.getJobName());
 
         // Generate deterministic hashes for the nodes in order to identify them across
         // submission iff they didn't change.
@@ -218,7 +211,7 @@ public class StreamingJobGraphGenerator {
                         streamGraph, new AtomicBoolean(false), hashes, legacyHashes);
     }
 
-    private JobGraph createJobGraph() {
+    private ExecutionPlan createJobGraph() {
         preValidate(streamGraph, userClassloader);
         jobGraph.setJobType(streamGraph.getJobType());
         jobGraph.setDynamic(streamGraph.isDynamic());
@@ -255,7 +248,7 @@ public class StreamingJobGraphGenerator {
         jobGraph.setSavepointRestoreSettings(streamGraph.getSavepointRestoreSettings());
 
         final Map<String, DistributedCache.DistributedCacheEntry> distributedCacheEntries =
-                JobGraphUtils.prepareUserArtifactEntries(
+                ExecutionPlanUtils.prepareUserArtifactEntries(
                         streamGraph.getUserArtifacts().stream()
                                 .collect(Collectors.toMap(e -> e.f0, e -> e.f1)),
                         jobGraph.getJobID());
@@ -291,7 +284,7 @@ public class StreamingJobGraphGenerator {
     }
 
     public static void serializeOperatorCoordinatorsAndStreamConfig(
-            JobGraph jobGraph,
+            ExecutionPlan jobGraph,
             Executor serializationExecutor,
             JobVertexBuildContext jobVertexBuildContext) {
         try {
@@ -324,7 +317,7 @@ public class StreamingJobGraphGenerator {
     }
 
     private static void waitForSerializationFuturesAndUpdateJobVertices(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext)
+            ExecutionPlan jobGraph, JobVertexBuildContext jobVertexBuildContext)
             throws ExecutionException, InterruptedException {
         for (Map.Entry<
                         JobVertexID,
@@ -349,7 +342,7 @@ public class StreamingJobGraphGenerator {
     public static void addVertexIndexPrefixInVertexName(
             JobVertexBuildContext jobVertexBuildContext,
             AtomicInteger vertexIndexId,
-            JobGraph jobGraph) {
+            ExecutionPlan jobGraph) {
         if (!jobVertexBuildContext.getStreamGraph().isVertexNameIncludeIndexPrefix()) {
             return;
         }
@@ -1814,13 +1807,13 @@ public class StreamingJobGraphGenerator {
     }
 
     public static void setSlotSharingAndCoLocation(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+            ExecutionPlan jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         setSlotSharing(jobGraph, jobVertexBuildContext);
         setCoLocation(jobVertexBuildContext);
     }
 
     private static void setSlotSharing(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+            ExecutionPlan jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<String, SlotSharingGroup> specifiedSlotSharingGroups = new HashMap<>();
         final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups =
@@ -1878,7 +1871,7 @@ public class StreamingJobGraphGenerator {
      * in the same slot sharing group.
      */
     private static Map<JobVertexID, SlotSharingGroup> buildVertexRegionSlotSharingGroups(
-            JobGraph jobGraph, JobVertexBuildContext jobVertexBuildContext) {
+            ExecutionPlan jobGraph, JobVertexBuildContext jobVertexBuildContext) {
         StreamGraph streamGraph = jobVertexBuildContext.getStreamGraph();
         final Map<JobVertexID, SlotSharingGroup> vertexRegionSlotSharingGroups = new HashMap<>();
         final SlotSharingGroup defaultSlotSharingGroup = new SlotSharingGroup();
@@ -2079,7 +2072,7 @@ public class StreamingJobGraphGenerator {
         }
     }
 
-    public static void configureCheckpointing(StreamGraph streamGraph, JobGraph jobGraph) {
+    public static void configureCheckpointing(StreamGraph streamGraph, ExecutionPlan jobGraph) {
         CheckpointConfig cfg = streamGraph.getCheckpointConfig();
 
         long interval = cfg.getCheckpointInterval();

@@ -23,7 +23,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
@@ -267,7 +267,7 @@ public class IntermediateResultPartitionTest {
         v3.connectNewDataSetAsInput(
                 v1, distributionPattern, ResultPartitionType.BLOCKING, dataSetId, false);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newBatchJobGraphBuilder()
                         .addJobVertices(Arrays.asList(v1, v2, v3))
                         .build();
@@ -323,7 +323,7 @@ public class IntermediateResultPartitionTest {
 
         ScheduledExecutorService executorService = new DirectScheduledExecutorService();
 
-        JobGraph jobGraph = JobGraphTestUtils.batchJobGraph(source, sink1, sink2);
+        ExecutionPlan jobGraph = JobGraphTestUtils.batchJobGraph(source, sink1, sink2);
 
         SchedulerBase scheduler =
                 new DefaultSchedulerBuilder(

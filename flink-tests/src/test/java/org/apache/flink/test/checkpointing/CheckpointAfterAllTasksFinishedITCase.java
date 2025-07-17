@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -105,7 +105,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
 
             RestartStrategyUtils.configureNoRestartStrategy(env);
             env.enableCheckpointing(100);
-            JobGraph jobGraph = getStreamGraph(env, true, false).getJobGraph();
+            ExecutionPlan jobGraph = getStreamGraph(env, true, false).getJobGraph();
             miniCluster.submitJob(jobGraph).get();
 
             CommonTestUtils.waitForSubtasksToFinish(
@@ -128,7 +128,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
             env.enableCheckpointing(
                     Duration.ofNanos(Long.MAX_VALUE) /* max duration allowed by FLINK */
                             .toMillis());
-            JobGraph restoredJobGraph = getStreamGraph(env, true, false).getJobGraph();
+            ExecutionPlan restoredJobGraph = getStreamGraph(env, true, false).getJobGraph();
             restoredJobGraph.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath, false));
             miniCluster.submitJob(restoredJobGraph).get();
@@ -167,7 +167,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
             miniCluster.start();
 
             env.enableCheckpointing(100);
-            JobGraph jobGraph = getStreamGraph(env, true, true).getJobGraph();
+            ExecutionPlan jobGraph = getStreamGraph(env, true, true).getJobGraph();
             miniCluster.submitJob(jobGraph).get();
 
             CommonTestUtils.waitForSubtasksToFinish(
@@ -206,7 +206,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
         return env.getStreamGraph();
     }
 
-    private JobVertex findVertexByName(JobGraph jobGraph, String vertexName) {
+    private JobVertex findVertexByName(ExecutionPlan jobGraph, String vertexName) {
         for (JobVertex vertex : jobGraph.getVerticesAsArray()) {
             if (vertex.getName().equals(vertexName)) {
                 return vertex;

@@ -25,7 +25,7 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -78,7 +78,7 @@ class YARNFileReplicationITCase extends YarnTestBase {
         runTest(() -> deployPerJob(getDefaultConfiguration(), getTestingJobGraph()));
     }
 
-    private void deployPerJob(Configuration configuration, JobGraph jobGraph) throws Exception {
+    private void deployPerJob(Configuration configuration, ExecutionPlan jobGraph) throws Exception {
         try (final YarnClusterDescriptor yarnClusterDescriptor =
                 createYarnClusterDescriptor(configuration)) {
 
@@ -139,7 +139,7 @@ class YARNFileReplicationITCase extends YarnTestBase {
         }
     }
 
-    private JobGraph getTestingJobGraph() {
+    private ExecutionPlan getTestingJobGraph() {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
 

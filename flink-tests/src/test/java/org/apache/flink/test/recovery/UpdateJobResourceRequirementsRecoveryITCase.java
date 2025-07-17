@@ -26,7 +26,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.core.testutils.AllCallbackWrapper;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
@@ -69,7 +69,7 @@ class UpdateJobResourceRequirementsRecoveryITCase {
         final JobVertex jobVertex = new JobVertex("operator");
         jobVertex.setParallelism(1);
         jobVertex.setInvokableClass(BlockingNoOpInvokable.class);
-        final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
         final JobID jobId = jobGraph.getJobID();
 
         // We need to have a restart strategy set, to prevent the job from failing during the first

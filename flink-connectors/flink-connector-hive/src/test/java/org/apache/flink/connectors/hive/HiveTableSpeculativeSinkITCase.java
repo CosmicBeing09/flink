@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.configuration.BatchExecutionOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.SlowTaskDetectorOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -160,7 +160,7 @@ class HiveTableSpeculativeSinkITCase {
                     // will lead
                     // to a slow sink as well.
                     StreamTableEnvironmentImpl tEnvImpl = (StreamTableEnvironmentImpl) tEnv;
-                    JobGraph jobGraph =
+                    ExecutionPlan jobGraph =
                             tEnvImpl.execEnv()
                                     .generateStreamGraph(
                                             tEnvImpl.getPlanner()

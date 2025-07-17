@@ -29,7 +29,7 @@ import org.apache.flink.api.connector.source.lib.NumberSequenceSource;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.Metric;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -81,7 +81,7 @@ class AlignedWatermarksITCase {
 
     @Test
     void testAlignment(@InjectMiniCluster MiniCluster miniCluster) throws Exception {
-        final JobGraph jobGraph = getJobGraph();
+        final ExecutionPlan jobGraph = getJobGraph();
         final CompletableFuture<JobSubmissionResult> submission = miniCluster.submitJob(jobGraph);
         final JobID jobID = submission.get().getJobID();
         CommonTestUtils.waitForAllTaskRunning(miniCluster, jobID, false);
@@ -102,7 +102,7 @@ class AlignedWatermarksITCase {
         } while (oldDrift >= MAX_DRIFT);
     }
 
-    private JobGraph getJobGraph() {
+    private ExecutionPlan getJobGraph() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().setAutoWatermarkInterval(0L);
         env.setParallelism(1);

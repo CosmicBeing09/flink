@@ -32,7 +32,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointOptions;
 import org.apache.flink.runtime.checkpoint.OperatorSubtaskState;
 import org.apache.flink.runtime.checkpoint.TaskStateSnapshot;
 import org.apache.flink.runtime.io.network.api.CheckpointBarrier;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.OperatorID;
 import org.apache.flink.runtime.operators.testutils.MockEnvironment;
@@ -591,7 +591,7 @@ class AsyncWaitOperatorTest {
                 .sinkTo(new DiscardingSink<>());
 
         // be build our own OperatorChain
-        final JobGraph jobGraph = chainEnv.getStreamGraph().getJobGraph();
+        final ExecutionPlan jobGraph = chainEnv.getStreamGraph().getJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(3);
 

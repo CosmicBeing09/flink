@@ -28,7 +28,7 @@ import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -113,7 +113,7 @@ public class SchedulingITCase extends TestLogger {
 
             MiniClusterClient miniClusterClient = new MiniClusterClient(configuration, miniCluster);
 
-            JobGraph jobGraph = createJobGraph(slotIdleTimeout << 1, parallelism);
+            ExecutionPlan jobGraph = createJobGraph(slotIdleTimeout << 1, parallelism);
 
             // wait for the submission to succeed
             JobID jobID = miniClusterClient.submitJob(jobGraph).get();
@@ -127,7 +127,7 @@ public class SchedulingITCase extends TestLogger {
     }
 
     @Nonnull
-    private JobGraph createJobGraph(long delay, int parallelism) throws IOException {
+    private ExecutionPlan createJobGraph(long delay, int parallelism) throws IOException {
         SlotSharingGroup slotSharingGroup = new SlotSharingGroup();
 
         final JobVertex source = new JobVertex("source");
@@ -143,7 +143,7 @@ public class SchedulingITCase extends TestLogger {
         sink.connectNewDataSetAsInput(
                 source, DistributionPattern.POINTWISE, ResultPartitionType.PIPELINED);
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Arrays.asList(source, sink))
                         .build();

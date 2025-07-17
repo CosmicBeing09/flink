@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.highavailability.zookeeper.CuratorFrameworkWithUnhandledErrorListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -131,7 +131,7 @@ public class ZooKeeperLeaderElectionITCase extends TestLogger {
             miniCluster.start();
 
             final int parallelism = numTMs * numSlotsPerTM;
-            JobGraph jobGraph = createJobGraph(parallelism);
+            ExecutionPlan jobGraph = createJobGraph(parallelism);
 
             miniCluster.submitJob(jobGraph).get();
 
@@ -162,7 +162,7 @@ public class ZooKeeperLeaderElectionITCase extends TestLogger {
         }
     }
 
-    private static void awaitRunningStatus(DispatcherGateway dispatcherGateway, JobGraph jobGraph)
+    private static void awaitRunningStatus(DispatcherGateway dispatcherGateway, ExecutionPlan jobGraph)
             throws Exception {
         CommonTestUtils.waitUntilCondition(
                 () ->
@@ -185,7 +185,7 @@ public class ZooKeeperLeaderElectionITCase extends TestLogger {
         return miniCluster.getDispatcherGatewayFuture().get();
     }
 
-    private JobGraph createJobGraph(int parallelism) throws IOException {
+    private ExecutionPlan createJobGraph(int parallelism) throws IOException {
         BlockingOperator.isBlocking = true;
         final JobVertex vertex = new JobVertex("blocking operator");
         vertex.setParallelism(parallelism);
@@ -198,7 +198,7 @@ public class ZooKeeperLeaderElectionITCase extends TestLogger {
         // is undefined behavior. By allowing restarts we prevent the job from reaching a globally
         // terminal state,
         // causing it to be recovered by the next Dispatcher.
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder().addJobVertex(vertex).build();
 
         RestartStrategyUtils.configureFixedDelayRestartStrategy(

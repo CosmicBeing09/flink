@@ -33,7 +33,7 @@ import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -196,7 +196,7 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
         return env;
     }
 
-    protected JobGraph buildJobGraph(
+    protected ExecutionPlan buildJobGraph(
             StateBackend stateBackend,
             StreamExecutionEnvironment env,
             ControlledSource controlledSource,
@@ -223,7 +223,7 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
                 env, stateBackend, env.getClass().getClassLoader(), jobId);
     }
 
-    protected void waitAndAssert(JobGraph jobGraph) throws Exception {
+    protected void waitAndAssert(ExecutionPlan jobGraph) throws Exception {
         waitUntilJobFinished(jobGraph);
         assertEquals(CollectionSink.getActualResult(), ControlledSource.getExpectedResult());
     }
@@ -276,7 +276,7 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
         return Collections.emptySet();
     }
 
-    private void waitUntilJobFinished(JobGraph jobGraph) throws Exception {
+    private void waitUntilJobFinished(ExecutionPlan jobGraph) throws Exception {
         JobSubmissionResult jobSubmissionResult =
                 cluster.getMiniCluster().submitJob(jobGraph).get();
         JobResult jobResult =

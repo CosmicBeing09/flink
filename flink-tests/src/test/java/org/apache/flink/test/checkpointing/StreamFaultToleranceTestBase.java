@@ -21,7 +21,7 @@ package org.apache.flink.test.checkpointing;
 import org.apache.flink.changelog.fs.FsStateChangelogStorageFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.util.RestartStrategyUtils;
@@ -131,7 +131,7 @@ public abstract class StreamFaultToleranceTestBase extends TestLogger {
 
             testProgram(env);
 
-            JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+            ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
             try {
                 submitJobAndWaitForResult(
                         cluster.getClusterClient(), jobGraph, getClass().getClassLoader());

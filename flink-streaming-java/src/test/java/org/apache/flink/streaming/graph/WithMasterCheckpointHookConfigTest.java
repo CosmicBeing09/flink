@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook;
 import org.apache.flink.runtime.checkpoint.MasterTriggerRestoreHook.Factory;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.checkpoint.WithMasterCheckpointHook;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -83,7 +83,7 @@ class WithMasterCheckpointHookConfigTest {
                 .union(env.addSource(source4).map(identityWithHook2))
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jg = env.getStreamGraph().getJobGraph();
+        final ExecutionPlan jg = env.getStreamGraph().getJobGraph();
 
         SerializedValue<Factory[]> serializedConfiguredHooks =
                 jg.getCheckpointingSettings().getMasterHooks();

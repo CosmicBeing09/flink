@@ -25,7 +25,7 @@ import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.checkpoint.CheckpointFailureReason;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -172,7 +172,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
         if (savepointResource == null) {
             throw new IllegalArgumentException("Savepoint file does not exist.");
         }
-        JobGraph jobToMigrate = createJobGraph(ExecutionMode.MIGRATE);
+        ExecutionPlan jobToMigrate = createJobGraph(ExecutionMode.MIGRATE);
         jobToMigrate.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepointResource.getFile()));
 
@@ -235,7 +235,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
 
     private void restoreJob(ClusterClient<?> clusterClient, Deadline deadline, String savepointPath)
             throws Exception {
-        JobGraph jobToRestore = createJobGraph(ExecutionMode.RESTORE);
+        ExecutionPlan jobToRestore = createJobGraph(ExecutionMode.RESTORE);
         jobToRestore.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepointPath, true));
 
@@ -255,7 +255,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
                 jobStatusFuture.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS));
     }
 
-    private JobGraph createJobGraph(ExecutionMode mode) {
+    private ExecutionPlan createJobGraph(ExecutionMode mode) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
         RestartStrategyUtils.configureNoRestartStrategy(env);

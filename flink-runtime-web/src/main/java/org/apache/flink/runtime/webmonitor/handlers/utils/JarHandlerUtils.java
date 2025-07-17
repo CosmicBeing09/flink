@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.configuration.PipelineOptionsInternal;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.rest.messages.MessageParameters;
@@ -159,7 +159,7 @@ public class JarHandlerUtils {
                     URL::toString);
         }
 
-        public JobGraph toJobGraph(
+        public ExecutionPlan toJobGraph(
                 PackagedProgram packagedProgram,
                 Configuration configuration,
                 boolean suppressOutput) {

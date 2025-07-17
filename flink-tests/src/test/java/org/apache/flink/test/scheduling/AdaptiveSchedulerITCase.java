@@ -32,11 +32,8 @@ import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphBuilder;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
-import org.apache.flink.runtime.jobgraph.OperatorID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.operators.coordination.OperatorCoordinator;
@@ -311,7 +308,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
                         new FailingCoordinatorProvider(OperatorID.fromJobVertexID(jobVertexId))));
         jobVertex.setParallelism(1);
 
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 JobGraphBuilder.newStreamingJobGraphBuilder()
                         .addJobVertices(Collections.singletonList(jobVertex))
                         .build();

@@ -19,7 +19,7 @@ package org.apache.flink.streaming.runtime.partitioner;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -29,7 +29,7 @@ import org.apache.flink.streaming.api.transformations.StreamExchangeMode;
 /** Utility class to test {@link StreamPartitioner}. */
 public class StreamPartitionerTestUtils {
 
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             String sourceSlotSharingGroup,
             String sinkSlotSharingGroup,
             StreamPartitioner<Long> streamPartitioner) {
@@ -40,7 +40,7 @@ public class StreamPartitionerTestUtils {
                 StreamExchangeMode.UNDEFINED);
     }
 
-    public static JobGraph createJobGraph(
+    public static ExecutionPlan createJobGraph(
             String sourceSlotSharingGroup,
             String sinkSlotSharingGroup,
             StreamPartitioner<Long> streamPartitioner,

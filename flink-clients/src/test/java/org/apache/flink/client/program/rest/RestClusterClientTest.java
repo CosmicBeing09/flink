@@ -41,7 +41,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.instance.SlotSharingGroupId;
 import org.apache.flink.runtime.io.network.partition.DataSetMetaInfo;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
@@ -189,7 +189,7 @@ class RestClusterClientTest {
 
     private ExecutorService executor;
 
-    private JobGraph jobGraph;
+    private ExecutionPlan jobGraph;
     private JobID jobId;
 
     private static final Configuration restConfig;

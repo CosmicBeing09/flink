@@ -38,8 +38,8 @@ import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobgraph.tasks.TaskInvokable;
@@ -61,8 +61,6 @@ import org.apache.flink.streaming.runtime.tasks.MultipleInputStreamTask;
 import org.apache.flink.streaming.runtime.tasks.OneInputStreamTask;
 import org.apache.flink.streaming.runtime.tasks.SourceOperatorStreamTask;
 import org.apache.flink.streaming.runtime.tasks.SourceStreamTask;
-import org.apache.flink.streaming.runtime.tasks.StreamIterationHead;
-import org.apache.flink.streaming.runtime.tasks.StreamIterationTail;
 import org.apache.flink.streaming.runtime.tasks.TwoInputStreamTask;
 import org.apache.flink.util.OutputTag;
 
@@ -91,10 +89,6 @@ public class StreamGraph implements Pipeline {
 
     private static final Logger LOG = LoggerFactory.getLogger(StreamGraph.class);
 
-    public static final String ITERATION_SOURCE_NAME_PREFIX = "IterationSource";
-
-    public static final String ITERATION_SINK_NAME_PREFIX = "IterationSink";
-
     private String jobName;
 
     private final Configuration jobConfiguration;
@@ -120,7 +114,6 @@ public class StreamGraph implements Pipeline {
     protected Map<Integer, Long> vertexIDtoLoopTimeout;
     private StateBackend stateBackend;
     private CheckpointStorage checkpointStorage;
-    private Set<Tuple2<StreamNode, StreamNode>> iterationSourceSinkPairs;
     private InternalTimeServiceManager.Provider timerServiceProvider;
     private LineageGraph lineageGraph;
     private JobType jobType = JobType.STREAMING;
@@ -159,7 +152,6 @@ public class StreamGraph implements Pipeline {
         virtualPartitionNodes = new HashMap<>();
         vertexIDtoBrokerID = new HashMap<>();
         vertexIDtoLoopTimeout = new HashMap<>();
-        iterationSourceSinkPairs = new HashSet<>();
         sources = new HashSet<>();
         sinks = new HashSet<>();
         slotSharingGroupResources = new HashMap<>();
@@ -912,68 +904,6 @@ public class StreamGraph implements Pipeline {
         return vertexIDtoLoopTimeout.get(vertexID);
     }
 
-    public Tuple2<StreamNode, StreamNode> createIterationSourceAndSink(
-            int loopId,
-            int sourceId,
-            int sinkId,
-            long timeout,
-            int parallelism,
-            int maxParallelism,
-            ResourceSpec minResources,
-            ResourceSpec preferredResources) {
-
-        final String coLocationGroup = "IterationCoLocationGroup-" + loopId;
-
-        StreamNode source =
-                this.addNode(
-                        sourceId,
-                        null,
-                        coLocationGroup,
-                        StreamIterationHead.class,
-                        null,
-                        ITERATION_SOURCE_NAME_PREFIX + "-" + loopId);
-        sources.add(source.getId());
-        setParallelism(source.getId(), parallelism);
-        setMaxParallelism(source.getId(), maxParallelism);
-        setResources(source.getId(), minResources, preferredResources);
-
-        StreamNode sink =
-                this.addNode(
-                        sinkId,
-                        null,
-                        coLocationGroup,
-                        StreamIterationTail.class,
-                        null,
-                        ITERATION_SINK_NAME_PREFIX + "-" + loopId);
-        sinks.add(sink.getId());
-        setParallelism(sink.getId(), parallelism);
-        setMaxParallelism(sink.getId(), parallelism);
-        // The tail node is always in the same slot sharing group with the head node
-        // so that they can share resources (they do not use non-sharable resources,
-        // i.e. managed memory). There is no contract on how the resources should be
-        // divided for head and tail nodes at the moment. To be simple, we assign all
-        // resources to the head node and set the tail node resources to be zero if
-        // resources are specified.
-        final ResourceSpec tailResources =
-                minResources.equals(ResourceSpec.UNKNOWN)
-                        ? ResourceSpec.UNKNOWN
-                        : ResourceSpec.ZERO;
-        setResources(sink.getId(), tailResources, tailResources);
-
-        iterationSourceSinkPairs.add(new Tuple2<>(source, sink));
-
-        this.vertexIDtoBrokerID.put(source.getId(), "broker-" + loopId);
-        this.vertexIDtoBrokerID.put(sink.getId(), "broker-" + loopId);
-        this.vertexIDtoLoopTimeout.put(source.getId(), timeout);
-        this.vertexIDtoLoopTimeout.put(sink.getId(), timeout);
-
-        return new Tuple2<>(source, sink);
-    }
-
-    public Set<Tuple2<StreamNode, StreamNode>> getIterationSourceSinkPairs() {
-        return iterationSourceSinkPairs;
-    }
-
     public StreamNode getSourceVertex(StreamEdge edge) {
         return streamNodes.get(edge.getSourceId());
     }
@@ -999,14 +929,14 @@ public class StreamGraph implements Pipeline {
         streamNodes.remove(toRemove.getId());
     }
 
-    /** Gets the assembled {@link JobGraph} with a random {@link JobID}. */
+    /** Gets the assembled {@link ExecutionPlan} with a random {@link JobID}. */
     @VisibleForTesting
-    public JobGraph getJobGraph() {
+    public ExecutionPlan getJobGraph() {
         return getJobGraph(Thread.currentThread().getContextClassLoader(), null);
     }
 
-    /** Gets the assembled {@link JobGraph} with a specified {@link JobID}. */
-    public JobGraph getJobGraph(ClassLoader userClassLoader, @Nullable JobID jobID) {
+    /** Gets the assembled {@link ExecutionPlan} with a specified {@link JobID}. */
+    public ExecutionPlan getJobGraph(ClassLoader userClassLoader, @Nullable JobID jobID) {
         return StreamingJobGraphGenerator.createJobGraph(userClassLoader, this, jobID);
     }
 

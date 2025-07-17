@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.NettyShuffleEnvironmentOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -78,7 +78,7 @@ class BatchShuffleITCaseBase {
         Arrays.fill(NUM_RECEIVED_RECORDS, 0);
     }
 
-    protected JobGraph createJobGraph(
+    protected ExecutionPlan createJobGraph(
             int numRecordsToSend,
             boolean failExecution,
             Configuration configuration,
@@ -91,7 +91,7 @@ class BatchShuffleITCaseBase {
                 enableAdaptiveAutoParallelism);
     }
 
-    protected JobGraph createJobGraph(
+    protected ExecutionPlan createJobGraph(
             int numRecordsToSend,
             boolean failExecution,
             boolean deletePartitionFile,
@@ -132,7 +132,7 @@ class BatchShuffleITCaseBase {
         return configuration;
     }
 
-    protected void executeJob(JobGraph jobGraph, Configuration configuration, int numRecordsToSend)
+    protected void executeJob(ExecutionPlan jobGraph, Configuration configuration, int numRecordsToSend)
             throws Exception {
         JobGraphRunningUtil.execute(
                 jobGraph, configuration, NUM_TASK_MANAGERS, NUM_SLOTS_PER_TASK_MANAGER);

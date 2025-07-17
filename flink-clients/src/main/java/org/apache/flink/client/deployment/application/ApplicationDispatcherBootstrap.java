@@ -35,7 +35,7 @@ import org.apache.flink.runtime.client.DuplicateJobSubmissionException;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.DispatcherBootstrap;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.messages.Acknowledge;
@@ -71,7 +71,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * A {@link DispatcherBootstrap} used for running the user's {@code main()} in "Application Mode"
  * (see FLIP-85).
  *
- * <p>This dispatcher bootstrap submits the recovered {@link JobGraph job graphs} for re-execution
+ * <p>This dispatcher bootstrap submits the recovered {@link ExecutionPlan job graphs} for re-execution
  * (in case of recovery from a failure), and then submits the remaining jobs of the application for
  * execution.
  *

@@ -28,7 +28,7 @@ import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.clusterframework.TaskExecutorProcessSpec;
 import org.apache.flink.runtime.clusterframework.TaskExecutorProcessUtils;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.rest.RestClient;
 import org.apache.flink.runtime.rest.messages.EmptyMessageParameters;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
@@ -104,7 +104,7 @@ class YarnConfigurationITCase extends YarnTestBase {
 
                     final PackagedProgram packagedProgram =
                             PackagedProgram.newBuilder().setJarFile(streamingWordCountFile).build();
-                    final JobGraph jobGraph =
+                    final ExecutionPlan jobGraph =
                             PackagedProgramUtils.createJobGraph(
                                     packagedProgram, configuration, 1, false);
 

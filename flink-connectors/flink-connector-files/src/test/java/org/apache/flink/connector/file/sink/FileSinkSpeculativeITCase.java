@@ -30,7 +30,7 @@ import org.apache.flink.configuration.SlowTaskDetectorOptions;
 import org.apache.flink.connector.file.sink.utils.IntegerFileSinkTestDataUtils;
 import org.apache.flink.connector.file.sink.utils.PartSizeAndCheckpointRollingPolicy;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
@@ -114,7 +114,7 @@ class FileSinkSpeculativeITCase {
                         .name("file_sink")
                         .setParallelism(NUM_SINKS);
 
-        JobGraph jobGraph = env.getStreamGraph(false).getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph(false).getJobGraph();
 
         // Assert that the TestingMap operator is chained with FileSink, which will lead
         // to a slow sink as well.

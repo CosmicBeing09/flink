@@ -23,7 +23,7 @@ import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.client.program.rest.RestClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.Preconditions;
 
@@ -71,7 +71,7 @@ public class StandaloneClusterDescriptor implements ClusterDescriptor<Standalone
 
     @Override
     public ClusterClientProvider<StandaloneClusterId> deployJobCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
+            ClusterSpecification clusterSpecification, ExecutionPlan jobGraph, boolean detached) {
         throw new UnsupportedOperationException(
                 "Per-Job Mode not supported by standalone deployments.");
     }
