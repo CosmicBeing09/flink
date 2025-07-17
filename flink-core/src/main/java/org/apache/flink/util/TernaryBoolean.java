@@ -81,7 +81,7 @@ public enum TernaryBoolean {
      * @param configOption the config option to merge with from the config.
      * @param config the config to merge with.
      */
-    public static TernaryBoolean mergeTernaryBooleanWithConfig(
+    public static TernaryBoolean mergeWithConfig(
             TernaryBoolean original, ConfigOption<Boolean> configOption, ReadableConfig config) {
         if (original != TernaryBoolean.UNDEFINED) {
             return original;

@@ -303,11 +303,11 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
                 "Overlap fraction threshold of restoring should be between 0 and 1");
 
         useIngestDbRestoreMode =
-                TernaryBoolean.mergeTernaryBooleanWithConfig(
+                TernaryBoolean.mergeWithConfig(
                         original.useIngestDbRestoreMode, USE_INGEST_DB_RESTORE_MODE, config);
 
         rescalingUseDeleteFilesInRange =
-                TernaryBoolean.mergeTernaryBooleanWithConfig(
+                TernaryBoolean.mergeWithConfig(
                         original.rescalingUseDeleteFilesInRange,
                         USE_DELETE_FILES_IN_RANGE_DURING_RESCALING,
                         config);
