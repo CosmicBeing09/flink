@@ -123,7 +123,7 @@ public class MiniClusterResourceConfiguration {
 
         /**
          * Enables or disables {@link HaLeadershipControl} in {@link
-         * MiniCluster#getHaLeadershipControl}.
+         * MiniCluster#leadershipControl}.
          *
          * <p>{@link HaLeadershipControl} allows granting and revoking leadership of HA components.
          * Enabling this feature disables {@link HighAvailabilityOptions#HA_MODE} option.

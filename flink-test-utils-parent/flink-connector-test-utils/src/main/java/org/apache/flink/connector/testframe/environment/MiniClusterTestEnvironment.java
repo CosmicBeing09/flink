@@ -123,7 +123,7 @@ public class MiniClusterTestEnvironment implements TestEnvironment, ClusterContr
     public void triggerJobManagerFailover(JobClient jobClient, Runnable afterFailAction)
             throws ExecutionException, InterruptedException {
         final Optional<HaLeadershipControl> controlOptional =
-                miniCluster.getMiniCluster().getHaLeadershipControl();
+                miniCluster.getMiniCluster().leadershipControl();
         if (!controlOptional.isPresent()) {
             throw new UnsupportedOperationException(
                     "This MiniCluster does not support JobManager HA");

@@ -337,7 +337,7 @@ class FileSourceTextLinesITCase {
 
     private static void triggerJobManagerFailover(
             JobID jobId, Runnable afterFailAction, MiniCluster miniCluster) throws Exception {
-        final HaLeadershipControl haLeadershipControl = miniCluster.getHaLeadershipControl().get();
+        final HaLeadershipControl haLeadershipControl = miniCluster.leadershipControl().get();
         haLeadershipControl.revokeJobMasterLeadership(jobId).get();
         afterFailAction.run();
         haLeadershipControl.grantJobMasterLeadership(jobId).get();
