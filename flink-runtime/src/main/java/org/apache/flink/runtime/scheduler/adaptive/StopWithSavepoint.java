@@ -165,7 +165,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
     @Override
     public void cancel() {
         operationFailureCause = new FlinkException("The job was cancelled.");
-        context.goToCanceling(
+        context.transitionToCanceling(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
                 getOperatorCoordinatorHandler(),

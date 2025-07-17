@@ -49,7 +49,7 @@ public interface StateTransitions {
          *     Canceling} state
          * @param failureCollection collection of failures that are propagated
          */
-        void goToCanceling(
+        void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorManager operatorCoordinatorHandler,
@@ -60,7 +60,7 @@ public interface StateTransitions {
     interface ToCreatingExecutionGraph extends StateTransitions {
 
         /** Transitions into the {@link CreatingExecutionGraph} state. */
-        void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph);
+        void transitionToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph);
     }
 
     /** Interface covering transition to the {@link Executing} state. */

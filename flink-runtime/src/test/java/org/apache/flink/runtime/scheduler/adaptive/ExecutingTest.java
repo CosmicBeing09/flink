@@ -707,7 +707,7 @@ class ExecutingTest {
         // --------- Interface Implementations ------- //
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorManager operatorCoordinatorHandler,

@@ -379,7 +379,7 @@ class WaitingForResourcesTest {
         }
 
         @Override
-        public void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
+        public void transitionToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
             creatingExecutionGraphStateValidator.validateInput(null);
             registerStateTransition();
         }

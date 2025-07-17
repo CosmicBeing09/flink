@@ -1181,7 +1181,7 @@ public class AdaptiveScheduler
     }
 
     @Override
-    public void goToCanceling(
+    public void transitionToCanceling(
             ExecutionGraph executionGraph,
             ExecutionGraphHandler executionGraphHandler,
             OperatorCoordinatorManager operatorCoordinatorHandler,
@@ -1278,7 +1278,7 @@ public class AdaptiveScheduler
     }
 
     @Override
-    public void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
+    public void transitionToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph) {
         final CompletableFuture<CreatingExecutionGraph.ExecutionGraphWithVertexParallelism>
                 executionGraphWithAvailableResourcesFuture =
                         createExecutionGraphWithAvailableResourcesAsync(previousExecutionGraph);

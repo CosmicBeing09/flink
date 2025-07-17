@@ -183,7 +183,7 @@ class FailingTest {
         public void archiveFailure(RootExceptionHistoryEntry failure) {}
 
         @Override
-        public void goToCanceling(
+        public void transitionToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorManager operatorCoordinatorHandler,

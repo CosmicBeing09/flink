@@ -168,7 +168,7 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public void cancel() {
-        context.goToCanceling(
+        context.transitionToCanceling(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
                 getOperatorCoordinatorHandler(),
