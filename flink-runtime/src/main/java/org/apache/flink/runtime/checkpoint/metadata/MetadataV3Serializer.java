@@ -257,13 +257,13 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @VisibleForTesting
     public static void serializeStreamStateHandle(
             StreamStateHandle stateHandle, DataOutputStream dos) throws IOException {
-        MetadataV2V3SerializerBase.serializeStreamStateHandle(stateHandle, dos);
+        MetadataV2V3SerializerBase.serializeStateHandle(stateHandle, dos);
     }
 
     @VisibleForTesting
     public static StreamStateHandle deserializeStreamStateHandle(DataInputStream dis)
             throws IOException {
-        return MetadataV2V3SerializerBase.deserializeStreamStateHandle(dis, null);
+        return MetadataV2V3SerializerBase.deserializeStateHandle(dis, null);
     }
 
     @VisibleForTesting

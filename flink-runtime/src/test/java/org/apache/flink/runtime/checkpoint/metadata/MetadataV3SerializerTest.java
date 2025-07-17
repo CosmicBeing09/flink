@@ -266,12 +266,12 @@ class MetadataV3SerializerTest {
         KeyGroupRangeOffsets offsets = new KeyGroupRangeOffsets(0, 123);
         byte[] data = {1, 2, 3, 4};
         try (ByteArrayOutputStreamWithPos out = new ByteArrayOutputStreamWithPos()) {
-            MetadataV2V3SerializerBase.serializeStreamStateHandle(
+            MetadataV2V3SerializerBase.serializeStateHandle(
                     new KeyGroupsStateHandle(offsets, new ByteStreamStateHandle("test", data)),
                     new DataOutputStream(out));
             try (ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray())) {
                 StreamStateHandle handle =
-                        MetadataV2V3SerializerBase.deserializeStreamStateHandle(
+                        MetadataV2V3SerializerBase.deserializeStateHandle(
                                 new DataInputStream(in), null);
                 assertThat(handle).isNotNull().isInstanceOf(KeyGroupsStateHandle.class);
                 assertThat(((KeyGroupsStateHandle) handle).getGroupRangeOffsets())

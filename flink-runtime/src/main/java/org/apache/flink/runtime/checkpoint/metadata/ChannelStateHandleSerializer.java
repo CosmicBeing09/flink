@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.flink.runtime.checkpoint.metadata.MetadataV2V3SerializerBase.deserializeStreamStateHandle;
-import static org.apache.flink.runtime.checkpoint.metadata.MetadataV2V3SerializerBase.serializeStreamStateHandle;
 import static org.apache.flink.runtime.state.ChannelStateHelper.INPUT_CHANNEL_INFO_READER;
 import static org.apache.flink.runtime.state.ChannelStateHelper.INPUT_CHANNEL_INFO_WRITER;
 import static org.apache.flink.runtime.state.ChannelStateHelper.RESULT_SUBPARTITION_INFO_READER;
@@ -95,7 +93,7 @@ class ChannelStateHandleSerializer {
             dos.writeLong(offset);
         }
         dos.writeLong(handle.getStateSize());
-        serializeStreamStateHandle(handle.getDelegate(), dos);
+        MetadataV2V3SerializerBase.serializeStateHandle(handle.getDelegate(), dos);
     }
 
     private static <Info, Handle extends AbstractChannelStateHandle<Info>>
@@ -118,7 +116,7 @@ class ChannelStateHandleSerializer {
         return handleBuilder.apply(
                 subtaskIndex,
                 info,
-                deserializeStreamStateHandle(dis, context),
+                MetadataV2V3SerializerBase.deserializeStateHandle(dis, context),
                 new StateContentMetaInfo(offsets, size));
     }
 }
