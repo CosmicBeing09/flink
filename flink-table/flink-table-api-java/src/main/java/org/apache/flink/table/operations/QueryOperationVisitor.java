@@ -45,7 +45,7 @@ public interface QueryOperationVisitor<T> {
 
     T visit(LateralTableQueryOperation correlatedFunction);
 
-    T visit(SourceQueryOperation catalogTable);
+    T visit(SourceQueryOperation sourceQueryOperation);
 
     T visit(ValuesQueryOperation values);
 
