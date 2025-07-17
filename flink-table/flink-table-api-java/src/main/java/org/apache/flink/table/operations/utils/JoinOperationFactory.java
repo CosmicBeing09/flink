@@ -42,7 +42,7 @@ import static org.apache.flink.table.types.logical.LogicalTypeRoot.BOOLEAN;
 @Internal
 final class JoinOperationFactory {
 
-    private final EquiJoinExistsChecker equiJoinExistsChecker = new EquiJoinExistsChecker();
+    private final EquiJoinPredicateChecker equiJoinPredicateChecker = new EquiJoinPredicateChecker();
 
     /**
      * Creates a valid {@link JoinQueryOperation} operation.
@@ -86,7 +86,7 @@ final class JoinOperationFactory {
             return;
         }
 
-        Boolean equiJoinExists = condition.accept(equiJoinExistsChecker);
+        Boolean equiJoinExists = condition.accept(equiJoinPredicateChecker);
         if (correlated && right instanceof LateralTableQueryOperation && joinType != JoinType.INNER) {
             throw new ValidationException(
                     "Predicate for lateral left outer join with table function can only be empty or literal true.");
@@ -120,7 +120,7 @@ final class JoinOperationFactory {
         }
     }
 
-    private class EquiJoinExistsChecker extends ResolvedExpressionDefaultVisitor<Boolean> {
+    private class EquiJoinPredicateChecker extends ResolvedExpressionDefaultVisitor<Boolean> {
 
         @Override
         public Boolean visit(CallExpression call) {
