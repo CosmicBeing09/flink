@@ -29,11 +29,11 @@ public class TimestampSchemaVersion implements SchemaVersion {
         this.timestamp = timestamp;
     }
 
-    public static SchemaVersion of(long timestamp) {
+    public static SchemaVersion forTimestamp(long timestamp) {
         return new TimestampSchemaVersion(timestamp);
     }
 
-    public long getTimestamp() {
+    public long timestamp() {
         return timestamp;
     }
 

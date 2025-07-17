@@ -78,7 +78,7 @@ class DatabaseCalciteSchema extends FlinkSchema {
             if (schemaVersion instanceof TimestampSchemaVersion) {
                 TimestampSchemaVersion timestampSchemaVersion =
                         (TimestampSchemaVersion) getSchemaVersion().get();
-                table = catalogManager.getTable(identifier, timestampSchemaVersion.getTimestamp());
+                table = catalogManager.getTable(identifier, timestampSchemaVersion.timestamp());
             } else {
                 throw new UnsupportedOperationException(
                         String.format(

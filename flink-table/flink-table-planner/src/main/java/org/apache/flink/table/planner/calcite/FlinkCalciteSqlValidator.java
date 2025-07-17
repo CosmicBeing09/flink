@@ -255,7 +255,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
                             .toInstant()
                             .toEpochMilli();
 
-            SchemaVersion schemaVersion = TimestampSchemaVersion.of(timeTravelTimestamp);
+            SchemaVersion schemaVersion = TimestampSchemaVersion.forTimestamp(timeTravelTimestamp);
             IdentifierNamespace identifierNamespace = (IdentifierNamespace) ns;
             ns =
                     new IdentifierSnapshotNamespace(
