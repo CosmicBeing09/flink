@@ -78,7 +78,7 @@ public class CEPMigrationTest implements MigrationTest {
     }
 
     @SnapshotsGenerator
-    public void writeAfterBranchingPatternSnapshot(FlinkVersion flinkGenerateSavepointVersion)
+    public void writeAfterBranchingPatternState(FlinkVersion flinkGenerateSavepointVersion)
             throws Exception {
 
         KeySelector<Event, Integer> keySelector =
@@ -245,7 +245,7 @@ public class CEPMigrationTest implements MigrationTest {
     }
 
     @SnapshotsGenerator
-    public void writeStartingNewPatternAfterMigrationSnapshot(
+    public void writeStartingNewPatternAfterMigrationState(
             FlinkVersion flinkGenerateSavepointVersion) throws Exception {
 
         KeySelector<Event, Integer> keySelector =

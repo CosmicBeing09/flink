@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.apache.flink.runtime.checkpoint.metadata.MetadataV2V3SerializerBase.deserializeStreamStateHandle;
-import static org.apache.flink.runtime.checkpoint.metadata.MetadataV2V3SerializerBase.serializeStreamStateHandle;
 import static org.apache.flink.runtime.state.ChannelStateHelper.INPUT_CHANNEL_INFO_READER;
 import static org.apache.flink.runtime.state.ChannelStateHelper.INPUT_CHANNEL_INFO_WRITER;
 import static org.apache.flink.runtime.state.ChannelStateHelper.RESULT_SUBPARTITION_INFO_READER;
@@ -48,7 +46,7 @@ import static org.apache.flink.runtime.state.ChannelStateHelper.RESULT_SUBPARTIT
  */
 class ChannelStateHandleSerializer {
 
-    public void serialize(OutputStateHandle handle, DataOutputStream dos) throws IOException {
+    public void writeOutputStateHandle(OutputStateHandle handle, DataOutputStream dos) throws IOException {
         if (!(handle instanceof ResultSubpartitionStateHandle)) {
             throw new IllegalStateException(
                     "OutputStateHandle must be ResultSubpartitionStateHandle.");
@@ -66,7 +64,7 @@ class ChannelStateHandleSerializer {
                 RESULT_SUBPARTITION_INFO_READER, ResultSubpartitionStateHandle::new, dis, context);
     }
 
-    public void serialize(InputStateHandle handle, DataOutputStream dos) throws IOException {
+    public void writeInputStateHandle(InputStateHandle handle, DataOutputStream dos) throws IOException {
         if (!(handle instanceof InputChannelStateHandle)) {
             throw new IllegalStateException("InputStateHandle must be InputChannelStateHandle.");
         }
@@ -95,7 +93,7 @@ class ChannelStateHandleSerializer {
             dos.writeLong(offset);
         }
         dos.writeLong(handle.getStateSize());
-        serializeStreamStateHandle(handle.getDelegate(), dos);
+        MetadataV2V3SerializerBase.serializeStateHandle(handle.getDelegate(), dos);
     }
 
     private static <Info, Handle extends AbstractChannelStateHandle<Info>>
@@ -118,7 +116,7 @@ class ChannelStateHandleSerializer {
         return handleBuilder.apply(
                 subtaskIndex,
                 info,
-                deserializeStreamStateHandle(dis, context),
+                MetadataV2V3SerializerBase.deserializeStateHandle(dis, context),
                 new StateContentMetaInfo(offsets, size));
     }
 }
