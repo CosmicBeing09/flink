@@ -213,7 +213,7 @@ public abstract class AbstractKeyedStateBackend<K>
 
     private static StreamCompressionDecorator determineStreamCompression(
             ExecutionConfig executionConfig) {
-        if (executionConfig != null && executionConfig.isUseSnapshotCompression()) {
+        if (executionConfig != null && executionConfig.isSnapshotCompressionEnabled()) {
             return SnappyStreamCompressionDecorator.INSTANCE;
         } else {
             return UncompressedStreamCompressionDecorator.INSTANCE;

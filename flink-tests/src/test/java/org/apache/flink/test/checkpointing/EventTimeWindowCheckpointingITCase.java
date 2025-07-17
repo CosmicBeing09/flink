@@ -285,7 +285,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -376,7 +376,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setMaxParallelism(maxParallelism);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -465,7 +465,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -547,7 +547,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -631,7 +631,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(

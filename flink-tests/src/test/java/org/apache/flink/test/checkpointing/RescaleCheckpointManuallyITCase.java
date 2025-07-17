@@ -259,7 +259,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
             env.getConfig().setMaxParallelism(maxParallelism);
         }
         env.enableCheckpointing(checkpointingInterval);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         SharedReference<JobID> jobID = sharedObjects.add(new JobID());
         SharedReference<MiniCluster> miniClusterRef = sharedObjects.add(miniCluster);

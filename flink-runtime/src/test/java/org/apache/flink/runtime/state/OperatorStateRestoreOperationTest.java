@@ -134,7 +134,7 @@ public class OperatorStateRestoreOperationTest {
     @ValueSource(booleans = {true, false})
     void testRestoringMixedOperatorState(boolean snapshotCompressionEnabled) throws Exception {
         final ExecutionConfig cfg = new ExecutionConfig();
-        cfg.setUseSnapshotCompression(snapshotCompressionEnabled);
+        cfg.setSnapshotCompressionEnabled(snapshotCompressionEnabled);
         final ThrowingFunction<Collection<OperatorStateHandle>, OperatorStateBackend>
                 operatorStateBackendFactory =
                         createOperatorStateBackendFactory(
@@ -162,7 +162,7 @@ public class OperatorStateRestoreOperationTest {
     @ValueSource(booleans = {true, false})
     void testMergeOperatorState(boolean snapshotCompressionEnabled) throws Exception {
         final ExecutionConfig cfg = new ExecutionConfig();
-        cfg.setUseSnapshotCompression(snapshotCompressionEnabled);
+        cfg.setSnapshotCompressionEnabled(snapshotCompressionEnabled);
         final ThrowingFunction<Collection<OperatorStateHandle>, OperatorStateBackend>
                 operatorStateBackendFactory =
                         createOperatorStateBackendFactory(
@@ -205,7 +205,7 @@ public class OperatorStateRestoreOperationTest {
     @ValueSource(booleans = {true, false})
     void testEmptyPartitionedOperatorState(boolean snapshotCompressionEnabled) throws Exception {
         final ExecutionConfig cfg = new ExecutionConfig();
-        cfg.setUseSnapshotCompression(snapshotCompressionEnabled);
+        cfg.setSnapshotCompressionEnabled(snapshotCompressionEnabled);
         final ThrowingFunction<Collection<OperatorStateHandle>, OperatorStateBackend>
                 operatorStateBackendFactory =
                         createOperatorStateBackendFactory(
@@ -232,7 +232,7 @@ public class OperatorStateRestoreOperationTest {
     @ValueSource(booleans = {true, false})
     void testRepartitionOperatorState(boolean snapshotCompressionEnabled) throws Exception {
         final ExecutionConfig cfg = new ExecutionConfig();
-        cfg.setUseSnapshotCompression(snapshotCompressionEnabled);
+        cfg.setSnapshotCompressionEnabled(snapshotCompressionEnabled);
         final ThrowingFunction<Collection<OperatorStateHandle>, OperatorStateBackend>
                 operatorStateBackendFactory =
                         createOperatorStateBackendFactory(

@@ -623,7 +623,7 @@ public class AutoRescalingITCase extends TestLogger {
 
         configureCheckpointing(env.getCheckpointConfig());
         RestartStrategyUtils.configureNoRestartStrategy(env);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         DataStream<Integer> input =
                 env.addSource(new SubtaskIndexSource(numberKeys, numberElements, parallelism))

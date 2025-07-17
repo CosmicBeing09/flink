@@ -666,7 +666,7 @@ public class RescalingITCase extends TestLogger {
         }
         env.enableCheckpointing(checkpointingInterval);
         RestartStrategyUtils.configureNoRestartStrategy(env);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         DataStream<Integer> input =
                 env.addSource(
