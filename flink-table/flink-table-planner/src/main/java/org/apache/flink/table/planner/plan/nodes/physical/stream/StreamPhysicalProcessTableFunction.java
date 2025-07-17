@@ -186,7 +186,7 @@ public class StreamPhysicalProcessTableFunction extends AbstractRelNode
                 (BridgingSqlFunction.WithTableFunction) rexCall.getOperator();
         final List<StaticArgument> staticArgs =
                 function.getTypeInference()
-                        .getStaticArguments()
+                        .getStaticArgumentList()
                         .orElseThrow(IllegalStateException::new);
         final ContextResolvedFunction resolvedFunction = function.getResolvedFunction();
         final List<RexNode> operands = rexCall.getOperands();
@@ -252,7 +252,7 @@ public class StreamPhysicalProcessTableFunction extends AbstractRelNode
                 (BridgingSqlFunction.WithTableFunction) call.getOperator();
         final List<StaticArgument> declaredArgs =
                 function.getTypeInference()
-                        .getStaticArguments()
+                        .getStaticArgumentList()
                         .orElseThrow(IllegalStateException::new);
         // This logic filters out optional tables for which an input is missing. It returns tables
         // in the same order as provided inputs of this RelNode.

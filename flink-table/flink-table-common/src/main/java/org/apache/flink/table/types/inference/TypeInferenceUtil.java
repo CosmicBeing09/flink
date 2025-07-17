@@ -113,7 +113,7 @@ public final class TypeInferenceUtil {
         final List<DataType> actualTypes = callContext.getArgumentDataTypes();
 
         typeInference
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .ifPresent(
                         staticArgs -> {
                             if (actualTypes.size() != staticArgs.size()) {
@@ -191,7 +191,7 @@ public final class TypeInferenceUtil {
     public static String generateSignature(
             TypeInference typeInference, String name, FunctionDefinition definition) {
         final List<StaticArgument> staticArguments =
-                typeInference.getStaticArguments().orElse(null);
+                typeInference.getStaticArgumentList().orElse(null);
         if (staticArguments != null) {
             return formatStaticArguments(name, staticArguments);
         }
@@ -467,7 +467,7 @@ public final class TypeInferenceUtil {
                 new CastCallContext(callContext, outputType);
 
         // Static arguments have the highest priority
-        final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
+        final List<StaticArgument> staticArgs = typeInference.getStaticArgumentList().orElse(null);
         if (staticArgs != null) {
             final List<DataType> fromStaticArgs =
                     IntStream.range(0, staticArgs.size())

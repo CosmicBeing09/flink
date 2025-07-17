@@ -1091,7 +1091,7 @@ class TypeInferenceExtractorTest {
     void testStaticArguments(TestSpec testSpec) {
         if (testSpec.expectedStaticArguments != null) {
             final Optional<List<StaticArgument>> staticArguments =
-                    testSpec.typeInferenceExtraction.get().getStaticArguments();
+                    testSpec.typeInferenceExtraction.get().getStaticArgumentList();
             assertThat(staticArguments).isPresent();
             assertThat(staticArguments.get())
                     .containsExactlyElementsOf(testSpec.expectedStaticArguments);

@@ -221,7 +221,7 @@ public final class OperatorBindingCallContext extends AbstractSqlCallContext {
         }
         final BridgingSqlFunction function = (BridgingSqlFunction) operator;
         return function.getTypeInference()
-                .getStaticArguments()
+                .getStaticArgumentList()
                 .map(args -> args.get(pos))
                 .orElse(null);
     }

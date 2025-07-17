@@ -88,7 +88,7 @@ public class SystemTypeInference {
         final TypeInference.Builder builder = TypeInference.newBuilder();
 
         final List<StaticArgument> systemArgs =
-                deriveSystemArgs(functionKind, origin.getStaticArguments().orElse(null));
+                deriveSystemArgs(functionKind, origin.getStaticArgumentList().orElse(null));
         if (systemArgs != null) {
             builder.staticArguments(systemArgs);
         }

@@ -73,7 +73,7 @@ public final class TypeInferenceOperandInference implements SqlOperandTypeInfere
                         definition,
                         callBinding,
                         returnType,
-                        typeInference.getStaticArguments().orElse(null));
+                        typeInference.getStaticArgumentList().orElse(null));
         try {
             if (TypeInferenceUtil.validateArgumentCount(
                     typeInference.getInputTypeStrategy().getArgumentCount(),
@@ -95,7 +95,7 @@ public final class TypeInferenceOperandInference implements SqlOperandTypeInfere
         final List<DataType> expectedDataTypes;
 
         // Static arguments have the highest priority
-        final List<StaticArgument> staticArgs = typeInference.getStaticArguments().orElse(null);
+        final List<StaticArgument> staticArgs = typeInference.getStaticArgumentList().orElse(null);
         if (staticArgs != null) {
             expectedDataTypes =
                     staticArgs.stream()

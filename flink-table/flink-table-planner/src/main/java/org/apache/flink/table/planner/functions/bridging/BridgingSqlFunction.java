@@ -264,7 +264,7 @@ public class BridgingSqlFunction extends SqlFunction {
 
         @Override
         public @Nullable TableCharacteristic tableCharacteristic(int ordinal) {
-            final List<StaticArgument> args = typeInference.getStaticArguments().orElse(null);
+            final List<StaticArgument> args = typeInference.getStaticArgumentList().orElse(null);
             if (args == null || ordinal >= args.size()) {
                 return null;
             }
@@ -282,7 +282,7 @@ public class BridgingSqlFunction extends SqlFunction {
 
         @Override
         public boolean argumentMustBeScalar(int ordinal) {
-            final List<StaticArgument> args = typeInference.getStaticArguments().orElse(null);
+            final List<StaticArgument> args = typeInference.getStaticArgumentList().orElse(null);
             if (args == null || ordinal >= args.size()) {
                 return true;
             }
