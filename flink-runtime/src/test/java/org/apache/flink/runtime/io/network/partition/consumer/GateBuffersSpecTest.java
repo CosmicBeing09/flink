@@ -44,14 +44,14 @@ class GateBuffersSpecTest {
         GateBuffersSpec gateBuffersSpec = createGateBuffersSpec(numInputChannels, partitionType);
 
         int numExclusivePerChannel = 2;
-        int expectedBuffersPerGate = 999;
+        int maxFloating = 999;
         int maxBuffersPerGate = 1006;
 
         checkBuffersInGate(
                 gateBuffersSpec,
                 numExclusivePerChannel,
-                expectedBuffersPerGate,
-                expectedBuffersPerGate,
+                maxFloating,
+                maxFloating,
                 maxBuffersPerGate);
     }
 
