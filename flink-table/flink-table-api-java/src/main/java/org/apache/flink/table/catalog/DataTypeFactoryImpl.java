@@ -48,19 +48,19 @@ import static org.apache.flink.table.types.utils.TypeConversions.fromLogicalToDa
 @Internal
 final class DataTypeFactoryImpl implements DataTypeFactory {
 
-    private final LogicalTypeResolver resolver = new LogicalTypeResolver();
+    private final LogicalTypeResolver logicalTypeResolver = new LogicalTypeResolver();
 
-    private final ClassLoader classLoader;
+    private final ClassLoader userClassLoader;
 
-    private final Supplier<ExecutionConfig> executionConfig;
+    private final Supplier<ExecutionConfig> executionConfigSupplier;
 
     DataTypeFactoryImpl(
-            ClassLoader classLoader,
-            ReadableConfig config,
-            @Nullable ExecutionConfig executionConfig) {
-        this.classLoader = classLoader;
-        this.executionConfig =
-                createSerializerExecutionConfig(classLoader, config, executionConfig);
+            ClassLoader userClassLoader,
+            ReadableConfig tableConfig,
+            @Nullable ExecutionConfig parentExecutionConfig) {
+        this.userClassLoader = userClassLoader;
+        this.executionConfigSupplier =
+                createSerializerExecutionConfig(userClassLoader, tableConfig, parentExecutionConfig);
     }
 
     @Override
@@ -96,20 +96,20 @@ final class DataTypeFactoryImpl implements DataTypeFactory {
     @Override
     public <T> DataType createRawDataType(Class<T> clazz) {
         // we assume that a RAW type is nullable by default
-        return DataTypes.RAW(clazz, new KryoSerializer<>(clazz, executionConfig.get()));
+        return DataTypes.RAW(clazz, new KryoSerializer<>(clazz, executionConfigSupplier.get()));
     }
 
     @Override
     public <T> DataType createRawDataType(TypeInformation<T> typeInfo) {
         // we assume that a RAW type is nullable by default
         return DataTypes.RAW(
-                typeInfo.getTypeClass(), typeInfo.createSerializer(executionConfig.get()));
+                typeInfo.getTypeClass(), typeInfo.createSerializer(executionConfigSupplier.get()));
     }
 
     @Override
     public LogicalType createLogicalType(String typeString) {
-        final LogicalType parsedType = LogicalTypeParser.parse(typeString, classLoader);
-        return parsedType.accept(resolver);
+        final LogicalType parsedType = LogicalTypeParser.parse(typeString, userClassLoader);
+        return parsedType.accept(logicalTypeResolver);
     }
 
     @Override
@@ -128,39 +128,39 @@ final class DataTypeFactoryImpl implements DataTypeFactory {
      * ReadableConfig}.
      */
     private static Supplier<ExecutionConfig> createSerializerExecutionConfig(
-            ClassLoader classLoader, ReadableConfig config, ExecutionConfig executionConfig) {
+            ClassLoader userClassLoader, ReadableConfig tableConfig, ExecutionConfig parentExecutionConfig) {
         return () -> {
             final ExecutionConfig newExecutionConfig = new ExecutionConfig();
 
-            if (executionConfig != null) {
-                if (executionConfig.isForceKryoEnabled()) {
+            if (parentExecutionConfig != null) {
+                if (parentExecutionConfig.isForceKryoEnabled()) {
                     newExecutionConfig.enableForceKryo();
                 }
 
-                if (executionConfig.isForceAvroEnabled()) {
+                if (parentExecutionConfig.isForceAvroEnabled()) {
                     newExecutionConfig.enableForceAvro();
                 }
 
-                executionConfig
+                parentExecutionConfig
                         .getDefaultKryoSerializers()
                         .forEach(
                                 (c, s) ->
                                         newExecutionConfig.addDefaultKryoSerializer(
                                                 c, s.getSerializer()));
 
-                executionConfig
+                parentExecutionConfig
                         .getDefaultKryoSerializerClasses()
                         .forEach(newExecutionConfig::addDefaultKryoSerializer);
 
-                executionConfig
+                parentExecutionConfig
                         .getRegisteredKryoTypes()
                         .forEach(newExecutionConfig::registerKryoType);
 
-                executionConfig
+                parentExecutionConfig
                         .getRegisteredTypesWithKryoSerializerClasses()
                         .forEach(newExecutionConfig::registerTypeWithKryoSerializer);
 
-                executionConfig
+                parentExecutionConfig
                         .getRegisteredTypesWithKryoSerializers()
                         .forEach(
                                 (c, s) ->
@@ -168,7 +168,7 @@ final class DataTypeFactoryImpl implements DataTypeFactory {
                                                 c, s.getSerializer()));
             }
 
-            newExecutionConfig.configure(config, classLoader);
+            newExecutionConfig.configure(tableConfig, userClassLoader);
 
             return newExecutionConfig;
         };
