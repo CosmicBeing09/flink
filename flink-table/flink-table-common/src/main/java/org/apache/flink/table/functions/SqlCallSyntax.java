@@ -280,7 +280,7 @@ public interface SqlCallSyntax {
                                     + " serializable. It should've been flattened during expression"
                                     + " resolution.");
                 }
-                final String identifier = ExpressionUtils.stringValue(operands.get(1));
+                final String identifier = ExpressionUtils.extractStringValue(operands.get(1));
                 return String.format(
                         "%s %s %s",
                         CallSyntaxUtils.asSerializableOperand(operands.get(0)),

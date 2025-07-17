@@ -26,7 +26,7 @@ import org.apache.flink.table.expressions.FieldReferenceExpression;
 import org.apache.flink.table.expressions.ResolvedExpression;
 import org.apache.flink.table.expressions.utils.ResolvedExpressionDefaultVisitor;
 import org.apache.flink.table.functions.BuiltInFunctionDefinitions;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
+import org.apache.flink.table.operations.LateralTableQueryOperation;
 import org.apache.flink.table.operations.JoinQueryOperation;
 import org.apache.flink.table.operations.JoinQueryOperation.JoinType;
 import org.apache.flink.table.operations.QueryOperation;
@@ -42,7 +42,7 @@ import static org.apache.flink.table.types.logical.LogicalTypeRoot.BOOLEAN;
 @Internal
 final class JoinOperationFactory {
 
-    private final EquiJoinExistsChecker equiJoinExistsChecker = new EquiJoinExistsChecker();
+    private final EquiJoinPredicateChecker equiJoinPredicateChecker = new EquiJoinPredicateChecker();
 
     /**
      * Creates a valid {@link JoinQueryOperation} operation.
@@ -80,14 +80,14 @@ final class JoinOperationFactory {
             JoinType joinType,
             ResolvedExpression condition,
             boolean correlated) {
-        boolean alwaysTrue = ExpressionUtils.extractValue(condition, Boolean.class).orElse(false);
+        boolean alwaysTrue = ExpressionUtils.extractLiteralValue(condition, Boolean.class).orElse(false);
 
         if (alwaysTrue) {
             return;
         }
 
-        Boolean equiJoinExists = condition.accept(equiJoinExistsChecker);
-        if (correlated && right instanceof CalculatedQueryOperation && joinType != JoinType.INNER) {
+        Boolean equiJoinExists = condition.accept(equiJoinPredicateChecker);
+        if (correlated && right instanceof LateralTableQueryOperation && joinType != JoinType.INNER) {
             throw new ValidationException(
                     "Predicate for lateral left outer join with table function can only be empty or literal true.");
         } else if (!equiJoinExists) {
@@ -120,7 +120,7 @@ final class JoinOperationFactory {
         }
     }
 
-    private class EquiJoinExistsChecker extends ResolvedExpressionDefaultVisitor<Boolean> {
+    private class EquiJoinPredicateChecker extends ResolvedExpressionDefaultVisitor<Boolean> {
 
         @Override
         public Boolean visit(CallExpression call) {

@@ -355,7 +355,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             if (!isFunction(e, BuiltInFunctionDefinitions.ASSIGNMENT) || children.size() != 2) {
                 return null;
             }
-            final String name = ExpressionUtils.stringValue(children.get(0));
+            final String name = ExpressionUtils.extractStringValue(children.get(0));
             if (name == null) {
                 return null;
             }

@@ -68,7 +68,7 @@ public final class ContextResolvedFunction {
 
     private final FunctionDefinition functionDefinition;
 
-    private final @Nullable CatalogFunction catalogFunction;
+    private final @Nullable CatalogFunction resolvedCatalogFunction;
 
     public static ContextResolvedFunction permanent(
             FunctionIdentifier functionIdentifier, FunctionDefinition functionDefinition) {
@@ -81,12 +81,12 @@ public final class ContextResolvedFunction {
     public static ContextResolvedFunction permanent(
             FunctionIdentifier functionIdentifier,
             FunctionDefinition functionDefinition,
-            CatalogFunction catalogFunction) {
+            CatalogFunction resolvedCatalogFunction) {
         Preconditions.checkNotNull(
                 functionIdentifier,
                 "Function identifier should not be null for a permanent function.");
         return new ContextResolvedFunction(
-                false, functionIdentifier, functionDefinition, catalogFunction);
+                false, functionIdentifier, functionDefinition, resolvedCatalogFunction);
     }
 
     public static ContextResolvedFunction temporary(
@@ -130,7 +130,7 @@ public final class ContextResolvedFunction {
         this.functionDefinition =
                 Preconditions.checkNotNull(
                         functionDefinition, "Function definition must not be null.");
-        this.catalogFunction = catalogFunction;
+        this.resolvedCatalogFunction = catalogFunction;
     }
 
     public boolean isAnonymous() {
@@ -157,7 +157,7 @@ public final class ContextResolvedFunction {
     }
 
     public CatalogFunction getCatalogFunction() {
-        return catalogFunction;
+        return resolvedCatalogFunction;
     }
 
     public String asSummaryString() {

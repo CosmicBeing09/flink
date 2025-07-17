@@ -27,7 +27,7 @@ import org.apache.flink.annotation.Internal;
 @Internal
 public interface QueryOperationVisitor<T> {
 
-    T visit(ProjectQueryOperation projection);
+    T visit(ProjectQueryOperation projectOperation);
 
     T visit(AggregateQueryOperation aggregation);
 
@@ -43,9 +43,9 @@ public interface QueryOperationVisitor<T> {
 
     T visit(SortQueryOperation sort);
 
-    T visit(CalculatedQueryOperation calculatedTable);
+    T visit(LateralTableQueryOperation lateralOperation);
 
-    T visit(SourceQueryOperation catalogTable);
+    T visit(SourceQueryOperation sourceQueryOperation);
 
     T visit(ValuesQueryOperation values);
 

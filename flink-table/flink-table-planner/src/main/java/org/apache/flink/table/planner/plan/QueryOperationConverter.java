@@ -34,6 +34,7 @@ import org.apache.flink.table.connector.ChangelogMode;
 import org.apache.flink.table.expressions.CallExpression;
 import org.apache.flink.table.expressions.Expression;
 import org.apache.flink.table.expressions.ExpressionDefaultVisitor;
+import org.apache.flink.table.expressions.ExpressionUtils;
 import org.apache.flink.table.expressions.FieldReferenceExpression;
 import org.apache.flink.table.expressions.ResolvedExpression;
 import org.apache.flink.table.expressions.ValueLiteralExpression;
@@ -45,7 +46,7 @@ import org.apache.flink.table.legacy.api.TableSchema;
 import org.apache.flink.table.legacy.sources.LookupableTableSource;
 import org.apache.flink.table.legacy.sources.TableSource;
 import org.apache.flink.table.operations.AggregateQueryOperation;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
+import org.apache.flink.table.operations.LateralTableQueryOperation;
 import org.apache.flink.table.operations.DataStreamQueryOperation;
 import org.apache.flink.table.operations.DistinctQueryOperation;
 import org.apache.flink.table.operations.ExternalQueryOperation;
@@ -121,7 +122,6 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 import static org.apache.flink.table.expressions.ApiExpressionUtils.isFunctionOfKind;
-import static org.apache.flink.table.expressions.ExpressionUtils.extractValue;
 import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 import static org.apache.flink.table.functions.FunctionKind.AGGREGATE;
 import static org.apache.flink.table.functions.FunctionKind.TABLE_AGGREGATE;
@@ -158,11 +158,11 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
     private class SingleRelVisitor implements QueryOperationVisitor<RelNode> {
 
         @Override
-        public RelNode visit(ProjectQueryOperation projection) {
-            List<RexNode> rexNodes = convertToRexNodes(projection.getProjectList());
+        public RelNode visit(ProjectQueryOperation projectOperation) {
+            List<RexNode> rexNodes = convertToRexNodes(projectOperation.getProjectList());
 
             return relBuilder
-                    .project(rexNodes, projection.getResolvedSchema().getColumnNames(), true)
+                    .project(rexNodes, projectOperation.getResolvedSchema().getColumnNames(), true)
                     .build();
         }
 
@@ -288,15 +288,15 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         }
 
         @Override
-        public RelNode visit(CalculatedQueryOperation calculatedTable) {
-            final ContextResolvedFunction resolvedFunction = calculatedTable.getResolvedFunction();
-            final List<RexNode> parameters = convertToRexNodes(calculatedTable.getArguments());
+        public RelNode visit(LateralTableQueryOperation lateralOperation) {
+            final ContextResolvedFunction resolvedFunction = lateralOperation.getResolvedFunction();
+            final List<RexNode> parameters = convertToRexNodes(lateralOperation.getArguments());
 
             final FunctionDefinition functionDefinition = resolvedFunction.getDefinition();
             if (functionDefinition instanceof TableFunctionDefinition) {
                 final FlinkTypeFactory typeFactory = relBuilder.getTypeFactory();
                 return convertLegacyTableFunction(
-                        calculatedTable,
+                        lateralOperation,
                         (TableFunctionDefinition) functionDefinition,
                         parameters,
                         typeFactory);
@@ -310,17 +310,17 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
                     sqlFunction,
                     0,
                     parameters,
-                    calculatedTable.getResolvedSchema().getColumnNames());
+                    lateralOperation.getResolvedSchema().getColumnNames());
 
             return relBuilder.build();
         }
 
         private RelNode convertLegacyTableFunction(
-                CalculatedQueryOperation calculatedTable,
+                LateralTableQueryOperation lateralTableOp,
                 TableFunctionDefinition functionDefinition,
                 List<RexNode> parameters,
                 FlinkTypeFactory typeFactory) {
-            List<String> fieldNames = calculatedTable.getResolvedSchema().getColumnNames();
+            List<String> fieldNames = lateralTableOp.getResolvedSchema().getColumnNames();
 
             TableFunction<?> tableFunction = functionDefinition.getTableFunction();
             DataType resultType = fromLegacyInfoToDataType(functionDefinition.getResultType());
@@ -330,7 +330,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
 
             final TableSqlFunction sqlFunction =
                     new TableSqlFunction(
-                            calculatedTable.getResolvedFunction().getIdentifier().orElse(null),
+                            lateralTableOp.getResolvedFunction().getIdentifier().orElse(null),
                             tableFunction.toString(),
                             tableFunction,
                             resultType,
@@ -711,7 +711,8 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
         public AggCall visit(CallExpression unresolvedCall) {
             if (unresolvedCall.getFunctionDefinition() == AS) {
                 String aggregateName =
-                        extractValue(unresolvedCall.getChildren().get(1), String.class)
+                        ExpressionUtils
+                                .extractLiteralValue(unresolvedCall.getChildren().get(1), String.class)
                                 .orElseThrow(() -> new TableException("Unexpected name."));
 
                 Expression aggregate = unresolvedCall.getChildren().get(0);

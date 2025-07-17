@@ -594,7 +594,7 @@ final class AggregateOperationFactory {
                     children.subList(1, children.size()).stream()
                             .map(
                                     alias ->
-                                            ExpressionUtils.extractValue(alias, String.class)
+                                            ExpressionUtils.extractLiteralValue(alias, String.class)
                                                     .orElseThrow(
                                                             () ->
                                                                     new ValidationException(

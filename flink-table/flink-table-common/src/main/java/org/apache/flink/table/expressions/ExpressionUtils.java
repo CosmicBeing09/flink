@@ -35,7 +35,7 @@ public final class ExpressionUtils {
      * @param <V> type of extracted value
      * @return extracted value or empty if could not extract value of given type
      */
-    public static <V> Optional<V> extractValue(Expression expression, Class<V> targetClass) {
+    public static <V> Optional<V> extractLiteralValue(Expression expression, Class<V> targetClass) {
         if (expression instanceof ValueLiteralExpression) {
             final ValueLiteralExpression valueLiteral = (ValueLiteralExpression) expression;
             return valueLiteral.getValueAs(targetClass);
@@ -43,7 +43,7 @@ public final class ExpressionUtils {
         return Optional.empty();
     }
 
-    public static String stringValue(Expression expression) {
+    public static String extractStringValue(Expression expression) {
         return ((ValueLiteralExpression) expression).getValueAs(String.class).orElse(null);
     }
 
