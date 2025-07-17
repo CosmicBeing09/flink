@@ -65,6 +65,6 @@ public interface RescaleManager {
          * Creates a {@code RescaleManager} instance for the given {@code rescaleContext} and
          * previous rescale time.
          */
-        RescaleManager create(Context rescaleContext, Instant lastRescale);
+        RescaleManager create(Context context, Instant lastRescale);
     }
 }
