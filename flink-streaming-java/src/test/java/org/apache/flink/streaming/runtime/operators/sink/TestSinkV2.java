@@ -204,11 +204,11 @@ public class TestSinkV2<InputT> implements Sink<InputT> {
 
         public TestSinkV2TwoPhaseCommittingSink(
                 DefaultSinkWriter<InputT> writer,
-                SimpleVersionedSerializer<String> committableSerializer,
+                SimpleVersionedSerializer<String> commSerializerFactory,
                 DefaultCommitter committer) {
             super(writer);
             this.committer = committer;
-            this.committableSerializer = committableSerializer;
+            this.committableSerializer = commSerializerFactory;
         }
 
         @Override
