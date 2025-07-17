@@ -37,7 +37,7 @@ import java.util.UUID;
 
 import static org.apache.flink.configuration.HeartbeatManagerOptions.HEARTBEAT_INTERVAL;
 import static org.apache.flink.configuration.HeartbeatManagerOptions.HEARTBEAT_TIMEOUT;
-import static org.apache.flink.configuration.JobManagerOptions.SLOT_REQUEST_TIMEOUT;
+import static org.apache.flink.configuration.JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT;
 import static org.apache.flink.configuration.MetricOptions.METRIC_FETCHER_UPDATE_INTERVAL;
 
 /** The central configuration holder for Flink container-based test environments. */
@@ -366,7 +366,7 @@ public class FlinkContainersSettings {
             config.set(JobManagerOptions.TOTAL_PROCESS_MEMORY, DEFAULT_JM_TOTAL_PROCESS_MEMORY);
             config.set(HEARTBEAT_INTERVAL, DEFAULT_HEARTBEAT_INTERVAL_MS);
             config.set(HEARTBEAT_TIMEOUT, DEFAULT_HEARTBEAT_TIMEOUT_MS);
-            config.set(SLOT_REQUEST_TIMEOUT, Duration.ofMillis(DEFAULT_SLOT_REQUEST_TIMEOUT_MS));
+            config.set(JOB_MANAGER_SLOT_REQUEST_TIMEOUT, Duration.ofMillis(DEFAULT_SLOT_REQUEST_TIMEOUT_MS));
             config.set(
                     METRIC_FETCHER_UPDATE_INTERVAL,
                     Duration.ofMillis(DEFAULT_METRIC_FETCHER_UPDATE_INTERVAL_MS));

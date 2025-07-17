@@ -83,7 +83,7 @@ class RescaleOnCheckpointITCase {
         // - lower refresh interval -> controls how fast we invalidate ExecutionGraphCache
         // - lower slot idle timeout -> controls how fast we return idle slots to TM
         configuration.set(WebOptions.REFRESH_INTERVAL, Duration.ofMillis(50L));
-        configuration.set(JobManagerOptions.SLOT_IDLE_TIMEOUT, Duration.ofMillis(50L));
+        configuration.set(JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT, Duration.ofMillis(50L));
 
         // no checkpoints shall be triggered by Flink itself
         configuration.set(
