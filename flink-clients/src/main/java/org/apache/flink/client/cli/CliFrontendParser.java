@@ -93,7 +93,7 @@ public class CliFrontendParser {
      *     deployments
      */
     @Deprecated
-    public static final Option YARN_DETACHED_OPTION =
+    public static final Option DEPRECATED_YARN_DETACHED_OPTION =
             new Option(
                     "yd",
                     "yarndetached",
@@ -145,7 +145,7 @@ public class CliFrontendParser {
                             + "savepoint files, but can reuse some shared files.");
 
     @Deprecated
-    public static final Option SAVEPOINT_RESTORE_MODE =
+    public static final Option DEPRECATED_SAVEPOINT_RESTORE_MODE =
             new Option(
                     "rm",
                     "restoreMode",
@@ -332,7 +332,7 @@ public class CliFrontendParser {
 
         DETACHED_OPTION.setRequired(false);
         SHUTDOWN_IF_ATTACHED_OPTION.setRequired(false);
-        YARN_DETACHED_OPTION.setRequired(false);
+        DEPRECATED_YARN_DETACHED_OPTION.setRequired(false);
 
         ARGS_OPTION.setRequired(false);
         ARGS_OPTION.setArgName("programArgs");
@@ -346,7 +346,7 @@ public class CliFrontendParser {
 
         SAVEPOINT_ALLOW_NON_RESTORED_OPTION.setRequired(false);
         SAVEPOINT_CLAIM_MODE.setRequired(false);
-        SAVEPOINT_RESTORE_MODE.setRequired(false);
+        DEPRECATED_SAVEPOINT_RESTORE_MODE.setRequired(false);
 
         SAVEPOINT_FORMAT_OPTION.setRequired(false);
 
@@ -400,7 +400,7 @@ public class CliFrontendParser {
         options.addOption(ARGS_OPTION);
         options.addOption(DETACHED_OPTION);
         options.addOption(SHUTDOWN_IF_ATTACHED_OPTION);
-        options.addOption(YARN_DETACHED_OPTION);
+        options.addOption(DEPRECATED_YARN_DETACHED_OPTION);
         options.addOption(PY_OPTION);
         options.addOption(PYFILES_OPTION);
         options.addOption(PYMODULE_OPTION);
@@ -434,7 +434,7 @@ public class CliFrontendParser {
                 .addOption(SAVEPOINT_PATH_OPTION)
                 .addOption(SAVEPOINT_ALLOW_NON_RESTORED_OPTION)
                 .addOption(SAVEPOINT_CLAIM_MODE)
-                .addOption(SAVEPOINT_RESTORE_MODE);
+                .addOption(DEPRECATED_SAVEPOINT_RESTORE_MODE);
     }
 
     static Options getInfoCommandOptions() {
@@ -484,7 +484,7 @@ public class CliFrontendParser {
                 .addOption(SAVEPOINT_PATH_OPTION)
                 .addOption(SAVEPOINT_ALLOW_NON_RESTORED_OPTION)
                 .addOption(SAVEPOINT_CLAIM_MODE)
-                .addOption(SAVEPOINT_RESTORE_MODE);
+                .addOption(DEPRECATED_SAVEPOINT_RESTORE_MODE);
     }
 
     private static Options getInfoOptionsWithoutDeprecatedOptions(Options options) {
@@ -703,14 +703,14 @@ public class CliFrontendParser {
                         ConfigurationUtils.convertValue(
                                 commandLine.getOptionValue(SAVEPOINT_CLAIM_MODE),
                                 RestoreMode.class);
-            } else if (commandLine.hasOption(SAVEPOINT_RESTORE_MODE)) {
+            } else if (commandLine.hasOption(DEPRECATED_SAVEPOINT_RESTORE_MODE)) {
                 restoreMode =
                         ConfigurationUtils.convertValue(
-                                commandLine.getOptionValue(SAVEPOINT_RESTORE_MODE),
+                                commandLine.getOptionValue(DEPRECATED_SAVEPOINT_RESTORE_MODE),
                                 RestoreMode.class);
                 System.out.printf(
                         "The option '%s' is deprecated. Please use '%s' instead.%n",
-                        SAVEPOINT_RESTORE_MODE.getLongOpt(), SAVEPOINT_CLAIM_MODE.getLongOpt());
+                        DEPRECATED_SAVEPOINT_RESTORE_MODE.getLongOpt(), SAVEPOINT_CLAIM_MODE.getLongOpt());
             } else {
                 restoreMode = StateRecoveryOptions.RESTORE_MODE.defaultValue();
             }
