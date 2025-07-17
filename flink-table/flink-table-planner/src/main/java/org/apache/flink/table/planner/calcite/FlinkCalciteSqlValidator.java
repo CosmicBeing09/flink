@@ -362,7 +362,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
         // for this column. Therefore, explicit table expressions (for window TVFs at most one)
         // are captured before rewriting and replaced with a "marker" SqlSelect that contains the
         // descriptor information. The "marker" SqlSelect is considered during column expansion.
-        final List<SqlIdentifier> explicitTableArgs = getExplicitTableOperands(node);
+        final List<SqlIdentifier> explicitTableArgs = getTableOperands(node);
 
         final SqlNode rewritten = super.performUnconditionalRewrites(node, underFrom);
 
@@ -450,7 +450,7 @@ public final class FlinkCalciteSqlValidator extends SqlValidatorImpl {
      * Returns all {@link SqlKind#EXPLICIT_TABLE} operands within TVF operands. A list entry is
      * {@code null} if the operand is not an {@link SqlKind#EXPLICIT_TABLE}.
      */
-    private static List<SqlIdentifier> getExplicitTableOperands(SqlNode node) {
+    private static List<SqlIdentifier> getTableOperands(SqlNode node) {
         if (!(node instanceof SqlBasicCall)) {
             return null;
         }
