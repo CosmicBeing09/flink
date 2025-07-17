@@ -312,7 +312,7 @@ public abstract class MetadataV2V3SerializerBase {
             state.setRawKeyedState(rawKeyedState);
         }
 
-        state.setInputChannelState(deserializeInputChannelStateHandle(dis, context));
+        state.setInputChannelState(deserializeInputStateHandle(dis, context));
         state.setResultSubpartitionState(deserializeResultSubpartitionStateHandle(dis, context));
 
         return state.build();
@@ -701,7 +701,7 @@ public abstract class MetadataV2V3SerializerBase {
         return StateObjectCollection.empty();
     }
 
-    protected StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
+    protected StateObjectCollection<InputStateHandle> deserializeInputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return StateObjectCollection.empty();
     }
