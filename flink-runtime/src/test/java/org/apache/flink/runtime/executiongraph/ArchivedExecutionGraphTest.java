@@ -288,7 +288,7 @@ public class ArchivedExecutionGraphTest {
 
         List<Function<CompletedCheckpointStatsSummarySnapshot, StatsSummarySnapshot>> meters =
                 asList(
-                        CompletedCheckpointStatsSummarySnapshot::getEndToEndDurationStats,
+                        CompletedCheckpointStatsSummarySnapshot::getDurationStats,
                         CompletedCheckpointStatsSummarySnapshot::getPersistedDataStats,
                         CompletedCheckpointStatsSummarySnapshot::getProcessedDataStats,
                         CompletedCheckpointStatsSummarySnapshot::getStateSizeStats);

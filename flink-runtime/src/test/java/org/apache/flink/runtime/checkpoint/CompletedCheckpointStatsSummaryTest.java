@@ -152,7 +152,7 @@ public class CompletedCheckpointStatsSummaryTest {
                 .isCloseTo(processedData, offset(0d));
         assertThat(snapshot.getPersistedDataStats().getQuantile(1))
                 .isCloseTo(persistedData, offset(0d));
-        assertThat(snapshot.getEndToEndDurationStats().getQuantile(1))
+        assertThat(snapshot.getDurationStats().getQuantile(1))
                 .isCloseTo(lastAck - triggerTimestamp, offset(0d));
     }
 }

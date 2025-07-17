@@ -56,7 +56,7 @@ public class CompletedCheckpointStatsSummarySnapshot implements Serializable {
                 StatsSummarySnapshot.empty());
     }
 
-    public StatsSummarySnapshot getEndToEndDurationStats() {
+    public StatsSummarySnapshot getDurationStats() {
         return duration;
     }
 
@@ -72,7 +72,7 @@ public class CompletedCheckpointStatsSummarySnapshot implements Serializable {
         return stateSize;
     }
 
-    public StatsSummarySnapshot getCheckpointedSize() {
+    public StatsSummarySnapshot getCheckpointedSizeStats() {
         return checkpointedSize;
     }
 }
