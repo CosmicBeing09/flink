@@ -76,7 +76,7 @@ class ResourceCounterTest {
         final ResourceCounter resourceCounter = ResourceCounter.withResources(resources);
 
         for (Map.Entry<ResourceProfile, Integer> resource : resources.entrySet()) {
-            assertThat(resourceCounter.getResourceCount(resource.getKey()))
+            assertThat(resourceCounter.count(resource.getKey()))
                     .isEqualTo(resource.getValue());
         }
     }
@@ -85,7 +85,7 @@ class ResourceCounterTest {
     void testGetResourceCountReturnsZeroForUnknownResourceProfile() {
         final ResourceCounter resourceCounter = ResourceCounter.withResources(createResources());
 
-        assertThat(resourceCounter.getResourceCount(ResourceProfile.newBuilder().build())).isZero();
+        assertThat(resourceCounter.count(ResourceProfile.newBuilder().build())).isZero();
     }
 
     @Test
@@ -94,7 +94,7 @@ class ResourceCounterTest {
 
         final ResourceCounter resourceCounter = ResourceCounter.withResources(resources);
 
-        assertThat(resourceCounter.getTotalResourceCount()).isEqualTo(5);
+        assertThat(resourceCounter.getTotalCount()).isEqualTo(5);
     }
 
     @Test

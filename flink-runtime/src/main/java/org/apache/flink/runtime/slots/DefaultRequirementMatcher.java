@@ -36,7 +36,7 @@ public class DefaultRequirementMatcher implements RequirementMatcher {
             Function<ResourceProfile, Integer> numAssignedResourcesLookup) {
         // Short-cut for fine-grained resource management. If there is already exactly equal
         // requirement, we can directly match with it.
-        if (totalRequirements.getResourceCount(resourceProfile)
+        if (totalRequirements.count(resourceProfile)
                 > numAssignedResourcesLookup.apply(resourceProfile)) {
             return Optional.of(resourceProfile);
         }

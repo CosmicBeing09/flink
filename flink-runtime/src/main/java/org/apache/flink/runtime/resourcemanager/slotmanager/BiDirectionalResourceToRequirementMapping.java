@@ -108,14 +108,14 @@ class BiDirectionalResourceToRequirementMapping {
         Preconditions.checkNotNull(requirement);
         return requirementToFulfillingResources
                 .getOrDefault(requirement, ResourceCounter.empty())
-                .getTotalResourceCount();
+                .getTotalCount();
     }
 
     public int getNumFulfilledRequirements(ResourceProfile resource) {
         Preconditions.checkNotNull(resource);
         return resourceToFulfilledRequirement
                 .getOrDefault(resource, ResourceCounter.empty())
-                .getTotalResourceCount();
+                .getTotalCount();
     }
 
     @VisibleForTesting

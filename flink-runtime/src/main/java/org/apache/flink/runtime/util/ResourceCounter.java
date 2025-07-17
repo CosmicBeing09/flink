@@ -49,7 +49,7 @@ public final class ResourceCounter {
      * @return number of resources with the given resourceProfile or {@code 0} if the resource
      *     profile does not exist
      */
-    public int getResourceCount(ResourceProfile resourceProfile) {
+    public int count(ResourceProfile resourceProfile) {
         return resources.getOrDefault(resourceProfile, 0);
     }
 
@@ -58,7 +58,7 @@ public final class ResourceCounter {
      *
      * @return the total number of resources in this counter
      */
-    public int getTotalResourceCount() {
+    public int getTotalCount() {
         return resources.isEmpty() ? 0 : resources.values().stream().reduce(0, Integer::sum);
     }
 

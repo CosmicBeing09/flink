@@ -330,11 +330,11 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                                     new FlinkException("Test failure"));
 
                     assertThat(
-                                    fulfilledRequirements.getResourceCount(
+                                    fulfilledRequirements.count(
                                             freeSlot.getResourceProfile()))
                             .isEqualTo(0);
                     assertThat(
-                                    fulfilledRequirements.getResourceCount(
+                                    fulfilledRequirements.count(
                                             slotToReserve.getResourceProfile()))
                             .isEqualTo(1);
                 });
@@ -359,7 +359,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
                     assertThat(fulfilledRequirementsOfFreeSlot.getResources()).isEmpty();
                     assertThat(
-                                    fulfilledRequirementsOfReservedSlot.getResourceCount(
+                                    fulfilledRequirementsOfReservedSlot.count(
                                             slotToReserve.getResourceProfile()))
                             .isEqualTo(1);
                 });
@@ -611,7 +611,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         slotPool.reserveFreeSlot(slot.getAllocationId(), largeResourceProfile);
         assertThat(
                         slotPool.getFulfilledResourceRequirements()
-                                .getResourceCount(largeResourceProfile))
+                                .count(largeResourceProfile))
                 .isEqualTo(1);
 
         slotPool.increaseResourceRequirementsBy(
@@ -629,11 +629,11 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         slotPool.freeReservedSlot(slot.getAllocationId(), null, 1);
         assertThat(
                         slotPool.getFulfilledResourceRequirements()
-                                .getResourceCount(largeResourceProfile))
+                                .count(largeResourceProfile))
                 .isEqualTo(1);
         assertThat(
                         slotPool.getFulfilledResourceRequirements()
-                                .getResourceCount(smallResourceProfile))
+                                .count(smallResourceProfile))
                 .isEqualTo(0);
     }
 
@@ -668,8 +668,8 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         slotPool.reserveFreeSlot(largeSlot.getAllocationId(), smallResourceProfile);
 
         ResourceCounter availableResources = slotPool.getFulfilledResourceRequirements();
-        assertThat(availableResources.getResourceCount(smallResourceProfile)).isEqualTo(1);
-        assertThat(availableResources.getResourceCount(largeResourceProfile)).isEqualTo(0);
+        assertThat(availableResources.count(smallResourceProfile)).isEqualTo(1);
+        assertThat(availableResources.count(largeResourceProfile)).isEqualTo(0);
 
         Collection<ResourceRequirement> currentResourceRequirements =
                 slotPool.getResourceRequirements();

@@ -93,7 +93,7 @@ class JobScopedResourceTracker {
 
     public void notifyLostResource(ResourceProfile resourceProfile) {
         Preconditions.checkNotNull(resourceProfile);
-        if (excessResources.getResourceCount(resourceProfile) > 0) {
+        if (excessResources.count(resourceProfile) > 0) {
             LOG.trace("Job {} lost excess resource {}.", jobId, resourceProfile);
             excessResources = excessResources.subtract(resourceProfile, 1);
             return;
@@ -153,7 +153,7 @@ class JobScopedResourceTracker {
         for (ResourceProfile knownResourceProfile : knownResourceProfiles) {
             int numTotalAcquiredResources =
                     resourceToRequirementMapping.getNumFulfilledRequirements(knownResourceProfile)
-                            + excessResources.getResourceCount(knownResourceProfile);
+                            + excessResources.count(knownResourceProfile);
             ResourceRequirement resourceRequirement =
                     ResourceRequirement.create(knownResourceProfile, numTotalAcquiredResources);
             acquiredResources.add(resourceRequirement);
@@ -176,7 +176,7 @@ class JobScopedResourceTracker {
         for (ResourceProfile requirementProfile :
                 resourceToRequirementMapping.getAllRequirementProfiles()) {
             int numTotalRequiredResources =
-                    resourceRequirements.getResourceCount(requirementProfile);
+                    resourceRequirements.count(requirementProfile);
             int numTotalAcquiredResources =
                     resourceToRequirementMapping.getNumFulfillingResources(requirementProfile);
 
@@ -228,7 +228,7 @@ class JobScopedResourceTracker {
         if (LOG.isTraceEnabled()) {
             LOG.trace(
                     "There are {} excess resources for job {} before re-assignment.",
-                    excessResources.getTotalResourceCount(),
+                    excessResources.getTotalCount(),
                     jobId);
         }
 
@@ -259,7 +259,7 @@ class JobScopedResourceTracker {
         if (LOG.isTraceEnabled()) {
             LOG.trace(
                     "There are {} excess resources for job {} after re-assignment.",
-                    excessResources.getTotalResourceCount(),
+                    excessResources.getTotalCount(),
                     jobId);
         }
     }
