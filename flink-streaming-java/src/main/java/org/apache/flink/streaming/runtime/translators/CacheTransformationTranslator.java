@@ -94,7 +94,7 @@ public class CacheTransformationTranslator<OUT, T extends CacheTransformation<OU
 
         addCacheProduceNode(streamGraph, transformation, context, physicalTransformation);
 
-        final int virtualId = Transformation.getNewNodeId();
+        final int virtualId = Transformation.getNewNodeIdInternal();
         streamGraph.addVirtualSideOutputNode(cacheNodeId, virtualId, input.getOutputTag());
         streamGraph.addEdge(
                 virtualId,

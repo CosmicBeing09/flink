@@ -116,7 +116,7 @@ public abstract class Transformation<T> {
     // Otherwise the parallelism can be changed at runtime.
     private boolean parallelismConfigured;
 
-    public static int getNewNodeId() {
+    public static int getNewNodeIdInternal() {
         return ID_COUNTER.incrementAndGet();
     }
 
@@ -206,7 +206,7 @@ public abstract class Transformation<T> {
             TypeInformation<T> outputType,
             int parallelism,
             boolean parallelismConfigured) {
-        this.id = getNewNodeId();
+        this.id = getNewNodeIdInternal();
         this.name = Preconditions.checkNotNull(name);
         this.outputType = outputType;
         this.parallelism = parallelism;
@@ -578,7 +578,7 @@ public abstract class Transformation<T> {
      *
      * @return The list of transitive predecessors.
      */
-    public abstract List<Transformation<?>> getTransitivePredecessors();
+    public abstract List<Transformation<?>> getTransitivePredecessorsInternal();
 
     /**
      * Returns the {@link Transformation transformations} that are the immediate predecessors of the

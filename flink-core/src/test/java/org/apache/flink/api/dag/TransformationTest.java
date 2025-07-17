@@ -64,7 +64,7 @@ class TransformationTest {
 
                             final List<Integer> ids = new ArrayList<>();
                             for (int c = 0; c < numIdsPerThread; c++) {
-                                ids.add(Transformation.getNewNodeId());
+                                ids.add(Transformation.getNewNodeIdInternal());
                             }
                             idLists.add(ids);
                         }
@@ -142,7 +142,7 @@ class TransformationTest {
         }
 
         @Override
-        public List<Transformation<?>> getTransitivePredecessors() {
+        public List<Transformation<?>> getTransitivePredecessorsInternal() {
             return Collections.emptyList();
         }
 
