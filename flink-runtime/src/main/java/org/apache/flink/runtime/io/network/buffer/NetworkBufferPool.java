@@ -61,7 +61,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * the buffers for the network data transfer. When new local buffer pools are created, the
  * NetworkBufferPool dynamically redistributes the buffers between the pools. The redistribution
  * logic is to make the number of buffers of each buffer pool fall within the minimum and maximum
- * numbers while endeavoring to closely align with its individual expected number.
+ * numbers while endeavoring to closely align with its individual required number.
  */
 public class NetworkBufferPool
         implements BufferPoolFactory, MemorySegmentProvider, AvailabilityProvider {
@@ -454,14 +454,14 @@ public class NetworkBufferPool
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
+            int numRequiredBuffers, int minUsedBuffers, int maxUsedBuffers) throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
+                numRequiredBuffers, minUsedBuffers, maxUsedBuffers, 0, Integer.MAX_VALUE, 0);
     }
 
     @Override
     public BufferPool createBufferPool(
-            int numExpectedBuffers,
+            int numRequiredBuffers,
             int minUsedBuffers,
             int maxUsedBuffers,
             int numSubpartitions,
@@ -469,7 +469,7 @@ public class NetworkBufferPool
             int maxOverdraftBuffersPerGate)
             throws IOException {
         return internalCreateBufferPool(
-                numExpectedBuffers,
+                numRequiredBuffers,
                 minUsedBuffers,
                 maxUsedBuffers,
                 numSubpartitions,
@@ -478,7 +478,7 @@ public class NetworkBufferPool
     }
 
     private BufferPool internalCreateBufferPool(
-            int numExpectedBuffers,
+            int numRequiredBuffers,
             int minUsedBuffers,
             int maxUsedBuffers,
             int numSubpartitions,
@@ -512,7 +512,7 @@ public class NetworkBufferPool
             LocalBufferPool localBufferPool =
                     new LocalBufferPool(
                             this,
-                            numExpectedBuffers,
+                            numRequiredBuffers,
                             minUsedBuffers,
                             maxUsedBuffers,
                             numSubpartitions,
@@ -622,25 +622,25 @@ public class NetworkBufferPool
         int numBuffersToBeRedistributed = numAvailableMemorySegment;
         for (LocalBufferPool bufferPool : resizableBufferPools) {
             numBuffersToBeRedistributed += bufferPool.getMinNumberOfMemorySegments();
-            totalWeight += bufferPool.getExpectedNumberOfMemorySegments();
+            totalWeight += bufferPool.getRequiredNumberOfMemorySegments();
         }
 
-        // First, all buffers are allocated proportionally according to the expected values of each
+        // First, all buffers are allocated proportionally according to the required values of each
         // pool as weights. However, due to the constraints of minimum and maximum values, the
         // actual number of buffers distributed may be more or less than the total number of
         // buffers.
         int totalAllocated = 0;
         Map<LocalBufferPool, Integer> cachedPoolSize = new HashMap<>(resizableBufferPools.size());
         for (LocalBufferPool bufferPool : resizableBufferPools) {
-            int expectedNumBuffers =
-                    bufferPool.getExpectedNumberOfMemorySegments()
+            int requiredNumBuffers =
+                    bufferPool.getRequiredNumberOfMemorySegments()
                             * numBuffersToBeRedistributed
                             / totalWeight;
             int actualAllocated =
                     Math.min(
                             bufferPool.getMaxNumberOfMemorySegments(),
                             Math.max(
-                                    bufferPool.getMinNumberOfMemorySegments(), expectedNumBuffers));
+                                    bufferPool.getMinNumberOfMemorySegments(), requiredNumBuffers));
             cachedPoolSize.put(bufferPool, actualAllocated);
             totalAllocated += actualAllocated;
         }
@@ -684,7 +684,7 @@ public class NetworkBufferPool
             for (LocalBufferPool bufferPool : resizableBufferPools) {
                 if (cachedPoolSize.get(bufferPool) < bufferPool.getMaxNumberOfMemorySegments()) {
                     poolsToBeRedistributed.add(bufferPool);
-                    totalWeight += bufferPool.getExpectedNumberOfMemorySegments();
+                    totalWeight += bufferPool.getRequiredNumberOfMemorySegments();
                 }
             }
 
@@ -698,7 +698,7 @@ public class NetworkBufferPool
                                         Math.ceil(
                                                 pieceOfDelta
                                                         * bufferPool
-                                                                .getExpectedNumberOfMemorySegments()));
+                                                                .getRequiredNumberOfMemorySegments()));
                 int numBuffers =
                         Math.min(
                                 bufferPool.getMaxNumberOfMemorySegments(),
@@ -720,7 +720,7 @@ public class NetworkBufferPool
                     continue;
                 }
                 poolsToBeRedistributed.add(bufferPool);
-                totalWeight += bufferPool.getExpectedNumberOfMemorySegments();
+                totalWeight += bufferPool.getRequiredNumberOfMemorySegments();
             }
 
             int totalDeallocated = 0;
@@ -734,7 +734,7 @@ public class NetworkBufferPool
                                         Math.ceil(
                                                 pieceOfDelta
                                                         * bufferPool
-                                                                .getExpectedNumberOfMemorySegments()));
+                                                                .getRequiredNumberOfMemorySegments()));
                 int numBuffers =
                         Math.max(
                                 bufferPool.getMinNumberOfMemorySegments(),
