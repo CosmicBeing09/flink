@@ -62,7 +62,7 @@ public final class CallExpression implements ResolvedExpression {
 
     private final FunctionDefinition functionDefinition;
 
-    private final List<ResolvedExpression> args;
+    private final List<ResolvedExpression> arguments;
 
     private final DataType dataType;
 
@@ -71,15 +71,15 @@ public final class CallExpression implements ResolvedExpression {
             boolean isTemporary,
             @Nullable FunctionIdentifier functionIdentifier,
             FunctionDefinition functionDefinition,
-            List<ResolvedExpression> args,
+            List<ResolvedExpression> arguments,
             DataType dataType) {
         this.isTemporary = isTemporary;
         this.functionIdentifier = functionIdentifier;
         this.functionDefinition =
                 Preconditions.checkNotNull(
                         functionDefinition, "Function definition must not be null.");
-        this.args =
-                new ArrayList<>(Preconditions.checkNotNull(args, "Arguments must not be null."));
+        this.arguments =
+                new ArrayList<>(Preconditions.checkNotNull(arguments, "Arguments must not be null."));
         this.dataType = Preconditions.checkNotNull(dataType, "Data type must not be null.");
     }
 
@@ -184,13 +184,13 @@ public final class CallExpression implements ResolvedExpression {
 
     @Override
     public List<ResolvedExpression> getResolvedChildren() {
-        return args;
+        return arguments;
     }
 
     @Override
     public String asSummaryString() {
         final String argList =
-                args.stream()
+                arguments.stream()
                         .map(Expression::asSummaryString)
                         .collect(Collectors.joining(", ", "(", ")"));
 
@@ -202,9 +202,9 @@ public final class CallExpression implements ResolvedExpression {
         if (functionDefinition instanceof BuiltInFunctionDefinition) {
             final BuiltInFunctionDefinition definition =
                     (BuiltInFunctionDefinition) functionDefinition;
-            return definition.getCallSyntax().unparse(definition.getSqlName(), args);
+            return definition.getCallSyntax().unparse(definition.getSqlName(), arguments);
         } else {
-            return SqlCallSyntax.FUNCTION.unparse(getSerializableFunctionName(), args);
+            return SqlCallSyntax.FUNCTION.unparse(getSerializableFunctionName(), arguments);
         }
     }
 
@@ -223,7 +223,7 @@ public final class CallExpression implements ResolvedExpression {
 
     @Override
     public List<Expression> getChildren() {
-        return Collections.unmodifiableList(this.args);
+        return Collections.unmodifiableList(this.arguments);
     }
 
     @Override
@@ -243,13 +243,13 @@ public final class CallExpression implements ResolvedExpression {
         return isTemporary == that.isTemporary
                 && Objects.equals(functionIdentifier, that.functionIdentifier)
                 && functionDefinition.equals(that.functionDefinition)
-                && args.equals(that.args)
+                && arguments.equals(that.arguments)
                 && dataType.equals(that.dataType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(isTemporary, functionIdentifier, functionDefinition, args, dataType);
+        return Objects.hash(isTemporary, functionIdentifier, functionDefinition, arguments, dataType);
     }
 
     @Override
