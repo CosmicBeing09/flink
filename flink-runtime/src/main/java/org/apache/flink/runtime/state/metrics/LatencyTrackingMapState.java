@@ -57,7 +57,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public UV get(UK key) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnGet()) {
+        if (latencyTrackingStateMetric.trackMetricsOnGet()) {
             return trackLatencyWithException(
                     () -> original.get(key), MapStateLatencyMetrics.MAP_STATE_GET_LATENCY);
         } else {
@@ -67,7 +67,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public void put(UK key, UV value) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnPut()) {
+        if (latencyTrackingStateMetric.trackMetricsOnPut()) {
             trackLatencyWithException(
                     () -> original.put(key, value), MapStateLatencyMetrics.MAP_STATE_PUT_LATENCY);
         } else {
@@ -77,7 +77,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public void putAll(Map<UK, UV> map) throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnPutAll()) {
+        if (latencyTrackingStateMetric.trackMetricsOnPutAll()) {
             trackLatencyWithException(
                     () -> original.putAll(map), MapStateLatencyMetrics.MAP_STATE_PUT_ALL_LATENCY);
         } else {
@@ -141,7 +141,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterator<Map.Entry<UK, UV>> iterator() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnIteratorInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnIteratorInit()) {
             return trackLatencyWithException(
                     () -> new IteratorWrapper<>(original.iterator()),
                     MapStateLatencyMetrics.MAP_STATE_ITERATOR_INIT_LATENCY);
@@ -309,17 +309,17 @@ class LatencyTrackingMapState<K, N, UK, UV>
             return iteratorNextCount;
         }
 
-        private boolean trackLatencyOnGet() {
+        private boolean trackMetricsOnGet() {
             getCount = loopUpdateCounter(getCount);
             return getCount == 1;
         }
 
-        private boolean trackLatencyOnPut() {
+        private boolean trackMetricsOnPut() {
             putCount = loopUpdateCounter(putCount);
             return putCount == 1;
         }
 
-        private boolean trackLatencyOnPutAll() {
+        private boolean trackMetricsOnPutAll() {
             putAllCount = loopUpdateCounter(putAllCount);
             return putAllCount == 1;
         }
@@ -349,7 +349,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
             return valuesInitCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorInit() {
+        private boolean trackMetricsOnIteratorInit() {
             iteratorInitCount = loopUpdateCounter(iteratorInitCount);
             return iteratorInitCount == 1;
         }
