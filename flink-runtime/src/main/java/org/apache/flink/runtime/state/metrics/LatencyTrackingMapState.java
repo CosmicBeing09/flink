@@ -141,7 +141,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
 
     @Override
     public Iterator<Map.Entry<UK, UV>> iterator() throws Exception {
-        if (latencyTrackingStateMetric.trackLatencyOnIteratorInit()) {
+        if (latencyTrackingStateMetric.trackMetricsOnIteratorInit()) {
             return trackLatencyWithException(
                     () -> new IteratorWrapper<>(original.iterator()),
                     MapStateLatencyMetrics.MAP_STATE_ITERATOR_INIT_LATENCY);
@@ -349,7 +349,7 @@ class LatencyTrackingMapState<K, N, UK, UV>
             return valuesInitCount == 1;
         }
 
-        private boolean trackLatencyOnIteratorInit() {
+        private boolean trackMetricsOnIteratorInit() {
             iteratorInitCount = loopUpdateCounter(iteratorInitCount);
             return iteratorInitCount == 1;
         }
