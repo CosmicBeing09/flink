@@ -106,22 +106,23 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition;
+            final FunctionDefinition functionDefinition;
             // clean functions that were not registered in a catalog
             if (!unresolvedCall.getFunctionIdentifier().isPresent()) {
-                definition =
+                functionDefinition =
                         prepareInlineUserDefinedFunction(unresolvedCall.getFunctionDefinition());
             } else {
-                definition = unresolvedCall.getFunctionDefinition();
+                functionDefinition = unresolvedCall.getFunctionDefinition();
             }
 
-            final String name =
+            final String functionName =
                     unresolvedCall
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
-                            .orElseGet(definition::toString);
+                            .orElseGet(functionDefinition::toString);
 
-            final Optional<TypeInference> typeInference = getOptionalTypeInference(definition);
+            final Optional<TypeInference> functionTypeInference = getOptionalTypeInference(
+                    functionDefinition);
 
             // resolve the children with information from the current call
             final List<ResolvedExpression> resolvedArgs = new ArrayList<>();
@@ -130,12 +131,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             for (int i = 0; i < argCount; i++) {
                 final int currentPos = i;
                 final SurroundingInfo surroundingInfo =
-                        typeInference
+                        functionTypeInference
                                 .map(
                                         inference ->
                                                 SurroundingInfo.of(
-                                                        name,
-                                                        definition,
+                                                        functionName,
+                                                        functionDefinition,
                                                         inference,
                                                         argCount,
                                                         currentPos,
@@ -146,16 +147,16 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 resolvedArgs.addAll(unresolvedCall.getChildren().get(i).accept(childResolver));
             }
 
-            if (definition == BuiltInFunctionDefinitions.FLATTEN) {
+            if (functionDefinition == BuiltInFunctionDefinitions.FLATTEN) {
                 return executeFlatten(resolvedArgs);
             }
 
             return Collections.singletonList(
-                    typeInference
+                    functionTypeInference
                             .map(
                                     newInference ->
                                             runTypeInference(
-                                                    name,
+                                                    functionName,
                                                     unresolvedCall,
                                                     newInference,
                                                     resolvedArgs,
@@ -164,7 +165,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                                     () ->
                                             new TableException(
                                                     "Could not get a type inference for function: "
-                                                            + name)));
+                                                            + functionName)));
         }
 
         @Override
@@ -248,7 +249,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         private ResolvedExpression runTypeInference(
-                String name,
+                String functionName,
                 UnresolvedCallExpression unresolvedCall,
                 TypeInference inference,
                 List<ResolvedExpression> resolvedArgs,
@@ -259,7 +260,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                             inference,
                             new TableApiCallContext(
                                     resolutionContext.typeFactory(),
-                                    name,
+                                    functionName,
                                     unresolvedCall.getFunctionDefinition(),
                                     resolvedArgs,
                                     resolutionContext.isGroupedAggregation()),
@@ -341,7 +342,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         private final DataTypeFactory typeFactory;
 
-        private final String name;
+        private final String functionName;
 
         private final FunctionDefinition definition;
 
@@ -351,12 +352,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         public TableApiCallContext(
                 DataTypeFactory typeFactory,
-                String name,
+                String functionName,
                 FunctionDefinition definition,
                 List<ResolvedExpression> resolvedArgs,
                 boolean isGroupedAggregation) {
             this.typeFactory = typeFactory;
-            this.name = name;
+            this.functionName = functionName;
             this.definition = definition;
             this.resolvedArgs = resolvedArgs;
             this.isGroupedAggregation = isGroupedAggregation;
@@ -410,7 +411,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public String getName() {
-            return name;
+            return functionName;
         }
 
         @Override
@@ -435,7 +436,8 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 throw new IndexOutOfBoundsException(
                         String.format(
                                 "Not enough arguments to access literal at position %d for function '%s'.",
-                                pos, name));
+                                pos,
+                                functionName));
             }
             return resolvedArgs.get(pos);
         }
