@@ -29,7 +29,7 @@ import org.apache.flink.table.expressions.ResolvedExpression;
 import org.apache.flink.table.expressions.utils.ResolvedExpressionDefaultVisitor;
 import org.apache.flink.table.functions.FunctionDefinition;
 import org.apache.flink.table.functions.FunctionKind;
-import org.apache.flink.table.operations.CalculatedQueryOperation;
+import org.apache.flink.table.operations.LateralTableQueryOperation;
 import org.apache.flink.table.operations.QueryOperation;
 import org.apache.flink.table.types.DataType;
 import org.apache.flink.table.types.logical.utils.LogicalTypeChecks;
@@ -42,12 +42,12 @@ import static java.util.stream.Collectors.toList;
 import static org.apache.flink.table.expressions.ApiExpressionUtils.isFunctionOfKind;
 import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 
-/** Utility class for creating a valid {@link CalculatedQueryOperation} operation. */
+/** Utility class for creating a valid {@link LateralTableQueryOperation} operation. */
 @Internal
 final class CalculatedTableFactory {
 
     /**
-     * Creates a valid {@link CalculatedQueryOperation} operation.
+     * Creates a valid {@link LateralTableQueryOperation} operation.
      *
      * @param callExpr call to table function as expression
      * @return valid calculated table
@@ -59,7 +59,7 @@ final class CalculatedTableFactory {
     }
 
     private static class FunctionTableCallVisitor
-            extends ResolvedExpressionDefaultVisitor<CalculatedQueryOperation> {
+            extends ResolvedExpressionDefaultVisitor<LateralTableQueryOperation> {
         private final List<String> leftTableFieldNames;
         private static final String ATOMIC_FIELD_NAME = "f0";
 
@@ -68,7 +68,7 @@ final class CalculatedTableFactory {
         }
 
         @Override
-        public CalculatedQueryOperation visit(CallExpression call) {
+        public LateralTableQueryOperation visit(CallExpression call) {
             FunctionDefinition definition = call.getFunctionDefinition();
             if (definition.equals(AS)) {
                 return unwrapFromAlias(call);
@@ -77,7 +77,7 @@ final class CalculatedTableFactory {
             return createFunctionCall(call, Collections.emptyList(), call.getResolvedChildren());
         }
 
-        private CalculatedQueryOperation unwrapFromAlias(CallExpression call) {
+        private LateralTableQueryOperation unwrapFromAlias(CallExpression call) {
             List<Expression> children = call.getChildren();
             List<String> aliases =
                     children.subList(1, children.size()).stream()
@@ -99,7 +99,7 @@ final class CalculatedTableFactory {
             return createFunctionCall(tableCall, aliases, tableCall.getResolvedChildren());
         }
 
-        private CalculatedQueryOperation createFunctionCall(
+        private LateralTableQueryOperation createFunctionCall(
                 CallExpression callExpression,
                 List<String> aliases,
                 List<ResolvedExpression> parameters) {
@@ -110,7 +110,7 @@ final class CalculatedTableFactory {
                             aliases,
                             callExpression.getFunctionName());
 
-            return new CalculatedQueryOperation(
+            return new LateralTableQueryOperation(
                     ContextResolvedFunction.fromCallExpression(callExpression),
                     parameters,
                     resolvedSchema);
@@ -152,7 +152,7 @@ final class CalculatedTableFactory {
         }
 
         @Override
-        protected CalculatedQueryOperation defaultMethod(ResolvedExpression expression) {
+        protected LateralTableQueryOperation defaultMethod(ResolvedExpression expression) {
             throw fail();
         }
 
