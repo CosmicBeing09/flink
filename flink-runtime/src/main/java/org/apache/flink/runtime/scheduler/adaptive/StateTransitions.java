@@ -47,13 +47,13 @@ public interface StateTransitions {
          * @param executionGraphHandler executionGraphHandler to pass to the {@link Canceling} state
          * @param operatorCoordinatorHandler operatorCoordinatorHandler to pass to the {@link
          *     Canceling} state
-         * @param failureCollection collection of failures that are propagated
+         * @param propagatedFailures collection of failures that are propagated
          */
         void goToCanceling(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<ExceptionHistoryEntry> propagatedFailures);
     }
 
     /** Interface covering transition to the {@link CreatingExecutionGraph} state. */
@@ -105,14 +105,14 @@ public interface StateTransitions {
          * @param operatorCoordinatorHandler operatorCoordinatorHandler to pass to the {@link
          *     Failing} state
          * @param failureCause failureCause describing why the job execution failed
-         * @param failureCollection collection of failures that are propagated
+         * @param propagatedFailures collection of failures that are propagated
          */
         void goToFailing(
                 ExecutionGraph executionGraph,
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Throwable failureCause,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<ExceptionHistoryEntry> propagatedFailures);
     }
 
     /** Interface covering transition to the {@link Restarting} state. */
