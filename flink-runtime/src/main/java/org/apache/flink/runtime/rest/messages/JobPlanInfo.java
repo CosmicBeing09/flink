@@ -46,7 +46,7 @@ public class JobPlanInfo implements ResponseBody {
     private static final String FIELD_NAME_PLAN = "plan";
 
     @JsonProperty(FIELD_NAME_PLAN)
-    private final RawJson jsonPlan;
+    private final RawJson plan;
 
     public JobPlanInfo(String jsonPlan) {
         this(new RawJson(Preconditions.checkNotNull(jsonPlan)));
@@ -54,12 +54,12 @@ public class JobPlanInfo implements ResponseBody {
 
     @JsonCreator
     public JobPlanInfo(@JsonProperty(FIELD_NAME_PLAN) RawJson jsonPlan) {
-        this.jsonPlan = jsonPlan;
+        this.plan = jsonPlan;
     }
 
     @JsonIgnore
-    public String getJsonPlan() {
-        return jsonPlan.json;
+    public String getPlan() {
+        return plan.json;
     }
 
     @Override
@@ -71,17 +71,17 @@ public class JobPlanInfo implements ResponseBody {
             return false;
         }
         JobPlanInfo that = (JobPlanInfo) o;
-        return Objects.equals(jsonPlan, that.jsonPlan);
+        return Objects.equals(plan, that.plan);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(jsonPlan);
+        return Objects.hash(plan);
     }
 
     @Override
     public String toString() {
-        return "JobPlanInfo{" + "jsonPlan=" + jsonPlan + '}';
+        return "JobPlanInfo{" + "jsonPlan=" + plan + '}';
     }
 
     /** Simple wrapper around a raw JSON string. */
