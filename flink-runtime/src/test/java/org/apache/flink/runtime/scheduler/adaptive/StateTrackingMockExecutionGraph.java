@@ -91,7 +91,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
     private static final Logger LOG =
             LoggerFactory.getLogger(StateTrackingMockExecutionGraph.class);
 
-    private JobStatus state = JobStatus.INITIALIZING;
+    private JobStatus jobStatus = JobStatus.INITIALIZING;
     private JobType jobType = JobType.STREAMING;
     private final CompletableFuture<JobStatus> terminationFuture = new CompletableFuture<>();
     private final JobID jobId = new JobID();
@@ -99,14 +99,14 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
             new ExecutionConfig().archive();
     private final Map<ExecutionAttemptID, TestingAccessExecution> executions = new HashMap<>();
 
-    private void transitionToState(JobStatus targetState) {
-        if (!state.isTerminalState()) {
-            this.state = targetState;
+    private void transitionToJobStatus(JobStatus targetState) {
+        if (!jobStatus.isTerminalState()) {
+            this.jobStatus = targetState;
         } else {
             LOG.warn(
                     "Trying to transition into state {} while being in terminal state {}",
                     targetState,
-                    state);
+                    jobStatus);
         }
     }
 
@@ -114,7 +114,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
 
     void completeTerminationFuture(JobStatus finalStatus) {
         terminationFuture.complete(finalStatus);
-        transitionToState(finalStatus);
+        transitionToJobStatus(finalStatus);
     }
 
     // ---- interface implementations
@@ -126,7 +126,7 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
 
     @Override
     public JobStatus getState() {
-        return state;
+        return jobStatus;
     }
 
     @Override
@@ -141,22 +141,22 @@ class StateTrackingMockExecutionGraph implements ExecutionGraph {
 
     @Override
     public void cancel() {
-        transitionToState(JobStatus.CANCELLING);
+        transitionToJobStatus(JobStatus.CANCELLING);
     }
 
     @Override
     public void failJob(Throwable cause, long timestamp) {
-        transitionToState(JobStatus.FAILING);
+        transitionToJobStatus(JobStatus.FAILING);
     }
 
     @Override
     public void suspend(Throwable suspensionCause) {
-        transitionToState(JobStatus.SUSPENDED);
+        transitionToJobStatus(JobStatus.SUSPENDED);
     }
 
     @Override
     public void transitionToRunning() {
-        transitionToState(JobStatus.RUNNING);
+        transitionToJobStatus(JobStatus.RUNNING);
     }
 
     // --- interface implementations: methods for creating an archived execution graph
