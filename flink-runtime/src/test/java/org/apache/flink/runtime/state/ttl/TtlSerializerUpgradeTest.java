@@ -86,7 +86,7 @@ class TtlSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TtlValue<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
