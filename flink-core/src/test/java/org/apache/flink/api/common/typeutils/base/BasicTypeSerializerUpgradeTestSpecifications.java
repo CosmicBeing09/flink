@@ -71,7 +71,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<BigDecimal> testDataMatcher() {
+        public Matcher<BigDecimal> testDataCondition() {
             return Matchers.is(new BigDecimal("123456789012345678901234567890123456.789"));
         }
 
@@ -108,7 +108,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<BigInteger> testDataMatcher() {
+        public Matcher<BigInteger> testDataCondition() {
             return Matchers.is(new BigInteger("123456789012345678901234567890123456"));
         }
 
@@ -145,7 +145,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Boolean> testDataMatcher() {
+        public Matcher<Boolean> testDataCondition() {
             return Matchers.is(Boolean.TRUE);
         }
 
@@ -182,7 +182,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<BooleanValue> testDataMatcher() {
+        public Matcher<BooleanValue> testDataCondition() {
             return Matchers.is(BooleanValue.TRUE);
         }
 
@@ -219,7 +219,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Byte> testDataMatcher() {
+        public Matcher<Byte> testDataCondition() {
             return Matchers.is(Byte.valueOf("42"));
         }
 
@@ -256,7 +256,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<ByteValue> testDataMatcher() {
+        public Matcher<ByteValue> testDataCondition() {
             return Matchers.is(new ByteValue((byte) 42));
         }
 
@@ -293,7 +293,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Character> testDataMatcher() {
+        public Matcher<Character> testDataCondition() {
             return Matchers.is(Character.MAX_VALUE);
         }
 
@@ -330,7 +330,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<CharValue> testDataMatcher() {
+        public Matcher<CharValue> testDataCondition() {
             return Matchers.is(new CharValue((char) 42));
         }
 
@@ -367,7 +367,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Date> testDataMatcher() {
+        public Matcher<Date> testDataCondition() {
             return Matchers.is(new Date(1580382960L));
         }
 
@@ -404,7 +404,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Double> testDataMatcher() {
+        public Matcher<Double> testDataCondition() {
             return Matchers.is(new Double("12345.6789"));
         }
 
@@ -441,7 +441,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<DoubleValue> testDataMatcher() {
+        public Matcher<DoubleValue> testDataCondition() {
             return Matchers.is(new DoubleValue(12345.6789));
         }
 
@@ -478,7 +478,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Float> testDataMatcher() {
+        public Matcher<Float> testDataCondition() {
             return Matchers.is(new Float("123.456"));
         }
 
@@ -515,7 +515,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<FloatValue> testDataMatcher() {
+        public Matcher<FloatValue> testDataCondition() {
             return Matchers.is(new FloatValue(123.456f));
         }
 
@@ -552,7 +552,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Integer> testDataMatcher() {
+        public Matcher<Integer> testDataCondition() {
             return Matchers.is(123456);
         }
 
@@ -589,7 +589,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<IntValue> testDataMatcher() {
+        public Matcher<IntValue> testDataCondition() {
             return Matchers.is(new IntValue(123456));
         }
 
@@ -626,7 +626,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Long> testDataMatcher() {
+        public Matcher<Long> testDataCondition() {
             return Matchers.is(1234567890L);
         }
 
@@ -663,7 +663,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<LongValue> testDataMatcher() {
+        public Matcher<LongValue> testDataCondition() {
             return Matchers.is(new LongValue(1234567890));
         }
 
@@ -700,7 +700,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<NullValue> testDataMatcher() {
+        public Matcher<NullValue> testDataCondition() {
             return Matchers.is(NullValue.getInstance());
         }
 
@@ -737,7 +737,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Short> testDataMatcher() {
+        public Matcher<Short> testDataCondition() {
             return Matchers.is((short) 123);
         }
 
@@ -774,7 +774,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<ShortValue> testDataMatcher() {
+        public Matcher<ShortValue> testDataCondition() {
             return Matchers.is(new ShortValue((short) 123));
         }
 
@@ -811,7 +811,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<java.sql.Date> testDataMatcher() {
+        public Matcher<java.sql.Date> testDataCondition() {
             return Matchers.is(new java.sql.Date(1580382960L));
         }
 
@@ -848,7 +848,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Time> testDataMatcher() {
+        public Matcher<Time> testDataCondition() {
             return Matchers.is(new Time(1580382960L));
         }
 
@@ -885,7 +885,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<Timestamp> testDataMatcher() {
+        public Matcher<Timestamp> testDataCondition() {
             return Matchers.is(new Timestamp(1580382960L));
         }
 
@@ -922,7 +922,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<String> testDataMatcher() {
+        public Matcher<String> testDataCondition() {
             return Matchers.is("123456789012345678901234567890123456");
         }
 
@@ -959,7 +959,7 @@ public class BasicTypeSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<StringValue> testDataMatcher() {
+        public Matcher<StringValue> testDataCondition() {
             return Matchers.is(new StringValue("123456789012345678901234567890123456"));
         }
 
