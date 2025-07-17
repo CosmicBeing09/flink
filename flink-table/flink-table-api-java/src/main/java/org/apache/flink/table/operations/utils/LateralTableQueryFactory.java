@@ -44,7 +44,7 @@ import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.AS;
 
 /** Utility class for creating a valid {@link LateralTableQueryOperation} operation. */
 @Internal
-final class CalculatedTableFactory {
+final class LateralTableQueryFactory {
 
     /**
      * Creates a valid {@link LateralTableQueryOperation} operation.
@@ -53,9 +53,9 @@ final class CalculatedTableFactory {
      * @return valid calculated table
      */
     QueryOperation create(ResolvedExpression callExpr, List<String> leftTableFieldNames) {
-        FunctionTableCallVisitor calculatedTableCreator =
+        FunctionTableCallVisitor tableFunctionVisitor =
                 new FunctionTableCallVisitor(leftTableFieldNames);
-        return callExpr.accept(calculatedTableCreator);
+        return callExpr.accept(tableFunctionVisitor);
     }
 
     private static class FunctionTableCallVisitor
