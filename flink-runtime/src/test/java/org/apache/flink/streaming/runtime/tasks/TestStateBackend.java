@@ -48,7 +48,7 @@ import org.apache.flink.runtime.state.SnapshotStrategy;
 import org.apache.flink.runtime.state.SnapshotStrategyRunner;
 import org.apache.flink.runtime.state.StateSnapshotTransformer;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueElement;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 
 import javax.annotation.Nonnull;
@@ -73,7 +73,7 @@ public class TestStateBackend extends AbstractStateBackend {
                 Thread.currentThread().getContextClassLoader(),
                 parameters.getEnv().getExecutionConfig(),
                 parameters.getTtlTimeProvider(),
-                LatencyTrackingStateConfig.newBuilder().build(),
+                MetricsTrackingStateConfig.newBuilder().build(),
                 parameters.getCancelStreamRegistry(),
                 new InternalKeyContextImpl<>(
                         parameters.getKeyGroupRange(), parameters.getNumberOfKeyGroups()));
@@ -125,7 +125,7 @@ public class TestStateBackend extends AbstractStateBackend {
                 ClassLoader userCodeClassLoader,
                 ExecutionConfig executionConfig,
                 TtlTimeProvider ttlTimeProvider,
-                LatencyTrackingStateConfig latencyTrackingStateConfig,
+                MetricsTrackingStateConfig latencyTrackingStateConfig,
                 CloseableRegistry cancelStreamRegistry,
                 InternalKeyContext<K> keyContext) {
             super(

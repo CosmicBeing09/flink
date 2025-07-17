@@ -36,16 +36,16 @@ import java.util.function.Supplier;
  * @param <S> Type of the internal kv state
  * @param <LSM> Type of the latency tracking state metrics
  */
-class AbstractLatencyTrackState<
+class AbstractMetricsTrackState<
                 K, N, V, S extends InternalKvState<K, N, V>, LSM extends StateLatencyMetricBase>
         implements InternalKvState<K, N, V> {
 
     protected S original;
-    protected LSM latencyTrackingStateMetric;
+    protected LSM metricsTrackingStateMetric;
 
-    AbstractLatencyTrackState(S original, LSM latencyTrackingStateMetric) {
+    AbstractMetricsTrackState(S original, LSM latencyTrackingStateMetric) {
         this.original = original;
-        this.latencyTrackingStateMetric = latencyTrackingStateMetric;
+        this.metricsTrackingStateMetric = latencyTrackingStateMetric;
     }
 
     @Override
@@ -90,7 +90,7 @@ class AbstractLatencyTrackState<
 
     @Override
     public void clear() {
-        if (latencyTrackingStateMetric.trackLatencyOnClear()) {
+        if (metricsTrackingStateMetric.trackLatencyOnClear()) {
             trackLatency(original::clear, StateLatencyMetricBase.STATE_CLEAR_LATENCY);
         } else {
             original.clear();
@@ -101,7 +101,7 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
@@ -111,7 +111,7 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
@@ -120,15 +120,15 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
-    protected <T> T trackLatencyWithException(
+    protected <T> T trackMetricWithException(
             SupplierWithException<T, Exception> supplier, String latencyLabel) throws Exception {
         long startTime = System.nanoTime();
         T result = supplier.get();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
         return result;
     }
 
@@ -137,18 +137,18 @@ class AbstractLatencyTrackState<
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
     protected void trackLatency(Runnable runnable, String latencyLabel) {
         long startTime = System.nanoTime();
         runnable.run();
         long latency = System.nanoTime() - startTime;
-        latencyTrackingStateMetric.updateLatency(latencyLabel, latency);
+        metricsTrackingStateMetric.updateLatency(latencyLabel, latency);
     }
 
     @VisibleForTesting
     LSM getLatencyTrackingStateMetric() {
-        return latencyTrackingStateMetric;
+        return metricsTrackingStateMetric;
     }
 }

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.state;
 
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 
 import java.io.IOException;
 
@@ -44,8 +44,8 @@ public abstract class AbstractStateBackend implements StateBackend, java.io.Seri
         }
     }
 
-    protected LatencyTrackingStateConfig.Builder latencyTrackingConfigBuilder =
-            LatencyTrackingStateConfig.newBuilder();
+    protected MetricsTrackingStateConfig.Builder latencyTrackingConfigBuilder =
+            MetricsTrackingStateConfig.newBuilder();
 
     // ------------------------------------------------------------------------
     //  State Backend - State-Holding Backends

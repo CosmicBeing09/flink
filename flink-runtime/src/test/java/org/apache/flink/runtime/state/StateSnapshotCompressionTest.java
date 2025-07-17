@@ -30,7 +30,7 @@ import org.apache.flink.runtime.state.heap.HeapKeyedStateBackendBuilder;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSetFactory;
 import org.apache.flink.runtime.state.internal.InternalValueState;
 import org.apache.flink.runtime.state.memory.MemCheckpointStreamFactory;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 import org.apache.flink.runtime.state.ttl.TtlTimeProvider;
 
 import org.apache.commons.io.IOUtils;
@@ -106,7 +106,7 @@ class StateSnapshotCompressionTest {
                         new KeyGroupRange(0, 15),
                         executionConfig,
                         TtlTimeProvider.DEFAULT,
-                        LatencyTrackingStateConfig.disabled(),
+                        MetricsTrackingStateConfig.disabled(),
                         stateHandles,
                         AbstractStateBackend.getCompressionDecorator(executionConfig),
                         TestLocalRecoveryConfig.disabled(),

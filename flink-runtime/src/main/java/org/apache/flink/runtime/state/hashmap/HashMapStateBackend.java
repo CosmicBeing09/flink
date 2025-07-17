@@ -32,7 +32,7 @@ import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.TaskStateManager;
 import org.apache.flink.runtime.state.heap.HeapKeyedStateBackendBuilder;
 import org.apache.flink.runtime.state.heap.HeapPriorityQueueSetFactory;
-import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
+import org.apache.flink.runtime.state.metrics.MetricsTrackingStateConfig;
 
 import java.io.IOException;
 
@@ -99,7 +99,7 @@ public class HashMapStateBackend extends AbstractStateBackend implements Configu
                 new HeapPriorityQueueSetFactory(
                         parameters.getKeyGroupRange(), parameters.getNumberOfKeyGroups(), 128);
 
-        LatencyTrackingStateConfig latencyTrackingStateConfig =
+        MetricsTrackingStateConfig latencyTrackingStateConfig =
                 latencyTrackingConfigBuilder.setMetricGroup(parameters.getMetricGroup()).build();
         return new HeapKeyedStateBackendBuilder<>(
                         parameters.getKvStateRegistry(),
