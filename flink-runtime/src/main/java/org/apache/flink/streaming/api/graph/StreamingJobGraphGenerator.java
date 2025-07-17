@@ -901,7 +901,7 @@ public class StreamingJobGraphGenerator {
         jobGraph.enableApproximateLocalRecovery(
                 streamGraph.getCheckpointConfig().isApproximateLocalRecoveryEnabled());
 
-        jobGraph.setSnapshotSettings(streamGraph.getCheckpointingSettings());
+        jobGraph.setCheckpointingSettings(streamGraph.getCheckpointingSettings());
         jobGraph.setSavepointRestoreSettings(streamGraph.getSavepointRestoreSettings());
         for (Map.Entry<String, DistributedCache.DistributedCacheEntry> entry :
                 streamGraph.getUserArtifacts().entrySet()) {

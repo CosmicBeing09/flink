@@ -177,7 +177,7 @@ public class AdaptiveSchedulerClusterITCase {
         jobVertex.setParallelism(PARALLELISM);
 
         final JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder()
                                 .setCheckpointInterval(100)

@@ -272,7 +272,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedCheckpointingSettingsNotNullIfCheckpointingIsEnabled() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
         scheduler =
@@ -290,7 +290,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedJobVerticesPresent() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -1087,7 +1087,7 @@ public class AdaptiveSchedulerTest {
 
         final JobGraph jobGraph = createJobGraph();
         // checkpointing components are only created if checkpointing is enabled
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -1786,7 +1786,7 @@ public class AdaptiveSchedulerTest {
         final Exception expectedException = new Exception("Expected Local Exception");
         Consumer<JobGraph> setupJobGraph =
                 jobGraph ->
-                        jobGraph.setSnapshotSettings(
+                        jobGraph.setCheckpointingSettings(
                                 new JobCheckpointingSettings(
                                         // set a large checkpoint interval so we can easily deduce
                                         // the savepoints checkpoint id
