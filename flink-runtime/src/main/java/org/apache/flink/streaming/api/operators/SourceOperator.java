@@ -509,7 +509,7 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
                                 .getEnvironment()
                                 .getTaskManagerInfo()
                                 .getConfiguration()
-                                .get(MetricOptions.LATENCY_INTERVAL)
+                                .get(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL)
                                 .toMillis();
         if (latencyTrackingInterval > 0) {
             latencyMarkerEmitter =

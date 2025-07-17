@@ -61,7 +61,7 @@ import java.util.function.Function;
 
 /** Builder for {@link AdaptiveScheduler}. */
 public class AdaptiveSchedulerBuilder {
-    private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(300);
+    private static final Duration DEFAULT_RPC_TIMEOUT = Duration.ofSeconds(300);
 
     private final JobGraph jobGraph;
 
@@ -76,7 +76,7 @@ public class AdaptiveSchedulerBuilder {
     private CheckpointRecoveryFactory checkpointRecoveryFactory =
             new StandaloneCheckpointRecoveryFactory();
     private DeclarativeSlotPool declarativeSlotPool;
-    private Duration rpcTimeout = DEFAULT_TIMEOUT;
+    private Duration jobMasterRpcTimeout = DEFAULT_RPC_TIMEOUT;
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
     private JobManagerJobMetricGroup jobManagerJobMetricGroup =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
@@ -118,8 +118,8 @@ public class AdaptiveSchedulerBuilder {
                         jobGraph.getJobID(),
                         new DefaultAllocatedSlotPool(),
                         ignored -> {},
-                        DEFAULT_TIMEOUT,
-                        rpcTimeout,
+                        DEFAULT_RPC_TIMEOUT,
+                        jobMasterRpcTimeout,
                         Duration.ZERO,
                         mainThreadExecutor);
         this.executorService = executorService;
@@ -161,7 +161,7 @@ public class AdaptiveSchedulerBuilder {
     }
 
     public AdaptiveSchedulerBuilder setRpcTimeout(final Duration rpcTimeout) {
-        this.rpcTimeout = rpcTimeout;
+        this.jobMasterRpcTimeout = rpcTimeout;
         return this;
     }
 
@@ -251,7 +251,7 @@ public class AdaptiveSchedulerBuilder {
                         new DefaultExecutionDeploymentTracker(),
                         executorService,
                         executorService,
-                        rpcTimeout,
+                        jobMasterRpcTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
                         shuffleMaster,

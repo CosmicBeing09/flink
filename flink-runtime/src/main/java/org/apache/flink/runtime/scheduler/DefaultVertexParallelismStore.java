@@ -30,7 +30,7 @@ import java.util.function.Function;
 /** Maintains the configured parallelisms for vertices, which should be defined by a scheduler. */
 public class DefaultVertexParallelismStore implements MutableVertexParallelismStore {
 
-    private static final Function<Integer, Optional<String>> RESCALE_MAX_REJECT =
+    private static final Function<Integer, Optional<String>> FIXED_MAX_PARALLELISM_REJECTION_MESSAGE =
             maxParallelism -> Optional.of("Cannot change the max parallelism.");
 
     /**
@@ -45,7 +45,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
     public static Optional<VertexParallelismStore> applyJobResourceRequirements(
             VertexParallelismStore oldVertexParallelismStore,
             JobResourceRequirements jobResourceRequirements) {
-        final DefaultVertexParallelismStore newVertexParallelismStore =
+        final DefaultVertexParallelismStore updatedVertexParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
         for (final JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
@@ -55,18 +55,18 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
                     jobResourceRequirements.getParallelism(jobVertexId);
             final int minParallelism = parallelismSettings.getLowerBound();
             final int parallelism = parallelismSettings.getUpperBound();
-            newVertexParallelismStore.setParallelismInfo(
+            updatedVertexParallelismStore.setParallelismInfo(
                     jobVertexId,
                     new DefaultVertexParallelismInfo(
                             minParallelism,
                             parallelism,
                             oldVertexParallelismInfo.getMaxParallelism(),
-                            RESCALE_MAX_REJECT));
+                            FIXED_MAX_PARALLELISM_REJECTION_MESSAGE));
             changed |=
                     oldVertexParallelismInfo.getMinParallelism() != minParallelism
                             || oldVertexParallelismInfo.getParallelism() != parallelism;
         }
-        return changed ? Optional.of(newVertexParallelismStore) : Optional.empty();
+        return changed ? Optional.of(updatedVertexParallelismStore) : Optional.empty();
     }
 
     private final Map<JobVertexID, VertexParallelismInformation> vertexToParallelismInfo =

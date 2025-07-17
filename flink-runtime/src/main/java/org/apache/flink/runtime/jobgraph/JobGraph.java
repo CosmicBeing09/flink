@@ -70,7 +70,7 @@ public class JobGraph implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private static final ConfigOption<Long> INITIAL_CLIENT_HEARTBEAT_TIMEOUT =
+    private static final ConfigOption<Long> CLIENT_SUBMISSION_HEARTBEAT_TIMEOUT =
             ConfigOptions.key("initialClientHeartbeatTimeout")
                     .longType()
                     .defaultValue(Long.MIN_VALUE);
@@ -661,10 +661,10 @@ public class JobGraph implements Serializable {
     }
 
     public void setInitialClientHeartbeatTimeout(long initialClientHeartbeatTimeout) {
-        jobConfiguration.set(INITIAL_CLIENT_HEARTBEAT_TIMEOUT, initialClientHeartbeatTimeout);
+        jobConfiguration.set(CLIENT_SUBMISSION_HEARTBEAT_TIMEOUT, initialClientHeartbeatTimeout);
     }
 
     public long getInitialClientHeartbeatTimeout() {
-        return jobConfiguration.get(INITIAL_CLIENT_HEARTBEAT_TIMEOUT);
+        return jobConfiguration.get(CLIENT_SUBMISSION_HEARTBEAT_TIMEOUT);
     }
 }

@@ -45,7 +45,7 @@ class RestServerEndpointConfigurationTest {
         originalConfig.set(RestOptions.BIND_ADDRESS, BIND_ADDRESS);
         originalConfig.set(RestOptions.BIND_PORT, BIND_PORT);
         originalConfig.set(RestOptions.SERVER_MAX_CONTENT_LENGTH, CONTENT_LENGTH);
-        originalConfig.set(WebOptions.TMP_DIR, file.getAbsolutePath());
+        originalConfig.set(WebOptions.webRestApiTempDir, file.getAbsolutePath());
 
         final RestServerEndpointConfiguration result =
                 RestServerEndpointConfiguration.fromConfiguration(originalConfig);

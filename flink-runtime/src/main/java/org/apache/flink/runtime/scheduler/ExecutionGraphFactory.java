@@ -43,7 +43,7 @@ public interface ExecutionGraphFactory {
      * @param checkpointIdCounter checkpointIdCounter to pass to the CheckpointCoordinator
      * @param checkpointStatsTracker The {@link CheckpointStatsTracker} that's used for collecting
      *     the checkpoint-related statistics.
-     * @param partitionLocationConstraint partitionLocationConstraint for this job
+     * @param taskDeploymentPartitionLocationConstraint taskDeploymentPartitionLocationConstraint for this job
      * @param initializationTimestamp initializationTimestamp when the ExecutionGraph was created
      * @param vertexAttemptNumberStore vertexAttemptNumberStore keeping information about the vertex
      *     attempts of previous runs
@@ -61,7 +61,7 @@ public interface ExecutionGraphFactory {
             CheckpointsCleaner checkpointsCleaner,
             CheckpointIDCounter checkpointIdCounter,
             CheckpointStatsTracker checkpointStatsTracker,
-            TaskDeploymentDescriptorFactory.PartitionLocationConstraint partitionLocationConstraint,
+            TaskDeploymentDescriptorFactory.PartitionLocationConstraint taskDeploymentPartitionLocationConstraint,
             long initializationTimestamp,
             VertexAttemptNumberStore vertexAttemptNumberStore,
             VertexParallelismStore vertexParallelismStore,

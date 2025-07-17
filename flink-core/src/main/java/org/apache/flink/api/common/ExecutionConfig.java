@@ -231,7 +231,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
      */
     @PublicEvolving
     public ExecutionConfig setLatencyTrackingInterval(long interval) {
-        configuration.set(MetricOptions.LATENCY_INTERVAL, Duration.ofMillis(interval));
+        configuration.set(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL, Duration.ofMillis(interval));
         return this;
     }
 
@@ -242,12 +242,12 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
      */
     @PublicEvolving
     public long getLatencyTrackingInterval() {
-        return configuration.get(MetricOptions.LATENCY_INTERVAL).toMillis();
+        return configuration.get(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL).toMillis();
     }
 
     @Internal
     public boolean isLatencyTrackingConfigured() {
-        return configuration.getOptional(MetricOptions.LATENCY_INTERVAL).isPresent();
+        return configuration.getOptional(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL).isPresent();
     }
 
     @Internal
@@ -1127,7 +1127,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
                 .ifPresent(this::setGlobalJobParameters);
 
         configuration
-                .getOptional(MetricOptions.LATENCY_INTERVAL)
+                .getOptional(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL)
                 .ifPresent(interval -> setLatencyTrackingInterval(interval.toMillis()));
 
         configuration

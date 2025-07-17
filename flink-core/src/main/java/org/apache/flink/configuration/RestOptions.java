@@ -206,13 +206,13 @@ public class RestOptions {
     public static final ConfigOption<Duration> CACHE_CHECKPOINT_STATISTICS_TIMEOUT =
             key("rest.cache.checkpoint-statistics.timeout")
                     .durationType()
-                    .defaultValue(WebOptions.REFRESH_INTERVAL.defaultValue())
-                    .withFallbackKeys(WebOptions.REFRESH_INTERVAL.key())
+                    .defaultValue(WebOptions.webFrontendRefreshInterval.defaultValue())
+                    .withFallbackKeys(WebOptions.webFrontendRefreshInterval.key())
                     .withDescription(
                             Description.builder()
                                     .text(
                                             "Duration from write after which cached checkpoints statistics are cleaned up. For backwards compatibility, if no value is configured, %s will be used instead.",
-                                            code(WebOptions.REFRESH_INTERVAL.key()))
+                                            code(WebOptions.webFrontendRefreshInterval.key()))
                                     .build());
 
     /** Maximum number of entries in the checkpoint statistics cache. */

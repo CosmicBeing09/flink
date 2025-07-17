@@ -97,7 +97,7 @@ class StreamSourceOperatorLatencyMetricsTest {
                 (operator, timeProvider) -> {
                     Configuration tmConfig = new Configuration();
                     tmConfig.set(
-                            MetricOptions.LATENCY_INTERVAL, Duration.ofMillis(latencyMarkInterval));
+                            MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL, Duration.ofMillis(latencyMarkInterval));
 
                     Environment env =
                             MockEnvironment.builder()
@@ -122,7 +122,7 @@ class StreamSourceOperatorLatencyMetricsTest {
                     executionConfig.setLatencyTrackingInterval(latencyMarkInterval);
 
                     Configuration tmConfig = new Configuration();
-                    tmConfig.set(MetricOptions.LATENCY_INTERVAL, Duration.ofMillis(0L));
+                    tmConfig.set(MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL, Duration.ofMillis(0L));
 
                     Environment env =
                             MockEnvironment.builder()
@@ -145,7 +145,7 @@ class StreamSourceOperatorLatencyMetricsTest {
                 (operator, timeProvider) -> {
                     Configuration tmConfig = new Configuration();
                     tmConfig.set(
-                            MetricOptions.LATENCY_INTERVAL, Duration.ofMillis(latencyMarkInterval));
+                            MetricOptions.SOURCE_LATENCY_EMIT_INTERVAL, Duration.ofMillis(latencyMarkInterval));
 
                     Environment env =
                             MockEnvironment.builder()

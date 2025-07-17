@@ -110,7 +110,7 @@ public class RestHandlerConfiguration {
     }
 
     public static RestHandlerConfiguration fromConfiguration(Configuration configuration) {
-        final long refreshInterval = configuration.get(WebOptions.REFRESH_INTERVAL).toMillis();
+        final long refreshInterval = configuration.get(WebOptions.webFrontendRefreshInterval).toMillis();
 
         final int checkpointHistorySize = configuration.get(WebOptions.CHECKPOINTS_HISTORY_SIZE);
         final Duration checkpointStatsSnapshotCacheExpireAfterWrite =
@@ -123,7 +123,7 @@ public class RestHandlerConfiguration {
         final Duration timeout = configuration.get(WebOptions.TIMEOUT);
 
         final String rootDir = "flink-web-ui";
-        final File webUiDir = new File(configuration.get(WebOptions.TMP_DIR), rootDir);
+        final File webUiDir = new File(configuration.get(WebOptions.webRestApiTempDir), rootDir);
 
         final boolean webSubmitEnabled = configuration.get(WebOptions.SUBMIT_ENABLE);
         final boolean webCancelEnabled = configuration.get(WebOptions.CANCEL_ENABLE);
