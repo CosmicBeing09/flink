@@ -143,7 +143,7 @@ public class ConfigurationUtils {
                 && !standaloneClusterStartupPeriodTime.isNegative()) {
             timeout = standaloneClusterStartupPeriodTime;
         } else {
-            timeout = configuration.get(JobManagerOptions.SLOT_REQUEST_TIMEOUT);
+            timeout = configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT);
         }
         return timeout;
     }

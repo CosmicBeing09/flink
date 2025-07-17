@@ -198,7 +198,7 @@ public class ResourceManagerOptions {
      * resource manager of the standalone cluster expects new task executors to be registered, and
      * will not fail slot requests that can not be satisfied by any current registered slots. After
      * this time, it will fail pending and new coming requests immediately that can not be satisfied
-     * by registered slots. If not set, {@link JobManagerOptions#SLOT_REQUEST_TIMEOUT} will be used
+     * by registered slots. If not set, {@link JobManagerOptions#JOB_MANAGER_SLOT_REQUEST_TIMEOUT} will be used
      * by default.
      */
     public static final ConfigOption<Duration> STANDALONE_CLUSTER_STARTUP_PERIOD_TIME =
@@ -214,7 +214,7 @@ public class ResourceManagerOptions {
                                                     + "fail pending and new coming requests immediately that can not be satisfied by registered slots. If not "
                                                     + "set, %s will be used by default.",
                                             TextElement.code(
-                                                    JobManagerOptions.SLOT_REQUEST_TIMEOUT.key()))
+                                                    JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT.key()))
                                     .build());
 
     /** The timeout for an idle task manager to be released. */

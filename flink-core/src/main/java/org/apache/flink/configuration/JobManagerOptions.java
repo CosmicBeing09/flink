@@ -431,7 +431,7 @@ public class JobManagerOptions {
 
     /** The timeout in milliseconds for requesting a slot from Slot Pool. */
     @Documentation.Section(Documentation.Sections.EXPERT_SCHEDULING)
-    public static final ConfigOption<Duration> SLOT_REQUEST_TIMEOUT =
+    public static final ConfigOption<Duration> JOB_MANAGER_SLOT_REQUEST_TIMEOUT =
             key("slot.request.timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(5L * 60L * 1000L))
@@ -439,7 +439,7 @@ public class JobManagerOptions {
 
     /** The timeout in milliseconds for a idle slot in Slot Pool. */
     @Documentation.Section(Documentation.Sections.EXPERT_SCHEDULING)
-    public static final ConfigOption<Duration> SLOT_IDLE_TIMEOUT =
+    public static final ConfigOption<Duration> JOB_MANAGER_SLOT_IDLE_TIMEOUT =
             key("slot.idle.timeout")
                     .durationType()
                     // default matches heartbeat.timeout so that sticky allocation is not lost on
@@ -448,7 +448,7 @@ public class JobManagerOptions {
                     .withDescription("The timeout for a idle slot in Slot Pool.");
 
     @Documentation.Section(Documentation.Sections.EXPERT_SCHEDULING)
-    public static final ConfigOption<Duration> SLOT_REQUEST_MAX_INTERVAL =
+    public static final ConfigOption<Duration> JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL =
             key("slot.request.max-interval")
                     .durationType()
                     .defaultValue(Duration.ofMillis(20L))
