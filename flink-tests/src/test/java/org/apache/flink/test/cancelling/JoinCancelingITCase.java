@@ -79,18 +79,18 @@ public class JoinCancelingITCase extends CancelingTestBase {
     }
 
     @Test
-    public void testCancelSortMatchWhileReadingSlowInputs() throws Exception {
+    public void testCancelSlowRead() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), true);
     }
 
     @Test
-    public void testCancelSortMatchWhileReadingFastInputs() throws Exception {
+    public void testCancelFastRead() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), false);
     }
 
     @Test
-    public void testCancelSortMatchPriorToFirstRecordReading() throws Exception {
-        executeTask(new StuckInOpenMatcher<Integer>(), false);
+    public void testCancelBeforeRead() throws Exception {
+        executeTask(new BlockOnOpen<Integer>(), false);
     }
 
     private void executeTaskWithGenerator(
@@ -122,7 +122,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
     }
 
     @Test
-    public void testCancelSortMatchWhileDoingHeavySorting() throws Exception {
+    public void testCancelDuringSort() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         HeavyCompareGeneratorInputFormat input = new HeavyCompareGeneratorInputFormat(100);
         DataSet<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
@@ -154,21 +154,21 @@ public class JoinCancelingITCase extends CancelingTestBase {
     // -----------------
 
     @Test
-    public void testCancelSortMatchWhileJoining() throws Exception {
-        executeTaskWithGenerator(new DelayingMatcher<Integer>(), 500, 3, 10 * 1000, 20 * 1000);
+    public void testCancelDuringJoin() throws Exception {
+        executeTaskWithGenerator(new SlowMatcher<Integer>(), 500, 3, 10 * 1000, 20 * 1000);
     }
 
     @Test
-    public void testCancelSortMatchWithLongCancellingResponse() throws Exception {
+    public void testCancelSlowResponse() throws Exception {
         executeTaskWithGenerator(
-                new LongCancelTimeMatcher<Integer>(), 500, 3, 10 * 1000, 10 * 1000);
+                new InterruptibleMatcher<Integer>(), 500, 3, 10 * 1000, 10 * 1000);
     }
 
     // -------------------------------------- Test System corner cases
     // ---------------------------------
 
     @Test
-    public void testCancelSortMatchWithHighparallelism() throws Exception {
+    public void testCancelHighParallelism() throws Exception {
         executeTask(new SimpleMatcher<Integer>(), false, 64);
     }
 
@@ -184,7 +184,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
         }
     }
 
-    private static final class DelayingMatcher<IN>
+    private static final class SlowMatcher<IN>
             implements JoinFunction<Tuple2<IN, IN>, Tuple2<IN, IN>, Tuple2<IN, IN>> {
         private static final long serialVersionUID = 1L;
 
@@ -197,7 +197,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
         }
     }
 
-    private static final class LongCancelTimeMatcher<IN>
+    private static final class InterruptibleMatcher<IN>
             implements JoinFunction<Tuple2<IN, IN>, Tuple2<IN, IN>, Tuple2<IN, IN>> {
         private static final long serialVersionUID = 1L;
 
@@ -217,7 +217,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
         }
     }
 
-    private static final class StuckInOpenMatcher<IN>
+    private static final class BlockOnOpen<IN>
             extends RichJoinFunction<Tuple2<IN, IN>, Tuple2<IN, IN>, Tuple2<IN, IN>> {
         private static final long serialVersionUID = 1L;
 
