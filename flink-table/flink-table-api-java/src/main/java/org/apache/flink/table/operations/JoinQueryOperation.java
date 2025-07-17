@@ -35,8 +35,8 @@ import java.util.stream.Stream;
 @Internal
 public class JoinQueryOperation implements QueryOperation {
 
-    private static final String INPUT_1_ALIAS = "$$T1_JOIN";
-    private static final String INPUT_2_ALIAS = "$$T2_JOIN";
+    private static final String LEFT_INPUT_ALIAS = "$$T1_JOIN";
+    private static final String RIGHT_INPUT_ALIAS = "$$T2_JOIN";
     private final QueryOperation left;
     private final QueryOperation right;
     private final JoinType joinType;
@@ -114,14 +114,14 @@ public class JoinQueryOperation implements QueryOperation {
     public String asSerializableString() {
 
         Map<Integer, String> inputAliases = new HashMap<>();
-        inputAliases.put(0, INPUT_1_ALIAS);
-        inputAliases.put(1, correlated ? LateralTableQueryOperation.LATERAL_TABLE_ALIAS : INPUT_2_ALIAS);
+        inputAliases.put(0, LEFT_INPUT_ALIAS);
+        inputAliases.put(1, correlated ? LateralTableQueryOperation.LATERAL_TABLE_ALIAS : RIGHT_INPUT_ALIAS);
 
         return String.format(
                 "SELECT %s FROM (%s\n) %s %s JOIN %s ON %s",
                 getSelectList(),
                 OperationUtils.indent(left.asSerializableString()),
-                INPUT_1_ALIAS,
+                LEFT_INPUT_ALIAS,
                 joinType.toString().replaceAll("_", " "),
                 rightToSerializable(),
                 OperationExpressionsUtils.scopeReferencesWithAlias(inputAliases, condition)
@@ -130,11 +130,11 @@ public class JoinQueryOperation implements QueryOperation {
 
     private String getSelectList() {
         String leftColumns =
-                OperationUtils.formatSelectColumns(left.getResolvedSchema(), INPUT_1_ALIAS);
+                OperationUtils.formatSelectColumns(left.getResolvedSchema(), LEFT_INPUT_ALIAS);
         String rightColumns =
                 OperationUtils.formatSelectColumns(
                         right.getResolvedSchema(),
-                        correlated ? LateralTableQueryOperation.LATERAL_TABLE_ALIAS : INPUT_2_ALIAS);
+                        correlated ? LateralTableQueryOperation.LATERAL_TABLE_ALIAS : RIGHT_INPUT_ALIAS);
         return leftColumns + ", " + rightColumns;
     }
 
@@ -147,7 +147,7 @@ public class JoinQueryOperation implements QueryOperation {
         if (!correlated) {
             s.append("\n)");
             s.append(" ");
-            s.append(INPUT_2_ALIAS);
+            s.append(RIGHT_INPUT_ALIAS);
         }
         return s.toString();
     }
