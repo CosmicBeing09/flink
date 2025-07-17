@@ -60,15 +60,15 @@ import static org.apache.flink.table.types.utils.DataTypeUtils.removeTimeAttribu
 @PublicEvolving
 public final class ResolvedSchema {
 
-    private final List<Column> columns;
+    private final List<Column> schemaColumns;
     private final List<WatermarkSpec> watermarkSpecs;
     private final @Nullable UniqueConstraint primaryKey;
 
     public ResolvedSchema(
-            List<Column> columns,
+            List<Column> schemaColumns,
             List<WatermarkSpec> watermarkSpecs,
             @Nullable UniqueConstraint primaryKey) {
-        this.columns = Preconditions.checkNotNull(columns, "Columns must not be null.");
+        this.schemaColumns = Preconditions.checkNotNull(schemaColumns, "Columns must not be null.");
         this.watermarkSpecs =
                 Preconditions.checkNotNull(watermarkSpecs, "Watermark specs must not be null.");
         this.primaryKey = primaryKey;
@@ -104,24 +104,24 @@ public final class ResolvedSchema {
 
     /** Returns the number of {@link Column}s of this schema. */
     public int getColumnCount() {
-        return columns.size();
+        return schemaColumns.size();
     }
 
     /** Returns all {@link Column}s of this schema. */
     public List<Column> getColumns() {
-        return columns;
+        return schemaColumns;
     }
 
     /** Returns all column names. It does not distinguish between different kinds of columns. */
     public List<String> getColumnNames() {
-        return columns.stream().map(Column::getName).collect(Collectors.toList());
+        return schemaColumns.stream().map(Column::getName).collect(Collectors.toList());
     }
 
     /**
      * Returns all column data types. It does not distinguish between different kinds of columns.
      */
     public List<DataType> getColumnDataTypes() {
-        return columns.stream().map(Column::getDataType).collect(Collectors.toList());
+        return schemaColumns.stream().map(Column::getDataType).collect(Collectors.toList());
     }
 
     /**
@@ -130,10 +130,10 @@ public final class ResolvedSchema {
      * @param columnIndex the index of the column
      */
     public Optional<Column> getColumn(int columnIndex) {
-        if (columnIndex < 0 || columnIndex >= columns.size()) {
+        if (columnIndex < 0 || columnIndex >= schemaColumns.size()) {
             return Optional.empty();
         }
-        return Optional.of(this.columns.get(columnIndex));
+        return Optional.of(this.schemaColumns.get(columnIndex));
     }
 
     /**
@@ -142,7 +142,7 @@ public final class ResolvedSchema {
      * @param columnName the name of the column
      */
     public Optional<Column> getColumn(String columnName) {
-        return this.columns.stream()
+        return this.schemaColumns.stream()
                 .filter(column -> column.getName().equals(columnName))
                 .findFirst();
     }
@@ -223,7 +223,7 @@ public final class ResolvedSchema {
     @Override
     public String toString() {
         final List<Object> components = new ArrayList<>();
-        components.addAll(columns);
+        components.addAll(schemaColumns);
         components.addAll(watermarkSpecs);
         if (primaryKey != null) {
             components.add(primaryKey);
@@ -243,20 +243,20 @@ public final class ResolvedSchema {
             return false;
         }
         final ResolvedSchema that = (ResolvedSchema) o;
-        return Objects.equals(columns, that.columns)
+        return Objects.equals(schemaColumns, that.schemaColumns)
                 && Objects.equals(watermarkSpecs, that.watermarkSpecs)
                 && Objects.equals(primaryKey, that.primaryKey);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(columns, watermarkSpecs, primaryKey);
+        return Objects.hash(schemaColumns, watermarkSpecs, primaryKey);
     }
 
     // --------------------------------------------------------------------------------------------
 
     private DataType toRowDataType(Predicate<Column> columnPredicate) {
-        return columns.stream()
+        return schemaColumns.stream()
                 .filter(columnPredicate)
                 .map(ResolvedSchema::columnToField)
                 .collect(Collectors.collectingAndThen(Collectors.toList(), DataTypes::ROW))
