@@ -106,7 +106,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
         dos.writeInt(operatorState.getMaxParallelism());
 
         // Coordinator state
-        serializeStreamOutput(operatorState.getCoordinatorState(), dos);
+        serializeStreamStateHandle(operatorState.getCoordinatorState(), dos);
 
         // Sub task states
         if (operatorState.isFullyFinished()) {
@@ -204,7 +204,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @Override
     public void serializeOutputStateHandle(
             OutputStateHandle handle, DataOutputStream dos) throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        channelStateHandleSerializer.writeOutputStateHandle(handle, dos);
     }
 
     @VisibleForTesting
@@ -218,7 +218,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @Override
     public void serializeInputChannelStateHandle(InputStateHandle handle, DataOutputStream dos)
             throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        channelStateHandleSerializer.writeInputStateHandle(handle, dos);
     }
 
     @VisibleForTesting
@@ -255,13 +255,13 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     // ------------------------------------------------------------------------
 
     @VisibleForTesting
-    public static void serializeStreamOutput(
+    public static void serializeStreamStateHandle(
             StreamStateHandle stateHandle, DataOutputStream dos) throws IOException {
         MetadataV2V3SerializerBase.serializeStreamStateHandle(stateHandle, dos);
     }
 
     @VisibleForTesting
-    public static StreamStateHandle deserializeStreamOutput(DataInputStream dis)
+    public static StreamStateHandle deserializeStreamStateHandle(DataInputStream dis)
             throws IOException {
         return MetadataV2V3SerializerBase.deserializeStreamStateHandle(dis, null);
     }
