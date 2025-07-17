@@ -43,31 +43,31 @@ import static org.apache.flink.table.types.logical.utils.LogicalTypeCasts.suppor
 @Internal
 public final class CastCallContext implements CallContext {
 
-    private final CallContext originalContext;
+    private final CallContext delegateContext;
 
     private final @Nullable DataType outputDataType;
 
-    private List<DataType> expectedArguments;
+    private List<DataType> adaptedArgumentDataTypes;
 
     public CastCallContext(CallContext originalContext, @Nullable DataType outputDataType) {
-        this.originalContext = originalContext;
-        this.expectedArguments = originalContext.getArgumentDataTypes();
+        this.delegateContext = originalContext;
+        this.adaptedArgumentDataTypes = originalContext.getArgumentDataTypes();
         this.outputDataType = outputDataType;
     }
 
     public void setExpectedArguments(List<DataType> expectedArguments) {
-        Preconditions.checkArgument(this.expectedArguments.size() == expectedArguments.size());
-        this.expectedArguments = expectedArguments;
+        Preconditions.checkArgument(this.adaptedArgumentDataTypes.size() == expectedArguments.size());
+        this.adaptedArgumentDataTypes = expectedArguments;
     }
 
     @Override
     public DataTypeFactory getDataTypeFactory() {
-        return originalContext.getDataTypeFactory();
+        return delegateContext.getDataTypeFactory();
     }
 
     @Override
     public FunctionDefinition getFunctionDefinition() {
-        return originalContext.getFunctionDefinition();
+        return delegateContext.getFunctionDefinition();
     }
 
     @Override
@@ -75,13 +75,13 @@ public final class CastCallContext implements CallContext {
         if (isCasted(pos)) {
             return false;
         }
-        return originalContext.isArgumentLiteral(pos);
+        return delegateContext.isArgumentLiteral(pos);
     }
 
     @Override
     public boolean isArgumentNull(int pos) {
         // null remains null regardless of casting
-        return originalContext.isArgumentNull(pos);
+        return delegateContext.isArgumentNull(pos);
     }
 
     @Override
@@ -89,23 +89,23 @@ public final class CastCallContext implements CallContext {
         if (isCasted(pos)) {
             return Optional.empty();
         }
-        return originalContext.getArgumentValue(pos, clazz);
+        return delegateContext.getArgumentValue(pos, clazz);
     }
 
     @Override
     public Optional<TableSemantics> getTableSemantics(int pos) {
         // table arguments remain regardless of casting
-        return originalContext.getTableSemantics(pos);
+        return delegateContext.getTableSemantics(pos);
     }
 
     @Override
     public String getName() {
-        return originalContext.getName();
+        return delegateContext.getName();
     }
 
     @Override
     public List<DataType> getArgumentDataTypes() {
-        return expectedArguments;
+        return adaptedArgumentDataTypes;
     }
 
     @Override
@@ -115,13 +115,13 @@ public final class CastCallContext implements CallContext {
 
     @Override
     public boolean isGroupedAggregation() {
-        return originalContext.isGroupedAggregation();
+        return delegateContext.isGroupedAggregation();
     }
 
     private boolean isCasted(int pos) {
         final LogicalType originalType =
-                originalContext.getArgumentDataTypes().get(pos).getLogicalType();
-        final LogicalType expectedType = expectedArguments.get(pos).getLogicalType();
+                delegateContext.getArgumentDataTypes().get(pos).getLogicalType();
+        final LogicalType expectedType = adaptedArgumentDataTypes.get(pos).getLogicalType();
         return !supportsAvoidingCast(originalType, expectedType);
     }
 }
