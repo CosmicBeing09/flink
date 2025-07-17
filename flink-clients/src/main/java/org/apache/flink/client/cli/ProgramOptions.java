@@ -42,7 +42,7 @@ import static org.apache.flink.client.cli.CliFrontendParser.DETACHED_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.JAR_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.PARALLELISM_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SHUTDOWN_IF_ATTACHED_OPTION;
-import static org.apache.flink.client.cli.CliFrontendParser.YARN_DETACHED_OPTION;
+import static org.apache.flink.client.cli.CliFrontendParser.DEPRECATED_YARN_DETACHED_OPTION;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.containsPythonDependencyOptions;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.createPythonProgramOptions;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.isPythonEntryPoint;
@@ -114,7 +114,7 @@ public class ProgramOptions extends CommandLineOptions {
 
         detachedMode =
                 line.hasOption(DETACHED_OPTION.getOpt())
-                        || line.hasOption(YARN_DETACHED_OPTION.getOpt());
+                        || line.hasOption(DEPRECATED_YARN_DETACHED_OPTION.getOpt());
         shutdownOnAttachedExit = line.hasOption(SHUTDOWN_IF_ATTACHED_OPTION.getOpt());
 
         this.savepointSettings = CliFrontendParser.createSavepointRestoreSettings(line);
