@@ -250,7 +250,7 @@ public class JobMasterTester implements Closeable {
                             final int numVertices =
                                     Iterables.size(
                                             executionGraphInfo
-                                                    .getArchivedExecutionGraph()
+                                                    .getExecutionGraph()
                                                     .getAllExecutionVertices());
                             descriptors.put(
                                     taskDeploymentDescriptor.getExecutionAttemptId(),

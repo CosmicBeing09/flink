@@ -47,9 +47,9 @@ public class ErrorInfo implements Serializable {
      * @return a {@code ErrorInfo} containing a generic {@link FlinkException} in case of a missing
      *     error cause.
      */
-    public static ErrorInfo createErrorInfoWithNullableCause(
+    public static ErrorInfo createWithNullableCause(
             @Nullable Throwable exception, long timestamp) {
-        return new ErrorInfo(handleMissingThrowable(exception), timestamp);
+        return new ErrorInfo(ensureCause(exception), timestamp);
     }
 
     /**
@@ -58,7 +58,7 @@ public class ErrorInfo implements Serializable {
      * @param throwable The actual exception.
      * @return a {@link FlinkException} if no exception was passed.
      */
-    public static Throwable handleMissingThrowable(@Nullable Throwable throwable) {
+    public static Throwable ensureCause(@Nullable Throwable throwable) {
         return throwable != null
                 ? throwable
                 : new FlinkException(

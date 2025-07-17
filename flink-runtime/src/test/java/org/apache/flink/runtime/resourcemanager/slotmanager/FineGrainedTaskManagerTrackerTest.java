@@ -114,7 +114,7 @@ class FineGrainedTaskManagerTrackerTest {
                                         ResourceProfile.ANY, ResourceProfile.ANY))
                 .isEmpty();
         assertThat(records).containsKey(jobId);
-        assertThat(records.get(jobId).getResourceCount(ResourceProfile.ANY)).isEqualTo(1);
+        assertThat(records.get(jobId).count(ResourceProfile.ANY)).isEqualTo(1);
     }
 
     @Test

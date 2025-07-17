@@ -654,7 +654,7 @@ class DefaultExecutionGraphDeploymentTest {
 
     private ExecutionGraph createExecutionGraph(Configuration configuration) throws Exception {
         final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         new CheckpointCoordinatorConfiguration(
                                 100,

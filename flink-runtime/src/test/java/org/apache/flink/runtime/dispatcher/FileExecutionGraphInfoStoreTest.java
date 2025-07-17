@@ -58,7 +58,6 @@ import java.util.stream.Collectors;
 
 import static org.apache.flink.runtime.dispatcher.ExecutionGraphInfoStoreTestUtils.createDefaultExecutionGraphInfoStore;
 import static org.apache.flink.runtime.dispatcher.ExecutionGraphInfoStoreTestUtils.generateJobDetails;
-import static org.apache.flink.runtime.dispatcher.ExecutionGraphInfoStoreTestUtils.generateTerminalExecutionGraphInfos;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -105,11 +104,11 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
     public void testStoredJobsOverview() throws IOException {
         final int numberExecutionGraphs = 10;
         final Collection<ExecutionGraphInfo> executionGraphInfos =
-                generateTerminalExecutionGraphInfos(numberExecutionGraphs);
+                ExecutionGraphInfoStoreTestUtils.generateTerminalInfos(numberExecutionGraphs);
 
         final List<JobStatus> jobStatuses =
                 executionGraphInfos.stream()
-                        .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                        .map(ExecutionGraphInfo::getExecutionGraph)
                         .map(ArchivedExecutionGraph::getState)
                         .collect(Collectors.toList());
 
@@ -136,7 +135,7 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
     public void testAvailableJobDetails() throws IOException {
         final int numberExecutionGraphs = 10;
         final Collection<ExecutionGraphInfo> executionGraphInfos =
-                generateTerminalExecutionGraphInfos(numberExecutionGraphs);
+                ExecutionGraphInfoStoreTestUtils.generateTerminalInfos(numberExecutionGraphs);
 
         final Collection<JobDetails> jobDetails = generateJobDetails(executionGraphInfos);
 
@@ -300,9 +299,9 @@ public class FileExecutionGraphInfoStoreTest extends TestLogger {
         final int numberExecutionGraphs = 10;
 
         final Collection<ExecutionGraphInfo> oldExecutionGraphInfos =
-                generateTerminalExecutionGraphInfos(numberExecutionGraphs);
+                ExecutionGraphInfoStoreTestUtils.generateTerminalInfos(numberExecutionGraphs);
         final Collection<ExecutionGraphInfo> newExecutionGraphInfos =
-                generateTerminalExecutionGraphInfos(numberExecutionGraphs);
+                ExecutionGraphInfoStoreTestUtils.generateTerminalInfos(numberExecutionGraphs);
 
         final Collection<JobDetails> jobDetails = generateJobDetails(newExecutionGraphInfos);
 

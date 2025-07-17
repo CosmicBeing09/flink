@@ -71,7 +71,7 @@ public class CheckpointStatsSnapshotTest {
 
         assertThat(copy.getSummaryStats().getStateSizeStats().getSum())
                 .isEqualTo(summary.getStateSizeStats().getSum());
-        assertThat(copy.getSummaryStats().getEndToEndDurationStats().getSum())
+        assertThat(copy.getSummaryStats().getDurationStats().getSum())
                 .isEqualTo(summary.getEndToEndDurationStats().getSum());
 
         assertThat(copy.getLatestRestoredCheckpoint().getCheckpointId())

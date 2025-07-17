@@ -98,7 +98,7 @@ class DefaultCheckpointStatsTrackerTest {
         // Summary should be available
         CompletedCheckpointStatsSummarySnapshot summary = snapshot.getSummaryStats();
         assertThat(summary.getStateSizeStats().getCount()).isOne();
-        assertThat(summary.getEndToEndDurationStats().getCount()).isOne();
+        assertThat(summary.getDurationStats().getCount()).isOne();
 
         // Latest completed checkpoint
         assertThat(snapshot.getHistory().getLatestCompletedCheckpoint()).isNotNull();
@@ -202,7 +202,7 @@ class DefaultCheckpointStatsTrackerTest {
         // Summary stats
         CompletedCheckpointStatsSummarySnapshot summary = snapshot.getSummaryStats();
         assertThat(summary.getStateSizeStats().getCount()).isEqualTo(2);
-        assertThat(summary.getEndToEndDurationStats().getCount()).isEqualTo(2);
+        assertThat(summary.getDurationStats().getCount()).isEqualTo(2);
 
         // History
         CheckpointStatsHistory history = snapshot.getHistory();

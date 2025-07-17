@@ -103,7 +103,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
 
         requirementListener.tryWaitSlotRequestIsDone();
 
-        assertThat(requirementListener.getRequirements().getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(requirementListener.getRequirements().count(ResourceProfile.UNKNOWN))
                 .isOne();
     }
 
@@ -143,7 +143,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
                                     assertThat(
                                                     requirementListener
                                                             .getRequirements()
-                                                            .getResourceCount(
+                                                            .count(
                                                                     ResourceProfile.UNKNOWN))
                                             .isZero(),
                             mainThreadExecutor)
@@ -160,7 +160,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
         // notifications about new slots should not affect requirements
         final PhysicalSlot newSlot = createAllocatedSlot(new AllocationID());
         declarativeSlotPoolBridge.newSlotsAreAvailable(Collections.singleton(newSlot));
-        assertThat(requirementListener.getRequirements().getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(requirementListener.getRequirements().count(ResourceProfile.UNKNOWN))
                 .isZero();
     }
 
@@ -178,7 +178,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
 
         requirementListener.tryWaitSlotRequestIsDone();
 
-        assertThat(requirementListener.getRequirements().getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(requirementListener.getRequirements().count(ResourceProfile.UNKNOWN))
                 .isOne();
     }
 
@@ -198,7 +198,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
         // releasing (==freeing) a [reserved] slot should decrease the requirements
         declarativeSlotPoolBridge.releaseSlot(
                 slotRequestId, new RuntimeException("Test exception"));
-        assertThat(requirementListener.getRequirements().getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(requirementListener.getRequirements().count(ResourceProfile.UNKNOWN))
                 .isZero();
     }
 
@@ -219,7 +219,7 @@ class DeclarativeSlotPoolBridgeResourceDeclarationTest
                 newSlot.getTaskManagerLocation().getResourceID(),
                 newSlot.getAllocationId(),
                 new RuntimeException("Test exception"));
-        assertThat(requirementListener.getRequirements().getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(requirementListener.getRequirements().count(ResourceProfile.UNKNOWN))
                 .isZero();
     }
 

@@ -158,7 +158,7 @@ public class MiniCluster implements AutoCloseableAsync {
     private final Object lock = new Object();
 
     /** The configuration for this mini cluster. */
-    private final MiniClusterConfiguration miniClusterConfiguration;
+    private final MiniClusterConfiguration config;
 
     private final Duration rpcTimeout;
 
@@ -259,7 +259,7 @@ public class MiniCluster implements AutoCloseableAsync {
             MiniClusterConfiguration miniClusterConfiguration,
             Supplier<Reference<RpcSystem>> rpcSystemSupplier) {
 
-        this.miniClusterConfiguration =
+        this.config =
                 checkNotNull(miniClusterConfiguration, "config may not be null");
         this.rpcServices =
                 new ArrayList<>(
@@ -322,11 +322,11 @@ public class MiniCluster implements AutoCloseableAsync {
             checkState(!running, "MiniCluster is already running");
 
             LOG.info("Starting Flink Mini Cluster");
-            LOG.debug("Using configuration {}", miniClusterConfiguration);
+            LOG.debug("Using configuration {}", config);
 
-            final Configuration configuration = miniClusterConfiguration.getConfiguration();
+            final Configuration configuration = config.getConfiguration();
             final boolean useSingleRpcService =
-                    miniClusterConfiguration.getRpcServiceSharing() == RpcServiceSharing.SHARED;
+                    config.getRpcServiceSharing() == RpcServiceSharing.SHARED;
 
             try {
                 workingDirectory =
@@ -366,17 +366,17 @@ public class MiniCluster implements AutoCloseableAsync {
 
                     // start a new service per component, possibly with custom bind addresses
                     final String jobManagerExternalAddress =
-                            miniClusterConfiguration.getJobManagerExternalAddress();
+                            config.getJobManagerExternalAddress();
                     final String taskManagerExternalAddress =
-                            miniClusterConfiguration.getTaskManagerExternalAddress();
+                            config.getTaskManagerExternalAddress();
                     final String jobManagerExternalPortRange =
-                            miniClusterConfiguration.getJobManagerExternalPortRange();
+                            config.getJobManagerExternalPortRange();
                     final String taskManagerExternalPortRange =
-                            miniClusterConfiguration.getTaskManagerExternalPortRange();
+                            config.getTaskManagerExternalPortRange();
                     final String jobManagerBindAddress =
-                            miniClusterConfiguration.getJobManagerBindAddress();
+                            config.getJobManagerBindAddress();
                     final String taskManagerBindAddress =
-                            miniClusterConfiguration.getTaskManagerBindAddress();
+                            config.getTaskManagerBindAddress();
 
                     dispatcherResourceManagerComponentRpcServiceFactory =
                             new DedicatedRpcServiceFactory(
@@ -423,7 +423,7 @@ public class MiniCluster implements AutoCloseableAsync {
                 delegationTokenManager =
                         DefaultDelegationTokenManagerFactory.create(
                                 configuration,
-                                miniClusterConfiguration.getPluginManager(),
+                                config.getPluginManager(),
                                 commonRpcService.getScheduledExecutor(),
                                 ioExecutor);
                 // Obtaining delegation tokens and propagating them to the local JVM receivers in a
@@ -433,7 +433,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
                 delegationTokenReceiverRepository =
                         new DelegationTokenReceiverRepository(
-                                configuration, miniClusterConfiguration.getPluginManager());
+                                configuration, config.getPluginManager());
 
                 haServicesFactory = createHighAvailabilityServicesFactory(configuration);
 
@@ -583,7 +583,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
     private HighAvailabilityServicesFactory createHighAvailabilityServicesFactory(
             Configuration configuration) {
-        final HaServices customMiniClusterHaServicesMode = miniClusterConfiguration.getHaServices();
+        final HaServices customMiniClusterHaServicesMode = config.getHaServices();
         if (customMiniClusterHaServicesMode == HaServices.WITH_LEADERSHIP_CONTROL) {
             // special feature of MiniClusters to allow the control of leadership
             // EmbeddedLeaderElection requires a single instance for leader election across multiple
@@ -628,7 +628,7 @@ public class MiniCluster implements AutoCloseableAsync {
      *
      * <p>Enabling this feature disables {@link HighAvailabilityOptions#HA_MODE} option.
      */
-    public Optional<HaLeadershipControl> getHaLeadershipControl() {
+    public Optional<HaLeadershipControl> leadershipControl() {
         synchronized (lock) {
             return haServices instanceof HaLeadershipControl
                     ? Optional.of((HaLeadershipControl) haServices)
@@ -664,11 +664,11 @@ public class MiniCluster implements AutoCloseableAsync {
                 LOG.info("Shutting down Flink Mini Cluster");
                 try {
                     final long shutdownTimeoutMillis =
-                            miniClusterConfiguration
+                            config
                                     .getConfiguration()
                                     .get(ClusterOptions.CLUSTER_SERVICES_SHUTDOWN_TIMEOUT)
                                     .toMillis();
-                    final int numComponents = 2 + miniClusterConfiguration.getNumTaskManagers();
+                    final int numComponents = 2 + config.getNumTaskManagers();
                     final Collection<CompletableFuture<Void>> componentTerminationFutures =
                             new ArrayList<>(numComponents);
 
@@ -740,7 +740,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
     @GuardedBy("lock")
     private void startTaskManagers() throws Exception {
-        final int numTaskManagers = miniClusterConfiguration.getNumTaskManagers();
+        final int numTaskManagers = config.getNumTaskManagers();
 
         LOG.info("Starting {} TaskManager(s)", numTaskManagers);
 
@@ -761,7 +761,7 @@ public class MiniCluster implements AutoCloseableAsync {
      */
     public void startTaskManager() throws Exception {
         synchronized (lock) {
-            final Configuration configuration = miniClusterConfiguration.getConfiguration();
+            final Configuration configuration = config.getConfiguration();
 
             final TaskExecutor taskExecutor =
                     TaskManagerRunner.startTaskManager(
@@ -786,12 +786,12 @@ public class MiniCluster implements AutoCloseableAsync {
 
     @VisibleForTesting
     protected boolean useLocalCommunication() {
-        return miniClusterConfiguration.getNumTaskManagers() == 1;
+        return config.getNumTaskManagers() == 1;
     }
 
     @VisibleForTesting
     public Configuration getConfiguration() {
-        return miniClusterConfiguration.getConfiguration();
+        return config.getConfiguration();
     }
 
     // HACK: temporary hack to make the changelog state backend tests work with forced
@@ -842,7 +842,7 @@ public class MiniCluster implements AutoCloseableAsync {
                 dispatcherGateway ->
                         dispatcherGateway
                                 .requestExecutionGraphInfo(jobId, rpcTimeout)
-                                .thenApply(ExecutionGraphInfo::getArchivedExecutionGraph));
+                                .thenApply(ExecutionGraphInfo::getExecutionGraph));
     }
 
     public CompletableFuture<Collection<JobStatusMessage>> listJobs() {
@@ -1149,7 +1149,7 @@ public class MiniCluster implements AutoCloseableAsync {
                                 () ->
                                         new BlobClient(
                                                 blobServerAddress,
-                                                miniClusterConfiguration.getConfiguration()));
+                                                config.getConfiguration()));
                     } catch (FlinkException e) {
                         throw new CompletionException(e);
                     }
@@ -1188,15 +1188,15 @@ public class MiniCluster implements AutoCloseableAsync {
                 ReporterSetupBuilder.METRIC_SETUP_BUILDER.fromConfiguration(
                         config,
                         DefaultReporterFilters::metricsFromConfiguration,
-                        miniClusterConfiguration.getPluginManager()),
+                        this.config.getPluginManager()),
                 ReporterSetupBuilder.TRACE_SETUP_BUILDER.fromConfiguration(
                         config,
                         DefaultReporterFilters::tracesFromConfiguration,
-                        miniClusterConfiguration.getPluginManager()),
+                        this.config.getPluginManager()),
                 ReporterSetupBuilder.EVENT_SETUP_BUILDER.fromConfiguration(
                         config,
                         DefaultReporterFilters::eventsFromConfiguration,
-                        miniClusterConfiguration.getPluginManager()));
+                        this.config.getPluginManager()));
     }
 
     /**
@@ -1553,7 +1553,7 @@ public class MiniCluster implements AutoCloseableAsync {
 
         /**
          * Enables or disables {@link HaLeadershipControl} in {@link
-         * MiniCluster#getHaLeadershipControl}.
+         * MiniCluster#leadershipControl}.
          *
          * <p>{@link HaLeadershipControl} allows granting and revoking leadership of HA components.
          * Enabling this feature disables {@link HighAvailabilityOptions#HA_MODE} option.

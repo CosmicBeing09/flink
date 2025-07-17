@@ -223,7 +223,7 @@ abstract class StateWithExecutionGraph implements State {
                 executionGraph.getCheckpointCoordinatorConfiguration();
         if (checkpointCoordinatorConfiguration != null
                 && checkpointCoordinatorConfiguration.isCheckpointingEnabled()
-                && checkpointCoordinatorConfiguration.isEnableCheckpointsAfterTasksFinish()) {
+                && checkpointCoordinatorConfiguration.areCheckpointsEnabledAfterFinish()) {
             vertexEndOfDataListener.recordTaskEndOfData(executionAttemptID);
             if (vertexEndOfDataListener.areAllTasksOfJobVertexEndOfData(
                     executionAttemptID.getJobVertexId())) {
@@ -425,7 +425,7 @@ abstract class StateWithExecutionGraph implements State {
                 failureCollection.add(
                         ExceptionHistoryEntry.create(execution, taskName, failureLabels));
                 onFailure(
-                        ErrorInfo.handleMissingThrowable(
+                        ErrorInfo.ensureCause(
                                 taskExecutionStateTransition.getError(userCodeClassLoader)),
                         failureLabels);
             }

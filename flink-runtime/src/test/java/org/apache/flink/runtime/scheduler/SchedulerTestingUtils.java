@@ -154,7 +154,7 @@ public class SchedulerTestingUtils {
             }
         }
 
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         config,
                         serializedStateBackend,
@@ -168,7 +168,7 @@ public class SchedulerTestingUtils {
         return StreamSupport.stream(
                         scheduler
                                 .requestJob()
-                                .getArchivedExecutionGraph()
+                                .getExecutionGraph()
                                 .getAllExecutionVertices()
                                 .spliterator(),
                         false)

@@ -362,7 +362,7 @@ class CheckpointResourcesCleanupRunnerTest {
                                 Objects.requireNonNull(
                                                 jobManagerRunnerResult
                                                         .getExecutionGraphInfo()
-                                                        .getArchivedExecutionGraph()
+                                                        .getExecutionGraph()
                                                         .getFailureInfo())
                                         .getException()
                                         .equals(expectedError),
@@ -490,7 +490,7 @@ class CheckpointResourcesCleanupRunnerTest {
                 jobResult,
                 initializationTimestamp,
                 actualExecutionGraphInfo ->
-                        assertion.apply(actualExecutionGraphInfo.getArchivedExecutionGraph()));
+                        assertion.apply(actualExecutionGraphInfo.getExecutionGraph()));
     }
 
     private static void testRequestJob(

@@ -102,7 +102,7 @@ public class JobGraph implements ExecutionPlan {
     private SerializedValue<ExecutionConfig> serializedExecutionConfig;
 
     /** The settings for the job checkpoints. */
-    private JobCheckpointingSettings snapshotSettings;
+    private JobCheckpointingSettings checkpointSettings;
 
     /** Savepoint restore settings. */
     private SavepointRestoreSettings savepointRestoreSettings = SavepointRestoreSettings.none();
@@ -391,8 +391,8 @@ public class JobGraph implements ExecutionPlan {
      *
      * @param settings The snapshot settings
      */
-    public void setSnapshotSettings(JobCheckpointingSettings settings) {
-        this.snapshotSettings = settings;
+    public void setCheckpointingSettings(JobCheckpointingSettings settings) {
+        this.checkpointSettings = settings;
     }
 
     /**
@@ -403,7 +403,7 @@ public class JobGraph implements ExecutionPlan {
      */
     @Override
     public JobCheckpointingSettings getCheckpointingSettings() {
-        return snapshotSettings;
+        return checkpointSettings;
     }
 
     /**

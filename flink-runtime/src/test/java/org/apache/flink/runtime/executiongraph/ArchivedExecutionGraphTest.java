@@ -151,7 +151,7 @@ public class ArchivedExecutionGraphTest {
     void testSerialization() throws IOException, ClassNotFoundException {
         ArchivedExecutionGraph archivedGraph = ArchivedExecutionGraph.createFrom(runtimeGraph);
 
-        verifySerializability(archivedGraph);
+        verifySerialization(archivedGraph);
     }
 
     @Test
@@ -254,7 +254,7 @@ public class ArchivedExecutionGraphTest {
         // -------------------------------------------------------------------------------------------------------------
         // ExecutionGraph
         // -------------------------------------------------------------------------------------------------------------
-        assertThat(runtimeGraph.getJsonPlan()).isEqualTo(archivedGraph.getJsonPlan());
+        assertThat(runtimeGraph.getPlan()).isEqualTo(archivedGraph.getPlan());
         assertThat(runtimeGraph.getJobID()).isEqualTo(archivedGraph.getJobID());
         assertThat(runtimeGraph.getJobName()).isEqualTo(archivedGraph.getJobName());
         assertThat(runtimeGraph.getState()).isEqualTo(archivedGraph.getState());
@@ -288,7 +288,7 @@ public class ArchivedExecutionGraphTest {
 
         List<Function<CompletedCheckpointStatsSummarySnapshot, StatsSummarySnapshot>> meters =
                 asList(
-                        CompletedCheckpointStatsSummarySnapshot::getEndToEndDurationStats,
+                        CompletedCheckpointStatsSummarySnapshot::getDurationStats,
                         CompletedCheckpointStatsSummarySnapshot::getPersistedDataStats,
                         CompletedCheckpointStatsSummarySnapshot::getProcessedDataStats,
                         CompletedCheckpointStatsSummarySnapshot::getStateSizeStats);
@@ -356,7 +356,7 @@ public class ArchivedExecutionGraphTest {
 
         for (Map.Entry<JobVertexID, ? extends AccessExecutionJobVertex> vertex :
                 runtimeVertices.entrySet()) {
-            compareExecutionJobVertex(vertex.getValue(), archivedVertices.get(vertex.getKey()));
+            compareJobVertex(vertex.getValue(), archivedVertices.get(vertex.getKey()));
         }
 
         Iterator<? extends AccessExecutionJobVertex> runtimeTopologicalVertices =
@@ -366,7 +366,7 @@ public class ArchivedExecutionGraphTest {
 
         while (runtimeTopologicalVertices.hasNext()) {
             assertThat(archiveTopologicaldVertices.hasNext()).isTrue();
-            compareExecutionJobVertex(
+            compareJobVertex(
                     runtimeTopologicalVertices.next(), archiveTopologicaldVertices.next());
         }
 
@@ -385,7 +385,7 @@ public class ArchivedExecutionGraphTest {
         }
     }
 
-    private static void compareExecutionJobVertex(
+    private static void compareJobVertex(
             AccessExecutionJobVertex runtimeJobVertex, AccessExecutionJobVertex archivedJobVertex) {
         assertThat(runtimeJobVertex.getName()).isEqualTo(archivedJobVertex.getName());
         assertThat(runtimeJobVertex.getParallelism()).isEqualTo(archivedJobVertex.getParallelism());
@@ -408,7 +408,7 @@ public class ArchivedExecutionGraphTest {
         }
     }
 
-    private static void verifySerializability(ArchivedExecutionGraph graph)
+    private static void verifySerialization(ArchivedExecutionGraph graph)
             throws IOException, ClassNotFoundException {
         ArchivedExecutionGraph copy = CommonTestUtils.createCopySerializable(graph);
         compareExecutionGraph(graph, copy);

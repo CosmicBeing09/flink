@@ -528,7 +528,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                         new ScheduledExecutorServiceAdapter(checkpointCoordinatorTimer),
                         failureManager,
                         createCheckpointPlanCalculator(
-                                chkConfig.isEnableCheckpointsAfterTasksFinish()),
+                                chkConfig.areCheckpointsEnabledAfterFinish()),
                         checkpointStatsTracker);
 
         // register the master hooks on the checkpoint coordinator
@@ -623,7 +623,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
     }
 
     @Override
-    public String getJsonPlan() {
+    public String getPlan() {
         return jsonPlan;
     }
 

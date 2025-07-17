@@ -1197,7 +1197,7 @@ public class Execution
         // success (in a manner of speaking)
         this.failureCause =
                 Optional.of(
-                        ErrorInfo.createErrorInfoWithNullableCause(t, getStateTimestamp(FAILED)));
+                        ErrorInfo.createWithNullableCause(t, getStateTimestamp(FAILED)));
 
         updateAccumulatorsAndMetrics(userAccumulators, metrics);
 

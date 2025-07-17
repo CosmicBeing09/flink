@@ -80,13 +80,13 @@ class DefaultResourceAllocationStrategyTest {
                         result.getAllocationsOnRegisteredResources()
                                 .get(jobId)
                                 .get(taskManager.getInstanceId())
-                                .getResourceCount(DEFAULT_SLOT_RESOURCE))
+                                .count(DEFAULT_SLOT_RESOURCE))
                 .isEqualTo(2);
         assertThat(
                         result.getAllocationsOnRegisteredResources()
                                 .get(jobId)
                                 .get(taskManager.getInstanceId())
-                                .getResourceCount(largeResource))
+                                .count(largeResource))
                 .isEqualTo(1);
     }
 
@@ -129,7 +129,7 @@ class DefaultResourceAllocationStrategyTest {
         assertThat(result.getAllocationsOnRegisteredResources().get(jobId).values())
                 .allSatisfy(
                         resourceCounter ->
-                                assertThat(resourceCounter.getTotalResourceCount()).isEqualTo(2));
+                                assertThat(resourceCounter.getTotalCount()).isEqualTo(2));
         assertThat(result.getAllocationsOnRegisteredResources().get(jobId).values())
                 .allSatisfy(
                         resourceCounter ->
@@ -177,7 +177,7 @@ class DefaultResourceAllocationStrategyTest {
                 .overridingErrorMessage("Expected all 6 allocations on registered TM.")
                 .allSatisfy(
                         resourceCounter ->
-                                assertThat(resourceCounter.getTotalResourceCount()).isEqualTo(6));
+                                assertThat(resourceCounter.getTotalCount()).isEqualTo(6));
 
         assertThat(result.getAllocationsOnRegisteredResources().get(jobId).values())
                 .allSatisfy(
@@ -227,7 +227,7 @@ class DefaultResourceAllocationStrategyTest {
                 .allSatisfy(
                         resourceCounter -> {
                             assertThat(resourceCounter.containsResource(largeResource)).isTrue();
-                            assertThat(resourceCounter.getTotalResourceCount()).isEqualTo(3);
+                            assertThat(resourceCounter.getTotalCount()).isEqualTo(3);
                         });
     }
 
@@ -356,8 +356,8 @@ class DefaultResourceAllocationStrategyTest {
                             resourceWithCount.getKey(), resourceWithCount.getValue());
         }
 
-        assertThat(allFulfilledRequirements.getResourceCount(DEFAULT_SLOT_RESOURCE)).isEqualTo(4);
-        assertThat(allFulfilledRequirements.getResourceCount(largeResource)).isEqualTo(2);
+        assertThat(allFulfilledRequirements.count(DEFAULT_SLOT_RESOURCE)).isEqualTo(4);
+        assertThat(allFulfilledRequirements.count(largeResource)).isEqualTo(2);
     }
 
     @Test

@@ -79,7 +79,7 @@ public interface RestfulGateway extends RpcGateway {
     default CompletableFuture<ArchivedExecutionGraph> requestJob(
             JobID jobId, @RpcTimeout Duration timeout) {
         return requestExecutionGraphInfo(jobId, timeout)
-                .thenApply(ExecutionGraphInfo::getArchivedExecutionGraph);
+                .thenApply(ExecutionGraphInfo::getExecutionGraph);
     }
 
     /**

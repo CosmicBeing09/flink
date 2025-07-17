@@ -335,7 +335,7 @@ public class DefaultDeclarativeSlotPool implements DeclarativeSlotPool {
         return requirementMatcher.match(
                 resourceProfile,
                 totalResourceRequirements,
-                fulfilledResourceRequirements::getResourceCount);
+                fulfilledResourceRequirements::count);
     }
 
     @VisibleForTesting

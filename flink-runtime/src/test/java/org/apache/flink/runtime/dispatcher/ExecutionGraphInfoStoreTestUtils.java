@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 /** Test utils class for {@link FileExecutionGraphInfoStore}. */
 public class ExecutionGraphInfoStoreTestUtils {
 
-    static final List<JobStatus> GLOBALLY_TERMINAL_JOB_STATUS =
+    static final List<JobStatus> TERMINAL_JOB_STATUSES =
             Arrays.stream(JobStatus.values())
                     .filter(JobStatus::isGloballyTerminalState)
                     .collect(Collectors.toList());
@@ -77,14 +77,14 @@ public class ExecutionGraphInfoStoreTestUtils {
      * @param number the given number
      * @return the result ExecutionGraphInfo collection
      */
-    static Collection<ExecutionGraphInfo> generateTerminalExecutionGraphInfos(int number) {
+    static Collection<ExecutionGraphInfo> generateTerminalInfos(int number) {
         final Collection<ExecutionGraphInfo> executionGraphInfos = new ArrayList<>(number);
 
         for (int i = 0; i < number; i++) {
             final JobStatus state =
-                    GLOBALLY_TERMINAL_JOB_STATUS.get(
+                    TERMINAL_JOB_STATUSES.get(
                             ThreadLocalRandom.current()
-                                    .nextInt(GLOBALLY_TERMINAL_JOB_STATUS.size()));
+                                    .nextInt(TERMINAL_JOB_STATUSES.size()));
             executionGraphInfos.add(
                     new ExecutionGraphInfo(
                             new ArchivedExecutionGraphBuilder().setState(state).build()));
@@ -114,15 +114,15 @@ public class ExecutionGraphInfoStoreTestUtils {
             ExecutionGraphInfo that = (ExecutionGraphInfo) o;
 
             ArchivedExecutionGraph thisExecutionGraph =
-                    expectedExecutionGraphInfo.getArchivedExecutionGraph();
-            ArchivedExecutionGraph thatExecutionGraph = that.getArchivedExecutionGraph();
+                    expectedExecutionGraphInfo.getExecutionGraph();
+            ArchivedExecutionGraph thatExecutionGraph = that.getExecutionGraph();
             return thisExecutionGraph.isStoppable() == thatExecutionGraph.isStoppable()
                     && Objects.equals(thisExecutionGraph.getJobID(), thatExecutionGraph.getJobID())
                     && Objects.equals(
                             thisExecutionGraph.getJobName(), thatExecutionGraph.getJobName())
                     && thisExecutionGraph.getState() == thatExecutionGraph.getState()
                     && Objects.equals(
-                            thisExecutionGraph.getJsonPlan(), thatExecutionGraph.getJsonPlan())
+                            thisExecutionGraph.getPlan(), thatExecutionGraph.getPlan())
                     && Objects.equals(
                             thisExecutionGraph.getAccumulatorsSerialized(),
                             thatExecutionGraph.getAccumulatorsSerialized())
@@ -146,7 +146,7 @@ public class ExecutionGraphInfoStoreTestUtils {
     static Collection<JobDetails> generateJobDetails(
             Collection<ExecutionGraphInfo> executionGraphInfos) {
         return executionGraphInfos.stream()
-                .map(ExecutionGraphInfo::getArchivedExecutionGraph)
+                .map(ExecutionGraphInfo::getExecutionGraph)
                 .map(JobDetails::createDetailsForJob)
                 .collect(Collectors.toList());
     }

@@ -32,10 +32,10 @@ public class CheckpointStatsCounts implements Serializable {
     private static final long serialVersionUID = -5229425063269482528L;
 
     /** Number of restored checkpoints. */
-    private long numRestoredCheckpoints;
+    private long restoredCheckpoints;
 
     /** Number of total checkpoints (in progress, completed, failed). */
-    private long numTotalCheckpoints;
+    private long totalCheckpoints;
 
     /** Number of in progress checkpoints. */
     private int numInProgressCheckpoints;
@@ -73,8 +73,8 @@ public class CheckpointStatsCounts implements Serializable {
         checkArgument(numCompletedCheckpoints >= 0, "Negative number of completed checkpoints");
         checkArgument(numFailedCheckpoints >= 0, "Negative number of failed checkpoints");
 
-        this.numRestoredCheckpoints = numRestoredCheckpoints;
-        this.numTotalCheckpoints = numTotalCheckpoints;
+        this.restoredCheckpoints = numRestoredCheckpoints;
+        this.totalCheckpoints = numTotalCheckpoints;
         this.numInProgressCheckpoints = numInProgressCheckpoints;
         this.numCompletedCheckpoints = numCompletedCheckpoints;
         this.numFailedCheckpoints = numFailedCheckpoints;
@@ -86,7 +86,7 @@ public class CheckpointStatsCounts implements Serializable {
      * @return Number of restored checkpoints.
      */
     public long getNumberOfRestoredCheckpoints() {
-        return numRestoredCheckpoints;
+        return restoredCheckpoints;
     }
 
     /**
@@ -95,7 +95,7 @@ public class CheckpointStatsCounts implements Serializable {
      * @return Total number of checkpoints.
      */
     public long getTotalNumberOfCheckpoints() {
-        return numTotalCheckpoints;
+        return totalCheckpoints;
     }
 
     /**
@@ -127,13 +127,13 @@ public class CheckpointStatsCounts implements Serializable {
 
     /** Increments the number of restored checkpoints. */
     void incrementRestoredCheckpoints() {
-        numRestoredCheckpoints++;
+        restoredCheckpoints++;
     }
 
     /** Increments the number of total and in progress checkpoints. */
     void incrementInProgressCheckpoints() {
         numInProgressCheckpoints++;
-        numTotalCheckpoints++;
+        totalCheckpoints++;
     }
 
     /**
@@ -168,7 +168,7 @@ public class CheckpointStatsCounts implements Serializable {
      */
     void incrementFailedCheckpointsWithoutInProgress() {
         numFailedCheckpoints++;
-        numTotalCheckpoints++;
+        totalCheckpoints++;
     }
 
     /**
@@ -178,8 +178,8 @@ public class CheckpointStatsCounts implements Serializable {
      */
     CheckpointStatsCounts createSnapshot() {
         return new CheckpointStatsCounts(
-                numRestoredCheckpoints,
-                numTotalCheckpoints,
+                restoredCheckpoints,
+                totalCheckpoints,
                 numInProgressCheckpoints,
                 numCompletedCheckpoints,
                 numFailedCheckpoints);

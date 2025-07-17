@@ -272,7 +272,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedCheckpointingSettingsNotNullIfCheckpointingIsEnabled() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
         scheduler =
@@ -290,7 +290,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedJobVerticesPresent() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -452,7 +452,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .join();
 
@@ -461,7 +461,7 @@ public class AdaptiveSchedulerTest {
 
         assertThat(
                         JacksonMapperFactory.createObjectMapper()
-                                .readTree(executionGraph.getJsonPlan())
+                                .readTree(executionGraph.getPlan())
                                 .get("nodes")
                                 .size())
                 .isOne();
@@ -509,7 +509,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .join();
 
@@ -532,7 +532,7 @@ public class AdaptiveSchedulerTest {
         final long initializationTimestamp =
                 scheduler
                         .requestJob()
-                        .getArchivedExecutionGraph()
+                        .getExecutionGraph()
                         .getStatusTimestamp(JobStatus.INITIALIZING);
 
         assertThat(initializationTimestamp).isEqualTo(expectedInitializationTimestamp);
@@ -947,7 +947,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .get();
 
@@ -1087,7 +1087,7 @@ public class AdaptiveSchedulerTest {
 
         final JobGraph jobGraph = createJobGraph();
         // checkpointing components are only created if checkpointing is enabled
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -1126,7 +1126,7 @@ public class AdaptiveSchedulerTest {
                                         singleNoOpJobGraph(),
                                         mainThreadExecutor,
                                         EXECUTOR_RESOURCE.getExecutor())
-                                .setCheckpointCleaner(checkpointsCleaner)
+                                .setCheckpointsCleaner(checkpointsCleaner)
                                 .build());
     }
 
@@ -1528,7 +1528,7 @@ public class AdaptiveSchedulerTest {
 
         final ArchivedExecutionGraph executionGraph =
                 CompletableFuture.supplyAsync(
-                                () -> scheduler.requestJob().getArchivedExecutionGraph(),
+                                () -> scheduler.requestJob().getExecutionGraph(),
                                 singleThreadMainThreadExecutor)
                         .get();
 
@@ -1786,7 +1786,7 @@ public class AdaptiveSchedulerTest {
         final Exception expectedException = new Exception("Expected Local Exception");
         Consumer<JobGraph> setupJobGraph =
                 jobGraph ->
-                        jobGraph.setSnapshotSettings(
+                        jobGraph.setCheckpointingSettings(
                                 new JobCheckpointingSettings(
                                         // set a large checkpoint interval so we can easily deduce
                                         // the savepoints checkpoint id
@@ -1804,7 +1804,7 @@ public class AdaptiveSchedulerTest {
         Consumer<AdaptiveSchedulerBuilder> setupScheduler =
                 builder ->
                         builder.setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                                .setCheckpointCleaner(checkpointCleaner);
+                                .setCheckpointsCleaner(checkpointCleaner);
 
         BiConsumer<AdaptiveScheduler, List<ExecutionAttemptID>> testLogic =
                 (scheduler, attemptIds) -> {
@@ -2132,7 +2132,7 @@ public class AdaptiveSchedulerTest {
                                                     .forSingleThreadExecutor(executorService),
                                             EXECUTOR_RESOURCE.getExecutor())
                                     .setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                                    .setCheckpointCleaner(checkpointCleaner)
+                                    .setCheckpointsCleaner(checkpointCleaner)
                                     .build();
                         } catch (Exception e) {
                             throw new RuntimeException(e);
@@ -2577,7 +2577,7 @@ public class AdaptiveSchedulerTest {
                 () -> {
                     ArchivedExecutionGraph graph = null;
                     while (graph == null || graph.getState() != JobStatus.RUNNING) {
-                        graph = scheduler.requestJob().getArchivedExecutionGraph();
+                        graph = scheduler.requestJob().getExecutionGraph();
                     }
                     return graph;
                 },
@@ -2849,7 +2849,7 @@ public class AdaptiveSchedulerTest {
                             .setJobMasterConfiguration(configuration)
                             .setDeclarativeSlotPool(declarativeSlotPool)
                             .setCheckpointRecoveryFactory(checkpointRecoveryFactory)
-                            .setCheckpointCleaner(checkpointCleaner)
+                            .setCheckpointsCleaner(checkpointCleaner)
                             .setFailureEnrichers(failureEnrichers);
             schedulerModifier.accept(builder);
             final AdaptiveScheduler scheduler = builder.build();
@@ -2889,7 +2889,7 @@ public class AdaptiveSchedulerTest {
                                 vertexFuture.complete(
                                         scheduler
                                                 .requestJob()
-                                                .getArchivedExecutionGraph()
+                                                .getExecutionGraph()
                                                 .getAllExecutionVertices()));
                 final Iterable<ArchivedExecutionVertex> executionVertices = vertexFuture.get();
                 final List<ExecutionAttemptID> attemptIds =

@@ -85,7 +85,7 @@ class SlotSharingSlotAllocatorTest {
                 slotAllocator.calculateRequiredSlots(Arrays.asList(vertex1, vertex2, vertex3));
 
         assertThat(resourceCounter.getResources()).contains(ResourceProfile.UNKNOWN);
-        assertThat(resourceCounter.getResourceCount(ResourceProfile.UNKNOWN))
+        assertThat(resourceCounter.count(ResourceProfile.UNKNOWN))
                 .isEqualTo(
                         Math.max(vertex1.getParallelism(), vertex2.getParallelism())
                                 + vertex3.getParallelism());

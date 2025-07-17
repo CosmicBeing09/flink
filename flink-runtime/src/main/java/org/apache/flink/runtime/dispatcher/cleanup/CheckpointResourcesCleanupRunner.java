@@ -194,7 +194,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
                 .thenApply(
                         executionGraphInfo ->
                                 JobDetails.createDetailsForJob(
-                                        executionGraphInfo.getArchivedExecutionGraph()));
+                                        executionGraphInfo.getExecutionGraph()));
     }
 
     @Override
