@@ -481,7 +481,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     // --------------------------------------------------------------------------------------------
 
     @Experimental
-    public int getAsyncInflightRecordsLimit() {
+    public int getAsyncStateTotalBufferSize() {
         return configuration.get(ExecutionOptions.ASYNC_INFLIGHT_RECORDS_LIMIT);
     }
 

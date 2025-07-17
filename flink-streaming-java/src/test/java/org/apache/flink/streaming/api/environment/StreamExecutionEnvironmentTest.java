@@ -468,7 +468,7 @@ class StreamExecutionEnvironmentTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
 
-        assertThat(env.getConfig().getAsyncInflightRecordsLimit())
+        assertThat(env.getConfig().getAsyncStateTotalBufferSize())
                 .isEqualTo(ExecutionOptions.ASYNC_INFLIGHT_RECORDS_LIMIT.defaultValue());
         assertThat(env.getConfig().getAsyncStateBufferSize())
                 .isEqualTo(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE.defaultValue());
@@ -479,7 +479,7 @@ class StreamExecutionEnvironmentTest {
         config.set(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE, 2);
         config.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, 1L);
         env.configure(config, this.getClass().getClassLoader());
-        assertThat(env.getConfig().getAsyncInflightRecordsLimit()).isEqualTo(3);
+        assertThat(env.getConfig().getAsyncStateTotalBufferSize()).isEqualTo(3);
         assertThat(env.getConfig().getAsyncStateBufferSize()).isEqualTo(2);
         assertThat(env.getConfig().getAsyncStateBufferTimeout()).isEqualTo(1);
 
@@ -487,7 +487,7 @@ class StreamExecutionEnvironmentTest {
                 .setAsyncInflightRecordsLimit(6)
                 .setAsyncStateBufferSize(5)
                 .setAsyncStateBufferTimeout(4);
-        assertThat(env.getConfig().getAsyncInflightRecordsLimit()).isEqualTo(6);
+        assertThat(env.getConfig().getAsyncStateTotalBufferSize()).isEqualTo(6);
         assertThat(env.getConfig().getAsyncStateBufferSize()).isEqualTo(5);
         assertThat(env.getConfig().getAsyncStateBufferTimeout()).isEqualTo(4);
     }

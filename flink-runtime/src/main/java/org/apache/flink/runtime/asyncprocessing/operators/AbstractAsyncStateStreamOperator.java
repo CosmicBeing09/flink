@@ -102,7 +102,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         final MailboxExecutor mailboxExecutor = environment.getMainMailboxExecutor();
         final int maxParallelism = environment.getTaskInfo().getMaxNumberOfParallelSubtasks();
         final int inFlightRecordsLimit =
-                environment.getExecutionConfig().getAsyncInflightRecordsLimit();
+                environment.getExecutionConfig().getAsyncStateTotalBufferSize();
         final int asyncBufferSize = environment.getExecutionConfig().getAsyncStateBufferSize();
         final long asyncBufferTimeout =
                 environment.getExecutionConfig().getAsyncStateBufferTimeout();
