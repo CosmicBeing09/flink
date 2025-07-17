@@ -44,7 +44,7 @@ public abstract class AbstractKeyedStateBackendBuilder<K>
     protected final KeyGroupRange keyGroupRange;
     protected final ExecutionConfig executionConfig;
     protected final TtlTimeProvider ttlTimeProvider;
-    protected final MetricsTrackingStateConfig latencyTrackingStateConfig;
+    protected final MetricsTrackingStateConfig metricsTrackingStateConfig;
     protected final StreamCompressionDecorator keyGroupCompressionDecorator;
     protected final Collection<KeyedStateHandle> restoreStateHandles;
     protected final CloseableRegistry cancelStreamRegistry;
@@ -57,7 +57,7 @@ public abstract class AbstractKeyedStateBackendBuilder<K>
             KeyGroupRange keyGroupRange,
             ExecutionConfig executionConfig,
             TtlTimeProvider ttlTimeProvider,
-            MetricsTrackingStateConfig latencyTrackingStateConfig,
+            MetricsTrackingStateConfig metricsTrackingStateConfig,
             @Nonnull Collection<KeyedStateHandle> stateHandles,
             StreamCompressionDecorator keyGroupCompressionDecorator,
             CloseableRegistry cancelStreamRegistry) {
@@ -69,7 +69,7 @@ public abstract class AbstractKeyedStateBackendBuilder<K>
         this.keyGroupRange = keyGroupRange;
         this.executionConfig = executionConfig;
         this.ttlTimeProvider = ttlTimeProvider;
-        this.latencyTrackingStateConfig = latencyTrackingStateConfig;
+        this.metricsTrackingStateConfig = metricsTrackingStateConfig;
         this.keyGroupCompressionDecorator = keyGroupCompressionDecorator;
         this.restoreStateHandles = stateHandles;
         this.cancelStreamRegistry = cancelStreamRegistry;

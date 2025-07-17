@@ -114,7 +114,7 @@ public class HeapKeyedStateBackendBuilder<K> extends AbstractKeyedStateBackendBu
                 userCodeClassLoader,
                 executionConfig,
                 ttlTimeProvider,
-                latencyTrackingStateConfig,
+                metricsTrackingStateConfig,
                 cancelStreamRegistryForBackend,
                 keyGroupCompressionDecorator,
                 registeredKVStates,
