@@ -55,7 +55,7 @@ public class OperatorSnapshotUtil {
             dos.writeInt(MetadataV3Serializer.VERSION);
 
             // still required for compatibility
-            MetadataV3Serializer.serializeStreamStateHandle(null, dos);
+            MetadataV3Serializer.serializeStreamOutput(null, dos);
 
             Collection<OperatorStateHandle> rawOperatorState = state.getRawOperatorState();
             if (rawOperatorState != null) {
@@ -129,7 +129,7 @@ public class OperatorSnapshotUtil {
             final int v = dis.readInt();
 
             // still required for compatibility to consume the bytes.
-            MetadataV3Serializer.deserializeStreamStateHandle(dis);
+            MetadataV3Serializer.deserializeStreamOutput(dis);
 
             List<OperatorStateHandle> rawOperatorState = null;
             int numRawOperatorStates = dis.readInt();

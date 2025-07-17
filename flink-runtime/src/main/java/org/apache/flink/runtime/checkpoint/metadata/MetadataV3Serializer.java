@@ -106,7 +106,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
         dos.writeInt(operatorState.getMaxParallelism());
 
         // Coordinator state
-        serializeStreamStateHandle(operatorState.getCoordinatorState(), dos);
+        serializeStreamOutput(operatorState.getCoordinatorState(), dos);
 
         // Sub task states
         if (operatorState.isFullyFinished()) {
@@ -255,13 +255,13 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     // ------------------------------------------------------------------------
 
     @VisibleForTesting
-    public static void serializeStreamStateHandle(
+    public static void serializeStreamOutput(
             StreamStateHandle stateHandle, DataOutputStream dos) throws IOException {
         MetadataV2V3SerializerBase.serializeStreamStateHandle(stateHandle, dos);
     }
 
     @VisibleForTesting
-    public static StreamStateHandle deserializeStreamStateHandle(DataInputStream dis)
+    public static StreamStateHandle deserializeStreamOutput(DataInputStream dis)
             throws IOException {
         return MetadataV2V3SerializerBase.deserializeStreamStateHandle(dis, null);
     }
