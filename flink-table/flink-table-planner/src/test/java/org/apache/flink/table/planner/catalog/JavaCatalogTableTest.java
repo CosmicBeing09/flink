@@ -153,8 +153,8 @@ class JavaCatalogTableTest extends TableTestBase {
 
         private final boolean isStreamingMode;
 
-        private CustomCatalogTable(boolean isStreamingMode) {
-            this.isStreamingMode = isStreamingMode;
+        private CustomCatalogTable(boolean streamingMode) {
+            this.isStreamingMode = streamingMode;
         }
 
         @Override
