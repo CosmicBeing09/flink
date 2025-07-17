@@ -27,13 +27,13 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link MetricsTrackingStateConfig}. */
-class LatencyTrackingStateConfigTest {
+class MetricsTrackingStateConfigTest {
 
     @Test
     void testDefaultDisabledLatencyTrackingStateConfig() {
-        MetricsTrackingStateConfig latencyTrackingStateConfig =
+        MetricsTrackingStateConfig metricsTrackingStateConfig =
                 MetricsTrackingStateConfig.newBuilder().build();
-        assertThat(latencyTrackingStateConfig.isEnabled()).isFalse();
+        assertThat(metricsTrackingStateConfig.isEnabled()).isFalse();
     }
 
     @Test
