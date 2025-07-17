@@ -497,7 +497,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     }
 
     @Experimental
-    public ExecutionConfig setAsyncStateBufferSize(int bufferSize) {
+    public ExecutionConfig setAsyncStateActiveBufferSize(int bufferSize) {
         configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE, bufferSize);
         return this;
     }

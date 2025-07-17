@@ -485,7 +485,7 @@ class StreamExecutionEnvironmentTest {
 
         env.getConfig()
                 .setAsyncInflightRecordsLimit(6)
-                .setAsyncStateBufferSize(5)
+                .setAsyncStateActiveBufferSize(5)
                 .setAsyncStateBufferTimeout(4);
         assertThat(env.getConfig().getAsyncInflightRecordsLimit()).isEqualTo(6);
         assertThat(env.getConfig().getAsyncStateBufferSize()).isEqualTo(5);
