@@ -96,7 +96,7 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Either<String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
@@ -140,7 +140,7 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

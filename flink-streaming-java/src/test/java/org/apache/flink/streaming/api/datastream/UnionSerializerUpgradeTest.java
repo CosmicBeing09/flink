@@ -101,7 +101,7 @@ class UnionSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TaggedUnion<String, Long>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
@@ -145,7 +145,7 @@ class UnionSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TaggedUnion<String, Long>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

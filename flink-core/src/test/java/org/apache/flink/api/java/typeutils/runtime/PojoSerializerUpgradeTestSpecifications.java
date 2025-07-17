@@ -240,7 +240,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
@@ -354,7 +354,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<PojoAfterSchemaUpgrade>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAfterMigration();
         }
     }
@@ -428,7 +428,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<PojoWithStringField>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isIncompatible();
         }
     }
@@ -570,7 +570,7 @@ public class PojoSerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<BasePojo>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<BasePojo>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAfterMigration();
         }
@@ -656,7 +656,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isIncompatible();
         }
     }
@@ -705,7 +705,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }
     }
@@ -763,7 +763,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }
     }
@@ -819,7 +819,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }
     }
@@ -874,7 +874,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }
     }
@@ -930,7 +930,7 @@ public class PojoSerializerUpgradeTestSpecifications {
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<StaticSchemaPojo>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }
     }
