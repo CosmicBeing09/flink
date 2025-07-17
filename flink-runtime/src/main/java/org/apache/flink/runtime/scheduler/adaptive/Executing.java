@@ -65,7 +65,7 @@ class Executing extends StateWithExecutionGraph
     private final RescalingController sufficientResourcesController;
     private final RescalingController desiredResourcesController;
     private final RescaleManager rescaleManager;
-    private final int rescaleOnFailedCheckpointCount;
+    private final int maxFailedCheckpointsBeforeRescale;
     // null indicates that there was no change event observed, yet
     @Nullable private AtomicInteger failedCheckpointCountdown;
 
@@ -101,7 +101,7 @@ class Executing extends StateWithExecutionGraph
         Preconditions.checkArgument(
                 rescaleOnFailedCheckpointCount > 0,
                 "The rescaleOnFailedCheckpointCount should be larger than 0.");
-        this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
+        this.maxFailedCheckpointsBeforeRescale = rescaleOnFailedCheckpointCount;
         this.failedCheckpointCountdown = null;
 
         deploy();
@@ -152,7 +152,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void rescale() {
+    public void transitionToSubsequentState() {
         context.goToRestarting(
                 getExecutionGraph(),
                 getExecutionGraphHandler(),
@@ -242,7 +242,7 @@ class Executing extends StateWithExecutionGraph
 
     private void initializeFailedCheckpointCountdownIfUnset() {
         if (failedCheckpointCountdown == null) {
-            this.failedCheckpointCountdown = new AtomicInteger(this.rescaleOnFailedCheckpointCount);
+            this.failedCheckpointCountdown = new AtomicInteger(this.maxFailedCheckpointsBeforeRescale);
         }
     }
 
