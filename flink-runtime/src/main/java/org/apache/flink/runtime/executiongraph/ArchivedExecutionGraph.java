@@ -95,11 +95,11 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     @Nullable private final ErrorInfo failureCause;
 
     // ------ Fields that are only relevant for archived execution graphs ------------
-    private final String jsonPlan;
-    private final StringifiedAccumulatorResult[] archivedUserAccumulators;
+    private final String plan;
+    private final StringifiedAccumulatorResult[] userAccumulators;
     private final ArchivedExecutionConfig archivedExecutionConfig;
     private final boolean isStoppable;
-    private final Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators;
+    private final Map<String, SerializedValue<OptionalFailure<Object>>> userAccumulatorsSerialized;
 
     @Nullable private final CheckpointCoordinatorConfiguration jobCheckpointingConfiguration;
 
@@ -126,9 +126,9 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
             JobStatus state,
             @Nullable JobType jobType,
             @Nullable ErrorInfo failureCause,
-            String jsonPlan,
-            StringifiedAccumulatorResult[] archivedUserAccumulators,
-            Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators,
+            String plan,
+            StringifiedAccumulatorResult[] userAccumulators,
+            Map<String, SerializedValue<OptionalFailure<Object>>> userAccumulatorsSerialized,
             ArchivedExecutionConfig executionConfig,
             boolean isStoppable,
             @Nullable CheckpointCoordinatorConfiguration jobCheckpointingConfiguration,
@@ -148,9 +148,9 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
         this.state = Preconditions.checkNotNull(state);
         this.jobType = jobType;
         this.failureCause = failureCause;
-        this.jsonPlan = Preconditions.checkNotNull(jsonPlan);
-        this.archivedUserAccumulators = Preconditions.checkNotNull(archivedUserAccumulators);
-        this.serializedUserAccumulators = Preconditions.checkNotNull(serializedUserAccumulators);
+        this.plan = Preconditions.checkNotNull(plan);
+        this.userAccumulators = Preconditions.checkNotNull(userAccumulators);
+        this.userAccumulatorsSerialized = Preconditions.checkNotNull(userAccumulatorsSerialized);
         this.archivedExecutionConfig = Preconditions.checkNotNull(executionConfig);
         this.isStoppable = isStoppable;
         this.jobCheckpointingConfiguration = jobCheckpointingConfiguration;
@@ -166,8 +166,8 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public String getJsonPlan() {
-        return jsonPlan;
+    public String getPlan() {
+        return plan;
     }
 
     @Override
@@ -283,12 +283,12 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
 
     @Override
     public StringifiedAccumulatorResult[] getAccumulatorResultsStringified() {
-        return archivedUserAccumulators;
+        return userAccumulators;
     }
 
     @Override
     public Map<String, SerializedValue<OptionalFailure<Object>>> getAccumulatorsSerialized() {
-        return serializedUserAccumulators;
+        return userAccumulatorsSerialized;
     }
 
     @Override
@@ -374,7 +374,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
                 statusOverride == null ? executionGraph.getState() : statusOverride,
                 executionGraph.getJobType(),
                 executionGraph.getFailureInfo(),
-                executionGraph.getJsonPlan(),
+                executionGraph.getPlan(),
                 executionGraph.getAccumulatorResultsStringified(),
                 serializedUserAccumulators,
                 executionGraph.getArchivedExecutionConfig(),
