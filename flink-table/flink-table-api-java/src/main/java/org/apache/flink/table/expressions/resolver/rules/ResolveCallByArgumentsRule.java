@@ -470,12 +470,12 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         public TableApiCallContext(
                 DataTypeFactory typeFactory,
-                String name,
+                String functionName,
                 FunctionDefinition definition,
                 List<ResolvedExpression> resolvedArgs,
                 boolean isGroupedAggregation) {
             this.typeFactory = typeFactory;
-            this.name = name;
+            this.name = functionName;
             this.definition = definition;
             this.resolvedArgs = resolvedArgs;
             this.isGroupedAggregation = isGroupedAggregation;
