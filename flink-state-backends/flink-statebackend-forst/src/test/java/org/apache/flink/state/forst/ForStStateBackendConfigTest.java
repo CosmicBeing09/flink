@@ -742,7 +742,7 @@ public class ForStStateBackendConfigTest {
     }
 
     @Test
-    public void testRemoteDirectory() throws Exception {
+    public void testPrimaryDirectory() throws Exception {
         FileSystem.initialize(new Configuration(), null);
         Configuration configuration = new Configuration();
         configuration.set(ForStOptions.REMOTE_DIRECTORY, tempFolder.newFolder().toURI().toString());
