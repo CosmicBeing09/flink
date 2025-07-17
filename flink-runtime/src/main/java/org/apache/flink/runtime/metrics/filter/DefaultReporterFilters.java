@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  * Default {@link MetricFilter} implementation that filters metrics based on {@link
  * MetricOptions#REPORTER_INCLUDES}/{@link MetricOptions#REPORTER_EXCLUDES}.
  */
-public class DefaultMetricFilter implements MetricFilter {
+public class DefaultReporterFilters implements MetricFilter {
 
     private static final EnumSet<MetricType> ALL_METRIC_TYPES = EnumSet.allOf(MetricType.class);
     @VisibleForTesting static final String LIST_DELIMITER = ",";
@@ -42,7 +42,7 @@ public class DefaultMetricFilter implements MetricFilter {
     private final List<FilterSpec> includes;
     private final List<FilterSpec> excludes;
 
-    private DefaultMetricFilter(List<FilterSpec> includes, List<FilterSpec> excludes) {
+    private DefaultReporterFilters(List<FilterSpec> includes, List<FilterSpec> excludes) {
         this.includes = includes;
         this.excludes = excludes;
     }
@@ -75,7 +75,7 @@ public class DefaultMetricFilter implements MetricFilter {
         final List<FilterSpec> excludeFilters =
                 excludes.stream().map(e -> parse(e)).collect(Collectors.toList());
 
-        return new DefaultMetricFilter(includeFilters, excludeFilters);
+        return new DefaultReporterFilters(includeFilters, excludeFilters);
     }
 
     private static FilterSpec parse(String filter) {
