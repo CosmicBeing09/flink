@@ -57,9 +57,9 @@ public class LatencyTrackingStateFactoryTest {
         return Arrays.asList(true, false);
     }
 
-    private LatencyTrackingStateConfig getLatencyTrackingStateConfig() {
+    private MetricsTrackingStateConfig getLatencyTrackingStateConfig() {
         UnregisteredMetricsGroup metricsGroup = new UnregisteredMetricsGroup();
-        return LatencyTrackingStateConfig.newBuilder()
+        return MetricsTrackingStateConfig.newBuilder()
                 .setEnabled(enableLatencyTracking)
                 .setMetricGroup(metricsGroup)
                 .build();
@@ -107,7 +107,7 @@ public class LatencyTrackingStateFactoryTest {
                 LatencyTrackingStateFactory.createStateAndWrapWithLatencyTrackingIfEnabled(
                         mapState, mapStateDescriptor, getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingMapState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingMapState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(mapState);
         }
@@ -167,7 +167,7 @@ public class LatencyTrackingStateFactoryTest {
                         aggregatingStateDescriptor,
                         getLatencyTrackingStateConfig());
         if (enableLatencyTracking) {
-            assertThat(latencyTrackingState).isInstanceOf(LatencyTrackingAggregatingState.class);
+            assertThat(latencyTrackingState).isInstanceOf(MetricsTrackingAggregatingState.class);
         } else {
             assertThat(latencyTrackingState).isEqualTo(aggregatingState);
         }
