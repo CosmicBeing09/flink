@@ -150,8 +150,8 @@ class InitOutputPathTest {
 
     private void runTest(final boolean useAwaits) throws Exception {
         final File tempFile = TempDirUtils.newFile(tempFolder);
-        final Path path1 = new Path(tempFile.getAbsolutePath(), "1");
-        final Path path2 = new Path(tempFile.getAbsolutePath(), "2");
+        final Path firstFilePath = new Path(tempFile.getAbsolutePath(), "1");
+        final Path secondFilePath = new Path(tempFile.getAbsolutePath(), "2");
 
         final OneShotLatch deleteAwaitLatch1 = new OneShotLatch();
         final OneShotLatch deleteAwaitLatch2 = new OneShotLatch();
@@ -185,8 +185,8 @@ class InitOutputPathTest {
                         createTriggerLatch);
 
         // start the concurrent file creators
-        FileCreator thread1 = new FileCreator(fs1, path1);
-        FileCreator thread2 = new FileCreator(fs2, path2);
+        FileCreator thread1 = new FileCreator(fs1, firstFilePath);
+        FileCreator thread2 = new FileCreator(fs2, secondFilePath);
         thread1.start();
         thread2.start();
 
