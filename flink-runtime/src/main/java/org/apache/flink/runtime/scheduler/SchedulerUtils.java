@@ -50,19 +50,19 @@ public final class SchedulerUtils {
 
     public static CompletedCheckpointStore createCompletedCheckpointStoreIfCheckpointingIsEnabled(
             JobGraph jobGraph,
-            Configuration configuration,
+            Configuration jobManagerConfiguration,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Executor ioExecutor,
-            Logger log)
+            Logger logger)
             throws JobExecutionException {
         final JobID jobId = jobGraph.getJobID();
         if (DefaultExecutionGraphBuilder.isCheckpointingEnabled(jobGraph)) {
             try {
                 return createCompletedCheckpointStore(
-                        configuration,
+                        jobManagerConfiguration,
                         checkpointRecoveryFactory,
                         ioExecutor,
-                        log,
+                        logger,
                         jobId,
                         jobGraph.getSavepointRestoreSettings().getRecoveryClaimMode());
             } catch (Exception e) {
