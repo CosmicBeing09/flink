@@ -27,7 +27,7 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.taskexecutor.SlotReport;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import javax.annotation.Nullable;
 
@@ -46,7 +46,7 @@ import java.util.UUID;
  * <p>Before the task slot table can be used, it must be started via the {@link #start} method.
  */
 public interface TaskSlotTable<T extends TaskSlotPayload>
-        extends TimeoutListener<AllocationID>, AutoCloseableAsync {
+        extends TimeoutListener<AllocationID>, AsyncCloseable {
     /**
      * Start the task slot table with the given slot actions.
      *

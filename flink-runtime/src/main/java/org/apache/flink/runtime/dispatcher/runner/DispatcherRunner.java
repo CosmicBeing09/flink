@@ -20,12 +20,12 @@ package org.apache.flink.runtime.dispatcher.runner;
 
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.util.concurrent.CompletableFuture;
 
 /** The {@link DispatcherRunner} encapsulates how a {@link Dispatcher} is being executed. */
-public interface DispatcherRunner extends AutoCloseableAsync {
+public interface DispatcherRunner extends AsyncCloseable {
 
     /**
      * Return shut down future of this runner. The shut down future is being completed with the

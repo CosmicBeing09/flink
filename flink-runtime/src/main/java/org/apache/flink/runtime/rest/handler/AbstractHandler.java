@@ -31,7 +31,7 @@ import org.apache.flink.runtime.rest.util.RestMapperUtils;
 import org.apache.flink.runtime.rpc.exceptions.EndpointNotStartedException;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.runtime.webmonitor.retriever.GatewayRetriever;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
@@ -72,7 +72,7 @@ import java.util.function.Function;
  */
 public abstract class AbstractHandler<
                 T extends RestfulGateway, R extends RequestBody, M extends MessageParameters>
-        extends LeaderRetrievalHandler<T> implements AutoCloseableAsync {
+        extends LeaderRetrievalHandler<T> implements AsyncCloseable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

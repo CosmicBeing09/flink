@@ -28,7 +28,7 @@ import org.apache.flink.runtime.resourcemanager.ResourceManagerService;
 import org.apache.flink.runtime.rest.RestService;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.webmonitor.WebMonitorEndpoint;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.FutureUtils;
@@ -49,7 +49,7 @@ import java.util.function.Supplier;
  * Component which starts a {@link Dispatcher}, {@link ResourceManager} and {@link
  * WebMonitorEndpoint} in the same process.
  */
-public class DispatcherResourceManagerComponent implements AutoCloseableAsync {
+public class DispatcherResourceManagerComponent implements AsyncCloseable {
 
     private static final Logger LOG =
             LoggerFactory.getLogger(DispatcherResourceManagerComponent.class);

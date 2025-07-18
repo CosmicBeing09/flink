@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rest.handler.async;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.configuration.RestOptions;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
 
@@ -58,7 +58,7 @@ import static org.apache.flink.util.Preconditions.checkState;
  */
 @ThreadSafe
 public class CompletedOperationCache<K extends OperationKey, R extends Serializable>
-        implements AutoCloseableAsync {
+        implements AsyncCloseable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CompletedOperationCache.class);
 

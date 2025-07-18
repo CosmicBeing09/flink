@@ -23,13 +23,13 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.messages.Acknowledge;
 import org.apache.flink.runtime.messages.webmonitor.JobDetails;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.time.Duration;
 import java.util.concurrent.CompletableFuture;
 
 /** Interface for a runner which executes a {@link JobMaster}. */
-public interface JobManagerRunner extends AutoCloseableAsync {
+public interface JobManagerRunner extends AsyncCloseable {
 
     /**
      * Start the execution of the {@link JobMaster}.

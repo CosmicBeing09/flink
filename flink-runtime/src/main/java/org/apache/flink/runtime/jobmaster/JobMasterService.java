@@ -18,12 +18,12 @@
 
 package org.apache.flink.runtime.jobmaster;
 
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.util.concurrent.CompletableFuture;
 
 /** Interface which specifies the JobMaster service. */
-public interface JobMasterService extends AutoCloseableAsync {
+public interface JobMasterService extends AsyncCloseable {
 
     /**
      * Get the {@link JobMasterGateway} belonging to this service.

@@ -19,14 +19,14 @@
 package org.apache.flink.runtime.resourcemanager;
 
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import javax.annotation.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 
 /** Service that maintains lifecycle of {@link ResourceManager}. */
-public interface ResourceManagerService extends AutoCloseableAsync {
+public interface ResourceManagerService extends AsyncCloseable {
 
     /**
      * Start the service.

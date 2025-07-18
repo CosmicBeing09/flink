@@ -35,7 +35,7 @@ import org.apache.flink.runtime.rest.util.RestClientException;
 import org.apache.flink.runtime.rest.util.RestConstants;
 import org.apache.flink.runtime.rest.util.RestMapperUtils;
 import org.apache.flink.runtime.rest.versioning.RestAPIVersion;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.ConfigurationException;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.NetUtils;
@@ -117,7 +117,7 @@ import static org.apache.flink.configuration.SecurityOptions.SSL_REST_ENABLED;
 import static org.apache.flink.shaded.netty4.io.netty.handler.codec.http.HttpResponseStatus.REQUEST_ENTITY_TOO_LARGE;
 
 /** This client is the counter-part to the {@link RestServerEndpoint}. */
-public class RestClient implements AutoCloseableAsync {
+public class RestClient implements AsyncCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 
     private static final ObjectMapper objectMapper = RestMapperUtils.getStrictObjectMapper();

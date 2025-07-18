@@ -33,7 +33,7 @@ import org.apache.flink.runtime.rpc.exceptions.RpcConnectionException;
 import org.apache.flink.runtime.rpc.exceptions.RpcRuntimeException;
 import org.apache.flink.runtime.rpc.messages.HandshakeSuccessMessage;
 import org.apache.flink.runtime.rpc.messages.RemoteHandshakeMessage;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.ExecutorUtils;
 import org.apache.flink.util.concurrent.ExecutorThreadFactory;
@@ -564,7 +564,7 @@ public class PekkoRpcService implements RpcService {
     // Private inner classes
     // ---------------------------------------------------------------------------------------
 
-    private static final class Supervisor implements AutoCloseableAsync {
+    private static final class Supervisor implements AsyncCloseable {
 
         private final ActorRef actor;
 

@@ -18,10 +18,10 @@
 
 package org.apache.flink.runtime.rest;
 
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 /** Rest service interface. */
-public interface RestService extends AutoCloseableAsync {
+public interface RestService extends AsyncCloseable {
 
     /**
      * Port of the running rest service.

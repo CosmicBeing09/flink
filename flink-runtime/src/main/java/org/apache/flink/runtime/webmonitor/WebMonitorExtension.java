@@ -20,7 +20,7 @@ package org.apache.flink.runtime.webmonitor;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.rest.handler.RestHandlerSpecification;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import org.apache.flink.shaded.netty4.io.netty.channel.ChannelInboundHandler;
 
@@ -33,7 +33,7 @@ import java.util.concurrent.CompletableFuture;
  * and allow to close their resources in order to integrate into the life cycle of the {@link
  * WebMonitorEndpoint}.
  */
-public interface WebMonitorExtension extends AutoCloseableAsync {
+public interface WebMonitorExtension extends AsyncCloseable {
 
     /**
      * Gets the collection of extension handlers to register at the {@link WebMonitorEndpoint}.

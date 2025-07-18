@@ -53,7 +53,7 @@ import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.taskmanager.TaskExecutionState;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.FlinkException;
 
 import javax.annotation.Nullable;
@@ -71,7 +71,7 @@ import java.util.concurrent.CompletableFuture;
  * <p>Implementations can expect that methods will not be invoked concurrently. In fact, all
  * invocations will originate from a thread in the {@link ComponentMainThreadExecutor}.
  */
-public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
+public interface SchedulerNG extends GlobalFailureHandler, AsyncCloseable {
 
     void startScheduling();
 
