@@ -66,9 +66,9 @@ public class ExecutionVertex
 
     final ExecutionJobVertex jobVertex;
 
-    private final Map<IntermediateResultPartitionID, IntermediateResultPartition> resultPartitions;
+    private final Map<IntermediateResultPartitionID, IntermediateResultPartition> producedPartitionsMap;
 
-    private final int subTaskIndex;
+    private final int parallelSubtaskIndex;
 
     private final ExecutionVertexID executionVertexId;
 
@@ -116,7 +116,7 @@ public class ExecutionVertex
             int initialAttemptCount) {
 
         this.jobVertex = jobVertex;
-        this.subTaskIndex = subTaskIndex;
+        this.parallelSubtaskIndex = subTaskIndex;
         this.executionVertexId = new ExecutionVertexID(jobVertex.getJobVertexId(), subTaskIndex);
         this.taskNameWithSubtask =
                 String.format(
@@ -125,7 +125,7 @@ public class ExecutionVertex
                         subTaskIndex + 1,
                         jobVertex.getParallelism());
 
-        this.resultPartitions = new LinkedHashMap<>(producedDataSets.length, 1);
+        this.producedPartitionsMap = new LinkedHashMap<>(producedDataSets.length, 1);
 
         for (IntermediateResult result : producedDataSets) {
             IntermediateResultPartition irp =
@@ -136,7 +136,7 @@ public class ExecutionVertex
                             getExecutionGraphAccessor().getEdgeManager());
             result.setPartition(subTaskIndex, irp);
 
-            resultPartitions.put(irp.getPartitionId(), irp);
+            producedPartitionsMap.put(irp.getPartitionId(), irp);
         }
 
         this.executionHistory = new ExecutionHistory(executionHistorySizeLimit);
@@ -170,7 +170,7 @@ public class ExecutionVertex
         return getExecutionGraphAccessor()
                 .getJobVertexInputInfo(getJobvertexId(), resultId)
                 .getExecutionVertexInputInfos()
-                .get(subTaskIndex);
+                .get(parallelSubtaskIndex);
     }
 
     public void setInputBytes(long inputBytes) {
@@ -228,7 +228,7 @@ public class ExecutionVertex
 
     @Override
     public int getParallelSubtaskIndex() {
-        return this.subTaskIndex;
+        return this.parallelSubtaskIndex;
     }
 
     public ExecutionVertexID getID() {
@@ -339,7 +339,7 @@ public class ExecutionVertex
     }
 
     public Map<IntermediateResultPartitionID, IntermediateResultPartition> getProducedPartitions() {
-        return resultPartitions;
+        return producedPartitionsMap;
     }
 
     CompletableFuture<?> getTerminationFuture() {
@@ -398,7 +398,7 @@ public class ExecutionVertex
         }
 
         // reset the intermediate results
-        for (IntermediateResultPartition resultPartition : resultPartitions.values()) {
+        for (IntermediateResultPartition resultPartition : producedPartitionsMap.values()) {
             resultPartition.resetForNewExecution();
         }
 
@@ -507,7 +507,7 @@ public class ExecutionVertex
         List<IntermediateResultPartition> finishedPartitions = null;
         MarkPartitionFinishedStrategy markPartitionFinishedStrategy =
                 getExecutionGraphAccessor().getMarkPartitionFinishedStrategy();
-        for (IntermediateResultPartition partition : resultPartitions.values()) {
+        for (IntermediateResultPartition partition : producedPartitionsMap.values()) {
             if (markPartitionFinishedStrategy.needMarkPartitionFinished(
                     partition.getResultType())) {
 

@@ -43,7 +43,7 @@ class FullyFinishedOperatorStateTest {
         OperatorState operatorState = new FullyFinishedOperatorState(new OperatorID(), 5, 256);
         assertThat(operatorState.isFullyFinished()).isTrue();
 
-        assertThat(operatorState.getSubtaskStates()).isEmpty();
+        assertThat(operatorState.getSubtaskStateByIndex()).isEmpty();
         assertThat(operatorState.getStates()).isEmpty();
         assertThat(operatorState.getNumberCollectedStates()).isZero();
 

@@ -512,7 +512,7 @@ public class StateAssignmentOperation {
     private <T extends AbstractChannelStateHandle<?>> boolean hasChannelState(
             OperatorState operatorState,
             Function<OperatorSubtaskState, StateObjectCollection<T>> extractHandle) {
-        return operatorState.getSubtaskStates().values().stream()
+        return operatorState.getSubtaskStateByIndex().values().stream()
                 .anyMatch(subState -> !isEmpty(extractHandle.apply(subState)));
     }
 

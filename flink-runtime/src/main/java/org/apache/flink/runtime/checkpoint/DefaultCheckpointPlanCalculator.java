@@ -54,9 +54,9 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
 
     private final CheckpointPlanCalculatorContext context;
 
-    private final List<ExecutionJobVertex> jobVerticesInTopologyOrder = new ArrayList<>();
+    private final List<ExecutionJobVertex> executionJobVerticesInTopologyOrder = new ArrayList<>();
 
-    private final List<ExecutionVertex> allTasks = new ArrayList<>();
+    private final List<ExecutionVertex> allExecutionVertices = new ArrayList<>();
 
     private final List<ExecutionVertex> sourceTasks = new ArrayList<>();
 
@@ -75,8 +75,8 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
         checkNotNull(jobVerticesInTopologyOrderIterable);
         jobVerticesInTopologyOrderIterable.forEach(
                 jobVertex -> {
-                    jobVerticesInTopologyOrder.add(jobVertex);
-                    allTasks.addAll(Arrays.asList(jobVertex.getTaskVertices()));
+                    executionJobVerticesInTopologyOrder.add(jobVertex);
+                    allExecutionVertices.addAll(Arrays.asList(jobVertex.getTaskVertices()));
 
                     if (jobVertex.getJobVertex().isInputVertex()) {
                         sourceTasks.addAll(Arrays.asList(jobVertex.getTaskVertices()));
@@ -119,7 +119,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
      * @throws CheckpointException if some tasks do not have attached Execution.
      */
     private void checkAllTasksInitiated() throws CheckpointException {
-        for (ExecutionVertex task : allTasks) {
+        for (ExecutionVertex task : allExecutionVertices) {
             if (task.getCurrentExecutionAttempt() == null) {
                 throw new CheckpointException(
                         String.format(
@@ -161,12 +161,12 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
                         .map(ExecutionVertex::getCurrentExecutionAttempt)
                         .collect(Collectors.toList());
 
-        List<Execution> tasksToWaitFor = createTaskToWaitFor(allTasks);
+        List<Execution> tasksToWaitFor = createTaskToWaitFor(allExecutionVertices);
 
         return new DefaultCheckpointPlan(
                 Collections.unmodifiableList(executionsToTrigger),
                 Collections.unmodifiableList(tasksToWaitFor),
-                Collections.unmodifiableList(allTasks),
+                Collections.unmodifiableList(allExecutionVertices),
                 Collections.emptyList(),
                 Collections.emptyList(),
                 allowCheckpointsAfterTasksFinished);
@@ -190,7 +190,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
         List<Execution> finishedTasks = new ArrayList<>();
         List<ExecutionJobVertex> fullyFinishedJobVertex = new ArrayList<>();
 
-        for (ExecutionJobVertex jobVertex : jobVerticesInTopologyOrder) {
+        for (ExecutionJobVertex jobVertex : executionJobVerticesInTopologyOrder) {
             BitSet taskRunningStatus = taskRunningStatusByVertex.get(jobVertex.getJobVertexId());
 
             if (taskRunningStatus.cardinality() == 0) {
@@ -314,7 +314,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
     Map<JobVertexID, BitSet> collectTaskRunningStatus() {
         Map<JobVertexID, BitSet> runningStatusByVertex = new HashMap<>();
 
-        for (ExecutionJobVertex vertex : jobVerticesInTopologyOrder) {
+        for (ExecutionJobVertex vertex : executionJobVerticesInTopologyOrder) {
             BitSet runningTasks = new BitSet(vertex.getTaskVertices().length);
 
             for (int i = 0; i < vertex.getTaskVertices().length; ++i) {

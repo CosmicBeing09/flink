@@ -98,7 +98,7 @@ public class MetadataV2Serializer extends MetadataV2V3SerializerBase implements 
         dos.writeInt(1);
 
         // Sub task states
-        Map<Integer, OperatorSubtaskState> subtaskStateMap = operatorState.getSubtaskStates();
+        Map<Integer, OperatorSubtaskState> subtaskStateMap = operatorState.getSubtaskStateByIndex();
         dos.writeInt(subtaskStateMap.size());
         for (Map.Entry<Integer, OperatorSubtaskState> entry : subtaskStateMap.entrySet()) {
             dos.writeInt(entry.getKey());

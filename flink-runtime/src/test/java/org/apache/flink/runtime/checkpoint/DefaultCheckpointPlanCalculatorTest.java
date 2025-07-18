@@ -371,7 +371,7 @@ class DefaultCheckpointPlanCalculatorTest {
         assertSameInstancesWithoutOrder(
                 "The computed fully finished JobVertex is different from expected",
                 expectedFullyFinished,
-                plan.getFullyFinishedJobVertex());
+                plan.getFullyFinishedJobVertices());
 
         // Compares tasks to ack
         assertSameInstancesWithoutOrder(

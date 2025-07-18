@@ -49,7 +49,7 @@ public interface CheckpointPlan extends FinishedTaskStateProvider {
 
     /** Returns the job vertices whose tasks are all finished when taking the checkpoint. */
     @VisibleForTesting
-    Collection<ExecutionJobVertex> getFullyFinishedJobVertex();
+    Collection<ExecutionJobVertex> getFullyFinishedJobVertices();
 
     /** Returns whether we support checkpoints after some tasks finished. */
     boolean mayHaveFinishedTasks();

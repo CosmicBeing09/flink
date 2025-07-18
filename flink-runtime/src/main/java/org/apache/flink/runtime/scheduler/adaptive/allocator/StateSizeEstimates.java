@@ -123,7 +123,7 @@ public class StateSizeEstimates {
 
     private static Map<Integer, Long> calculateStateSizeInBytes(OperatorState state) {
         Map<Integer, Long> sizesPerSubtask = new HashMap<>();
-        for (Entry<Integer, OperatorSubtaskState> e : state.getSubtaskStates().entrySet()) {
+        for (Entry<Integer, OperatorSubtaskState> e : state.getSubtaskStateByIndex().entrySet()) {
             for (KeyedStateHandle handle : e.getValue().getManagedKeyedState()) {
                 sizesPerSubtask.merge(e.getKey(), handle.getStateSize(), Long::sum);
             }

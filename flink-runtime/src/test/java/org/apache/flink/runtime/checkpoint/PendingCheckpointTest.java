@@ -72,8 +72,8 @@ import static org.mockito.Mockito.when;
 /** Tests for the {@link PendingCheckpoint}. */
 class PendingCheckpointTest {
 
-    private static final List<Execution> ACK_TASKS = new ArrayList<>();
-    private static final List<ExecutionVertex> TASKS_TO_COMMIT = new ArrayList<>();
+    private static final List<Execution> acknowledgedExecutionTasks = new ArrayList<>();
+    private static final List<ExecutionVertex> tasksToCommit = new ArrayList<>();
     private static final ExecutionAttemptID ATTEMPT_ID = createExecutionAttemptId();
 
     public static final OperatorID OPERATOR_ID = new OperatorID();
@@ -95,8 +95,8 @@ class PendingCheckpointTest {
         Execution execution = mock(Execution.class);
         when(execution.getAttemptId()).thenReturn(ATTEMPT_ID);
         when(execution.getVertex()).thenReturn(vertex);
-        ACK_TASKS.add(execution);
-        TASKS_TO_COMMIT.add(vertex);
+        acknowledgedExecutionTasks.add(execution);
+        tasksToCommit.add(vertex);
     }
 
     @TempDir private java.nio.file.Path tmpFolder;
@@ -486,27 +486,27 @@ class PendingCheckpointTest {
     @Test
     void testReportTaskFinishedOnRestore() throws IOException {
         RecordCheckpointPlan recordCheckpointPlan =
-                new RecordCheckpointPlan(new ArrayList<>(ACK_TASKS));
+                new RecordCheckpointPlan(new ArrayList<>(acknowledgedExecutionTasks));
         PendingCheckpoint checkpoint = createPendingCheckpoint(recordCheckpointPlan);
         checkpoint.acknowledgeTask(
-                ACK_TASKS.get(0).getAttemptId(),
+                acknowledgedExecutionTasks.get(0).getAttemptId(),
                 TaskStateSnapshot.FINISHED_ON_RESTORE,
                 new CheckpointMetrics());
         assertThat(recordCheckpointPlan.getReportedFinishedOnRestoreTasks())
-                .contains(ACK_TASKS.get(0).getVertex());
+                .contains(acknowledgedExecutionTasks.get(0).getVertex());
     }
 
     @Test
     void testReportTaskFinishedOperators() throws IOException {
         RecordCheckpointPlan recordCheckpointPlan =
-                new RecordCheckpointPlan(new ArrayList<>(ACK_TASKS));
+                new RecordCheckpointPlan(new ArrayList<>(acknowledgedExecutionTasks));
         PendingCheckpoint checkpoint = createPendingCheckpoint(recordCheckpointPlan);
         checkpoint.acknowledgeTask(
-                ACK_TASKS.get(0).getAttemptId(),
+                acknowledgedExecutionTasks.get(0).getAttemptId(),
                 new TaskStateSnapshot(10, true),
                 new CheckpointMetrics());
         assertThat(recordCheckpointPlan.getReportedOperatorsFinishedTasks())
-                .contains(ACK_TASKS.get(0).getVertex());
+                .contains(acknowledgedExecutionTasks.get(0).getVertex());
     }
 
     // ------------------------------------------------------------------------
@@ -581,8 +581,8 @@ class PendingCheckpointTest {
             Executor executor)
             throws IOException {
 
-        final List<Execution> ackTasks = new ArrayList<>(ACK_TASKS);
-        final List<ExecutionVertex> tasksToCommit = new ArrayList<>(TASKS_TO_COMMIT);
+        final List<Execution> ackTasks = new ArrayList<>(acknowledgedExecutionTasks);
+        final List<ExecutionVertex> tasksToCommit = new ArrayList<>(PendingCheckpointTest.tasksToCommit);
         return createPendingCheckpoint(
                 props,
                 operatorCoordinators,
