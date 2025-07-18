@@ -105,12 +105,13 @@ class MiniClusterITCase {
         final Configuration config = new Configuration();
 
         // the slot timeout needs to be high enough to avoid causing TimeoutException
-        final Duration slotRequestTimeout = Duration.ofMillis(100);
+        final Duration jobSubmissionSlotRequestTimeout = Duration.ofMillis(100);
 
         // this triggers the failure for the default scheduler
-        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT,
+                jobSubmissionSlotRequestTimeout);
         // this triggers the failure for the adaptive scheduler
-        config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, jobSubmissionSlotRequestTimeout);
 
         // we have to disable sending the slot-unavailable request to allow for the timeout to kick
         // in
@@ -128,12 +129,13 @@ class MiniClusterITCase {
         final Configuration config = new Configuration();
 
         // the slot timeout needs to be high enough to avoid causing TimeoutException
-        final Duration slotRequestTimeout = Duration.ofNanos(Long.MAX_VALUE);
+        final Duration adaptiveSchedulerResourceWaitTimeout = Duration.ofNanos(Long.MAX_VALUE);
 
         // this triggers the failure for the default scheduler
-        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT,
+                adaptiveSchedulerResourceWaitTimeout);
         // this triggers the failure for the adaptive scheduler
-        config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, adaptiveSchedulerResourceWaitTimeout);
 
         // overwrite the default check delay to speed up the test execution
         config.set(ResourceManagerOptions.REQUIREMENTS_CHECK_DELAY, Duration.ofMillis(20));
