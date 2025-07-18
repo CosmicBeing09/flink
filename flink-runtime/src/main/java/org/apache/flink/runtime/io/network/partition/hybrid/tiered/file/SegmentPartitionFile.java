@@ -144,15 +144,15 @@ public class SegmentPartitionFile {
         }
     }
 
-    public static void deletePathQuietly(String toDelete) {
+    public static void deletePathQuietly(String pathToDelete) {
         try {
-            Path toRemovePath = new Path(toDelete);
-            FileSystem fs = toRemovePath.getFileSystem();
-            if (fs.exists(toRemovePath)) {
-                fs.delete(toRemovePath, true);
+            Path pathToRemove = new Path(pathToDelete);
+            FileSystem fs = pathToRemove.getFileSystem();
+            if (fs.exists(pathToRemove)) {
+                fs.delete(pathToRemove, true);
             }
         } catch (IOException e) {
-            LOG.error("Failed to delete files for {} ", toDelete, e);
+            LOG.error("Failed to delete files for {} ", pathToDelete, e);
         }
     }
 }
