@@ -50,20 +50,20 @@ public abstract class AtomicRtasITCaseBase {
     @RegisterExtension
     private static final MiniClusterExtension MINI_CLUSTER_EXTENSION = new MiniClusterExtension();
 
-    protected TableEnvironment tEnv;
+    protected TableEnvironment tableEnvironment;
 
     protected abstract TableEnvironment getTableEnvironment();
 
     @BeforeEach
     void setup() {
-        tEnv = getTableEnvironment();
+        tableEnvironment = getTableEnvironment();
         List<Row> sourceData = Collections.singletonList(Row.of(1, "ZM"));
 
         TestCollectionTableFactory.reset();
         TestCollectionTableFactory.initData(sourceData);
 
         String sourceDDL = "create table t1(a int, b varchar) with ('connector' = 'COLLECTION')";
-        tEnv.executeSql(sourceDDL);
+        tableEnvironment.executeSql(sourceDDL);
     }
 
     @AfterEach
@@ -106,10 +106,10 @@ public abstract class AtomicRtasITCaseBase {
             File tmpDataFolder)
             throws Exception {
         if (isCreateReplacedTable) {
-            tEnv.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
+            tableEnvironment.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
         }
 
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
         String dataDir = tmpDataFolder.getAbsolutePath();
         String sqlFragment = getCreateOrReplaceSqlFragment(isCreateOrReplace, tableName);
         String sql =
@@ -118,7 +118,7 @@ public abstract class AtomicRtasITCaseBase {
                         + dataDir
                         + "') as select * from t1";
         if (!isCreateOrReplace && !isCreateReplacedTable) {
-            assertThatThrownBy(() -> tEnv.executeSql(sql))
+            assertThatThrownBy(() -> tableEnvironment.executeSql(sql))
                     .isInstanceOf(TableException.class)
                     .hasMessage(
                             "The table `default_catalog`.`default_database`.`"
@@ -126,11 +126,11 @@ public abstract class AtomicRtasITCaseBase {
                                     + "` to be replaced doesn't exist."
                                     + " You can try to use CREATE TABLE AS statement or CREATE OR REPLACE TABLE AS statement.");
         } else {
-            tEnv.executeSql(sql).await();
+            tableEnvironment.executeSql(sql).await();
             if (isCreateReplacedTable) {
-                assertThat(tEnv.listTables()).contains(tableName);
+                assertThat(tableEnvironment.listTables()).contains(tableName);
             } else {
-                assertThat(tEnv.listTables()).doesNotContain(tableName);
+                assertThat(tableEnvironment.listTables()).doesNotContain(tableName);
             }
             verifyDataFile(dataDir, "data");
             assertThat(TestSupportsStagingTableFactory.JOB_STATUS_CHANGE_PROCESS).hasSize(2);
@@ -161,13 +161,13 @@ public abstract class AtomicRtasITCaseBase {
 
     private void commonTestForAtomicReplaceTableAsWithException(
             String tableName, boolean isCreateOrReplace, File tmpDataFolder) {
-        tEnv.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
+        tableEnvironment.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
         String dataDir = tmpDataFolder.getAbsolutePath();
         String sqlFragment = getCreateOrReplaceSqlFragment(isCreateOrReplace, tableName);
         assertThatCode(
                         () ->
-                                tEnv.executeSql(
+                                tableEnvironment.executeSql(
                                                 sqlFragment
                                                         + " with ('connector' = 'test-staging', 'data-dir' = '"
                                                         + dataDir
@@ -196,18 +196,18 @@ public abstract class AtomicRtasITCaseBase {
 
     private void commonTestForWithoutAtomicReplaceTableAs(
             String tableName, boolean isCreateOrReplace, File tmpDataFolder) throws Exception {
-        tEnv.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, false);
+        tableEnvironment.executeSql("create table " + tableName + " (a int) with ('connector' = 'PRINT')");
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, false);
         String dataDir = tmpDataFolder.getAbsolutePath();
         String sqlFragment = getCreateOrReplaceSqlFragment(isCreateOrReplace, tableName);
 
-        tEnv.executeSql(
+        tableEnvironment.executeSql(
                         sqlFragment
                                 + " with ('connector' = 'test-staging', 'data-dir' = '"
                                 + dataDir
                                 + "') as select * from t1")
                 .await();
-        assertThat(tEnv.listTables()).contains(tableName);
+        assertThat(tableEnvironment.listTables()).contains(tableName);
         // Not using StagedTable, so need to read the hidden file
         verifyDataFile(dataDir, "_data");
         assertThat(TestSupportsStagingTableFactory.JOB_STATUS_CHANGE_PROCESS).hasSize(0);
