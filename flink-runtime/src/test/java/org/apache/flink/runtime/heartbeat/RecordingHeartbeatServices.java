@@ -65,7 +65,7 @@ public final class RecordingHeartbeatServices implements HeartbeatServices {
     }
 
     @Override
-    public <I, O> HeartbeatManager<I, O> createHeartbeatManagerSender(
+    public <I, O> HeartbeatManager<I, O> createActiveHeartbeatManager(
             ResourceID resourceId,
             HeartbeatListener<I, O> heartbeatListener,
             ScheduledExecutor mainThreadExecutor,

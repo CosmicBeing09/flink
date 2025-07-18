@@ -62,7 +62,7 @@ public interface HeartbeatServices {
      * @param <O> Type of the outgoing payload
      * @return A new HeartbeatManager instance which actively sends heartbeats
      */
-    <I, O> HeartbeatManager<I, O> createHeartbeatManagerSender(
+    <I, O> HeartbeatManager<I, O> createActiveHeartbeatManager(
             ResourceID resourceId,
             HeartbeatListener<I, O> heartbeatListener,
             ScheduledExecutor mainThreadExecutor,

@@ -435,7 +435,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
 
     private HeartbeatManager<TaskExecutorToJobManagerHeartbeatPayload, AllocatedSlotReport>
             createTaskManagerHeartbeatManager(HeartbeatServices heartbeatServices) {
-        return heartbeatServices.createHeartbeatManagerSender(
+        return heartbeatServices.createActiveHeartbeatManager(
                 resourceId, new TaskManagerHeartbeatListener(), getMainThreadExecutor(), log);
     }
 

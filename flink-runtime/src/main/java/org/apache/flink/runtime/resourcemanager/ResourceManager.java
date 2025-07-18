@@ -1280,14 +1280,14 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
 
     private void startHeartbeatServices() {
         taskManagerHeartbeatManager =
-                heartbeatServices.createHeartbeatManagerSender(
+                heartbeatServices.createActiveHeartbeatManager(
                         resourceId,
                         new TaskManagerHeartbeatListener(),
                         getMainThreadExecutor(),
                         log);
 
         jobManagerHeartbeatManager =
-                heartbeatServices.createHeartbeatManagerSender(
+                heartbeatServices.createActiveHeartbeatManager(
                         resourceId,
                         new JobManagerHeartbeatListener(),
                         getMainThreadExecutor(),
