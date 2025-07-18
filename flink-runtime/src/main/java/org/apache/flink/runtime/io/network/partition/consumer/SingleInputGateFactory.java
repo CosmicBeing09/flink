@@ -171,7 +171,7 @@ public class SingleInputGateFactory {
         SupplierWithException<BufferPool, IOException> bufferPoolFactory =
                 createBufferPoolFactory(
                         networkBufferPool,
-                        gateBuffersSpec.getExpectedBuffersPerGate(),
+                        gateBuffersSpec.getRequiredBuffersPerGate(),
                         gateBuffersSpec.getMinBuffersPerGate(),
                         gateBuffersSpec.getMaxBuffersPerGate());
 
@@ -446,12 +446,12 @@ public class SingleInputGateFactory {
     @VisibleForTesting
     static SupplierWithException<BufferPool, IOException> createBufferPoolFactory(
             BufferPoolFactory bufferPoolFactory,
-            int expectedBuffersPerGate,
+            int requiredBuffersPerGate,
             int minBuffersPerGate,
             int maxBuffersPerGate) {
         return () ->
                 bufferPoolFactory.createBufferPool(
-                        expectedBuffersPerGate, minBuffersPerGate, maxBuffersPerGate);
+                        requiredBuffersPerGate, minBuffersPerGate, maxBuffersPerGate);
     }
 
     /** Statistics of input channels. */

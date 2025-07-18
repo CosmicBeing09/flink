@@ -181,7 +181,7 @@ class GateBuffersSpecTest {
             int maxBuffersPerGate) {
         assertThat(gateBuffersSpec.getEffectiveExclusiveBuffersPerChannel())
                 .isEqualTo(numExclusivePerChannel);
-        assertThat(gateBuffersSpec.getExpectedBuffersPerGate()).isEqualTo(expectedBuffersPerGate);
+        assertThat(gateBuffersSpec.getRequiredBuffersPerGate()).isEqualTo(expectedBuffersPerGate);
         assertThat(gateBuffersSpec.getMinBuffersPerGate()).isEqualTo(minBuffersPerGate);
         assertThat(gateBuffersSpec.getMaxBuffersPerGate()).isEqualTo(maxBuffersPerGate);
     }
