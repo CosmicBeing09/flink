@@ -178,11 +178,11 @@ public class NettyShuffleEnvironmentConfiguration {
 
     // ------------------------------------------------------------------------
 
-    public int numNetworkBuffers() {
+    public int getNumNetworkBuffers() {
         return numNetworkBuffers;
     }
 
-    public int networkBufferSize() {
+    public int getNetworkBufferSize() {
         return networkBufferSize;
     }
 
