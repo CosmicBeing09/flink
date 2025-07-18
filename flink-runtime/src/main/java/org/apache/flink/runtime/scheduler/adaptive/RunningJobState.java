@@ -58,13 +58,13 @@ import java.util.stream.Collectors;
 
 /** State which represents a running job with an {@link ExecutionGraph} and assigned slots. */
 class RunningJobState extends StateWithExecutionGraph
-        implements ResourceEventListener, RescaleManager.Context, CheckpointStatsListener {
+        implements ResourceEventListener, AdaptiveScalingManager.Context, CheckpointStatsListener {
 
     private final Context context;
 
     private final RescalingController parallelismChangeController;
     private final RescalingController desiredResourcesController;
-    private final RescaleManager stateTransitionManager;
+    private final AdaptiveScalingManager stateTransitionManager;
     private final int rescaleOnFailedCheckpointCount;
     // null indicates that there was no change event observed, yet
     @Nullable private AtomicInteger failedCheckpointCountdown;
@@ -77,7 +77,7 @@ class RunningJobState extends StateWithExecutionGraph
             Context context,
             ClassLoader userCodeClassLoader,
             List<ExceptionHistoryEntry> failureCollection,
-            RescaleManager.Factory rescaleManagerFactory,
+            AdaptiveScalingManager.Factory rescaleManagerFactory,
             int minParallelismChangeForRescale,
             int rescaleOnFailedCheckpointCount,
             Instant lastRescale) {
@@ -322,7 +322,7 @@ class RunningJobState extends StateWithExecutionGraph
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final ClassLoader userCodeClassLoader;
         private final List<ExceptionHistoryEntry> failureCollection;
-        private final RescaleManager.Factory rescaleManagerFactory;
+        private final AdaptiveScalingManager.Factory rescaleManagerFactory;
         private final int minParallelismChangeForRescale;
         private final int rescaleOnFailedCheckpointCount;
 
@@ -334,7 +334,7 @@ class RunningJobState extends StateWithExecutionGraph
                 Context context,
                 ClassLoader userCodeClassLoader,
                 List<ExceptionHistoryEntry> failureCollection,
-                RescaleManager.Factory rescaleManagerFactory,
+                AdaptiveScalingManager.Factory rescaleManagerFactory,
                 int minParallelismChangeForRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.context = context;

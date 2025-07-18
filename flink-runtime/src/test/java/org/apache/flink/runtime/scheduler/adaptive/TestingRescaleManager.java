@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import java.time.Instant;
 
-public class TestingRescaleManager implements RescaleManager {
+public class TestingRescaleManager implements AdaptiveScalingManager {
 
     private final Runnable onChangeRunnable;
     private final Runnable onTriggerRunnable;
@@ -40,7 +40,7 @@ public class TestingRescaleManager implements RescaleManager {
         this.onTriggerRunnable.run();
     }
 
-    public static class Factory implements RescaleManager.Factory {
+    public static class Factory implements AdaptiveScalingManager.Factory {
 
         private final Runnable onChangeRunnable;
         private final Runnable onTriggerRunnable;
@@ -55,7 +55,7 @@ public class TestingRescaleManager implements RescaleManager {
         }
 
         @Override
-        public RescaleManager create(Context ignoredContext, Instant ignoredLastRescale) {
+        public AdaptiveScalingManager create(Context ignoredContext, Instant ignoredLastRescale) {
             return new TestingRescaleManager(onChangeRunnable, onTriggerRunnable);
         }
     }

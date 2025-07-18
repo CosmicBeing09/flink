@@ -460,7 +460,7 @@ class DefaultRescaleManagerTest {
      * {@code TestingRescaleManagerContext} provides methods for adjusting the elapsed time and for
      * adjusting the available resources for rescaling.
      */
-    private static class TestingRescaleManagerContext implements RescaleManager.Context {
+    private static class TestingRescaleManagerContext implements AdaptiveScalingManager.Context {
 
         // default configuration values to allow for easy transitioning between the phases
         private static final Duration SCALING_MIN = Duration.ofHours(1);
