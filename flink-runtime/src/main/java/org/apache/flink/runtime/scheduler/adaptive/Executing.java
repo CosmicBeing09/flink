@@ -226,12 +226,12 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void onCompletedCheckpoint() {
+    public void onCheckpointCompleted() {
         triggerPotentialRescale();
     }
 
     @Override
-    public void onFailedCheckpoint() {
+    public void onCheckpointFailed() {
         if (this.failedCheckpointCountdown != null
                 && this.failedCheckpointCountdown.decrementAndGet() <= 0) {
             triggerPotentialRescale();

@@ -272,12 +272,12 @@ class DefaultCheckpointStatsTrackerTest {
         final CheckpointStatsListener listener =
                 new CheckpointStatsListener() {
                     @Override
-                    public void onCompletedCheckpoint() {
+                    public void onCheckpointCompleted() {
                         onCompletedCheckpointCount.incrementAndGet();
                     }
 
                     @Override
-                    public void onFailedCheckpoint() {
+                    public void onCheckpointFailed() {
                         onFailedCheckpointCount.incrementAndGet();
                     }
                 };

@@ -1624,14 +1624,14 @@ public class AdaptiveScheduler
         return new CheckpointStatsListener() {
 
             @Override
-            public void onFailedCheckpoint() {
-                runIfSupported(CheckpointStatsListener::onFailedCheckpoint, "onFailedCheckpoint");
+            public void onCheckpointFailed() {
+                runIfSupported(CheckpointStatsListener::onCheckpointFailed, "onFailedCheckpoint");
             }
 
             @Override
-            public void onCompletedCheckpoint() {
+            public void onCheckpointCompleted() {
                 runIfSupported(
-                        CheckpointStatsListener::onCompletedCheckpoint, "onCompletedCheckpoint");
+                        CheckpointStatsListener::onCheckpointCompleted, "onCompletedCheckpoint");
             }
 
             private void runIfSupported(
