@@ -98,11 +98,11 @@ public class CliFrontend {
 
     // actions
     private static final String ACTION_RUN = "run";
-    private static final String ACTION_RUN_APPLICATION = "run-application";
+    private static final String ACTION_RUN_AS_APPLICATION = "run-application";
     private static final String ACTION_INFO = "info";
     private static final String ACTION_LIST = "list";
     private static final String ACTION_CANCEL = "cancel";
-    private static final String ACTION_STOP = "stop";
+    private static final String ACTION_DRAIN = "stop";
     private static final String ACTION_SAVEPOINT = "savepoint";
     private static final String ACTION_CHECKPOINT = "checkpoint";
 
@@ -1296,7 +1296,7 @@ public class CliFrontend {
                 case ACTION_RUN:
                     run(params);
                     return 0;
-                case ACTION_RUN_APPLICATION:
+                case ACTION_RUN_AS_APPLICATION:
                     runApplication(params);
                     return 0;
                 case ACTION_LIST:
@@ -1308,7 +1308,7 @@ public class CliFrontend {
                 case ACTION_CANCEL:
                     cancel(params);
                     return 0;
-                case ACTION_STOP:
+                case ACTION_DRAIN:
                     stop(params);
                     return 0;
                 case ACTION_SAVEPOINT:
