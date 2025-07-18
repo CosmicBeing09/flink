@@ -90,9 +90,9 @@ public class MockEnvironment implements Environment, AutoCloseable {
 
     private final ExecutionConfig executionConfig;
 
-    private final MemoryManager memManager;
+    private final MemoryManager memoryManager;
 
-    private final SharedResources sharedResources;
+    private final SharedResources sharedResourceManager;
 
     private final IOManager ioManager;
 
@@ -183,8 +183,8 @@ public class MockEnvironment implements Environment, AutoCloseable {
         this.outputs = new LinkedList<ResultPartitionWriter>();
         this.executionAttemptID = createExecutionAttemptId(jobVertexID, subtaskIndex, 0);
 
-        this.memManager = memManager;
-        this.sharedResources = new SharedResources();
+        this.memoryManager = memManager;
+        this.sharedResourceManager = new SharedResources();
         this.ioManager = ioManager;
         this.taskManagerRuntimeInfo = taskManagerRuntimeInfo;
 
@@ -251,12 +251,12 @@ public class MockEnvironment implements Environment, AutoCloseable {
 
     @Override
     public MemoryManager getMemoryManager() {
-        return this.memManager;
+        return this.memoryManager;
     }
 
     @Override
     public SharedResources getSharedResources() {
-        return this.sharedResources;
+        return this.sharedResourceManager;
     }
 
     @Override
@@ -426,13 +426,13 @@ public class MockEnvironment implements Environment, AutoCloseable {
     public void close() throws Exception {
         // close() method should be idempotent and calling memManager.verifyEmpty() will throw after
         // it was shutdown.
-        if (!memManager.isShutdown()) {
+        if (!memoryManager.isShutdown()) {
             checkState(
-                    memManager.verifyEmpty(),
+                    memoryManager.verifyEmpty(),
                     "Memory Manager managed memory was not completely freed.");
         }
 
-        memManager.shutdown();
+        memoryManager.shutdown();
         ioManager.close();
     }
 

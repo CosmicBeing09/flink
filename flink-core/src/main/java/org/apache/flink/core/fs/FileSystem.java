@@ -237,10 +237,10 @@ public abstract class FileSystem implements IFileSystem {
      * Mapping of file system schemes to the corresponding factories, populated in {@link
      * FileSystem#initialize(Configuration, PluginManager)}.
      */
-    private static final HashMap<String, FileSystemFactory> FS_FACTORIES = new HashMap<>();
+    private static final HashMap<String, FileSystemFactory> FILE_SYSTEM_FACTORIES = new HashMap<>();
 
     /** The default factory that is used when no scheme matches. */
-    private static final FileSystemFactory FALLBACK_FACTORY = loadHadoopFsFactory();
+    private static final FileSystemFactory DEFAULT_FS_FACTORY = loadHadoopFsFactory();
 
     /** All known plugins for a given scheme, do not fallback for those. */
     private static final Multimap<String, String> DIRECTLY_SUPPORTED_FILESYSTEM =
@@ -322,7 +322,7 @@ public abstract class FileSystem implements IFileSystem {
         try {
             // make sure file systems are re-instantiated after re-configuration
             CACHE.clear();
-            FS_FACTORIES.clear();
+            FILE_SYSTEM_FACTORIES.clear();
 
             Collection<Supplier<Iterator<FileSystemFactory>>> factorySuppliers = new ArrayList<>(2);
             factorySuppliers.add(() -> ServiceLoader.load(FileSystemFactory.class).iterator());
@@ -345,11 +345,11 @@ public abstract class FileSystem implements IFileSystem {
 
                 FileSystemFactory fsf =
                         ConnectionLimitingFactory.decorateIfLimited(factory, scheme, config);
-                FS_FACTORIES.put(scheme, fsf);
+                FILE_SYSTEM_FACTORIES.put(scheme, fsf);
             }
 
             // configure the default (fallback) factory
-            FALLBACK_FACTORY.configure(config);
+            DEFAULT_FS_FACTORY.configure(config);
 
             // also read the default file system scheme
             final String stringifiedUri = config.get(CoreOptions.DEFAULT_FILESYSTEM_SCHEME, null);
@@ -491,13 +491,13 @@ public abstract class FileSystem implements IFileSystem {
             // this "default" initialization makes sure that the FileSystem class works
             // even when not configured with an explicit Flink configuration, like on
             // JobManager or TaskManager setup
-            if (FS_FACTORIES.isEmpty()) {
+            if (FILE_SYSTEM_FACTORIES.isEmpty()) {
                 initializeWithoutPlugins(new Configuration());
             }
 
             // Try to create a new file system
             final FileSystem fs;
-            final FileSystemFactory factory = FS_FACTORIES.get(uri.getScheme());
+            final FileSystemFactory factory = FILE_SYSTEM_FACTORIES.get(uri.getScheme());
 
             if (factory != null) {
                 ClassLoader classLoader = factory.getClassLoader();
@@ -521,7 +521,7 @@ public abstract class FileSystem implements IFileSystem {
                                 uri.getScheme(), String.join(", ", plugins)));
             } else {
                 try {
-                    fs = FALLBACK_FACTORY.create(uri);
+                    fs = DEFAULT_FS_FACTORY.create(uri);
                 } catch (UnsupportedFileSystemSchemeException e) {
                     if (DIRECTLY_SUPPORTED_FILESYSTEM.containsKey(uri.getScheme())) {
                         final Collection<String> plugins =

@@ -25,20 +25,20 @@ import java.nio.file.Path;
 
 /** The utils contains some methods same as org.junit.rules.TemporaryFolder in Junit4. */
 public class TempDirUtils {
-    private static final String TMP_PREFIX = "junit";
+    private static final String TEMP_DIR_PREFIX = "junit";
 
-    public static File newFolder(Path path) throws IOException {
+    public static File newFolder(Path parentDir) throws IOException {
         Path tempPath;
-        if (path != null) {
-            tempPath = Files.createTempDirectory(path, TMP_PREFIX);
+        if (parentDir != null) {
+            tempPath = Files.createTempDirectory(parentDir, TEMP_DIR_PREFIX);
         } else {
-            tempPath = Files.createTempDirectory(TMP_PREFIX);
+            tempPath = Files.createTempDirectory(TEMP_DIR_PREFIX);
         }
         return tempPath.toFile();
     }
 
     public static File newFile(Path path) throws IOException {
-        return File.createTempFile(TMP_PREFIX, null, path.toFile());
+        return File.createTempFile(TEMP_DIR_PREFIX, null, path.toFile());
     }
 
     public static File newFolder(Path base, String... paths) throws IOException {

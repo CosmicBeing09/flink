@@ -55,7 +55,7 @@ public class ForStNativeMetricOptions implements Serializable {
     //  ForSt property based metrics, report at column family level
     // --------------------------------------------------------------------------------------------
 
-    public static final String METRICS_COLUMN_FAMILY_AS_VARIABLE_KEY =
+    public static final String CONFIG_KEY_EXPOSE_COLUMN_FAMILY_AS_VARIABLE =
             "state.backend.forst.metrics" + ".column-family-as-variable";
 
     public static final ConfigOption<Boolean> MONITOR_NUM_IMMUTABLE_MEM_TABLES =
@@ -239,8 +239,8 @@ public class ForStNativeMetricOptions implements Serializable {
                     .withDescription(
                             "Monitor the memory size for the entries being pinned in block cache.");
 
-    public static final ConfigOption<Boolean> COLUMN_FAMILY_AS_VARIABLE =
-            ConfigOptions.key(METRICS_COLUMN_FAMILY_AS_VARIABLE_KEY)
+    public static final ConfigOption<Boolean> EXPOSE_COLUMN_FAMILY_AS_VARIABLE =
+            ConfigOptions.key(CONFIG_KEY_EXPOSE_COLUMN_FAMILY_AS_VARIABLE)
                     .booleanType()
                     .defaultValue(false)
                     .withDescription(
@@ -448,7 +448,7 @@ public class ForStNativeMetricOptions implements Serializable {
             options.enableNumFilesAtLevel();
         }
 
-        options.setColumnFamilyAsVariable(config.get(COLUMN_FAMILY_AS_VARIABLE));
+        options.setColumnFamilyAsVariable(config.get(EXPOSE_COLUMN_FAMILY_AS_VARIABLE));
     }
 
     private static void configureStatisticsMetrics(
@@ -483,7 +483,7 @@ public class ForStNativeMetricOptions implements Serializable {
 
     private final Set<ForStProperty> properties;
     private final Set<TickerType> monitorTickerTypes;
-    private boolean columnFamilyAsVariable = COLUMN_FAMILY_AS_VARIABLE.defaultValue();
+    private boolean columnFamilyAsVariable = EXPOSE_COLUMN_FAMILY_AS_VARIABLE.defaultValue();
 
     public ForStNativeMetricOptions() {
         this.properties = new HashSet<>();

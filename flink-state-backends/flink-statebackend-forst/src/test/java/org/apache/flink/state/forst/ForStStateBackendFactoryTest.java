@@ -65,17 +65,17 @@ public class ForStStateBackendFactoryTest {
     public void testLoadForStStateBackend() throws Exception {
         final String localDir1 = tmp.newFolder().getAbsolutePath();
         final String localDir2 = tmp.newFolder().getAbsolutePath();
-        final String localDirs = localDir1 + File.pathSeparator + localDir2;
+        final String localDbStoragePaths = localDir1 + File.pathSeparator + localDir2;
         final boolean incremental = !CheckpointingOptions.INCREMENTAL_CHECKPOINTS.defaultValue();
 
         final Configuration config1 = new Configuration();
         config1.setString(backendKey, "forst");
-        config1.set(ForStOptions.LOCAL_DIRECTORIES, localDirs);
+        config1.set(ForStOptions.LOCAL_DB_STORAGE_PATHS, localDbStoragePaths);
         config1.set(CheckpointingOptions.INCREMENTAL_CHECKPOINTS, incremental);
 
         final Configuration config2 = new Configuration();
         config2.setString(backendKey, ForStStateBackendFactory.class.getName());
-        config2.set(ForStOptions.LOCAL_DIRECTORIES, localDirs);
+        config2.set(ForStOptions.LOCAL_DB_STORAGE_PATHS, localDbStoragePaths);
         config2.set(CheckpointingOptions.INCREMENTAL_CHECKPOINTS, incremental);
 
         StateBackend backend1 = StateBackendLoader.loadStateBackendFromConfig(config1, cl, null);
@@ -109,7 +109,7 @@ public class ForStStateBackendFactoryTest {
         final Configuration config = new Configuration();
         config.setString(backendKey, "hashmap"); // this should not be picked up
         config.set(
-                ForStOptions.LOCAL_DIRECTORIES,
+                ForStOptions.LOCAL_DB_STORAGE_PATHS,
                 localDir3 + ":" + localDir4); // this should not be picked up
 
         final StateBackend loadedBackend =

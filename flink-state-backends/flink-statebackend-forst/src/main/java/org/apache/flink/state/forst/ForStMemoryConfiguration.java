@@ -135,7 +135,7 @@ public final class ForStMemoryConfiguration implements Serializable {
     }
 
     /**
-     * Gets the fixed amount of memory to be shared between all RocksDB instances (in all tasks and
+     * Gets the fixed amount of memory to be shared between all ForSt instances (in all tasks and
      * operators) of a slot. Null is not configured. See {@link ForStOptions#USE_MANAGED_MEMORY} for
      * details.
      */

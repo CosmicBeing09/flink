@@ -32,8 +32,8 @@ import java.io.Serializable;
  * Utils to create {@link Cache} and {@link WriteBufferManager} which are used to control total
  * memory usage of ForSt.
  */
-public class ForStMemoryControllerUtils {
-    private static final Logger LOG = LoggerFactory.getLogger(ForStMemoryControllerUtils.class);
+public class ForestMemoryControllerUtils {
+    private static final Logger LOG = LoggerFactory.getLogger(ForestMemoryControllerUtils.class);
 
     /**
      * Allocate memory controllable ForSt shared resources.
@@ -48,16 +48,16 @@ public class ForStMemoryControllerUtils {
             long totalMemorySize,
             double writeBufferRatio,
             double highPriorityPoolRatio,
-            boolean usingPartitionedIndexFilters,
+            boolean enablePartitionedIndexFiltering,
             ForStMemoryFactory factory) {
 
         long calculatedCacheCapacity =
-                ForStMemoryControllerUtils.calculateActualCacheCapacity(
+                ForestMemoryControllerUtils.calculateActualCacheCapacity(
                         totalMemorySize, writeBufferRatio);
         final Cache cache = factory.createCache(calculatedCacheCapacity, highPriorityPoolRatio);
 
         long writeBufferManagerCapacity =
-                ForStMemoryControllerUtils.calculateWriteBufferManagerCapacity(
+                ForestMemoryControllerUtils.calculateWriteBufferManagerCapacity(
                         totalMemorySize, writeBufferRatio);
         final WriteBufferManager wbm =
                 factory.createWriteBufferManager(writeBufferManagerCapacity, cache);
@@ -67,9 +67,9 @@ public class ForStMemoryControllerUtils {
                 calculatedCacheCapacity,
                 highPriorityPoolRatio,
                 writeBufferManagerCapacity,
-                usingPartitionedIndexFilters);
+                enablePartitionedIndexFiltering);
         return new ForStSharedResources(
-                cache, wbm, writeBufferManagerCapacity, usingPartitionedIndexFilters);
+                cache, wbm, writeBufferManagerCapacity, enablePartitionedIndexFiltering);
     }
 
     /**
@@ -180,14 +180,14 @@ public class ForStMemoryControllerUtils {
                 new ForStMemoryFactory() {
                     @Override
                     public Cache createCache(long cacheCapacity, double highPriorityPoolRatio) {
-                        return ForStMemoryControllerUtils.createCache(
+                        return ForestMemoryControllerUtils.createCache(
                                 cacheCapacity, highPriorityPoolRatio);
                     }
 
                     @Override
                     public WriteBufferManager createWriteBufferManager(
                             long writeBufferManagerCapacity, Cache cache) {
-                        return ForStMemoryControllerUtils.createWriteBufferManager(
+                        return ForestMemoryControllerUtils.createWriteBufferManager(
                                 writeBufferManagerCapacity, cache);
                     }
                 };

@@ -43,7 +43,7 @@ import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.filesystem.FsCheckpointStorageAccess;
 import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
-import org.apache.flink.state.forst.ForStMemoryControllerUtils.ForStMemoryFactory;
+import org.apache.flink.state.forst.ForestMemoryControllerUtils.ForStMemoryFactory;
 import org.apache.flink.state.forst.sync.ForStPriorityQueueConfig;
 import org.apache.flink.state.forst.sync.ForStSyncKeyedStateBackendBuilder;
 import org.apache.flink.util.AbstractID;
@@ -95,7 +95,7 @@ import static org.apache.flink.util.Preconditions.checkArgument;
 public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         implements ConfigurableStateBackend {
 
-    public static final String REMOTE_SHORTCUT_CHECKPOINT = "checkpoint-dir";
+    public static final String CHECKPOINT_DIRECTORY_SHORTCUT = "checkpoint-dir";
 
     private static final long serialVersionUID = 1L;
 
@@ -216,8 +216,8 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         if (original.remoteForStDirectory != null) {
             this.remoteForStDirectory = original.remoteForStDirectory;
         } else {
-            String remoteDirStr = config.get(ForStOptions.REMOTE_DIRECTORY);
-            if (REMOTE_SHORTCUT_CHECKPOINT.equals(remoteDirStr)) {
+            String remoteDirStr = config.get(ForStOptions.PRIMARY_DIRECTORY);
+            if (CHECKPOINT_DIRECTORY_SHORTCUT.equals(remoteDirStr)) {
                 this.remoteForStDirectory = null;
                 this.remoteShareWithCheckpoint = true;
             } else {
@@ -233,7 +233,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         if (original.localForStDirectories != null) {
             this.localForStDirectories = original.localForStDirectories;
         } else {
-            final String forStLocalPaths = config.get(ForStOptions.LOCAL_DIRECTORIES);
+            final String forStLocalPaths = config.get(ForStOptions.LOCAL_DB_STORAGE_PATHS);
             if (forStLocalPaths != null) {
                 String[] directories = forStLocalPaths.split(",|" + File.pathSeparator);
 

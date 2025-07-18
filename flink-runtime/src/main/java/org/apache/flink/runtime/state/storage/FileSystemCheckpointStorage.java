@@ -98,7 +98,7 @@ public class FileSystemCheckpointStorage
      * State below this size will be stored as part of the metadata, rather than in files. A value
      * of '-1' means not yet configured, in which case the default will be used.
      */
-    private final int fileStateThreshold;
+    private final int minFileSizeThreshold;
 
     /**
      * The write buffer size for created checkpoint stream, this should not be less than file state
@@ -217,7 +217,7 @@ public class FileSystemCheckpointStorage
                 "The write buffer size must be not less than '-1', where '-1' means to use "
                         + "the value from the deployment's configuration.");
 
-        this.fileStateThreshold = fileStateSizeThreshold;
+        this.minFileSizeThreshold = fileStateSizeThreshold;
         this.writeBufferSize = writeBufferSize;
         this.location =
                 ExternalizedSnapshotLocation.newBuilder()
@@ -233,17 +233,17 @@ public class FileSystemCheckpointStorage
      */
     private FileSystemCheckpointStorage(
             FileSystemCheckpointStorage original, ReadableConfig configuration) {
-        if (getValidFileStateThreshold(original.fileStateThreshold) >= 0) {
-            this.fileStateThreshold = original.fileStateThreshold;
+        if (getValidFileStateThreshold(original.minFileSizeThreshold) >= 0) {
+            this.minFileSizeThreshold = original.minFileSizeThreshold;
         } else {
             final int configuredStateThreshold =
                     getValidFileStateThreshold(
                             configuration.get(FS_SMALL_FILE_THRESHOLD).getBytes());
 
             if (configuredStateThreshold >= 0) {
-                this.fileStateThreshold = configuredStateThreshold;
+                this.minFileSizeThreshold = configuredStateThreshold;
             } else {
-                this.fileStateThreshold =
+                this.minFileSizeThreshold =
                         MathUtils.checkedDownCast(
                                 FS_SMALL_FILE_THRESHOLD.defaultValue().getBytes());
 
@@ -263,7 +263,7 @@ public class FileSystemCheckpointStorage
                         ? original.writeBufferSize
                         : configuration.get(CheckpointingOptions.FS_WRITE_BUFFER_SIZE);
 
-        this.writeBufferSize = Math.max(bufferSize, this.fileStateThreshold);
+        this.writeBufferSize = Math.max(bufferSize, this.minFileSizeThreshold);
         this.location =
                 ExternalizedSnapshotLocation.newBuilder()
                         .withCheckpointPath(original.location.getBaseCheckpointPath())
@@ -368,8 +368,8 @@ public class FileSystemCheckpointStorage
      * @return The file size threshold, in bytes.
      */
     public int getMinFileSizeThreshold() {
-        return fileStateThreshold >= 0
-                ? fileStateThreshold
+        return minFileSizeThreshold >= 0
+                ? minFileSizeThreshold
                 : MathUtils.checkedDownCast(FS_SMALL_FILE_THRESHOLD.defaultValue().getBytes());
     }
 
@@ -389,7 +389,7 @@ public class FileSystemCheckpointStorage
 
     @Override
     public int hashCode() {
-        return Objects.hash(location, fileStateThreshold, writeBufferSize);
+        return Objects.hash(location, minFileSizeThreshold, writeBufferSize);
     }
 
     @Override
@@ -402,7 +402,7 @@ public class FileSystemCheckpointStorage
         }
         FileSystemCheckpointStorage that = (FileSystemCheckpointStorage) other;
         return Objects.equals(location, that.location)
-                && Objects.equals(fileStateThreshold, that.fileStateThreshold)
+                && Objects.equals(minFileSizeThreshold, that.minFileSizeThreshold)
                 && Objects.equals(writeBufferSize, that.writeBufferSize);
     }
 }

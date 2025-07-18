@@ -144,7 +144,7 @@ public class ForStOperationUtils {
             Environment env,
             double memoryFraction,
             Logger logger,
-            ForStMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory)
+            ForestMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory)
             throws IOException {
 
         try {
@@ -304,12 +304,12 @@ public class ForStOperationUtils {
             long writeBufferSize, long arenaBlockSizeConfigured, long writeBufferManagerCapacity) {
 
         long defaultArenaBlockSize =
-                ForStMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize);
+                ForestMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize);
         long arenaBlockSize =
                 arenaBlockSizeConfigured <= 0 ? defaultArenaBlockSize : arenaBlockSizeConfigured;
         long mutableLimit =
-                ForStMemoryControllerUtils.calculateForStMutableLimit(writeBufferManagerCapacity);
-        if (ForStMemoryControllerUtils.validateArenaBlockSize(arenaBlockSize, mutableLimit)) {
+                ForestMemoryControllerUtils.calculateForStMutableLimit(writeBufferManagerCapacity);
+        if (ForestMemoryControllerUtils.validateArenaBlockSize(arenaBlockSize, mutableLimit)) {
             return true;
         } else {
             LOG.warn(

@@ -742,10 +742,10 @@ public class ForStStateBackendConfigTest {
     }
 
     @Test
-    public void testRemoteDirectory() throws Exception {
+    public void testPrimaryDirectory() throws Exception {
         FileSystem.initialize(new Configuration(), null);
         Configuration configuration = new Configuration();
-        configuration.set(ForStOptions.REMOTE_DIRECTORY, tempFolder.newFolder().toURI().toString());
+        configuration.set(ForStOptions.PRIMARY_DIRECTORY, tempFolder.newFolder().toURI().toString());
         ForStStateBackend forStStateBackend =
                 new ForStStateBackend().configure(configuration, null);
         ForStKeyedStateBackend<Integer> keyedBackend = null;
@@ -757,9 +757,9 @@ public class ForStStateBackendConfigTest {
                             IntSerializer.INSTANCE);
             assertTrue(
                     keyedBackend
-                            .getRemoteBasePath()
+                            .getStateStoragePath()
                             .toString()
-                            .startsWith(configuration.get(ForStOptions.REMOTE_DIRECTORY)));
+                            .startsWith(configuration.get(ForStOptions.PRIMARY_DIRECTORY)));
         } finally {
             if (keyedBackend != null) {
                 keyedBackend.dispose();

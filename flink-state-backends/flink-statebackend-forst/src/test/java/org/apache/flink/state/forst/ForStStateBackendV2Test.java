@@ -53,9 +53,9 @@ import java.util.List;
 import static org.apache.flink.configuration.StateRecoveryOptions.RESTORE_MODE;
 import static org.apache.flink.state.forst.ForStConfigurableOptions.USE_DELETE_FILES_IN_RANGE_DURING_RESCALING;
 import static org.apache.flink.state.forst.ForStConfigurableOptions.USE_INGEST_DB_RESTORE_MODE;
-import static org.apache.flink.state.forst.ForStOptions.LOCAL_DIRECTORIES;
-import static org.apache.flink.state.forst.ForStOptions.REMOTE_DIRECTORY;
-import static org.apache.flink.state.forst.ForStStateBackend.REMOTE_SHORTCUT_CHECKPOINT;
+import static org.apache.flink.state.forst.ForStOptions.LOCAL_DB_STORAGE_PATHS;
+import static org.apache.flink.state.forst.ForStOptions.PRIMARY_DIRECTORY;
+import static org.apache.flink.state.forst.ForStStateBackend.CHECKPOINT_DIRECTORY_SHORTCUT;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 /** Tests for the async keyed state backend part of {@link ForStStateBackend}. */
@@ -166,10 +166,10 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
         ForStStateBackend backend = new ForStStateBackend();
         Configuration config = new Configuration();
         if (hasLocalDir) {
-            config.set(LOCAL_DIRECTORIES, tempFolderForForStLocal.toString());
+            config.set(LOCAL_DB_STORAGE_PATHS, tempFolderForForStLocal.toString());
         }
         if (hasRemoteDir) {
-            config.set(REMOTE_DIRECTORY, tempFolderForForstRemote.toString());
+            config.set(PRIMARY_DIRECTORY, tempFolderForForstRemote.toString());
         }
         config.set(USE_INGEST_DB_RESTORE_MODE, useIngestDbRestoreMode);
         config.set(USE_DELETE_FILES_IN_RANGE_DURING_RESCALING, useDeleteFileInRange);
@@ -206,8 +206,8 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
                 new FileSystemCheckpointStorage(new Path(checkpointPath), 0, -1);
 
         Configuration config = new Configuration();
-        config.set(LOCAL_DIRECTORIES, tempFolderForForStLocal.toString());
-        config.set(REMOTE_DIRECTORY, REMOTE_SHORTCUT_CHECKPOINT);
+        config.set(LOCAL_DB_STORAGE_PATHS, tempFolderForForStLocal.toString());
+        config.set(PRIMARY_DIRECTORY, CHECKPOINT_DIRECTORY_SHORTCUT);
         config.set(CheckpointingOptions.CREATE_CHECKPOINT_SUB_DIR, createJob);
 
         checkpointStorage =
@@ -237,7 +237,7 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
                                 new CloseableRegistry(),
                                 1.0d));
 
-        assertThat(keyedBackend.getRemoteBasePath().getParent())
+        assertThat(keyedBackend.getStateStoragePath().getParent())
                 .isEqualTo(
                         new Path(
                                 checkpointStorage.getCheckpointPath(),

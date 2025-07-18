@@ -292,7 +292,7 @@ public class ForStKeyedStateBackendBuilder<K>
                 logger.warn(
                         "Failed to delete ForSt local base path {}, remote base path {}.",
                         optionsContainer.getLocalBasePath(),
-                        optionsContainer.getRemoteBasePath(),
+                        optionsContainer.getStateStoragePath(),
                         ex);
             }
             IOUtils.closeQuietly(optionsContainer);
@@ -311,7 +311,7 @@ public class ForStKeyedStateBackendBuilder<K>
         logger.info(
                 "Finished building ForSt keyed state-backend at local base path: {}, remote base path: {}.",
                 optionsContainer.getLocalBasePath(),
-                optionsContainer.getRemoteBasePath());
+                optionsContainer.getStateStoragePath());
         return new ForStKeyedStateBackend<>(
                 backendUID,
                 executionConfig,
