@@ -94,9 +94,9 @@ import static org.assertj.core.api.HamcrestCondition.matching;
 /** Random test for sort code generator. */
 class SortCodeGeneratorTest {
 
-    private static final int RECORD_NUM = 3000;
+    private static final int TOTAL_RECORDS = 3000;
 
-    private final LogicalType[] types =
+    private final LogicalType[] allLogicalTypes =
             new LogicalType[] {
                 new BooleanType(),
                 new TinyIntType(),
@@ -150,7 +150,7 @@ class SortCodeGeneratorTest {
             Random rnd = new Random();
             LogicalType[] fields = new LogicalType[rnd.nextInt(9) + 1];
             for (int i = 0; i < fields.length; i++) {
-                fields[i] = types[rnd.nextInt(types.length)];
+                fields[i] = allLogicalTypes[rnd.nextInt(allLogicalTypes.length)];
             }
             inputType = RowType.of(fields);
 
@@ -167,7 +167,7 @@ class SortCodeGeneratorTest {
         Random rnd = new Random();
         LogicalType[] fields = new LogicalType[rnd.nextInt(9) + 1];
         for (int i = 0; i < fields.length; i++) {
-            fields[i] = types[rnd.nextInt(types.length)];
+            fields[i] = allLogicalTypes[rnd.nextInt(allLogicalTypes.length)];
         }
         inputType = RowType.of(fields);
 
@@ -213,12 +213,12 @@ class SortCodeGeneratorTest {
     }
 
     private BinaryRowData[] getTestData() {
-        BinaryRowData[] result = new BinaryRowData[RECORD_NUM];
+        BinaryRowData[] result = new BinaryRowData[TOTAL_RECORDS];
         Object[][] values = new Object[inputType.getFieldCount()][];
         for (int i = 0; i < inputType.getFieldCount(); i++) {
             values[i] = shuffle(generateValues(inputType.getTypeAt(i)));
         }
-        for (int i = 0; i < RECORD_NUM; i++) {
+        for (int i = 0; i < TOTAL_RECORDS; i++) {
             result[i] = row(i, values);
         }
         return result;
@@ -228,7 +228,7 @@ class SortCodeGeneratorTest {
 
         Random rnd = new Random();
 
-        int seedNum = RECORD_NUM / 5;
+        int seedNum = TOTAL_RECORDS / 5;
         Object[] seeds = new Object[seedNum];
         seeds[0] = null;
         seeds[1] = value1(type, rnd);
@@ -308,8 +308,8 @@ class SortCodeGeneratorTest {
         }
 
         // result values
-        Object[] results = new Object[RECORD_NUM];
-        for (int i = 0; i < RECORD_NUM; i++) {
+        Object[] results = new Object[TOTAL_RECORDS];
+        for (int i = 0; i < TOTAL_RECORDS; i++) {
             results[i] = seeds[rnd.nextInt(seedNum)];
         }
         return results;
