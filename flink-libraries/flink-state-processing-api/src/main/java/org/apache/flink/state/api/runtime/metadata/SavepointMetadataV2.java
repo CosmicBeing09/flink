@@ -104,22 +104,22 @@ public class SavepointMetadataV2 {
 
     public void addOperator(
             OperatorIdentifier identifier, StateBootstrapTransformation<?> transformation) {
-        OperatorID id = identifier.getOperatorId();
+        OperatorID operatorId = identifier.getOperatorId();
 
-        if (operatorStateIndex.containsKey(id)) {
+        if (operatorStateIndex.containsKey(operatorId)) {
             throw new IllegalArgumentException(
                     "The savepoint already contains "
                             + identifier
                                     .getUid()
                                     .map(uid -> "uid " + uid)
-                                    .orElse("hash " + id.toHexString())
+                                    .orElse("hash " + operatorId.toHexString())
                             + ". All uid's/hashes must be unique.");
         }
 
         operatorStateIndex.put(
-                id,
+                operatorId,
                 OperatorStateSpecV2.newWithTransformation(
-                        new StateBootstrapTransformationWithID<>(id, transformation)));
+                        new StateBootstrapTransformationWithID<>(operatorId, transformation)));
     }
 
     /** @return List of {@link OperatorState} that already exists within the savepoint. */

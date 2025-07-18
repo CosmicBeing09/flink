@@ -207,8 +207,8 @@ public class SavepointWriter {
 
     /** @deprecated use {@link #removeOperator(OperatorIdentifier)} */
     @Deprecated
-    public SavepointWriter removeOperator(String uid) {
-        return removeOperator(OperatorIdentifier.forUid(uid));
+    public SavepointWriter removeOperator(String operatorIdentifierString) {
+        return removeOperator(OperatorIdentifier.forUid(operatorIdentifierString));
     }
 
     /**
@@ -377,7 +377,7 @@ public class SavepointWriter {
                                 newOperatorState
                                         .getBootstrapTransformation()
                                         .writeOperatorState(
-                                                newOperatorState.getOperatorID(),
+                                                newOperatorState.getOperatorIdentifier(),
                                                 stateBackend,
                                                 config,
                                                 metadata.getMaxParallelism(),
