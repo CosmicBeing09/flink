@@ -320,7 +320,7 @@ public final class ForStResourceContainer implements AutoCloseable {
     }
 
     @Nullable
-    public Path getRemoteBasePath() {
+    public Path getStateStoragePath() {
         return remoteBasePath;
     }
 

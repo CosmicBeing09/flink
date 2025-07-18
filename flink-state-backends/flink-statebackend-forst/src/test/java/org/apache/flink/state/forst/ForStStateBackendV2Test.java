@@ -237,7 +237,7 @@ class ForStStateBackendV2Test extends StateBackendTestV2Base<ForStStateBackend> 
                                 new CloseableRegistry(),
                                 1.0d));
 
-        assertThat(keyedBackend.getRemoteBasePath().getParent())
+        assertThat(keyedBackend.getStateStoragePath().getParent())
                 .isEqualTo(
                         new Path(
                                 checkpointStorage.getCheckpointPath(),

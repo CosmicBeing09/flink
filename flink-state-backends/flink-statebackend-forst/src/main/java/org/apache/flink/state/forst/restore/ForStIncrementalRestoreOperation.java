@@ -746,7 +746,7 @@ public class ForStIncrementalRestoreOperation<K> implements ForStRestoreOperatio
                 String uuid = UUID.randomUUID().toString();
 
                 String subPathStr =
-                        optionsContainer.getRemoteBasePath() != null
+                        optionsContainer.getStateStoragePath() != null
                                 ? exportBasePath.getName() + "/" + uuid
                                 : exportBasePath.toString() + "/" + uuid;
                 ExportImportFilesMetaData exportedColumnFamilyMetaData =
@@ -948,7 +948,7 @@ public class ForStIncrementalRestoreOperation<K> implements ForStRestoreOperatio
                 new ArrayList<>(stateMetaInfoSnapshots.size() + 1);
 
         String dbName =
-                optionsContainer.getRemoteBasePath() != null
+                optionsContainer.getStateStoragePath() != null
                         ? "/" + stateHandleSpec.getTransferDestination().getName()
                         : stateHandleSpec.getTransferDestination().toString();
 
