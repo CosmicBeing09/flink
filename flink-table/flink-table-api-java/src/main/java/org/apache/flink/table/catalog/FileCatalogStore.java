@@ -113,29 +113,29 @@ public class FileCatalogStore extends AbstractCatalogStore {
             throws CatalogException {
         checkOpenState();
 
-        Path catalogPath = getCatalogPath(catalogName);
+        Path catalogFilePath = getCatalogPath(catalogName);
         try {
-            FileSystem fs = catalogPath.getFileSystem();
+            FileSystem fs = catalogFilePath.getFileSystem();
 
-            if (fs.exists(catalogPath)) {
+            if (fs.exists(catalogFilePath)) {
                 throw new CatalogException(
                         String.format(
                                 "Catalog %s's store file %s is already exist.",
-                                catalogName, catalogPath));
+                                catalogName, catalogFilePath));
             }
 
-            try (FSDataOutputStream os = fs.create(catalogPath, WriteMode.NO_OVERWRITE)) {
+            try (FSDataOutputStream os = fs.create(catalogFilePath, WriteMode.NO_OVERWRITE)) {
                 YAML_MAPPER.writeValue(os, catalog.getConfiguration().toFileWritableMap());
             }
 
-            LOG.info("Catalog {}'s configuration saved to file {}", catalogName, catalogPath);
+            LOG.info("Catalog {}'s configuration saved to file {}", catalogName, catalogFilePath);
         } catch (CatalogException e) {
             throw e;
         } catch (Exception e) {
             throw new CatalogException(
                     String.format(
                             "Failed to store catalog %s's configuration to file %s.",
-                            catalogName, catalogPath),
+                            catalogName, catalogFilePath),
                     e);
         }
     }
@@ -152,17 +152,17 @@ public class FileCatalogStore extends AbstractCatalogStore {
     public void removeCatalog(String catalogName, boolean ignoreIfNotExists)
             throws CatalogException {
         checkOpenState();
-        Path catalogPath = getCatalogPath(catalogName);
+        Path catalogFilePath = getCatalogPath(catalogName);
         try {
-            FileSystem fs = catalogPath.getFileSystem();
+            FileSystem fs = catalogFilePath.getFileSystem();
 
-            if (fs.exists(catalogPath)) {
-                fs.delete(catalogPath, false);
+            if (fs.exists(catalogFilePath)) {
+                fs.delete(catalogFilePath, false);
             } else if (!ignoreIfNotExists) {
                 throw new CatalogException(
                         String.format(
                                 "Catalog %s's store file %s does not exist.",
-                                catalogName, catalogPath));
+                                catalogName, catalogFilePath));
             }
         } catch (CatalogException e) {
             throw e;
