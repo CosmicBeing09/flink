@@ -50,16 +50,16 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
 
     private final boolean mayHaveFinishedTasks;
 
-    private final Map<JobVertexID, ExecutionJobVertex> fullyFinishedOrFinishedOnRestoreVertices;
+    private final Map<JobVertexID, ExecutionJobVertex> finishedOrRestoredJobVerticesMap;
 
-    private final IdentityHashMap<ExecutionJobVertex, Integer> vertexOperatorsFinishedTasksCount;
+    private final IdentityHashMap<ExecutionJobVertex, Integer> finishedOperatorTasksCountByVertex;
 
     DefaultCheckpointPlan(
             List<Execution> tasksToTrigger,
             List<Execution> tasksToWaitFor,
             List<ExecutionVertex> tasksToCommitTo,
             List<Execution> finishedTasks,
-            List<ExecutionJobVertex> fullyFinishedJobVertex,
+            List<ExecutionJobVertex> fullyFinishedJobVertices,
             boolean mayHaveFinishedTasks) {
 
         this.tasksToTrigger = checkNotNull(tasksToTrigger);
@@ -68,13 +68,13 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
         this.finishedTasks = checkNotNull(finishedTasks);
         this.mayHaveFinishedTasks = mayHaveFinishedTasks;
 
-        this.fullyFinishedOrFinishedOnRestoreVertices = new HashMap<>();
-        fullyFinishedJobVertex.forEach(
+        this.finishedOrRestoredJobVerticesMap = new HashMap<>();
+        fullyFinishedJobVertices.forEach(
                 jobVertex ->
-                        fullyFinishedOrFinishedOnRestoreVertices.put(
+                        finishedOrRestoredJobVerticesMap.put(
                                 jobVertex.getJobVertexId(), jobVertex));
 
-        this.vertexOperatorsFinishedTasksCount = new IdentityHashMap<>();
+        this.finishedOperatorTasksCountByVertex = new IdentityHashMap<>();
     }
 
     @Override
@@ -98,8 +98,8 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     }
 
     @Override
-    public Collection<ExecutionJobVertex> getFullyFinishedJobVertex() {
-        return fullyFinishedOrFinishedOnRestoreVertices.values();
+    public Collection<ExecutionJobVertex> getFullyFinishedJobVertices() {
+        return finishedOrRestoredJobVerticesMap.values();
     }
 
     @Override
@@ -109,13 +109,13 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
 
     @Override
     public void reportTaskFinishedOnRestore(ExecutionVertex task) {
-        fullyFinishedOrFinishedOnRestoreVertices.putIfAbsent(
+        finishedOrRestoredJobVerticesMap.putIfAbsent(
                 task.getJobvertexId(), task.getJobVertex());
     }
 
     @Override
     public void reportTaskHasFinishedOperators(ExecutionVertex task) {
-        vertexOperatorsFinishedTasksCount.compute(
+        finishedOperatorTasksCountByVertex.compute(
                 task.getJobVertex(), (k, v) -> v == null ? 1 : v + 1);
     }
 
@@ -125,17 +125,17 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
             return;
         }
 
-        Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex = new HashMap<>();
+        Map<JobVertexID, ExecutionJobVertex> partlyFinishedVerticesMap = new HashMap<>();
         for (Execution task : finishedTasks) {
             JobVertexID jobVertexId = task.getVertex().getJobvertexId();
-            if (!fullyFinishedOrFinishedOnRestoreVertices.containsKey(jobVertexId)) {
-                partlyFinishedVertex.put(jobVertexId, task.getVertex().getJobVertex());
+            if (!finishedOrRestoredJobVerticesMap.containsKey(jobVertexId)) {
+                partlyFinishedVerticesMap.put(jobVertexId, task.getVertex().getJobVertex());
             }
         }
 
-        checkNoPartlyFinishedVertexUsedUnionListState(partlyFinishedVertex, operatorStates);
+        checkNoPartlyFinishedVertexUsedUnionListState(partlyFinishedVerticesMap, operatorStates);
         checkNoPartlyOperatorsFinishedVertexUsedUnionListState(
-                partlyFinishedVertex, operatorStates);
+                partlyFinishedVerticesMap, operatorStates);
 
         fulfillFullyFinishedOrFinishedOnRestoreOperatorStates(operatorStates);
         fulfillSubtaskStateForPartiallyFinishedOperators(operatorStates);
@@ -147,9 +147,9 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      * {@code UnionListState}.
      */
     private void checkNoPartlyFinishedVertexUsedUnionListState(
-            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
+            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVerticesMap,
             Map<OperatorID, OperatorState> operatorStates) {
-        for (ExecutionJobVertex vertex : partlyFinishedVertex.values()) {
+        for (ExecutionJobVertex vertex : partlyFinishedVerticesMap.values()) {
             if (hasUsedUnionListState(vertex, operatorStates)) {
                 throw new PartialFinishingNotSupportedByStateException(
                         String.format(
@@ -168,15 +168,15 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
      * forever since all the following checkpoints would be aborted.
      */
     private void checkNoPartlyOperatorsFinishedVertexUsedUnionListState(
-            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVertex,
+            Map<JobVertexID, ExecutionJobVertex> partlyFinishedVerticesMap,
             Map<OperatorID, OperatorState> operatorStates) {
         for (Map.Entry<ExecutionJobVertex, Integer> entry :
-                vertexOperatorsFinishedTasksCount.entrySet()) {
+                finishedOperatorTasksCountByVertex.entrySet()) {
             ExecutionJobVertex vertex = entry.getKey();
 
             // If the vertex is partly finished, then it must not used UnionListState
             // due to it passed the previous check.
-            if (partlyFinishedVertex.containsKey(vertex.getJobVertexId())) {
+            if (partlyFinishedVerticesMap.containsKey(vertex.getJobVertexId())) {
                 continue;
             }
 
@@ -227,20 +227,20 @@ public class DefaultCheckpointPlan implements CheckpointPlan {
     private void fulfillFullyFinishedOrFinishedOnRestoreOperatorStates(
             Map<OperatorID, OperatorState> operatorStates) {
         // Completes the operator state for the fully finished operators
-        for (ExecutionJobVertex jobVertex : fullyFinishedOrFinishedOnRestoreVertices.values()) {
-            for (OperatorIDPair operatorID : jobVertex.getOperatorIDs()) {
+        for (ExecutionJobVertex jobVertex : finishedOrRestoredJobVerticesMap.values()) {
+            for (OperatorIDPair operatorIDPair : jobVertex.getOperatorIDs()) {
                 OperatorState operatorState =
-                        operatorStates.get(operatorID.getGeneratedOperatorID());
+                        operatorStates.get(operatorIDPair.getGeneratedOperatorID());
                 checkState(
                         operatorState == null || !operatorState.hasSubtaskStates(),
                         "There should be no states or only coordinator state reported for fully finished operators");
 
                 operatorState =
                         new FullyFinishedOperatorState(
-                                operatorID.getGeneratedOperatorID(),
+                                operatorIDPair.getGeneratedOperatorID(),
                                 jobVertex.getParallelism(),
                                 jobVertex.getMaxParallelism());
-                operatorStates.put(operatorID.getGeneratedOperatorID(), operatorState);
+                operatorStates.put(operatorIDPair.getGeneratedOperatorID(), operatorState);
             }
         }
     }
