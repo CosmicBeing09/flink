@@ -111,14 +111,14 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
                 || (field.equals(ExpressionKeys.SELECT_ALL_CHAR_SCALA))) {
             // handle select all
             int keyPosition = 0;
-            for (TypeInformation<?> fType : types) {
-                if (fType instanceof CompositeType) {
-                    CompositeType<?> cType = (CompositeType<?>) fType;
-                    cType.getFlatFields(
+            for (TypeInformation<?> fieldTypeInfo : types) {
+                if (fieldTypeInfo instanceof CompositeType) {
+                    CompositeType<?> compositeType = (CompositeType<?>) fieldTypeInfo;
+                    compositeType.getFlatFields(
                             ExpressionKeys.SELECT_ALL_CHAR, offset + keyPosition, result);
-                    keyPosition += cType.getTotalFields() - 1;
+                    keyPosition += compositeType.getTotalFields() - 1;
                 } else {
-                    result.add(new FlatFieldDescriptor(offset + keyPosition, fType));
+                    result.add(new FlatFieldDescriptor(offset + keyPosition, fieldTypeInfo));
                 }
                 keyPosition++;
             }
