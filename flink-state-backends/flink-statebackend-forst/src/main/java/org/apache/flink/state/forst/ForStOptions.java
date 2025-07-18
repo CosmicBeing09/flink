@@ -36,7 +36,7 @@ public class ForStOptions {
 
     /** The local directory (on the TaskManager) where ForSt puts some meta files. */
     @Documentation.Section(Documentation.Sections.EXPERT_FORST)
-    public static final ConfigOption<String> LOCAL_DIRECTORIES =
+    public static final ConfigOption<String> LOCAL_DB_STORAGE_PATHS =
             ConfigOptions.key("state.backend.forst.local-dir")
                     .stringType()
                     .noDefaultValue()
@@ -60,7 +60,7 @@ public class ForStOptions {
                             String.format(
                                     "The remote directory where ForSt puts its SST files, fallback to %s if not configured."
                                             + " Recognized shortcut name is '%s', which means that forst shares the directory with checkpoint.",
-                                    LOCAL_DIRECTORIES.key(), CHECKPOINT_DIRECTORY_SHORTCUT));
+                                    LOCAL_DB_STORAGE_PATHS.key(), CHECKPOINT_DIRECTORY_SHORTCUT));
 
     @Documentation.Section(Documentation.Sections.STATE_BACKEND_FORST)
     public static final ConfigOption<String> CACHE_DIRECTORY =
@@ -70,7 +70,7 @@ public class ForStOptions {
                     .withDescription(
                             String.format(
                                     "The directory where ForSt caches its SST files, fallback to %s/cache if not configured.",
-                                    LOCAL_DIRECTORIES.key()));
+                                    LOCAL_DB_STORAGE_PATHS.key()));
 
     @Documentation.Section(Documentation.Sections.STATE_BACKEND_FORST)
     public static final ConfigOption<Long> CACHE_SIZE_BASE_LIMIT =

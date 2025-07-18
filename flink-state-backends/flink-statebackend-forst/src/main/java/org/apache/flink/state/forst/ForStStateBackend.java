@@ -233,7 +233,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         if (original.localForStDirectories != null) {
             this.localForStDirectories = original.localForStDirectories;
         } else {
-            final String forStLocalPaths = config.get(ForStOptions.LOCAL_DIRECTORIES);
+            final String forStLocalPaths = config.get(ForStOptions.LOCAL_DB_STORAGE_PATHS);
             if (forStLocalPaths != null) {
                 String[] directories = forStLocalPaths.split(",|" + File.pathSeparator);
 

@@ -39,7 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.flink.state.forst.ForStConfigurableOptions.USE_INGEST_DB_RESTORE_MODE;
-import static org.apache.flink.state.forst.ForStOptions.LOCAL_DIRECTORIES;
+import static org.apache.flink.state.forst.ForStOptions.LOCAL_DB_STORAGE_PATHS;
 
 /** Tests for the partitioned state part of {@link ForStStateBackendTest}. */
 @ExtendWith(ParameterizedTestExtension.class)
@@ -77,7 +77,7 @@ class ForStStateBackendTest extends StateBackendTestBase<ForStStateBackend> {
     protected ConfigurableStateBackend getStateBackend() throws Exception {
         ForStStateBackend backend = new ForStStateBackend();
         Configuration config = new Configuration();
-        config.set(LOCAL_DIRECTORIES, tempFolder.toString());
+        config.set(LOCAL_DB_STORAGE_PATHS, tempFolder.toString());
         config.set(USE_INGEST_DB_RESTORE_MODE, true);
         return backend.configure(config, Thread.currentThread().getContextClassLoader());
     }
