@@ -46,10 +46,10 @@ public class StateBackendTestUtils {
 
     /** Create an AbstractStateBackend supporting apply the snapshot result. */
     public static AbstractStateBackend wrapStateBackendWithSnapshotFunction(
-            AbstractStateBackend delegatedStataBackend,
+            AbstractStateBackend delegatedStateBackend,
             SerializableFunctionWithException<RunnableFuture<SnapshotResult<KeyedStateHandle>>>
                     snapshotResultFunction) {
-        return new ApplyingSnapshotStateBackend(delegatedStataBackend, snapshotResultFunction);
+        return new ApplyingSnapshotStateBackend(delegatedStateBackend, snapshotResultFunction);
     }
 
     public static StateBackend buildAsyncStateBackend(StateBackend delegatedSyncStateBackend) {
@@ -211,7 +211,7 @@ public class StateBackendTestUtils {
 
         private static final long serialVersionUID = 1L;
 
-        private final AbstractStateBackend delegatedStataBackend;
+        private final AbstractStateBackend delegatedStateBackend;
 
         private final SerializableFunctionWithException<
                         RunnableFuture<SnapshotResult<KeyedStateHandle>>>
@@ -221,20 +221,20 @@ public class StateBackendTestUtils {
                 AbstractStateBackend delegatedStataBackend,
                 SerializableFunctionWithException<RunnableFuture<SnapshotResult<KeyedStateHandle>>>
                         snapshotResultFunction) {
-            this.delegatedStataBackend = delegatedStataBackend;
+            this.delegatedStateBackend = delegatedStataBackend;
             this.snapshotResultFunction = snapshotResultFunction;
         }
 
         @Override
         public boolean useManagedMemory() {
-            return delegatedStataBackend.useManagedMemory();
+            return delegatedStateBackend.useManagedMemory();
         }
 
         @Override
         public <K> AbstractKeyedStateBackend<K> createKeyedStateBackend(
                 KeyedStateBackendParameters<K> parameters) throws IOException {
             AbstractKeyedStateBackend<K> delegatedKeyedStateBackend =
-                    delegatedStataBackend.createKeyedStateBackend(parameters);
+                    delegatedStateBackend.createKeyedStateBackend(parameters);
             return new AbstractKeyedStateBackend<K>(
                     parameters.getKvStateRegistry(),
                     parameters.getKeySerializer(),
@@ -332,7 +332,7 @@ public class StateBackendTestUtils {
         @Override
         public OperatorStateBackend createOperatorStateBackend(
                 OperatorStateBackendParameters parameters) throws Exception {
-            return delegatedStataBackend.createOperatorStateBackend(parameters);
+            return delegatedStateBackend.createOperatorStateBackend(parameters);
         }
     }
 
