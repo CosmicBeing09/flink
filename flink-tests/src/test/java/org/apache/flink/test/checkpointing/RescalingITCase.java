@@ -145,7 +145,7 @@ public class RescalingITCase extends TestLogger {
             final File checkpointDir = temporaryFolder.newFolder();
             final File savepointDir = temporaryFolder.newFolder();
 
-            config.set(StateBackendOptions.STATE_BACKEND, currentBackend);
+            config.set(StateBackendOptions.JOB_STATE_BACKEND, currentBackend);
             config.set(
                     CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir.toURI().toString());
             config.set(CheckpointingOptions.SAVEPOINT_DIRECTORY, savepointDir.toURI().toString());

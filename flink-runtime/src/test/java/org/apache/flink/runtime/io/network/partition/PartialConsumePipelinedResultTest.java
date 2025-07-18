@@ -62,7 +62,7 @@ class PartialConsumePipelinedResultTest {
 
     private static Configuration getFlinkConfiguration() {
         final Configuration config = new Configuration();
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, TestingUtils.DEFAULT_ASK_TIMEOUT);
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, TestingUtils.DEFAULT_ASK_TIMEOUT);
         config.set(NettyShuffleEnvironmentOptions.NETWORK_NUM_BUFFERS, NUMBER_OF_NETWORK_BUFFERS);
 
         return config;

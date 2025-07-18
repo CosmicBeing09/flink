@@ -301,7 +301,7 @@ public class CheckpointConfig implements java.io.Serializable {
      * @return The checkpoint timeout, in milliseconds.
      */
     public long getCheckpointTimeout() {
-        return configuration.get(CheckpointingOptions.CHECKPOINTING_TIMEOUT).toMillis();
+        return configuration.get(CheckpointingOptions.CHECKPOINT_ATTEMPT_MAX_TIMEOUT_DURATION).toMillis();
     }
 
     /**
@@ -317,7 +317,7 @@ public class CheckpointConfig implements java.io.Serializable {
                             MINIMAL_CHECKPOINT_TIME));
         }
         configuration.set(
-                CheckpointingOptions.CHECKPOINTING_TIMEOUT, Duration.ofMillis(checkpointTimeout));
+                CheckpointingOptions.CHECKPOINT_ATTEMPT_MAX_TIMEOUT_DURATION, Duration.ofMillis(checkpointTimeout));
     }
 
     /**
@@ -891,7 +891,7 @@ public class CheckpointConfig implements java.io.Serializable {
                 .getOptional(CheckpointingOptions.CHECKPOINTING_INTERVAL_DURING_BACKLOG)
                 .ifPresent(i -> this.setCheckpointIntervalDuringBacklog(i.toMillis()));
         configuration
-                .getOptional(CheckpointingOptions.CHECKPOINTING_TIMEOUT)
+                .getOptional(CheckpointingOptions.CHECKPOINT_ATTEMPT_MAX_TIMEOUT_DURATION)
                 .ifPresent(t -> this.setCheckpointTimeout(t.toMillis()));
         configuration
                 .getOptional(CheckpointingOptions.MAX_CONCURRENT_CHECKPOINTS)

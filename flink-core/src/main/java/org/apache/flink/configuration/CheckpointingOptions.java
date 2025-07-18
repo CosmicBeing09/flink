@@ -396,7 +396,7 @@ public class CheckpointingOptions {
                     .defaultValue(CheckpointingMode.EXACTLY_ONCE)
                     .withDescription("The checkpointing mode (exactly-once vs. at-least-once).");
 
-    public static final ConfigOption<Duration> CHECKPOINTING_TIMEOUT =
+    public static final ConfigOption<Duration> CHECKPOINT_ATTEMPT_MAX_TIMEOUT_DURATION =
             ConfigOptions.key("execution.checkpointing.timeout")
                     .durationType()
                     .defaultValue(Duration.ofMinutes(10))

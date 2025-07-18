@@ -541,7 +541,7 @@ class AdaptiveBatchSchedulerTest {
         return createScheduler(
                 jobGraph,
                 createCustomParallelismDecider(10),
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.defaultValue());
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.defaultValue());
     }
 
     private SchedulerBase createScheduler(

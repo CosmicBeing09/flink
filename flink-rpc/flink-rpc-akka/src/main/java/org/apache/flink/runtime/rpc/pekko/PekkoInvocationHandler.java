@@ -400,7 +400,7 @@ class PekkoInvocationHandler implements InvocationHandler, PekkoBasedEndpoint, R
                                             + "more time for responding, due to problems like slow machines or network jitters. In that case, you can try to increase %s.",
                                     rpcInvocation,
                                     recipient,
-                                    RpcOptions.ASK_TIMEOUT_DURATION.key()));
+                                    RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.key()));
         }
 
         newException.initCause(exception);

@@ -436,14 +436,14 @@ class StreamExecutionEnvironmentTest {
     void testBufferTimeoutEnabled() {
         Configuration config = new Configuration();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        config.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, true);
+        config.set(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED, true);
         testBufferTimeout(config, env);
     }
 
     @Test
     void testBufferTimeoutDisabled() {
         Configuration config = new Configuration();
-        config.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, false);
+        config.set(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED, false);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // The execution.buffer-timeout's default value 100ms will not take effect.

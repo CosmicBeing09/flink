@@ -64,7 +64,7 @@ class TaskManagerProfilingHandlerTest {
         taskManagerProfilingHandler =
                 new TaskManagerProfilingHandler(
                         () -> CompletableFuture.completedFuture(null),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         TaskManagerProfilingHeaders.getInstance(),
                         () -> CompletableFuture.completedFuture(resourceManagerGateway),

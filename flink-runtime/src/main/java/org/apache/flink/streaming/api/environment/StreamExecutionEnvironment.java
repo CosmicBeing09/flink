@@ -442,7 +442,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         }
 
         if (timeoutMillis == ExecutionOptions.DISABLED_NETWORK_BUFFER_TIMEOUT) {
-            this.configuration.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, false);
+            this.configuration.set(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED, false);
         } else {
             this.configuration.set(
                     ExecutionOptions.BUFFER_TIMEOUT, Duration.ofMillis(timeoutMillis));
@@ -457,7 +457,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The timeout of the buffer.
      */
     public long getBufferTimeout() {
-        return this.configuration.get(ExecutionOptions.BUFFER_TIMEOUT_ENABLED)
+        return this.configuration.get(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED)
                 ? this.configuration.get(ExecutionOptions.BUFFER_TIMEOUT).toMillis()
                 : ExecutionOptions.DISABLED_NETWORK_BUFFER_TIMEOUT;
     }
@@ -1064,7 +1064,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
 
         // reset state backend for backward compatibility
         configuration
-                .getOptional(StateBackendOptions.STATE_BACKEND)
+                .getOptional(StateBackendOptions.JOB_STATE_BACKEND)
                 .ifPresent(ignored -> this.defaultStateBackend = null);
     }
 

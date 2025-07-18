@@ -123,7 +123,7 @@ public class RestOptions {
      * @see #RETRY_DELAY
      */
     @Documentation.Section(Documentation.Sections.EXPERT_REST)
-    public static final ConfigOption<Integer> RETRY_MAX_ATTEMPTS =
+    public static final ConfigOption<Integer> CLIENT_RETRY_MAX_ATTEMPTS =
             key("rest.retry.max-attempts")
                     .intType()
                     .defaultValue(20)
@@ -134,7 +134,7 @@ public class RestOptions {
     /**
      * The time in ms that the client waits between retries.
      *
-     * @see #RETRY_MAX_ATTEMPTS
+     * @see #CLIENT_RETRY_MAX_ATTEMPTS
      */
     @Documentation.Section(Documentation.Sections.EXPERT_REST)
     public static final ConfigOption<Duration> RETRY_DELAY =
@@ -145,11 +145,11 @@ public class RestOptions {
                             String.format(
                                     "The time that the client waits between retries "
                                             + "(See also `%s`).",
-                                    RETRY_MAX_ATTEMPTS.key()));
+                                    CLIENT_RETRY_MAX_ATTEMPTS.key()));
 
     /** The maximum time in ms for the client to establish a TCP connection. */
     @Documentation.Section(Documentation.Sections.EXPERT_REST)
-    public static final ConfigOption<Duration> CONNECTION_TIMEOUT =
+    public static final ConfigOption<Duration> CLIENT_CONNECTION_TIMEOUT =
             key("rest.connection-timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(15_000L))
@@ -206,13 +206,13 @@ public class RestOptions {
     public static final ConfigOption<Duration> CACHE_CHECKPOINT_STATISTICS_TIMEOUT =
             key("rest.cache.checkpoint-statistics.timeout")
                     .durationType()
-                    .defaultValue(WebOptions.REFRESH_INTERVAL.defaultValue())
-                    .withFallbackKeys(WebOptions.REFRESH_INTERVAL.key())
+                    .defaultValue(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL.defaultValue())
+                    .withFallbackKeys(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL.key())
                     .withDescription(
                             Description.builder()
                                     .text(
                                             "Duration from write after which cached checkpoints statistics are cleaned up. For backwards compatibility, if no value is configured, %s will be used instead.",
-                                            code(WebOptions.REFRESH_INTERVAL.key()))
+                                            code(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL.key()))
                                     .build());
 
     /** Maximum number of entries in the checkpoint statistics cache. */

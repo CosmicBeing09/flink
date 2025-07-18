@@ -88,7 +88,7 @@ public class FixedDelayRestartBackoffTimeStrategy implements RestartBackoffTimeS
                 configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS);
         long delay =
                 configuration
-                        .get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY)
+                        .get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY)
                         .toMillis();
 
         return new FixedDelayRestartBackoffTimeStrategyFactory(maxAttempts, delay);

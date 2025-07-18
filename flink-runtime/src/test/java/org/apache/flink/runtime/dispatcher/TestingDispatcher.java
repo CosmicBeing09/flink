@@ -144,7 +144,7 @@ class TestingDispatcher extends Dispatcher {
     }
 
     <T> CompletableFuture<T> callAsyncInMainThread(Callable<CompletableFuture<T>> callable) {
-        return callAsync(callable, TestingUtils.TESTING_DURATION).thenCompose(Function.identity());
+        return callAsync(callable, TestingUtils.DEFAULT_TEST_EXECUTION_DURATION).thenCompose(Function.identity());
     }
 
     CompletableFuture<Void> getJobTerminationFuture(

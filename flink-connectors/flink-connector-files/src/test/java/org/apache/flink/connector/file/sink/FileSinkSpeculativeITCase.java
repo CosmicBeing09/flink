@@ -141,7 +141,7 @@ class FileSinkSpeculativeITCase {
     private static Configuration configure() {
         Configuration configuration = new Configuration();
         configuration.set(RestOptions.BIND_PORT, "0");
-        configuration.set(JobManagerOptions.SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
+        configuration.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
 
         // for speculative execution
         configuration.set(BatchExecutionOptions.SPECULATIVE_ENABLED, true);

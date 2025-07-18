@@ -43,7 +43,7 @@ public class StateBackendOptions {
      * <p>Recognized shortcut names are 'hashmap' and 'rocksdb'.
      */
     @Documentation.Section(value = Documentation.Sections.COMMON_STATE_BACKENDS, position = 1)
-    public static final ConfigOption<String> STATE_BACKEND =
+    public static final ConfigOption<String> JOB_STATE_BACKEND =
             ConfigOptions.key("state.backend.type")
                     .stringType()
                     .defaultValue("hashmap")

@@ -168,7 +168,7 @@ public class RestartStrategyOptions {
                                             code(FIXED_DELAY.getMainValue()))
                                     .build());
 
-    public static final ConfigOption<Duration> RESTART_STRATEGY_FIXED_DELAY_DELAY =
+    public static final ConfigOption<Duration> RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY =
             ConfigOptions.key(RESTART_STRATEGY_CONFIG_PREFIX + ".fixed-delay.delay")
                     .durationType()
                     .defaultValue(Duration.ofSeconds(1))
@@ -212,7 +212,7 @@ public class RestartStrategyOptions {
                                             code(FAILURE_RATE.getMainValue()))
                                     .build());
 
-    public static final ConfigOption<Duration> RESTART_STRATEGY_FAILURE_RATE_DELAY =
+    public static final ConfigOption<Duration> RESTART_STRATEGY_FAILURE_RATE_RETRY_DELAY =
             ConfigOptions.key(RESTART_STRATEGY_CONFIG_PREFIX + ".failure-rate.delay")
                     .durationType()
                     .defaultValue(Duration.ofSeconds(1))

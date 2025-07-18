@@ -85,7 +85,7 @@ public abstract class CancelingTestBase extends TestLogger {
         verifyJvmOptions();
         Configuration config = new Configuration();
         config.set(CoreOptions.FILESYTEM_DEFAULT_OVERRIDE, true);
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, TestingUtils.DEFAULT_ASK_TIMEOUT);
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, TestingUtils.DEFAULT_ASK_TIMEOUT);
         config.set(TaskManagerOptions.MEMORY_SEGMENT_SIZE, MemorySize.parse("4096"));
         config.set(NettyShuffleEnvironmentOptions.NETWORK_NUM_BUFFERS, 2048);
 
@@ -99,7 +99,7 @@ public abstract class CancelingTestBase extends TestLogger {
         // submit job
         final JobGraph jobGraph = getJobGraph(plan);
 
-        final long rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION).toMillis();
+        final long rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION).toMillis();
 
         ClusterClient<?> client = CLUSTER.getClusterClient();
         JobID jobID = client.submitJob(jobGraph).get();

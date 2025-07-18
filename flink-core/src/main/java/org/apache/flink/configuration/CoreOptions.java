@@ -540,7 +540,7 @@ public class CoreOptions {
      * which time (in milliseconds) stream opening fails with a timeout exception, if no stream
      * connection becomes available. Unlimited timeout be default.
      */
-    public static ConfigOption<Long> fileSystemConnectionLimitTimeout(String scheme) {
+    public static ConfigOption<Long> fileSystemConnectionLimitAcquireTimeout(String scheme) {
         return ConfigOptions.key("fs." + scheme + ".limit.timeout").longType().defaultValue(0L);
     }
 
@@ -550,7 +550,7 @@ public class CoreOptions {
      * that inactive streams make up the full pool of limited connections, and no further
      * connections can be established. Unlimited timeout be default.
      */
-    public static ConfigOption<Long> fileSystemConnectionLimitStreamInactivityTimeout(
+    public static ConfigOption<Long> fileSystemConnectionLimitIdleTimeout(
             String scheme) {
         return ConfigOptions.key("fs." + scheme + ".limit.stream-timeout")
                 .longType()

@@ -101,7 +101,7 @@ class JobManagerLogListHandlerTest {
     private JobManagerLogListHandler createHandler(@Nullable final File jobManagerLogRoot) {
         return new JobManagerLogListHandler(
                 () -> CompletableFuture.completedFuture(dispatcherGateway),
-                TestingUtils.TIMEOUT,
+                TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                 Collections.emptyMap(),
                 JobManagerLogListHeaders.getInstance(),
                 jobManagerLogRoot);

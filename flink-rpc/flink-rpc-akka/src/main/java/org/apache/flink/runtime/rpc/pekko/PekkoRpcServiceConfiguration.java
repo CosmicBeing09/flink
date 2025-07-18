@@ -77,7 +77,7 @@ public class PekkoRpcServiceConfiguration {
     }
 
     public static PekkoRpcServiceConfiguration fromConfiguration(Configuration configuration) {
-        final Duration timeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration timeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         final long maximumFramesize = PekkoRpcServiceUtils.extractMaximumFramesize(configuration);
 

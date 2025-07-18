@@ -65,7 +65,7 @@ class JobManagerCustomLogHandlerTest {
         testInstance =
                 new JobManagerCustomLogHandler(
                         () -> CompletableFuture.completedFuture(dispatcherGateway),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         JobManagerCustomLogHeaders.getInstance(),
                         logRoot);

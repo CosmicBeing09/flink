@@ -62,7 +62,7 @@ public class TestingDefaultExecutionGraphBuilder {
         return new TestingDefaultExecutionGraphBuilder();
     }
 
-    private Duration rpcTimeout = RpcOptions.ASK_TIMEOUT_DURATION.defaultValue();
+    private Duration rpcTimeout = RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue();
     private ClassLoader userClassLoader = DefaultExecutionGraph.class.getClassLoader();
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
     private ShuffleMaster<?> shuffleMaster = ShuffleTestUtils.DEFAULT_SHUFFLE_MASTER;

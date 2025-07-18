@@ -45,7 +45,7 @@ class JobManagerJobConfigurationHandlerTest {
         final JobManagerJobConfigurationHandler handler =
                 new JobManagerJobConfigurationHandler(
                         () -> null,
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         JobManagerJobConfigurationHeaders.getInstance(),
                         configuration);

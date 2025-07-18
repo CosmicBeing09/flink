@@ -332,7 +332,7 @@ public class StreamGraphGenerator {
 
         if (shouldExecuteInBatchMode) {
             configureStreamGraphBatch(graph);
-            configuration.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, false);
+            configuration.set(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED, false);
         } else {
             configureStreamGraphStreaming(graph);
         }
@@ -588,7 +588,7 @@ public class StreamGraphGenerator {
     }
 
     private long getBufferTimeout() {
-        return configuration.get(ExecutionOptions.BUFFER_TIMEOUT_ENABLED)
+        return configuration.get(ExecutionOptions.EXECUTION_BUFFER_FLUSHING_ENABLED)
                 ? configuration.get(ExecutionOptions.BUFFER_TIMEOUT).toMillis()
                 : ExecutionOptions.DISABLED_NETWORK_BUFFER_TIMEOUT;
     }

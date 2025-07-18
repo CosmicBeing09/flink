@@ -39,8 +39,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestingUtils {
     private static final UUID ZERO_UUID = new UUID(0L, 0L);
 
-    public static final Duration TESTING_DURATION = Duration.ofMinutes(2L);
-    public static final Duration TIMEOUT = Duration.ofMinutes(1L);
+    public static final Duration DEFAULT_TEST_EXECUTION_DURATION = Duration.ofMinutes(2L);
+    public static final Duration DEFAULT_TEST_EXECUTION_TIMEOUT = Duration.ofMinutes(1L);
     public static final Duration DEFAULT_ASK_TIMEOUT = Duration.ofSeconds(200);
 
     public static Duration infiniteTime() {

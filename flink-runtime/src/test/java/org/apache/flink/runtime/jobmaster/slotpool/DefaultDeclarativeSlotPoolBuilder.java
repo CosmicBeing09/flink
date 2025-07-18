@@ -25,7 +25,7 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.function.Consumer;
 
-import static org.apache.flink.configuration.JobManagerOptions.SLOT_REQUEST_MAX_INTERVAL;
+import static org.apache.flink.configuration.JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL;
 import static org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter.forMainThread;
 
 /** Builder for {@link DefaultDeclarativeSlotPool}. */
@@ -36,7 +36,7 @@ final class DefaultDeclarativeSlotPoolBuilder {
             ignored -> {};
     private Duration idleSlotTimeout = Duration.ofSeconds(20);
     private Duration rpcTimeout = Duration.ofSeconds(20);
-    private Duration slotRequestMaxInterval = SLOT_REQUEST_MAX_INTERVAL.defaultValue();
+    private Duration slotRequestMaxInterval = JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL.defaultValue();
     private ComponentMainThreadExecutor componentMainThreadExecutor = forMainThread();
 
     public DefaultDeclarativeSlotPoolBuilder setAllocatedSlotPool(

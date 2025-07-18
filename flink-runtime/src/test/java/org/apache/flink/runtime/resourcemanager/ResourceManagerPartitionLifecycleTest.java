@@ -190,7 +190,7 @@ class ResourceManagerPartitionLifecycleTest {
                         taskExecutorAddress);
         final CompletableFuture<RegistrationResponse> registrationFuture =
                 resourceManagerGateway.registerTaskExecutor(
-                        taskExecutorRegistration, TestingUtils.TIMEOUT);
+                        taskExecutorRegistration, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT);
 
         assertThatFuture(registrationFuture)
                 .eventuallySucceeds()

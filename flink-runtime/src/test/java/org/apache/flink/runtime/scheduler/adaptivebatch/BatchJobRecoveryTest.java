@@ -754,7 +754,7 @@ public class BatchJobRecoveryTest {
                 createScheduler(
                         deserializeJobGraph(serializedJobGraph),
                         failingJobEventStore,
-                        BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM
+                        BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM
                                 .defaultValue(),
                         BatchExecutionOptions.JOB_RECOVERY_SNAPSHOT_MIN_PAUSE.defaultValue());
         runInMainThread(newScheduler::startScheduling);
@@ -1022,7 +1022,7 @@ public class BatchJobRecoveryTest {
         return createScheduler(
                 jobGraph,
                 jobEventStore,
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.defaultValue(),
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.defaultValue(),
                 BatchExecutionOptions.JOB_RECOVERY_SNAPSHOT_MIN_PAUSE.defaultValue());
     }
 
@@ -1031,7 +1031,7 @@ public class BatchJobRecoveryTest {
         return createScheduler(
                 jobGraph,
                 jobEventStore,
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.defaultValue(),
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.defaultValue(),
                 jobRecoverySnapshotMinPause);
     }
 

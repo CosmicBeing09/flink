@@ -87,7 +87,7 @@ abstract class AggregatingMetricsHandlerTestBase<
                         () -> null,
                         rpcServiceAddress -> null,
                         Executors.directExecutor(),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         MetricOptions.METRIC_FETCHER_UPDATE_INTERVAL.defaultValue().toMillis());
         store = fetcher.getMetricStore();
 

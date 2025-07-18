@@ -123,7 +123,7 @@ public class FailureRateRestartBackoffTimeStrategy implements RestartBackoffTime
                         .toMillis();
         long delay =
                 configuration
-                        .get(RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_DELAY)
+                        .get(RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_RETRY_DELAY)
                         .toMillis();
 
         return new FailureRateRestartBackoffTimeStrategyFactory(

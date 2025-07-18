@@ -38,7 +38,7 @@ class SavepointWriterTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         Configuration configuration = new Configuration();
         configuration.set(
-                StateBackendOptions.STATE_BACKEND,
+                StateBackendOptions.JOB_STATE_BACKEND,
                 CustomStateBackendFactory.class.getCanonicalName());
         configuration.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
 

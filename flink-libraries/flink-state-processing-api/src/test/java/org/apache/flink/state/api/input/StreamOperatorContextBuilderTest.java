@@ -42,7 +42,7 @@ public class StreamOperatorContextBuilderTest {
     public void testStateBackendLoading() throws Exception {
         Configuration configuration = new Configuration();
         configuration.set(
-                StateBackendOptions.STATE_BACKEND,
+                StateBackendOptions.JOB_STATE_BACKEND,
                 CustomStateBackendFactory.class.getCanonicalName());
 
         MockStreamingRuntimeContext context = new MockStreamingRuntimeContext(true, 1, 0);

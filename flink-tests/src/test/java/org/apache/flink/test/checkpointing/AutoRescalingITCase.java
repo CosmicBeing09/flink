@@ -161,7 +161,7 @@ public class AutoRescalingITCase extends TestLogger {
             final File checkpointDir = temporaryFolder.newFolder();
             final File savepointDir = temporaryFolder.newFolder();
 
-            config.set(StateBackendOptions.STATE_BACKEND, currentBackend);
+            config.set(StateBackendOptions.JOB_STATE_BACKEND, currentBackend);
             config.set(RocksDBConfigurableOptions.USE_INGEST_DB_RESTORE_MODE, useIngestDB);
             config.set(CheckpointingOptions.INCREMENTAL_CHECKPOINTS, true);
             config.set(StateRecoveryOptions.LOCAL_RECOVERY, true);
@@ -178,8 +178,8 @@ public class AutoRescalingITCase extends TestLogger {
             // speed the test suite up
             // - lower refresh interval -> controls how fast we invalidate ExecutionGraphCache
             // - lower slot idle timeout -> controls how fast we return idle slots to TM
-            config.set(WebOptions.REFRESH_INTERVAL, Duration.ofMillis(50L));
-            config.set(JobManagerOptions.SLOT_IDLE_TIMEOUT, Duration.ofMillis(50L));
+            config.set(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL, Duration.ofMillis(50L));
+            config.set(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT, Duration.ofMillis(50L));
 
             cluster =
                     new MiniClusterWithClientResource(

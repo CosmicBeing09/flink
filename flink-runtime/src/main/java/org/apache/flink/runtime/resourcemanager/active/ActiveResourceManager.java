@@ -161,7 +161,7 @@ public class ActiveResourceManager<WorkerType extends ResourceIDRetrievable>
                 clusterInformation,
                 fatalErrorHandler,
                 resourceManagerMetricGroup,
-                Preconditions.checkNotNull(flinkConfig).get(RpcOptions.ASK_TIMEOUT_DURATION),
+                Preconditions.checkNotNull(flinkConfig).get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION),
                 ioExecutor);
 
         this.flinkConfig = flinkConfig;

@@ -73,7 +73,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
         Configuration config = new Configuration();
         config.set(TaskManagerOptions.MANAGED_MEMORY_SIZE, MemorySize.parse("48m"));
         config.set(RpcOptions.LOOKUP_TIMEOUT_DURATION, Duration.ofMinutes(1));
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofMinutes(1));
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofMinutes(1));
         return config;
     }
 

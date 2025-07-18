@@ -130,7 +130,7 @@ public final class CollectDynamicSink implements DynamicTableSink {
                         inputStream
                                 .getExecutionEnvironment()
                                 .getConfiguration()
-                                .get(RpcOptions.ASK_TIMEOUT_DURATION)
+                                .get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION)
                                 .toMillis();
 
                 iterator =

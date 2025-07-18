@@ -44,7 +44,7 @@ public class WebOptions {
                             "Access-Control-Allow-Origin header for all responses from the web-frontend.");
 
     /** The config parameter defining the refresh interval for the web-frontend in milliseconds. */
-    public static final ConfigOption<Duration> REFRESH_INTERVAL =
+    public static final ConfigOption<Duration> SCHEDULER_UI_REFRESH_INTERVAL =
             key("web.refresh-interval")
                     .durationType()
                     .defaultValue(Duration.ofMillis(3000L))
@@ -53,7 +53,7 @@ public class WebOptions {
 
     /** The config parameter defining the flink web directory to be used by the webmonitor. */
     @Documentation.OverrideDefault("System.getProperty(\"java.io.tmpdir\")")
-    public static final ConfigOption<String> TMP_DIR =
+    public static final ConfigOption<String> WEB_REST_TMP_DIR =
             key("web.tmpdir")
                     .stringType()
                     .defaultValue(System.getProperty("java.io.tmpdir"))
@@ -75,7 +75,7 @@ public class WebOptions {
                                     .text(
                                             "Local directory that is used by the REST API for storing uploaded jars. If not specified a dynamic directory will be created"
                                                     + " under %s.",
-                                            code(TMP_DIR.key()))
+                                            code(WEB_REST_TMP_DIR.key()))
                                     .build());
 
     /** The config parameter defining the number of archived jobs for the JobManager. */

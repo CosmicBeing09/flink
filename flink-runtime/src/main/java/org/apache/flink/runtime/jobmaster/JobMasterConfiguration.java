@@ -30,9 +30,9 @@ import java.time.Duration;
 /** Configuration for the {@link JobMaster}. */
 public class JobMasterConfiguration {
 
-    private final Duration rpcTimeout;
+    private final Duration jobMasterRpcTimeout;
 
-    private final Duration slotRequestTimeout;
+    private final Duration jobMasterSlotRequestTimeout;
 
     private final String tmpDirectory;
 
@@ -46,19 +46,19 @@ public class JobMasterConfiguration {
             String tmpDirectory,
             RetryingRegistrationConfiguration retryingRegistrationConfiguration,
             Configuration configuration) {
-        this.rpcTimeout = Preconditions.checkNotNull(rpcTimeout);
-        this.slotRequestTimeout = Preconditions.checkNotNull(slotRequestTimeout);
+        this.jobMasterRpcTimeout = Preconditions.checkNotNull(rpcTimeout);
+        this.jobMasterSlotRequestTimeout = Preconditions.checkNotNull(slotRequestTimeout);
         this.tmpDirectory = Preconditions.checkNotNull(tmpDirectory);
         this.retryingRegistrationConfiguration = retryingRegistrationConfiguration;
         this.configuration = Preconditions.checkNotNull(configuration);
     }
 
     public Duration getRpcTimeout() {
-        return rpcTimeout;
+        return jobMasterRpcTimeout;
     }
 
     public Duration getSlotRequestTimeout() {
-        return slotRequestTimeout;
+        return jobMasterSlotRequestTimeout;
     }
 
     public String getTmpDirectory() {
@@ -75,10 +75,10 @@ public class JobMasterConfiguration {
 
     public static JobMasterConfiguration fromConfiguration(Configuration configuration) {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         final Duration slotRequestTimeout =
-                configuration.get(JobManagerOptions.SLOT_REQUEST_TIMEOUT);
+                configuration.get(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT);
 
         final String tmpDirectory = ConfigurationUtils.parseTempDirectories(configuration)[0];
 

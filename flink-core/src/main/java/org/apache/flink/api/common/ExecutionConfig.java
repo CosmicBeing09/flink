@@ -929,11 +929,11 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     }
 
     public boolean isUseSnapshotCompression() {
-        return configuration.get(ExecutionOptions.SNAPSHOT_COMPRESSION);
+        return configuration.get(ExecutionOptions.CHECKPOINT_SNAPSHOT_COMPRESSION_ENABLED);
     }
 
     public void setUseSnapshotCompression(boolean useSnapshotCompression) {
-        configuration.set(ExecutionOptions.SNAPSHOT_COMPRESSION, useSnapshotCompression);
+        configuration.set(ExecutionOptions.CHECKPOINT_SNAPSHOT_COMPRESSION_ENABLED, useSnapshotCompression);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -1152,7 +1152,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
                 .getOptional(TaskManagerOptions.TASK_CANCELLATION_TIMEOUT)
                 .ifPresent(timeout -> setTaskCancellationTimeout(timeout.toMillis()));
         configuration
-                .getOptional(ExecutionOptions.SNAPSHOT_COMPRESSION)
+                .getOptional(ExecutionOptions.CHECKPOINT_SNAPSHOT_COMPRESSION_ENABLED)
                 .ifPresent(this::setUseSnapshotCompression);
         configuration
                 .getOptional(RestartStrategyOptions.RESTART_STRATEGY)

@@ -201,7 +201,7 @@ public class AdaptiveScheduler
                 StateTransitionManager.Context context,
                 Supplier<Temporal> clock,
                 Duration cooldownTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration initialResourceStabilizationTimeout,
                 Duration maximumDelayForTrigger);
     }
 
@@ -230,7 +230,7 @@ public class AdaptiveScheduler
                 stabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration minScalingInterval =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
 
             final int rescaleOnFailedCheckpointsCount =
@@ -285,8 +285,8 @@ public class AdaptiveScheduler
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
-                    configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT),
+                    minScalingInterval,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
@@ -306,7 +306,7 @@ public class AdaptiveScheduler
         private Settings(
                 SchedulerExecutionMode executionMode,
                 Duration initialResourceAllocationTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration submissionResourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
                 Duration scalingResourceStabilizationTimeout,
@@ -314,7 +314,7 @@ public class AdaptiveScheduler
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
-            this.resourceStabilizationTimeout = resourceStabilizationTimeout;
+            this.resourceStabilizationTimeout = submissionResourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
             this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
@@ -1584,7 +1584,7 @@ public class AdaptiveScheduler
     }
 
     /**
-     * Check for slots that are idle for more than {@link JobManagerOptions#SLOT_IDLE_TIMEOUT} and
+     * Check for slots that are idle for more than {@link JobManagerOptions#SCHEDULER_SLOT_IDLE_TIMEOUT} and
      * release them back to the ResourceManager.
      */
     private void checkIdleSlotTimeout() {

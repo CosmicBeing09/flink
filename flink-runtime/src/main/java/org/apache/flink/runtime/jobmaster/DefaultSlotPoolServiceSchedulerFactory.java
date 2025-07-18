@@ -63,7 +63,7 @@ import java.util.Collection;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ScheduledExecutorService;
 
-import static org.apache.flink.configuration.JobManagerOptions.SLOT_REQUEST_MAX_INTERVAL;
+import static org.apache.flink.configuration.JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL;
 
 /** Default {@link SlotPoolServiceSchedulerFactory} implementation. */
 public final class DefaultSlotPoolServiceSchedulerFactory
@@ -158,9 +158,9 @@ public final class DefaultSlotPoolServiceSchedulerFactory
     public static DefaultSlotPoolServiceSchedulerFactory fromConfiguration(
             Configuration configuration, JobType jobType, boolean isDynamicGraph) {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
-        final Duration slotIdleTimeout = configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT);
-        final Duration batchSlotTimeout = configuration.get(JobManagerOptions.SLOT_REQUEST_TIMEOUT);
+        final Duration jobSubmissionRpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
+        final Duration schedulerSlotIdleTimeout = configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT);
+        final Duration batchSlotTimeout = configuration.get(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT);
 
         final SlotPoolServiceFactory slotPoolServiceFactory;
         final SchedulerNGFactory schedulerNGFactory;
@@ -168,7 +168,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
         JobManagerOptions.SchedulerType schedulerType =
                 getSchedulerType(configuration, jobType, isDynamicGraph);
 
-        final Duration slotRequestMaxInterval = configuration.get(SLOT_REQUEST_MAX_INTERVAL);
+        final Duration slotRequestMaxInterval = configuration.get(
+                JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL);
 
         // TODO: It will be assigned by the corresponding logic after
         //  https://issues.apache.org/jira/browse/FLINK-35966
@@ -189,8 +190,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolBridgeServiceFactory(
                                 SystemClock.getInstance(),
-                                rpcTimeout,
-                                slotIdleTimeout,
+                                jobSubmissionRpcTimeout,
+                                schedulerSlotIdleTimeout,
                                 batchSlotTimeout,
                                 slotRequestMaxInterval,
                                 slotBatchAllocatable,
@@ -201,8 +202,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolServiceFactory(
                                 SystemClock.getInstance(),
-                                slotIdleTimeout,
-                                rpcTimeout,
+                                schedulerSlotIdleTimeout,
+                                jobSubmissionRpcTimeout,
                                 slotRequestMaxInterval);
                 break;
             case AdaptiveBatch:
@@ -210,8 +211,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolBridgeServiceFactory(
                                 SystemClock.getInstance(),
-                                rpcTimeout,
-                                slotIdleTimeout,
+                                jobSubmissionRpcTimeout,
+                                schedulerSlotIdleTimeout,
                                 batchSlotTimeout,
                                 slotRequestMaxInterval,
                                 slotBatchAllocatable,

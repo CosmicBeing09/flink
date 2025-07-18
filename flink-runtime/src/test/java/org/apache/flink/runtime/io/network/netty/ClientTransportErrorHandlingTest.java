@@ -142,10 +142,10 @@ class ClientTransportErrorHandlingTest {
         requestClient.requestSubpartition(
                 new ResultPartitionID(), new ResultSubpartitionIndexSet(0), rich[1], 0);
         // Wait for the notification, and it could confirm all the request operations are done
-        assertThat(sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS))
+        assertThat(sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS))
                 .withFailMessage(
                         "Timed out after waiting for "
-                                + TestingUtils.TESTING_DURATION.toMillis()
+                                + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                 + " ms to be notified about the channel error.")
                 .isTrue();
 
@@ -260,10 +260,10 @@ class ClientTransportErrorHandlingTest {
         ch.writeAndFlush(Unpooled.buffer().writerIndex(16));
 
         // Wait for the notification
-        assertThat(sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS))
+        assertThat(sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS))
                 .withFailMessage(
                         "Timed out after waiting for "
-                                + TestingUtils.TESTING_DURATION.toMillis()
+                                + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                 + " ms to be notified about remote connection close.")
                 .isTrue();
 

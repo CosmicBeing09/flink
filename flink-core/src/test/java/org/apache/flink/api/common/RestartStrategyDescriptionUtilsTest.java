@@ -52,7 +52,7 @@ public class RestartStrategyDescriptionUtilsTest {
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 3);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofSeconds(10));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofSeconds(10));
 
         String description =
                 RestartStrategyDescriptionUtils.getRestartStrategyDescription(configuration);
@@ -68,7 +68,7 @@ public class RestartStrategyDescriptionUtilsTest {
                 RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_FAILURE_RATE_INTERVAL,
                 Duration.ofMinutes(1));
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_DELAY, Duration.ofSeconds(15));
+                RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_RETRY_DELAY, Duration.ofSeconds(15));
 
         String description =
                 RestartStrategyDescriptionUtils.getRestartStrategyDescription(configuration);

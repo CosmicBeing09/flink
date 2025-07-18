@@ -110,10 +110,10 @@ class CancelPartitionRequestTest {
                     .await();
 
             // Wait for the notification
-            assertThat(sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS))
+            assertThat(sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS))
                     .withFailMessage(
                             "Timed out after waiting for "
-                                    + TestingUtils.TESTING_DURATION.toMillis()
+                                    + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                     + " ms to be notified about cancelled partition.")
                     .isTrue();
 
@@ -174,10 +174,10 @@ class CancelPartitionRequestTest {
                     .await();
 
             // Wait for the notification
-            assertThat(sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS))
+            assertThat(sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS))
                     .withFailMessage(
                             "Timed out after waiting for "
-                                    + TestingUtils.TESTING_DURATION.toMillis()
+                                    + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                     + " ms to be notified about cancelled partition.")
                     .isTrue();
 

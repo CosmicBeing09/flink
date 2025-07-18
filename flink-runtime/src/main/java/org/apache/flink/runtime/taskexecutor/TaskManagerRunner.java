@@ -170,7 +170,7 @@ public class TaskManagerRunner implements FatalErrorHandler {
         this.pluginManager = checkNotNull(pluginManager);
         this.taskExecutorServiceFactory = checkNotNull(taskExecutorServiceFactory);
 
-        timeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        timeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         this.terminationFuture = new CompletableFuture<>();
         this.shutdown = false;

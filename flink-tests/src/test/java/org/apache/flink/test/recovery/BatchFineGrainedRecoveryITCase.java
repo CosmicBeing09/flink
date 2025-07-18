@@ -240,7 +240,7 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
                 RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS,
                 MAX_JOB_RESTART_ATTEMPTS);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofMillis(10));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofMillis(10));
         return configuration;
     }
 

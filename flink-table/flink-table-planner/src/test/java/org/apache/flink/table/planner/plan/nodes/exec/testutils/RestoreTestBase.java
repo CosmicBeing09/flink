@@ -210,7 +210,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
     @Order(0)
     public void generateTestSetupFiles(TableTestProgram program) throws Exception {
         final EnvironmentSettings settings = EnvironmentSettings.inStreamingMode();
-        settings.getConfiguration().set(StateBackendOptions.STATE_BACKEND, "rocksdb");
+        settings.getConfiguration().set(StateBackendOptions.JOB_STATE_BACKEND, "rocksdb");
         final TableEnvironment tEnv = TableEnvironment.create(settings);
         program.getSetupConfigOptionTestSteps().forEach(s -> s.apply(tEnv));
         tEnv.getConfig()
@@ -281,7 +281,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
                             RecoveryClaimMode.NO_CLAIM);
         }
         SavepointRestoreSettings.toConfiguration(restoreSettings, settings.getConfiguration());
-        settings.getConfiguration().set(StateBackendOptions.STATE_BACKEND, "rocksdb");
+        settings.getConfiguration().set(StateBackendOptions.JOB_STATE_BACKEND, "rocksdb");
         final TableEnvironment tEnv = TableEnvironment.create(settings);
         tEnv.getConfig()
                 .set(

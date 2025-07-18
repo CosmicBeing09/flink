@@ -1443,7 +1443,7 @@ public class DataStream<T> {
                 new CollectSinkOperatorFactory<>(serializer, accumulatorName);
         CollectSinkOperator<T> operator = (CollectSinkOperator<T>) factory.getOperator();
         long resultFetchTimeout =
-                env.getConfiguration().get(RpcOptions.ASK_TIMEOUT_DURATION).toMillis();
+                env.getConfiguration().get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION).toMillis();
         CollectResultIterator<T> iterator =
                 new CollectResultIterator<>(
                         operator.getOperatorIdFuture(),

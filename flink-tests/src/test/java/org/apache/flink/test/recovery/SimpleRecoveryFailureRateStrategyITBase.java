@@ -50,7 +50,7 @@ public class SimpleRecoveryFailureRateStrategyITBase extends SimpleRecoveryITCas
                 RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_FAILURE_RATE_INTERVAL,
                 Duration.ofSeconds(1));
         config.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_DELAY, Duration.ofSeconds(0));
+                RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_RETRY_DELAY, Duration.ofSeconds(0));
 
         return config;
     }

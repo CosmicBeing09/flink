@@ -138,7 +138,7 @@ public class FsStateChangelogOptions {
                                     + RETRY_POLICY.key()
                                     + " is fixed. "
                                     + "Please note that timeout * max_attempts should be less than "
-                                    + CheckpointingOptions.CHECKPOINTING_TIMEOUT.key());
+                                    + CheckpointingOptions.CHECKPOINT_ATTEMPT_MAX_TIMEOUT_DURATION.key());
     public static final ConfigOption<Integer> RETRY_MAX_ATTEMPTS =
             ConfigOptions.key("state.changelog.dstl.dfs.upload.max-attempts")
                     .intType()

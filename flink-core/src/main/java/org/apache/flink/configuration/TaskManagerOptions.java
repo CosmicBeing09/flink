@@ -201,15 +201,15 @@ public class TaskManagerOptions {
     public static final ConfigOption<Duration> SLOT_TIMEOUT =
             key("taskmanager.slot.timeout")
                     .durationType()
-                    .defaultValue(RpcOptions.ASK_TIMEOUT_DURATION.defaultValue())
-                    .withFallbackKeys(RpcOptions.ASK_TIMEOUT_DURATION.key())
+                    .defaultValue(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue())
+                    .withFallbackKeys(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.key())
                     .withDescription(
                             Description.builder()
                                     .text(
                                             "Timeout used for identifying inactive slots. The TaskManager will free the slot if it does not become active "
                                                     + "within the given amount of time. Inactive slots can be caused by an out-dated slot request. If no "
                                                     + "value is configured, then it will fall back to %s.",
-                                            code(RpcOptions.ASK_TIMEOUT_DURATION.key()))
+                                            code(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.key()))
                                     .build());
 
     @Documentation.Section(Documentation.Sections.ALL_TASK_MANAGER)

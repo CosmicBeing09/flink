@@ -211,9 +211,9 @@ class AdaptiveBatchSchedulerITCase {
     private static Configuration createConfiguration() {
         final Configuration configuration = new Configuration();
         configuration.set(RestOptions.BIND_PORT, "0");
-        configuration.set(JobManagerOptions.SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
+        configuration.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
         configuration.set(
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM,
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM,
                 DEFAULT_MAX_PARALLELISM);
         configuration.set(
                 BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_AVG_DATA_VOLUME_PER_TASK,

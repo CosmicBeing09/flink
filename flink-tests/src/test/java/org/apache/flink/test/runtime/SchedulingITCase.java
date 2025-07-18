@@ -95,7 +95,7 @@ public class SchedulingITCase extends TestLogger {
 
     private void executeSchedulingTest(Configuration configuration) throws Exception {
         final long slotIdleTimeout = 50L;
-        configuration.set(JobManagerOptions.SLOT_IDLE_TIMEOUT, Duration.ofMillis(slotIdleTimeout));
+        configuration.set(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT, Duration.ofMillis(slotIdleTimeout));
 
         configuration.set(TaskManagerOptions.TOTAL_FLINK_MEMORY, MemorySize.parse("1g"));
 

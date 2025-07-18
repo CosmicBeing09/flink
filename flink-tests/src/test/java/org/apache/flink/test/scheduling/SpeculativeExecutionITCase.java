@@ -280,7 +280,7 @@ class SpeculativeExecutionITCase {
     private Configuration configure(final Configuration configuration) {
         configuration.set(RestOptions.BIND_PORT, "0");
         configuration.set(JobManagerOptions.ARCHIVE_DIR, temporaryFolder.getRoot().toString());
-        configuration.set(JobManagerOptions.SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
+        configuration.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, Duration.ofMillis(5000L));
         configuration.set(JobManagerOptions.MAX_ATTEMPTS_HISTORY_SIZE, 1);
         configuration.set(TaskManagerOptions.MEMORY_SEGMENT_SIZE, MemorySize.parse("4kb"));
         configuration.set(TaskManagerOptions.NUM_TASK_SLOTS, MAX_PARALLELISM);
@@ -305,7 +305,7 @@ class SpeculativeExecutionITCase {
                 MAX_PARALLELISM);
         configuration.set(BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MIN_PARALLELISM, 1);
         configuration.set(
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM, MAX_PARALLELISM);
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM, MAX_PARALLELISM);
         configuration.set(
                 BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_AVG_DATA_VOLUME_PER_TASK,
                 MemorySize.parse("150kb"));

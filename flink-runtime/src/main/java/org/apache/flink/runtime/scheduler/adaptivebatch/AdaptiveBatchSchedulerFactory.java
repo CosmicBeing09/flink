@@ -380,10 +380,10 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     static int getDefaultMaxParallelism(
             Configuration configuration, ExecutionConfig executionConfig) {
         return configuration
-                .getOptional(BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM)
+                .getOptional(BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM)
                 .orElse(
                         executionConfig.getParallelism() == ExecutionConfig.PARALLELISM_DEFAULT
-                                ? BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM
+                                ? BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM
                                         .defaultValue()
                                 : executionConfig.getParallelism());
     }

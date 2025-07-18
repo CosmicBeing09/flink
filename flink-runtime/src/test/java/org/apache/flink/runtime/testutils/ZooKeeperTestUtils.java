@@ -114,17 +114,17 @@ public class ZooKeeperTestUtils {
         }
 
         config.set(
-                HighAvailabilityOptions.ZOOKEEPER_CONNECTION_TIMEOUT,
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_CONNECTION_TIMEOUT,
                 Duration.ofMillis(connTimeout));
         config.set(
-                HighAvailabilityOptions.ZOOKEEPER_SESSION_TIMEOUT, Duration.ofMillis(connTimeout));
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT, Duration.ofMillis(connTimeout));
 
         // File system state backend
-        config.set(StateBackendOptions.STATE_BACKEND, "FILESYSTEM");
+        config.set(StateBackendOptions.JOB_STATE_BACKEND, "FILESYSTEM");
         config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, fsStateHandlePath + "/checkpoints");
         config.set(HighAvailabilityOptions.HA_STORAGE_PATH, fsStateHandlePath + "/recovery");
 
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(100));
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofSeconds(100));
 
         return config;
     }

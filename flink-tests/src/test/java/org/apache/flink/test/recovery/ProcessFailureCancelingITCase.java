@@ -110,7 +110,7 @@ class ProcessFailureCancelingITCase {
 
         Configuration config = new Configuration();
         config.set(JobManagerOptions.ADDRESS, "localhost");
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(100));
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofSeconds(100));
         config.set(HighAvailabilityOptions.HA_MODE, "zookeeper");
         config.set(
                 HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM,
