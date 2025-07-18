@@ -131,7 +131,7 @@ public class SingleInputGateFactory {
         this.floatingNetworkBuffersPerGate = networkConfig.floatingNetworkBuffersPerGate();
         this.batchShuffleCompressionEnabled = networkConfig.isBatchShuffleCompressionEnabled();
         this.compressionCodec = networkConfig.getCompressionCodec();
-        this.networkBufferSize = networkConfig.networkBufferSize();
+        this.networkBufferSize = networkConfig.getNetworkBufferSize();
         this.connectionManager = connectionManager;
         this.partitionManager = partitionManager;
         this.taskEventPublisher = taskEventPublisher;

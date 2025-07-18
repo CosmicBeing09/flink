@@ -157,7 +157,7 @@ class BufferBuilderAndConsumerTest {
     void buildEmptyBuffer() {
         try (BufferBuilder bufferBuilder = createEmptyBufferBuilder(BUFFER_SIZE)) {
             Buffer buffer = buildSingleBuffer(bufferBuilder);
-            assertThat(buffer.getSize()).isZero();
+            assertThat(buffer.getWriterIndex()).isZero();
             assertContent(buffer, FreeingBufferRecycler.INSTANCE);
         }
     }
@@ -334,7 +334,7 @@ class BufferBuilderAndConsumerTest {
         assertThat(bufferConsumer.isFinished()).isFalse();
         assertThat(bufferConsumer.getWrittenBytes()).isEqualTo(expectedWrittenBytes);
 
-        assertThat(bufferConsumer.build().getSize()).isZero();
+        assertThat(bufferConsumer.build().getWriterIndex()).isZero();
         assertThat(bufferBuilder.isFinished()).isTrue();
     }
 

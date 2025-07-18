@@ -60,10 +60,10 @@ public class BufferFileChannelReader {
                             + size
                             + " needed. This is most likely due to an serialized event, which is larger than the buffer size.");
         }
-        checkArgument(buffer.getSize() == 0, "Buffer not empty");
+        checkArgument(buffer.getWriterIndex() == 0, "Buffer not empty");
 
         fileChannel.read(buffer.getNioBuffer(0, size));
-        buffer.setSize(size);
+        buffer.setWriterIndex(size);
         buffer.setDataType(isBuffer ? Buffer.DataType.DATA_BUFFER : Buffer.DataType.EVENT_BUFFER);
 
         return fileChannel.size() - fileChannel.position() == 0;

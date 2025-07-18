@@ -164,7 +164,7 @@ class BroadcastRecordWriterTest {
     private static void closeConsumer(ResultSubpartitionView view, int expectedSize)
             throws IOException {
         Buffer buffer = view.getNextBuffer().buffer();
-        assertThat(buffer.getSize()).isEqualTo(expectedSize);
+        assertThat(buffer.getWriterIndex()).isEqualTo(expectedSize);
         buffer.recycleBuffer();
     }
 }

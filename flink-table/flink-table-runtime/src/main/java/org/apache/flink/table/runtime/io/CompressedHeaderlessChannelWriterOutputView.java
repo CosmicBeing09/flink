@@ -109,7 +109,7 @@ public final class CompressedHeaderlessChannelWriterOutputView
         int compressedLen =
                 compressor.compress(current.getArray(), 0, size, compressedBuffer.getArray(), 0);
         NetworkBuffer networkBuffer = new NetworkBuffer(compressedBuffer, this);
-        networkBuffer.setSize(compressedLen);
+        networkBuffer.setWriterIndex(compressedLen);
         writer.writeBlock(networkBuffer);
         blockCount++;
         numBytes += size;

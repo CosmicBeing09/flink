@@ -126,7 +126,7 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
         this.dataType = dataType;
         this.isCompressed = isCompressed;
         this.currentSize = memorySegment.size();
-        setSize(size);
+        setWriterIndex(size);
     }
 
     @Override
@@ -312,12 +312,12 @@ public class NetworkBuffer extends AbstractReferenceCountedByteBuf implements Bu
     }
 
     @Override
-    public int getSize() {
+    public int getWriterIndex() {
         return writerIndex();
     }
 
     @Override
-    public void setSize(int writerIndex) {
+    public void setWriterIndex(int writerIndex) {
         writerIndex(writerIndex);
     }
 

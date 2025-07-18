@@ -131,12 +131,12 @@ public class HsMemoryDataManager implements HsSpillingInfoProvider, HsMemoryData
             subpartitionViewOperationsMap.add(new ConcurrentHashMap<>());
         }
 
-        poolSize = new AtomicInteger(this.bufferPool.getNumBuffers());
+        poolSize = new AtomicInteger(this.bufferPool.getNumberOfBuffers());
 
         if (poolSizeCheckInterval > 0) {
             poolSizeChecker.scheduleAtFixedRate(
                     () -> {
-                        int newSize = this.bufferPool.getNumBuffers();
+                        int newSize = this.bufferPool.getNumberOfBuffers();
                         int oldSize = poolSize.getAndSet(newSize);
                         if (oldSize > newSize) {
                             // pass Optional.empty to trigger global decision.

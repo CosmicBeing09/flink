@@ -45,7 +45,7 @@ class NettyShuffleEnvironmentConfigurationTest {
         final int numNetworkBuffers =
                 NettyShuffleEnvironmentConfiguration.fromConfiguration(
                                 config, MEM_SIZE_PARAM, false, InetAddress.getLoopbackAddress())
-                        .numNetworkBuffers();
+                        .getNumNetworkBuffers();
         assertThat(numNetworkBuffers).isEqualTo(128);
     }
 

@@ -52,7 +52,7 @@ import static org.apache.flink.util.Preconditions.checkState;
  * <p>Our non-Netty usages of this <tt>Buffer</tt> class either rely on the underlying {@link
  * #getMemorySegment()} directly, or on {@link ByteBuffer} wrappers of this buffer which do not
  * modify either index, so the indices need to be updated manually via {@link #setReaderIndex(int)}
- * and {@link #setSize(int)}.
+ * and {@link #setWriterIndex(int)}.
  */
 public interface Buffer {
     /**
@@ -126,7 +126,7 @@ public interface Buffer {
 
     /**
      * Returns a read-only slice of this buffer's readable bytes, i.e. between {@link
-     * #getReaderIndex()} and {@link #getSize()}.
+     * #getReaderIndex()} and {@link #getWriterIndex()}.
      *
      * <p>Reader and writer indices as well as markers are not shared. Reference counters are shared
      * but the slice is not {@link #retainBuffer() retained} automatically.
@@ -169,7 +169,7 @@ public interface Buffer {
      * Sets the <tt>reader index</tt> of this buffer.
      *
      * @throws IndexOutOfBoundsException if the index is less than <tt>0</tt> or greater than {@link
-     *     #getSize()}
+     *     #getWriterIndex()}
      */
     void setReaderIndex(int readerIndex) throws IndexOutOfBoundsException;
 
@@ -181,7 +181,7 @@ public interface Buffer {
      * @return writer index (from 0 (inclusive) to the size of the backing {@link MemorySegment}
      *     (inclusive))
      */
-    int getSize();
+    int getWriterIndex();
 
     /**
      * Sets the size of the written data, i.e. the <tt>writer index</tt>, of this buffer.
@@ -189,17 +189,17 @@ public interface Buffer {
      * @throws IndexOutOfBoundsException if the index is less than {@link #getReaderIndex()} or
      *     greater than {@link #getMaxCapacity()}
      */
-    void setSize(int writerIndex);
+    void setWriterIndex(int writerIndex);
 
     /**
-     * Returns the number of readable bytes (same as <tt>{@link #getSize()} - {@link
+     * Returns the number of readable bytes (same as <tt>{@link #getWriterIndex()} - {@link
      * #getReaderIndex()}</tt>).
      */
     int readableBytes();
 
     /**
      * Gets a new {@link ByteBuffer} instance wrapping this buffer's readable bytes, i.e. between
-     * {@link #getReaderIndex()} and {@link #getSize()}.
+     * {@link #getReaderIndex()} and {@link #getWriterIndex()}.
      *
      * <p>Please note that neither index is updated by the returned buffer.
      *
@@ -252,9 +252,9 @@ public interface Buffer {
                 new StringBuilder("Buffer{cnt=")
                         .append(refCnt())
                         .append(", size=")
-                        .append(getSize());
+                        .append(getWriterIndex());
         if (includeHash) {
-            byte[] bytes = new byte[getSize()];
+            byte[] bytes = new byte[getWriterIndex()];
             readOnlySlice().asByteBuf().readBytes(bytes);
             prettyString.append(", hash=").append(Arrays.hashCode(bytes));
         }

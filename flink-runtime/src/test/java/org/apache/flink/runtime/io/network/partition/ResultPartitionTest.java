@@ -292,7 +292,7 @@ class ResultPartitionTest {
         try {
             resultPartition.setup();
 
-            resultPartition.getBufferPool().setNumBuffers(2);
+            resultPartition.getBufferPool().setNumberOfBuffers(2);
 
             assertThat(resultPartition.getAvailableFuture()).isDone();
 
@@ -333,15 +333,15 @@ class ResultPartitionTest {
             partition.setup();
             BufferPool bufferPool = partition.getBufferPool();
             // verify the amount of buffers in created local pool
-            assertThat(bufferPool.getExpectedNumberOfMemorySegments())
+            assertThat(bufferPool.getNumberOfRequiredMemorySegments())
                     .isEqualTo(partition.getNumberOfSubpartitions() + 1);
             if (type.isBounded()) {
                 final int maxNumBuffers =
                         networkBuffersPerChannel * partition.getNumberOfSubpartitions()
                                 + floatingNetworkBuffersPerGate;
-                assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(maxNumBuffers);
+                assertThat(bufferPool.getMaximumNumberOfMemorySegments()).isEqualTo(maxNumBuffers);
             } else {
-                assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
+                assertThat(bufferPool.getMaximumNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
             }
 
         } finally {
@@ -585,10 +585,10 @@ class ResultPartitionTest {
         bufferWritingResultPartition.emitRecord(ByteBuffer.allocate(10), 1);
 
         // then: The buffer is less or equal to configured.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(10);
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(2);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(6);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(6);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(10);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(2);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
 
         // when: Reset the buffer size.
         subpartition0.bufferSize(13);
@@ -602,11 +602,11 @@ class ResultPartitionTest {
 
         // then: The buffer less or equal to configured.
         // 8 bytes which fitted to the previous unfinished buffer(10 - 2).
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(8);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(8);
         // 12 rest bytes which fitted to a new buffer which has 13 bytes.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(12);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(5);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(4);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(12);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(5);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
     }
 
     @Test
@@ -630,8 +630,8 @@ class ResultPartitionTest {
         bufferWritingResultPartition.emitRecord(ByteBuffer.allocate(111), 1);
 
         // then: The buffer can not be less than first record.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(12);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(111);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(12);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(111);
     }
 
     @Test
@@ -654,8 +654,8 @@ class ResultPartitionTest {
         bufferWritingResultPartition.broadcastRecord(ByteBuffer.allocate(6));
 
         // then: The buffer less or equal to configured.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(6);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(6);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
 
         // when: Set the different buffers size.
         subpartition0.bufferSize(4);
@@ -666,10 +666,10 @@ class ResultPartitionTest {
         bufferWritingResultPartition.broadcastRecord(ByteBuffer.allocate(7));
 
         // then: The buffer less or equal to configured.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(4);
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(6);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(4);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(6);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
 
         // when: Set the different buffers size.
         subpartition0.bufferSize(8);
@@ -679,8 +679,8 @@ class ResultPartitionTest {
         bufferWritingResultPartition.broadcastRecord(ByteBuffer.allocate(3));
 
         // then: The buffer less or equal to configured.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(3);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(3);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(3);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(3);
     }
 
     @Test
@@ -702,8 +702,8 @@ class ResultPartitionTest {
         bufferWritingResultPartition.broadcastRecord(ByteBuffer.allocate(31));
 
         // then: The buffer can not be less than first record.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(31);
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(31);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(31);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(31);
     }
 
     @Test
@@ -727,10 +727,10 @@ class ResultPartitionTest {
         bufferWritingResultPartition.emitRecord(ByteBuffer.allocate(bufferSize), 1);
 
         // then: The buffer has initial size because new buffer was greater than max.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(bufferSize);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(bufferSize);
 
         // and: The buffer has initial size because new buffer was less than 0.
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(bufferSize);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(bufferSize);
     }
 
     @Test
@@ -833,52 +833,52 @@ class ResultPartitionTest {
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(73);
 
         // Poll the recovered state.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(6);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(67);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(6);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(6);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(61);
 
         // Poll the EndOfChannelStateEvent and resume the consumption.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(4);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(57);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(4);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(53);
 
         subpartition0.resumeConsumption();
         subpartition1.resumeConsumption();
 
         // when: Poll finished buffers.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(10);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(10);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(43);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(10);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(10);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(33);
 
         // Poll records which were unfinished because of broadcasting event.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(3);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(3);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(30);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(3);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(3);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(27);
 
         // Poll the event.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(4);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(23);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(4);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(4);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(19);
 
         // Poll the unfinished buffer.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(5);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(5);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(14);
 
         // Poll broadcasted record.
-        assertThat(subpartition0.pollBuffer().buffer().getSize()).isEqualTo(7);
+        assertThat(subpartition0.pollBuffer().buffer().getWriterIndex()).isEqualTo(7);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(7);
 
-        assertThat(subpartition1.pollBuffer().buffer().getSize()).isEqualTo(7);
+        assertThat(subpartition1.pollBuffer().buffer().getWriterIndex()).isEqualTo(7);
         assertThat(resultPartition.getSizeOfQueuedBuffersUnsafe()).isEqualTo(0);
     }
 

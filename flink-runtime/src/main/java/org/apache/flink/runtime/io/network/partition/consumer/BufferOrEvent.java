@@ -59,7 +59,7 @@ public class BufferOrEvent {
         this.event = null;
         this.channelInfo = channelInfo;
         this.moreAvailable = moreAvailable;
-        this.size = buffer.getSize();
+        this.size = buffer.getWriterIndex();
         this.morePriorityEvents = morePriorityEvents;
     }
 

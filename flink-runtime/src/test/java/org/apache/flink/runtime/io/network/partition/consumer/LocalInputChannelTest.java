@@ -594,7 +594,7 @@ class LocalInputChannelTest {
 
         assertThat(
                         stateWriter.getAddedInput().get(channel.getChannelInfo()).stream()
-                                .mapToInt(Buffer::getSize)
+                                .mapToInt(Buffer::getWriterIndex)
                                 .toArray())
                 .containsExactly(1);
     }

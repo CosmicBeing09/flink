@@ -507,7 +507,7 @@ public class SingleInputGate extends IndexedInputGate {
                 int totalBuffers = 0;
 
                 for (InputChannel channel : inputChannels()) {
-                    totalBuffers += channel.unsynchronizedGetNumberOfQueuedBuffers();
+                    totalBuffers += channel.getNumberOfQueuedBuffersUnsynchronized();
                 }
 
                 return totalBuffers;
@@ -526,7 +526,7 @@ public class SingleInputGate extends IndexedInputGate {
                 long totalSize = 0;
 
                 for (InputChannel channel : inputChannels()) {
-                    totalSize += channel.unsynchronizedGetSizeOfQueuedBuffers();
+                    totalSize += channel.getSizeOfQueuedBuffersUnsynchronized();
                 }
 
                 return totalSize;
@@ -1093,7 +1093,7 @@ public class SingleInputGate extends IndexedInputGate {
                 buffer.getDataType().hasPriority(),
                 currentChannel.getChannelInfo(),
                 moreAvailable,
-                buffer.getSize(),
+                buffer.getWriterIndex(),
                 morePriorityEvents);
     }
 

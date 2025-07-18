@@ -52,7 +52,7 @@ public abstract class AbstractCollectingResultPartitionWriter extends MockResult
 
         MemorySegment segment = MemorySegmentFactory.wrap(serializedRecord.array());
         NetworkBuffer buffer = new NetworkBuffer(segment, FreeingBufferRecycler.INSTANCE);
-        buffer.setSize(serializedRecord.remaining());
+        buffer.setWriterIndex(serializedRecord.remaining());
         deserializeBuffer(buffer);
     }
 

@@ -154,12 +154,12 @@ public class FileRegionBuffer extends DefaultFileRegion implements Buffer {
     }
 
     @Override
-    public void setSize(int writerIndex) {
+    public void setWriterIndex(int writerIndex) {
         throw new UnsupportedOperationException("Method should never be called.");
     }
 
     @Override
-    public int getSize() {
+    public int getWriterIndex() {
         return bufferSize();
     }
 

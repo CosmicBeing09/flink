@@ -130,7 +130,7 @@ public class CompressedBlockChannelReader
             }
 
             final MemorySegment srcSegment = buffer.getMemorySegment();
-            final int srcSize = buffer.getSize();
+            final int srcSize = buffer.getWriterIndex();
             int readLen =
                     srcSegment.processAsByteBuffer(
                             (srcBuffer) -> {

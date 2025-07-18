@@ -67,7 +67,7 @@ public class BufferDecompressor {
      */
     public Buffer decompressToIntermediateBuffer(Buffer buffer) {
         int decompressedLen = decompress(buffer);
-        internalBuffer.setSize(decompressedLen);
+        internalBuffer.setWriterIndex(decompressedLen);
 
         return internalBuffer.retainBuffer();
     }
@@ -107,7 +107,7 @@ public class BufferDecompressor {
                 internalBuffer.refCnt() == 1,
                 "Illegal reference count, buffer need to be released.");
 
-        int length = buffer.getSize();
+        int length = buffer.getWriterIndex();
         MemorySegment memorySegment = buffer.getMemorySegment();
         // If buffer is on-heap, manipulate the underlying array directly. There are two main
         // reasons why NIO buffer is not directly used here: One is that some compression

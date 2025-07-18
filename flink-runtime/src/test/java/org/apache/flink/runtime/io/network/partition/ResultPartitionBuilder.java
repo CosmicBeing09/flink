@@ -136,7 +136,7 @@ public class ResultPartitionBuilder {
                         environment.getConfiguration().networkBuffersPerChannel())
                 .setFloatingNetworkBuffersPerGate(
                         environment.getConfiguration().floatingNetworkBuffersPerGate())
-                .setNetworkBufferSize(environment.getConfiguration().networkBufferSize())
+                .setNetworkBufferSize(environment.getConfiguration().getNetworkBufferSize())
                 .setNetworkBufferPool(environment.getNetworkBufferPool())
                 .setBatchShuffleReadBufferPool(environment.getBatchShuffleReadBufferPool())
                 .setBatchShuffleReadIOExecutor(environment.getBatchShuffleReadIOExecutor())

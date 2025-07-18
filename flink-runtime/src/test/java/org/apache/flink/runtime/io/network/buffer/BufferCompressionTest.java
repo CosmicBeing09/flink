@@ -244,7 +244,7 @@ class BufferCompressionTest {
             segment.putLongLittleEndian(8 * i, i);
         }
         NetworkBuffer buffer = new NetworkBuffer(segment, FreeingBufferRecycler.INSTANCE);
-        buffer.setSize(8 * NUM_LONGS);
+        buffer.setWriterIndex(8 * NUM_LONGS);
         return buffer;
     }
 

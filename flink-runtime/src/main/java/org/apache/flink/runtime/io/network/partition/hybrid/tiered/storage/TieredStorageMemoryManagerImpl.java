@@ -242,7 +242,7 @@ public class TieredStorageMemoryManagerImpl implements TieredStorageMemoryManage
         // is limited to the memory tier, which is only utilized when downstream registration is in
         // effect. Furthermore, the buffers within the memory tier can be recycled quickly enough,
         // thereby minimizing the impact on the guaranteed buffers of other tiers.
-        return bufferPool.getNumBuffers() - numBuffersUsedOrReservedForOtherOwners;
+        return bufferPool.getNumberOfBuffers() - numBuffersUsedOrReservedForOtherOwners;
     }
 
     @Override
@@ -257,7 +257,7 @@ public class TieredStorageMemoryManagerImpl implements TieredStorageMemoryManage
 
         while (bufferQueue.size() + numRequestedByGuaranteedReclaimableOwners
                 < numGuaranteedReclaimableBuffers + numAdditionalBuffers) {
-            if (numRequestedBuffers.get() >= bufferPool.getNumBuffers()) {
+            if (numRequestedBuffers.get() >= bufferPool.getNumberOfBuffers()) {
                 return false;
             }
 
@@ -318,7 +318,7 @@ public class TieredStorageMemoryManagerImpl implements TieredStorageMemoryManage
         MemorySegment memorySegment = null;
 
         hardBackpressureTimerGauge.markStart();
-        while (numRequestedBuffers.get() < bufferPool.getNumBuffers()) {
+        while (numRequestedBuffers.get() < bufferPool.getNumberOfBuffers()) {
             memorySegment = bufferPool.requestMemorySegment();
             if (memorySegment == null) {
                 try {
@@ -400,7 +400,7 @@ public class TieredStorageMemoryManagerImpl implements TieredStorageMemoryManage
         // The accuracy of the memory usage ratio may be compromised due to the varying buffer pool
         // sizes. However, this only impacts a single iteration of the buffer usage check. Upon the
         // next iteration, the buffer reclaim will eventually be triggered.
-        int numTotal = bufferPool.getNumBuffers();
+        int numTotal = bufferPool.getNumberOfBuffers();
         int numRequested = numRequestedBuffers.get();
 
         // Because we do the checking before requesting buffers, we need add additional one
@@ -415,7 +415,7 @@ public class TieredStorageMemoryManagerImpl implements TieredStorageMemoryManage
     private void recycleBuffer(Object owner, MemorySegment buffer) {
         try {
             releasedStateLock.readLock().lock();
-            if (!isReleased && numRequestedBuffers.get() <= bufferPool.getNumBuffers()) {
+            if (!isReleased && numRequestedBuffers.get() <= bufferPool.getNumberOfBuffers()) {
                 bufferQueue.add(buffer);
             } else {
                 bufferPool.recycle(buffer);

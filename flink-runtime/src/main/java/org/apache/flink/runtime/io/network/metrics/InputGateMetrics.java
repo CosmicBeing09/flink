@@ -54,7 +54,7 @@ public class InputGateMetrics {
             if (channel instanceof RemoteInputChannel) {
                 RemoteInputChannel rc = (RemoteInputChannel) channel;
 
-                total += rc.unsynchronizedGetNumberOfQueuedBuffers();
+                total += rc.getNumberOfQueuedBuffersUnsynchronized();
             }
         }
 
@@ -74,7 +74,7 @@ public class InputGateMetrics {
             if (channel instanceof RemoteInputChannel) {
                 RemoteInputChannel rc = (RemoteInputChannel) channel;
 
-                int size = rc.unsynchronizedGetNumberOfQueuedBuffers();
+                int size = rc.getNumberOfQueuedBuffersUnsynchronized();
                 min = Math.min(min, size);
             }
         }
@@ -99,7 +99,7 @@ public class InputGateMetrics {
             if (channel instanceof RemoteInputChannel) {
                 RemoteInputChannel rc = (RemoteInputChannel) channel;
 
-                int size = rc.unsynchronizedGetNumberOfQueuedBuffers();
+                int size = rc.getNumberOfQueuedBuffersUnsynchronized();
                 max = Math.max(max, size);
             }
         }
@@ -121,7 +121,7 @@ public class InputGateMetrics {
             if (channel instanceof RemoteInputChannel) {
                 RemoteInputChannel rc = (RemoteInputChannel) channel;
 
-                int size = rc.unsynchronizedGetNumberOfQueuedBuffers();
+                int size = rc.getNumberOfQueuedBuffersUnsynchronized();
                 total += size;
                 ++count;
             }

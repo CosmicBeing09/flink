@@ -67,7 +67,7 @@ public final class BufferReaderWriterUtil {
     // ------------------------------------------------------------------------
 
     static boolean writeBuffer(Buffer buffer, ByteBuffer memory) {
-        final int bufferSize = buffer.getSize();
+        final int bufferSize = buffer.getWriterIndex();
 
         if (memory.remaining() < bufferSize + HEADER_LENGTH) {
             return false;
@@ -131,7 +131,7 @@ public final class BufferReaderWriterUtil {
             FileChannel channel, Buffer buffer, ByteBuffer[] arrayWithHeaderBuffer, long bytesLeft)
             throws IOException {
 
-        if (bytesLeft >= HEADER_LENGTH + buffer.getSize()) {
+        if (bytesLeft >= HEADER_LENGTH + buffer.getWriterIndex()) {
             return writeToByteChannel(channel, buffer, arrayWithHeaderBuffer);
         }
 
@@ -142,7 +142,7 @@ public final class BufferReaderWriterUtil {
         header.clear();
         header.putShort(generateDataTypeHeader(buffer));
         header.putShort(buffer.isCompressed() ? BUFFER_IS_COMPRESSED : BUFFER_IS_NOT_COMPRESSED);
-        header.putInt(buffer.getSize());
+        header.putInt(buffer.getWriterIndex());
         header.flip();
     }
 

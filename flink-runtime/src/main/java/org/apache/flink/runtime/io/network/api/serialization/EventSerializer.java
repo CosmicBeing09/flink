@@ -383,7 +383,7 @@ public class EventSerializer {
         final Buffer buffer =
                 new NetworkBuffer(
                         data, FreeingBufferRecycler.INSTANCE, getDataType(event, hasPriority));
-        buffer.setSize(serializedEvent.remaining());
+        buffer.setWriterIndex(serializedEvent.remaining());
 
         return buffer;
     }

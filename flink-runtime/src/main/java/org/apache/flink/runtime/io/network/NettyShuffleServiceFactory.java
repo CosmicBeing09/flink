@@ -177,8 +177,8 @@ public class NettyShuffleServiceFactory
 
         NetworkBufferPool networkBufferPool =
                 new NetworkBufferPool(
-                        config.numNetworkBuffers(),
-                        config.networkBufferSize(),
+                        config.getNumNetworkBuffers(),
+                        config.getNetworkBufferSize(),
                         config.getRequestSegmentsTimeout());
 
         // we create a separated buffer pool here for batch shuffle instead of reusing the network
@@ -186,7 +186,7 @@ public class NettyShuffleServiceFactory
         // dead lock or "insufficient network buffer" error
         BatchShuffleReadBufferPool batchShuffleReadBufferPool =
                 new BatchShuffleReadBufferPool(
-                        config.batchShuffleReadMemoryBytes(), config.networkBufferSize());
+                        config.batchShuffleReadMemoryBytes(), config.getNetworkBufferSize());
 
         // we create a separated IO executor pool here for batch shuffle instead of reusing the
         // TaskManager IO executor pool directly to avoid the potential side effects of execution
@@ -228,7 +228,7 @@ public class NettyShuffleServiceFactory
                         config.getBlockingSubpartitionType(),
                         config.networkBuffersPerChannel(),
                         config.floatingNetworkBuffersPerGate(),
-                        config.networkBufferSize(),
+                        config.getNetworkBufferSize(),
                         config.isBatchShuffleCompressionEnabled(),
                         config.getCompressionCodec(),
                         config.getMaxBuffersPerChannel(),

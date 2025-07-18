@@ -80,7 +80,7 @@ public class NoOpBufferPool implements BufferPool {
     }
 
     @Override
-    public int getExpectedNumberOfMemorySegments() {
+    public int getNumberOfRequiredMemorySegments() {
         throw new UnsupportedOperationException();
     }
 
@@ -95,12 +95,12 @@ public class NoOpBufferPool implements BufferPool {
     }
 
     @Override
-    public int getNumBuffers() {
+    public int getNumberOfBuffers() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void setNumBuffers(int numBuffers) {
+    public void setNumberOfBuffers(int numBuffers) {
         throw new UnsupportedOperationException();
     }
 

@@ -171,12 +171,12 @@ public final class ReadOnlySlicedNetworkBuffer extends ReadOnlyByteBuf implement
     }
 
     @Override
-    public int getSize() {
+    public int getWriterIndex() {
         return writerIndex();
     }
 
     @Override
-    public void setSize(int writerIndex) {
+    public void setWriterIndex(int writerIndex) {
         writerIndex(writerIndex);
     }
 

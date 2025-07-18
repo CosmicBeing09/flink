@@ -330,11 +330,11 @@ public abstract class InputChannel {
     // Metric related method
     // ------------------------------------------------------------------------
 
-    public int unsynchronizedGetNumberOfQueuedBuffers() {
+    public int getNumberOfQueuedBuffersUnsynchronized() {
         return 0;
     }
 
-    public long unsynchronizedGetSizeOfQueuedBuffers() {
+    public long getSizeOfQueuedBuffersUnsynchronized() {
         return 0;
     }
 

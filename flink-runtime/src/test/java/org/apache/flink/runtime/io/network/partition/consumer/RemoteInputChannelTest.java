@@ -1526,7 +1526,7 @@ class RemoteInputChannelTest {
 
     private static List<Integer> toBufferSizes(List<Buffer> inflightBuffers) {
         return inflightBuffers.stream()
-                .map(buffer -> buffer.getSize())
+                .map(buffer -> buffer.getWriterIndex())
                 .collect(Collectors.toList());
     }
 
@@ -1604,13 +1604,13 @@ class RemoteInputChannelTest {
         int bufferSize = 1;
         int queueSize = 0;
         final RemoteInputChannel channel = buildInputGateAndGetChannel(sequenceNumber);
-        assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isZero();
+        assertThat(channel.getSizeOfQueuedBuffersUnsynchronized()).isZero();
 
         // Receive a couple of buffers.
         for (int i = 0; i < 2; i++) {
             queueSize += bufferSize;
             sendBuffer(channel, sequenceNumber++, bufferSize++);
-            assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isEqualTo(queueSize);
+            assertThat(channel.getSizeOfQueuedBuffersUnsynchronized()).isEqualTo(queueSize);
         }
 
         // Receive the event.
@@ -1618,16 +1618,16 @@ class RemoteInputChannelTest {
                 EventSerializer.toSerializedEvent(new CheckpointBarrier(1L, 123L, UNALIGNED))
                         .remaining();
         sendBarrier(channel, sequenceNumber++, UNALIGNED);
-        assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isEqualTo(queueSize);
+        assertThat(channel.getSizeOfQueuedBuffersUnsynchronized()).isEqualTo(queueSize);
 
         // Poll all received buffers.
         for (int i = 0; i < 3; i++) {
             Optional<BufferAndAvailability> nextBuffer = channel.getNextBuffer();
-            queueSize -= nextBuffer.get().buffer().getSize();
-            assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isEqualTo(queueSize);
+            queueSize -= nextBuffer.get().buffer().getWriterIndex();
+            assertThat(channel.getSizeOfQueuedBuffersUnsynchronized()).isEqualTo(queueSize);
         }
 
-        assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isZero();
+        assertThat(channel.getSizeOfQueuedBuffersUnsynchronized()).isZero();
     }
 
     private void sendBarrier(

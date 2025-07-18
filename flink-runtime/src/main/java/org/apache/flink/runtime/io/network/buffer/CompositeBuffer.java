@@ -80,7 +80,7 @@ public class CompositeBuffer implements Buffer {
     }
 
     @Override
-    public int getSize() {
+    public int getWriterIndex() {
         return currentLength;
     }
 
@@ -207,7 +207,7 @@ public class CompositeBuffer implements Buffer {
     }
 
     @Override
-    public void setSize(int writerIndex) {
+    public void setWriterIndex(int writerIndex) {
         throw new UnsupportedOperationException();
     }
 

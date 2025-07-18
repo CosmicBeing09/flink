@@ -1135,7 +1135,7 @@ class AlignedCheckpointsTest {
         if (expected.isBuffer()) {
             assertThat(present.getBuffer().getMaxCapacity())
                     .isEqualTo(expected.getBuffer().getMaxCapacity());
-            assertThat(present.getBuffer().getSize()).isEqualTo(expected.getBuffer().getSize());
+            assertThat(present.getBuffer().getWriterIndex()).isEqualTo(expected.getBuffer().getWriterIndex());
             MemorySegment expectedMem = expected.getBuffer().getMemorySegment();
             MemorySegment presentMem = present.getBuffer().getMemorySegment();
             assertThat(expectedMem.compare(presentMem, 0, 0, pageSize))

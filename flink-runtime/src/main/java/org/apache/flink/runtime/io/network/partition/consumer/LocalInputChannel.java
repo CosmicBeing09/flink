@@ -390,7 +390,7 @@ public class LocalInputChannel extends InputChannel implements BufferAvailabilit
     }
 
     @Override
-    public int unsynchronizedGetNumberOfQueuedBuffers() {
+    public int getNumberOfQueuedBuffersUnsynchronized() {
         ResultSubpartitionView view = subpartitionView;
 
         if (view != null) {

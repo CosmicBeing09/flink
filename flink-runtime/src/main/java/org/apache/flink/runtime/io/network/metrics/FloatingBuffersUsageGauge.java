@@ -53,7 +53,7 @@ public class FloatingBuffersUsageGauge extends AbstractBuffersUsageGauge {
     public int calculateTotalBuffers(SingleInputGate inputGate) {
         BufferPool bufferPool = inputGate.getBufferPool();
         if (bufferPool != null) {
-            return inputGate.getBufferPool().getNumBuffers();
+            return inputGate.getBufferPool().getNumberOfBuffers();
         }
         return 0;
     }

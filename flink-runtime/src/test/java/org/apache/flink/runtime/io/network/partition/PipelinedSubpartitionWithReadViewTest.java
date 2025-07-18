@@ -360,7 +360,7 @@ class PipelinedSubpartitionWithReadViewTest {
 
         final List<Buffer> inflight =
                 channelStateWriter.getAddedOutput().get(subpartition.getSubpartitionInfo());
-        assertThat(inflight.stream().map(Buffer::getSize).collect(Collectors.toList()))
+        assertThat(inflight.stream().map(Buffer::getWriterIndex).collect(Collectors.toList()))
                 .containsExactly(1, 2, 4);
         inflight.forEach(Buffer::recycleBuffer);
 

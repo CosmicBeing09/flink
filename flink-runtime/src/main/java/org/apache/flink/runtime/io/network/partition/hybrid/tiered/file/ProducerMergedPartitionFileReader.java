@@ -195,7 +195,7 @@ public class ProducerMergedPartitionFileReader implements PartitionFileReader {
         checkState(partialBuffer == null || partialBuffer.missingLength() > 0);
 
         NetworkBuffer buffer = new NetworkBuffer(memorySegment, bufferRecycler);
-        buffer.setSize(byteBuffer.remaining());
+        buffer.setWriterIndex(byteBuffer.remaining());
 
         try {
             int numSlicedBytes = 0;

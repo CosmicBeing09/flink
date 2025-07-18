@@ -263,7 +263,7 @@ public class RemoteInputChannel extends InputChannel {
             next = receivedBuffers.poll();
 
             if (next != null) {
-                totalQueueSizeInBytes -= next.buffer.getSize();
+                totalQueueSizeInBytes -= next.buffer.getWriterIndex();
             }
             nextDataType =
                     receivedBuffers.peek() != null
@@ -286,7 +286,7 @@ public class RemoteInputChannel extends InputChannel {
                 channelInfo,
                 channelStatePersister,
                 next.sequenceNumber);
-        numBytesIn.inc(next.buffer.getSize());
+        numBytesIn.inc(next.buffer.getWriterIndex());
         numBuffersIn.inc();
         return Optional.of(
                 new BufferAndAvailability(next.buffer, nextDataType, 0, next.sequenceNumber));
@@ -503,12 +503,12 @@ public class RemoteInputChannel extends InputChannel {
     }
 
     @Override
-    public int unsynchronizedGetNumberOfQueuedBuffers() {
+    public int getNumberOfQueuedBuffersUnsynchronized() {
         return Math.max(0, receivedBuffers.size());
     }
 
     @Override
-    public long unsynchronizedGetSizeOfQueuedBuffers() {
+    public long getSizeOfQueuedBuffersUnsynchronized() {
         return Math.max(0, totalQueueSizeInBytes);
     }
 
@@ -610,7 +610,7 @@ public class RemoteInputChannel extends InputChannel {
                         firstPriorityEvent = addPriorityBuffer(announce(sequenceBuffer));
                     }
                 }
-                totalQueueSizeInBytes += buffer.getSize();
+                totalQueueSizeInBytes += buffer.getWriterIndex();
                 final OptionalLong barrierId =
                         channelStatePersister.checkForBarrier(sequenceBuffer.buffer);
                 if (barrierId.isPresent() && barrierId.getAsLong() > lastBarrierId) {

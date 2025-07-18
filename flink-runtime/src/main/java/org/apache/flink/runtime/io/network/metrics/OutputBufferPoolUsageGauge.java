@@ -41,7 +41,7 @@ public class OutputBufferPoolUsageGauge implements Gauge<Float> {
 
             if (bufferPool != null) {
                 usedBuffers += bufferPool.bestEffortGetNumOfUsedBuffers();
-                bufferPoolSize += bufferPool.getNumBuffers();
+                bufferPoolSize += bufferPool.getNumberOfBuffers();
             }
         }
 

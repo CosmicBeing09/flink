@@ -210,8 +210,8 @@ class TieredStorageSortBufferTest {
                         buffer.getMemorySegment(),
                         MemorySegment::free,
                         buffer.getDataType(),
-                        buffer.getSize()));
-        numBytesRead[subpartition] += buffer.getSize();
+                        buffer.getWriterIndex()));
+        numBytesRead[subpartition] += buffer.getWriterIndex();
     }
 
     private static void checkWriteReadResult(

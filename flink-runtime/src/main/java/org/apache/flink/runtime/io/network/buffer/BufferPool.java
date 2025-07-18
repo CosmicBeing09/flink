@@ -44,7 +44,7 @@ public interface BufferPool extends BufferProvider, BufferRecycler {
      * Returns the number of expected memory segments of this buffer pool, representing a value that
      * adequately satisfies the requirements for buffer usage.
      */
-    int getExpectedNumberOfMemorySegments();
+    int getNumberOfRequiredMemorySegments();
 
     /** Returns the number of guaranteed (minimum number of) memory segments of this buffer pool. */
     int getMinNumberOfMemorySegments();
@@ -54,21 +54,21 @@ public interface BufferPool extends BufferProvider, BufferRecycler {
      *
      * @return maximum number of memory segments to use or <tt>-1</tt> if unlimited
      */
-    int getMaxNumberOfMemorySegments();
+    int getMaximumNumberOfMemorySegments();
 
     /**
      * Returns the current size of this buffer pool.
      *
      * <p>The size of the buffer pool can change dynamically at runtime.
      */
-    int getNumBuffers();
+    int getNumberOfBuffers();
 
     /**
      * Sets the current size of this buffer pool.
      *
      * <p>The size needs to be greater or equal to the guaranteed number of memory segments.
      */
-    void setNumBuffers(int numBuffers);
+    void setNumberOfBuffers(int numBuffers);
 
     /** Sets the max overdraft buffer size of per gate. */
     void setMaxOverdraftBuffersPerGate(int maxOverdraftBuffersPerGate);
