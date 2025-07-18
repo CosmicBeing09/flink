@@ -62,7 +62,7 @@ public class FailureRateRestartBackoffTimeStrategy implements RestartBackoffTime
     }
 
     @Override
-    public boolean canRestart() {
+    public boolean isRestartAllowed() {
         if (isFailureTimestampsQueueFull()) {
             Long now = clock.absoluteTimeMillis();
             Long earliestFailure = failureTimestamps.peek();
@@ -74,7 +74,7 @@ public class FailureRateRestartBackoffTimeStrategy implements RestartBackoffTime
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartDelayMillis() {
         return backoffTimeMS;
     }
 

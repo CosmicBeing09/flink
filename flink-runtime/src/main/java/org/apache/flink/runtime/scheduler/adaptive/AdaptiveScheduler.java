@@ -1477,9 +1477,9 @@ public class AdaptiveScheduler
         }
 
         restartBackoffTimeStrategy.notifyFailure(failure);
-        if (restartBackoffTimeStrategy.canRestart()) {
+        if (restartBackoffTimeStrategy.isRestartAllowed()) {
             return FailureResult.canRestart(
-                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getBackoffTime()));
+                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getRestartDelayMillis()));
         } else {
             return FailureResult.canNotRestart(
                     new JobException(

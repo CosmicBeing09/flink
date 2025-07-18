@@ -42,12 +42,12 @@ public class TestRestartBackoffTimeStrategy implements RestartBackoffTimeStrateg
     }
 
     @Override
-    public boolean canRestart() {
+    public boolean isRestartAllowed() {
         return canRestart;
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartDelayMillis() {
         return backoffTime;
     }
 

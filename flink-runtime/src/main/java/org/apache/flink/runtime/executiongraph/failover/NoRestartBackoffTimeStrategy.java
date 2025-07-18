@@ -23,12 +23,12 @@ public enum NoRestartBackoffTimeStrategy implements RestartBackoffTimeStrategy {
     INSTANCE;
 
     @Override
-    public boolean canRestart() {
+    public boolean isRestartAllowed() {
         return false;
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartDelayMillis() {
         return 0L;
     }
 

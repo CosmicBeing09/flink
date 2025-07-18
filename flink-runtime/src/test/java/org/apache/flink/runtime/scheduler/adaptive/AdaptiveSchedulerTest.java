@@ -1509,7 +1509,7 @@ public class AdaptiveSchedulerTest {
 
         assertThat(failureResult.canRestart()).isTrue();
         assertThat(failureResult.getBackoffTime().toMillis())
-                .isEqualTo(restartBackoffTimeStrategy.getBackoffTime());
+                .isEqualTo(restartBackoffTimeStrategy.getRestartDelayMillis());
 
         assertThat(spanCollector).isEmpty();
         mainThreadExecutor.trigger();

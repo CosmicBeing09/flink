@@ -201,7 +201,7 @@ public class ExecutionFailureHandler {
         }
 
         boolean isNewAttempt = restartBackoffTimeStrategy.notifyFailure(cause);
-        if (restartBackoffTimeStrategy.canRestart()) {
+        if (restartBackoffTimeStrategy.isRestartAllowed()) {
             if (isNewAttempt) {
                 numberOfRestarts++;
             }
@@ -212,7 +212,7 @@ public class ExecutionFailureHandler {
                     timestamp,
                     failureLabels,
                     verticesToRestart,
-                    restartBackoffTimeStrategy.getBackoffTime(),
+                    restartBackoffTimeStrategy.getRestartDelayMillis(),
                     globalFailure,
                     isNewAttempt);
         } else {
