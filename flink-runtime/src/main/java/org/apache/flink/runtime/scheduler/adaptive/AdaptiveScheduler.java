@@ -499,7 +499,7 @@ public class AdaptiveScheduler
                 computeVertexParallelismStore(jobGraph, settings.getExecutionMode());
         if (jobResourceRequirements != null) {
             vertexParallelismStore =
-                    DefaultVertexParallelismStore.applyJobResourceRequirements(
+                    DefaultVertexParallelismStore.applyExecutionPlanRequirements(
                                     vertexParallelismStore, jobResourceRequirements)
                             .orElse(vertexParallelismStore);
         }
@@ -1065,7 +1065,7 @@ public class AdaptiveScheduler
                     "Cannot change the parallelism of a job running in reactive mode.");
         }
         final Optional<VertexParallelismStore> maybeUpdateVertexParallelismStore =
-                DefaultVertexParallelismStore.applyJobResourceRequirements(
+                DefaultVertexParallelismStore.applyExecutionPlanRequirements(
                         jobInformation.getVertexParallelismStore(), jobResourceRequirements);
         if (maybeUpdateVertexParallelismStore.isPresent()) {
             this.jobInformation =
