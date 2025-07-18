@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StreamingPipelineOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.JobGraph;
@@ -62,7 +62,7 @@ class PerJobMiniClusterFactoryTest {
     void testJobExecution() throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
 
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(getNoopJobGraph(), ClassLoader.getSystemClassLoader())
                         .get();
@@ -81,7 +81,7 @@ class PerJobMiniClusterFactoryTest {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
 
         JobGraph cancellableJobGraph = getCancellableJobGraph();
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(cancellableJobGraph, ClassLoader.getSystemClassLoader())
                         .get();
@@ -89,7 +89,7 @@ class PerJobMiniClusterFactoryTest {
         assertThat(jobClient.getJobID()).isEqualTo(cancellableJobGraph.getJobID());
         assertThat(jobClient.getJobStatus().get()).isIn(JobStatus.CREATED, JobStatus.RUNNING);
 
-        jobClient.cancel().get();
+        jobClient.cancelStreamingJob().get();
 
         assertThatFuture(jobClient.getJobExecutionResult())
                 .eventuallyFailsWith(ExecutionException.class)
@@ -101,7 +101,7 @@ class PerJobMiniClusterFactoryTest {
     @Test
     void testJobClientSavepoint() throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(getCancellableJobGraph(), ClassLoader.getSystemClassLoader())
                         .get();
@@ -124,7 +124,7 @@ class PerJobMiniClusterFactoryTest {
     void testMultipleExecutions() throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
         {
-            JobClient jobClient =
+            StreamingJobClient jobClient =
                     perJobMiniClusterFactory
                             .submitJob(getNoopJobGraph(), ClassLoader.getSystemClassLoader())
                             .get();
@@ -132,7 +132,7 @@ class PerJobMiniClusterFactoryTest {
             assertThatMiniClusterIsShutdown();
         }
         {
-            JobClient jobClient =
+            StreamingJobClient jobClient =
                     perJobMiniClusterFactory
                             .submitJob(getNoopJobGraph(), ClassLoader.getSystemClassLoader())
                             .get();
@@ -144,14 +144,14 @@ class PerJobMiniClusterFactoryTest {
     @Test
     void testJobClientInteractionAfterShutdown() throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(getNoopJobGraph(), ClassLoader.getSystemClassLoader())
                         .get();
         jobClient.getJobExecutionResult().get();
         assertThatMiniClusterIsShutdown();
 
-        assertThatThrownBy(jobClient::cancel)
+        assertThatThrownBy(jobClient::cancelStreamingJob)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(
                         "MiniCluster is not yet running or has already been shut down.");
@@ -171,7 +171,7 @@ class PerJobMiniClusterFactoryTest {
                         jobVertex.getID().toHexString(), String.valueOf(overwriteParallelism)));
 
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster(configuration);
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(jobGraph, ClassLoader.getSystemClassLoader())
                         .get();
@@ -179,7 +179,7 @@ class PerJobMiniClusterFactoryTest {
         // wait for tasks to be properly running
         BlockingInvokable.latch.await();
 
-        jobClient.cancel().get();
+        jobClient.cancelStreamingJob().get();
         assertThatFuture(jobClient.getJobExecutionResult())
                 .eventuallyFailsWith(ExecutionException.class)
                 .withMessageContaining("Job was cancelled");

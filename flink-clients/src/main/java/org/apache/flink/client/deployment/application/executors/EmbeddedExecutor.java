@@ -25,7 +25,7 @@ import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptionsInternal;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
@@ -105,7 +105,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
     }
 
     @Override
-    public CompletableFuture<JobClient> execute(
+    public CompletableFuture<StreamingJobClient> execute(
             final Pipeline pipeline,
             final Configuration configuration,
             ClassLoader userCodeClassloader)
@@ -125,14 +125,14 @@ public class EmbeddedExecutor implements PipelineExecutor {
         return submitAndGetJobClientFuture(pipeline, configuration, userCodeClassloader);
     }
 
-    private CompletableFuture<JobClient> getJobClientFuture(
+    private CompletableFuture<StreamingJobClient> getJobClientFuture(
             final JobID jobId, final ClassLoader userCodeClassloader) {
         LOG.info("Job {} was recovered successfully.", jobId);
         return CompletableFuture.completedFuture(
                 jobClientCreator.getJobClient(jobId, userCodeClassloader));
     }
 
-    private CompletableFuture<JobClient> submitAndGetJobClientFuture(
+    private CompletableFuture<StreamingJobClient> submitAndGetJobClientFuture(
             final Pipeline pipeline,
             final Configuration configuration,
             final ClassLoader userCodeClassloader)

@@ -21,7 +21,7 @@ package org.apache.flink.streaming.api.operators.collect.utils;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
@@ -36,8 +36,8 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** A {@link JobClient} to test fetching SELECT query results. */
-public class TestJobClient implements JobClient, CoordinationRequestGateway {
+/** A {@link StreamingJobClient} to test fetching SELECT query results. */
+public class TestJobClient implements StreamingJobClient, CoordinationRequestGateway {
 
     private final JobID jobId;
     private final String operatorUid;
@@ -72,7 +72,7 @@ public class TestJobClient implements JobClient, CoordinationRequestGateway {
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         jobStatus = JobStatus.CANCELED;
         return CompletableFuture.completedFuture(null);
     }

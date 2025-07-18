@@ -30,7 +30,7 @@ import java.util.concurrent.CompletableFuture;
 
 /** A client that is scoped to a specific job. */
 @PublicEvolving
-public interface JobClient {
+public interface StreamingJobClient {
 
     /** Returns the {@link JobID} that uniquely identifies the job this client is scoped to. */
     JobID getJobID();
@@ -39,7 +39,7 @@ public interface JobClient {
     CompletableFuture<JobStatus> getJobStatus();
 
     /** Cancels the associated job. */
-    CompletableFuture<Void> cancel();
+    CompletableFuture<Void> cancelStreamingJob();
 
     /**
      * Stops the associated job on Flink cluster.

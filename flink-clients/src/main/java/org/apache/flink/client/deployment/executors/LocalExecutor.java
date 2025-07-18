@@ -25,7 +25,7 @@ import org.apache.flink.client.program.PerJobMiniClusterFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
@@ -83,7 +83,7 @@ public class LocalExecutor implements PipelineExecutor {
     }
 
     @Override
-    public CompletableFuture<JobClient> execute(
+    public CompletableFuture<StreamingJobClient> execute(
             Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws Exception {
         checkNotNull(pipeline);

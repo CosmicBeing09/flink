@@ -37,7 +37,7 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.execution.DetachedJobExecutionResult;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
@@ -414,7 +414,7 @@ class ClientTest {
 
             for (int i = 0; i < 2; i++) {
                 env.fromData(1, 2).sinkTo(new DiscardingSink<>());
-                JobClient jc = env.executeAsync();
+                StreamingJobClient jc = env.executeAsync();
 
                 jc.getJobExecutionResult();
             }

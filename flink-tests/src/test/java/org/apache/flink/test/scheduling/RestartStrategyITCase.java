@@ -26,7 +26,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.connector.datagen.source.DataGeneratorSource;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.sink.legacy.SinkFunction;
@@ -93,7 +93,7 @@ class RestartStrategyITCase {
                 .addSink(failureCountableSink)
                 .name("MySink");
 
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
 
         assertThatThrownBy(() -> jobClient.getJobExecutionResult().get())
                 .cause()

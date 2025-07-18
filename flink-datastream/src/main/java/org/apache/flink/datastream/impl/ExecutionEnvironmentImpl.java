@@ -37,7 +37,7 @@ import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.connector.datagen.functions.FromElementsGeneratorFunction;
 import org.apache.flink.connector.datagen.source.DataGeneratorSource;
 import org.apache.flink.core.execution.DefaultExecutorServiceLoader;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
@@ -276,7 +276,7 @@ public class ExecutionEnvironmentImpl implements ExecutionEnvironment {
     }
 
     private void execute(StreamGraph streamGraph) throws Exception {
-        final JobClient jobClient = executeAsync(streamGraph);
+        final StreamingJobClient jobClient = executeAsync(streamGraph);
 
         try {
             if (configuration.get(DeploymentOptions.ATTACHED)) {
@@ -292,11 +292,11 @@ public class ExecutionEnvironmentImpl implements ExecutionEnvironment {
         }
     }
 
-    private JobClient executeAsync(StreamGraph streamGraph) throws Exception {
+    private StreamingJobClient executeAsync(StreamGraph streamGraph) throws Exception {
         checkNotNull(streamGraph, "StreamGraph cannot be null.");
         final PipelineExecutor executor = getPipelineExecutor();
 
-        CompletableFuture<JobClient> jobClientFuture =
+        CompletableFuture<StreamingJobClient> jobClientFuture =
                 executor.execute(streamGraph, configuration, getClass().getClassLoader());
 
         try {

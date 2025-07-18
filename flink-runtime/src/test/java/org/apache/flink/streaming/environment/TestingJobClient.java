@@ -21,7 +21,7 @@ package org.apache.flink.streaming.environment;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 
 import javax.annotation.Nullable;
@@ -30,8 +30,8 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-/** Testing implementation of {@link JobClient}. */
-public class TestingJobClient implements JobClient {
+/** Testing implementation of {@link StreamingJobClient}. */
+public class TestingJobClient implements StreamingJobClient {
 
     @Override
     public JobID getJobID() {
@@ -50,7 +50,7 @@ public class TestingJobClient implements JobClient {
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         return CompletableFuture.completedFuture(null);
     }
 

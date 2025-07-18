@@ -25,7 +25,7 @@ import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.core.execution.DetachedJobExecutionResult;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobListener;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
 import org.apache.flink.runtime.dispatcher.ConfigurationNotAllowedMessage;
@@ -110,7 +110,7 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
 
     @Override
     public JobExecutionResult execute(StreamGraph streamGraph) throws Exception {
-        final JobClient jobClient = executeAsync(streamGraph);
+        final StreamingJobClient jobClient = executeAsync(streamGraph);
         final List<JobListener> jobListeners = getJobListeners();
 
         try {
@@ -130,7 +130,7 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
         }
     }
 
-    private JobExecutionResult getJobExecutionResult(final JobClient jobClient) throws Exception {
+    private JobExecutionResult getJobExecutionResult(final StreamingJobClient jobClient) throws Exception {
         checkNotNull(jobClient);
 
         JobExecutionResult jobExecutionResult;
@@ -146,7 +146,7 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
                                     // wait a smidgen to allow the async request to go through
                                     // before
                                     // the jvm exits
-                                    jobClient.cancel().get(1, TimeUnit.SECONDS);
+                                    jobClient.cancelStreamingJob().get(1, TimeUnit.SECONDS);
                                 },
                                 StreamContextEnvironment.class.getSimpleName(),
                                 LOG);
@@ -182,10 +182,10 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
     }
 
     @Override
-    public JobClient executeAsync(StreamGraph streamGraph) throws Exception {
+    public StreamingJobClient executeAsync(StreamGraph streamGraph) throws Exception {
         checkNotAllowedConfigurations();
         validateAllowedExecution();
-        final JobClient jobClient = super.executeAsync(streamGraph);
+        final StreamingJobClient jobClient = super.executeAsync(streamGraph);
 
         if (!suppressSysout) {
             System.out.println("Job has been submitted with JobID " + jobClient.getJobID());

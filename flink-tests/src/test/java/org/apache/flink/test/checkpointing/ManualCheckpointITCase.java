@@ -27,7 +27,7 @@ import org.apache.flink.api.common.state.ValueState;
 import org.apache.flink.api.common.state.ValueStateDescriptor;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.connector.source.mocks.MockSource;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -82,7 +82,7 @@ public class ManualCheckpointITCase extends AbstractTestBaseJUnit4 {
                 .flatMap(new StatefulMapper())
                 .sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
         final JobID jobID = jobClient.getJobID();
         final MiniCluster miniCluster = MINI_CLUSTER_RESOURCE.getMiniCluster();
 
@@ -112,7 +112,7 @@ public class ManualCheckpointITCase extends AbstractTestBaseJUnit4 {
                 .flatMap(new StatefulMapper())
                 .sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
         final JobID jobID = jobClient.getJobID();
         final MiniCluster miniCluster = MINI_CLUSTER_RESOURCE.getMiniCluster();
 

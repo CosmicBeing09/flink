@@ -21,7 +21,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HighAvailabilityOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.checkpoint.CheckpointRecoveryFactory;
 import org.apache.flink.runtime.checkpoint.PerJobCheckpointRecoveryFactory;
 import org.apache.flink.runtime.checkpoint.StandaloneCompletedCheckpointStore;
@@ -83,7 +83,7 @@ public class CheckpointStoreITCase extends TestLogger {
         env.addSource(emitUntil(() -> FailingMapper.failedAndProcessed))
                 .map(new FailingMapper())
                 .sinkTo(new DiscardingSink<>());
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
 
         BlockingHighAvailabilityServiceFactory.fetchRemoteCheckpointsStart.await();
         for (int i = 0; i < 10; i++) {

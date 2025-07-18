@@ -20,7 +20,7 @@ package org.apache.flink.connector.testframe.environment;
 
 import org.apache.flink.annotation.Experimental;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.highavailability.nonha.embedded.HaLeadershipControl;
 import org.apache.flink.runtime.minicluster.RpcServiceSharing;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -120,7 +120,7 @@ public class MiniClusterTestEnvironment implements TestEnvironment, ClusterContr
     }
 
     @Override
-    public void triggerJobManagerFailover(JobClient jobClient, Runnable afterFailAction)
+    public void triggerJobManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction)
             throws ExecutionException, InterruptedException {
         final Optional<HaLeadershipControl> controlOptional =
                 miniCluster.getMiniCluster().getHaLeadershipControl();
@@ -135,7 +135,7 @@ public class MiniClusterTestEnvironment implements TestEnvironment, ClusterContr
     }
 
     @Override
-    public void triggerTaskManagerFailover(JobClient jobClient, Runnable afterFailAction)
+    public void triggerTaskManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction)
             throws Exception {
         terminateTaskManager();
         CommonTestUtils.waitForNoTaskRunning(
@@ -145,7 +145,7 @@ public class MiniClusterTestEnvironment implements TestEnvironment, ClusterContr
     }
 
     @Override
-    public void isolateNetwork(JobClient jobClient, Runnable afterFailAction) {
+    public void isolateNetwork(StreamingJobClient jobClient, Runnable afterFailAction) {
         throw new UnsupportedOperationException("Cannot isolate network in a MiniCluster");
     }
 

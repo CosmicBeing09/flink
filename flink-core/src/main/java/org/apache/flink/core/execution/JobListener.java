@@ -39,10 +39,10 @@ public interface JobListener {
      *
      * <p>Exactly one of the passed parameters is null, respectively for failure or success.
      *
-     * @param jobClient a {@link JobClient} for the submitted Flink job
+     * @param jobClient a {@link StreamingJobClient} for the submitted Flink job
      * @param throwable the cause if submission failed
      */
-    void onJobSubmitted(@Nullable JobClient jobClient, @Nullable Throwable throwable);
+    void onJobSubmitted(@Nullable StreamingJobClient jobClient, @Nullable Throwable throwable);
 
     /**
      * Callback on job execution finished, successfully or unsuccessfully. It is only called back

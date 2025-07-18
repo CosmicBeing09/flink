@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.api.common.typeutils.base.IntSerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.operators.collect.utils.AbstractTestCoordinationRequestHandler;
 import org.apache.flink.streaming.api.operators.collect.utils.TestCheckpointedCoordinationRequestHandler;
 import org.apache.flink.streaming.api.operators.collect.utils.TestJobClient;
@@ -123,13 +123,13 @@ class CollectResultIteratorTest {
             expected.add(i);
         }
 
-        Tuple2<CollectResultIterator<Integer>, JobClient> tuple2 =
+        Tuple2<CollectResultIterator<Integer>, StreamingJobClient> tuple2 =
                 createIteratorAndJobClient(
                         new CheckpointedCollectResultBuffer<>(serializer),
                         new TestCheckpointedCoordinationRequestHandler<>(
                                 expected, serializer, ACCUMULATOR_NAME));
         CollectResultIterator<Integer> iterator = tuple2.f0;
-        JobClient jobClient = tuple2.f1;
+        StreamingJobClient jobClient = tuple2.f1;
 
         for (int i = 0; i < 100; i++) {
             assertThat(iterator).hasNext();
@@ -143,7 +143,7 @@ class CollectResultIteratorTest {
                 .isEqualTo(JobStatus.CANCELED);
     }
 
-    private Tuple2<CollectResultIterator<Integer>, JobClient> createIteratorAndJobClient(
+    private Tuple2<CollectResultIterator<Integer>, StreamingJobClient> createIteratorAndJobClient(
             AbstractCollectResultBuffer<Integer> buffer,
             AbstractTestCoordinationRequestHandler<Integer> handler) {
         CollectResultIterator<Integer> iterator =

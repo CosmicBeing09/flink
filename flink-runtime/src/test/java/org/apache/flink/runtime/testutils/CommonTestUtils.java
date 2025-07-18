@@ -20,7 +20,7 @@ package org.apache.flink.runtime.testutils;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.checkpoint.CheckpointStatsSnapshot;
 import org.apache.flink.runtime.checkpoint.CompletedCheckpointStats;
 import org.apache.flink.runtime.execution.ExecutionState;
@@ -264,7 +264,7 @@ public class CommonTestUtils {
         waitUntilCondition(() -> jobStatusSupplier.get() != JobStatus.INITIALIZING, 20L);
     }
 
-    public static void waitForJobStatus(JobClient client, List<JobStatus> expectedStatus)
+    public static void waitForJobStatus(StreamingJobClient client, List<JobStatus> expectedStatus)
             throws Exception {
         waitUntilCondition(
                 () -> {
@@ -298,8 +298,8 @@ public class CommonTestUtils {
                 });
     }
 
-    public static void terminateJob(JobClient client) throws Exception {
-        client.cancel().get();
+    public static void terminateJob(StreamingJobClient client) throws Exception {
+        client.cancelStreamingJob().get();
     }
 
     public static void waitForSubtasksToFinish(

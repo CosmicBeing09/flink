@@ -21,7 +21,7 @@ package org.apache.flink.streaming.environment;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -36,7 +36,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 /**
  * Tests the {@link PipelineExecutorFactory} discovery in the {@link StreamExecutionEnvironment} and
- * the calls of the {@link JobClient}.
+ * the calls of the {@link StreamingJobClient}.
  */
 public class ExecutorDiscoveryAndJobClientTest {
 

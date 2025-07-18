@@ -24,7 +24,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.client.program.ProgramInvocationException;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequest;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
@@ -43,11 +43,11 @@ import java.util.function.Function;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * An implementation of the {@link JobClient} interface that uses a {@link ClusterClient}
+ * An implementation of the {@link StreamingJobClient} interface that uses a {@link ClusterClient}
  * underneath..
  */
 public class ClusterClientJobClientAdapter<ClusterID>
-        implements JobClient, CoordinationRequestGateway {
+        implements StreamingJobClient, CoordinationRequestGateway {
 
     private final ClusterClientProvider<ClusterID> clusterClientProvider;
 
@@ -76,7 +76,7 @@ public class ClusterClientJobClientAdapter<ClusterID>
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         return bridgeClientRequest(
                 clusterClientProvider,
                 (clusterClient -> clusterClient.cancel(jobID).thenApply((ignored) -> null)));

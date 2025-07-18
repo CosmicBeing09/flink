@@ -23,7 +23,7 @@ import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.*;
 import org.apache.flink.configuration.StreamingPipelineOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobListener;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
 import org.apache.flink.runtime.scheduler.DefaultScheduler;
@@ -243,7 +243,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
         private int count = 0;
 
         @Override
-        public void onJobSubmitted(@Nullable JobClient jobClient, @Nullable Throwable throwable) {
+        public void onJobSubmitted(@Nullable StreamingJobClient jobClient, @Nullable Throwable throwable) {
             this.count = this.count + 1;
         }
 
@@ -257,7 +257,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
         private int count = 0;
 
         @Override
-        public void onJobSubmitted(@Nullable JobClient jobClient, @Nullable Throwable throwable) {
+        public void onJobSubmitted(@Nullable StreamingJobClient jobClient, @Nullable Throwable throwable) {
             this.count = this.count + 1;
         }
 

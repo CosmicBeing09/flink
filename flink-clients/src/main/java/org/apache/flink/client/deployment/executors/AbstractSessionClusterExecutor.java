@@ -27,11 +27,8 @@ import org.apache.flink.client.deployment.ClusterDescriptor;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
-import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
-import org.apache.flink.core.execution.PipelineExecutor;
+import org.apache.flink.core.execution.*;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.util.AbstractID;
@@ -85,7 +82,7 @@ public class AbstractSessionClusterExecutor<
     }
 
     @Override
-    public CompletableFuture<JobClient> execute(
+    public CompletableFuture<StreamingJobClient> execute(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
@@ -114,7 +111,7 @@ public class AbstractSessionClusterExecutor<
                                     }))
                     .thenApplyAsync(
                             jobID ->
-                                    (JobClient)
+                                    (StreamingJobClient)
                                             new ClusterClientJobClientAdapter<>(
                                                     clusterClientProvider,
                                                     jobID,

@@ -26,7 +26,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
@@ -167,7 +167,7 @@ public class MiniClusterStreamingExecutorServiceLoader implements PipelineExecut
         }
 
         @Override
-        public CompletableFuture<JobClient> execute(
+        public CompletableFuture<StreamingJobClient> execute(
                 Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassLoader)
                 throws Exception {
             final JobGraph jobGraph =

@@ -19,7 +19,7 @@
 package org.apache.flink.table.api.internal;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.table.api.TableResult;
 import org.apache.flink.table.data.RowData;
 import org.apache.flink.table.utils.print.RowDataToStringConverter;
@@ -36,7 +36,7 @@ import org.apache.flink.util.CloseableIterator;
 @Internal
 public interface ResultProvider {
     /** Set the job client associated with the select job to retrieve the result. */
-    ResultProvider setJobClient(JobClient jobClient);
+    ResultProvider setJobClient(StreamingJobClient jobClient);
 
     /**
      * Returns the select result as row iterator using internal data types. You must not invoke this

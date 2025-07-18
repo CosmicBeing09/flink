@@ -38,7 +38,7 @@ import org.apache.flink.connector.testframe.junit.extensions.TestCaseInvocationC
 import org.apache.flink.connector.testframe.utils.CollectIteratorAssertions;
 import org.apache.flink.connector.testframe.utils.MetricQuerier;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.RestClient;
@@ -145,7 +145,7 @@ public abstract class SourceTestSuiteBase<T> {
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
-        JobClient jobClient = submitJob(execEnv, "Source Single Split Test");
+        StreamingJobClient jobClient = submitJob(execEnv, "Source Single Split Test");
 
         // Step 5: Validate test data
         try (CollectResultIterator<T> resultIterator = iteratorBuilder.build(jobClient)) {
@@ -202,7 +202,7 @@ public abstract class SourceTestSuiteBase<T> {
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(splitNumber);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
-        JobClient jobClient = submitJob(execEnv, "Source Multiple Split Test");
+        StreamingJobClient jobClient = submitJob(execEnv, "Source Multiple Split Test");
 
         // Step 4: Validate test data
         try (CloseableIterator<T> resultIterator = iteratorBuilder.build(jobClient)) {
@@ -319,7 +319,7 @@ public abstract class SourceTestSuiteBase<T> {
                                 "Tested Source")
                         .setParallelism(beforeParallelism);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(source);
-        final JobClient jobClient = execEnv.executeAsync("Restart Test");
+        final StreamingJobClient jobClient = execEnv.executeAsync("Restart Test");
 
         // Step 4: Check the result and stop Flink job with a savepoint
         CollectResultIterator<T> iterator = null;
@@ -371,7 +371,7 @@ public abstract class SourceTestSuiteBase<T> {
                         .setParallelism(afterParallelism);
         addCollectSink(restartSource);
 
-        final JobClient restartJobClient = restartEnv.executeAsync("Restart Test");
+        final StreamingJobClient restartJobClient = restartEnv.executeAsync("Restart Test");
 
         waitForJobStatus(restartJobClient, singletonList(JobStatus.RUNNING));
 
@@ -438,7 +438,7 @@ public abstract class SourceTestSuiteBase<T> {
                                 sourceName)
                         .setParallelism(splitNumber);
         dataStreamSource.sinkTo(new DiscardingSink<>());
-        final JobClient jobClient = env.executeAsync("Metrics Test");
+        final StreamingJobClient jobClient = env.executeAsync("Metrics Test");
 
         final MetricQuerier queryRestClient = new MetricQuerier(new Configuration());
         final ExecutorService executorService = Executors.newCachedThreadPool();
@@ -518,7 +518,7 @@ public abstract class SourceTestSuiteBase<T> {
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(splitNumber + 1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
-        JobClient jobClient = submitJob(execEnv, "Idle Reader Test");
+        StreamingJobClient jobClient = submitJob(execEnv, "Idle Reader Test");
 
         // Step 4: Validate test data
         try (CloseableIterator<T> resultIterator = iteratorBuilder.build(jobClient)) {
@@ -583,7 +583,7 @@ public abstract class SourceTestSuiteBase<T> {
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
-        JobClient jobClient = submitJob(execEnv, "TaskManager Failover Test");
+        StreamingJobClient jobClient = submitJob(execEnv, "TaskManager Failover Test");
 
         // Step 4: Validate records before killing TaskManagers
         CloseableIterator<T> iterator = iteratorBuilder.build(jobClient);
@@ -660,7 +660,7 @@ public abstract class SourceTestSuiteBase<T> {
         }
     }
 
-    protected JobClient submitJob(StreamExecutionEnvironment env, String jobName) throws Exception {
+    protected StreamingJobClient submitJob(StreamExecutionEnvironment env, String jobName) throws Exception {
         LOG.info("Submitting Flink job {} to test environment", jobName);
         return env.executeAsync(jobName);
     }
@@ -766,7 +766,7 @@ public abstract class SourceTestSuiteBase<T> {
         return Precision.equals(allRecordSize, sumNumRecordsIn);
     }
 
-    private void killJob(JobClient jobClient) throws Exception {
+    private void killJob(StreamingJobClient jobClient) throws Exception {
         terminateJob(jobClient);
         waitForJobStatus(jobClient, singletonList(JobStatus.CANCELED));
     }
@@ -790,7 +790,7 @@ public abstract class SourceTestSuiteBase<T> {
             this.checkpointConfig = checkpointConfig;
         }
 
-        protected CollectResultIterator<T> build(JobClient jobClient) {
+        protected CollectResultIterator<T> build(StreamingJobClient jobClient) {
             CollectResultIterator<T> iterator =
                     new CollectResultIterator<>(
                             operatorUid,

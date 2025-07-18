@@ -22,7 +22,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 import org.apache.flink.runtime.minicluster.MiniClusterJobClient;
@@ -68,7 +68,7 @@ public final class PerJobMiniClusterFactory {
     }
 
     /** Starts a {@link MiniCluster} and submits a job. */
-    public CompletableFuture<JobClient> submitJob(
+    public CompletableFuture<StreamingJobClient> submitJob(
             ExecutionPlan executionPlan, ClassLoader userCodeClassloader) throws Exception {
         MiniClusterConfiguration miniClusterConfig =
                 getMiniClusterConfig(executionPlan.getMaximumParallelism());

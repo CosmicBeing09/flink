@@ -23,7 +23,7 @@ import org.apache.flink.client.deployment.executors.LocalExecutor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -84,7 +84,7 @@ public class LocalExecutorITCase extends TestLogger {
             config.set(DeploymentOptions.ATTACHED, true);
 
             StreamGraph wcStreamGraph = getWordCountStreamGraph(inFile, outFile, parallelism);
-            JobClient jobClient =
+            StreamingJobClient jobClient =
                     executor.execute(wcStreamGraph, config, ClassLoader.getSystemClassLoader())
                             .get();
             jobClient.getJobExecutionResult().get();
@@ -103,7 +103,7 @@ public class LocalExecutorITCase extends TestLogger {
         Configuration config = new Configuration();
         config.set(DeploymentOptions.ATTACHED, true);
 
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 executor.execute(runtimeExceptionPlan, config, ClassLoader.getSystemClassLoader())
                         .get();
 

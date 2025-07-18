@@ -25,7 +25,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.configuration.StateChangelogOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -50,7 +50,7 @@ public class TestStreamEnvironment extends StreamExecutionEnvironment {
             Boolean.parseBoolean(System.getProperty("checkpointing.randomization", "false"));
     private static final String STATE_CHANGE_LOG_CONFIG =
             System.getProperty("checkpointing.changelog", STATE_CHANGE_LOG_CONFIG_UNSET).trim();
-    private static AtomicReference<JobExecutionResult> lastJobExecutionResult =
+    private static AtomicReference<JobExecutionResult> lastStreamingJobExecutionResult =
             new AtomicReference<>(null);
     private final MiniCluster miniCluster;
     private final int parallelism;
@@ -222,20 +222,20 @@ public class TestStreamEnvironment extends StreamExecutionEnvironment {
     @Override
     public JobExecutionResult execute(String jobName) throws Exception {
         JobExecutionResult result = super.execute(jobName);
-        this.lastJobExecutionResult.set(result);
+        this.lastStreamingJobExecutionResult.set(result);
         return result;
     }
 
     @Override
-    public JobClient executeAsync(String jobName) throws Exception {
-        JobClient jobClient = super.executeAsync(jobName);
+    public StreamingJobClient executeAsync(String jobName) throws Exception {
+        StreamingJobClient jobClient = super.executeAsync(jobName);
         CompletableFuture<JobExecutionResult> jobExecutionResultFuture =
                 jobClient.getJobExecutionResult();
-        jobExecutionResultFuture.thenAccept((e) -> this.lastJobExecutionResult.set(e));
+        jobExecutionResultFuture.thenAccept((e) -> this.lastStreamingJobExecutionResult.set(e));
         return jobClient;
     }
 
-    public JobExecutionResult getLastJobExecutionResult() {
-        return lastJobExecutionResult.get();
+    public JobExecutionResult getLastStreamingJobExecutionResult() {
+        return lastStreamingJobExecutionResult.get();
     }
 }

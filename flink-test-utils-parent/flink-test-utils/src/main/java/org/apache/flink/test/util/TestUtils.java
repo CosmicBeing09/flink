@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.time.Deadline;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.rest.RestClusterClient;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.checkpoint.Checkpoints;
 import org.apache.flink.runtime.checkpoint.metadata.CheckpointMetadata;
 import org.apache.flink.runtime.execution.ExecutionState;
@@ -69,7 +69,7 @@ public class TestUtils {
      *     SuccessException} as a cause.
      */
     public static void tryExecute(StreamExecutionEnvironment see, String name) throws Exception {
-        JobClient jobClient = null;
+        StreamingJobClient jobClient = null;
         try {
             StreamGraph graph = see.getStreamGraph();
             graph.setJobName(name);
@@ -78,7 +78,7 @@ public class TestUtils {
         } catch (Throwable root) {
             if (jobClient != null) {
                 try {
-                    jobClient.cancel().get();
+                    jobClient.cancelStreamingJob().get();
                 } catch (Exception e) {
                     // Exception could be thrown if the job has already finished.
                     // Ignore the exception.

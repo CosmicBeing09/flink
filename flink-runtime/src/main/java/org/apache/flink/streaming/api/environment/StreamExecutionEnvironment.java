@@ -63,7 +63,7 @@ import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.DefaultExecutorServiceLoader;
 import org.apache.flink.core.execution.DetachedJobExecutionResult;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobListener;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
@@ -1869,7 +1869,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Internal
     public JobExecutionResult execute(StreamGraph streamGraph) throws Exception {
-        final JobClient jobClient = executeAsync(streamGraph);
+        final StreamingJobClient jobClient = executeAsync(streamGraph);
 
         try {
             final JobExecutionResult jobExecutionResult;
@@ -1944,12 +1944,12 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *
      * <p>The program execution will be logged and displayed with a generated default name.
      *
-     * @return A {@link JobClient} that can be used to communicate with the submitted job, completed
+     * @return A {@link StreamingJobClient} that can be used to communicate with the submitted job, completed
      *     on submission succeeded.
      * @throws Exception which occurs during job execution.
      */
     @PublicEvolving
-    public final JobClient executeAsync() throws Exception {
+    public final StreamingJobClient executeAsync() throws Exception {
         return executeAsync(getStreamGraph());
     }
 
@@ -1961,12 +1961,12 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * <p>The program execution will be logged and displayed with the provided name
      *
      * @param jobName desired name of the job
-     * @return A {@link JobClient} that can be used to communicate with the submitted job, completed
+     * @return A {@link StreamingJobClient} that can be used to communicate with the submitted job, completed
      *     on submission succeeded.
      * @throws Exception which occurs during job execution.
      */
     @PublicEvolving
-    public JobClient executeAsync(String jobName) throws Exception {
+    public StreamingJobClient executeAsync(String jobName) throws Exception {
         final StreamGraph streamGraph = getStreamGraph();
         if (jobName != null) {
             streamGraph.setJobName(jobName);
@@ -1980,20 +1980,20 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * results or forwarding them to a message queue.
      *
      * @param streamGraph the stream graph representing the transformations
-     * @return A {@link JobClient} that can be used to communicate with the submitted job, completed
+     * @return A {@link StreamingJobClient} that can be used to communicate with the submitted job, completed
      *     on submission succeeded.
      * @throws Exception which occurs during job execution.
      */
     @Internal
-    public JobClient executeAsync(StreamGraph streamGraph) throws Exception {
+    public StreamingJobClient executeAsync(StreamGraph streamGraph) throws Exception {
         checkNotNull(streamGraph, "StreamGraph cannot be null.");
         final PipelineExecutor executor = getPipelineExecutor();
 
-        CompletableFuture<JobClient> jobClientFuture =
+        CompletableFuture<StreamingJobClient> jobClientFuture =
                 executor.execute(streamGraph, configuration, userClassloader);
 
         try {
-            JobClient jobClient = jobClientFuture.get();
+            StreamingJobClient jobClient = jobClientFuture.get();
             jobListeners.forEach(jobListener -> jobListener.onJobSubmitted(jobClient, null));
             collectIterators.forEach(iterator -> iterator.setJobClient(jobClient));
             collectIterators.clear();

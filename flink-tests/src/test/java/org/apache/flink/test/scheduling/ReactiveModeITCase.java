@@ -24,7 +24,7 @@ import org.apache.flink.client.program.rest.RestClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.SchedulerExecutionMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
@@ -90,7 +90,7 @@ public class ReactiveModeITCase extends TestLogger {
                 env.addSource(new FailOnParallelExecutionSource()).setMaxParallelism(1);
         input.sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
 
         waitUntilParallelismForVertexReached(
                 miniClusterResource.getRestClusterClient(), jobClient.getJobID(), 1);
@@ -103,7 +103,7 @@ public class ReactiveModeITCase extends TestLogger {
         final DataStream<String> input = env.addSource(new DummySource());
         input.sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
 
         waitUntilParallelismForVertexReached(
                 miniClusterResource.getRestClusterClient(),
@@ -125,7 +125,7 @@ public class ReactiveModeITCase extends TestLogger {
         final DataStream<String> input = env.addSource(new DummySource());
         input.sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
 
         int initialParallelism = NUMBER_SLOTS_PER_TASK_MANAGER * INITIAL_NUMBER_TASK_MANAGERS;
         waitUntilParallelismForVertexReached(
@@ -179,7 +179,7 @@ public class ReactiveModeITCase extends TestLogger {
         final DataStream<String> input = env.addSource(new DummySource());
         input.sinkTo(new DiscardingSink<>());
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
 
         waitUntilParallelismForVertexReached(
                 miniClusterResource.getRestClusterClient(),

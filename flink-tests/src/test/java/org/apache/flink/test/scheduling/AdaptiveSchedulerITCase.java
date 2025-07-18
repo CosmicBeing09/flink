@@ -29,7 +29,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HeartbeatManagerOptions;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.runtime.jobgraph.JobGraph;
@@ -161,7 +161,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
         DummySource.resetForParallelism(PARALLELISM);
 
-        JobClient client = env.executeAsync();
+        StreamingJobClient client = env.executeAsync();
 
         DummySource.awaitRunning();
 
@@ -184,7 +184,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
         DummySource.resetForParallelism(PARALLELISM);
 
-        JobClient client = env.executeAsync();
+        StreamingJobClient client = env.executeAsync();
 
         DummySource.awaitRunning();
         try {
@@ -209,7 +209,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
         DummySource.resetForParallelism(PARALLELISM);
 
-        JobClient client = env.executeAsync();
+        StreamingJobClient client = env.executeAsync();
 
         DummySource.awaitRunning();
         final CompletableFuture<String> savepointCompleted =
@@ -243,7 +243,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
                 .addSink(new DiscardingSink<>());
         DummySource.resetForParallelism(PARALLELISM);
 
-        JobClient client = env.executeAsync();
+        StreamingJobClient client = env.executeAsync();
 
         DummySource.awaitRunning();
         DummySource.resetForParallelism(PARALLELISM);
@@ -284,7 +284,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
         env.addSource(new FailOnCompletedCheckpointSource())
                 // TODO replace this by sink v2 after source is ported to FLIP-27.
                 .addSink(new DiscardingSink<>());
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
         CommonTestUtils.waitUntilCondition(
                 () -> {
                     final List<RootExceptionInfo> exceptions =
@@ -295,7 +295,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
                                     .getEntries();
                     return !exceptions.isEmpty();
                 });
-        jobClient.cancel().get();
+        jobClient.cancelStreamingJob().get();
         CommonTestUtils.waitForJobStatus(jobClient, Collections.singletonList(JobStatus.CANCELED));
     }
 

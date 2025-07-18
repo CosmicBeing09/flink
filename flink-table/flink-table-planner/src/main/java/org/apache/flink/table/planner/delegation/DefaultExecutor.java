@@ -26,7 +26,7 @@ import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -106,7 +106,7 @@ public class DefaultExecutor implements Executor {
     }
 
     @Override
-    public JobClient executeAsync(Pipeline pipeline) throws Exception {
+    public StreamingJobClient executeAsync(Pipeline pipeline) throws Exception {
         return executionEnvironment.executeAsync((StreamGraph) pipeline);
     }
 

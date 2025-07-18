@@ -22,7 +22,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.connector.testframe.environment.ClusterControllable;
 import org.apache.flink.connector.testframe.environment.TestEnvironment;
 import org.apache.flink.connector.testframe.environment.TestEnvironmentSettings;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.environment.RemoteStreamEnvironment;
@@ -154,13 +154,13 @@ public class FlinkContainerTestEnvironment implements TestEnvironment, ClusterCo
     }
 
     @Override
-    public void triggerJobManagerFailover(JobClient jobClient, Runnable afterFailAction)
+    public void triggerJobManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction)
             throws Exception {
         flinkContainers.restartJobManager(afterFailAction::run);
     }
 
     @Override
-    public void triggerTaskManagerFailover(JobClient jobClient, Runnable afterFailAction)
+    public void triggerTaskManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction)
             throws Exception {
         flinkContainers.restartTaskManager(
                 () -> {
@@ -175,7 +175,7 @@ public class FlinkContainerTestEnvironment implements TestEnvironment, ClusterCo
     }
 
     @Override
-    public void isolateNetwork(JobClient jobClient, Runnable afterFailAction) {}
+    public void isolateNetwork(StreamingJobClient jobClient, Runnable afterFailAction) {}
 
     @Override
     public String toString() {

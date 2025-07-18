@@ -20,7 +20,7 @@ package org.apache.flink.table.api.internal;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.table.api.TableException;
 import org.apache.flink.table.data.GenericArrayData;
 import org.apache.flink.table.data.GenericMapData;
@@ -90,7 +90,7 @@ public class StaticResultProvider implements ResultProvider {
     }
 
     @Override
-    public StaticResultProvider setJobClient(JobClient jobClient) {
+    public StaticResultProvider setJobClient(StreamingJobClient jobClient) {
         return this;
     }
 

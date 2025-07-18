@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.accumulators.AccumulatorHelper;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.jobmaster.JobResult;
@@ -42,8 +42,8 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-/** A {@link JobClient} for a {@link MiniCluster}. */
-public final class MiniClusterJobClient implements JobClient, CoordinationRequestGateway {
+/** A {@link StreamingJobClient} for a {@link MiniCluster}. */
+public final class MiniClusterJobClient implements StreamingJobClient, CoordinationRequestGateway {
 
     private static final Logger LOG = LoggerFactory.getLogger(MiniClusterJobClient.class);
 
@@ -91,7 +91,7 @@ public final class MiniClusterJobClient implements JobClient, CoordinationReques
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         return miniCluster.cancelJob(jobID).thenAccept(result -> {});
     }
 
