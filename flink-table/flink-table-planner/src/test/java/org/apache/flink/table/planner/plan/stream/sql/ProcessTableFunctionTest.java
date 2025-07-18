@@ -225,7 +225,7 @@ public class ProcessTableFunctionTest extends TableTestBase {
     @MethodSource("errorSpecs")
     void testErrorBehavior(ErrorSpec spec) {
         util.addTemporarySystemFunction("f", spec.functionClass);
-        assertThatThrownBy(() -> util.verifyExecPlan(spec.sql))
+        assertThatThrownBy(() -> util.verifyExecPlan(spec.selectSql))
                 .satisfies(anyCauseMatches(spec.errorMessage));
     }
 
@@ -406,17 +406,17 @@ public class ProcessTableFunctionTest extends TableTestBase {
     private static class ErrorSpec {
         private final String description;
         private final Class<? extends UserDefinedFunction> functionClass;
-        private final String sql;
+        private final String selectSql;
         private final String errorMessage;
 
         private ErrorSpec(
                 String description,
                 Class<? extends UserDefinedFunction> functionClass,
-                String sql,
+                String selectSql,
                 String errorMessage) {
             this.description = description;
             this.functionClass = functionClass;
-            this.sql = sql;
+            this.selectSql = selectSql;
             this.errorMessage = errorMessage;
         }
 
