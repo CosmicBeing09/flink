@@ -268,12 +268,12 @@ class ForStStateDataTransferTest extends TestLogger {
                             new CloseableRegistry(),
                             new CloseableRegistry());
 
-            for (Path path : sstFilePaths) {
+            for (Path localSstFilePath : sstFilePaths) {
                 assertStateContentEqual(
-                        path,
+                        localSstFilePath,
                         -1,
                         sstFiles.stream()
-                                .filter(e -> e.getLocalPath().equals(path.getName()))
+                                .filter(e -> e.getLocalPath().equals(localSstFilePath.getName()))
                                 .findFirst()
                                 .get()
                                 .getHandle()
@@ -353,15 +353,15 @@ class ForStStateDataTransferTest extends TestLogger {
         inputStream.close();
     }
 
-    private byte[] readHeadBytes(Path path, long headBytes) throws IOException {
-        FileSystem fileSystem = path.getFileSystem();
-        FileStatus fileStatus = fileSystem.getFileStatus(path);
+    private byte[] readHeadBytes(Path filePath, long headBytes) throws IOException {
+        FileSystem fileSystem = filePath.getFileSystem();
+        FileStatus fileStatus = fileSystem.getFileStatus(filePath);
         Preconditions.checkNotNull(fileStatus);
 
         long len = fileStatus.getLen();
         Preconditions.checkState(len >= headBytes);
 
-        try (FSDataInputStream inputStream = fileSystem.open(path)) {
+        try (FSDataInputStream inputStream = fileSystem.open(filePath)) {
 
             int toRead = (int) (headBytes > 0 ? headBytes : len);
             byte[] content = new byte[toRead];
