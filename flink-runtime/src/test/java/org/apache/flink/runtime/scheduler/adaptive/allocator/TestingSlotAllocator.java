@@ -43,13 +43,13 @@ public class TestingSlotAllocator implements SlotAllocator {
     }
 
     @Override
-    public ResourceCounter calculateRequiredSlots(
+    public ResourceCounter calculateResourceRequirements(
             Iterable<JobInformation.VertexInformation> vertices) {
         return calculateRequiredSlotsFunction.apply(vertices);
     }
 
     @Override
-    public Optional<VertexParallelism> determineParallelism(
+    public Optional<VertexParallelism> determineVertexParallelism(
             JobInformation jobInformation, Collection<? extends SlotInfo> slots) {
         return Optional.empty();
     }

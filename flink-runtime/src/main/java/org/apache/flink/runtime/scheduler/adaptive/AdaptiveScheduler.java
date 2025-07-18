@@ -1108,7 +1108,7 @@ public class AdaptiveScheduler
     @Override
     public boolean hasSufficientResources() {
         return slotAllocator
-                .determineParallelism(jobInformation, declarativeSlotPool.getAllSlotsInformation())
+                .determineVertexParallelism(jobInformation, declarativeSlotPool.getAllSlotsInformation())
                 .isPresent();
     }
 
@@ -1175,7 +1175,7 @@ public class AdaptiveScheduler
     }
 
     private ResourceCounter calculateDesiredResources() {
-        return slotAllocator.calculateRequiredSlots(jobInformation.getVertices());
+        return slotAllocator.calculateResourceRequirements(jobInformation.getVertices());
     }
 
     @Override
@@ -1435,7 +1435,7 @@ public class AdaptiveScheduler
 
     @Override
     public Optional<VertexParallelism> getAvailableVertexParallelism() {
-        return slotAllocator.determineParallelism(
+        return slotAllocator.determineVertexParallelism(
                 jobInformation, declarativeSlotPool.getAllSlotsInformation());
     }
 

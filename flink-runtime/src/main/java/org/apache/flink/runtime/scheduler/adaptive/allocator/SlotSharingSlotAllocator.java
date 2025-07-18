@@ -78,7 +78,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
     }
 
     @Override
-    public ResourceCounter calculateRequiredSlots(
+    public ResourceCounter calculateResourceRequirements(
             Iterable<JobInformation.VertexInformation> vertices) {
         int numTotalRequiredSlots = 0;
         for (SlotSharingGroupMetaInfo slotSharingGroupMetaInfo :
@@ -89,7 +89,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
     }
 
     @Override
-    public Optional<VertexParallelism> determineParallelism(
+    public Optional<VertexParallelism> determineVertexParallelism(
             JobInformation jobInformation, Collection<? extends SlotInfo> freeSlots) {
 
         final Map<SlotSharingGroupId, SlotSharingGroupMetaInfo> slotSharingGroupMetaInfo =
@@ -134,7 +134,7 @@ public class SlotSharingSlotAllocator implements SlotAllocator {
             JobInformation jobInformation,
             Collection<? extends SlotInfo> slots,
             JobAllocationsInformation jobAllocationsInformation) {
-        return determineParallelism(jobInformation, slots)
+        return determineVertexParallelism(jobInformation, slots)
                 .map(
                         parallelism -> {
                             SlotAssigner slotAssigner =

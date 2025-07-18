@@ -82,7 +82,7 @@ class SlotSharingSlotAllocatorTest {
                         DISABLE_LOCAL_RECOVERY);
 
         final ResourceCounter resourceCounter =
-                slotAllocator.calculateRequiredSlots(Arrays.asList(vertex1, vertex2, vertex3));
+                slotAllocator.calculateResourceRequirements(Arrays.asList(vertex1, vertex2, vertex3));
 
         assertThat(resourceCounter.getResources()).contains(ResourceProfile.UNKNOWN);
         assertThat(resourceCounter.getResourceCount(ResourceProfile.UNKNOWN))
@@ -104,7 +104,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2, vertex3));
 
         final VertexParallelism vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(2)).get();
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(2)).get();
 
         assertThat(vertexParallelism.getParallelism(vertex1.getJobVertexID())).isOne();
         assertThat(vertexParallelism.getParallelism(vertex2.getJobVertexID())).isOne();
@@ -124,7 +124,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2, vertex3));
 
         final VertexParallelism vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(50)).get();
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(50)).get();
 
         assertThat(vertexParallelism.getParallelism(vertex1.getJobVertexID()))
                 .isEqualTo(vertex1.getParallelism());
@@ -155,7 +155,7 @@ class SlotSharingSlotAllocatorTest {
 
         VertexParallelism vertexParallelism =
                 slotAllocator
-                        .determineParallelism(
+                        .determineVertexParallelism(
                                 testJobInformation,
                                 getSlots(vertex11.getParallelism() + vertex2.getParallelism()))
                         .get();
@@ -181,7 +181,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2, vertex3));
 
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(1));
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(1));
 
         assertThat(vertexParallelism).isNotPresent();
     }
@@ -203,7 +203,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
 
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(13));
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(13));
 
         assertThat(vertexParallelism)
                 .hasValueSatisfying(
@@ -232,7 +232,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
 
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(3));
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(3));
 
         assertThat(vertexParallelism).isNotPresent();
     }
@@ -254,7 +254,7 @@ class SlotSharingSlotAllocatorTest {
         final JobInformation jobInformation =
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(jobInformation, getSlots(5));
+                slotAllocator.determineVertexParallelism(jobInformation, getSlots(5));
 
         assertThat(vertexParallelism).isNotPresent();
     }
@@ -276,7 +276,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
 
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(
+                slotAllocator.determineVertexParallelism(
                         jobInformation,
                         getSlots(vertex1.getMinParallelism() + vertex2.getMinParallelism()));
 
@@ -307,7 +307,7 @@ class SlotSharingSlotAllocatorTest {
                 new TestJobInformation(Arrays.asList(vertex1, vertex2));
 
         final Optional<VertexParallelism> vertexParallelism =
-                slotAllocator.determineParallelism(
+                slotAllocator.determineVertexParallelism(
                         jobInformation,
                         getSlots(vertex1.getMinParallelism() + vertex2.getMinParallelism() + 12));
 
