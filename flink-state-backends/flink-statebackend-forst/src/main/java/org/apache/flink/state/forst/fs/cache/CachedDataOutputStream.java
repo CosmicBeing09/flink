@@ -36,7 +36,7 @@ public class CachedDataOutputStream extends FSDataOutputStream {
     private final Path cachePath;
 
     private FSDataOutputStream cacheOutputStream;
-    private FSDataOutputStream originOutputStream;
+    private FSDataOutputStream primaryOutputStream;
 
     /** The reference of file cache. */
     private FileBasedCache fileBasedCache;
@@ -44,10 +44,10 @@ public class CachedDataOutputStream extends FSDataOutputStream {
     public CachedDataOutputStream(
             Path originalPath,
             Path cachePath,
-            FSDataOutputStream originalOutputStream,
+            FSDataOutputStream primaryOutputStream,
             FSDataOutputStream cacheOutputStream,
             FileBasedCache cache) {
-        this.originOutputStream = originalOutputStream;
+        this.primaryOutputStream = primaryOutputStream;
         this.originalPath = originalPath;
         this.cachePath = cachePath;
         this.cacheOutputStream = cacheOutputStream;
@@ -62,37 +62,37 @@ public class CachedDataOutputStream extends FSDataOutputStream {
     @Override
     public void write(int b) throws IOException {
         cacheOutputStream.write(b);
-        originOutputStream.write(b);
+        primaryOutputStream.write(b);
     }
 
     public void write(byte[] b) throws IOException {
         cacheOutputStream.write(b);
-        originOutputStream.write(b);
+        primaryOutputStream.write(b);
     }
 
     @Override
     public void write(byte[] b, int off, int len) throws IOException {
         cacheOutputStream.write(b, off, len);
-        originOutputStream.write(b, off, len);
+        primaryOutputStream.write(b, off, len);
     }
 
     @Override
     public void flush() throws IOException {
         cacheOutputStream.flush();
-        originOutputStream.flush();
+        primaryOutputStream.flush();
     }
 
     @Override
     public void sync() throws IOException {
         cacheOutputStream.sync();
-        originOutputStream.sync();
+        primaryOutputStream.sync();
     }
 
     @Override
     public void close() throws IOException {
-        if (originOutputStream != null) {
-            originOutputStream.close();
-            originOutputStream = null;
+        if (primaryOutputStream != null) {
+            primaryOutputStream.close();
+            primaryOutputStream = null;
         }
         if (cacheOutputStream != null) {
             putIntoCache();
