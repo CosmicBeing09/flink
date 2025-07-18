@@ -717,7 +717,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
         FutureUtils.handleUncaughtException(
                 jobTerminationFuture,
-                (thread, throwable) -> fatalErrorHandler.onFatalError(throwable));
+                (thread, throwable) -> fatalErrorHandler.handleFatalError(throwable));
         registerJobManagerRunnerTerminationFuture(jobId, jobTerminationFuture);
     }
 
@@ -1326,7 +1326,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
     }
 
     protected void onFatalError(Throwable throwable) {
-        fatalErrorHandler.onFatalError(throwable);
+        fatalErrorHandler.handleFatalError(throwable);
     }
 
     @VisibleForTesting
@@ -1400,7 +1400,7 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
                 .handleAsync(
                         (ignored, error) -> {
                             if (error != null) {
-                                fatalErrorHandler.onFatalError(
+                                fatalErrorHandler.handleFatalError(
                                         new FlinkException(
                                                 String.format(
                                                         "The job %s couldn't be marked as pre-cleanup finished in JobResultStore.",

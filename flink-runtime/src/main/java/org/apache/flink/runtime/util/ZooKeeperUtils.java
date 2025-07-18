@@ -324,7 +324,7 @@ public class ZooKeeperUtils {
                     // The exception thrown in UnhandledErrorListener will be caught by
                     // CuratorFramework. So we mostly trigger exit process or interact with main
                     // thread to inform the failure in FatalErrorHandler.
-                    fatalErrorHandler.onFatalError(throwable);
+                    fatalErrorHandler.handleFatalError(throwable);
                 };
         cf.getUnhandledErrorListenable().addListener(unhandledErrorListener);
         cf.start();

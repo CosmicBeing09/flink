@@ -1513,7 +1513,7 @@ public class AdaptiveScheduler
             try {
                 action.run();
             } catch (Throwable t) {
-                fatalErrorHandler.onFatalError(t);
+                fatalErrorHandler.handleFatalError(t);
             }
         } else {
             LOG.debug(

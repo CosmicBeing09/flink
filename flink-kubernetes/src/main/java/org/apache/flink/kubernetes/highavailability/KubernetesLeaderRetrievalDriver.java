@@ -122,14 +122,14 @@ public class KubernetesLeaderRetrievalDriver implements LeaderRetrievalDriver {
 
         @Override
         public void onError(List<KubernetesConfigMap> configMaps) {
-            fatalErrorHandler.onFatalError(
+            fatalErrorHandler.handleFatalError(
                     new LeaderRetrievalException(
                             "Error while watching the ConfigMap " + configMapName));
         }
 
         @Override
         public void handleError(Throwable throwable) {
-            fatalErrorHandler.onFatalError(
+            fatalErrorHandler.handleFatalError(
                     new LeaderRetrievalException(
                             "Error while watching the ConfigMap " + configMapName, throwable));
         }

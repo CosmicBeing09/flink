@@ -25,5 +25,5 @@ public enum NoOpFatalErrorHandler implements FatalErrorHandler {
     INSTANCE;
 
     @Override
-    public void onFatalError(final Throwable exception) {}
+    public void handleFatalError(final Throwable exception) {}
 }

@@ -203,7 +203,7 @@ class ZooKeeperLeaderElectionConnectionHandlingTest {
             ZooKeeperLeaderElectionConnectionHandlingTest.this
                     .testingFatalErrorHandlerResource
                     .getTestingFatalErrorHandler()
-                    .onFatalError(exception);
+                    .handleFatalError(exception);
         }
 
         public void awaitGrantLeadership() throws InterruptedException {

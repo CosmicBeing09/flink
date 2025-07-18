@@ -26,7 +26,7 @@ public enum ExitJVMFatalErrorHandler implements FatalErrorHandler {
     INSTANCE;
 
     @Override
-    public void onFatalError(Throwable exception) {
+    public void handleFatalError(Throwable exception) {
         FatalExitExceptionHandler.INSTANCE.uncaughtException(Thread.currentThread(), exception);
     }
 }

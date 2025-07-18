@@ -202,7 +202,7 @@ public class ResourceManagerServiceImpl implements ResourceManagerService, Leade
                         try {
                             startNewLeaderResourceManager(newLeaderSessionID);
                         } catch (Throwable t) {
-                            fatalErrorHandler.onFatalError(
+                            fatalErrorHandler.handleFatalError(
                                     new FlinkException("Cannot start resource manager.", t));
                         }
                     }
@@ -235,7 +235,7 @@ public class ResourceManagerServiceImpl implements ResourceManagerService, Leade
 
     @Override
     public void handleError(Exception exception) {
-        fatalErrorHandler.onFatalError(
+        fatalErrorHandler.handleFatalError(
                 new FlinkException(
                         "Exception during leader election of resource manager occurred.",
                         exception));

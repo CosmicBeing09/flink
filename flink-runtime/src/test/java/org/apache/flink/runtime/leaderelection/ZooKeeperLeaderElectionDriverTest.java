@@ -431,7 +431,7 @@ class ZooKeeperLeaderElectionDriverTest {
 
         @Override
         public void onError(Throwable t) {
-            fatalErrorHandler.onFatalError(t);
+            fatalErrorHandler.handleFatalError(t);
         }
     }
 

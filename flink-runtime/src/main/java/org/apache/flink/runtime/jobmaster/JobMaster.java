@@ -1238,7 +1238,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
             log.error("Fatal error occurred on JobManager.", cause);
             // The fatal error handler implementation should make sure that this call is
             // non-blocking
-            fatalErrorHandler.onFatalError(cause);
+            fatalErrorHandler.handleFatalError(cause);
         } else {
             jobCompletionActions.jobMasterFailed(cause);
         }

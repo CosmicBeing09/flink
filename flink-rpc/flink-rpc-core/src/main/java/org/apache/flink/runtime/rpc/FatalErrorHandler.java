@@ -27,7 +27,7 @@ public interface FatalErrorHandler {
      * <p>IMPORTANT: This call should never be blocking since it might be called from within the
      * main thread of an {@link RpcEndpoint}.
      *
-     * @param exception cause
+     * @param fatalErrorCause cause
      */
-    void onFatalError(Throwable exception);
+    void handleFatalError(Throwable fatalErrorCause);
 }

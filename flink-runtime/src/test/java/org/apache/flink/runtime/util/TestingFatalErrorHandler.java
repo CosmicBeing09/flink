@@ -86,7 +86,7 @@ public class TestingFatalErrorHandler implements FatalErrorHandler {
     }
 
     @Override
-    public synchronized void onFatalError(@Nonnull Throwable exception) {
+    public synchronized void handleFatalError(@Nonnull Throwable exception) {
         LOG.error("OnFatalError:", exception);
 
         if (!errorFuture.complete(exception)) {

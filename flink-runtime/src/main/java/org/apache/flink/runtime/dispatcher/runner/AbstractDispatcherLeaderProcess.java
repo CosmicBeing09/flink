@@ -240,7 +240,7 @@ public abstract class AbstractDispatcherLeaderProcess implements DispatcherLeade
 
     private void handleError(Throwable throwable) {
         closeAsync();
-        fatalErrorHandler.onFatalError(throwable);
+        fatalErrorHandler.handleFatalError(throwable);
     }
 
     /** The state of the {@link DispatcherLeaderProcess}. */

@@ -43,6 +43,6 @@ public class ShuffleMasterContextImpl implements ShuffleMasterContext {
 
     @Override
     public void onFatalError(Throwable throwable) {
-        fatalErrorHandler.onFatalError(throwable);
+        fatalErrorHandler.handleFatalError(throwable);
     }
 }

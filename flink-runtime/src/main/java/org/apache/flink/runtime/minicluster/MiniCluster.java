@@ -1490,7 +1490,7 @@ public class MiniCluster implements AutoCloseableAsync {
         }
 
         @Override
-        public void onFatalError(Throwable exception) {
+        public void handleFatalError(Throwable exception) {
             // first check if we are still running
             if (running) {
                 LOG.error("TaskManager #{} failed.", index, exception);
@@ -1505,7 +1505,7 @@ public class MiniCluster implements AutoCloseableAsync {
     private class ShutDownFatalErrorHandler implements FatalErrorHandler {
 
         @Override
-        public void onFatalError(Throwable exception) {
+        public void handleFatalError(Throwable exception) {
             LOG.warn("Error in MiniCluster. Shutting the MiniCluster down.", exception);
             closeAsync();
         }

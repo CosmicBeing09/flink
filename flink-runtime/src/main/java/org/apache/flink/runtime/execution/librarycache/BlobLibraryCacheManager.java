@@ -199,7 +199,7 @@ public class BlobLibraryCacheManager implements LibraryCacheManager {
         return fatalErrorHandlerJvmMetaspaceOomError != null
                 ? classLoadingException -> {
                     if (ExceptionUtils.isMetaspaceOutOfMemoryError(classLoadingException)) {
-                        fatalErrorHandlerJvmMetaspaceOomError.onFatalError(classLoadingException);
+                        fatalErrorHandlerJvmMetaspaceOomError.handleFatalError(classLoadingException);
                     }
                 }
                 : FlinkUserCodeClassLoader.NOOP_EXCEPTION_HANDLER;

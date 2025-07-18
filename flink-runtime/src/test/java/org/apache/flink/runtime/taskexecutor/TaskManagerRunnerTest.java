@@ -75,7 +75,7 @@ class TaskManagerRunnerTest {
         configuration.set(TaskManagerOptions.REGISTRATION_TIMEOUT, TimeUtils.parseDuration("42 h"));
         taskManagerRunner = createTaskManagerRunner(configuration);
 
-        taskManagerRunner.onFatalError(new RuntimeException());
+        taskManagerRunner.handleFatalError(new RuntimeException());
 
         assertThatFuture(taskManagerRunner.getTerminationFuture())
                 .eventuallySucceeds()
@@ -313,7 +313,7 @@ class TaskManagerRunnerTest {
             return TestingTaskExecutorService.newBuilder()
                     .setStartRunnable(
                             () ->
-                                    fatalErrorHandler.onFatalError(
+                                    fatalErrorHandler.handleFatalError(
                                             new FlinkException(
                                                     "Cannot instantiate the TaskExecutorService.")))
                     .build();

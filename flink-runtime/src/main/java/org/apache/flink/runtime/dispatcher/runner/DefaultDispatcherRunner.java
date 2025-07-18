@@ -221,7 +221,7 @@ public final class DefaultDispatcherRunner implements DispatcherRunner, LeaderCo
 
     @Override
     public void handleError(Exception exception) {
-        fatalErrorHandler.onFatalError(
+        fatalErrorHandler.handleFatalError(
                 new FlinkException(
                         String.format(
                                 "Exception during leader election of %s occurred.",

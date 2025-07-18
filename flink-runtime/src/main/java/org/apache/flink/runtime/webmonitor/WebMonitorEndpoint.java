@@ -1223,7 +1223,7 @@ public class WebMonitorEndpoint<T extends RestfulGateway> extends RestServerEndp
 
     @Override
     public void handleError(final Exception exception) {
-        fatalErrorHandler.onFatalError(exception);
+        fatalErrorHandler.handleFatalError(exception);
     }
 
     @Override
