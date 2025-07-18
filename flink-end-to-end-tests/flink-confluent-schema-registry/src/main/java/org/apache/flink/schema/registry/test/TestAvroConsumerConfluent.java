@@ -107,6 +107,6 @@ public class TestAvroConsumerConfluent {
                         .build();
         input.sinkTo(avroSink);
 
-        env.execute("Kafka Confluent Schema Registry AVRO Example");
+        env.executeInternal("Kafka Confluent Schema Registry AVRO Example");
     }
 }

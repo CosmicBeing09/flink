@@ -154,7 +154,7 @@ public class SavepointWriterUidModificationITCase {
 
         writer.write(savepointPath);
 
-        env.execute("Bootstrap");
+        env.executeInternal("Bootstrap");
 
         return savepointPath;
     }
@@ -179,7 +179,7 @@ public class SavepointWriterUidModificationITCase {
         mutator.accept(writer);
         writer.write(newSavepointPath);
 
-        env.execute("Modifying");
+        env.executeInternal("Modifying");
 
         return newSavepointPath;
     }

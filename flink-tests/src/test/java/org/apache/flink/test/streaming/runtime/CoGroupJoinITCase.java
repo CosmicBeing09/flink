@@ -149,7 +149,7 @@ public class CoGroupJoinITCase extends AbstractTestBase {
                             }
                         });
 
-        env.execute("CoGroup Test");
+        env.executeInternal("CoGroup Test");
 
         List<String> expectedResult =
                 Arrays.asList(
@@ -251,7 +251,7 @@ public class CoGroupJoinITCase extends AbstractTestBase {
                             }
                         });
 
-        env.execute("Join Test");
+        env.executeInternal("Join Test");
 
         List<String> expectedResult =
                 Arrays.asList(
@@ -340,7 +340,7 @@ public class CoGroupJoinITCase extends AbstractTestBase {
                             }
                         });
 
-        env.execute("Self-Join Test");
+        env.executeInternal("Self-Join Test");
 
         List<String> expectedResult =
                 Arrays.asList(

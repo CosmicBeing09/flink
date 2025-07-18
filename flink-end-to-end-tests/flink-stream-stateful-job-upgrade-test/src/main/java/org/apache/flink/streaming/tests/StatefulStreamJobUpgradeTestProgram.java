@@ -110,7 +110,7 @@ public class StatefulStreamJobUpgradeTestProgram {
                 .name("SemanticsCheckMapper")
                 .addSink(new PrintSinkFunction<>());
 
-        env.execute("General purpose test job");
+        env.executeInternal("General purpose test job");
     }
 
     private static void executeUpgradedVariant(StreamExecutionEnvironment env, ParameterTool pt)
@@ -138,7 +138,7 @@ public class StatefulStreamJobUpgradeTestProgram {
                 .name("SemanticsCheckMapper")
                 .addSink(new PrintSinkFunction<>());
 
-        env.execute("General purpose test job");
+        env.executeInternal("General purpose test job");
     }
 
     private static boolean isOriginalJobVariant(final ParameterTool pt) {

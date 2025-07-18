@@ -81,7 +81,7 @@ public class StreamTaskTimerITCase extends AbstractTestBase {
                 new TimerOperator(ChainingStrategy.ALWAYS));
 
         try {
-            env.execute("Timer test");
+            env.executeInternal("Timer test");
         } catch (JobExecutionException e) {
             verifyJobExecutionException(e);
         }
@@ -121,7 +121,7 @@ public class StreamTaskTimerITCase extends AbstractTestBase {
                 new TimerOperator(ChainingStrategy.NEVER));
 
         try {
-            env.execute("Timer test");
+            env.executeInternal("Timer test");
         } catch (JobExecutionException e) {
             verifyJobExecutionException(e);
         }
@@ -142,7 +142,7 @@ public class StreamTaskTimerITCase extends AbstractTestBase {
                         new TwoInputTimerOperator(ChainingStrategy.NEVER));
 
         try {
-            env.execute("Timer test");
+            env.executeInternal("Timer test");
         } catch (JobExecutionException e) {
             verifyJobExecutionException(e);
         }

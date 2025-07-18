@@ -143,7 +143,7 @@ public class SideOutputExample {
         }
 
         // execute program
-        env.execute("Streaming WordCount SideOutput");
+        env.executeInternal("Streaming WordCount SideOutput");
     }
 
     // *************************************************************************

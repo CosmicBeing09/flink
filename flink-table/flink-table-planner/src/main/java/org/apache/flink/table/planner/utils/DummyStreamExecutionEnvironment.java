@@ -283,7 +283,7 @@ public class DummyStreamExecutionEnvironment extends StreamExecutionEnvironment 
     }
 
     @Override
-    public JobExecutionResult execute(String jobName) throws Exception {
+    public JobExecutionResult executeInternal(String jobName) throws Exception {
         throw new UnsupportedOperationException(
                 "This is a dummy StreamExecutionEnvironment, execute method is unsupported.");
     }

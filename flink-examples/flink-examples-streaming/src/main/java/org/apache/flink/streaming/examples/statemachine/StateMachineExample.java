@@ -186,7 +186,7 @@ public class StateMachineExample {
         }
 
         // trigger program execution
-        env.execute("State machine job");
+        env.executeInternal("State machine job");
     }
 
     // ------------------------------------------------------------------------

@@ -148,7 +148,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSize)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -227,7 +227,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSlide)))
                     .setParallelism(1);
 
-            env.execute("Sliding Window Test");
+            env.executeInternal("Sliding Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -307,7 +307,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSize)))
                     .setParallelism(1);
 
-            env.execute("PreAggregated Tumbling Window Test");
+            env.executeInternal("PreAggregated Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -390,7 +390,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSlide)))
                     .setParallelism(1);
 
-            env.execute("PreAggregated Sliding Window Test");
+            env.executeInternal("PreAggregated Sliding Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

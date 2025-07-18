@@ -98,7 +98,7 @@ public class NettyShuffleMemoryControlTestProgram {
                 .slotSharingGroup("b");
 
         // execute program
-        env.execute("Netty Shuffle Memory Control Test");
+        env.executeInternal("Netty Shuffle Memory Control Test");
     }
 
     /**

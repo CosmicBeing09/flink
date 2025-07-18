@@ -104,7 +104,7 @@ public enum FileSinkProgram {
             throw new UnsupportedOperationException("Unsupported sink type: " + sinkToTest);
         }
 
-        env.execute("StreamingFileSinkProgram");
+        env.executeInternal("StreamingFileSinkProgram");
     }
 
     /** Use first field for buckets. */

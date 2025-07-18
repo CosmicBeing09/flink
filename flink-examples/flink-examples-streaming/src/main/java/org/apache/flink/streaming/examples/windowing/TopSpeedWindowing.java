@@ -169,7 +169,7 @@ public class TopSpeedWindowing {
             topSpeeds.print();
         }
 
-        env.execute("CarTopSpeedWindowingExample");
+        env.executeInternal("CarTopSpeedWindowingExample");
     }
 
     // *************************************************************************

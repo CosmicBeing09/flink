@@ -286,7 +286,7 @@ public class DataStreamAllroundTestProgram {
                 .name(SLIDING_WINDOW_CHECK_PRINT_SINK.getName())
                 .uid(SLIDING_WINDOW_CHECK_PRINT_SINK.getUid());
 
-        env.execute("General purpose test job");
+        env.executeInternal("General purpose test job");
     }
 
     private static void throwIncorrectRestoredStateException(

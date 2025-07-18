@@ -1455,7 +1455,7 @@ public class DataStream<T> {
         sink.name("Data stream collect sink");
         env.addOperator(sink.getTransformation());
 
-        env.registerCollectIterator(iterator);
+        env.registerCollectIteratorInternal(iterator);
         collector.setIterator(iterator);
     }
 

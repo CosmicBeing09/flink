@@ -67,7 +67,7 @@ public class DistributedCacheViaBlobTestProgram {
                                 containedFile.getFileName().toString()))
                 .writeAsText(params.getRequired("output"), FileSystem.WriteMode.OVERWRITE);
 
-        env.execute("Distributed Cache Via Blob Test Program");
+        env.executeInternal("Distributed Cache Via Blob Test Program");
     }
 
     static class TestMapFunction extends RichMapFunction<Integer, String> {

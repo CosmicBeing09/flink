@@ -150,7 +150,7 @@ public class IterateExample {
         }
 
         // execute the program
-        env.execute("Streaming Iteration Example");
+        env.executeInternal("Streaming Iteration Example");
     }
 
     // *************************************************************************

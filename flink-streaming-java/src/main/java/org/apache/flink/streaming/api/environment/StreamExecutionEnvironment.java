@@ -154,7 +154,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     private final List<CollectResultIterator<?>> collectIterators = new ArrayList<>();
 
     @Internal
-    public void registerCollectIterator(CollectResultIterator<?> iterator) {
+    public void registerCollectIteratorInternal(CollectResultIterator<?> iterator) {
         collectIterators.add(iterator);
     }
 
@@ -2300,7 +2300,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @throws Exception which occurs during job execution.
      */
     public JobExecutionResult execute() throws Exception {
-        return execute((String) null);
+        return executeInternal((String) null);
     }
 
     /**
@@ -2314,7 +2314,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The result of the job execution, containing elapsed time and accumulators.
      * @throws Exception which occurs during job execution.
      */
-    public JobExecutionResult execute(String jobName) throws Exception {
+    public JobExecutionResult executeInternal(String jobName) throws Exception {
         final List<Transformation<?>> originalTransformations = new ArrayList<>(transformations);
         StreamGraph streamGraph = getStreamGraph();
         if (jobName != null) {
@@ -2600,7 +2600,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
 
     /**
      * Adds an operator to the list of operators that should be executed when calling {@link
-     * #execute}.
+     * #executeInternal}.
      *
      * <p>When calling {@link #execute()} only the operators that where previously added to the list
      * are executed.

@@ -89,7 +89,7 @@ public class StreamingScalabilityAndLatency {
                 .keyBy(0)
                 .addSink(new TimestampingSink());
 
-        env.execute("Partitioning Program");
+        env.executeInternal("Partitioning Program");
     }
 
     private static class TimeStampingSource implements ParallelSourceFunction<Tuple2<Long, Long>> {

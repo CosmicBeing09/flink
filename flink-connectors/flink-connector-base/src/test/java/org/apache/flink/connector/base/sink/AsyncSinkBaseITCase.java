@@ -48,7 +48,7 @@ public class AsyncSinkBaseITCase {
     @Test
     public void testWriteTwentyThousandRecordsToGenericSink() throws Exception {
         env.fromSequence(1, 20000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
-        env.execute("Integration Test: AsyncSinkBaseITCase").getJobExecutionResult();
+        env.executeInternal("Integration Test: AsyncSinkBaseITCase").getJobExecutionResult();
     }
 
     @Test
@@ -56,7 +56,7 @@ public class AsyncSinkBaseITCase {
         env.fromSequence(999_999, 1_000_100)
                 .map(Object::toString)
                 .sinkTo(new ArrayListAsyncSink(1, 1, 2, 10, 1000, 10));
-        assertThatThrownBy(() -> env.execute("Integration Test: AsyncSinkBaseITCase"))
+        assertThatThrownBy(() -> env.executeInternal("Integration Test: AsyncSinkBaseITCase"))
                 .isInstanceOf(JobExecutionException.class)
                 .rootCause()
                 .hasMessageContaining(
@@ -68,6 +68,6 @@ public class AsyncSinkBaseITCase {
         env.enableCheckpointing(20);
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(1, Time.milliseconds(200)));
         env.fromSequence(1, 10_000).map(Object::toString).sinkTo(new ArrayListAsyncSink());
-        env.execute("Integration Test: AsyncSinkBaseITCase");
+        env.executeInternal("Integration Test: AsyncSinkBaseITCase");
     }
 }

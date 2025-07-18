@@ -39,7 +39,7 @@ public class TestJob {
         mapper.sinkTo(new DiscardingSink<>());
 
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
-        env.execute(TestJob.class.getCanonicalName() + "-" + parameterTool.getRequired("arg"));
+        env.executeInternal(TestJob.class.getCanonicalName() + "-" + parameterTool.getRequired("arg"));
     }
 
     /**

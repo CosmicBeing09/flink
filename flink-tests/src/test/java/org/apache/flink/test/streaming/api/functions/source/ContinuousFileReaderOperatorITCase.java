@@ -59,6 +59,6 @@ public class ContinuousFileReaderOperatorITCase {
                                         .build())
                         .build();
         stream.sinkTo(sink);
-        env.execute("test");
+        env.executeInternal("test");
     }
 }

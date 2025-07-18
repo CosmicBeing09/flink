@@ -136,7 +136,7 @@ public class IgnoreInFlightDataITCase extends TestLogger {
 
         // when: Job is executed.
         try {
-            env.execute("Total sum");
+            env.executeInternal("Total sum");
         } catch (Exception ex) {
             log.error("Execution failed", ex);
             return false;

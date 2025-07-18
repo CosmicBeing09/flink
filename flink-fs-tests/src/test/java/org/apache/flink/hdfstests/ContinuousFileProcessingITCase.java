@@ -157,7 +157,7 @@ public class ContinuousFileProcessingITCase extends AbstractTestBase {
         new Thread(
                         () -> {
                             try {
-                                env.execute("ContinuousFileProcessingITCase Job.");
+                                env.executeInternal("ContinuousFileProcessingITCase Job.");
                                 jobFuture.complete(null);
                             } catch (Exception e) {
                                 if (ExceptionUtils.findThrowable(e, SuccessException.class)

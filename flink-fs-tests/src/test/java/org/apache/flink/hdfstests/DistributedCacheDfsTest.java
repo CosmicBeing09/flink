@@ -130,7 +130,7 @@ public class DistributedCacheDfsTest extends TestLogger {
 
     @Test
     public void testDistributedFileViaDFS() throws Exception {
-        createJobWithRegisteredCachedFiles().execute("Distributed Cache Via Blob Test Program");
+        createJobWithRegisteredCachedFiles().executeInternal("Distributed Cache Via Blob Test Program");
     }
 
     /**

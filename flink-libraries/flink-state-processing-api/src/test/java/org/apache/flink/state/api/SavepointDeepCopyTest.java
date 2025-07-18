@@ -158,7 +158,7 @@ public class SavepointDeepCopyTest extends AbstractTestBase {
                 .withOperator(OperatorIdentifier.forUid("Operator1"), transformation)
                 .write(savepointPath1);
 
-        env.execute("bootstrap savepoint1");
+        env.executeInternal("bootstrap savepoint1");
 
         Set<String> stateFiles1 = getFileNamesInDirectory(Paths.get(savepointPath1));
 
@@ -177,7 +177,7 @@ public class SavepointDeepCopyTest extends AbstractTestBase {
         savepoint2
                 .withOperator(OperatorIdentifier.forUid("Operator2"), transformation)
                 .write(savepointPath2);
-        env.execute("create savepoint2");
+        env.executeInternal("create savepoint2");
 
         Set<String> stateFiles2 = getFileNamesInDirectory(Paths.get(savepointPath1));
 
