@@ -58,7 +58,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
 
-    private final Temporal initializationTime;
+    private final Temporal lastStateTransitionTime;
     private final Supplier<Temporal> clock;
 
     @VisibleForTesting final Duration scalingIntervalMin;
@@ -82,13 +82,13 @@ public class DefaultRescaleManager implements RescaleManager {
     private CompletableFuture<Void> triggerFuture;
 
     DefaultRescaleManager(
-            Temporal initializationTime,
+            Temporal lastStateTransitionTime,
             RescaleManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
         this(
-                initializationTime,
+                lastStateTransitionTime,
                 Instant::now,
                 rescaleContext,
                 scalingIntervalMin,
@@ -98,13 +98,13 @@ public class DefaultRescaleManager implements RescaleManager {
 
     @VisibleForTesting
     DefaultRescaleManager(
-            Temporal initializationTime,
+            Temporal lastStateTransitionTime,
             Supplier<Temporal> clock,
             RescaleManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
-        this.initializationTime = initializationTime;
+        this.lastStateTransitionTime = lastStateTransitionTime;
         this.clock = clock;
 
         this.maxTriggerDelay = maxTriggerDelay;
@@ -139,7 +139,7 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private void evaluateChangeEvent() {
-        if (timeSinceLastRescale().compareTo(scalingIntervalMin) > 0) {
+        if (timeSinceLastStateTransition().compareTo(scalingIntervalMin) > 0) {
             maybeRescale();
         } else if (!rescaleScheduled) {
             rescaleScheduled = true;
@@ -156,8 +156,8 @@ public class DefaultRescaleManager implements RescaleManager {
         return triggerFuture;
     }
 
-    private Duration timeSinceLastRescale() {
-        return Duration.between(this.initializationTime, clock.get());
+    private Duration timeSinceLastStateTransition() {
+        return Duration.between(this.lastStateTransitionTime, clock.get());
     }
 
     private void maybeRescale() {
@@ -173,7 +173,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
             // reasoning for inconsistent scheduling:
             // https://lists.apache.org/thread/m2w2xzfjpxlw63j0k7tfxfgs0rshhwwr
-            if (timeSinceLastRescale().compareTo(scalingIntervalMax) > 0) {
+            if (timeSinceLastStateTransition().compareTo(scalingIntervalMax) > 0) {
                 rescaleWithSufficientResources();
             } else {
                 rescaleContext.scheduleOperation(
@@ -220,9 +220,9 @@ public class DefaultRescaleManager implements RescaleManager {
         }
 
         @Override
-        public DefaultRescaleManager create(Context rescaleContext, Instant lastRescale) {
+        public DefaultRescaleManager create(Context rescaleContext, Instant lastStateTransition) {
             return new DefaultRescaleManager(
-                    lastRescale,
+                    lastStateTransition,
                     rescaleContext,
                     scalingIntervalMin,
                     scalingIntervalMax,
