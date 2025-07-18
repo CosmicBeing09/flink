@@ -50,15 +50,15 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Internal
 @Deprecated
-public class AbstractJobClusterExecutor<
+public class AbstractStreamingJobClusterExecutor<
                 ClusterID, ClientFactory extends ClusterClientFactory<ClusterID>>
         implements PipelineExecutor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractJobClusterExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractStreamingJobClusterExecutor.class);
 
     private final ClientFactory clusterClientFactory;
 
-    public AbstractJobClusterExecutor(@Nonnull final ClientFactory clusterClientFactory) {
+    public AbstractStreamingJobClusterExecutor(@Nonnull final ClientFactory clusterClientFactory) {
         this.clusterClientFactory = checkNotNull(clusterClientFactory);
     }
 
@@ -68,7 +68,7 @@ public class AbstractJobClusterExecutor<
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
-        final JobGraph jobGraph =
+        final JobGraph streamingJobGraph =
                 PipelineExecutorUtils.getStreamingJobGraph(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
@@ -81,12 +81,12 @@ public class AbstractJobClusterExecutor<
 
             final ClusterClientProvider<ClusterID> clusterClientProvider =
                     clusterDescriptor.deployJobCluster(
-                            clusterSpecification, jobGraph, configAccessor.getDetachedMode());
-            LOG.info("Job has been submitted with JobID " + jobGraph.getJobID());
+                            clusterSpecification, streamingJobGraph, configAccessor.getDetachedMode());
+            LOG.info("Job has been submitted with JobID " + streamingJobGraph.getJobID());
 
             return CompletableFuture.completedFuture(
                     new ClusterClientJobClientAdapter<>(
-                            clusterClientProvider, jobGraph.getJobID(), userCodeClassloader));
+                            clusterClientProvider, streamingJobGraph.getJobID(), userCodeClassloader));
         }
     }
 }
