@@ -35,8 +35,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Tests {@link org.apache.flink.api.java.typeutils.runtime.RowComparator} for wide rows. */
 class RowComparatorWithManyFieldsTests extends ComparatorTestBase<Row> {
 
-    private static final int numberOfFields = 10;
-    private static RowTypeInfo typeInfo;
+    private static final int NUM_FIELDS = 10;
+    private static RowTypeInfo rowTypeInfo;
     private static final Row[] data =
             new Row[] {
                 createRow(null, "b0", "c0", "d0", "e0", "f0", "g0", "h0", "i0", "j0"),
@@ -47,11 +47,11 @@ class RowComparatorWithManyFieldsTests extends ComparatorTestBase<Row> {
 
     @BeforeAll
     static void setUp() throws Exception {
-        TypeInformation<?>[] fieldTypes = new TypeInformation[numberOfFields];
-        for (int i = 0; i < numberOfFields; i++) {
+        TypeInformation<?>[] fieldTypes = new TypeInformation[NUM_FIELDS];
+        for (int i = 0; i < NUM_FIELDS; i++) {
             fieldTypes[i] = BasicTypeInfo.STRING_TYPE_INFO;
         }
-        typeInfo = new RowTypeInfo(fieldTypes);
+        rowTypeInfo = new RowTypeInfo(fieldTypes);
     }
 
     @Override
@@ -67,13 +67,13 @@ class RowComparatorWithManyFieldsTests extends ComparatorTestBase<Row> {
 
     @Override
     protected TypeComparator<Row> createComparator(boolean ascending) {
-        return typeInfo.createComparator(
+        return rowTypeInfo.createComparator(
                 new int[] {0}, new boolean[] {ascending}, 0, new ExecutionConfig());
     }
 
     @Override
     protected TypeSerializer<Row> createSerializer() {
-        return typeInfo.createSerializer(new ExecutionConfig());
+        return rowTypeInfo.createSerializer(new ExecutionConfig());
     }
 
     @Override
@@ -88,8 +88,8 @@ class RowComparatorWithManyFieldsTests extends ComparatorTestBase<Row> {
 
     private static Row createRow(Object... values) {
         checkNotNull(values);
-        checkArgument(values.length == numberOfFields);
-        Row row = new Row(numberOfFields);
+        checkArgument(values.length == NUM_FIELDS);
+        Row row = new Row(NUM_FIELDS);
         for (int i = 0; i < values.length; i++) {
             row.setField(i, values[i]);
         }
