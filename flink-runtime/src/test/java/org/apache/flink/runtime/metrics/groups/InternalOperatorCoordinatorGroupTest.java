@@ -44,7 +44,7 @@ class InternalOperatorCoordinatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
         InternalOperatorCoordinatorMetricGroup operatorCoordinatorMetricGroup =
                 new InternalOperatorCoordinatorMetricGroup(jmJobGroup);
 
@@ -62,7 +62,7 @@ class InternalOperatorCoordinatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
         InternalOperatorCoordinatorMetricGroup operatorCoordinatorMetricGroup =
                 new InternalOperatorCoordinatorMetricGroup(jmJobGroup);
 

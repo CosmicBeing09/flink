@@ -529,7 +529,7 @@ public class OperatorCoordinatorHolder
             final JobManagerJobMetricGroup jobManagerJobMetricGroup)
             throws Exception {
         final MetricGroup parentMetricGroup =
-                jobManagerJobMetricGroup.getOrAddOperator(
+                jobManagerJobMetricGroup.getOrCreateOperatorMetricGroup(
                         taskInformation.getJobVertexId(),
                         taskInformation.getTaskName(),
                         opId,
