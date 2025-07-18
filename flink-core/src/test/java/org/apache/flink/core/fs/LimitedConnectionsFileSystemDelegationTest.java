@@ -73,17 +73,17 @@ class LimitedConnectionsFileSystemDelegationTest {
         verify(fs).getUri();
 
         {
-            Path path = mock(Path.class);
-            lfs.getFileStatus(path);
-            verify(fs).getFileStatus(path);
+            Path fileStatusPath = mock(Path.class);
+            lfs.getFileStatus(fileStatusPath);
+            verify(fs).getFileStatus(fileStatusPath);
         }
 
         {
-            FileStatus path = mock(FileStatus.class);
+            FileStatus fileStatusPath = mock(FileStatus.class);
             int pos = rnd.nextInt();
             int len = rnd.nextInt();
-            lfs.getFileBlockLocations(path, pos, len);
-            verify(fs).getFileBlockLocations(path, pos, len);
+            lfs.getFileBlockLocations(fileStatusPath, pos, len);
+            verify(fs).getFileBlockLocations(fileStatusPath, pos, len);
         }
 
         {
