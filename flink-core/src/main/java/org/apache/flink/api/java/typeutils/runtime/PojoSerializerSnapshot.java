@@ -54,13 +54,13 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
     private static final int VERSION = 2;
 
     /** Contains the actual content for the serializer snapshot. */
-    private PojoSerializerSnapshotData<T> snapshotData;
+    private PojoSerializerSnapshotData<T> pojoSerializerSnapshotData;
 
     /**
      * Configuration of the current execution. WARN: it's just used as point-in-time view to check
      * or generate something which should never be used in writeSnapshot or readSnapshot.
      */
-    private ExecutionConfig executionConfig;
+    private ExecutionConfig pointInTimeExecutionConfig;
 
     /** Constructor for reading the snapshot. */
     public PojoSerializerSnapshot() {}
@@ -86,14 +86,14 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
             Map<Class<?>, TypeSerializer<?>> nonRegisteredSubclassSerializers,
             ExecutionConfig executionConfig) {
 
-        this.snapshotData =
+        this.pojoSerializerSnapshotData =
                 PojoSerializerSnapshotData.createFrom(
                         pojoClass,
                         fields,
                         fieldSerializers,
                         registeredSubclassSerializers,
                         nonRegisteredSubclassSerializers);
-        this.executionConfig = executionConfig;
+        this.pointInTimeExecutionConfig = executionConfig;
     }
 
     /**
@@ -112,14 +112,14 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
                     existingNonRegisteredSubclassSerializerSnapshots,
             ExecutionConfig executionConfig) {
 
-        this.snapshotData =
+        this.pojoSerializerSnapshotData =
                 PojoSerializerSnapshotData.createFrom(
                         pojoClass,
                         fields,
                         existingFieldSerializerSnapshots,
                         existingRegisteredSubclassSerializerSnapshots,
                         existingNonRegisteredSubclassSerializerSnapshots);
-        this.executionConfig = executionConfig;
+        this.pointInTimeExecutionConfig = executionConfig;
     }
 
     @Override
@@ -129,24 +129,24 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
 
     @Override
     public void writeSnapshot(DataOutputView out) throws IOException {
-        snapshotData.writeSnapshotData(out);
+        pojoSerializerSnapshotData.writeSnapshotData(out);
     }
 
     @Override
     public void readSnapshot(int readVersion, DataInputView in, ClassLoader userCodeClassLoader)
             throws IOException {
         checkArgument(readVersion == 2, "unrecognized read version %s", readVersion);
-        snapshotData = PojoSerializerSnapshotData.createFrom(in, userCodeClassLoader);
+        pojoSerializerSnapshotData = PojoSerializerSnapshotData.createFrom(in, userCodeClassLoader);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public TypeSerializer<T> restoreSerializer() {
-        final int numFields = snapshotData.getFieldSerializerSnapshots().size();
+        final int numFields = pojoSerializerSnapshotData.getFieldSerializerSnapshots().size();
 
         final ArrayList<Field> restoredFields = new ArrayList<>(numFields);
         final ArrayList<TypeSerializer<?>> restoredFieldSerializers = new ArrayList<>(numFields);
-        snapshotData
+        pojoSerializerSnapshotData
                 .getFieldSerializerSnapshots()
                 .forEach(
                         (fieldName, field, fieldSerializerSnapshot) -> {
@@ -160,19 +160,19 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
 
         final LinkedHashMap<Class<?>, TypeSerializer<?>> registeredSubclassSerializers =
                 restoreSerializers(
-                        snapshotData.getRegisteredSubclassSerializerSnapshots().unwrapOptionals());
+                        pojoSerializerSnapshotData.getRegisteredSubclassSerializerSnapshots().unwrapOptionals());
         final Tuple2<LinkedHashMap<Class<?>, Integer>, TypeSerializer<Object>[]>
                 decomposedSubclassSerializerRegistry =
                         decomposeSubclassSerializerRegistry(registeredSubclassSerializers);
 
         final LinkedHashMap<Class<?>, TypeSerializer<?>> nonRegisteredSubclassSerializers =
                 restoreSerializers(
-                        snapshotData
+                        pojoSerializerSnapshotData
                                 .getNonRegisteredSubclassSerializerSnapshots()
                                 .unwrapOptionals());
 
         return new PojoSerializer<>(
-                snapshotData.getPojoClass(),
+                pojoSerializerSnapshotData.getPojoClass(),
                 restoredFields.toArray(new Field[numFields]),
                 restoredFieldSerializers.toArray(new TypeSerializer[numFields]),
                 decomposedSubclassSerializerRegistry.f0,
@@ -192,19 +192,19 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
                 (PojoSerializerSnapshot<T>) oldSerializerSnapshot;
 
         final Class<T> previousPojoClass =
-                previousPojoSerializerSnapshot.snapshotData.getPojoClass();
+                previousPojoSerializerSnapshot.pojoSerializerSnapshotData.getPojoClass();
         final LinkedOptionalMap<Field, TypeSerializerSnapshot<?>> fieldSerializerSnapshots =
-                previousPojoSerializerSnapshot.snapshotData.getFieldSerializerSnapshots();
+                previousPojoSerializerSnapshot.pojoSerializerSnapshotData.getFieldSerializerSnapshots();
         final LinkedOptionalMap<Class<?>, TypeSerializerSnapshot<?>>
                 registeredSubclassSerializerSnapshots =
-                        previousPojoSerializerSnapshot.snapshotData
+                        previousPojoSerializerSnapshot.pojoSerializerSnapshotData
                                 .getRegisteredSubclassSerializerSnapshots();
         final LinkedOptionalMap<Class<?>, TypeSerializerSnapshot<?>>
                 nonRegisteredSubclassSerializerSnapshots =
-                        previousPojoSerializerSnapshot.snapshotData
+                        previousPojoSerializerSnapshot.pojoSerializerSnapshotData
                                 .getNonRegisteredSubclassSerializerSnapshots();
 
-        if (previousPojoClass != snapshotData.getPojoClass()) {
+        if (previousPojoClass != pojoSerializerSnapshotData.getPojoClass()) {
             return TypeSerializerSchemaCompatibility.incompatible();
         }
 
@@ -318,7 +318,7 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
                 new ArrayList<>(presentFieldSnapshots.size());
 
         Map<Field, TypeSerializerSnapshot<?>> newFieldSerializerSnapshots =
-                snapshotData.getFieldSerializerSnapshots().unwrapOptionals();
+                pojoSerializerSnapshotData.getFieldSerializerSnapshots().unwrapOptionals();
         for (LinkedOptionalMap.KeyValue<Field, TypeSerializerSnapshot<?>> presentFieldEntry :
                 presentFieldSnapshots) {
             TypeSerializerSnapshot<?> associatedNewFieldSerializer =
@@ -357,7 +357,7 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
                 new ArrayList<>();
 
         final LinkedHashMap<Class<?>, TypeSerializerSnapshot<?>> newSubclassSerializerRegistry =
-                snapshotData.getRegisteredSubclassSerializerSnapshots().unwrapOptionals();
+                pojoSerializerSnapshotData.getRegisteredSubclassSerializerSnapshots().unwrapOptionals();
 
         for (Map.Entry<Class<?>, TypeSerializerSnapshot<?>> entry :
                 unwrappedSerializerSnapshots.entrySet()) {
@@ -416,7 +416,7 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
 
         boolean hasRemovedFields = numRemovedFields > 0;
         boolean hasNewFields =
-                snapshotData.getFieldSerializerSnapshots().size() - numPreexistingFields > 0;
+                pojoSerializerSnapshotData.getFieldSerializerSnapshots().size() - numPreexistingFields > 0;
         return hasRemovedFields || hasNewFields;
     }
 
@@ -430,7 +430,8 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
         Set<Class<?>> previousRegistrationOrder =
                 registeredSubclassSerializerSnapshots.unwrapOptionals().keySet();
         Set<Class<?>> newRegistrationOrder =
-                snapshotData.getRegisteredSubclassSerializerSnapshots().unwrapOptionals().keySet();
+                pojoSerializerSnapshotData
+                        .getRegisteredSubclassSerializerSnapshots().unwrapOptionals().keySet();
         return !isPreviousRegistrationPrefixOfNewRegistration(
                 previousRegistrationOrder, newRegistrationOrder);
     }
@@ -486,15 +487,15 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
         Tuple2<LinkedHashMap<Class<?>, Integer>, TypeSerializer<Object>[]>
                 reconfiguredSubclassRegistry =
                         constructReconfiguredSubclassRegistrations(
-                                snapshotData
+                                pojoSerializerSnapshotData
                                         .getRegisteredSubclassSerializerSnapshots()
                                         .unwrapOptionals(),
                                 registeredSerializerSnapshots,
                                 preExistingRegistrationsCompatibility);
 
         return new PojoSerializer<>(
-                snapshotData.getPojoClass(),
-                snapshotData
+                pojoSerializerSnapshotData.getPojoClass(),
+                pojoSerializerSnapshotData
                         .getFieldSerializerSnapshots()
                         .unwrapOptionals()
                         .keySet()
@@ -503,7 +504,7 @@ public class PojoSerializerSnapshot<T> implements TypeSerializerSnapshot<T> {
                 reconfiguredSubclassRegistry.f0,
                 reconfiguredSubclassRegistry.f1,
                 restoreSerializers(nonRegisteredSubclassSerializerSnapshots.unwrapOptionals()),
-                executionConfig);
+                pointInTimeExecutionConfig);
     }
 
     private static TypeSerializer[] constructReconfiguredFieldSerializers(
