@@ -107,7 +107,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
     private final @Nullable String uid;
 
     @JsonProperty(FIELD_NAME_FUNCTION_CALL)
-    private final RexCall invocation;
+    private final RexCall functionCall;
 
     @JsonProperty(FIELD_NAME_INPUT_CHANGELOG_MODES)
     private final List<ChangelogMode> inputChangelogModes;
@@ -118,7 +118,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
             RowType outputType,
             String description,
             @Nullable String uid,
-            RexCall invocation,
+            RexCall functionCall,
             List<ChangelogMode> inputChangelogModes) {
         this(
                 ExecNodeContext.newNodeId(),
@@ -129,7 +129,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
                 outputType,
                 description,
                 uid,
-                invocation,
+                functionCall,
                 inputChangelogModes);
     }
 
@@ -147,7 +147,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
                     List<ChangelogMode> inputChangelogModes) {
         super(id, context, persistedConfig, inputProperties, outputType, description);
         this.uid = uid;
-        this.invocation = (RexCall) invocation;
+        this.functionCall = (RexCall) invocation;
         this.inputChangelogModes = inputChangelogModes;
     }
 
@@ -169,8 +169,8 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
         final Transformation<RowData> inputTransform = inputTransforms.get(0);
 
         final List<Ord<StaticArgument>> providedInputArgs =
-                StreamPhysicalProcessTableFunction.getProvidedInputArgs(invocation);
-        final List<RexNode> operands = invocation.getOperands();
+                StreamPhysicalProcessTableFunction.getProvidedInputArgs(functionCall);
+        final List<RexNode> operands = functionCall.getOperands();
         final Set<String> onTimeFields = deriveOnTimeFields(operands);
         final List<RuntimeTableSemantics> runtimeTableSemantics =
                 providedInputArgs.stream()
@@ -193,7 +193,7 @@ public class StreamExecProcessTableFunction extends ExecNodeBase<RowData>
 
         final GeneratedRunnerResult generated =
                 ProcessTableRunnerGenerator.generate(
-                        ctx, invocation, timeColumns, inputChangelogModes);
+                        ctx, functionCall, timeColumns, inputChangelogModes);
         final GeneratedProcessTableRunner generatedRunner = generated.runner();
         final LinkedHashMap<String, StateInfo> stateInfos = generated.stateInfos();
 
