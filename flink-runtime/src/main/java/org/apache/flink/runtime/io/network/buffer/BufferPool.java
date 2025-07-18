@@ -44,7 +44,7 @@ public interface BufferPool extends BufferProvider, BufferRecycler {
      * Returns the number of expected memory segments of this buffer pool, representing a value that
      * adequately satisfies the requirements for buffer usage.
      */
-    int getExpectedNumberOfMemorySegments();
+    int getRequiredNumberOfMemorySegments();
 
     /** Returns the number of guaranteed (minimum number of) memory segments of this buffer pool. */
     int getMinNumberOfMemorySegments();

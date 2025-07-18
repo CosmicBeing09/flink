@@ -135,9 +135,9 @@ class BufferPoolFactoryTest {
                             buffersToTakeFromPool1, buffersToTakeFromPool1, numBuffers);
 
             assertThat(bufferPool2.getNumBuffers())
-                    .isEqualTo(bufferPool2.getExpectedNumberOfMemorySegments());
+                    .isEqualTo(bufferPool2.getRequiredNumberOfMemorySegments());
             assertThat(bufferPool1.getNumBuffers())
-                    .isEqualTo(bufferPool1.getExpectedNumberOfMemorySegments());
+                    .isEqualTo(bufferPool1.getRequiredNumberOfMemorySegments());
             assertThat(bufferPool1.requestBuffer()).isNull();
 
             // take all remaining buffers
