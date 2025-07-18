@@ -84,9 +84,9 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return unsafeFileSystem.getFileBlockLocations(file, start, len);
+        return unsafeFileSystem.getFileBlockLocations(fileStatus, start, len);
     }
 
     @Override
@@ -113,8 +113,8 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return unsafeFileSystem.exists(f);
+    public boolean exists(Path filePath) throws IOException {
+        return unsafeFileSystem.exists(filePath);
     }
 
     @Override
@@ -145,8 +145,8 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
-        return unsafeFileSystem.rename(src, dst);
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
+        return unsafeFileSystem.rename(sourcePath, destinationPath);
     }
 
     @Override

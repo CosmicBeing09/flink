@@ -83,12 +83,12 @@ public class LocalFileSystem extends FileSystem {
     // ------------------------------------------------------------------------
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        if (file instanceof LocalFileStatus) {
-            return ((LocalFileStatus) file).getBlockLocations();
+        if (fileStatus instanceof LocalFileStatus) {
+            return ((LocalFileStatus) fileStatus).getBlockLocations();
         }
-        throw new IOException("File status does not belong to the LocalFileSystem: " + file);
+        throw new IOException("File status does not belong to the LocalFileSystem: " + fileStatus);
     }
 
     @Override
@@ -139,8 +139,8 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        final File path = pathToFile(f);
+    public boolean exists(Path filePath) throws IOException {
+        final File path = pathToFile(filePath);
         return path.exists();
     }
 
@@ -266,9 +266,9 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
-        final File srcFile = pathToFile(src);
-        final File dstFile = pathToFile(dst);
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
+        final File srcFile = pathToFile(sourcePath);
+        final File dstFile = pathToFile(destinationPath);
 
         final File dstParent = dstFile.getParentFile();
 

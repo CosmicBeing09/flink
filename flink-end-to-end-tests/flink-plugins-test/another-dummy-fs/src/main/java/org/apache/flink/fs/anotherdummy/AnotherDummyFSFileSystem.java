@@ -74,8 +74,8 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return getDataByPath(f) != null;
+    public boolean exists(Path filePath) throws IOException {
+        return getDataByPath(filePath) != null;
     }
 
     @Override
@@ -88,9 +88,9 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return new BlockLocation[] {new LocalBlockLocation(file.getLen())};
+        return new BlockLocation[] {new LocalBlockLocation(fileStatus.getLen())};
     }
 
     @Override
@@ -123,13 +123,13 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataOutputStream create(final Path path, final WriteMode overwrite)
+    public FSDataOutputStream create(final Path targetPath, final WriteMode overwrite)
             throws IOException {
         throw new UnsupportedOperationException("Dummy FS doesn't support create operation");
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
         throw new UnsupportedOperationException("Dummy FS doesn't support rename operation");
     }
 
