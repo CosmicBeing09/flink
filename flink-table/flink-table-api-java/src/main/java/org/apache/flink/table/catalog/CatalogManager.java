@@ -80,11 +80,11 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(CatalogManager.class);
 
     // A map between names and catalogs.
-    private final Map<String, Catalog> catalogs;
+    private final Map<String, Catalog> initializedCatalogs;
 
     // Those tables take precedence over corresponding permanent tables, thus they shadow
     // tables coming from catalogs.
-    private final Map<ObjectIdentifier, CatalogBaseTable> temporaryTables;
+    private final Map<ObjectIdentifier, CatalogBaseTable> temporaryCatalogTables;
 
     // The name of the current catalog and database
     private @Nullable String currentCatalogName;
@@ -116,12 +116,12 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                 "Default catalog name cannot be null or empty");
         checkNotNull(defaultCatalog, "Default catalog cannot be null");
 
-        catalogs = new LinkedHashMap<>();
-        catalogs.put(defaultCatalogName, defaultCatalog);
+        initializedCatalogs = new LinkedHashMap<>();
+        initializedCatalogs.put(defaultCatalogName, defaultCatalog);
         currentCatalogName = defaultCatalogName;
         currentDatabaseName = defaultCatalog.getDefaultDatabase();
 
-        temporaryTables = new HashMap<>();
+        temporaryCatalogTables = new HashMap<>();
         // right now the default catalog is always the built-in one
         builtInCatalogName = defaultCatalogName;
 
@@ -224,7 +224,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
     public void close() throws CatalogException {
         // close the initialized catalogs
         List<Throwable> errors = new ArrayList<>();
-        for (Map.Entry<String, Catalog> entry : catalogs.entrySet()) {
+        for (Map.Entry<String, Catalog> entry : initializedCatalogs.entrySet()) {
             String catalogName = entry.getKey();
             Catalog catalog = entry.getValue();
             try {
@@ -299,14 +299,14 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
             throw new CatalogException(
                     format("Catalog %s already exists in catalog store.", catalogName));
         }
-        if (catalogs.containsKey(catalogName)) {
+        if (initializedCatalogs.containsKey(catalogName)) {
             throw new CatalogException(
                     format("Catalog %s already exists in initialized catalogs.", catalogName));
         }
 
         Catalog catalog = initCatalog(catalogName, catalogDescriptor);
         catalog.open();
-        catalogs.put(catalogName, catalog);
+        initializedCatalogs.put(catalogName, catalog);
 
         catalogStoreHolder.catalogStore().storeCatalog(catalogName, catalogDescriptor);
     }
@@ -336,12 +336,12 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                 "Catalog name cannot be null or empty.");
         checkNotNull(catalog, "Catalog cannot be null");
 
-        if (catalogs.containsKey(catalogName)) {
+        if (initializedCatalogs.containsKey(catalogName)) {
             throw new CatalogException(format("Catalog %s already exists.", catalogName));
         }
 
         catalog.open();
-        catalogs.put(catalogName, catalog);
+        initializedCatalogs.put(catalogName, catalog);
     }
 
     /**
@@ -362,13 +362,13 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                 !StringUtils.isNullOrWhitespaceOnly(catalogName),
                 "Catalog name cannot be null or empty.");
 
-        if (catalogs.containsKey(catalogName)
+        if (initializedCatalogs.containsKey(catalogName)
                 || catalogStoreHolder.catalogStore().contains(catalogName)) {
             if (catalogName.equals(currentCatalogName)) {
                 throw new CatalogException("Cannot drop a catalog which is currently in use.");
             }
-            if (catalogs.containsKey(catalogName)) {
-                Catalog catalog = catalogs.remove(catalogName);
+            if (initializedCatalogs.containsKey(catalogName)) {
+                Catalog catalog = initializedCatalogs.remove(catalogName);
                 catalog.close();
             }
             if (catalogStoreHolder.catalogStore().contains(catalogName)) {
@@ -391,8 +391,8 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      */
     public Optional<Catalog> getCatalog(String catalogName) {
         // Get catalog from the initialized catalogs.
-        if (catalogs.containsKey(catalogName)) {
-            return Optional.of(catalogs.get(catalogName));
+        if (initializedCatalogs.containsKey(catalogName)) {
+            return Optional.of(initializedCatalogs.get(catalogName));
         }
 
         // Get catalog from the CatalogStore.
@@ -402,7 +402,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                 descriptor -> {
                     Catalog catalog = initCatalog(catalogName, descriptor);
                     catalog.open();
-                    catalogs.put(catalogName, catalog);
+                    initializedCatalogs.put(catalogName, catalog);
                     return catalog;
                 });
     }
@@ -551,7 +551,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      * @return table that the path points to.
      */
     public Optional<ContextResolvedTable> getTable(ObjectIdentifier objectIdentifier) {
-        CatalogBaseTable temporaryTable = temporaryTables.get(objectIdentifier);
+        CatalogBaseTable temporaryTable = temporaryCatalogTables.get(objectIdentifier);
         if (temporaryTable != null) {
             final ResolvedCatalogBaseTable<?> resolvedTable =
                     resolveCatalogBaseTable(temporaryTable);
@@ -572,7 +572,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      */
     public Optional<ContextResolvedTable> getTable(
             ObjectIdentifier objectIdentifier, long timestamp) {
-        CatalogBaseTable temporaryTable = temporaryTables.get(objectIdentifier);
+        CatalogBaseTable temporaryTable = temporaryCatalogTables.get(objectIdentifier);
         if (temporaryTable != null) {
             final ResolvedCatalogBaseTable<?> resolvedTable =
                     resolveCatalogBaseTable(temporaryTable);
@@ -606,7 +606,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      */
     @Override
     public boolean isTemporaryTable(ObjectIdentifier objectIdentifier) {
-        return temporaryTables.containsKey(objectIdentifier);
+        return temporaryCatalogTables.containsKey(objectIdentifier);
     }
 
     /**
@@ -699,7 +699,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
     public Set<String> listCatalogs() {
         return Collections.unmodifiableSet(
                 Stream.concat(
-                                catalogs.keySet().stream(),
+                                initializedCatalogs.keySet().stream(),
                                 catalogStoreHolder.catalogStore().listCatalogs().stream())
                         .collect(Collectors.toSet()));
     }
@@ -764,7 +764,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
 
     private Stream<Map.Entry<ObjectIdentifier, CatalogBaseTable>> listTemporaryTablesInternal(
             String catalogName, String databaseName) {
-        return temporaryTables.entrySet().stream()
+        return temporaryCatalogTables.entrySet().stream()
                 .filter(
                         e -> {
                             ObjectIdentifier identifier = e.getKey();
@@ -823,8 +823,8 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      */
     public Set<String> listSchemas() {
         return Stream.concat(
-                        catalogs.keySet().stream(),
-                        temporaryTables.keySet().stream().map(ObjectIdentifier::getCatalogName))
+                        initializedCatalogs.keySet().stream(),
+                        temporaryCatalogTables.keySet().stream().map(ObjectIdentifier::getCatalogName))
                 .collect(Collectors.toSet());
     }
 
@@ -842,7 +842,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
         return Stream.concat(
                         getCatalog(catalogName).map(Catalog::listDatabases)
                                 .orElse(Collections.emptyList()).stream(),
-                        temporaryTables.keySet().stream()
+                        temporaryCatalogTables.keySet().stream()
                                 .filter(i -> i.getCatalogName().equals(catalogName))
                                 .map(ObjectIdentifier::getDatabaseName))
                 .collect(Collectors.toSet());
@@ -859,7 +859,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
      */
     public boolean schemaExists(String catalogName) {
         return getCatalog(catalogName).isPresent()
-                || temporaryTables.keySet().stream()
+                || temporaryCatalogTables.keySet().stream()
                         .anyMatch(i -> i.getCatalogName().equals(catalogName));
     }
 
@@ -879,7 +879,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
     }
 
     private boolean temporaryDatabaseExists(String catalogName, String databaseName) {
-        return temporaryTables.keySet().stream()
+        return temporaryCatalogTables.keySet().stream()
                 .anyMatch(
                         i ->
                                 i.getCatalogName().equals(catalogName)
@@ -984,7 +984,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
             CatalogBaseTable table, ObjectIdentifier objectIdentifier, boolean ignoreIfExists) {
         Optional<TemporaryOperationListener> listener =
                 getTemporaryOperationListener(objectIdentifier);
-        temporaryTables.compute(
+        temporaryCatalogTables.compute(
                 objectIdentifier,
                 (k, v) -> {
                     if (v != null) {
@@ -1044,7 +1044,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
             ObjectIdentifier tableIdentifier,
             CatalogPartitionSpec partitionSpec) {
         return managedTableListener.notifyTableCompaction(
-                catalogs.getOrDefault(tableIdentifier.getCatalogName(), null),
+                initializedCatalogs.getOrDefault(tableIdentifier.getCatalogName(), null),
                 tableIdentifier,
                 origin,
                 partitionSpec,
@@ -1086,7 +1086,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
             Predicate<CatalogBaseTable> filter,
             boolean ignoreIfNotExists,
             boolean isDropTable) {
-        CatalogBaseTable catalogBaseTable = temporaryTables.get(objectIdentifier);
+        CatalogBaseTable catalogBaseTable = temporaryCatalogTables.get(objectIdentifier);
         if (filter.test(catalogBaseTable)) {
             getTemporaryOperationListener(objectIdentifier)
                     .ifPresent(l -> l.onDropTemporaryTable(objectIdentifier.toObjectPath()));
@@ -1096,7 +1096,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
             managedTableListener.notifyTableDrop(
                     catalog, objectIdentifier, resolvedTable, true, ignoreIfNotExists);
 
-            temporaryTables.remove(objectIdentifier);
+            temporaryCatalogTables.remove(objectIdentifier);
             if (isDropTable) {
                 catalogModificationListeners.forEach(
                         listener ->
@@ -1224,7 +1224,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                         ? table -> table instanceof CatalogTable
                         : table -> table instanceof CatalogView;
         // Same name temporary table or view exists.
-        if (filter.test(temporaryTables.get(objectIdentifier))) {
+        if (filter.test(temporaryCatalogTables.get(objectIdentifier))) {
             String tableOrView = isDropTable ? "table" : "view";
             throw new ValidationException(
                     String.format(
