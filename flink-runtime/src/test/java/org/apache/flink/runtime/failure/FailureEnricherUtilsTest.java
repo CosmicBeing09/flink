@@ -303,7 +303,7 @@ class FailureEnricherUtilsTest {
         }
 
         @Override
-        public CompletableFuture<Map<String, String>> processFailure(
+        public CompletableFuture<Map<String, String>> enrichFailureLabels(
                 Throwable cause, Context context) {
             final CompletableFuture<Map<String, String>> future = new CompletableFuture<>();
             future.completeExceptionally(new RuntimeException("test failure"));
@@ -339,12 +339,12 @@ class FailureEnricherUtilsTest {
         }
 
         @Override
-        public Set<String> getOutputKeys() {
+        public Set<String> getFailureLabelKeys() {
             return outputKeys;
         }
 
         @Override
-        public CompletableFuture<Map<String, String>> processFailure(
+        public CompletableFuture<Map<String, String>> enrichFailureLabels(
                 Throwable cause, Context context) {
             return CompletableFuture.completedFuture(outputMap);
         }

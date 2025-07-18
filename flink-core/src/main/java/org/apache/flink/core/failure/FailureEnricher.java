@@ -42,7 +42,7 @@ public interface FailureEnricher {
      *
      * @return the unique label Keys of the FailureEnricher
      */
-    Set<String> getOutputKeys();
+    Set<String> getFailureLabelKeys();
 
     /**
      * Method to handle a failure as part of the enricher and optionally return a map of KV pairs
@@ -53,7 +53,7 @@ public interface FailureEnricher {
      * @param context the context that includes extra information (e.g., if it was a global failure)
      * @return map of KV pairs (labels) associated with the failure
      */
-    CompletableFuture<Map<String, String>> processFailure(
+    CompletableFuture<Map<String, String>> enrichFailureLabels(
             final Throwable cause, final Context context);
 
     /**

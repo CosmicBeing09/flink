@@ -31,12 +31,12 @@ public class TestingFailureEnricher implements FailureEnricher {
     final Map<String, String> failureLabels = Collections.singletonMap("failKey", "failValue");
 
     @Override
-    public Set<String> getOutputKeys() {
+    public Set<String> getFailureLabelKeys() {
         return Collections.singleton("failKey");
     }
 
     @Override
-    public CompletableFuture<Map<String, String>> processFailure(Throwable cause, Context context) {
+    public CompletableFuture<Map<String, String>> enrichFailureLabels(Throwable cause, Context context) {
         seenThrowables.add(cause);
         return CompletableFuture.completedFuture(failureLabels);
     }
