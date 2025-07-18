@@ -81,14 +81,14 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
             Collection<FailureEnricher> failureEnrichers,
             BlocklistOperations blocklistOperations)
             throws Exception {
-        final DeclarativeSlotPool declarativeSlotPool =
+        final DeclarativeSlotPool slotPoolServiceAdapter =
                 slotPoolService
                         .castInto(DeclarativeSlotPool.class)
                         .orElseThrow(
                                 () ->
                                         new IllegalStateException(
                                                 "The AdaptiveScheduler requires a DeclarativeSlotPool."));
-        final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
+        final RestartBackoffTimeStrategy backoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
                                 jobGraph.getJobConfiguration(),
                                 jobMasterConfiguration,
@@ -96,13 +96,13 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
                         .create();
         log.info(
                 "Using restart back off time strategy {} for {} ({}).",
-                restartBackoffTimeStrategy,
+                backoffTimeStrategy,
                 jobGraph.getName(),
                 jobGraph.getJobID());
 
         final SlotSharingSlotAllocator slotAllocator =
                 createSlotSharingSlotAllocator(
-                        declarativeSlotPool,
+                        slotPoolServiceAdapter,
                         jobMasterConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY));
 
         final ExecutionGraphFactory executionGraphFactory =
@@ -124,14 +124,14 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
                 jobGraph,
                 JobResourceRequirements.readFromJobGraph(jobGraph).orElse(null),
                 jobMasterConfiguration,
-                declarativeSlotPool,
+                slotPoolServiceAdapter,
                 slotAllocator,
                 ioExecutor,
                 userCodeLoader,
                 new CheckpointsCleaner(),
                 checkpointRecoveryFactory,
                 jobManagerJobMetricGroup,
-                restartBackoffTimeStrategy,
+                backoffTimeStrategy,
                 initializationTimestamp,
                 mainThreadExecutor,
                 fatalErrorHandler,
