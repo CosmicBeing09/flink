@@ -1064,7 +1064,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
 
         // reset state backend for backward compatibility
         configuration
-                .getOptional(StateBackendOptions.STATE_BACKEND)
+                .getOptional(StateBackendOptions.JOB_STATE_BACKEND)
                 .ifPresent(ignored -> this.defaultStateBackend = null);
     }
 

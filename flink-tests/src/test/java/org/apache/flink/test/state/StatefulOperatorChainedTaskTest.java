@@ -57,7 +57,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 import static org.apache.flink.configuration.CheckpointingOptions.CHECKPOINTS_DIRECTORY;
 import static org.apache.flink.configuration.CheckpointingOptions.INCREMENTAL_CHECKPOINTS;
-import static org.apache.flink.configuration.StateBackendOptions.STATE_BACKEND;
+import static org.apache.flink.configuration.StateBackendOptions.JOB_STATE_BACKEND;
 import static org.junit.Assert.assertEquals;
 
 /** Test for StatefulOperatorChainedTaskTest. */
@@ -142,7 +142,7 @@ public class StatefulOperatorChainedTaskTest {
                         testHarness.getTaskStateManager());
 
         Configuration configuration = new Configuration();
-        configuration.setString(STATE_BACKEND.key(), "rocksdb");
+        configuration.setString(JOB_STATE_BACKEND.key(), "rocksdb");
         File file = temporaryFolder.newFolder();
         configuration.setString(CHECKPOINTS_DIRECTORY.key(), file.toURI().toString());
         configuration.setString(INCREMENTAL_CHECKPOINTS.key(), "true");

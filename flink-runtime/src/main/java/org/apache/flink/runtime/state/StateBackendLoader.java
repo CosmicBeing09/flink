@@ -86,7 +86,7 @@ public class StateBackendLoader {
 
     /**
      * Loads the unwrapped state backend from the configuration, from the parameter 'state.backend',
-     * as defined in {@link StateBackendOptions#STATE_BACKEND}.
+     * as defined in {@link StateBackendOptions#JOB_STATE_BACKEND}.
      *
      * <p>The state backends can be specified either via their shortcut name, or via the class name
      * of a {@link StateBackendFactory}. If a StateBackendFactory class name is specified, the
@@ -117,7 +117,7 @@ public class StateBackendLoader {
         checkNotNull(config, "config");
         checkNotNull(classLoader, "classLoader");
 
-        final String backendName = config.get(StateBackendOptions.STATE_BACKEND);
+        final String backendName = config.get(StateBackendOptions.JOB_STATE_BACKEND);
 
         // by default the factory class is the backend name
         String factoryClassName = backendName;
@@ -180,7 +180,7 @@ public class StateBackendLoader {
                 } catch (ClassCastException | InstantiationException | IllegalAccessException e) {
                     throw new DynamicCodeLoadingException(
                             "The class configured under '"
-                                    + StateBackendOptions.STATE_BACKEND.key()
+                                    + StateBackendOptions.JOB_STATE_BACKEND.key()
                                     + "' is not a valid state backend factory ("
                                     + backendName
                                     + ')',
@@ -194,7 +194,7 @@ public class StateBackendLoader {
     /**
      * Checks if an application-defined state backend is given, and if not, loads the state backend
      * from the configuration, from the parameter 'state.backend', as defined in {@link
-     * StateBackendOptions#STATE_BACKEND}. If no state backend is configured, this instantiates the
+     * StateBackendOptions#JOB_STATE_BACKEND}. If no state backend is configured, this instantiates the
      * default state backend (the {@link HashMapStateBackend}).
      *
      * <p>If an application-defined state backend is found, and the state backend is a {@link

@@ -70,7 +70,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         Configuration configuration = new Configuration();
-        configuration.set(StateBackendOptions.STATE_BACKEND, "hashmap");
+        configuration.set(StateBackendOptions.JOB_STATE_BACKEND, "hashmap");
         String path = "file:///valid";
         configuration.set(CheckpointingOptions.CHECKPOINT_STORAGE, "jobmanager");
         configuration.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, path);
@@ -89,8 +89,8 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
                         .build();
         Configuration jobConfiguration = scheduler.getExecutionGraph().getJobConfiguration();
 
-        assertThat(jobConfiguration.get(StateBackendOptions.STATE_BACKEND))
-                .isEqualTo(configuration.get(StateBackendOptions.STATE_BACKEND));
+        assertThat(jobConfiguration.get(StateBackendOptions.JOB_STATE_BACKEND))
+                .isEqualTo(configuration.get(StateBackendOptions.JOB_STATE_BACKEND));
         assertThat(jobConfiguration.get(CheckpointingOptions.CHECKPOINT_STORAGE))
                 .isEqualTo(configuration.get(CheckpointingOptions.CHECKPOINT_STORAGE));
         assertThat(jobConfiguration.get(RestartStrategyOptions.RESTART_STRATEGY))

@@ -161,7 +161,7 @@ public class AutoRescalingITCase extends TestLogger {
             final File checkpointDir = temporaryFolder.newFolder();
             final File savepointDir = temporaryFolder.newFolder();
 
-            config.set(StateBackendOptions.STATE_BACKEND, currentBackend);
+            config.set(StateBackendOptions.JOB_STATE_BACKEND, currentBackend);
             config.set(RocksDBConfigurableOptions.USE_INGEST_DB_RESTORE_MODE, useIngestDB);
             config.set(CheckpointingOptions.INCREMENTAL_CHECKPOINTS, true);
             config.set(StateRecoveryOptions.LOCAL_RECOVERY, true);

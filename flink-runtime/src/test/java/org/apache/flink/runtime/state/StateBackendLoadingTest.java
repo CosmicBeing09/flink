@@ -52,7 +52,7 @@ class StateBackendLoadingTest {
 
     private final ClassLoader cl = getClass().getClassLoader();
 
-    private final String backendKey = StateBackendOptions.STATE_BACKEND.key();
+    private final String backendKey = StateBackendOptions.JOB_STATE_BACKEND.key();
 
     // ------------------------------------------------------------------------
     //  defaults

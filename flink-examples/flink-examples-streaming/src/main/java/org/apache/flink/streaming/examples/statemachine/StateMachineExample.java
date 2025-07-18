@@ -88,14 +88,14 @@ public class StateMachineExample {
         final String stateBackend = params.get("backend", "memory");
         if ("hashmap".equals(stateBackend)) {
             final String checkpointDir = params.get("checkpoint-dir");
-            configuration.set(StateBackendOptions.STATE_BACKEND, "hashmap");
+            configuration.set(StateBackendOptions.JOB_STATE_BACKEND, "hashmap");
             configuration.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");
             configuration.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir);
         } else if ("rocks".equals(stateBackend)) {
             final String checkpointDir = params.get("checkpoint-dir");
             boolean incrementalCheckpoints = params.getBoolean("incremental-checkpoints", false);
             configuration.set(
-                    StateBackendOptions.STATE_BACKEND,
+                    StateBackendOptions.JOB_STATE_BACKEND,
                     "org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackendFactory");
             configuration.set(CheckpointingOptions.INCREMENTAL_CHECKPOINTS, incrementalCheckpoints);
             configuration.set(CheckpointingOptions.CHECKPOINT_STORAGE, "filesystem");

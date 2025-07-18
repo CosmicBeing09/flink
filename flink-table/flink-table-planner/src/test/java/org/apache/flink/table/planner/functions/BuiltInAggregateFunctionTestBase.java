@@ -311,7 +311,7 @@ abstract class BuiltInAggregateFunctionTestBase {
         private Executable createTestItemExecutable(TestItem testItem, String stateBackend) {
             return () -> {
                 Configuration conf = new Configuration();
-                conf.set(StateBackendOptions.STATE_BACKEND, stateBackend);
+                conf.set(StateBackendOptions.JOB_STATE_BACKEND, stateBackend);
                 final TableEnvironment tEnv =
                         TableEnvironment.create(
                                 EnvironmentSettings.newInstance()

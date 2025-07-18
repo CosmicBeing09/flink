@@ -144,7 +144,7 @@ public class TimersSavepointITCase {
                 .sinkTo(new DiscardingSink<>());
 
         final Configuration config = new Configuration();
-        config.set(StateBackendOptions.STATE_BACKEND, "rocksdb");
+        config.set(StateBackendOptions.JOB_STATE_BACKEND, "rocksdb");
         config.set(
                 CheckpointingOptions.CHECKPOINTS_DIRECTORY,
                 TMP_FOLDER.newFolder().toURI().toString());

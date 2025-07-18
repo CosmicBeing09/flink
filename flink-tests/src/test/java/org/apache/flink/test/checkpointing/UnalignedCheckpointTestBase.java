@@ -770,7 +770,7 @@ public abstract class UnalignedCheckpointTestBase extends TestLogger {
 
             conf.set(TaskManagerOptions.NETWORK_MEMORY_FRACTION, 0.9f);
             conf.set(TaskManagerOptions.MEMORY_SEGMENT_SIZE, MemorySize.parse("4kb"));
-            conf.set(StateBackendOptions.STATE_BACKEND, "filesystem");
+            conf.set(StateBackendOptions.JOB_STATE_BACKEND, "filesystem");
             conf.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir.toURI().toString());
             if (restoreCheckpoint != null) {
                 conf.set(StateRecoveryOptions.SAVEPOINT_PATH, restoreCheckpoint.toURI().toString());

@@ -97,7 +97,7 @@ public class PojoSerializerUpgradeTest extends TestLogger {
     public PojoSerializerUpgradeTest(String backendType)
             throws IOException, DynamicCodeLoadingException {
         Configuration config = new Configuration();
-        config.set(StateBackendOptions.STATE_BACKEND, backendType);
+        config.set(StateBackendOptions.JOB_STATE_BACKEND, backendType);
         config.set(
                 CheckpointingOptions.CHECKPOINTS_DIRECTORY,
                 temporaryFolder.newFolder().toURI().toString());

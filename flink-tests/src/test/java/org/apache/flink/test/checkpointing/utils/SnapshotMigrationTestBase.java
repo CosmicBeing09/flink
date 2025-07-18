@@ -246,7 +246,7 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         LOG.info("Created temporary checkpoint directory: " + checkpointDir + ".");
         LOG.info("Created savepoint directory: " + savepointDir + ".");
 
-        config.set(StateBackendOptions.STATE_BACKEND, "memory");
+        config.set(StateBackendOptions.JOB_STATE_BACKEND, "memory");
         config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir.toURI().toString());
         config.set(CheckpointingOptions.FS_SMALL_FILE_THRESHOLD, MemorySize.ZERO);
         config.set(CheckpointingOptions.SAVEPOINT_DIRECTORY, savepointDir.toURI().toString());
