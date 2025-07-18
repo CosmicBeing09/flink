@@ -50,8 +50,8 @@ public final class SchedulerUtils {
 
     public static CompletedCheckpointStore createCompletedCheckpointStoreIfCheckpointingIsEnabled(
             JobGraph jobGraph,
-            Configuration configuration,
-            CheckpointRecoveryFactory checkpointRecoveryFactory,
+            Configuration checkpointingConfiguration,
+            CheckpointRecoveryFactory completedCheckpointRecoveryFactory,
             Executor ioExecutor,
             Logger log)
             throws JobExecutionException {
@@ -59,8 +59,8 @@ public final class SchedulerUtils {
         if (DefaultExecutionGraphBuilder.isCheckpointingEnabled(jobGraph)) {
             try {
                 return createCompletedCheckpointStore(
-                        configuration,
-                        checkpointRecoveryFactory,
+                        checkpointingConfiguration,
+                        completedCheckpointRecoveryFactory,
                         ioExecutor,
                         log,
                         jobId,
