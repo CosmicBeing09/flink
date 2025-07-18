@@ -86,10 +86,10 @@ public class UpdateJobResourceRequirementsITCase {
         final int parallelismAfterRescaling = 2;
         jobVertex.setParallelism(initialParallelism);
         jobVertex.setInvokableClass(BlockingNoOpInvokable.class);
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        final ExecutionPlan executionPlan = JobGraphTestUtils.streamingJobGraph(jobVertex);
 
         runRescalingTest(
-                jobGraph,
+                executionPlan,
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(jobVertex.getID(), 1, parallelismAfterRescaling)
                         .build(),
@@ -114,10 +114,10 @@ public class UpdateJobResourceRequirementsITCase {
         jobVertex1.setSlotSharingGroup(slotSharingGroup);
         jobVertex2.setSlotSharingGroup(slotSharingGroup);
 
-        final ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
+        final ExecutionPlan executionPlan = JobGraphTestUtils.streamingJobGraph(jobVertex1, jobVertex2);
 
         runRescalingTest(
-                jobGraph,
+                executionPlan,
                 JobResourceRequirements.newBuilder()
                         .setParallelismForJobVertex(jobVertex1.getID(), 1, 2)
                         .setParallelismForJobVertex(jobVertex2.getID(), 1, 2)
