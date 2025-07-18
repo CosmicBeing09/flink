@@ -86,7 +86,7 @@ public class StreamSQLTestProgram {
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 3);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofSeconds(10L));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofSeconds(10L));
 
         sEnv.configure(configuration);
         sEnv.enableCheckpointing(4000);

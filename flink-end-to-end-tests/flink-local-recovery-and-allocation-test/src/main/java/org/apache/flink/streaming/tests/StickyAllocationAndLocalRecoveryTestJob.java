@@ -97,7 +97,7 @@ public class StickyAllocationAndLocalRecoveryTestJob {
         configuration.set(
                 RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, Integer.MAX_VALUE);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY,
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY,
                 Duration.ofMillis(pt.getInt("restartDelay", 0)));
         String checkpointDir = pt.getRequired("checkpointDir");
         configuration.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir);

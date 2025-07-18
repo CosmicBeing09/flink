@@ -96,7 +96,7 @@ public class RestartStrategyDescriptionUtils {
                 configuration.get(
                         RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_FAILURE_RATE_INTERVAL);
         Duration failureRateDelay =
-                configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_DELAY);
+                configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FAILURE_RATE_RETRY_DELAY);
 
         return String.format(
                 "Failure rate restart with maximum of %d failures within interval %s and fixed delay %s.",
@@ -107,7 +107,7 @@ public class RestartStrategyDescriptionUtils {
         int attempts =
                 configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS);
         Duration delay =
-                configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY);
+                configuration.get(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY);
         return String.format(
                 "Restart with fixed delay (%s). #%d restart attempts.", delay, attempts);
     }

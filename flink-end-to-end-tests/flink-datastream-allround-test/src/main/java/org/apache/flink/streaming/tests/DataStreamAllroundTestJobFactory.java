@@ -356,7 +356,7 @@ public class DataStreamAllroundTestJobFactory {
                                     ENVIRONMENT_RESTART_STRATEGY_FIXED_ATTEMPTS.key(),
                                     ENVIRONMENT_RESTART_STRATEGY_FIXED_ATTEMPTS.defaultValue()));
                     configuration.set(
-                            RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY,
+                            RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY,
                             Duration.ofMillis(
                                     pt.getLong(
                                             ENVIRONMENT_RESTART_STRATEGY_FIXED_DELAY.key(),

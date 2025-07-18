@@ -1046,7 +1046,7 @@ class JobMasterTest {
     void testRequestNextInputSplitWithGlobalFailover() throws Exception {
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 1);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofSeconds(0));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofSeconds(0));
         configuration.set(JobManagerOptions.EXECUTION_FAILOVER_STRATEGY, "full");
 
         final Function<List<List<InputSplit>>, Collection<InputSplit>>
@@ -1855,7 +1855,7 @@ class JobMasterTest {
     void testJobMasterAcceptsSlotsWhenJobIsRestarting() throws Exception {
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, FIXED_DELAY.getMainValue());
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofDays(1));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofDays(1));
         final int numberSlots = 1;
         try (final JobMaster jobMaster =
                 new JobMasterBuilder(jobGraph, rpcService)

@@ -119,7 +119,7 @@ abstract class AbstractTaskManagerProcessFailureRecoveryTest {
         config.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         config.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 1);
         config.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofMillis(5000));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofMillis(5000));
 
         try (final StandaloneSessionClusterEntrypoint clusterEntrypoint =
                 new StandaloneSessionClusterEntrypoint(config)) {

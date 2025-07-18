@@ -150,7 +150,7 @@ class JobManagerHAProcessFailureRecoveryITCase {
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 1);
         configuration.set(
-                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofMillis(0));
+                RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_RETRY_DELAY, Duration.ofMillis(0));
         env.configure(configuration, Thread.currentThread().getContextClassLoader());
 
         env.getConfig().setExecutionMode(executionMode);
