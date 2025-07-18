@@ -67,9 +67,9 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
 
     @Test
     void testDifferentStateTtlThroughSqlHintForDifferentOneInputStreamOperator() throws Exception {
-        tableEnv.getConfig().set("table.exec.mini-batch.enabled", "true");
-        tableEnv.getConfig().set("table.exec.mini-batch.size", "2");
-        tableEnv.getConfig().set("table.exec.mini-batch.allow-latency", "1");
+        streamTableEnvironment.getConfig().set("table.exec.mini-batch.enabled", "true");
+        streamTableEnvironment.getConfig().set("table.exec.mini-batch.size", "2");
+        streamTableEnvironment.getConfig().set("table.exec.mini-batch.allow-latency", "1");
         innerTestDeduplicateAndGroupAggregate(
                 "INSERT INTO OrdersStats \n"
                         + "SELECT /*+STATE_TTL('tmp' = '9s')*/ buyer, COUNT(1) AS ord_cnt, SUM(quantity) AS quantity_cnt, SUM(amount) AS total_amount \n"
