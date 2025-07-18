@@ -45,7 +45,7 @@ public class JobResourceRequirements implements Serializable {
      * explicit), that we'll serialize the {@link JobResourceRequirements} into, when writing it to
      * {@link ExecutionPlan}.
      */
-    private static final String JOB_RESOURCE_REQUIREMENTS_KEY =
+    private static final String INTERNAL_JOB_RESOURCE_REQUIREMENTS_CONFIG_KEY =
             "$internal.job-resource-requirements";
 
     private static final JobResourceRequirements EMPTY =
@@ -59,13 +59,13 @@ public class JobResourceRequirements implements Serializable {
      * @param jobResourceRequirements resource requirements to write
      * @throws IOException in case we're not able to serialize requirements into the configuration
      */
-    public static void writeToExecutionPlan(
+    public static void writeRequirementsToPlan(
             ExecutionPlan executionPlan, JobResourceRequirements jobResourceRequirements)
             throws IOException {
         InstantiationUtil.writeObjectToConfig(
                 jobResourceRequirements,
                 executionPlan.getJobConfiguration(),
-                JOB_RESOURCE_REQUIREMENTS_KEY);
+                INTERNAL_JOB_RESOURCE_REQUIREMENTS_CONFIG_KEY);
     }
 
     /**
@@ -81,7 +81,7 @@ public class JobResourceRequirements implements Serializable {
             return Optional.ofNullable(
                     InstantiationUtil.readObjectFromConfig(
                             executionPlan.getJobConfiguration(),
-                            JOB_RESOURCE_REQUIREMENTS_KEY,
+                            INTERNAL_JOB_RESOURCE_REQUIREMENTS_CONFIG_KEY,
                             JobResourceRequirements.class.getClassLoader()));
         } catch (ClassNotFoundException e) {
             throw new IOException(

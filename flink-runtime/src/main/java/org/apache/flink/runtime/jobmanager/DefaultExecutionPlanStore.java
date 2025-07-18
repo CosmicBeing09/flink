@@ -262,7 +262,7 @@ public class DefaultExecutionPlanStore<R extends ResourceVersion<R>>
                                 jobId));
             }
 
-            JobResourceRequirements.writeToExecutionPlan(executionPlan, jobResourceRequirements);
+            JobResourceRequirements.writeRequirementsToPlan(executionPlan, jobResourceRequirements);
             putExecutionPlan(executionPlan);
         }
     }
