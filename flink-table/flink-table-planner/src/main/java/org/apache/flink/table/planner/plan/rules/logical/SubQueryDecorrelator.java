@@ -1010,8 +1010,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
             return super.visitChild(parent, i, stripHep(input));
         }
 
-        @Override
-        public RelNode visit(LogicalCorrelate correlate) {
+        public RelNode doVisit(LogicalCorrelate correlate) {
             // TODO does not allow correlation condition in its inputs now
             // If correlation conditions in correlate inputs reference to correlate outputs
             // variable,
@@ -1035,8 +1034,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
             return correlate;
         }
 
-        @Override
-        public RelNode visit(LogicalJoin join) {
+        public RelNode doVisit(LogicalJoin join) {
             switch (join.getJoinType()) {
                 case LEFT:
                     checkCorConditionOfInput(join.getRight());
@@ -1248,10 +1246,9 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
                             return super.visit(project);
                         }
 
-                        @Override
-                        public RelNode visit(LogicalJoin join) {
+                        public RelNode doVisit(LogicalJoin join) {
                             join.getCondition().accept(visitor);
-                            return super.visit(join);
+                            return super.doVisit(join);
                         }
                     };
             input.accept(shuttle);
