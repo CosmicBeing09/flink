@@ -94,22 +94,22 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        byte[] data = getDataByPath(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        byte[] data = getDataByPath(flinkPath);
         if (data == null) {
-            throw new FileNotFoundException("File " + f + " does not exist.");
+            throw new FileNotFoundException("File " + flinkPath + " does not exist.");
         }
-        return new AnotherDummyFSFileStatus(f, data.length);
+        return new AnotherDummyFSFileStatus(flinkPath, data.length);
     }
 
     @Override
-    public FSDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
+        return open(flinkPath);
     }
 
     @Override
-    public FSDataInputStream open(final Path f) throws IOException {
-        return AnotherDummyFSInputStream.create(getDataByPath(f));
+    public FSDataInputStream open(final Path filePath) throws IOException {
+        return AnotherDummyFSInputStream.create(getDataByPath(filePath));
     }
 
     @Override

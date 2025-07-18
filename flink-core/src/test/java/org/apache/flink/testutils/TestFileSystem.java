@@ -62,15 +62,15 @@ public class TestFileSystem extends LocalFileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
+    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
         streamOpenCounter.incrementAndGet();
-        return super.open(f, bufferSize);
+        return super.open(flinkPath, bufferSize);
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
+    public FSDataInputStream open(Path filePath) throws IOException {
         streamOpenCounter.incrementAndGet();
-        return super.open(f);
+        return super.open(filePath);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class TestFileSystem extends LocalFileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        LocalFileStatus status = (LocalFileStatus) super.getFileStatus(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        LocalFileStatus status = (LocalFileStatus) super.getFileStatus(flinkPath);
         return new LocalFileStatus(status.getFile(), this);
     }
 

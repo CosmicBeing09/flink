@@ -84,8 +84,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(final Path f) throws IOException {
-        org.apache.hadoop.fs.FileStatus status = this.fs.getFileStatus(toHadoopPath(f));
+    public FileStatus getFileStatus(final Path flinkPath) throws IOException {
+        org.apache.hadoop.fs.FileStatus status = this.fs.getFileStatus(toHadoopPath(flinkPath));
         return HadoopFileStatus.fromHadoopStatus(status);
     }
 
@@ -122,15 +122,15 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public HadoopDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        final org.apache.hadoop.fs.Path path = toHadoopPath(f);
+    public HadoopDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
+        final org.apache.hadoop.fs.Path path = toHadoopPath(flinkPath);
         final org.apache.hadoop.fs.FSDataInputStream fdis = this.fs.open(path, bufferSize);
         return new HadoopDataInputStream(fdis);
     }
 
     @Override
-    public HadoopDataInputStream open(final Path f) throws IOException {
-        final org.apache.hadoop.fs.Path path = toHadoopPath(f);
+    public HadoopDataInputStream open(final Path filePath) throws IOException {
+        final org.apache.hadoop.fs.Path path = toHadoopPath(filePath);
         final org.apache.hadoop.fs.FSDataInputStream fdis = fs.open(path);
         return new HadoopDataInputStream(fdis);
     }

@@ -92,14 +92,14 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        final File path = pathToFile(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        final File path = pathToFile(flinkPath);
         if (path.exists()) {
             return new LocalFileStatus(path, this);
         } else {
             throw new FileNotFoundException(
                     "File "
-                            + f
+                            + flinkPath
                             + " does not exist or the user running "
                             + "Flink ('"
                             + System.getProperty("user.name")
@@ -123,13 +123,13 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
+        return open(flinkPath);
     }
 
     @Override
-    public FSDataInputStream open(final Path f) throws IOException {
-        final File file = pathToFile(f);
+    public FSDataInputStream open(final Path filePath) throws IOException {
+        final File file = pathToFile(filePath);
         return new LocalDataInputStream(file);
     }
 

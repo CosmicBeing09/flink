@@ -82,7 +82,7 @@ public class TestingFileSystem extends FileSystem {
 
         final Collection<TestFileStatus> status =
                 files.stream()
-                        .map((path) -> TestFileStatus.forFileWithDefaultBlock(path, 10L << 20))
+                        .map((filePath) -> TestFileStatus.forFileWithDefaultBlock(filePath, 10L << 20))
                         .collect(Collectors.toList());
 
         return createForFileStatus(scheme, status);
@@ -182,12 +182,12 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        final FileStatus status = files.get(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        final FileStatus status = files.get(flinkPath);
         if (status != null) {
             return status;
         } else {
-            throw new FileNotFoundException("File not found: " + f);
+            throw new FileNotFoundException("File not found: " + flinkPath);
         }
     }
 
@@ -206,13 +206,13 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
+        return open(flinkPath);
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        final TestFileStatus status = (TestFileStatus) getFileStatus(f);
+    public FSDataInputStream open(Path filePath) throws IOException {
+        final TestFileStatus status = (TestFileStatus) getFileStatus(filePath);
         if (status.stream != null) {
             return status.stream;
         } else {

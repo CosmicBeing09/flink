@@ -74,8 +74,8 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        return unsafeFileSystem.getFileStatus(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        return unsafeFileSystem.getFileStatus(flinkPath);
     }
 
     @Override
@@ -90,15 +90,15 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        FSDataInputStream innerStream = unsafeFileSystem.open(f, bufferSize);
-        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(f));
+    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
+        FSDataInputStream innerStream = unsafeFileSystem.open(flinkPath, bufferSize);
+        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(flinkPath));
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        FSDataInputStream innerStream = unsafeFileSystem.open(f);
-        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(f));
+    public FSDataInputStream open(Path filePath) throws IOException {
+        FSDataInputStream innerStream = unsafeFileSystem.open(filePath);
+        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(filePath));
     }
 
     @Override

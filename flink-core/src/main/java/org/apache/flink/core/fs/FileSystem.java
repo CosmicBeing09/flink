@@ -642,17 +642,17 @@ public abstract class FileSystem implements IFileSystem {
     public abstract URI getUri();
 
     @Override
-    public abstract FileStatus getFileStatus(Path f) throws IOException;
+    public abstract FileStatus getFileStatus(Path flinkPath) throws IOException;
 
     @Override
     public abstract BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException;
 
     @Override
-    public abstract FSDataInputStream open(Path f, int bufferSize) throws IOException;
+    public abstract FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException;
 
     @Override
-    public abstract FSDataInputStream open(Path f) throws IOException;
+    public abstract FSDataInputStream open(Path filePath) throws IOException;
 
     @Override
     public RecoverableWriter createRecoverableWriter() throws IOException {

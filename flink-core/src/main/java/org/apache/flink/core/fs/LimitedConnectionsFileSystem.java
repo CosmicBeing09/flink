@@ -285,13 +285,13 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        return createInputStream(() -> originalFs.open(f, bufferSize));
+    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
+        return createInputStream(() -> originalFs.open(flinkPath, bufferSize));
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        return createInputStream(() -> originalFs.open(f));
+    public FSDataInputStream open(Path filePath) throws IOException {
+        return createInputStream(() -> originalFs.open(filePath));
     }
 
     private FSDataOutputStream createOutputStream(
@@ -339,8 +339,8 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        return originalFs.getFileStatus(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        return originalFs.getFileStatus(flinkPath);
     }
 
     @Override
