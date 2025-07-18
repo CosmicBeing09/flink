@@ -284,8 +284,8 @@ public class AdaptiveScheduler
         private final Duration initialResourceAllocationTimeout;
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
-        private final Duration scalingIntervalMin;
-        private final Duration scalingIntervalMax;
+        private final Duration resourceCooldownIntervalMin;
+        private final Duration resourceCooldownIntervalMax;
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
         private final int minParallelismChangeForDesiredRescale;
@@ -304,8 +304,8 @@ public class AdaptiveScheduler
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
-            this.scalingIntervalMin = scalingIntervalMin;
-            this.scalingIntervalMax = scalingIntervalMax;
+            this.resourceCooldownIntervalMin = scalingIntervalMin;
+            this.resourceCooldownIntervalMax = scalingIntervalMax;
             this.minParallelismChangeForDesiredRescale = minParallelismChangeForDesiredRescale;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
@@ -328,11 +328,11 @@ public class AdaptiveScheduler
         }
 
         public Duration getScalingIntervalMin() {
-            return scalingIntervalMin;
+            return resourceCooldownIntervalMin;
         }
 
         public Duration getScalingIntervalMax() {
-            return scalingIntervalMax;
+            return resourceCooldownIntervalMax;
         }
 
         public int getMinParallelismChangeForDesiredRescale() {
