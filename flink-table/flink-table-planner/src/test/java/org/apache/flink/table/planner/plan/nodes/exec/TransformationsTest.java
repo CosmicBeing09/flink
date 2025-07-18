@@ -161,7 +161,7 @@ class TransformationsTest {
         // Uses in-memory ExecNodes
         final CompiledPlan memoryPlan = table.insertInto("sink_table").compilePlan();
         final List<String> memoryUids =
-                CompiledPlanUtils.toTransformations(env, memoryPlan).get(0)
+                CompiledPlanUtils.toTransformationsInternal(env, memoryPlan).get(0)
                         .getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)
                         .collect(Collectors.toList());
@@ -175,7 +175,7 @@ class TransformationsTest {
         // Uses deserialized ExecNodes
         final String jsonPlan = table.insertInto("sink_table").compilePlan().asJsonString();
         final List<String> jsonUids =
-                CompiledPlanUtils.toTransformations(
+                CompiledPlanUtils.toTransformationsInternal(
                                 env, env.loadPlan(PlanReference.fromJsonString(jsonPlan)))
                         .get(0).getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)
@@ -262,7 +262,7 @@ class TransformationsTest {
         final JsonNode json = JsonTestUtils.readFromString(planGenerator.apply(env));
         jsonModifier.accept(json);
         final List<String> planUids =
-                CompiledPlanUtils.toTransformations(
+                CompiledPlanUtils.toTransformationsInternal(
                                 env, env.loadPlan(PlanReference.fromJsonString(json.toString())))
                         .get(0).getTransitivePredecessorsInternal().stream()
                         .map(Transformation::getUid)

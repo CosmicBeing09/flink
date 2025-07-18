@@ -100,7 +100,7 @@ public abstract class JsonPlanTestBase {
 
     protected void checkTransformationUids(CompiledPlan compiledPlan) {
         List<Transformation<?>> transformations =
-                CompiledPlanUtils.toTransformations(tableEnv, compiledPlan);
+                CompiledPlanUtils.toTransformationsInternal(tableEnv, compiledPlan);
 
         transformations.stream()
                 .flatMap(t -> t.getTransitivePredecessorsInternal().stream())
