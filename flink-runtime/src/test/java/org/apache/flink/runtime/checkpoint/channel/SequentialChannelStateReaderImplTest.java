@@ -100,7 +100,7 @@ public class SequentialChannelStateReaderImplTest {
     public int stateBytesPerPart;
 
     @Parameter(value = 4)
-    public int parLevel;
+    public int parallelism;
 
     @Parameter(value = 5)
     public int bufferSize;
@@ -196,18 +196,18 @@ public class SequentialChannelStateReaderImplTest {
     }
 
     private void withInputGates(ThrowingConsumer<InputGate[], Exception> action) throws Exception {
-        SingleInputGate[] gates = new SingleInputGate[parLevel];
-        final int segmentsToAllocate = parLevel + parLevel * parLevel * buffersPerChannel;
+        SingleInputGate[] gates = new SingleInputGate[parallelism];
+        final int segmentsToAllocate = parallelism + parallelism * parallelism * buffersPerChannel;
         NetworkBufferPool networkBufferPool = new NetworkBufferPool(segmentsToAllocate, bufferSize);
         try (Closer poolCloser = Closer.create()) {
             poolCloser.register(networkBufferPool::destroy);
             poolCloser.register(networkBufferPool::destroyAllBufferPools);
 
             try (Closer gateCloser = Closer.create()) {
-                for (int i = 0; i < parLevel; i++) {
+                for (int i = 0; i < parallelism; i++) {
                     gates[i] =
                             new SingleInputGateBuilder()
-                                    .setNumberOfChannels(parLevel)
+                                    .setNumberOfChannels(parallelism)
                                     .setSingleInputGateIndex(i)
                                     .setBufferPoolFactory(
                                             networkBufferPool.createBufferPool(
@@ -231,15 +231,15 @@ public class SequentialChannelStateReaderImplTest {
 
     private void withResultPartitions(
             ThrowingConsumer<BufferWritingResultPartition[], Exception> action) throws Exception {
-        int segmentsToAllocate = parLevel * parLevel * buffersPerChannel;
+        int segmentsToAllocate = parallelism * parallelism * buffersPerChannel;
         NetworkBufferPool networkBufferPool = new NetworkBufferPool(segmentsToAllocate, bufferSize);
         BufferWritingResultPartition[] resultPartitions =
-                range(0, parLevel)
+                range(0, parallelism)
                         .mapToObj(
                                 i ->
                                         new ResultPartitionBuilder()
                                                 .setResultPartitionIndex(i)
-                                                .setNumberOfSubpartitions(parLevel)
+                                                .setNumberOfSubpartitions(parallelism)
                                                 .setNetworkBufferPool(networkBufferPool)
                                                 .build())
                         .toArray(BufferWritingResultPartition[]::new);
@@ -367,10 +367,10 @@ public class SequentialChannelStateReaderImplTest {
     }
 
     private <T> void assertBuffersEquals(
-            Map<T, List<byte[]>> expected, Map<T, List<Buffer>> actual) {
+            Map<T, List<byte[]>> required, Map<T, List<Buffer>> actual) {
         try {
             assertThat(mapValues(actual, buffers -> concat(toBytes(buffers))))
-                    .isEqualTo(mapValues(expected, this::concat));
+                    .isEqualTo(mapValues(required, this::concat));
         } finally {
             actual.values().stream().flatMap(List::stream).forEach(Buffer::recycleBuffer);
         }
