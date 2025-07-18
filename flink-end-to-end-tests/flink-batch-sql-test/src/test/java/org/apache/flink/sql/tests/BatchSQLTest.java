@@ -84,10 +84,10 @@ class BatchSQLTest {
 
         String sqlStatement = new String(Files.readAllBytes(sqlPath));
 
-        TableEnvironment tEnv = TableEnvironment.create(EnvironmentSettings.inBatchMode());
-        tEnv.getConfig().set(ExecutionOptions.BATCH_SHUFFLE_MODE, shuffleMode);
+        TableEnvironment batchTableEnvironment = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        batchTableEnvironment.getConfig().set(ExecutionOptions.BATCH_SHUFFLE_MODE, shuffleMode);
 
-        tEnv.createTable(
+        batchTableEnvironment.createTable(
                 "table1",
                 TableDescriptor.forConnector(GeneratorTableSourceFactory.CONNECTOR_ID)
                         .schema(GeneratorTableSourceFactory.getSchema())
@@ -96,7 +96,7 @@ class BatchSQLTest {
                         .option(GeneratorTableSourceFactory.DURATION_SECONDS, 60)
                         .option(GeneratorTableSourceFactory.OFFSET_SECONDS, 0)
                         .build());
-        tEnv.createTable(
+        batchTableEnvironment.createTable(
                 "table2",
                 TableDescriptor.forConnector(GeneratorTableSourceFactory.CONNECTOR_ID)
                         .schema(GeneratorTableSourceFactory.getSchema())
@@ -106,7 +106,7 @@ class BatchSQLTest {
                         .option(GeneratorTableSourceFactory.OFFSET_SECONDS, 5)
                         .build());
 
-        tEnv.createTable(
+        batchTableEnvironment.createTable(
                 "sinkTable",
                 TableDescriptor.forConnector("filesystem")
                         .schema(
@@ -123,7 +123,7 @@ class BatchSQLTest {
                         .build());
 
         LOG.info("Submitting job");
-        TableResult result = tEnv.executeSql(sqlStatement);
+        TableResult result = batchTableEnvironment.executeSql(sqlStatement);
 
         // Wait for the job to finish.
         JobClient jobClient =
