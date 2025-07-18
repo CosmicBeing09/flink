@@ -619,7 +619,7 @@ class StopWithSavepointTest {
             if (hadStateTransition) {
                 throw new IllegalStateException("Only one state transition is allowed.");
             }
-            simulateTransitionToState(Executing.class);
+            simulateTransitionToState(RunningJobState.class);
             executingStateTransition.validateInput(
                     new ExecutingTest.CancellingArguments(
                             executionGraph, executionGraphHandler, operatorCoordinatorHandler));

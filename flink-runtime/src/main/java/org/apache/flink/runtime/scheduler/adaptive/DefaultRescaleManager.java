@@ -51,7 +51,7 @@ import java.util.function.Supplier;
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
  * that any method call happens within a single thread.
  *
- * @see Executing
+ * @see RunningJobState
  */
 @NotThreadSafe
 public class DefaultRescaleManager implements RescaleManager {

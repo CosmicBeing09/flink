@@ -63,16 +63,16 @@ public interface StateTransitions {
         void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph);
     }
 
-    /** Interface covering transition to the {@link Executing} state. */
+    /** Interface covering transition to the {@link RunningJobState} state. */
     interface ToExecuting extends StateTransitions {
 
         /**
-         * Transitions into the {@link Executing} state.
+         * Transitions into the {@link RunningJobState} state.
          *
-         * @param executionGraph executionGraph to pass to the {@link Executing} state
-         * @param executionGraphHandler executionGraphHandler to pass to the {@link Executing} state
+         * @param executionGraph executionGraph to pass to the {@link RunningJobState} state
+         * @param executionGraphHandler executionGraphHandler to pass to the {@link RunningJobState} state
          * @param operatorCoordinatorHandler operatorCoordinatorHandler to pass to the {@link
-         *     Executing} state
+         *     RunningJobState} state
          * @param failureCollection collection of failures that are propagated
          */
         void goToExecuting(

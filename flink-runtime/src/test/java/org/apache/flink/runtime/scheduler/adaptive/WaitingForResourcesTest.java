@@ -72,7 +72,7 @@ class WaitingForResourcesTest {
                 new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
 
         // we expect no state transition.
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
     }
 
     @Test
@@ -82,7 +82,7 @@ class WaitingForResourcesTest {
                 new WaitingForResources(ctx, LOG, Duration.ZERO, STABILIZATION_TIMEOUT);
         ctx.setHasDesiredResources(() -> true); // make resources available
         ctx.setExpectCreatingExecutionGraph();
-        wfr.onNewResourcesAvailable(); // .. and notify
+        wfr.onResourcesAvailable(); // .. and notify
     }
 
     @Test
@@ -94,7 +94,7 @@ class WaitingForResourcesTest {
         ctx.setHasDesiredResources(() -> false);
         ctx.setHasSufficientResources(() -> true);
         ctx.setExpectCreatingExecutionGraph();
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
     }
 
     @Test
@@ -106,7 +106,7 @@ class WaitingForResourcesTest {
 
         ctx.setHasDesiredResources(() -> false);
         ctx.setHasSufficientResources(() -> true);
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
         // we are not triggering the scheduled tasks, to simulate a long stabilization timeout
 
         assertThat(ctx.hasStateTransition()).isFalse();
@@ -130,7 +130,7 @@ class WaitingForResourcesTest {
         ctx.setHasSufficientResources(() -> true);
 
         // notify about sufficient resources
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
 
         ctx.setExpectCreatingExecutionGraph();
 
@@ -162,17 +162,17 @@ class WaitingForResourcesTest {
         // notify about resources, trigger stabilization timeout
         ctx.setHasSufficientResources(() -> true);
         ctx.advanceTimeByMillis(40); // advance time, but don't trigger stabilizationTimeout
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
 
         // notify again, but insufficient (reset stabilization timeout)
         ctx.setHasSufficientResources(() -> false);
         ctx.advanceTimeByMillis(40);
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
 
         // notify again, but sufficient, trigger timeout
         ctx.setHasSufficientResources(() -> true);
         ctx.advanceTimeByMillis(40);
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
 
         // sanity check: no state transition has been triggered so far
         assertThat(ctx.hasStateTransition()).isFalse();

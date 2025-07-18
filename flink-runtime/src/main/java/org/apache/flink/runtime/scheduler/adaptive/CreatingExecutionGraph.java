@@ -52,7 +52,7 @@ import java.util.concurrent.ScheduledFuture;
  * the required slots. If the set of available slots has changed so that the created {@link
  * ExecutionGraph} cannot be executed, the state transitions back into {@link WaitingForResources}.
  * If there are enough slots for the {@link ExecutionGraph} to run, the state transitions to {@link
- * Executing}.
+ * RunningJobState}.
  */
 public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
 
@@ -94,7 +94,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                     .info(
                             "Failed to go from {} to {} because the ExecutionGraph creation failed.",
                             CreatingExecutionGraph.class.getSimpleName(),
-                            Executing.class.getSimpleName(),
+                            RunningJobState.class.getSimpleName(),
                             throwable);
             context.goToFinished(context.getArchivedExecutionGraph(JobStatus.FAILED, throwable));
         } else {

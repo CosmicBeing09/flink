@@ -177,7 +177,7 @@ public class AdaptiveScheduler
                 Created.Context,
                 WaitingForResources.Context,
                 CreatingExecutionGraph.Context,
-                Executing.Context,
+                RunningJobState.Context,
                 Restarting.Context,
                 Failing.Context,
                 Finished.Context,
@@ -676,8 +676,8 @@ public class AdaptiveScheduler
 
     private void newResourcesAvailable(Collection<? extends PhysicalSlot> physicalSlots) {
         state.tryRun(
-                ResourceListener.class,
-                ResourceListener::onNewResourcesAvailable,
+                ResourceEventListener.class,
+                ResourceEventListener::onResourcesAvailable,
                 "newResourcesAvailable");
     }
 
@@ -988,7 +988,7 @@ public class AdaptiveScheduler
     public CompletableFuture<String> stopWithSavepoint(
             @Nullable String targetDirectory, boolean terminate, SavepointFormatType formatType) {
         return state.tryCall(
-                        Executing.class,
+                        RunningJobState.class,
                         executing -> {
                             if (isAnyOutputBlocking(executing.getExecutionGraph())) {
                                 return FutureUtils.<String>completedExceptionally(
@@ -1062,8 +1062,8 @@ public class AdaptiveScheduler
                     new JobGraphJobInformation(jobGraph, maybeUpdateVertexParallelismStore.get());
             declareDesiredResources();
             state.tryRun(
-                    ResourceListener.class,
-                    ResourceListener::onNewResourceRequirements,
+                    ResourceEventListener.class,
+                    ResourceEventListener::onNewResourceRequirements,
                     "Current state does not react to desired parallelism changes.");
         }
     }
@@ -1167,7 +1167,7 @@ public class AdaptiveScheduler
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             List<ExceptionHistoryEntry> failureCollection) {
         transitionToState(
-                new Executing.Factory(
+                new RunningJobState.Factory(
                         executionGraph,
                         executionGraphHandler,
                         operatorCoordinatorHandler,

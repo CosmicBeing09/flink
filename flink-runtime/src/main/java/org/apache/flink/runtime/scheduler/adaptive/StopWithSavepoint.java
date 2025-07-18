@@ -179,7 +179,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
     /**
      * Restarts the checkpoint scheduler and, if only the savepoint failed without a task failure /
-     * job termination, transitions back to {@link Executing}.
+     * job termination, transitions back to {@link RunningJobState}.
      *
      * <p>This method must assume that {@link #onFailure}/{@link #onGloballyTerminalState} MAY
      * already be waiting for the savepoint operation to complete, itching to trigger a state
