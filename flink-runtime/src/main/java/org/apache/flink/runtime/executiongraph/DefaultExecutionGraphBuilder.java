@@ -354,7 +354,7 @@ public class DefaultExecutionGraphBuilder {
                                 classLoader,
                                 vertexParallelismStore
                                         .getParallelismInfo(vertex.getID())
-                                        .getParallelism()));
+                                        .getCurrentParallelism()));
             } catch (Throwable t) {
                 throw new JobExecutionException(
                         jobId,

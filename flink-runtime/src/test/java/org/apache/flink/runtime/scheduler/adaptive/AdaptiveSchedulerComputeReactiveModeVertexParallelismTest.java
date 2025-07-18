@@ -92,7 +92,7 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
 
         VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
 
-        assertThat(info.getParallelism()).as("parallelism is not adjusted").isEqualTo(parallelism);
+        assertThat(info.getCurrentParallelism()).as("parallelism is not adjusted").isEqualTo(parallelism);
         assertThat(info.getMaxParallelism()).as("expected max").isEqualTo(expectedMaxParallelism);
 
         assertThat(info.canRescaleMaxParallelism(maxToScaleTo))
@@ -111,7 +111,7 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
 
         VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
 
-        assertThat(info.getParallelism())
+        assertThat(info.getCurrentParallelism())
                 .as("parallelism is adjusted to max")
                 .isEqualTo(expectedMaxParallelism);
         assertThat(info.getMaxParallelism()).as("expected max").isEqualTo(expectedMaxParallelism);

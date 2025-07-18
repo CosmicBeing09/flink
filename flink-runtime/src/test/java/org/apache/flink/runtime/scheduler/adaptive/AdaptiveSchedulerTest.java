@@ -2077,7 +2077,7 @@ public class AdaptiveSchedulerTest {
         for (JobVertex vertex : graph.getVertices()) {
             VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
 
-            assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
+            assertThat(info.getCurrentParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
         }
     }
@@ -2095,7 +2095,7 @@ public class AdaptiveSchedulerTest {
         for (JobVertex vertex : graph.getVertices()) {
             VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
 
-            assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
+            assertThat(info.getCurrentParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
         }
     }

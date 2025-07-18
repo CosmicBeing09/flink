@@ -145,12 +145,12 @@ public class ExecutionJobVertex
         this.parallelismInfo = parallelismInfo;
 
         // verify that our parallelism is not higher than the maximum parallelism
-        if (this.parallelismInfo.getParallelism() > this.parallelismInfo.getMaxParallelism()) {
+        if (this.parallelismInfo.getCurrentParallelism() > this.parallelismInfo.getMaxParallelism()) {
             throw new JobException(
                     String.format(
                             "Vertex %s's parallelism (%s) is higher than the max parallelism (%s). Please lower the parallelism or increase the max parallelism.",
                             jobVertex.getName(),
-                            this.parallelismInfo.getParallelism(),
+                            this.parallelismInfo.getCurrentParallelism(),
                             this.parallelismInfo.getMaxParallelism()));
         }
 
@@ -210,10 +210,10 @@ public class ExecutionJobVertex
             ExecutionPlanSchedulingContext executionPlanSchedulingContext)
             throws JobException {
 
-        checkState(parallelismInfo.getParallelism() > 0);
+        checkState(parallelismInfo.getCurrentParallelism() > 0);
         checkState(!isInitialized());
 
-        this.taskVertices = new ExecutionVertex[parallelismInfo.getParallelism()];
+        this.taskVertices = new ExecutionVertex[parallelismInfo.getCurrentParallelism()];
 
         this.inputs = new ArrayList<>(jobVertex.getInputs().size());
 
@@ -228,13 +228,13 @@ public class ExecutionJobVertex
                     new IntermediateResult(
                             result,
                             this,
-                            this.parallelismInfo.getParallelism(),
+                            this.parallelismInfo.getCurrentParallelism(),
                             result.getResultType(),
                             executionPlanSchedulingContext);
         }
 
         // create all task vertices
-        for (int i = 0; i < this.parallelismInfo.getParallelism(); i++) {
+        for (int i = 0; i < this.parallelismInfo.getCurrentParallelism(); i++) {
             ExecutionVertex vertex =
                     createExecutionVertex(
                             this,
@@ -251,7 +251,7 @@ public class ExecutionJobVertex
         // sanity check for the double referencing between intermediate result partitions and
         // execution vertices
         for (IntermediateResult ir : this.producedDataSets) {
-            if (ir.getNumberOfAssignedPartitions() != this.parallelismInfo.getParallelism()) {
+            if (ir.getNumberOfAssignedPartitions() != this.parallelismInfo.getCurrentParallelism()) {
                 throw new RuntimeException(
                         "The intermediate result's partitions were not correctly assigned.");
             }
@@ -269,7 +269,7 @@ public class ExecutionJobVertex
                 currentThread.setContextClassLoader(graph.getUserClassLoader());
                 try {
                     inputSplits =
-                            splitSource.createInputSplits(this.parallelismInfo.getParallelism());
+                            splitSource.createInputSplits(this.parallelismInfo.getCurrentParallelism());
 
                     if (inputSplits != null) {
                         splitAssigner = splitSource.getInputSplitAssigner(inputSplits);
@@ -325,7 +325,7 @@ public class ExecutionJobVertex
     }
 
     public boolean isParallelismDecided() {
-        return parallelismInfo.getParallelism() > 0;
+        return parallelismInfo.getCurrentParallelism() > 0;
     }
 
     /**
@@ -361,7 +361,7 @@ public class ExecutionJobVertex
 
     @Override
     public int getParallelism() {
-        return parallelismInfo.getParallelism();
+        return parallelismInfo.getCurrentParallelism();
     }
 
     @Override
@@ -474,7 +474,7 @@ public class ExecutionJobVertex
         return new TaskInformation(
                 jobVertex.getID(),
                 jobVertex.getName(),
-                parallelismInfo.getParallelism(),
+                parallelismInfo.getCurrentParallelism(),
                 parallelismInfo.getMaxParallelism(),
                 jobVertex.getInvokableClassName(),
                 jobVertex.getConfiguration());
@@ -487,7 +487,7 @@ public class ExecutionJobVertex
             num[vertex.getExecutionState().ordinal()]++;
         }
 
-        return getAggregateJobVertexState(num, this.parallelismInfo.getParallelism());
+        return getAggregateJobVertexState(num, this.parallelismInfo.getCurrentParallelism());
     }
 
     // ---------------------------------------------------------------------------------------------
@@ -585,14 +585,14 @@ public class ExecutionJobVertex
     void executionVertexFinished() {
         checkState(isInitialized());
         numExecutionVertexFinished++;
-        if (numExecutionVertexFinished == parallelismInfo.getParallelism()) {
+        if (numExecutionVertexFinished == parallelismInfo.getCurrentParallelism()) {
             getGraph().jobVertexFinished();
         }
     }
 
     void executionVertexUnFinished() {
         checkState(isInitialized());
-        if (numExecutionVertexFinished == parallelismInfo.getParallelism()) {
+        if (numExecutionVertexFinished == parallelismInfo.getCurrentParallelism()) {
             getGraph().jobVertexUnFinished();
         }
         numExecutionVertexFinished--;
@@ -600,7 +600,7 @@ public class ExecutionJobVertex
 
     public boolean isFinished() {
         return isParallelismDecided()
-                && numExecutionVertexFinished == parallelismInfo.getParallelism();
+                && numExecutionVertexFinished == parallelismInfo.getCurrentParallelism();
     }
 
     // --------------------------------------------------------------------------------------------

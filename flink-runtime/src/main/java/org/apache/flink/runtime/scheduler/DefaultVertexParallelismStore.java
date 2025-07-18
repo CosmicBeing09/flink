@@ -64,8 +64,8 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
                             oldVertexParallelismInfo.getMaxParallelism(),
                             MAX_RESCALE_REJECTION_MESSAGE));
             changed |=
-                    oldVertexParallelismInfo.getMinParallelism() != minParallelism
-                            || oldVertexParallelismInfo.getParallelism() != parallelism;
+                    oldVertexParallelismInfo.getMinimumParallelism() != minParallelism
+                            || oldVertexParallelismInfo.getCurrentParallelism() != parallelism;
         }
         return changed ? Optional.of(newVertexParallelismStore) : Optional.empty();
     }

@@ -29,14 +29,14 @@ public interface VertexParallelismInformation {
      *
      * @return the min parallelism for the vertex
      */
-    int getMinParallelism();
+    int getMinimumParallelism();
 
     /**
      * Returns a vertex's parallelism.
      *
      * @return the parallelism for the vertex
      */
-    int getParallelism();
+    int getCurrentParallelism();
 
     /**
      * Returns the vertex's max parallelism.
