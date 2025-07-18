@@ -83,17 +83,17 @@ public class QueryHintsResolver extends QueryHintsRelShuttle {
     }
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
-        Optional<String> leftName = extractAliasOrTableName(biRel.getLeft());
-        Optional<String> rightName = extractAliasOrTableName(biRel.getRight());
+    protected RelNode visitBinaryNode(BiRel binaryNode) {
+        Optional<String> leftName = extractAliasOrTableName(binaryNode.getLeft());
+        Optional<String> rightName = extractAliasOrTableName(binaryNode.getRight());
 
         Set<RelHint> existentKVHints = new HashSet<>();
 
-        List<RelHint> oldHints = ((Hintable) biRel).getHints();
+        List<RelHint> oldHints = ((Hintable) binaryNode).getHints();
         List<RelHint> oldQueryHints = FlinkHints.getAllQueryHints(oldHints);
         // has no hints, return directly.
         if (oldQueryHints.isEmpty()) {
-            return super.visitChildren(biRel);
+            return super.visitChildren(binaryNode);
         }
 
         List<RelHint> newHints = new ArrayList<>();
@@ -157,7 +157,7 @@ public class QueryHintsResolver extends QueryHintsRelShuttle {
             }
         }
 
-        RelNode newNode = super.visitChildren(biRel);
+        RelNode newNode = super.visitChildren(binaryNode);
 
         newHints = mergeQueryHintsIfNecessary(newHints);
         // replace new query hints

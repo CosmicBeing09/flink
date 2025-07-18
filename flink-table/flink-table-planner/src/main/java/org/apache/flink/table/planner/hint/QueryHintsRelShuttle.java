@@ -37,15 +37,15 @@ public abstract class QueryHintsRelShuttle extends RelShuttleImpl {
         if (containsSubQuery(join)) {
             join = (LogicalJoin) resolveSubQuery(join, relNode -> relNode.accept(this));
         }
-        return visitBiRel(join);
+        return visitBinaryNode(join);
     }
 
     @Override
     public RelNode visit(LogicalCorrelate correlate) {
-        return visitBiRel(correlate);
+        return visitBinaryNode(correlate);
     }
 
-    protected abstract RelNode visitBiRel(BiRel biRel);
+    protected abstract RelNode visitBinaryNode(BiRel binaryNode);
 
     @Override
     public RelNode visit(LogicalFilter filter) {
