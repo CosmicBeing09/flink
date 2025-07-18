@@ -39,7 +39,7 @@ public class TestingMiniClusterConfiguration extends MiniClusterConfiguration {
         return new Builder();
     }
 
-    private final int numberDispatcherResourceManagerComponents;
+    private final int numDispatcherResourceManagerComponents;
 
     private final boolean localCommunication;
 
@@ -48,7 +48,7 @@ public class TestingMiniClusterConfiguration extends MiniClusterConfiguration {
             int numTaskManagers,
             RpcServiceSharing rpcServiceSharing,
             @Nullable String commonBindAddress,
-            int numberDispatcherResourceManagerComponents,
+            int numDispatcherResourceManagerComponents,
             boolean localCommunication) {
         super(
                 configuration,
@@ -57,12 +57,12 @@ public class TestingMiniClusterConfiguration extends MiniClusterConfiguration {
                 commonBindAddress,
                 MiniCluster.HaServices.CONFIGURED,
                 null);
-        this.numberDispatcherResourceManagerComponents = numberDispatcherResourceManagerComponents;
+        this.numDispatcherResourceManagerComponents = numDispatcherResourceManagerComponents;
         this.localCommunication = localCommunication;
     }
 
     public int getNumberDispatcherResourceManagerComponents() {
-        return numberDispatcherResourceManagerComponents;
+        return numDispatcherResourceManagerComponents;
     }
 
     public boolean isLocalCommunication() {
