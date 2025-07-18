@@ -37,13 +37,13 @@ public class TypeSerializerSnapshotSerializationUtil {
      * <p>It is written with a format that can be later read again using {@link
      * #readSerializerSnapshot(DataInputView, ClassLoader)}.
      *
-     * @param out the data output view
+     * @param dataOutputView the data output view
      * @param serializerSnapshot the serializer configuration snapshot to write
      */
     public static <T> void writeSerializerSnapshot(
-            DataOutputView out, TypeSerializerSnapshot<T> serializerSnapshot) throws IOException {
+            DataOutputView dataOutputView, TypeSerializerSnapshot<T> serializerSnapshot) throws IOException {
 
-        new TypeSerializerSnapshotSerializationProxy<>(serializerSnapshot).write(out);
+        new TypeSerializerSnapshotSerializationProxy<>(serializerSnapshot).write(dataOutputView);
     }
 
     /**
@@ -55,11 +55,11 @@ public class TypeSerializerSnapshotSerializationUtil {
      * @return the read serializer configuration snapshot
      */
     public static <T> TypeSerializerSnapshot<T> readSerializerSnapshot(
-            DataInputView in, ClassLoader userCodeClassLoader) throws IOException {
+            DataInputView dataInputView, ClassLoader userCodeClassLoader) throws IOException {
 
         final TypeSerializerSnapshotSerializationProxy<T> proxy =
                 new TypeSerializerSnapshotSerializationProxy<>(userCodeClassLoader);
-        proxy.read(in);
+        proxy.read(dataInputView);
 
         return proxy.getSerializerSnapshot();
     }

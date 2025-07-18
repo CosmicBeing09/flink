@@ -41,7 +41,7 @@ import javax.annotation.Nullable;
 public class TypeSerializerSchemaCompatibility<T> {
 
     /** Enum for the type of the compatibility. */
-    enum Type {
+    enum CompatibilityType {
 
         /** This indicates that the new serializer continued to be used as is. */
         COMPATIBLE_AS_IS,
@@ -69,7 +69,7 @@ public class TypeSerializerSchemaCompatibility<T> {
     }
 
     /** The type of the compatibility. */
-    private final Type resultType;
+    private final CompatibilityType compatibilityType;
 
     private final TypeSerializer<T> reconfiguredNewSerializer;
 
@@ -80,7 +80,7 @@ public class TypeSerializerSchemaCompatibility<T> {
      * @return a result that indicates migration is not required for the new serializer.
      */
     public static <T> TypeSerializerSchemaCompatibility<T> compatibleAsIs() {
-        return new TypeSerializerSchemaCompatibility<>(Type.COMPATIBLE_AS_IS, null);
+        return new TypeSerializerSchemaCompatibility<>(CompatibilityType.COMPATIBLE_AS_IS, null);
     }
 
     /**
@@ -92,7 +92,7 @@ public class TypeSerializerSchemaCompatibility<T> {
      *     written bytes.
      */
     public static <T> TypeSerializerSchemaCompatibility<T> compatibleAfterMigration() {
-        return new TypeSerializerSchemaCompatibility<>(Type.COMPATIBLE_AFTER_MIGRATION, null);
+        return new TypeSerializerSchemaCompatibility<>(CompatibilityType.COMPATIBLE_AFTER_MIGRATION, null);
     }
 
     /**
@@ -106,7 +106,7 @@ public class TypeSerializerSchemaCompatibility<T> {
     public static <T> TypeSerializerSchemaCompatibility<T> compatibleWithReconfiguredSerializer(
             TypeSerializer<T> reconfiguredSerializer) {
         return new TypeSerializerSchemaCompatibility<>(
-                Type.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
+                CompatibilityType.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
                 Preconditions.checkNotNull(reconfiguredSerializer));
     }
 
@@ -121,44 +121,44 @@ public class TypeSerializerSchemaCompatibility<T> {
      * @return a result that indicates incompatibility between the new and previous serializer.
      */
     public static <T> TypeSerializerSchemaCompatibility<T> incompatible() {
-        return new TypeSerializerSchemaCompatibility<>(Type.INCOMPATIBLE, null);
+        return new TypeSerializerSchemaCompatibility<>(CompatibilityType.INCOMPATIBLE, null);
     }
 
     private TypeSerializerSchemaCompatibility(
-            Type resultType, @Nullable TypeSerializer<T> reconfiguredNewSerializer) {
-        this.resultType = Preconditions.checkNotNull(resultType);
+            CompatibilityType resultType, @Nullable TypeSerializer<T> reconfiguredNewSerializer) {
+        this.compatibilityType = Preconditions.checkNotNull(resultType);
         this.reconfiguredNewSerializer = reconfiguredNewSerializer;
     }
 
     /**
-     * Returns whether or not the type of the compatibility is {@link Type#COMPATIBLE_AS_IS}.
+     * Returns whether or not the type of the compatibility is {@link CompatibilityType#COMPATIBLE_AS_IS}.
      *
-     * @return whether or not the type of the compatibility is {@link Type#COMPATIBLE_AS_IS}.
+     * @return whether or not the type of the compatibility is {@link CompatibilityType#COMPATIBLE_AS_IS}.
      */
     public boolean isCompatibleAsIs() {
-        return resultType == Type.COMPATIBLE_AS_IS;
+        return compatibilityType == CompatibilityType.COMPATIBLE_AS_IS;
     }
 
     /**
      * Returns whether or not the type of the compatibility is {@link
-     * Type#COMPATIBLE_AFTER_MIGRATION}.
+     * CompatibilityType#COMPATIBLE_AFTER_MIGRATION}.
      *
      * @return whether or not the type of the compatibility is {@link
-     *     Type#COMPATIBLE_AFTER_MIGRATION}.
+     *     CompatibilityType#COMPATIBLE_AFTER_MIGRATION}.
      */
     public boolean isCompatibleAfterMigration() {
-        return resultType == Type.COMPATIBLE_AFTER_MIGRATION;
+        return compatibilityType == CompatibilityType.COMPATIBLE_AFTER_MIGRATION;
     }
 
     /**
      * Returns whether or not the type of the compatibility is {@link
-     * Type#COMPATIBLE_WITH_RECONFIGURED_SERIALIZER}.
+     * CompatibilityType#COMPATIBLE_WITH_RECONFIGURED_SERIALIZER}.
      *
      * @return whether or not the type of the compatibility is {@link
-     *     Type#COMPATIBLE_WITH_RECONFIGURED_SERIALIZER}.
+     *     CompatibilityType#COMPATIBLE_WITH_RECONFIGURED_SERIALIZER}.
      */
     public boolean isCompatibleWithReconfiguredSerializer() {
-        return resultType == Type.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER;
+        return compatibilityType == CompatibilityType.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER;
     }
 
     /**
@@ -169,25 +169,25 @@ public class TypeSerializerSchemaCompatibility<T> {
         Preconditions.checkState(
                 isCompatibleWithReconfiguredSerializer(),
                 "It is only possible to get a reconfigured serializer if the compatibility type is %s, but the type is %s",
-                Type.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
-                resultType);
+                CompatibilityType.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
+                compatibilityType);
         return reconfiguredNewSerializer;
     }
 
     /**
-     * Returns whether or not the type of the compatibility is {@link Type#INCOMPATIBLE}.
+     * Returns whether or not the type of the compatibility is {@link CompatibilityType#INCOMPATIBLE}.
      *
-     * @return whether or not the type of the compatibility is {@link Type#INCOMPATIBLE}.
+     * @return whether or not the type of the compatibility is {@link CompatibilityType#INCOMPATIBLE}.
      */
     public boolean isIncompatible() {
-        return resultType == Type.INCOMPATIBLE;
+        return compatibilityType == CompatibilityType.INCOMPATIBLE;
     }
 
     @Override
     public String toString() {
         return "TypeSerializerSchemaCompatibility{"
                 + "resultType="
-                + resultType
+                + compatibilityType
                 + ", reconfiguredNewSerializer="
                 + reconfiguredNewSerializer
                 + '}';

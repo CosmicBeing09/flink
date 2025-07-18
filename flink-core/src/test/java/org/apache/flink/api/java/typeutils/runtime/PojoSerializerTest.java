@@ -105,8 +105,8 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
     // User code class for testing the serializer
     public static class TestUserClass {
-        public int dumm1;
-        public String dumm2;
+        public int id;
+        public String name;
         public double dumm3;
         public int[] dumm4;
         public Date dumm5;
@@ -122,8 +122,8 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
                 int[] dumm4,
                 Date dumm5,
                 NestedTestUserClass nestedClass) {
-            this.dumm1 = dumm1;
-            this.dumm2 = dumm2;
+            this.id = dumm1;
+            this.name = dumm2;
             this.dumm3 = dumm3;
             this.dumm4 = dumm4;
             this.dumm5 = dumm5;
@@ -132,7 +132,7 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
         @Override
         public int hashCode() {
-            return Objects.hash(dumm1, dumm2, dumm3, dumm4, dumm5, nestedClass);
+            return Objects.hash(id, name, dumm3, dumm4, dumm5, nestedClass);
         }
 
         @Override
@@ -141,11 +141,11 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
                 return false;
             }
             TestUserClass otherTUC = (TestUserClass) other;
-            if (dumm1 != otherTUC.dumm1) {
+            if (id != otherTUC.id) {
                 return false;
             }
-            if ((dumm2 == null && otherTUC.dumm2 != null)
-                    || (dumm2 != null && !dumm2.equals(otherTUC.dumm2))) {
+            if ((name == null && otherTUC.name != null)
+                    || (name != null && !name.equals(otherTUC.name))) {
                 return false;
             }
             if (dumm3 != otherTUC.dumm3) {
@@ -530,10 +530,10 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
         // instantiate new PojoSerializer, with new execution config that has the subclass
         // registrations
-        ExecutionConfig newExecutionConfig = new ExecutionConfig();
-        newExecutionConfig.registerPojoType(SubTestUserClassA.class);
-        newExecutionConfig.registerPojoType(SubTestUserClassB.class);
-        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(newExecutionConfig);
+        ExecutionConfig serializerConfig = new ExecutionConfig();
+        serializerConfig.registerPojoType(SubTestUserClassA.class);
+        serializerConfig.registerPojoType(SubTestUserClassB.class);
+        pojoSerializer = (PojoSerializer<TestUserClass>) type.createSerializer(serializerConfig);
 
         // read configuration from bytes
         try (ByteArrayInputStream in = new ByteArrayInputStream(serializedConfig)) {
