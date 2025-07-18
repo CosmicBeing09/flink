@@ -71,10 +71,10 @@ public class JobGraph implements ExecutionPlan {
 
     // --- job and configuration ---
 
-    private long initialClientHeartbeatTimeout;
+    private long clientHeartbeatTimeoutMillis;
 
     /** List of task vertices included in this job graph. */
-    private final Map<JobVertexID, JobVertex> taskVertices =
+    private final Map<JobVertexID, JobVertex> jobVertices =
             new LinkedHashMap<JobVertexID, JobVertex>();
 
     /** The job configuration attached to this job. */
@@ -325,11 +325,11 @@ public class JobGraph implements ExecutionPlan {
      */
     public void addVertex(JobVertex vertex) {
         final JobVertexID id = vertex.getID();
-        JobVertex previous = taskVertices.put(id, vertex);
+        JobVertex previous = jobVertices.put(id, vertex);
 
         // if we had a prior association, restore and throw an exception
         if (previous != null) {
-            taskVertices.put(id, previous);
+            jobVertices.put(id, previous);
             throw new IllegalArgumentException(
                     "The JobGraph already contains a vertex with that id.");
         }
@@ -341,7 +341,7 @@ public class JobGraph implements ExecutionPlan {
      * @return an Iterable to iterate all vertices registered with the job graph
      */
     public Iterable<JobVertex> getVertices() {
-        return this.taskVertices.values();
+        return this.jobVertices.values();
     }
 
     /**
@@ -351,7 +351,7 @@ public class JobGraph implements ExecutionPlan {
      * @return an array of all job vertices that are registered with the job graph
      */
     public JobVertex[] getVerticesAsArray() {
-        return this.taskVertices.values().toArray(new JobVertex[this.taskVertices.size()]);
+        return this.jobVertices.values().toArray(new JobVertex[this.jobVertices.size()]);
     }
 
     /**
@@ -360,7 +360,7 @@ public class JobGraph implements ExecutionPlan {
      * @return The number of all vertices.
      */
     public int getNumberOfVertices() {
-        return this.taskVertices.size();
+        return this.jobVertices.size();
     }
 
     public Set<SlotSharingGroup> getSlotSharingGroups() {
@@ -414,7 +414,7 @@ public class JobGraph implements ExecutionPlan {
      *     be found
      */
     public JobVertex findVertexByID(JobVertexID id) {
-        return this.taskVertices.get(id);
+        return this.jobVertices.get(id);
     }
 
     /**
@@ -439,7 +439,7 @@ public class JobGraph implements ExecutionPlan {
     @Override
     public int getMaximumParallelism() {
         int maxParallelism = -1;
-        for (JobVertex vertex : taskVertices.values()) {
+        for (JobVertex vertex : jobVertices.values()) {
             maxParallelism = Math.max(vertex.getParallelism(), maxParallelism);
         }
         return maxParallelism;
@@ -452,12 +452,12 @@ public class JobGraph implements ExecutionPlan {
     public List<JobVertex> getVerticesSortedTopologicallyFromSources()
             throws InvalidProgramException {
         // early out on empty lists
-        if (this.taskVertices.isEmpty()) {
+        if (this.jobVertices.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<JobVertex> sorted = new ArrayList<JobVertex>(this.taskVertices.size());
-        Set<JobVertex> remaining = new LinkedHashSet<JobVertex>(this.taskVertices.values());
+        List<JobVertex> sorted = new ArrayList<JobVertex>(this.jobVertices.size());
+        Set<JobVertex> remaining = new LinkedHashSet<JobVertex>(this.jobVertices.values());
 
         // start by finding the vertices with no input edges
         // and the ones with disconnected inputs (that refer to some standalone data set)
@@ -686,11 +686,11 @@ public class JobGraph implements ExecutionPlan {
     }
 
     public void setInitialClientHeartbeatTimeout(long initialClientHeartbeatTimeout) {
-        this.initialClientHeartbeatTimeout = initialClientHeartbeatTimeout;
+        this.clientHeartbeatTimeoutMillis = initialClientHeartbeatTimeout;
     }
 
     @Override
     public long getInitialClientHeartbeatTimeout() {
-        return initialClientHeartbeatTimeout;
+        return clientHeartbeatTimeoutMillis;
     }
 }
