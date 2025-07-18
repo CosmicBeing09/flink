@@ -42,7 +42,7 @@ public class CachedDataInputStream extends FSDataInputStream implements ByteBuff
     /** The reference to the cache entry. */
     private final FileCacheEntry cacheEntry;
 
-    private volatile FSDataInputStream fsdis;
+    private volatile FSDataInputStream cachedInputStream;
 
     private volatile StreamStatus streamStatus;
 
@@ -52,7 +52,7 @@ public class CachedDataInputStream extends FSDataInputStream implements ByteBuff
      */
     private volatile long position;
 
-    private final FSDataInputStream originalStream;
+    private final FSDataInputStream underlyingInputStream;
 
     private Semaphore semaphore;
 
@@ -61,36 +61,36 @@ public class CachedDataInputStream extends FSDataInputStream implements ByteBuff
             FSDataInputStream cacheStream,
             FSDataInputStream originalStream) {
         this.cacheEntry = cacheEntry;
-        this.fsdis = cacheStream;
-        this.originalStream = originalStream;
+        this.cachedInputStream = cacheStream;
+        this.underlyingInputStream = originalStream;
         this.streamStatus = StreamStatus.CACHED_OPEN;
         this.semaphore = new Semaphore(0);
     }
 
     private FSDataInputStream getStream() throws IOException {
         if (streamStatus == StreamStatus.CACHED_OPEN && cacheEntry.tryRetain() > 0) {
-            return fsdis;
+            return cachedInputStream;
         } else if (streamStatus != StreamStatus.ORIGINAL) {
             try {
                 semaphore.acquire(1);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-            originalStream.seek(position);
+            underlyingInputStream.seek(position);
             position = -1;
             streamStatus = StreamStatus.ORIGINAL;
-            return originalStream;
+            return underlyingInputStream;
         } else {
-            return originalStream;
+            return underlyingInputStream;
         }
     }
 
     private void closeStream() throws IOException {
         if (streamStatus == StreamStatus.CACHED_OPEN) {
             streamStatus = StreamStatus.CACHED_CLOSED;
-            position = fsdis.getPos();
-            fsdis.close();
-            fsdis = null;
+            position = cachedInputStream.getPos();
+            cachedInputStream.close();
+            cachedInputStream = null;
             semaphore.release(1);
         }
     }

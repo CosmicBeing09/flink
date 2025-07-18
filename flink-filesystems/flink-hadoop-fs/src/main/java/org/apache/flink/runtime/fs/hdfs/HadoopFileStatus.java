@@ -39,7 +39,7 @@ public class HadoopFileStatus implements FileStatus {
     }
 
     @Override
-    public long getLen() {
+    public long getLength() {
         return fileStatus.getLen();
     }
 
@@ -59,7 +59,7 @@ public class HadoopFileStatus implements FileStatus {
     }
 
     @Override
-    public short getReplication() {
+    public short getReplicationFactor() {
         return fileStatus.getReplication();
     }
 

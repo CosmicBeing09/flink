@@ -170,28 +170,28 @@ public final class ForStResourceContainer implements AutoCloseable {
     /** Gets the ForSt {@link DBOptions} to be used for ForSt instances. */
     public DBOptions getDbOptions() {
         // initial options from common profile
-        DBOptions opt = createBaseCommonDBOptions();
-        handlesToClose.add(opt);
+        DBOptions dbOptions = createBaseCommonDBOptions();
+        handlesToClose.add(dbOptions);
 
         // load configurable options on top of pre-defined profile
-        setDBOptionsFromConfigurableOptions(opt);
+        setDBOptionsFromConfigurableOptions(dbOptions);
 
         // add user-defined options factory, if specified
         if (optionsFactory != null) {
-            opt = optionsFactory.createDBOptions(opt, handlesToClose);
+            dbOptions = optionsFactory.createDBOptions(dbOptions, handlesToClose);
         }
 
         // add necessary default options
-        opt = opt.setCreateIfMissing(true).setAvoidFlushDuringShutdown(true);
+        dbOptions = dbOptions.setCreateIfMissing(true).setAvoidFlushDuringShutdown(true);
 
         // if sharedResources is non-null, use the write buffer manager from it.
         if (sharedResources != null) {
-            opt.setWriteBufferManager(sharedResources.getResourceHandle().getWriteBufferManager());
+            dbOptions.setWriteBufferManager(sharedResources.getResourceHandle().getWriteBufferManager());
         }
 
         if (enableStatistics) {
             Statistics statistics = new Statistics();
-            opt.setStatistics(statistics);
+            dbOptions.setStatistics(statistics);
             handlesToClose.add(statistics);
         }
 
@@ -203,24 +203,24 @@ public final class ForStResourceContainer implements AutoCloseable {
                     new FlinkEnv(
                             remoteBasePath.toString(),
                             new StringifiedForStFileSystem(forStFileSystem));
-            opt.setEnv(flinkEnv);
+            dbOptions.setEnv(flinkEnv);
         }
 
-        return opt;
+        return dbOptions;
     }
 
     /** Gets the ForSt {@link ColumnFamilyOptions} to be used for all ForSt instances. */
     public ColumnFamilyOptions getColumnOptions() {
         // initial options from common profile
-        ColumnFamilyOptions opt = createBaseCommonColumnOptions();
-        handlesToClose.add(opt);
+        ColumnFamilyOptions columnFamilyOptions = createBaseCommonColumnOptions();
+        handlesToClose.add(columnFamilyOptions);
 
         // load configurable options on top of pre-defined profile
-        setColumnFamilyOptionsFromConfigurableOptions(opt, handlesToClose);
+        setColumnFamilyOptionsFromConfigurableOptions(columnFamilyOptions, handlesToClose);
 
         // add user-defined options, if specified
         if (optionsFactory != null) {
-            opt = optionsFactory.createColumnOptions(opt, handlesToClose);
+            columnFamilyOptions = optionsFactory.createColumnOptions(columnFamilyOptions, handlesToClose);
         }
 
         // if sharedResources is non-null, use the block cache from it and
@@ -228,7 +228,7 @@ public final class ForStResourceContainer implements AutoCloseable {
         if (sharedResources != null) {
             final ForStSharedResources rocksResources = sharedResources.getResourceHandle();
             final Cache blockCache = rocksResources.getCache();
-            TableFormatConfig tableFormatConfig = opt.tableFormatConfig();
+            TableFormatConfig tableFormatConfig = columnFamilyOptions.tableFormatConfig();
             BlockBasedTableConfig blockBasedTableConfig;
             if (tableFormatConfig == null) {
                 blockBasedTableConfig = new BlockBasedTableConfig();
@@ -248,10 +248,10 @@ public final class ForStResourceContainer implements AutoCloseable {
             blockBasedTableConfig.setCacheIndexAndFilterBlocks(true);
             blockBasedTableConfig.setCacheIndexAndFilterBlocksWithHighPriority(true);
             blockBasedTableConfig.setPinL0FilterAndIndexBlocksInCache(true);
-            opt.setTableFormatConfig(blockBasedTableConfig);
+            columnFamilyOptions.setTableFormatConfig(blockBasedTableConfig);
         }
 
-        return opt;
+        return columnFamilyOptions;
     }
 
     /** Gets the ForSt {@link WriteOptions} to be used for write operations. */

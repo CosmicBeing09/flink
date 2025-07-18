@@ -335,16 +335,16 @@ public abstract class FileSystem implements IFileSystem {
                                         PluginFileSystemFactory::of));
             }
 
-            final List<FileSystemFactory> fileSystemFactories =
+            final List<FileSystemFactory> discoveredFactories =
                     loadFileSystemFactories(factorySuppliers);
 
             // configure all file system factories
-            for (FileSystemFactory factory : fileSystemFactories) {
-                factory.configure(config);
-                String scheme = factory.getScheme();
+            for (FileSystemFactory fileSystemFactory : discoveredFactories) {
+                fileSystemFactory.configure(config);
+                String scheme = fileSystemFactory.getScheme();
 
                 FileSystemFactory fsf =
-                        ConnectionLimitingFactory.decorateIfLimited(factory, scheme, config);
+                        ConnectionLimitingFactory.decorateIfLimited(fileSystemFactory, scheme, config);
                 FS_FACTORIES.put(scheme, fsf);
             }
 

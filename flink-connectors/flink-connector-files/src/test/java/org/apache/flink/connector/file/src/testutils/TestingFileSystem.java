@@ -303,7 +303,7 @@ public class TestingFileSystem extends FileSystem {
         }
 
         @Override
-        public long getLen() {
+        public long getLength() {
             return len;
         }
 
@@ -313,7 +313,7 @@ public class TestingFileSystem extends FileSystem {
         }
 
         @Override
-        public short getReplication() {
+        public short getReplicationFactor() {
             return 1;
         }
 

@@ -38,10 +38,10 @@ public class MappingEntry extends ReferenceCounted {
     private final FileSystem fileSystem;
 
     /** The original path of file. */
-    String sourcePath;
+    String sourceFilePath;
 
     /** Whether the file is local. */
-    boolean isLocal;
+    boolean isLocalFile;
 
     boolean recursive;
 
@@ -56,9 +56,9 @@ public class MappingEntry extends ReferenceCounted {
             boolean recursive) {
         super(initReference);
         this.fileSystem = fileSystem;
-        this.sourcePath = sourcePath;
+        this.sourceFilePath = sourcePath;
         this.parentDir = null;
-        this.isLocal = isLocal;
+        this.isLocalFile = isLocal;
         this.recursive = recursive;
     }
 
@@ -68,9 +68,9 @@ public class MappingEntry extends ReferenceCounted {
             if (parentDir != null) {
                 parentDir.release();
             }
-            fileSystem.delete(new Path(sourcePath), recursive);
+            fileSystem.delete(new Path(sourceFilePath), recursive);
         } catch (Exception e) {
-            LOG.warn("Failed to delete file {}.", sourcePath, e);
+            LOG.warn("Failed to delete file {}.", sourceFilePath, e);
         }
     }
 
@@ -82,6 +82,6 @@ public class MappingEntry extends ReferenceCounted {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        return sourcePath.equals(((MappingEntry) o).sourcePath);
+        return sourceFilePath.equals(((MappingEntry) o).sourceFilePath);
     }
 }

@@ -104,12 +104,12 @@ public class ForStFlinkFileSystemTest {
     private void testReadAndWriteWithByteBuffer(ForStFlinkFileSystem fileSystem) throws Exception {
         org.apache.flink.core.fs.Path testFilePath =
                 new org.apache.flink.core.fs.Path(tempDir.toString() + "/temp.sst");
-        final int attempt = 200;
+        final int numWrites = 200;
 
         // Test write with ByteBuffer
         ByteBufferWritableFSDataOutputStream outputStream = fileSystem.create(testFilePath);
         ByteBuffer writeBuffer = ByteBuffer.allocate(20);
-        for (int i = 0; i < attempt; i++) {
+        for (int i = 0; i < numWrites; i++) {
             writeBuffer.clear();
             writeBuffer.position(2);
             writeBuffer.putLong(i);
@@ -125,7 +125,7 @@ public class ForStFlinkFileSystemTest {
         ByteBufferReadableFSDataInputStream inputStream = fileSystem.open(testFilePath);
         inputStream.seek(0);
         ByteBuffer readBuffer = ByteBuffer.allocate(20);
-        for (int i = 0; i < attempt; i++) {
+        for (int i = 0; i < numWrites; i++) {
             readBuffer.clear();
             readBuffer.position(1);
             readBuffer.limit(17);
@@ -139,13 +139,13 @@ public class ForStFlinkFileSystemTest {
         // Test random read with ByteBuffer concurrently
         ByteBufferReadableFSDataInputStream randomInputStream = fileSystem.open(testFilePath);
         List<CompletableFuture<Void>> futureList = new ArrayList<>();
-        for (int index = 0; index < attempt; index++) {
+        for (int taskIndex = 0; taskIndex < numWrites; taskIndex++) {
             futureList.add(
                     CompletableFuture.runAsync(
                             () -> {
                                 try {
                                     ByteBuffer randomReadBuffer = ByteBuffer.allocate(20);
-                                    for (int i = 0; i < attempt; i += 2) {
+                                    for (int i = 0; i < numWrites; i += 2) {
                                         randomReadBuffer.clear();
                                         randomReadBuffer.position(1);
                                         randomReadBuffer.limit(17);

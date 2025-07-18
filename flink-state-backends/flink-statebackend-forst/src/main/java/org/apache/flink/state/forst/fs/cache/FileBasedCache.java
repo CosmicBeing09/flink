@@ -43,10 +43,10 @@ public class FileBasedCache extends LruCache<String, FileCacheEntry> {
     private static final String FORST_CACHE_PREFIX = "forst.fileCache";
 
     /** The file system of cache. */
-    final FileSystem cacheFs;
+    final FileSystem cacheFileSystem;
 
     /** The base path of cache. */
-    private final Path basePath;
+    private final Path cacheBasePath;
 
     /** Whether the cache is closed. */
     private volatile boolean closed;
@@ -67,8 +67,8 @@ public class FileBasedCache extends LruCache<String, FileCacheEntry> {
             MetricGroup metricGroup) {
         super(capacity, cacheLimitPolicy);
         this.closed = false;
-        this.cacheFs = cacheFs;
-        this.basePath = basePath;
+        this.cacheFileSystem = cacheFs;
+        this.cacheBasePath = basePath;
         if (metricGroup != null) {
             this.metricGroup = metricGroup;
             this.hitCounter =
@@ -87,7 +87,7 @@ public class FileBasedCache extends LruCache<String, FileCacheEntry> {
     }
 
     Path getCachePath(Path fromOriginal) {
-        return new Path(basePath, fromOriginal.getName());
+        return new Path(cacheBasePath, fromOriginal.getName());
     }
 
     public CachedDataInputStream open(Path path, FSDataInputStream originalStream)
@@ -113,7 +113,7 @@ public class FileBasedCache extends LruCache<String, FileCacheEntry> {
                 path,
                 cachePath,
                 originalOutputStream,
-                cacheFs.create(cachePath, FileSystem.WriteMode.OVERWRITE),
+                cacheFileSystem.create(cachePath, FileSystem.WriteMode.OVERWRITE),
                 this);
     }
 

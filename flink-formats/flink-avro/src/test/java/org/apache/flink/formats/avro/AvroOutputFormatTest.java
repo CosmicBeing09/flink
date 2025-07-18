@@ -160,7 +160,7 @@ class AvroOutputFormatTest {
     }
 
     private long fileSize(Path path) throws IOException {
-        return path.getFileSystem().getFileStatus(path).getLen();
+        return path.getFileSystem().getFileStatus(path).getLength();
     }
 
     private void output(final AvroOutputFormat<User> outputFormat) throws IOException {

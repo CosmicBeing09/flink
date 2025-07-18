@@ -58,7 +58,7 @@ public class FileCacheEntry extends ReferenceCounted {
     FileCacheEntry(
             FileBasedCache fileBasedCache, Path originalPath, Path cachePath, long entrySize) {
         super(1);
-        this.cacheFs = fileBasedCache.cacheFs;
+        this.cacheFs = fileBasedCache.cacheFileSystem;
         this.originalPath = originalPath;
         this.cachePath = cachePath;
         this.entrySize = entrySize;

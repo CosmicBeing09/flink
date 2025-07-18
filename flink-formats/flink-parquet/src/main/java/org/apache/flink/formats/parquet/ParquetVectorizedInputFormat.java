@@ -119,7 +119,7 @@ public abstract class ParquetVectorizedInputFormat<T, SplitT extends FileSourceS
         // config that create inputFile needed from config.yaml
         final FileSystem fs = filePath.getFileSystem();
         final ParquetInputFile inputFile =
-                new ParquetInputFile(fs.open(filePath), fs.getFileStatus(filePath).getLen());
+                new ParquetInputFile(fs.open(filePath), fs.getFileStatus(filePath).getLength());
 
         // Notice: This filter is RowGroups level, not individual records.
         FilterCompat.Filter filter = getFilter(hadoopConfig.conf());

@@ -86,9 +86,9 @@ public class CompactBulkReader<T> implements CompactReader<T> {
                                     splitId,
                                     context.getPath(),
                                     0,
-                                    fileStatus.getLen(),
+                                    fileStatus.getLength(),
                                     fileStatus.getModificationTime(),
-                                    fileStatus.getLen())));
+                                    fileStatus.getLength())));
         }
     }
 }

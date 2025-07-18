@@ -138,10 +138,10 @@ class LocalFileSystemTest {
         assertThat(testbytestest).containsExactly(testbytes);
 
         // does lfs see the correct file length?
-        assertThat(testfile1).hasSize(lfs.getFileStatus(pathtotestfile1).getLen());
+        assertThat(testfile1).hasSize(lfs.getFileStatus(pathtotestfile1).getLength());
 
         // as well, when we call the listStatus (that is intended for directories?)
-        assertThat(testfile1).hasSize(lfs.listStatus(pathtotestfile1)[0].getLen());
+        assertThat(testfile1).hasSize(lfs.listStatus(pathtotestfile1)[0].getLength());
 
         // test that lfs can read files properly
         final FileOutputStream fosfile2 = new FileOutputStream(testfile2);

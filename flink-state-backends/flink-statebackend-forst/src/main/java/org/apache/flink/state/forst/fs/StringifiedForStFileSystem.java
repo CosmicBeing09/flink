@@ -30,10 +30,10 @@ import java.util.Arrays;
  */
 public class StringifiedForStFileSystem {
 
-    private ForStFlinkFileSystem fileSystem;
+    private ForStFlinkFileSystem underlyingFlinkFileSystem;
 
-    public StringifiedForStFileSystem(ForStFlinkFileSystem fileSystem) {
-        this.fileSystem = fileSystem;
+    public StringifiedForStFileSystem(ForStFlinkFileSystem underlyingFlinkFileSystem) {
+        this.underlyingFlinkFileSystem = underlyingFlinkFileSystem;
     }
 
     public static StringifiedForStFileSystem get(String uri) throws IOException {
@@ -41,40 +41,40 @@ public class StringifiedForStFileSystem {
     }
 
     public boolean exists(final String path) throws IOException {
-        return fileSystem.exists(new Path(path));
+        return underlyingFlinkFileSystem.exists(new Path(path));
     }
 
     public ForStFileStatus getFileStatus(String path) throws IOException {
-        return new ForStFileStatus(fileSystem.getFileStatus(new Path(path)));
+        return new ForStFileStatus(underlyingFlinkFileSystem.getFileStatus(new Path(path)));
     }
 
     public ForStFileStatus[] listStatus(String path) throws IOException {
-        return Arrays.stream(fileSystem.listStatus(new Path(path)))
+        return Arrays.stream(underlyingFlinkFileSystem.listStatus(new Path(path)))
                 .map(ForStFileStatus::new)
                 .toArray(ForStFileStatus[]::new);
     }
 
     public boolean delete(String path, boolean recursive) throws IOException {
-        return fileSystem.delete(new Path(path), recursive);
+        return underlyingFlinkFileSystem.delete(new Path(path), recursive);
     }
 
     public boolean mkdirs(String path) throws IOException {
-        return fileSystem.mkdirs(new Path(path));
+        return underlyingFlinkFileSystem.mkdirs(new Path(path));
     }
 
     public boolean rename(String src, String dst) throws IOException {
-        return fileSystem.rename(new Path(src), new Path(dst));
+        return underlyingFlinkFileSystem.rename(new Path(src), new Path(dst));
     }
 
     public ByteBufferReadableFSDataInputStream open(String path) throws IOException {
-        return fileSystem.open(new Path(path));
+        return underlyingFlinkFileSystem.open(new Path(path));
     }
 
     public ByteBufferWritableFSDataOutputStream create(String path) throws IOException {
-        return fileSystem.create(new Path(path));
+        return underlyingFlinkFileSystem.create(new Path(path));
     }
 
     public int link(String src, String dst) throws IOException {
-        return fileSystem.link(new Path(src), new Path(dst));
+        return underlyingFlinkFileSystem.link(new Path(src), new Path(dst));
     }
 }

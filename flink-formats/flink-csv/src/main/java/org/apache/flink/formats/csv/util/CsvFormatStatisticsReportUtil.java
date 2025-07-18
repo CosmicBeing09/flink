@@ -51,7 +51,7 @@ public class CsvFormatStatisticsReportUtil {
             for (Path file : files) {
                 FileSystem fs = FileSystem.get(file.toUri());
                 FileStatus status = fs.getFileStatus(file);
-                totalFileSize += status.getLen();
+                totalFileSize += status.getLength();
 
                 // sample the line size
                 if (sampledRowCnt < totalSampleLineCnt) {

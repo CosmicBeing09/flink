@@ -216,7 +216,7 @@ class ParquetColumnarRowSplitReaderTest {
         Path testPath = createTempParquetFile(tmpDir, records, rowGroupSize);
         ParquetColumnarRowSplitReader reader =
                 createReader(
-                        testPath, 0, testPath.getFileSystem().getFileStatus(testPath).getLen());
+                        testPath, 0, testPath.getFileSystem().getFileStatus(testPath).getLength());
         while (!reader.reachedEnd()) {
             reader.nextRecord();
         }
@@ -248,7 +248,7 @@ class ParquetColumnarRowSplitReaderTest {
         Path testPath = createTempParquetFile(tmpDir, records, rowGroupSize);
 
         // test reading and splitting
-        long fileLen = testPath.getFileSystem().getFileStatus(testPath).getLen();
+        long fileLen = testPath.getFileSystem().getFileStatus(testPath).getLength();
         int len1 = readSplitAndCheck(0, 0, testPath, 0, fileLen / 3, values);
         int len2 = readSplitAndCheck(len1, 0, testPath, fileLen / 3, fileLen * 2 / 3, values);
         int len3 =
@@ -667,7 +667,7 @@ class ParquetColumnarRowSplitReaderTest {
                         1000,
                         new org.apache.hadoop.fs.Path(path.getPath()),
                         0,
-                        path.getFileSystem().getFileStatus(path).getLen());
+                        path.getFileSystem().getFileStatus(path).getLength());
 
         List<Row> results = new ArrayList<>(1000);
         while (!reader.reachedEnd()) {

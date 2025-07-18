@@ -167,7 +167,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CoordinatorOutput
         Function<Path, Long> sizeFunc =
                 path -> {
                     try {
-                        return fileSystem.getFileStatus(path).getLen();
+                        return fileSystem.getFileStatus(path).getLength();
                     } catch (IOException e) {
                         throw new UncheckedIOException(e);
                     }

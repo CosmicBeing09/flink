@@ -135,7 +135,7 @@ public abstract class AbstractAvroBulkFormat<A, T, SplitT extends FileSourceSpli
             DatumReader<A> datumReader = new GenericDatumReader<>(null, readerSchema);
             SeekableInput in =
                     new FSDataInputStreamWrapper(
-                            fileSystem.open(path), fileSystem.getFileStatus(path).getLen());
+                            fileSystem.open(path), fileSystem.getFileStatus(path).getLength());
             return (DataFileReader<A>) DataFileReader.openReader(in, datumReader);
         }
 

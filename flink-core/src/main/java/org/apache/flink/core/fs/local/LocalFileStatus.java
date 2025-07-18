@@ -66,7 +66,7 @@ public class LocalFileStatus implements LocatedFileStatus {
     }
 
     @Override
-    public long getLen() {
+    public long getLength() {
         return this.len;
     }
 
@@ -76,7 +76,7 @@ public class LocalFileStatus implements LocatedFileStatus {
     }
 
     @Override
-    public short getReplication() {
+    public short getReplicationFactor() {
         return 1; // For local files replication is always 1
     }
 

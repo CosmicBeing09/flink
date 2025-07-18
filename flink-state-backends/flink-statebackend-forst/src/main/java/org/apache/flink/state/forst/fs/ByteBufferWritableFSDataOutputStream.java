@@ -70,11 +70,11 @@ public class ByteBufferWritableFSDataOutputStream extends FSDataOutputStream {
         if (bb.hasArray()) {
             write(bb.array(), bb.arrayOffset() + bb.position(), bb.remaining());
         } else if (bb.isDirect()) {
-            int len = bb.remaining();
-            int segment = Math.min(len, SEGMENT_BUFFER_SIZE);
-            byte[] bytes = new byte[segment];
-            for (int i = 0; i < len; ) {
-                int copy = Math.min(segment, bb.remaining());
+            int remainingBytes = bb.remaining();
+            int chunkSize = Math.min(remainingBytes, SEGMENT_BUFFER_SIZE);
+            byte[] bytes = new byte[chunkSize];
+            for (int i = 0; i < remainingBytes; ) {
+                int copy = Math.min(chunkSize, bb.remaining());
                 UNSAFE.copyMemory(
                         null,
                         MemoryUtils.getByteBufferAddress(bb) + bb.position(),

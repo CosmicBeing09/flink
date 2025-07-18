@@ -62,7 +62,7 @@ public class FileInputFormatCompactReader<T> implements CompactReader<T> {
 
         @Override
         public CompactReader<T> create(CompactContext context) throws IOException {
-            long len = context.getFileSystem().getFileStatus(context.getPath()).getLen();
+            long len = context.getFileSystem().getFileStatus(context.getPath()).getLength();
             format.open(new FileInputSplit(0, context.getPath(), 0, len, null));
             return new FileInputFormatCompactReader<>(format);
         }

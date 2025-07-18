@@ -231,7 +231,7 @@ public class HiveTableMetaStoreFactory implements TableMetaStoreFactory {
                     for (FileStatus fileStatus :
                             listDataFileRecursively(fileSystemFactory.create(path.toUri()), path)) {
                         numFiles += 1;
-                        fileSize += fileStatus.getLen();
+                        fileSize += fileStatus.getLength();
                     }
                     statistic.put(StatsSetupConst.TOTAL_SIZE, String.valueOf(fileSize));
                     statistic.put(StatsSetupConst.NUM_FILES, String.valueOf(numFiles));
@@ -380,7 +380,7 @@ public class HiveTableMetaStoreFactory implements TableMetaStoreFactory {
             return new CatalogTableStatistics(
                     serDeStats.getRowCount(),
                     1,
-                    fileStatus.getLen(),
+                    fileStatus.getLength(),
                     statsRR.getStats().getRawDataSize());
         }
     }

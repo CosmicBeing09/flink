@@ -494,7 +494,7 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
         } else {
             files.add(file);
             testForUnsplittable(file);
-            totalLength += file.getLen();
+            totalLength += file.getLength();
         }
 
         // check the modification time stamp
@@ -555,7 +555,7 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
                 testForUnsplittable(pathFile);
 
                 files.add(pathFile);
-                totalLength += pathFile.getLen();
+                totalLength += pathFile.getLength();
             }
         }
 
@@ -564,12 +564,12 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
             int splitNum = 0;
             for (final FileStatus file : files) {
                 final FileSystem fs = file.getPath().getFileSystem();
-                final BlockLocation[] blocks = fs.getFileBlockLocations(file, 0, file.getLen());
+                final BlockLocation[] blocks = fs.getFileBlockLocations(file, 0, file.getLength());
                 Set<String> hosts = new HashSet<String>();
                 for (BlockLocation block : blocks) {
                     hosts.addAll(Arrays.asList(block.getHosts()));
                 }
-                long len = file.getLen();
+                long len = file.getLength();
                 if (testForUnsplittable(file)) {
                     len = READ_WHOLE_SPLIT_FLAG;
                 }
@@ -593,7 +593,7 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
         for (final FileStatus file : files) {
 
             final FileSystem fs = file.getPath().getFileSystem();
-            final long len = file.getLen();
+            final long len = file.getLength();
             final long blockSize = file.getBlockSize();
 
             final long minSplitSize;
@@ -702,7 +702,7 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
             } else {
                 if (acceptFile(dir)) {
                     files.add(dir);
-                    length += dir.getLen();
+                    length += dir.getLength();
                     testForUnsplittable(dir);
                 } else {
                     if (logExcludedFiles && LOG.isDebugEnabled()) {

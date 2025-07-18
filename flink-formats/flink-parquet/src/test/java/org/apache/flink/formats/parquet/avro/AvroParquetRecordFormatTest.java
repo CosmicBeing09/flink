@@ -120,7 +120,7 @@ class AvroParquetRecordFormatTest {
                         new Configuration(),
                         addressPath,
                         0,
-                        addressPath.getFileSystem().getFileStatus(addressPath).getLen());
+                        addressPath.getFileSystem().getFileStatus(addressPath).getLength());
         for (Address expected : addressRecords) {
             Address address = Objects.requireNonNull(reader.read());
             assertThat(address).isEqualTo(expected);
@@ -135,7 +135,7 @@ class AvroParquetRecordFormatTest {
                         new Configuration(),
                         datumPath,
                         0,
-                        datumPath.getFileSystem().getFileStatus(datumPath).getLen());
+                        datumPath.getFileSystem().getFileStatus(datumPath).getLength());
         for (Datum expected : datumRecords) {
             assertThat(reader.read()).isNotNull().isEqualTo(expected);
         }
@@ -149,7 +149,7 @@ class AvroParquetRecordFormatTest {
                         new Configuration(),
                         userPath,
                         0,
-                        userPath.getFileSystem().getFileStatus(userPath).getLen());
+                        userPath.getFileSystem().getFileStatus(userPath).getLength());
         for (GenericRecord expected : userRecords) {
             assertUserEquals(reader.read(), expected);
         }
@@ -163,7 +163,7 @@ class AvroParquetRecordFormatTest {
                         new Configuration(),
                         userPath,
                         0,
-                        userPath.getFileSystem().getFileStatus(userPath).getLen());
+                        userPath.getFileSystem().getFileStatus(userPath).getLength());
         for (GenericRecord expected : userRecords) {
             assertUserEquals(reader.read(), expected);
         }
@@ -193,7 +193,7 @@ class AvroParquetRecordFormatTest {
                                         userPath,
                                         10,
                                         0,
-                                        userPath.getFileSystem().getFileStatus(userPath).getLen()))
+                                        userPath.getFileSystem().getFileStatus(userPath).getLength()))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -206,7 +206,7 @@ class AvroParquetRecordFormatTest {
                         userPath,
                         CheckpointedPosition.NO_OFFSET,
                         0,
-                        userPath.getFileSystem().getFileStatus(userPath).getLen());
+                        userPath.getFileSystem().getFileStatus(userPath).getLength());
         for (GenericRecord expected : userRecords) {
             assertUserEquals(reader.read(), expected);
         }
@@ -263,11 +263,11 @@ class AvroParquetRecordFormatTest {
             inputStream.seek(splitOffset);
         } else {
             inputStream.seek(0);
-            checkArgument(splitLength == fileStatus.getLen());
+            checkArgument(splitLength == fileStatus.getLength());
         }
 
         return format.createReader(
-                config, inputStream, fileStatus.getLen(), splitOffset + splitLength);
+                config, inputStream, fileStatus.getLength(), splitOffset + splitLength);
     }
 
     private <T> StreamFormat.Reader<T> restoreReader(
@@ -287,14 +287,14 @@ class AvroParquetRecordFormatTest {
             inputStream.seek(splitOffset);
         } else {
             inputStream.seek(0);
-            checkArgument(splitLength == fileStatus.getLen());
+            checkArgument(splitLength == fileStatus.getLength());
         }
 
         return format.restoreReader(
                 config,
                 inputStream,
                 restoredOffset,
-                fileStatus.getLen(),
+                fileStatus.getLength(),
                 splitOffset + splitLength);
     }
 

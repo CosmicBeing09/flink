@@ -33,7 +33,7 @@ public class ForStFileStatus {
     }
 
     public long getLen() {
-        return fileStatus.getLen();
+        return fileStatus.getLength();
     }
 
     public long getBlockSize() {
@@ -41,7 +41,7 @@ public class ForStFileStatus {
     }
 
     public short getReplication() {
-        return fileStatus.getReplication();
+        return fileStatus.getReplicationFactor();
     }
 
     public long getModificationTime() {

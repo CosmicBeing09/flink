@@ -738,7 +738,7 @@ class LimitedConnectionsFileSystemTest {
                 assertThat(fs.getTotalNumberOfOpenStreams())
                         .isLessThanOrEqualTo(maxConcurrentStreamsTotal);
 
-                final byte[] readBuffer = new byte[(int) fs.getFileStatus(path).getLen() - 1];
+                final byte[] readBuffer = new byte[(int) fs.getFileStatus(path).getLength() - 1];
                 assertThat(stream.read(readBuffer) != -1).isTrue();
 
                 waitTillWokenUp();

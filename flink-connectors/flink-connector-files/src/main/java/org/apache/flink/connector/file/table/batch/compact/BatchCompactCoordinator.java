@@ -137,7 +137,7 @@ public class BatchCompactCoordinator extends AbstractStreamOperator<CoordinatorO
     private Map<Path, Long> getFilesSize(FileSystem fs, List<Path> paths) throws IOException {
         Map<Path, Long> filesSize = new HashMap<>();
         for (Path path : paths) {
-            long len = fs.getFileStatus(path).getLen();
+            long len = fs.getFileStatus(path).getLength();
             filesSize.put(path, len);
         }
         return filesSize;

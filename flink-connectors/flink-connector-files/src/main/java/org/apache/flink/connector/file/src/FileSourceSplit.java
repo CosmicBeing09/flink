@@ -71,7 +71,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
     /** The modification time of the file, from {@link FileStatus#getModificationTime()}. */
     private final long fileModificationTime;
 
-    /** The file size in bytes, from {@link FileStatus#getLen()}. */
+    /** The file size in bytes, from {@link FileStatus#getLength()}. */
     private final long fileSize;
 
     /**
@@ -224,7 +224,7 @@ public class FileSourceSplit implements SourceSplit, Serializable {
         return fileModificationTime;
     }
 
-    /** Returns the full file size in bytes, from {@link FileStatus#getLen()}. */
+    /** Returns the full file size in bytes, from {@link FileStatus#getLength()}. */
     public long fileSize() {
         return fileSize;
     }

@@ -87,7 +87,7 @@ public class FileMonitoringFunction implements SourceFunction<Tuple3<String, Lon
                     offsetOfFiles.put(filePath, -1L);
                 } else if (watchType == WatchType.PROCESS_ONLY_APPENDED) {
                     long offset = 0;
-                    long fileSize = fileSystem.getFileStatus(new Path(filePath)).getLen();
+                    long fileSize = fileSystem.getFileStatus(new Path(filePath)).getLength();
                     if (offsetOfFiles.containsKey(filePath)) {
                         offset = offsetOfFiles.get(filePath);
                     }

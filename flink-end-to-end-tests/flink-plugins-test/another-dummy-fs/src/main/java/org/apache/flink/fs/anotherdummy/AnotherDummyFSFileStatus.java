@@ -31,7 +31,7 @@ class AnotherDummyFSFileStatus implements FileStatus {
     }
 
     @Override
-    public long getLen() {
+    public long getLength() {
         return length;
     }
 
@@ -41,7 +41,7 @@ class AnotherDummyFSFileStatus implements FileStatus {
     }
 
     @Override
-    public short getReplication() {
+    public short getReplicationFactor() {
         return 0;
     }
 

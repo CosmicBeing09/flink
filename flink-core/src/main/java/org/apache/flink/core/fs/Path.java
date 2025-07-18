@@ -61,10 +61,10 @@ public class Path implements Serializable {
     public static final String CUR_DIR = ".";
 
     /** A pre-compiled regex/state-machine to match the windows drive pattern. */
-    private static final Pattern WINDOWS_ROOT_DIR_REGEX = Pattern.compile("/\\p{Alpha}+:/");
+    private static final Pattern WINDOWS_DRIVE_ROOT_PATTERN = Pattern.compile("/\\p{Alpha}+:/");
 
     /** A pre-compiled regex to identify duplicate consecutive slashes. */
-    private static final Pattern DUPLICATE_CONSECUTIVE_SLASHES = Pattern.compile("/{2,}");
+    private static final Pattern DUPLICATE_SLASH_PATTERN = Pattern.compile("/{2,}");
 
     /** The internal representation of the path, a hierarchical URI. */
     private URI uri;
@@ -249,14 +249,14 @@ public class Path implements Serializable {
         // remove consecutive slashes & backslashes
         path = path.replace("\\", "/");
         if (path.contains("//")) {
-            path = DUPLICATE_CONSECUTIVE_SLASHES.matcher(path).replaceAll("/");
+            path = DUPLICATE_SLASH_PATTERN.matcher(path).replaceAll("/");
         }
 
         // remove tailing separator
         if (path.endsWith(SEPARATOR)
                 && !path.equals(SEPARATOR)
                 && // UNIX root path
-                !WINDOWS_ROOT_DIR_REGEX.matcher(path).matches()) { // Windows root path)
+                !WINDOWS_DRIVE_ROOT_PATTERN.matcher(path).matches()) { // Windows root path)
 
             // remove tailing slash
             path = path.substring(0, path.length() - SEPARATOR.length());

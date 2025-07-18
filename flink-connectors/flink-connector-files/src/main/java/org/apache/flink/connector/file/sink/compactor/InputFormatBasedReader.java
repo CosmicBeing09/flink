@@ -42,7 +42,7 @@ public class InputFormatBasedReader<T> implements RecordWiseFileCompactor.Reader
     }
 
     private void open() throws IOException {
-        long len = path.getFileSystem().getFileStatus(path).getLen();
+        long len = path.getFileSystem().getFileStatus(path).getLength();
         inputFormat.open(new FileInputSplit(0, path, 0, len, null));
     }
 
