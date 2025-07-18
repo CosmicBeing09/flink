@@ -93,11 +93,11 @@ public class FileCacheDirectoriesTest {
                                 new ByteArrayInputStream(
                                         testFileContent.getBytes(StandardCharsets.UTF_8)),
                                 containedFile);
-                        Path zipPath =
+                        Path remoteZipPath =
                                 FileUtils.compressDirectory(
                                         new Path(directory.toString()),
                                         new Path(directory + ".zip"));
-                        return new File(zipPath.getPath());
+                        return new File(remoteZipPath.getPath());
                     } else {
                         throw new IllegalArgumentException(
                                 "This service contains only entry for " + permanentBlobKey);
@@ -168,10 +168,10 @@ public class FileCacheDirectoriesTest {
         Future<Path> copyResult = fileCache.createTmpFile(fileName, entry, jobID, attemptID1);
         fileCache.createTmpFile(fileName, entry, jobID, attemptID2);
 
-        final Path dstPath = copyResult.get();
-        final FileSystem fs = dstPath.getFileSystem();
-        final FileStatus fileStatus = fs.getFileStatus(dstPath);
-        final Path cacheFile = new Path(dstPath, "cacheFile");
+        final Path localCacheDir = copyResult.get();
+        final FileSystem fs = localCacheDir.getFileSystem();
+        final FileStatus fileStatus = fs.getFileStatus(localCacheDir);
+        final Path cacheFile = new Path(localCacheDir, "cacheFile");
         assertTrue(fileStatus.isDir());
         assertTrue(fs.exists(cacheFile));
 
@@ -189,7 +189,7 @@ public class FileCacheDirectoriesTest {
         assertEquals(CLEANUP_INTERVAL, executorService.lastDelayMillis);
         executorService.lastDeleteProcess.run();
 
-        assertFalse(fs.exists(dstPath));
+        assertFalse(fs.exists(localCacheDir));
         assertFalse(fs.exists(cacheFile));
     }
 
