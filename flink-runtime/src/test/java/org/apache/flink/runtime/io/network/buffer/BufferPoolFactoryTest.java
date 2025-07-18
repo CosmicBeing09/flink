@@ -438,7 +438,7 @@ class BufferPoolFactoryTest {
     }
 
     @Test
-    void testRedistributeBuffersByExpected() throws IOException {
+    void testRedistributeBuffersByRequired() throws IOException {
         final int numBuffers = 32;
         try (CloseableRegistry closeableRegistry = new CloseableRegistry()) {
             NetworkBufferPool globalPool = new NetworkBufferPool(numBuffers, 128);
