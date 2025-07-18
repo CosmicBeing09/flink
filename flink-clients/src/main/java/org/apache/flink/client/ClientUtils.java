@@ -169,7 +169,7 @@ public enum ClientUtils {
                         + "should be less than the heartbeat timeout. Please adjust the param '"
                         + ClientOptions.CLIENT_HEARTBEAT_INTERVAL
                         + "' or '"
-                        + ClientOptions.CLIENT_HEARTBEAT_TIMEOUT
+                        + ClientOptions.CLIENT_HEARTBEAT_TIMEOUT_DURATION
                         + "'");
 
         JobID jobID = jobClient.getJobID();
