@@ -42,8 +42,8 @@ import static org.apache.flink.table.expressions.ApiExpressionUtils.unresolvedCa
 final class ReferenceResolverRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
                 .map(expr -> expr.accept(new ExpressionResolverVisitor(context)))
                 .collect(Collectors.toList());
     }

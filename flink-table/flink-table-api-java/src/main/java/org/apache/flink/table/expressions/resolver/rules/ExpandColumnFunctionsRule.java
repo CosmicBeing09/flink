@@ -51,7 +51,7 @@ import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.WITH_C
 final class ExpandColumnFunctionsRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         final List<ColumnExpansionStrategy> strategies =
                 context.configuration().get(TableConfigOptions.TABLE_COLUMN_EXPANSION_STRATEGY);
 
@@ -61,7 +61,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
                                 .map(p -> unresolvedRef(p.getName()))
                                 .collect(Collectors.toList()));
 
-        return expression.stream()
+        return inputExpressions.stream()
                 .flatMap(expr -> expr.accept(columnFunctionsExpander).stream())
                 .collect(Collectors.toList());
     }

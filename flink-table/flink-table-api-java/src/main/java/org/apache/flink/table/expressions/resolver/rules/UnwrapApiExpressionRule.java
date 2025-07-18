@@ -30,8 +30,8 @@ import java.util.stream.Collectors;
 @Internal
 final class UnwrapApiExpressionRule implements ResolverRule {
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
                 .map(ApiExpressionUtils::unwrapFromApi)
                 .collect(Collectors.toList());
     }
