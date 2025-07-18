@@ -276,30 +276,30 @@ public class Execution
      * Tries to assign the given slot to the execution. The assignment works only if the Execution
      * is in state SCHEDULED. Returns true, if the resource could be assigned.
      *
-     * @param logicalSlot to assign to this execution
+     * @param assignedLogicalSlot to assign to this execution
      * @return true if the slot could be assigned to the execution, otherwise false
      */
-    public boolean tryAssignResource(final LogicalSlot logicalSlot) {
+    public boolean tryAssignResource(final LogicalSlot assignedLogicalSlot) {
 
         assertRunningInJobMasterMainThread();
 
-        checkNotNull(logicalSlot);
+        checkNotNull(assignedLogicalSlot);
 
         // only allow to set the assigned resource in state SCHEDULED or CREATED
         // note: we also accept resource assignment when being in state CREATED for testing purposes
         if (state == SCHEDULED || state == CREATED) {
             if (assignedResource == null) {
-                assignedResource = logicalSlot;
-                if (logicalSlot.tryAssignPayload(this)) {
+                assignedResource = assignedLogicalSlot;
+                if (assignedLogicalSlot.tryAssignPayload(this)) {
                     // check for concurrent modification (e.g. cancelling call)
                     if ((state == SCHEDULED || state == CREATED)
                             && !taskManagerLocationFuture.isDone()) {
-                        taskManagerLocationFuture.complete(logicalSlot.getTaskManagerLocation());
-                        assignedAllocationID = logicalSlot.getAllocationId();
+                        taskManagerLocationFuture.complete(assignedLogicalSlot.getTaskManagerLocation());
+                        assignedAllocationID = assignedLogicalSlot.getAllocationId();
                         getVertex()
                                 .setLatestPriorSlotAllocation(
                                         assignedResource.getTaskManagerLocation(),
-                                        logicalSlot.getAllocationId());
+                                        assignedLogicalSlot.getAllocationId());
                         return true;
                     } else {
                         // free assigned resource and return false
@@ -321,8 +321,9 @@ public class Execution
     }
 
     public Optional<InputSplit> getNextInputSplit() {
-        final LogicalSlot slot = this.getAssignedResource();
-        final String host = slot != null ? slot.getTaskManagerLocation().getHostname() : null;
+        final LogicalSlot assignedLogicalSlot = this.getAssignedResource();
+        final String host = assignedLogicalSlot != null ? assignedLogicalSlot
+                .getTaskManagerLocation().getHostname() : null;
         return this.vertex.getNextInputSplit(host, getAttemptNumber());
     }
 
