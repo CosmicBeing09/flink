@@ -113,18 +113,18 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         @Override
-        public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCall) {
+        public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCallExpr) {
             final FunctionDefinition functionDefinition;
             // clean functions that were not registered in a catalog
-            if (unresolvedCall.getFunctionIdentifier().isEmpty()) {
+            if (unresolvedCallExpr.getFunctionIdentifier().isEmpty()) {
                 functionDefinition =
-                        prepareInlineUserDefinedFunction(unresolvedCall.getFunctionDefinition());
+                        prepareInlineUserDefinedFunction(unresolvedCallExpr.getFunctionDefinition());
             } else {
-                functionDefinition = unresolvedCall.getFunctionDefinition();
+                functionDefinition = unresolvedCallExpr.getFunctionDefinition();
             }
 
             final String functionName =
-                    unresolvedCall
+                    unresolvedCallExpr
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
                             .orElseGet(functionDefinition::toString);
@@ -134,7 +134,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             // Reorder named arguments and add replacements for optional ones
             final UnresolvedCallExpression adaptedCall =
                     executeAssignment(functionName,
-                            functionDefinition, typeInference, unresolvedCall);
+                            functionDefinition, typeInference, unresolvedCallExpr);
 
             // resolve the children with information from the current call
             final List<ResolvedExpression> resolvedArgs = new ArrayList<>();

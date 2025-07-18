@@ -79,21 +79,21 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public List<Expression> visit(UnresolvedCallExpression unresolvedCall) {
+        public List<Expression> visit(UnresolvedCallExpression unresolvedCallExpr) {
 
             List<Expression> result;
 
-            final FunctionDefinition definition = unresolvedCall.getFunctionDefinition();
+            final FunctionDefinition definition = unresolvedCallExpr.getFunctionDefinition();
             if (definition == WITH_COLUMNS) {
-                result = resolveArgsOfColumns(unresolvedCall.getChildren(), false);
+                result = resolveArgsOfColumns(unresolvedCallExpr.getChildren(), false);
             } else if (definition == WITHOUT_COLUMNS) {
-                result = resolveArgsOfColumns(unresolvedCall.getChildren(), true);
+                result = resolveArgsOfColumns(unresolvedCallExpr.getChildren(), true);
             } else {
                 List<Expression> args =
-                        unresolvedCall.getChildren().stream()
+                        unresolvedCallExpr.getChildren().stream()
                                 .flatMap(c -> c.accept(this).stream())
                                 .collect(Collectors.toList());
-                result = Collections.singletonList(unresolvedCall.replaceArgs(args));
+                result = Collections.singletonList(unresolvedCallExpr.replaceArgs(args));
 
                 // validate alias
                 if (definition == AS) {
@@ -176,18 +176,18 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public List<UnresolvedReferenceExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            if (isIndexRangeCall(unresolvedCall)) {
+        public List<UnresolvedReferenceExpression> visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (isIndexRangeCall(unresolvedCallExpr)) {
                 int start =
                         ExpressionUtils.extractValue(
-                                        unresolvedCall.getChildren().get(0), Integer.class)
+                                        unresolvedCallExpr.getChildren().get(0), Integer.class)
                                 .orElseThrow(
                                         () ->
                                                 new ValidationException(
                                                         "Constant integer value expected."));
                 int end =
                         ExpressionUtils.extractValue(
-                                        unresolvedCall.getChildren().get(1), Integer.class)
+                                        unresolvedCallExpr.getChildren().get(1), Integer.class)
                                 .orElseThrow(
                                         () ->
                                                 new ValidationException(
@@ -200,12 +200,12 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
 
                 return inputFieldReferences.subList(start - 1, end);
 
-            } else if (isNameRangeCall(unresolvedCall)) {
+            } else if (isNameRangeCall(unresolvedCallExpr)) {
                 String startName =
-                        ((UnresolvedReferenceExpression) unresolvedCall.getChildren().get(0))
+                        ((UnresolvedReferenceExpression) unresolvedCallExpr.getChildren().get(0))
                                 .getName();
                 String endName =
-                        ((UnresolvedReferenceExpression) unresolvedCall.getChildren().get(1))
+                        ((UnresolvedReferenceExpression) unresolvedCallExpr.getChildren().get(1))
                                 .getName();
 
                 int start = indexOfName(inputFieldReferences, startName);
@@ -221,7 +221,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
 
                 return inputFieldReferences.subList(start, end + 1);
             } else {
-                return defaultMethod(unresolvedCall);
+                return defaultMethod(unresolvedCallExpr);
             }
         }
 

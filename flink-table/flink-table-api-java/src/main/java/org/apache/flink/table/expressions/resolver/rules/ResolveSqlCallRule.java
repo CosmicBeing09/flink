@@ -89,8 +89,8 @@ final class ResolveSqlCallRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
-            return unresolvedCall.replaceArgs(resolveChildren(unresolvedCall.getChildren()));
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
+            return unresolvedCallExpr.replaceArgs(resolveChildren(unresolvedCallExpr.getChildren()));
         }
 
         @Override

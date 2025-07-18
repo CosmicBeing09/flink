@@ -51,25 +51,25 @@ final class QualifyBuiltInFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition = unresolvedCall.getFunctionDefinition();
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
+            final FunctionDefinition definition = unresolvedCallExpr.getFunctionDefinition();
 
             final List<Expression> args =
-                    unresolvedCall.getChildren().stream()
+                    unresolvedCallExpr.getChildren().stream()
                             .map(c -> c.accept(this))
                             .collect(Collectors.toList());
 
-            if (!unresolvedCall.getFunctionIdentifier().isPresent()
+            if (!unresolvedCallExpr.getFunctionIdentifier().isPresent()
                     && definition instanceof BuiltInFunctionDefinition) {
                 final ContextResolvedFunction resolvedFunction =
                         resolutionContext
                                 .functionLookup()
                                 .lookupBuiltInFunction(
                                         ((BuiltInFunctionDefinition)
-                                                unresolvedCall.getFunctionDefinition()));
+                                                unresolvedCallExpr.getFunctionDefinition()));
                 return ApiExpressionUtils.unresolvedCall(resolvedFunction, args);
             }
-            return unresolvedCall.replaceArgs(args);
+            return unresolvedCallExpr.replaceArgs(args);
         }
 
         @Override

@@ -139,14 +139,14 @@ public class OperationExpressionsUtils {
         }
 
         @Override
-        public Void visit(UnresolvedCallExpression unresolvedCall) {
-            FunctionDefinition functionDefinition = unresolvedCall.getFunctionDefinition();
-            if (isFunctionOfKind(unresolvedCall, AGGREGATE)) {
-                aggregates.computeIfAbsent(unresolvedCall, expr -> "EXPR$" + uniqueId++);
+        public Void visit(UnresolvedCallExpression unresolvedCallExpr) {
+            FunctionDefinition functionDefinition = unresolvedCallExpr.getFunctionDefinition();
+            if (isFunctionOfKind(unresolvedCallExpr, AGGREGATE)) {
+                aggregates.computeIfAbsent(unresolvedCallExpr, expr -> "EXPR$" + uniqueId++);
             } else if (WINDOW_PROPERTIES.contains(functionDefinition)) {
-                properties.computeIfAbsent(unresolvedCall, expr -> "EXPR$" + uniqueId++);
+                properties.computeIfAbsent(unresolvedCallExpr, expr -> "EXPR$" + uniqueId++);
             } else {
-                unresolvedCall.getChildren().forEach(c -> c.accept(this));
+                unresolvedCallExpr.getChildren().forEach(c -> c.accept(this));
             }
             return null;
         }
@@ -181,18 +181,18 @@ public class OperationExpressionsUtils {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
-            if (aggregates.get(unresolvedCall) != null) {
-                return unresolvedRef(aggregates.get(unresolvedCall));
-            } else if (properties.get(unresolvedCall) != null) {
-                return unresolvedRef(properties.get(unresolvedCall));
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (aggregates.get(unresolvedCallExpr) != null) {
+                return unresolvedRef(aggregates.get(unresolvedCallExpr));
+            } else if (properties.get(unresolvedCallExpr) != null) {
+                return unresolvedRef(properties.get(unresolvedCallExpr));
             }
 
             final List<Expression> args =
-                    unresolvedCall.getChildren().stream()
+                    unresolvedCallExpr.getChildren().stream()
                             .map(c -> c.accept(this))
                             .collect(Collectors.toList());
-            return unresolvedCall.replaceArgs(args);
+            return unresolvedCallExpr.replaceArgs(args);
         }
 
         @Override
@@ -251,9 +251,9 @@ public class OperationExpressionsUtils {
         }
 
         @Override
-        public Optional<String> visit(UnresolvedCallExpression unresolvedCall) {
-            if (unresolvedCall.getFunctionDefinition() == AS) {
-                return extractValue(unresolvedCall.getChildren().get(1), String.class);
+        public Optional<String> visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (unresolvedCallExpr.getFunctionDefinition() == AS) {
+                return extractValue(unresolvedCallExpr.getChildren().get(1), String.class);
             } else {
                 return Optional.empty();
             }

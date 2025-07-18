@@ -68,12 +68,12 @@ final class StarReferenceFlatteningRule implements ResolverRule {
         }
 
         @Override
-        public List<Expression> visit(UnresolvedCallExpression unresolvedCall) {
+        public List<Expression> visit(UnresolvedCallExpression unresolvedCallExpr) {
             final List<Expression> newArgs =
-                    unresolvedCall.getChildren().stream()
+                    unresolvedCallExpr.getChildren().stream()
                             .flatMap(e -> e.accept(this).stream())
                             .collect(Collectors.toList());
-            return singletonList(unresolvedCall.replaceArgs(newArgs));
+            return singletonList(unresolvedCallExpr.replaceArgs(newArgs));
         }
 
         @Override

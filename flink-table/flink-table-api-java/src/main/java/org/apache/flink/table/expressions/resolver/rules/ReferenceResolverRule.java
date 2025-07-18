@@ -55,13 +55,13 @@ final class ReferenceResolverRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
             final List<Expression> resolvedArgs =
-                    unresolvedCall.getChildren().stream()
+                    unresolvedCallExpr.getChildren().stream()
                             .map(childExpression -> childExpression.accept(this))
                             .collect(Collectors.toList());
 
-            return unresolvedCall.replaceArgs(resolvedArgs);
+            return unresolvedCallExpr.replaceArgs(resolvedArgs);
         }
 
         @Override

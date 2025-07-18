@@ -62,10 +62,10 @@ final class OverWindowResolverRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
 
-            if (unresolvedCall.getFunctionDefinition() == BuiltInFunctionDefinitions.OVER) {
-                List<Expression> children = unresolvedCall.getChildren();
+            if (unresolvedCallExpr.getFunctionDefinition() == BuiltInFunctionDefinitions.OVER) {
+                List<Expression> children = unresolvedCallExpr.getChildren();
                 Expression alias = children.get(1);
 
                 LocalOverWindow referenceWindow =
@@ -102,10 +102,10 @@ final class OverWindowResolverRule implements ResolverRule {
 
                 newArgs.addAll(referenceWindow.getPartitionBy());
 
-                return unresolvedCall.replaceArgs(newArgs);
+                return unresolvedCallExpr.replaceArgs(newArgs);
             } else {
-                return unresolvedCall.replaceArgs(
-                        unresolvedCall.getChildren().stream()
+                return unresolvedCallExpr.replaceArgs(
+                        unresolvedCallExpr.getChildren().stream()
                                 .map(expr -> expr.accept(this))
                                 .collect(Collectors.toList()));
             }
