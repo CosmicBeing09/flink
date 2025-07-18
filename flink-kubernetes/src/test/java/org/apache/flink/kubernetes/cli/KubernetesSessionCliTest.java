@@ -21,7 +21,7 @@ package org.apache.flink.kubernetes.cli;
 import org.apache.flink.client.cli.CliArgsException;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientServiceLoader;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.DefaultClusterClientServiceLoader;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
@@ -102,7 +102,7 @@ class KubernetesSessionCliTest {
 
         final Configuration executorConfig = cli.getEffectiveConfiguration(params);
         final ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         // each task manager has 3 slots but the parallelism is 7. Thus the slots should be
@@ -130,7 +130,7 @@ class KubernetesSessionCliTest {
 
     /**
      * Tests that the command line arguments override the configuration settings when the {@link
-     * ClusterSpecification} is created.
+     * StreamingClusterSpecification} is created.
      */
     @Test
     void testCommandLineClusterSpecification() throws Exception {
@@ -158,7 +158,7 @@ class KubernetesSessionCliTest {
 
         Configuration executorConfig = cli.getEffectiveConfiguration(args);
         ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        ClusterSpecification clusterSpecification =
+        StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(jobManagerMemory);
@@ -167,7 +167,7 @@ class KubernetesSessionCliTest {
     }
 
     /**
-     * Tests that the configuration settings are used to create the {@link ClusterSpecification}.
+     * Tests that the configuration settings are used to create the {@link StreamingClusterSpecification}.
      */
     @Test
     void testConfigurationClusterSpecification() throws Exception {
@@ -187,7 +187,7 @@ class KubernetesSessionCliTest {
 
         Configuration executorConfig = cli.getEffectiveConfiguration(args);
         ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        ClusterSpecification clusterSpecification =
+        StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(jobManagerMemory);
@@ -210,7 +210,7 @@ class KubernetesSessionCliTest {
 
         final Configuration executorConfig = cli.getEffectiveConfiguration(args);
         final ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);
@@ -232,7 +232,7 @@ class KubernetesSessionCliTest {
 
         final Configuration executorConfig = cli.getEffectiveConfiguration(args);
         final ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);
@@ -250,7 +250,7 @@ class KubernetesSessionCliTest {
 
         final Configuration executorConfig = cli.getEffectiveConfiguration(args);
         final ClusterClientFactory<String> clientFactory = getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);

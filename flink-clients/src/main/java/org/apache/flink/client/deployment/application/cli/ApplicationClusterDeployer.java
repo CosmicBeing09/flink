@@ -23,7 +23,7 @@ import org.apache.flink.client.cli.ApplicationDeployer;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientServiceLoader;
 import org.apache.flink.client.deployment.ClusterDescriptor;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.configuration.Configuration;
 
@@ -61,7 +61,7 @@ public class ApplicationClusterDeployer implements ApplicationDeployer {
                 clientServiceLoader.getClusterClientFactory(configuration);
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clientFactory.createClusterDescriptor(configuration)) {
-            final ClusterSpecification clusterSpecification =
+            final StreamingClusterSpecification clusterSpecification =
                     clientFactory.getClusterSpecification(configuration);
 
             clusterDescriptor.deployApplicationCluster(

@@ -24,7 +24,7 @@ import org.apache.flink.client.cli.CliFrontendParser;
 import org.apache.flink.client.cli.DynamicPropertiesUtil;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientServiceLoader;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.DefaultClusterClientServiceLoader;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
@@ -589,7 +589,7 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
 
                     clusterClientProvider = yarnClusterDescriptor.retrieve(yarnApplicationId);
                 } else {
-                    final ClusterSpecification clusterSpecification =
+                    final StreamingClusterSpecification clusterSpecification =
                             yarnClusterClientFactory.getClusterSpecification(
                                     effectiveConfiguration);
 

@@ -19,7 +19,7 @@
 package org.apache.flink.kubernetes;
 
 import org.apache.flink.client.deployment.ClusterDeploymentException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
@@ -59,8 +59,8 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     private static final String MOCK_SERVICE_HOST_NAME = "mock-host-name-of-service";
     private static final String MOCK_SERVICE_IP = "192.168.0.1";
 
-    private final ClusterSpecification clusterSpecification =
-            new ClusterSpecification.ClusterSpecificationBuilder().createClusterSpecification();
+    private final StreamingClusterSpecification clusterSpecification =
+            new StreamingClusterSpecification.StreamingClusterSpecificationBuilder().createClusterSpecification();
 
     private final Service loadBalancerSvc =
             buildExternalServiceWithLoadBalancer(MOCK_SERVICE_HOST_NAME, MOCK_SERVICE_IP);

@@ -51,7 +51,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      * @return Client for the cluster
      * @throws ClusterDeploymentException if the cluster could not be deployed
      */
-    ClusterClientProvider<T> deploySessionCluster(ClusterSpecification clusterSpecification)
+    ClusterClientProvider<T> deploySessionCluster(StreamingClusterSpecification clusterSpecification)
             throws ClusterDeploymentException;
 
     /**
@@ -66,7 +66,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      * @throws ClusterDeploymentException if the cluster could not be deployed
      */
     ClusterClientProvider<T> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration)
             throws ClusterDeploymentException;
 
@@ -85,7 +85,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      */
     @Deprecated
     ClusterClientProvider<T> deployStreamCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final JobGraph streamGraph,
             final boolean detached)
             throws ClusterDeploymentException;

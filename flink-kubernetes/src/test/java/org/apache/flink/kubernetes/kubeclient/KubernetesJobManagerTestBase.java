@@ -18,7 +18,7 @@
 
 package org.apache.flink.kubernetes.kubeclient;
 
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.configuration.BlobServerOptions;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
@@ -73,8 +73,8 @@ public class KubernetesJobManagerTestBase extends KubernetesPodTestBase {
 
     @Override
     protected void onSetup() throws Exception {
-        final ClusterSpecification clusterSpecification =
-                new ClusterSpecification.ClusterSpecificationBuilder()
+        final StreamingClusterSpecification clusterSpecification =
+                new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                         .setMasterMemoryMB(JOB_MANAGER_MEMORY)
                         .setTaskManagerMemoryMB(1024)
                         .setSlotsPerTaskManager(3)

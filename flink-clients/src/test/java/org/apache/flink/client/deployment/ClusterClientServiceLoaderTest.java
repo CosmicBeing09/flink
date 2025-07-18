@@ -157,7 +157,7 @@ public class ClusterClientServiceLoaderTest {
         }
 
         @Override
-        public ClusterSpecification getClusterSpecification(Configuration configuration) {
+        public StreamingClusterSpecification getClusterSpecification(Configuration configuration) {
             throw new UnsupportedOperationException();
         }
     }

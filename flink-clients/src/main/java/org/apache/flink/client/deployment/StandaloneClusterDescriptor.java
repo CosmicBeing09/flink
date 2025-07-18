@@ -57,13 +57,13 @@ public class StandaloneClusterDescriptor implements ClusterDescriptor<Standalone
 
     @Override
     public ClusterClientProvider<StandaloneClusterId> deploySessionCluster(
-            ClusterSpecification clusterSpecification) {
+            StreamingClusterSpecification clusterSpecification) {
         throw new UnsupportedOperationException("Can't deploy a standalone cluster.");
     }
 
     @Override
     public ClusterClientProvider<StandaloneClusterId> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration) {
         throw new UnsupportedOperationException(
                 "Application Mode not supported by standalone deployments.");
@@ -71,7 +71,7 @@ public class StandaloneClusterDescriptor implements ClusterDescriptor<Standalone
 
     @Override
     public ClusterClientProvider<StandaloneClusterId> deployStreamCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
+            StreamingClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
         throw new UnsupportedOperationException(
                 "Per-Job Mode not supported by standalone deployments.");
     }

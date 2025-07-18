@@ -19,7 +19,7 @@
 package org.apache.flink.yarn;
 
 import org.apache.flink.client.deployment.ClusterDeploymentException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
@@ -90,8 +90,8 @@ class YarnClusterDescriptorTest {
 
     private static YarnClient yarnClient;
 
-    private final ClusterSpecification clusterSpecification =
-            new ClusterSpecification.ClusterSpecificationBuilder()
+    private final StreamingClusterSpecification clusterSpecification =
+            new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                     .setSlotsPerTaskManager(Integer.MAX_VALUE)
                     .createClusterSpecification();
     private final ApplicationConfiguration appConfig =
@@ -152,8 +152,8 @@ class YarnClusterDescriptorTest {
         clusterDescriptor.setLocalJarPath(new Path(flinkJar.getPath()));
 
         // configure slots
-        ClusterSpecification clusterSpecification =
-                new ClusterSpecification.ClusterSpecificationBuilder().createClusterSpecification();
+        StreamingClusterSpecification clusterSpecification =
+                new StreamingClusterSpecification.StreamingClusterSpecificationBuilder().createClusterSpecification();
 
         try {
             clusterDescriptor.deploySessionCluster(clusterSpecification);

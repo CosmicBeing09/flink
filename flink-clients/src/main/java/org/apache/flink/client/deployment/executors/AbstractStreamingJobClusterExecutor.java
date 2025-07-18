@@ -24,7 +24,7 @@ import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
 import org.apache.flink.client.deployment.ClusterDescriptor;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.JobClient;
@@ -76,7 +76,7 @@ public class AbstractStreamingJobClusterExecutor<
             final StreamingExecutionConfigAccessor configAccessor =
                     StreamingExecutionConfigAccessor.fromConfiguration(configuration);
 
-            final ClusterSpecification clusterSpecification =
+            final StreamingClusterSpecification clusterSpecification =
                     clusterClientFactory.getClusterSpecification(configuration);
 
             final ClusterClientProvider<ClusterID> clusterClientProvider =

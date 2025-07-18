@@ -35,7 +35,7 @@ public abstract class AbstractContainerizedClusterClientFactory<ClusterID>
         implements ClusterClientFactory<ClusterID> {
 
     @Override
-    public ClusterSpecification getClusterSpecification(Configuration configuration) {
+    public StreamingClusterSpecification getClusterSpecification(Configuration configuration) {
         checkNotNull(configuration);
 
         final int jobManagerMemoryMB =
@@ -50,7 +50,7 @@ public abstract class AbstractContainerizedClusterClientFactory<ClusterID>
 
         int slotsPerTaskManager = configuration.get(TaskManagerOptions.NUM_TASK_SLOTS);
 
-        return new ClusterSpecification.ClusterSpecificationBuilder()
+        return new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                 .setMasterMemoryMB(jobManagerMemoryMB)
                 .setTaskManagerMemoryMB(taskManagerMemoryMB)
                 .setSlotsPerTaskManager(slotsPerTaskManager)

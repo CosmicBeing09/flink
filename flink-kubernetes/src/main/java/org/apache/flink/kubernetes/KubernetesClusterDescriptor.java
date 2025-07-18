@@ -21,7 +21,7 @@ package org.apache.flink.kubernetes;
 import org.apache.flink.client.deployment.ClusterDeploymentException;
 import org.apache.flink.client.deployment.ClusterDescriptor;
 import org.apache.flink.client.deployment.ClusterRetrieveException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
@@ -171,7 +171,7 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
 
     @Override
     public ClusterClientProvider<String> deploySessionCluster(
-            ClusterSpecification clusterSpecification) throws ClusterDeploymentException {
+            StreamingClusterSpecification clusterSpecification) throws ClusterDeploymentException {
         final ClusterClientProvider<String> clusterClientProvider =
                 deployClusterInternal(
                         KubernetesSessionClusterEntrypoint.class.getName(),
@@ -189,7 +189,7 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
 
     @Override
     public ClusterClientProvider<String> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration)
             throws ClusterDeploymentException {
         if (client.getService(ExternalServiceDecorator.getExternalServiceName(clusterId))
@@ -246,14 +246,14 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
 
     @Override
     public ClusterClientProvider<String> deployStreamCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
+            StreamingClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
             throws ClusterDeploymentException {
         throw new ClusterDeploymentException(
                 "Per-Job Mode not supported by Active Kubernetes deployments.");
     }
 
     private ClusterClientProvider<String> deployClusterInternal(
-            String entryPoint, ClusterSpecification clusterSpecification, boolean detached)
+            String entryPoint, StreamingClusterSpecification clusterSpecification, boolean detached)
             throws ClusterDeploymentException {
         final ClusterEntrypoint.ExecutionMode executionMode =
                 detached

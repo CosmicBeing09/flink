@@ -19,7 +19,7 @@
 package org.apache.flink.kubernetes.kubeclient.parameters;
 
 import org.apache.flink.client.cli.ArtifactFetchOptions;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.configuration.BlobServerOptions;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.IllegalConfigurationException;
@@ -49,8 +49,8 @@ class KubernetesJobManagerParametersTest extends KubernetesTestBase {
     private static final double JOB_MANAGER_CPU_LIMIT_FACTOR = 2.5;
     private static final double JOB_MANAGER_MEMORY_LIMIT_FACTOR = 2.0;
 
-    private final ClusterSpecification clusterSpecification =
-            new ClusterSpecification.ClusterSpecificationBuilder()
+    private final StreamingClusterSpecification clusterSpecification =
+            new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                     .setMasterMemoryMB(JOB_MANAGER_MEMORY)
                     .setTaskManagerMemoryMB(1024)
                     .setSlotsPerTaskManager(1)

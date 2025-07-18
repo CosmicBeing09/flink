@@ -24,7 +24,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.client.deployment.ClusterDeploymentException;
 import org.apache.flink.client.deployment.ClusterDescriptor;
 import org.apache.flink.client.deployment.ClusterRetrieveException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.client.program.PackagedProgramUtils;
@@ -387,7 +387,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         return path.getFileSystem(yarnConfiguration).getFileStatus(path);
     }
 
-    private void isReadyForDeployment(ClusterSpecification clusterSpecification) throws Exception {
+    private void isReadyForDeployment(StreamingClusterSpecification clusterSpecification) throws Exception {
 
         if (this.flinkJarPath == null) {
             throw new YarnDeploymentException("The Flink jar path is null");
@@ -492,7 +492,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
     @Override
     public ClusterClientProvider<ApplicationId> deploySessionCluster(
-            ClusterSpecification clusterSpecification) throws ClusterDeploymentException {
+            StreamingClusterSpecification clusterSpecification) throws ClusterDeploymentException {
         try {
             return deployInternal(
                     clusterSpecification,
@@ -507,7 +507,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
     @Override
     public ClusterClientProvider<ApplicationId> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration)
             throws ClusterDeploymentException {
         checkNotNull(clusterSpecification);
@@ -551,7 +551,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
 
     @Override
     public ClusterClientProvider<ApplicationId> deployStreamCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
+            StreamingClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
             throws ClusterDeploymentException {
 
         LOG.warn(
@@ -598,7 +598,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
      * @param detached True if the cluster should be started in detached mode
      */
     private ClusterClientProvider<ApplicationId> deployInternal(
-            ClusterSpecification clusterSpecification,
+            StreamingClusterSpecification clusterSpecification,
             String applicationName,
             String yarnClusterEntrypoint,
             @Nullable JobGraph jobGraph,
@@ -669,7 +669,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
                             + "' should be greater than 0.");
         }
 
-        final ClusterSpecification validClusterSpecification;
+        final StreamingClusterSpecification validClusterSpecification;
         try {
             validClusterSpecification =
                     validateClusterResources(
@@ -716,8 +716,8 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         };
     }
 
-    private ClusterSpecification validateClusterResources(
-            ClusterSpecification clusterSpecification,
+    private StreamingClusterSpecification validateClusterResources(
+            StreamingClusterSpecification clusterSpecification,
             int yarnMinAllocationMB,
             Resource maximumResourceCapability,
             ClusterResourceDescription freeClusterResources)
@@ -785,7 +785,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
                             + noteRsc);
         }
 
-        return new ClusterSpecification.ClusterSpecificationBuilder()
+        return new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                 .setMasterMemoryMB(jobManagerMemoryMb)
                 .setTaskManagerMemoryMB(taskManagerMemoryMb)
                 .setSlotsPerTaskManager(clusterSpecification.getSlotsPerTaskManager())
@@ -856,7 +856,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
             JobGraph jobGraph,
             YarnClient yarnClient,
             YarnClientApplication yarnApplication,
-            ClusterSpecification clusterSpecification)
+            StreamingClusterSpecification clusterSpecification)
             throws Exception {
 
         // ------------------ Initialize the file systems -------------------------

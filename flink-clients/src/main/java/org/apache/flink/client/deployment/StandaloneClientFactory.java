@@ -51,8 +51,8 @@ public class StandaloneClientFactory implements ClusterClientFactory<StandaloneC
     }
 
     @Override
-    public ClusterSpecification getClusterSpecification(Configuration configuration) {
+    public StreamingClusterSpecification getClusterSpecification(Configuration configuration) {
         checkNotNull(configuration);
-        return new ClusterSpecification.ClusterSpecificationBuilder().createClusterSpecification();
+        return new StreamingClusterSpecification.StreamingClusterSpecificationBuilder().createClusterSpecification();
     }
 }

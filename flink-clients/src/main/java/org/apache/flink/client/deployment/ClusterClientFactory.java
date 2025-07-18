@@ -59,14 +59,14 @@ public interface ClusterClientFactory<ClusterID> {
     ClusterID getClusterId(Configuration configuration);
 
     /**
-     * Returns the {@link ClusterSpecification} specified by the configuration and the command line
+     * Returns the {@link StreamingClusterSpecification} specified by the configuration and the command line
      * options. This specification can be used to deploy a new Flink cluster.
      *
      * @param configuration containing the configuration options relevant for the {@link
-     *     ClusterSpecification}
-     * @return the corresponding {@link ClusterSpecification} for a new Flink cluster
+     *     StreamingClusterSpecification}
+     * @return the corresponding {@link StreamingClusterSpecification} for a new Flink cluster
      */
-    ClusterSpecification getClusterSpecification(Configuration configuration);
+    StreamingClusterSpecification getClusterSpecification(Configuration configuration);
 
     /**
      * Returns the option to be used when trying to execute an application in Application Mode using

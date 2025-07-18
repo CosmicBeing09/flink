@@ -25,7 +25,7 @@ import org.apache.flink.client.cli.CustomCommandLine;
 import org.apache.flink.client.cli.GenericCLI;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientServiceLoader;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.DefaultClusterClientServiceLoader;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
@@ -127,7 +127,7 @@ class FlinkYarnSessionCliTest {
 
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(configuration);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(configuration);
 
         // each task manager has 3 slots but the parallelism is 7. Thus the slots should be
@@ -351,7 +351,7 @@ class FlinkYarnSessionCliTest {
 
     /**
      * Tests that the command line arguments override the configuration settings when the {@link
-     * ClusterSpecification} is created.
+     * StreamingClusterSpecification} is created.
      */
     @Test
     void testCommandLineClusterSpecification() throws Exception {
@@ -380,7 +380,7 @@ class FlinkYarnSessionCliTest {
 
         Configuration executorConfig = flinkYarnSessionCli.toConfiguration(commandLine);
         ClusterClientFactory<ApplicationId> clientFactory = getClusterClientFactory(executorConfig);
-        ClusterSpecification clusterSpecification =
+        StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(jobManagerMemory);
@@ -389,7 +389,7 @@ class FlinkYarnSessionCliTest {
     }
 
     /**
-     * Tests that the configuration settings are used to create the {@link ClusterSpecification}.
+     * Tests that the configuration settings are used to create the {@link StreamingClusterSpecification}.
      */
     @Test
     void testConfigurationClusterSpecification() throws Exception {
@@ -411,7 +411,7 @@ class FlinkYarnSessionCliTest {
         configuration.addAll(flinkYarnSessionCli.toConfiguration(commandLine));
 
         ClusterClientFactory<ApplicationId> clientFactory = getClusterClientFactory(configuration);
-        ClusterSpecification clusterSpecification =
+        StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(configuration);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(jobManagerMemory);
@@ -430,7 +430,7 @@ class FlinkYarnSessionCliTest {
         final Configuration executorConfig = flinkYarnSessionCli.toConfiguration(commandLine);
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);
@@ -449,7 +449,7 @@ class FlinkYarnSessionCliTest {
         final Configuration executorConfig = flinkYarnSessionCli.toConfiguration(commandLine);
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);
@@ -469,7 +469,7 @@ class FlinkYarnSessionCliTest {
         final Configuration executorConfig = flinkYarnSessionCli.toConfiguration(commandLine);
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(executorConfig);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(executorConfig);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(1024);
@@ -492,7 +492,7 @@ class FlinkYarnSessionCliTest {
 
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(configuration);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(configuration);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(2048);
@@ -516,7 +516,7 @@ class FlinkYarnSessionCliTest {
 
         final ClusterClientFactory<ApplicationId> clientFactory =
                 getClusterClientFactory(configuration);
-        final ClusterSpecification clusterSpecification =
+        final StreamingClusterSpecification clusterSpecification =
                 clientFactory.getClusterSpecification(configuration);
 
         assertThat(clusterSpecification.getMasterMemoryMB()).isEqualTo(procMemory);
