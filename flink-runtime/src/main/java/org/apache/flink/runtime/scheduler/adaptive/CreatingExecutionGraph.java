@@ -66,11 +66,11 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
             CompletableFuture<ExecutionGraphWithVertexParallelism>
                     executionGraphWithParallelismFuture,
             Logger logger,
-            OperatorCoordinatorHandlerFactory operatorCoordinatorFactory,
+            OperatorCoordinatorHandlerFactory operatorCoordinatorHandlerFactory,
             @Nullable ExecutionGraph previousExecutionGraph) {
         super(context, logger);
         this.context = context;
-        this.operatorCoordinatorHandlerFactory = operatorCoordinatorFactory;
+        this.operatorCoordinatorHandlerFactory = operatorCoordinatorHandlerFactory;
 
         FutureUtils.assertNoException(
                 executionGraphWithParallelismFuture.handle(
@@ -103,14 +103,14 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                 vertex.getCurrentExecutionAttempt().transitionState(ExecutionState.SCHEDULED);
             }
 
-            final AssignmentResult result =
+            final AssignmentResult assignmentResult =
                     context.tryToAssignSlots(executionGraphWithVertexParallelism);
 
-            if (result.isSuccess()) {
+            if (assignmentResult.isSuccess()) {
                 getLogger()
                         .debug(
                                 "Successfully reserved and assigned the required slots for the ExecutionGraph.");
-                final ExecutionGraph executionGraph = result.getExecutionGraph();
+                final ExecutionGraph executionGraph = assignmentResult.getExecutionGraph();
                 final ExecutionGraphHandler executionGraphHandler =
                         new ExecutionGraphHandler(
                                 executionGraph,
@@ -141,7 +141,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                 operatorCoordinatorHandler.startAllOperatorCoordinators();
 
                 context.goToExecuting(
-                        result.getExecutionGraph(),
+                        assignmentResult.getExecutionGraph(),
                         executionGraphHandler,
                         operatorCoordinatorHandler,
                         Collections.emptyList());
