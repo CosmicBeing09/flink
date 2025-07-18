@@ -58,6 +58,6 @@ public class HadoopMapredITCase extends JavaProgramTestBase {
 
     @Override
     protected void testProgram() throws Exception {
-        HadoopMapredCompatWordCount.main(new String[] {textPath, resultPath});
+        HadoopMapredCompatWordCount.run(new String[] {textPath, resultPath});
     }
 }
