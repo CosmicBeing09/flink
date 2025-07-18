@@ -94,18 +94,18 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        TestEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
-        env.getConfig().enableObjectReuse();
+        TestEnvironment streamExecutionEnvironment = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+        streamExecutionEnvironment.getConfig().enableObjectReuse();
 
         // Possibly run the test multiple times
-        executeProgramMultipleTimes(env);
+        executeProgramMultipleTimes(streamExecutionEnvironment);
     }
 
-    private void executeProgramMultipleTimes(ExecutionEnvironment env) throws Exception {
+    private void executeProgramMultipleTimes(ExecutionEnvironment streamExecutionEnvironment) throws Exception {
         for (int i = 0; i < numberOfTestRepetitions; i++) {
             try {
                 testProgram();
-                this.latestExecutionResult = env.getLastJobExecutionResult();
+                this.latestExecutionResult = streamExecutionEnvironment.getLastJobExecutionResult();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
