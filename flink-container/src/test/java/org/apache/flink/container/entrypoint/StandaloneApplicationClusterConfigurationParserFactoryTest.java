@@ -291,6 +291,6 @@ class StandaloneApplicationClusterConfigurationParserFactoryTest {
         };
         final StandaloneApplicationClusterConfiguration applicationClusterConfiguration =
                 commandLineParser.parse(args);
-        assertThat(applicationClusterConfiguration.getJarFile()).isEqualTo(JOB_JAR_FILE);
+        assertThat(applicationClusterConfiguration.getJarFiles()).isEqualTo(JOB_JAR_FILE);
     }
 }

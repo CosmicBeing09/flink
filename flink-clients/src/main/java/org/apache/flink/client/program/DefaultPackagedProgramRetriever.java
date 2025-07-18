@@ -52,7 +52,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
 
     private final EntryClassInformationProvider entryClassInformationProvider;
     private final String[] programArguments;
-    private final List<URL> userClasspath;
+    private final List<URL> userClasspaths;
     private final Configuration configuration;
 
     /**
@@ -162,14 +162,14 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
     }
 
     private static EntryClassInformationProvider fromUserClasspath(
-            @Nullable String jobClassName, Iterable<URL> userClasspath) throws FlinkException {
+            @Nullable String jobClassName, Iterable<URL> userClasspaths) throws FlinkException {
         try {
             if (jobClassName != null) {
                 return FromClasspathEntryClassInformationProvider.create(
-                        jobClassName, userClasspath);
+                        jobClassName, userClasspaths);
             }
 
-            return FromClasspathEntryClassInformationProvider.createFromClasspath(userClasspath);
+            return FromClasspathEntryClassInformationProvider.createFromClasspath(userClasspaths);
         } catch (IOException e) {
             throw createGenericFlinkException(e);
         }
@@ -189,7 +189,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
                         entryClassInformationProvider, "No EntryClassInformationProvider passed.");
         this.programArguments =
                 Preconditions.checkNotNull(programArguments, "No program parameter array passed.");
-        this.userClasspath = Preconditions.checkNotNull(userClasspath, "No user classpath passed.");
+        this.userClasspaths = Preconditions.checkNotNull(userClasspath, "No user classpath passed.");
         this.configuration =
                 Preconditions.checkNotNull(configuration, "No Flink configuration was passed.");
     }
@@ -199,7 +199,7 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
         try {
             final PackagedProgram.Builder packagedProgramBuilder =
                     PackagedProgram.newBuilder()
-                            .setUserClassPaths(userClasspath)
+                            .setUserClassPaths(userClasspaths)
                             .setArguments(programArguments)
                             .setConfiguration(configuration);
 

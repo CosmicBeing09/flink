@@ -363,14 +363,14 @@ public final class SerializerConfig implements Serializable {
 
         try {
             configuration
-                    .getOptional(PipelineOptions.SERIALIZATION_CONFIG)
+                    .getOptional(PipelineOptions.SERIALIZATION_CONFIGS)
                     .ifPresent(c -> parseSerializationConfigWithExceptionHandling(classLoader, c));
         } catch (Exception e) {
             if (!GlobalConfiguration.isStandardYaml()) {
                 throw new UnsupportedOperationException(
                         String.format(
                                 "%s is only supported with the standard YAML config parser, please use \"config.yaml\" as the config file.",
-                                PipelineOptions.SERIALIZATION_CONFIG.key()));
+                                PipelineOptions.SERIALIZATION_CONFIGS.key()));
             }
             throw e;
         }

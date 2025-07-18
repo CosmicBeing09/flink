@@ -256,7 +256,7 @@ public class PipelineOptions {
                                                     + " sure that only tags are written.")
                                     .build());
 
-    public static final ConfigOption<List<String>> SERIALIZATION_CONFIG =
+    public static final ConfigOption<List<String>> SERIALIZATION_CONFIGS =
             key("pipeline.serialization-config")
                     .stringType()
                     .asList()

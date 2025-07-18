@@ -133,14 +133,14 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
             Configuration flinkConfiguration)
             throws FlinkException {
         final File userLibDir = ClusterEntrypointUtils.tryFindUserLibDirectory().orElse(null);
-        File jarFile =
-                clusterConfiguration.getJarFile() == null
+        File jarFiles =
+                clusterConfiguration.getJarFiles() == null
                         ? null
-                        : fetchJarFileForApplicationMode(flinkConfiguration).get(0);
+                        : fetchJarFilesForApplicationMode(flinkConfiguration).get(0);
         final PackagedProgramRetriever programRetriever =
                 DefaultPackagedProgramRetriever.create(
                         userLibDir,
-                        jarFile,
+                        jarFiles,
                         clusterConfiguration.getJobClassName(),
                         clusterConfiguration.getArgs(),
                         flinkConfiguration);
@@ -159,13 +159,13 @@ public final class StandaloneApplicationClusterEntryPoint extends ApplicationClu
     private static void setJobJarFile(
             StandaloneApplicationClusterConfiguration clusterConfiguration,
             Configuration configuration) {
-        final String jarFile = clusterConfiguration.getJarFile();
+        final String jarFile = clusterConfiguration.getJarFiles();
         if (jarFile != null) {
             configuration.set(PipelineOptions.JARS, Collections.singletonList(jarFile));
         }
     }
 
-    private static List<File> fetchJarFileForApplicationMode(Configuration configuration) {
+    private static List<File> fetchJarFilesForApplicationMode(Configuration configuration) {
         String targetDir = generateJarDir(configuration);
         return configuration.get(PipelineOptions.JARS).stream()
                 .map(
