@@ -45,7 +45,7 @@ public class OperatorSnapshotUtil {
         return resource.getFile();
     }
 
-    public static void writeStateHandle(OperatorSubtaskState state, String path)
+    public static void writeOperatorSubtaskState(OperatorSubtaskState state, String path)
             throws IOException {
         FileOutputStream out = new FileOutputStream(path);
 
@@ -104,7 +104,7 @@ public class OperatorSnapshotUtil {
             Collection<InputStateHandle> inputChannelStateHandles = state.getInputChannelState();
             dos.writeInt(inputChannelStateHandles.size());
             for (InputStateHandle inputChannelStateHandle : inputChannelStateHandles) {
-                MetadataV3Serializer.INSTANCE.serializeInputChannelStateHandle(
+                MetadataV3Serializer.INSTANCE.serializeInputStateHandle(
                         inputChannelStateHandle, dos);
             }
 
@@ -120,7 +120,7 @@ public class OperatorSnapshotUtil {
         }
     }
 
-    public static OperatorSubtaskState readStateHandle(String path)
+    public static OperatorSubtaskState readOperatorSubtaskState(String path)
             throws IOException, ClassNotFoundException {
         FileInputStream in = new FileInputStream(path);
         try (DataInputStream dis = new DataInputStream(in)) {

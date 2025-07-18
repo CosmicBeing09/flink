@@ -131,7 +131,7 @@ public class ContinuousFileProcessingMigrationTest implements MigrationTest {
             snapshot = testHarness.snapshot(0L, 0L);
         }
 
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/reader-migration-test-flink"
                         + flinkGenerateSavepointVersion
@@ -252,7 +252,7 @@ public class ContinuousFileProcessingMigrationTest implements MigrationTest {
             snapshot = testHarness.snapshot(0L, 0L);
         }
 
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/monitoring-function-migration-test-"
                         + fileModTime

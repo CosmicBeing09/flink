@@ -62,7 +62,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     /** The singleton instance of the serializer. */
     public static final MetadataV3Serializer INSTANCE = new MetadataV3Serializer();
 
-    private final ChannelStateHandleSerializer channelStateHandleSerializer =
+    private final ChannelStateHandleSerializer stateHandleSerializer =
             new ChannelStateHandleSerializer();
 
     /** Singleton, not meant to be instantiated. */
@@ -95,7 +95,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     // ------------------------------------------------------------------------
 
     @Override
-    protected void serializeOperatorState(OperatorState operatorState, DataOutputStream dos)
+    protected void writeOperatorState(OperatorState operatorState, DataOutputStream dos)
             throws IOException {
         // Operator ID
         dos.writeLong(operatorState.getOperatorID().getLowerPart());
@@ -141,7 +141,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
             throws IOException {
         super.serializeSubtaskState(subtaskState, dos);
         serializeCollection(
-                subtaskState.getInputChannelState(), dos, this::serializeInputChannelStateHandle);
+                subtaskState.getInputChannelState(), dos, this::serializeInputStateHandle);
         serializeCollection(
                 subtaskState.getResultSubpartitionState(),
                 dos,
@@ -149,7 +149,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     }
 
     @Override
-    protected OperatorState deserializeOperatorState(
+    protected OperatorState readOperatorState(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         final OperatorID jobVertexId = new OperatorID(dis.readLong(), dis.readLong());
         final int parallelism = dis.readInt();
@@ -204,7 +204,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @Override
     public void serializeResultSubpartitionStateHandle(
             OutputStateHandle handle, DataOutputStream dos) throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        stateHandleSerializer.serialize(handle, dos);
     }
 
     @VisibleForTesting
@@ -212,22 +212,22 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     public StateObjectCollection<OutputStateHandle> deserializeResultSubpartitionStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return deserializeCollection(
-                dis, context, channelStateHandleSerializer::deserializeOutputStateHandle);
+                dis, context, stateHandleSerializer::deserializeOutputStateHandle);
     }
 
     @VisibleForTesting
     @Override
-    public void serializeInputChannelStateHandle(InputStateHandle handle, DataOutputStream dos)
+    public void serializeInputStateHandle(InputStateHandle handle, DataOutputStream dos)
             throws IOException {
-        channelStateHandleSerializer.serialize(handle, dos);
+        stateHandleSerializer.serialize(handle, dos);
     }
 
     @VisibleForTesting
     @Override
-    public StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
+    public StateObjectCollection<InputStateHandle> deserializeInputStateHandle(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         return deserializeCollection(
-                dis, context, channelStateHandleSerializer::deserializeInputStateHandle);
+                dis, context, stateHandleSerializer::deserializeInputStateHandle);
     }
 
     private <T extends StateObject> void serializeCollection(
@@ -294,7 +294,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     @VisibleForTesting
     public static StateObjectCollection<InputStateHandle> deserializeInputChannelStateHandle(
             DataInputStream dis) throws IOException {
-        return INSTANCE.deserializeInputChannelStateHandle(dis, null);
+        return INSTANCE.deserializeInputStateHandle(dis, null);
     }
 
     @VisibleForTesting

@@ -87,9 +87,9 @@ public class OperatorSubtaskState implements CompositeStateHandle {
      */
     private final StateObjectCollection<KeyedStateHandle> rawKeyedState;
 
-    private final StateObjectCollection<InputStateHandle> inputChannelState;
+    private final StateObjectCollection<InputStateHandle> channelInputState;
 
-    private final StateObjectCollection<OutputStateHandle> resultSubpartitionState;
+    private final StateObjectCollection<OutputStateHandle> channelOutputState;
 
     /**
      * The subpartitions mappings per partition set when the output operator for a partition was
@@ -131,8 +131,8 @@ public class OperatorSubtaskState implements CompositeStateHandle {
         this.rawOperatorState = checkNotNull(rawOperatorState);
         this.managedKeyedState = checkNotNull(managedKeyedState);
         this.rawKeyedState = checkNotNull(rawKeyedState);
-        this.inputChannelState = checkNotNull(inputChannelState);
-        this.resultSubpartitionState = checkNotNull(resultSubpartitionState);
+        this.channelInputState = checkNotNull(inputChannelState);
+        this.channelOutputState = checkNotNull(resultSubpartitionState);
         this.inputRescalingDescriptor = checkNotNull(inputRescalingDescriptor);
         this.outputRescalingDescriptor = checkNotNull(outputRescalingDescriptor);
 
@@ -152,7 +152,7 @@ public class OperatorSubtaskState implements CompositeStateHandle {
     }
 
     private Stream<StateObjectCollection<? extends ChannelState>> streamChannelStates() {
-        return Stream.of(inputChannelState, resultSubpartitionState).filter(Objects::nonNull);
+        return Stream.of(channelInputState, channelOutputState).filter(Objects::nonNull);
     }
 
     @VisibleForTesting
@@ -187,11 +187,11 @@ public class OperatorSubtaskState implements CompositeStateHandle {
     }
 
     public StateObjectCollection<InputStateHandle> getInputChannelState() {
-        return inputChannelState;
+        return channelInputState;
     }
 
     public StateObjectCollection<OutputStateHandle> getResultSubpartitionState() {
-        return resultSubpartitionState;
+        return channelOutputState;
     }
 
     public InflightDataRescalingDescriptor getInputRescalingDescriptor() {
@@ -342,9 +342,9 @@ public class OperatorSubtaskState implements CompositeStateHandle {
                 + ", keyedStateFromStream="
                 + rawKeyedState
                 + ", inputChannelState="
-                + inputChannelState
+                + channelInputState
                 + ", resultSubpartitionState="
-                + resultSubpartitionState
+                + channelOutputState
                 + ", stateSize="
                 + stateSize
                 + ", checkpointedSize="
@@ -357,8 +357,8 @@ public class OperatorSubtaskState implements CompositeStateHandle {
                 || rawOperatorState.hasState()
                 || managedKeyedState.hasState()
                 || rawKeyedState.hasState()
-                || inputChannelState.hasState()
-                || resultSubpartitionState.hasState();
+                || channelInputState.hasState()
+                || channelOutputState.hasState();
     }
 
     public Builder toBuilder() {
@@ -367,8 +367,8 @@ public class OperatorSubtaskState implements CompositeStateHandle {
                 .setManagedOperatorState(managedOperatorState)
                 .setRawOperatorState(rawOperatorState)
                 .setRawKeyedState(rawKeyedState)
-                .setInputChannelState(inputChannelState)
-                .setResultSubpartitionState(resultSubpartitionState)
+                .setInputChannelState(channelInputState)
+                .setResultSubpartitionState(channelOutputState)
                 .setInputRescalingDescriptor(inputRescalingDescriptor)
                 .setOutputRescalingDescriptor(outputRescalingDescriptor);
     }

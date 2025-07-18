@@ -497,7 +497,7 @@ public class AbstractStreamOperatorTestHarness<OUT> implements AutoCloseable {
     }
 
     public void initializeState(String operatorStateSnapshotPath) throws Exception {
-        initializeState(OperatorSnapshotUtil.readStateHandle(operatorStateSnapshotPath));
+        initializeState(OperatorSnapshotUtil.readOperatorSubtaskState(operatorStateSnapshotPath));
     }
 
     public void initializeEmptyState() throws Exception {
