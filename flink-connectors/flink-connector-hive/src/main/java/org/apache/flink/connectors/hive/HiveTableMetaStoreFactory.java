@@ -123,12 +123,12 @@ public class HiveTableMetaStoreFactory implements TableMetaStoreFactory {
         }
 
         @Override
-        public Path getLocationPath() {
+        public Path getTableLocationPath() {
             return new Path(sd.getLocation());
         }
 
         @Override
-        public Optional<Path> getPartition(LinkedHashMap<String, String> partSpec)
+        public Optional<Path> getPartitionLocationPath(LinkedHashMap<String, String> partSpec)
                 throws Exception {
             try {
                 return Optional.of(

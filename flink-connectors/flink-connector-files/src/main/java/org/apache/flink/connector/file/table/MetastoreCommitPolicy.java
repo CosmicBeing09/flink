@@ -47,7 +47,7 @@ public class MetastoreCommitPolicy implements PartitionCommitPolicy {
     public void commit(Context context) throws Exception {
         LinkedHashMap<String, String> partitionSpec = context.partitionSpec();
         metaStore
-                .getPartition(partitionSpec)
+                .getPartitionLocationPath(partitionSpec)
                 .ifPresent(
                         path ->
                                 LOG.warn(

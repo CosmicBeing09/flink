@@ -274,12 +274,12 @@ public class FileSystemCommitterTest {
             return new TableMetaStore() {
 
                 @Override
-                public Path getLocationPath() {
+                public Path getTableLocationPath() {
                     return outputPath;
                 }
 
                 @Override
-                public Optional<Path> getPartition(LinkedHashMap<String, String> partSpec) {
+                public Optional<Path> getPartitionLocationPath(LinkedHashMap<String, String> partSpec) {
                     return Optional.empty();
                 }
 

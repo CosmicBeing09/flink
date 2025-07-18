@@ -39,12 +39,12 @@ public class EmptyMetaStoreFactory implements TableMetaStoreFactory {
         return new TableMetaStore() {
 
             @Override
-            public Path getLocationPath() {
+            public Path getTableLocationPath() {
                 return path;
             }
 
             @Override
-            public Optional<Path> getPartition(LinkedHashMap<String, String> partitionSpec) {
+            public Optional<Path> getPartitionLocationPath(LinkedHashMap<String, String> partitionSpec) {
                 return Optional.empty();
             }
 

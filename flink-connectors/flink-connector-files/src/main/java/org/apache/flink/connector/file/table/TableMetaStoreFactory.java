@@ -42,7 +42,7 @@ public interface TableMetaStoreFactory extends Serializable {
 
         /** Get base location path of this table. */
         @Deprecated
-        Path getLocationPath();
+        Path getTableLocationPath();
 
         /**
          * Get partition location path for this partition spec. See {@link Catalog#getPartition}.
@@ -51,7 +51,7 @@ public interface TableMetaStoreFactory extends Serializable {
          *     the partition keys of the table.
          * @return empty if table has no this partition, some if table already has partition data.
          */
-        Optional<Path> getPartition(LinkedHashMap<String, String> partitionSpec) throws Exception;
+        Optional<Path> getPartitionLocationPath(LinkedHashMap<String, String> partitionSpec) throws Exception;
 
         /**
          * After data has been inserted into the partition path, the partition may need to be

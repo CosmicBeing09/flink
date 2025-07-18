@@ -52,8 +52,8 @@ public class FileSystemOutputFormat<T>
 
     private static final long serialVersionUID = 1L;
 
-    private final FileSystemFactory fsFactory;
-    private final TableMetaStoreFactory msFactory;
+    private final FileSystemFactory fileSystemFactory;
+    private final TableMetaStoreFactory metaStoreFactory;
     private final boolean overwrite;
     private final boolean isToLocal;
     private final Path tmpPath;
@@ -83,8 +83,8 @@ public class FileSystemOutputFormat<T>
             OutputFileConfig outputFileConfig,
             ObjectIdentifier identifier,
             PartitionCommitPolicyFactory partitionCommitPolicyFactory) {
-        this.fsFactory = fsFactory;
-        this.msFactory = msFactory;
+        this.fileSystemFactory = fsFactory;
+        this.metaStoreFactory = msFactory;
         this.overwrite = overwrite;
         this.isToLocal = isToLocal;
         this.tmpPath = tmpPath;
@@ -108,7 +108,7 @@ public class FileSystemOutputFormat<T>
                                 Thread.currentThread().getContextClassLoader(),
                                 () -> {
                                     try {
-                                        return fsFactory.create(tmpPath.toUri());
+                                        return fileSystemFactory.create(tmpPath.toUri());
                                     } catch (IOException e) {
                                         throw new RuntimeException(e);
                                     }
@@ -117,8 +117,8 @@ public class FileSystemOutputFormat<T>
 
             FileSystemCommitter committer =
                     new FileSystemCommitter(
-                            fsFactory,
-                            msFactory,
+                            fileSystemFactory,
+                            metaStoreFactory,
                             overwrite,
                             tmpPath,
                             partitionColumns.length,
@@ -141,7 +141,7 @@ public class FileSystemOutputFormat<T>
             throw new TableException("Exception in finalizeGlobal", e);
         } finally {
             try {
-                fsFactory.create(tmpPath.toUri()).delete(tmpPath, true);
+                fileSystemFactory.create(tmpPath.toUri()).delete(tmpPath, true);
             } catch (IOException ignore) {
             }
         }
@@ -157,7 +157,7 @@ public class FileSystemOutputFormat<T>
         try {
             PartitionTempFileManager fileManager =
                     new PartitionTempFileManager(
-                            fsFactory,
+                            fileSystemFactory,
                             tmpPath,
                             context.getTaskNumber(),
                             context.getAttemptNumber(),
