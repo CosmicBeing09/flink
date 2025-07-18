@@ -74,7 +74,7 @@ class TaskManagerDetailsHandlerTest {
         testInstance =
                 new TaskManagerDetailsHandler(
                         () -> CompletableFuture.completedFuture(null),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         TaskManagerDetailsHeaders.getInstance(),
                         () -> CompletableFuture.completedFuture(resourceManagerGateway),

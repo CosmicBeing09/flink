@@ -46,7 +46,7 @@ class JobStatusHandlerTest {
         final JobStatusHandler jobStatusHandler =
                 new JobStatusHandler(
                         CompletableFuture::new,
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         JobStatusInfoHeaders.getInstance());
 

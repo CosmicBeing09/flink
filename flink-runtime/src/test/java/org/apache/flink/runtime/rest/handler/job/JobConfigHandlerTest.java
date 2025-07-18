@@ -52,10 +52,10 @@ class JobConfigHandlerTest {
         final JobConfigHandler jobConfigHandler =
                 new JobConfigHandler(
                         () -> null,
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         JobConfigHeaders.getInstance(),
-                        new DefaultExecutionGraphCache(TestingUtils.TIMEOUT, TestingUtils.TIMEOUT),
+                        new DefaultExecutionGraphCache(TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT),
                         Executors.directExecutor());
 
         final Map<String, String> globalJobParameters = new HashMap<>();

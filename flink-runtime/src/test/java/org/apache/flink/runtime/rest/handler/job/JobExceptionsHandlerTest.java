@@ -84,10 +84,10 @@ class JobExceptionsHandlerTest {
     private final JobExceptionsHandler testInstance =
             new JobExceptionsHandler(
                     CompletableFuture::new,
-                    TestingUtils.TIMEOUT,
+                    TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                     Collections.emptyMap(),
                     JobExceptionsHeaders.getInstance(),
-                    new DefaultExecutionGraphCache(TestingUtils.TIMEOUT, TestingUtils.TIMEOUT),
+                    new DefaultExecutionGraphCache(TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT),
                     Executors.directExecutor());
 
     @Test

@@ -99,10 +99,10 @@ class PartitionRequestRegistrationTest {
                     .await();
 
             // Wait for the notification
-            if (!sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
+            if (!sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
                 fail(
                         "Timed out after waiting for "
-                                + TestingUtils.TESTING_DURATION.toMillis()
+                                + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                 + " ms to be notified about cancelled partition.");
             }
         } finally {
@@ -150,10 +150,10 @@ class PartitionRequestRegistrationTest {
             partitionManager.registerResultPartition(resultPartition);
 
             // Wait for the notification
-            if (!sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
+            if (!sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
                 fail(
                         "Timed out after waiting for "
-                                + TestingUtils.TESTING_DURATION.toMillis()
+                                + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                 + " ms to be notified about cancelled partition.");
             }
         } finally {
@@ -216,10 +216,10 @@ class PartitionRequestRegistrationTest {
                     .await();
 
             // Wait for the notification
-            if (!sync.await(TestingUtils.TESTING_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
+            if (!sync.await(TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis(), TimeUnit.MILLISECONDS)) {
                 fail(
                         "Timed out after waiting for "
-                                + TestingUtils.TESTING_DURATION.toMillis()
+                                + TestingUtils.DEFAULT_TEST_EXECUTION_DURATION.toMillis()
                                 + " ms to be notified about cancelled partition.");
             }
         } finally {

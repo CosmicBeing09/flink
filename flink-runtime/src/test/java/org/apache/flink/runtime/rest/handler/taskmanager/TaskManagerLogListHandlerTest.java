@@ -62,7 +62,7 @@ class TaskManagerLogListHandlerTest {
         taskManagerLogListHandler =
                 new TaskManagerLogListHandler(
                         () -> CompletableFuture.completedFuture(null),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         TaskManagerLogsHeaders.getInstance(),
                         () -> CompletableFuture.completedFuture(resourceManagerGateway));

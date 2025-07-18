@@ -62,7 +62,7 @@ class TaskManagerProfilingListHandlerTest {
         taskManagerProfilingListHandler =
                 new TaskManagerProfilingListHandler(
                         () -> CompletableFuture.completedFuture(null),
-                        TestingUtils.TIMEOUT,
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT,
                         Collections.emptyMap(),
                         TaskManagerProfilingListHeaders.getInstance(),
                         () -> CompletableFuture.completedFuture(resourceManagerGateway));

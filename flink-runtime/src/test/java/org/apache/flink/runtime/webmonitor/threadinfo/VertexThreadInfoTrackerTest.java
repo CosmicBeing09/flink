@@ -540,7 +540,7 @@ class VertexThreadInfoTrackerTest {
         return VertexThreadInfoTrackerBuilder.newBuilder(
                         VertexThreadInfoTrackerTest::createMockResourceManagerGateway,
                         executor,
-                        TestingUtils.TIMEOUT)
+                        TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT)
                 .setCoordinator(coordinator)
                 .setCleanUpInterval(cleanUpInterval)
                 .setNumSamples(NUMBER_OF_SAMPLES)

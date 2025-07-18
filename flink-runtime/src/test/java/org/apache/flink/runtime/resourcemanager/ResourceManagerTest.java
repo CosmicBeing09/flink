@@ -194,7 +194,7 @@ class ResourceManagerTest {
 
         CompletableFuture<TaskManagerInfoWithSlots> taskManagerInfoFuture =
                 resourceManagerGateway.requestTaskManagerDetailsInfo(
-                        taskManagerId, TestingUtils.TIMEOUT);
+                        taskManagerId, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT);
 
         TaskManagerInfoWithSlots taskManagerInfoWithSlots = taskManagerInfoFuture.get();
         TaskManagerInfo taskManagerInfo = taskManagerInfoWithSlots.getTaskManagerInfo();
@@ -232,7 +232,7 @@ class ResourceManagerTest {
 
         CompletableFuture<TaskExecutorThreadInfoGateway> taskExecutorGatewayFuture =
                 resourceManagerGateway.requestTaskExecutorThreadInfoGateway(
-                        taskManagerId, TestingUtils.TIMEOUT);
+                        taskManagerId, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT);
 
         assertThatFuture(taskExecutorGatewayFuture)
                 .eventuallySucceeds()
@@ -257,7 +257,7 @@ class ResourceManagerTest {
                         taskExecutorAddress);
         final CompletableFuture<RegistrationResponse> registrationFuture =
                 resourceManagerGateway.registerTaskExecutor(
-                        taskExecutorRegistration, TestingUtils.TIMEOUT);
+                        taskExecutorRegistration, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT);
 
         assertThatFuture(registrationFuture)
                 .eventuallySucceeds()
@@ -770,7 +770,7 @@ class ResourceManagerTest {
                         taskExecutorGateway.getAddress());
         RegistrationResponse registrationResult =
                 resourceManagerGateway
-                        .registerTaskExecutor(taskExecutorRegistration, TestingUtils.TIMEOUT)
+                        .registerTaskExecutor(taskExecutorRegistration, TestingUtils.DEFAULT_TEST_EXECUTION_TIMEOUT)
                         .get();
         assertThat(registrationResult).isInstanceOf(TaskExecutorRegistrationSuccess.class);
         InstanceID instanceID =
