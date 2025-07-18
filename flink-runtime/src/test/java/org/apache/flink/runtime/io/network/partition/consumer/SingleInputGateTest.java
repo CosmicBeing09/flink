@@ -353,7 +353,7 @@ class SingleInputGateTest extends InputGateTestBase {
                 segment.putLongLittleEndian(i, i);
             }
             Buffer uncompressedBuffer = new NetworkBuffer(segment, FreeingBufferRecycler.INSTANCE);
-            uncompressedBuffer.setSize(bufferSize);
+            uncompressedBuffer.setWriterIndex(bufferSize);
             Buffer compressedBuffer = compressor.compressToOriginalBuffer(uncompressedBuffer);
             assertThat(compressedBuffer.isCompressed()).isTrue();
 

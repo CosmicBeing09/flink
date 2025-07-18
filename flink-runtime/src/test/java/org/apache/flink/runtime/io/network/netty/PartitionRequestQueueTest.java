@@ -566,10 +566,10 @@ class PartitionRequestQueueTest {
         // then: Buffers of received size will be in outbound channel.
         Object data1 = channel.readOutbound();
         // The size can not be less than the first record in buffer.
-        assertThat(((NettyMessage.BufferResponse) data1).buffer.getSize()).isEqualTo(128);
+        assertThat(((NettyMessage.BufferResponse) data1).buffer.getWriterIndex()).isEqualTo(128);
         Object data2 = channel.readOutbound();
         // The size should shrink up to notified buffer size.
-        assertThat(((NettyMessage.BufferResponse) data2).buffer.getSize()).isEqualTo(65);
+        assertThat(((NettyMessage.BufferResponse) data2).buffer.getWriterIndex()).isEqualTo(65);
     }
 
     private static ResultPartition createResultPartition() throws IOException {

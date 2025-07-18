@@ -228,7 +228,7 @@ class ChannelPersistenceITCase {
                     .ifPresent(buffers::add);
         }
         ByteBuffer result =
-                ByteBuffer.wrap(new byte[buffers.stream().mapToInt(Buffer::getSize).sum()]);
+                ByteBuffer.wrap(new byte[buffers.stream().mapToInt(Buffer::getWriterIndex).sum()]);
         buffers.forEach(
                 buffer -> {
                     result.put(buffer.getNioBufferReadable());

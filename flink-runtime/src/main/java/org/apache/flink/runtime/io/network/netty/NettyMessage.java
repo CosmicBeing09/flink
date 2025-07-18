@@ -329,7 +329,7 @@ public abstract class NettyMessage {
             this.receiverId = checkNotNull(receiverId);
             this.subpartitionId = subpartitionId;
             this.backlog = backlog;
-            this.bufferSize = buffer.getSize();
+            this.bufferSize = buffer.getWriterIndex();
         }
 
         boolean isBuffer() {

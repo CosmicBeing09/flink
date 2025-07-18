@@ -123,7 +123,7 @@ public class CompressedBlockChannelWriter
                         });
 
         NetworkBuffer networkBuffer = new NetworkBuffer(compressedBuffer, this);
-        networkBuffer.setSize(compressedLen);
+        networkBuffer.setWriterIndex(compressedLen);
         writer.writeBlock(networkBuffer);
     }
 

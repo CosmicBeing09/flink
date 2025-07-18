@@ -202,18 +202,18 @@ class NetworkBufferTest extends AbstractByteBufTest {
 
     private static void testCreateSlice1(boolean isBuffer) {
         NetworkBuffer buffer = newBuffer(1024, 1024, isBuffer);
-        buffer.setSize(10); // fake some data
+        buffer.setWriterIndex(10); // fake some data
         ReadOnlySlicedNetworkBuffer slice = buffer.readOnlySlice();
 
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(slice.getSize()).isEqualTo(10);
+        assertThat(slice.getWriterIndex()).isEqualTo(10);
         assertThat(slice.unwrap().unwrap()).isSameAs(buffer);
 
         // slice indices should be independent:
-        buffer.setSize(8);
+        buffer.setWriterIndex(8);
         buffer.setReaderIndex(2);
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(slice.getSize()).isEqualTo(10);
+        assertThat(slice.getWriterIndex()).isEqualTo(10);
     }
 
     @Test
@@ -228,18 +228,18 @@ class NetworkBufferTest extends AbstractByteBufTest {
 
     private static void testCreateSlice2(boolean isBuffer) {
         NetworkBuffer buffer = newBuffer(1024, 1024, isBuffer);
-        buffer.setSize(2); // fake some data
+        buffer.setWriterIndex(2); // fake some data
         ReadOnlySlicedNetworkBuffer slice = buffer.readOnlySlice(1, 10);
 
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(slice.getSize()).isEqualTo(10);
+        assertThat(slice.getWriterIndex()).isEqualTo(10);
         assertThat(slice.unwrap().unwrap()).isSameAs(buffer);
 
         // slice indices should be independent:
-        buffer.setSize(8);
+        buffer.setWriterIndex(8);
         buffer.setReaderIndex(2);
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(slice.getSize()).isEqualTo(10);
+        assertThat(slice.getWriterIndex()).isEqualTo(10);
     }
 
     @Test
@@ -280,7 +280,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         assertThat(buffer.getReaderIndex()).isZero();
 
         // fake some data
-        buffer.setSize(100);
+        buffer.setWriterIndex(100);
         assertThat(buffer.getReaderIndex()).isZero();
         buffer.setReaderIndex(1);
         assertThat(buffer.getReaderIndex()).isOne();
@@ -299,13 +299,13 @@ class NetworkBufferTest extends AbstractByteBufTest {
     private static void testSetGetSize(boolean isBuffer) {
         NetworkBuffer buffer = newBuffer(1024, 1024, isBuffer);
 
-        assertThat(buffer.getSize()).isZero(); // initially 0
-        assertThat(buffer.writerIndex()).isEqualTo(buffer.getSize());
+        assertThat(buffer.getWriterIndex()).isZero(); // initially 0
+        assertThat(buffer.writerIndex()).isEqualTo(buffer.getWriterIndex());
         assertThat(buffer.readerIndex()).isZero(); // initially 0
 
-        buffer.setSize(10);
-        assertThat(buffer.getSize()).isEqualTo(10);
-        assertThat(buffer.writerIndex()).isEqualTo(buffer.getSize());
+        buffer.setWriterIndex(10);
+        assertThat(buffer.getWriterIndex()).isEqualTo(10);
+        assertThat(buffer.writerIndex()).isEqualTo(buffer.getWriterIndex());
         assertThat(buffer.readerIndex()).isZero(); // independent
     }
 
@@ -323,7 +323,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         NetworkBuffer buffer = newBuffer(1024, 1024, isBuffer);
 
         assertThat(buffer.readableBytes()).isZero();
-        buffer.setSize(10);
+        buffer.setWriterIndex(10);
         assertThat(buffer.readableBytes()).isEqualTo(10);
         buffer.setReaderIndex(2);
         assertThat(buffer.readableBytes()).isEqualTo(8);
@@ -351,7 +351,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         assertThat(byteBuffer.capacity()).isZero();
 
         // add some data
-        buffer.setSize(10);
+        buffer.setWriterIndex(10);
         // nothing changes in the byteBuffer
         assertThat(byteBuffer.remaining()).isZero();
         assertThat(byteBuffer.limit()).isZero();
@@ -366,7 +366,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         // modify byteBuffer position and verify nothing has changed in the original buffer
         byteBuffer.position(1);
         assertThat(buffer.getReaderIndex()).isZero();
-        assertThat(buffer.getSize()).isEqualTo(10);
+        assertThat(buffer.getWriterIndex()).isEqualTo(10);
     }
 
     @Test
@@ -407,7 +407,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         assertThat(byteBuffer.capacity()).isOne();
 
         // add some data
-        buffer.setSize(10);
+        buffer.setWriterIndex(10);
         // nothing changes in the byteBuffer
         assertThat(byteBuffer.remaining()).isOne();
         assertThat(byteBuffer.limit()).isOne();
@@ -422,7 +422,7 @@ class NetworkBufferTest extends AbstractByteBufTest {
         // modify byteBuffer position and verify nothing has changed in the original buffer
         byteBuffer.position(1);
         assertThat(buffer.getReaderIndex()).isZero();
-        assertThat(buffer.getSize()).isEqualTo(10);
+        assertThat(buffer.getWriterIndex()).isEqualTo(10);
     }
 
     @Test

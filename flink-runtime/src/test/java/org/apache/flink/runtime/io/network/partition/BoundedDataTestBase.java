@@ -218,13 +218,13 @@ abstract class BoundedDataTestBase {
         while ((b = reader.nextBuffer()) != null) {
             if (compressionEnabled && b.isCompressed()) {
                 Buffer decompressedBuffer = DECOMPRESSOR.decompressToIntermediateBuffer(b);
-                numLongsInBuffer = decompressedBuffer.getSize() / Long.BYTES;
+                numLongsInBuffer = decompressedBuffer.getWriterIndex() / Long.BYTES;
                 BufferBuilderTestUtils.validateBufferWithAscendingLongs(
                         decompressedBuffer, numLongsInBuffer, nextValue);
                 // recycle intermediate buffer.
                 decompressedBuffer.recycleBuffer();
             } else {
-                numLongsInBuffer = b.getSize() / Long.BYTES;
+                numLongsInBuffer = b.getWriterIndex() / Long.BYTES;
                 BufferBuilderTestUtils.validateBufferWithAscendingLongs(
                         b, numLongsInBuffer, nextValue);
             }

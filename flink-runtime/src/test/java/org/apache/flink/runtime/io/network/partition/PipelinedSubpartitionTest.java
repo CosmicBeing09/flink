@@ -181,7 +181,7 @@ public class PipelinedSubpartitionTest extends SubpartitionTestBase {
                     @Override
                     public void onBuffer(Buffer buffer) {
                         final MemorySegment segment = buffer.getMemorySegment();
-                        assertThat(buffer.getSize()).isEqualTo(segment.size());
+                        assertThat(buffer.getWriterIndex()).isEqualTo(segment.size());
 
                         int expected = numberOfBuffers * (segment.size() / 4);
 

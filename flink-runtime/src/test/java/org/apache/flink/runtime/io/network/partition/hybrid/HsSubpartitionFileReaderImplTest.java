@@ -736,7 +736,7 @@ class HsSubpartitionFileReaderImplTest {
             spilledBuffers.add(
                     new SpilledBuffer(
                             subpartitionId, firstBufferIndex + i, currentFileOffset + totalBytes));
-            totalBytes += buffer.getSize() + BufferReaderWriterUtil.HEADER_LENGTH;
+            totalBytes += buffer.getWriterIndex() + BufferReaderWriterUtil.HEADER_LENGTH;
         }
 
         BufferReaderWriterUtil.writeBuffers(dataFileChannel, totalBytes, bufferWithHeaders);

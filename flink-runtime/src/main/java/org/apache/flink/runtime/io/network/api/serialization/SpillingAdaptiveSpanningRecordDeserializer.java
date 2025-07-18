@@ -67,7 +67,7 @@ public class SpillingAdaptiveSpanningRecordDeserializer<T extends IOReadableWrit
 
         int offset = buffer.getMemorySegmentOffset();
         MemorySegment segment = buffer.getMemorySegment();
-        int numBytes = buffer.getSize();
+        int numBytes = buffer.getWriterIndex();
 
         // check if some spanning record deserialization is pending
         if (spanningWrapper.getNumGatheredBytes() > 0) {

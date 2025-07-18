@@ -71,7 +71,7 @@ public class BufferCompressor {
         }
 
         internalBuffer.setCompressed(true);
-        internalBuffer.setSize(compressedLen);
+        internalBuffer.setWriterIndex(compressedLen);
         return internalBuffer.retainBuffer();
     }
 
@@ -113,7 +113,7 @@ public class BufferCompressor {
 
         try {
             int compressedLen;
-            int length = buffer.getSize();
+            int length = buffer.getWriterIndex();
             MemorySegment memorySegment = buffer.getMemorySegment();
             // If buffer is on-heap, manipulate the underlying array directly. There are two main
             // reasons why NIO buffer is not directly used here: One is that some compression

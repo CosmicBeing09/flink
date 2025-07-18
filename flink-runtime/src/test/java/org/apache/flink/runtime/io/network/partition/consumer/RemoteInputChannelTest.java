@@ -1526,7 +1526,7 @@ class RemoteInputChannelTest {
 
     private static List<Integer> toBufferSizes(List<Buffer> inflightBuffers) {
         return inflightBuffers.stream()
-                .map(buffer -> buffer.getSize())
+                .map(buffer -> buffer.getWriterIndex())
                 .collect(Collectors.toList());
     }
 
@@ -1623,7 +1623,7 @@ class RemoteInputChannelTest {
         // Poll all received buffers.
         for (int i = 0; i < 3; i++) {
             Optional<BufferAndAvailability> nextBuffer = channel.getNextBuffer();
-            queueSize -= nextBuffer.get().buffer().getSize();
+            queueSize -= nextBuffer.get().buffer().getWriterIndex();
             assertThat(channel.unsynchronizedGetSizeOfQueuedBuffers()).isEqualTo(queueSize);
         }
 

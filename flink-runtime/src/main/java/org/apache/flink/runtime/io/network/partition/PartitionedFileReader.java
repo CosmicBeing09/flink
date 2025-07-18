@@ -134,7 +134,7 @@ class PartitionedFileReader {
                 }
 
                 NetworkBuffer buffer = new NetworkBuffer(segment, recycler);
-                buffer.setSize(byteBuffer.remaining());
+                buffer.setWriterIndex(byteBuffer.remaining());
                 try {
                     partialBuffer = processBuffer(byteBuffer, buffer, partialBuffer, consumer);
                 } catch (Throwable throwable) {

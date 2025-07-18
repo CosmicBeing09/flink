@@ -106,7 +106,7 @@ public class CompressedHeaderlessChannelReaderInputView extends AbstractChannelR
                     decompressor.decompress(
                             buffer.getMemorySegment().getArray(),
                             0,
-                            buffer.getSize(),
+                            buffer.getWriterIndex(),
                             uncompressedBuffer.getArray(),
                             0);
 

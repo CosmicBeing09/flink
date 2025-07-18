@@ -396,8 +396,8 @@ public class SequentialChannelStateReaderImplTest {
         return buffers.stream()
                 .map(
                         buffer -> {
-                            byte[] buf = new byte[buffer.getSize()];
-                            buffer.getNioBuffer(0, buffer.getSize()).get(buf, 0, buf.length);
+                            byte[] buf = new byte[buffer.getWriterIndex()];
+                            buffer.getNioBuffer(0, buffer.getWriterIndex()).get(buf, 0, buf.length);
                             return buf;
                         })
                 .collect(toList());

@@ -107,7 +107,7 @@ class BufferReaderWriterUtilTest {
         final FileChannel fc = tmpFileChannel(tempPath);
         final Buffer buffer = createTestBuffer();
         final MemorySegment readBuffer =
-                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getSize(), null);
+                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getWriterIndex(), null);
 
         BufferReaderWriterUtil.writeToByteChannel(
                 fc, buffer, BufferReaderWriterUtil.allocatedWriteBufferArray());
@@ -128,7 +128,7 @@ class BufferReaderWriterUtilTest {
         final FileChannel fc = tmpFileChannel(tempPath);
         final Buffer buffer = createTestBuffer();
         final MemorySegment readBuffer =
-                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getSize(), null);
+                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getWriterIndex(), null);
 
         BufferReaderWriterUtil.writeToByteChannel(
                 fc, buffer, BufferReaderWriterUtil.allocatedWriteBufferArray());
@@ -150,7 +150,7 @@ class BufferReaderWriterUtilTest {
         final FileChannel fc = tmpFileChannel(tempPath);
         final Buffer buffer = createTestBuffer();
         final MemorySegment readBuffer =
-                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getSize(), null);
+                MemorySegmentFactory.allocateUnpooledOffHeapMemory(buffer.getWriterIndex(), null);
 
         BufferReaderWriterUtil.writeToByteChannel(
                 fc, buffer, BufferReaderWriterUtil.allocatedWriteBufferArray());

@@ -198,7 +198,7 @@ final class MemoryMappedBoundedData implements BoundedData {
         throw new IOException(
                 String.format(
                         "The buffer (%d bytes) is larger than the maximum size of a memory buffer (%d bytes)",
-                        buffer.getSize(), mappingSize));
+                        buffer.getWriterIndex(), mappingSize));
     }
 
     /**

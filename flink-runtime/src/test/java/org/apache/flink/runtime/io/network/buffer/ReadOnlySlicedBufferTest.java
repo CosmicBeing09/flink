@@ -235,7 +235,7 @@ class ReadOnlySlicedBufferTest {
 
     /**
      * Tests the independence of the writer index via {@link
-     * ReadOnlySlicedNetworkBuffer#setSize(int)}, {@link ReadOnlySlicedNetworkBuffer#getSize()}.
+     * ReadOnlySlicedNetworkBuffer#setWriterIndex(int)}, {@link ReadOnlySlicedNetworkBuffer#getWriterIndex()}.
      */
     @Test
     void testGetSetSize1() {
@@ -244,7 +244,7 @@ class ReadOnlySlicedBufferTest {
 
     /**
      * Tests the independence of the writer index via {@link
-     * ReadOnlySlicedNetworkBuffer#setSize(int)}, {@link ReadOnlySlicedNetworkBuffer#getSize()}.
+     * ReadOnlySlicedNetworkBuffer#setWriterIndex(int)}, {@link ReadOnlySlicedNetworkBuffer#getWriterIndex()}.
      */
     @Test
     void testGetSetSize2() {
@@ -252,11 +252,11 @@ class ReadOnlySlicedBufferTest {
     }
 
     private void testGetSetSize(ReadOnlySlicedNetworkBuffer slice, int sliceSize) {
-        assertThat(buffer.getSize()).isEqualTo(DATA_SIZE);
-        assertThat(slice.getSize()).isEqualTo(sliceSize);
-        buffer.setSize(DATA_SIZE + 1);
-        assertThat(buffer.getSize()).isEqualTo(DATA_SIZE + 1);
-        assertThat(slice.getSize()).isEqualTo(sliceSize);
+        assertThat(buffer.getWriterIndex()).isEqualTo(DATA_SIZE);
+        assertThat(slice.getWriterIndex()).isEqualTo(sliceSize);
+        buffer.setWriterIndex(DATA_SIZE + 1);
+        assertThat(buffer.getWriterIndex()).isEqualTo(DATA_SIZE + 1);
+        assertThat(slice.getWriterIndex()).isEqualTo(sliceSize);
     }
 
     @Test
@@ -286,8 +286,8 @@ class ReadOnlySlicedBufferTest {
         sliceByteBuffer.position(1);
         assertThat(buffer.getReaderIndex()).isZero();
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(buffer.getSize()).isEqualTo(DATA_SIZE);
-        assertThat(slice.getSize()).isEqualTo(sliceSize);
+        assertThat(buffer.getWriterIndex()).isEqualTo(DATA_SIZE);
+        assertThat(slice.getWriterIndex()).isEqualTo(sliceSize);
     }
 
     @Test
@@ -311,8 +311,8 @@ class ReadOnlySlicedBufferTest {
         sliceByteBuffer.position(1);
         assertThat(buffer.getReaderIndex()).isZero();
         assertThat(slice.getReaderIndex()).isZero();
-        assertThat(buffer.getSize()).isEqualTo(DATA_SIZE);
-        assertThat(slice.getSize()).isEqualTo(sliceSize);
+        assertThat(buffer.getWriterIndex()).isEqualTo(DATA_SIZE);
+        assertThat(slice.getWriterIndex()).isEqualTo(sliceSize);
     }
 
     @Test

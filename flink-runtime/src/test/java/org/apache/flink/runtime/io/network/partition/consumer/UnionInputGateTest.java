@@ -206,7 +206,7 @@ class UnionInputGateTest extends InputGateTestBase {
         assertThat(inputGate.getAvailableFuture()).isDone();
         inputChannel1.read(BufferBuilderTestUtils.buildSomeBuffer(2));
         assertThat(inputGate.getAvailableFuture()).isDone();
-        assertThat(inputGate.getNext().get().getBuffer().getSize()).isOne();
+        assertThat(inputGate.getNext().get().getBuffer().getWriterIndex()).isOne();
         assertThat(inputGate.getAvailableFuture()).isDone();
     }
 

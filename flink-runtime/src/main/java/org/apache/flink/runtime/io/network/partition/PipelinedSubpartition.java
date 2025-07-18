@@ -706,7 +706,7 @@ public class PipelinedSubpartition extends ResultSubpartition implements Channel
     }
 
     private void updateStatistics(Buffer buffer) {
-        totalNumberOfBytes += buffer.getSize();
+        totalNumberOfBytes += buffer.getWriterIndex();
     }
 
     @GuardedBy("buffers")

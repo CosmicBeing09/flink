@@ -1093,7 +1093,7 @@ public class SingleInputGate extends IndexedInputGate {
                 buffer.getDataType().hasPriority(),
                 currentChannel.getChannelInfo(),
                 moreAvailable,
-                buffer.getSize(),
+                buffer.getWriterIndex(),
                 morePriorityEvents);
     }
 

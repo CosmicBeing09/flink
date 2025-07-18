@@ -173,7 +173,7 @@ public class BufferBuilderTestUtils {
         Buffer buffer = actualConsumer.build();
         assertThat(buffer.isRecycled()).isFalse();
         assertContent(buffer, FreeingBufferRecycler.INSTANCE, expected);
-        assertThat(buffer.getSize()).isEqualTo(expected.length * Integer.BYTES);
+        assertThat(buffer.getWriterIndex()).isEqualTo(expected.length * Integer.BYTES);
         buffer.recycleBuffer();
     }
 

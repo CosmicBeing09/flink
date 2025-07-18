@@ -169,7 +169,7 @@ public class CheckpointedInputGate implements PullingAsyncDataInput<BufferOrEven
              * However the current is on average accurate and it might be just good enough (at least
              * for the time being).
              */
-            barrierHandler.addProcessedBytes(bufferOrEvent.getBuffer().getSize());
+            barrierHandler.addProcessedBytes(bufferOrEvent.getBuffer().getWriterIndex());
         }
         return next;
     }
