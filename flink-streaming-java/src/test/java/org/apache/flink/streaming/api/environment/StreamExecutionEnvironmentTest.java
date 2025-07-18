@@ -392,12 +392,12 @@ class StreamExecutionEnvironmentTest {
         Configuration config = new Configuration();
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
-        assertThat(env.getConfig().isPeriodicMaterializeEnabled())
+        assertThat(env.getConfig().isPeriodicMaterializationEnabled())
                 .isEqualTo(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED.defaultValue());
 
         config.set(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED, false);
         env.configure(config, this.getClass().getClassLoader());
-        assertThat(env.getConfig().isPeriodicMaterializeEnabled()).isFalse();
+        assertThat(env.getConfig().isPeriodicMaterializationEnabled()).isFalse();
     }
 
     @Test

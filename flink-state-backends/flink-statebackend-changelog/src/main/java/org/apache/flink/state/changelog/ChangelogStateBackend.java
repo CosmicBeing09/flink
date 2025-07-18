@@ -124,7 +124,7 @@ public class ChangelogStateBackend extends AbstractChangelogStateBackend
                                 env.failExternally(new AsynchronousException(message, exception)),
                         changelogKeyedStateBackend,
                         new ChangelogMaterializationMetricGroup(metricGroup),
-                        executionConfig.isPeriodicMaterializeEnabled(),
+                        executionConfig.isPeriodicMaterializationEnabled(),
                         executionConfig.getPeriodicMaterializeIntervalMillis(),
                         executionConfig.getMaterializationMaxAllowedFailures(),
                         operatorIdentifier);

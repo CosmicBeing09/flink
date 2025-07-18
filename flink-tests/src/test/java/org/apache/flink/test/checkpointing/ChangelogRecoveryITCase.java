@@ -54,7 +54,7 @@ public class ChangelogRecoveryITCase extends ChangelogRecoveryITCaseBase {
         SharedReference<AtomicBoolean> hasMaterialization =
                 sharedObjects.add(new AtomicBoolean(true));
         StreamExecutionEnvironment env = getEnv(checkpointFolder, 1000, 1, 10, 0);
-        env.getConfig().enablePeriodicMaterialize(false);
+        env.getConfig().setPeriodicMaterializationEnabled(false);
         waitAndAssert(
                 buildJobGraph(
                         delegatedStateBackend,
