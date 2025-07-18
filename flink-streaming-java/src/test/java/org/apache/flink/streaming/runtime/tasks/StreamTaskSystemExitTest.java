@@ -85,13 +85,13 @@ import static org.mockito.Mockito.mock;
  */
 class StreamTaskSystemExitTest {
     private static final int TEST_EXIT_CODE = 123;
-    private SecurityManager originalSecurityManager;
+    private SecurityManager savedSecurityManager;
 
     /**
      * Perform the check System.exit() does through security manager without actually calling
      * System.exit() not to confuse Junit about failed test.
      */
-    private static void systemExit() {
+    private static void triggerUserSystemExitCheck() {
         SecurityManager securityManager = System.getSecurityManager();
         if (securityManager != null) {
             securityManager.checkExit(TEST_EXIT_CODE);
@@ -103,13 +103,13 @@ class StreamTaskSystemExitTest {
         Configuration configuration = new Configuration();
         configuration.set(
                 ClusterOptions.INTERCEPT_USER_SYSTEM_EXIT, ClusterOptions.UserSystemExitMode.THROW);
-        originalSecurityManager = System.getSecurityManager();
+        savedSecurityManager = System.getSecurityManager();
         FlinkSecurityManager.setFromConfiguration(configuration);
     }
 
     @AfterEach
     void tearDown() {
-        System.setSecurityManager(originalSecurityManager);
+        System.setSecurityManager(savedSecurityManager);
     }
 
     @Test
@@ -231,14 +231,14 @@ class StreamTaskSystemExitTest {
         @Override
         protected void init() {
             if (exitPoint == ExitPoint.INIT) {
-                systemExit();
+                triggerUserSystemExitCheck();
             }
         }
 
         @Override
         protected void processInput(MailboxDefaultAction.Controller controller) throws Exception {
             if (exitPoint == ExitPoint.PROCESS_INPUT) {
-                systemExit();
+                triggerUserSystemExitCheck();
             }
         }
 
@@ -248,7 +248,7 @@ class StreamTaskSystemExitTest {
         @Override
         protected void cancelTask() {
             if (exitPoint == ExitPoint.CANCEL) {
-                systemExit();
+                triggerUserSystemExitCheck();
             }
         }
 
@@ -299,7 +299,7 @@ class StreamTaskSystemExitTest {
 
         @Override
         public void run(SourceContext<String> ctx) {
-            systemExit();
+            triggerUserSystemExitCheck();
         }
 
         @Override
