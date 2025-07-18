@@ -69,13 +69,13 @@ public class SinkTransformationTranslator<Input, Output>
     private static final String WRITER_NAME = "Writer";
 
     @Override
-    public Collection<Integer> translateForBatch(
+    public Collection<Integer> translateForBatchInternal(
             SinkTransformation<Input, Output> transformation, Context context) {
         return translateInternal(transformation, context, true);
     }
 
     @Override
-    public Collection<Integer> translateForStreaming(
+    public Collection<Integer> translateForStreamingInternal(
             SinkTransformation<Input, Output> transformation, Context context) {
         return translateInternal(transformation, context, false);
     }

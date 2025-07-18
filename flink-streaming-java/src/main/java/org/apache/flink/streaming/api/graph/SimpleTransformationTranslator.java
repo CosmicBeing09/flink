@@ -40,7 +40,7 @@ public abstract class SimpleTransformationTranslator<OUT, T extends Transformati
         implements TransformationTranslator<OUT, T> {
 
     @Override
-    public final Collection<Integer> translateForBatch(
+    public final Collection<Integer> translateForBatchInternal(
             final T transformation, final Context context) {
         checkNotNull(transformation);
         checkNotNull(context);
@@ -53,7 +53,7 @@ public abstract class SimpleTransformationTranslator<OUT, T extends Transformati
     }
 
     @Override
-    public final Collection<Integer> translateForStreaming(
+    public final Collection<Integer> translateForStreamingInternal(
             final T transformation, final Context context) {
         checkNotNull(transformation);
         checkNotNull(context);

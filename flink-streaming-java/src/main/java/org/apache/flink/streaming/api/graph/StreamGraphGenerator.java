@@ -811,8 +811,8 @@ public class StreamGraphGenerator {
                 new ContextImpl(this, streamGraph, slotSharingGroup, configuration);
 
         return shouldExecuteInBatchMode
-                ? translator.translateForBatch(transform, context)
-                : translator.translateForStreaming(transform, context);
+                ? translator.translateForBatchInternal(transform, context)
+                : translator.translateForStreamingInternal(transform, context);
     }
 
     /**
