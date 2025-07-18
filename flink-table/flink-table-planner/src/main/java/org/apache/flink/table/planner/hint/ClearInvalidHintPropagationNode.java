@@ -47,10 +47,10 @@ import java.util.stream.Collectors;
  * org.apache.calcite.sql2rel.SqlToRelConverter#convertFrom(SqlToRelConverter.Blackboard, SqlNode,
  * List)}.
  */
-public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelShuttle {
+public class ClearInvalidHintPropagationNode extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBinaryNode(BiRel binaryNode) {
+    protected RelNode visitBinaryRelNode(BiRel binaryNode) {
         List<RelHint> hints = ((Hintable) binaryNode).getHints();
 
         Set<String> allHintNames =
@@ -127,13 +127,13 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
         }
 
         @Override
-        public RelNode visit(LogicalCorrelate correlate) {
-            return visitBiRel(correlate);
+        public RelNode visit(LogicalCorrelate correlateNode) {
+            return visitBiRel(correlateNode);
         }
 
         @Override
-        public RelNode visit(LogicalJoin join) {
-            return visitBiRel(join);
+        public RelNode visit(LogicalJoin joinNode) {
+            return visitBiRel(joinNode);
         }
 
         private RelNode visitBiRel(BiRel biRel) {

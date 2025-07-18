@@ -20,7 +20,7 @@ import org.apache.flink.table.api.TableConfig;
 import org.apache.flink.table.data.TimestampData;
 import org.apache.flink.table.planner.calcite.FlinkOperatorBinding;
 import org.apache.flink.table.planner.calcite.TimestampSchemaVersion;
-import org.apache.flink.table.planner.hint.ClearQueryHintsWithInvalidPropagationShuttle;
+import org.apache.flink.table.planner.hint.ClearInvalidHintPropagationNode;
 import org.apache.flink.table.planner.hint.FlinkHints;
 import org.apache.flink.table.planner.plan.FlinkCalciteCatalogSnapshotReader;
 import org.apache.flink.table.planner.plan.utils.FlinkRelOptUtil;
@@ -664,7 +664,7 @@ public class SqlToRelConverter {
         // clear query hints which are propagated into wrong query block
         // The hint QueryBlockAlias will be added when building a RelNode tree before. It is used to
         // distinguish the query block in the SQL.
-        result = result.accept(new ClearQueryHintsWithInvalidPropagationShuttle());
+        result = result.accept(new ClearInvalidHintPropagationNode());
 
         // clear the hints on some nodes where these hints should not be attached
         result = FlinkHints.clearQueryHintsOnUnmatchedNodes(result);

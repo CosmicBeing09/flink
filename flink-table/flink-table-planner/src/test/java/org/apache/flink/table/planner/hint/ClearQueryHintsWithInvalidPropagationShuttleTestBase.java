@@ -140,7 +140,7 @@ abstract class ClearQueryHintsWithInvalidPropagationShuttleTestBase extends Tabl
 
         RelNode rootAfterClearingJoinHintWithInvalidPropagation =
                 rootBeforeClearingJoinHintWithInvalidPropagation.accept(
-                        new ClearQueryHintsWithInvalidPropagationShuttle());
+                        new ClearInvalidHintPropagationNode());
         plan = buildRelPlanWithQueryBlockAlias(rootAfterClearingJoinHintWithInvalidPropagation);
         util.assertEqualsOrExpand("afterClearingJoinHints", plan, false);
     }

@@ -1011,7 +1011,7 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
         }
 
         @Override
-        public RelNode visit(LogicalCorrelate correlate) {
+        public RelNode visit(LogicalCorrelate correlateNode) {
             // TODO does not allow correlation condition in its inputs now
             // If correlation conditions in correlate inputs reference to correlate outputs
             // variable,
@@ -1027,49 +1027,49 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
             //   SELECT * FROM inner_table r WHERE r.d IN (SELECT x.i FROM x WHERE x.j = r.e)) t,
             //   LATERAL TABLE(table_func(t.f)) AS T(f1)
             //  ))
-            checkCorConditionOfInput(correlate.getLeft());
-            checkCorConditionOfInput(correlate.getRight());
+            checkCorConditionOfInput(correlateNode.getLeft());
+            checkCorConditionOfInput(correlateNode.getRight());
 
-            visitChild(correlate, 0, correlate.getLeft());
-            visitChild(correlate, 1, correlate.getRight());
-            return correlate;
+            visitChild(correlateNode, 0, correlateNode.getLeft());
+            visitChild(correlateNode, 1, correlateNode.getRight());
+            return correlateNode;
         }
 
         @Override
-        public RelNode visit(LogicalJoin join) {
-            switch (join.getJoinType()) {
+        public RelNode visit(LogicalJoin joinNode) {
+            switch (joinNode.getJoinType()) {
                 case LEFT:
-                    checkCorConditionOfInput(join.getRight());
+                    checkCorConditionOfInput(joinNode.getRight());
                     break;
                 case RIGHT:
-                    checkCorConditionOfInput(join.getLeft());
+                    checkCorConditionOfInput(joinNode.getLeft());
                     break;
                 case FULL:
-                    checkCorConditionOfInput(join.getLeft());
-                    checkCorConditionOfInput(join.getRight());
+                    checkCorConditionOfInput(joinNode.getLeft());
+                    checkCorConditionOfInput(joinNode.getRight());
                     break;
                 default:
                     break;
             }
 
-            final boolean hasSubQuery = RexUtil.SubQueryFinder.find(join.getCondition()) != null;
+            final boolean hasSubQuery = RexUtil.SubQueryFinder.find(joinNode.getCondition()) != null;
             try {
                 if (!corNodeStack.isEmpty()) {
-                    mapSubQueryNodeToCorSet.put(join, corNodeStack.peek().getVariablesSet());
+                    mapSubQueryNodeToCorSet.put(joinNode, corNodeStack.peek().getVariablesSet());
                 }
                 if (hasSubQuery) {
-                    corNodeStack.push(join);
+                    corNodeStack.push(joinNode);
                 }
-                checkCorCondition(join);
-                join.getCondition().accept(rexVisitor(join));
+                checkCorCondition(joinNode);
+                joinNode.getCondition().accept(rexVisitor(joinNode));
             } finally {
                 if (hasSubQuery) {
                     corNodeStack.pop();
                 }
             }
-            visitChild(join, 0, join.getLeft());
-            visitChild(join, 1, join.getRight());
-            return join;
+            visitChild(joinNode, 0, joinNode.getLeft());
+            visitChild(joinNode, 1, joinNode.getRight());
+            return joinNode;
         }
 
         @Override
@@ -1249,9 +1249,9 @@ public class SubQueryDecorrelator extends RelShuttleImpl {
                         }
 
                         @Override
-                        public RelNode visit(LogicalJoin join) {
-                            join.getCondition().accept(visitor);
-                            return super.visit(join);
+                        public RelNode visit(LogicalJoin joinNode) {
+                            joinNode.getCondition().accept(visitor);
+                            return super.visit(joinNode);
                         }
                     };
             input.accept(shuttle);
