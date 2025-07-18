@@ -371,8 +371,8 @@ class JMFailoverITCase {
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         return operatorCoordinatorsSupportsBatchSnapshot
-                ? createJobGraph(env, methodName)
-                : createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
+                ? createStreamGraph(env, methodName)
+                : createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(env, methodName);
     }
 
     private TestingMiniClusterConfiguration getMiniClusterConfiguration(Configuration config)
@@ -446,7 +446,7 @@ class JMFailoverITCase {
                 new File(flinkConfiguration.get(CoreOptions.TMP_DIRS)));
     }
 
-    private JobGraph createJobGraph(StreamExecutionEnvironment env, String jobName) {
+    private JobGraph createStreamGraph(StreamExecutionEnvironment env, String jobName) {
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
                 new TupleTypeInfo<>(BasicTypeInfo.INT_TYPE_INFO, BasicTypeInfo.INT_TYPE_INFO);
 
@@ -471,7 +471,7 @@ class JMFailoverITCase {
         return StreamingJobGraphGenerator.createJobGraph(streamGraph);
     }
 
-    private JobGraph createJobGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
+    private JobGraph createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
             StreamExecutionEnvironment env, String jobName) throws Exception {
 
         TupleTypeInfo<Tuple2<Integer, Integer>> typeInfo =
