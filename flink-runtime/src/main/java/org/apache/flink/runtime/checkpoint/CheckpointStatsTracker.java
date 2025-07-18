@@ -63,7 +63,7 @@ public interface CheckpointStatsTracker {
     }
 
     void reportRestoredCheckpoint(
-            long checkpointID,
+            long checkpointId,
             CheckpointProperties properties,
             String externalPath,
             long stateSize);
@@ -93,7 +93,7 @@ public interface CheckpointStatsTracker {
      *
      * @param checkpointId ID of the checkpoint.
      * @param triggerTimestamp Trigger timestamp of the checkpoint.
-     * @param props The checkpoint properties.
+     * @param checkpointProperties The checkpoint properties.
      * @param vertexToDop mapping of {@link JobVertexID} to DOP
      * @return Tracker for statistics gathering or {@code null} if no stats were tracked.
      */
@@ -101,7 +101,7 @@ public interface CheckpointStatsTracker {
     PendingCheckpointStats reportPendingCheckpoint(
             long checkpointId,
             long triggerTimestamp,
-            CheckpointProperties props,
+            CheckpointProperties checkpointProperties,
             Map<JobVertexID, Integer> vertexToDop);
 
     void reportFailedCheckpoint(FailedCheckpointStats failed);
