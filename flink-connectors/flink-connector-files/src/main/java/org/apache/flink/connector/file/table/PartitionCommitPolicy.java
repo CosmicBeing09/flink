@@ -70,11 +70,11 @@ public interface PartitionCommitPolicy {
 
         /** Partition spec in the form of a map from partition keys to values. */
         default LinkedHashMap<String, String> partitionSpec() {
-            LinkedHashMap<String, String> res = new LinkedHashMap<>();
+            LinkedHashMap<String, String> partitionSpecMap = new LinkedHashMap<>();
             for (int i = 0; i < partitionKeys().size(); i++) {
-                res.put(partitionKeys().get(i), partitionValues().get(i));
+                partitionSpecMap.put(partitionKeys().get(i), partitionValues().get(i));
             }
-            return res;
+            return partitionSpecMap;
         }
     }
 
