@@ -186,18 +186,18 @@ public class SavepointWriterUidModificationITCase {
 
     @SafeVarargs
     private static void runAndValidate(
-            String savepointPath, Tuple2<Collection<Integer>, String>... assertions)
+            String savepointPath, Tuple2<Collection<Integer>, String>... validationParameters)
             throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // prepare collection of state
-        final List<CloseableIterator<Integer>> iterators = new ArrayList<>();
-        for (Tuple2<Collection<Integer>, String> assertion : assertions) {
-            iterators.add(
-                    env.fromData(assertion.f0)
+        final List<CloseableIterator<Integer>> stateIterators = new ArrayList<>();
+        for (Tuple2<Collection<Integer>, String> validationParameter : validationParameters) {
+            stateIterators.add(
+                    env.fromData(validationParameter.f0)
                             .keyBy(v -> v)
                             .map(new StateReader())
-                            .uid(assertion.f1)
+                            .uid(validationParameter.f1)
                             .collectAsync());
         }
 
@@ -208,13 +208,13 @@ public class SavepointWriterUidModificationITCase {
         env.executeAsync(streamGraph);
 
         // validate state
-        for (int i = 0; i < assertions.length; i++) {
-            assertThat(iterators.get(i))
+        for (int i = 0; i < validationParameters.length; i++) {
+            assertThat(stateIterators.get(i))
                     .toIterable()
-                    .containsExactlyInAnyOrderElementsOf(assertions[i].f0);
+                    .containsExactlyInAnyOrderElementsOf(validationParameters[i].f0);
         }
 
-        for (CloseableIterator<Integer> iterator : iterators) {
+        for (CloseableIterator<Integer> iterator : stateIterators) {
             iterator.close();
         }
     }
