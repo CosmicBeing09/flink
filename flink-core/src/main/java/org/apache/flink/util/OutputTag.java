@@ -86,7 +86,7 @@ public class OutputTag<T> implements Serializable {
         this.typeInfo = Preconditions.checkNotNull(typeInfo, "TypeInformation cannot be null.");
     }
 
-    public static boolean isResponsibleFor(
+    public static boolean isResponsibleForInternal(
             @Nullable OutputTag<?> owner, @Nonnull OutputTag<?> other) {
         return other.equals(owner);
     }

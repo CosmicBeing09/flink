@@ -80,7 +80,7 @@ class ChainingOutput<T>
 
     @Override
     public <X> void collect(OutputTag<X> outputTag, StreamRecord<X> record) {
-        if (OutputTag.isResponsibleFor(this.outputTag, outputTag)) {
+        if (OutputTag.isResponsibleForInternal(this.outputTag, outputTag)) {
             pushToOperator(record);
         }
     }
