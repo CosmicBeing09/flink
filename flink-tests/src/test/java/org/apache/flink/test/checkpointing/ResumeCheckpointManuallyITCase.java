@@ -335,33 +335,33 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             RecoveryClaimMode recoveryClaimMode)
             throws Exception {
 
-        final Configuration config = new Configuration();
+        final Configuration clusterConfig = new Configuration();
 
         final File savepointDir = temporaryFolder.newFolder();
 
-        config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir.toURI().toString());
-        config.set(CheckpointingOptions.SAVEPOINT_DIRECTORY, savepointDir.toURI().toString());
-        config.set(StateRecoveryOptions.LOCAL_RECOVERY, localRecovery);
+        clusterConfig.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, checkpointDir.toURI().toString());
+        clusterConfig.set(CheckpointingOptions.SAVEPOINT_DIRECTORY, savepointDir.toURI().toString());
+        clusterConfig.set(StateRecoveryOptions.LOCAL_RECOVERY, localRecovery);
 
         // Configure DFS DSTL for this test as it might produce too much GC pressure if
         // ChangelogStateBackend is used.
         // Doing it on cluster level unconditionally as randomization currently happens on the job
         // level (environment); while this factory can only be set on the cluster level.
         FsStateChangelogStorageFactory.configure(
-                config, temporaryFolder.newFolder(), Duration.ofMinutes(1), 10);
+                clusterConfig, temporaryFolder.newFolder(), Duration.ofMinutes(1), 10);
 
         // ZooKeeper recovery mode?
         if (zooKeeperQuorum != null) {
             final File haDir = temporaryFolder.newFolder();
-            config.set(HighAvailabilityOptions.HA_MODE, "ZOOKEEPER");
-            config.set(HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM, zooKeeperQuorum);
-            config.set(HighAvailabilityOptions.HA_STORAGE_PATH, haDir.toURI().toString());
+            clusterConfig.set(HighAvailabilityOptions.HA_MODE, "ZOOKEEPER");
+            clusterConfig.set(HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM, zooKeeperQuorum);
+            clusterConfig.set(HighAvailabilityOptions.HA_STORAGE_PATH, haDir.toURI().toString());
         }
 
         MiniClusterWithClientResource cluster =
                 new MiniClusterWithClientResource(
                         new MiniClusterResourceConfiguration.Builder()
-                                .setConfiguration(config)
+                                .setConfiguration(clusterConfig)
                                 .setNumberTaskManagers(NUM_TASK_MANAGERS)
                                 .setNumberSlotsPerTaskManager(SLOTS_PER_TASK_MANAGER)
                                 .build());
