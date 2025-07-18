@@ -33,29 +33,29 @@ import static org.apache.flink.util.Preconditions.checkArgument;
  * slotAssignments}, describing the parallelism each vertex could be scheduled with.
  */
 public class VertexParallelism {
-    private final Map<JobVertexID, Integer> parallelismForVertices;
+    private final Map<JobVertexID, Integer> vertexParallelismMap;
 
-    public VertexParallelism(Map<JobVertexID, Integer> parallelismForVertices) {
-        this.parallelismForVertices = parallelismForVertices;
+    public VertexParallelism(Map<JobVertexID, Integer> vertexParallelismMap) {
+        this.vertexParallelismMap = vertexParallelismMap;
     }
 
     public int getParallelism(JobVertexID jobVertexId) {
         checkArgument(
-                parallelismForVertices.containsKey(jobVertexId), "Unknown vertex: " + jobVertexId);
-        return parallelismForVertices.get(jobVertexId);
+                vertexParallelismMap.containsKey(jobVertexId), "Unknown vertex: " + jobVertexId);
+        return vertexParallelismMap.get(jobVertexId);
     }
 
     public Optional<Integer> getParallelismOptional(JobVertexID jobVertexId) {
-        return Optional.ofNullable(parallelismForVertices.get(jobVertexId));
+        return Optional.ofNullable(vertexParallelismMap.get(jobVertexId));
     }
 
     public Set<JobVertexID> getVertices() {
-        return Collections.unmodifiableSet(parallelismForVertices.keySet());
+        return Collections.unmodifiableSet(vertexParallelismMap.keySet());
     }
 
     @Override
     public String toString() {
-        return "VertexParallelism: " + parallelismForVertices;
+        return "VertexParallelism: " + vertexParallelismMap;
     }
 
     public static VertexParallelism empty() {
