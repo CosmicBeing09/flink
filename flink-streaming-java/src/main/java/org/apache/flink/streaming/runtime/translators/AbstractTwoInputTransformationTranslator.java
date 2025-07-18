@@ -107,7 +107,7 @@ public abstract class AbstractTwoInputTransformationTranslator<
             streamGraph.setSupportsConcurrentExecutionAttempts(
                     transformationId,
                     ((PhysicalTransformation<OUT>) transformation)
-                            .isSupportsConcurrentExecutionAttempts());
+                            .isSupportsConcurrentExecutionAttemptsInternal());
         }
 
         return Collections.singleton(transformationId);

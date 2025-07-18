@@ -380,7 +380,7 @@ public class SinkTransformationTranslator<Input, Output>
 
                     // overrides the supportsConcurrentExecutionAttempts of transformation because
                     // it's not allowed to specify fine-grained concurrent execution attempts yet
-                    physicalSubTransformation.setSupportsConcurrentExecutionAttempts(
+                    physicalSubTransformation.setSupportsConcurrentExecutionAttemptsInternal(
                             supportsConcurrentExecutionAttempts);
                 }
             }

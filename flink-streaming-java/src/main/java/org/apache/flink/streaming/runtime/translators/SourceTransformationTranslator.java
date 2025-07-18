@@ -98,7 +98,7 @@ public class SourceTransformationTranslator<OUT, SplitT extends SourceSplit, Enu
         streamGraph.setMaxParallelism(transformationId, transformation.getMaxParallelism());
 
         streamGraph.setSupportsConcurrentExecutionAttempts(
-                transformationId, transformation.isSupportsConcurrentExecutionAttempts());
+                transformationId, transformation.isSupportsConcurrentExecutionAttemptsInternal());
 
         return Collections.singleton(transformationId);
     }

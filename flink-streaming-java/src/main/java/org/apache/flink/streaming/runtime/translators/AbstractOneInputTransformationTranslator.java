@@ -98,7 +98,7 @@ abstract class AbstractOneInputTransformationTranslator<IN, OUT, OP extends Tran
             streamGraph.setSupportsConcurrentExecutionAttempts(
                     transformationId,
                     ((PhysicalTransformation<OUT>) transformation)
-                            .isSupportsConcurrentExecutionAttempts());
+                            .isSupportsConcurrentExecutionAttemptsInternal());
         }
 
         return Collections.singleton(transformationId);

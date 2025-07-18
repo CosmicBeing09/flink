@@ -68,11 +68,11 @@ public abstract class PhysicalTransformation<T> extends Transformation<T> {
     /** Sets the chaining strategy of this {@code Transformation}. */
     public abstract void setChainingStrategy(ChainingStrategy strategy);
 
-    public boolean isSupportsConcurrentExecutionAttempts() {
+    public boolean isSupportsConcurrentExecutionAttemptsInternal() {
         return supportsConcurrentExecutionAttempts;
     }
 
-    public void setSupportsConcurrentExecutionAttempts(
+    public void setSupportsConcurrentExecutionAttemptsInternal(
             boolean supportsConcurrentExecutionAttempts) {
         this.supportsConcurrentExecutionAttempts = supportsConcurrentExecutionAttempts;
     }

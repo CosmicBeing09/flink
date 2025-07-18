@@ -125,7 +125,7 @@ public class MultiInputTransformationTranslator<OUT>
         }
 
         streamGraph.setSupportsConcurrentExecutionAttempts(
-                transformationId, transformation.isSupportsConcurrentExecutionAttempts());
+                transformationId, transformation.isSupportsConcurrentExecutionAttemptsInternal());
 
         return Collections.singleton(transformationId);
     }
