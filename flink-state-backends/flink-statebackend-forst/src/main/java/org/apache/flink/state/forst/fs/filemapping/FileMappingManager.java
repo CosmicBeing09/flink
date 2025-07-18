@@ -107,7 +107,7 @@ public class FileMappingManager {
         String fileName = path.toString();
         MappingEntry entry = filePathToMappingEntry.getOrDefault(fileName, null);
         if (entry != null) {
-            return new RealPath(new Path(entry.sourcePath), entry.isLocal);
+            return new RealPath(new Path(entry.sourceFilePath), entry.isLocalFile);
         }
         return null;
     }
@@ -174,7 +174,7 @@ public class FileMappingManager {
     public boolean deleteFile(Path file, boolean recursive) throws IOException {
         String fileStr = file.toString();
         MappingEntry entry = filePathToMappingEntry.getOrDefault(fileStr, null);
-        LOG.trace("delete: {}, source:{}", file, entry == null ? "null" : entry.sourcePath);
+        LOG.trace("delete: {}, source:{}", file, entry == null ? "null" : entry.sourceFilePath);
         // case 1: delete file
         if (entry != null) {
             filePathToMappingEntry.remove(fileStr);
@@ -190,12 +190,12 @@ public class FileMappingManager {
 
         // step 2.1: find all matched entries, mark delete dir as parent dir
         for (Map.Entry<String, MappingEntry> currentEntry : filePathToMappingEntry.entrySet()) {
-            if (!isParentDir(currentEntry.getValue().sourcePath, fileStr)) {
+            if (!isParentDir(currentEntry.getValue().sourceFilePath, fileStr)) {
                 continue;
             }
             MappingEntry oldParentDir = currentEntry.getValue().parentDir;
             if (oldParentDir == null
-                    || isParentDir(oldParentDir.sourcePath, fileStr)
+                    || isParentDir(oldParentDir.sourceFilePath, fileStr)
                             && !oldParentDir.equals(parentEntry)) {
                 parentEntry.retain();
                 currentEntry.getValue().parentDir = parentEntry;
