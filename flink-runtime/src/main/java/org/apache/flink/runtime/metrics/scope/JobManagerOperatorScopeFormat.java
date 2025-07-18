@@ -51,7 +51,7 @@ public class JobManagerOperatorScopeFormat extends ScopeFormat {
 
         final String[] template = copyTemplate();
         final String[] values = {
-            parent.parent().hostname(),
+            parent.getParentMetricGroup().hostname(),
             valueOrNull(parent.jobId()),
             valueOrNull(parent.jobName()),
             valueOrNull(vertexId),

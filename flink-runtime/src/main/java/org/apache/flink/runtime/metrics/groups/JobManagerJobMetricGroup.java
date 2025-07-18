@@ -39,7 +39,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Internal
 public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGroup> {
-    private final Map<String, JobManagerOperatorMetricGroup> operators = new HashMap<>();
+    private final Map<String, JobManagerOperatorMetricGroup> operatorMetricGroups = new HashMap<>();
 
     JobManagerJobMetricGroup(
             MetricRegistry registry,
@@ -56,7 +56,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
                         .formatScope(checkNotNull(parent), jobId, jobName));
     }
 
-    public final JobManagerMetricGroup parent() {
+    public final JobManagerMetricGroup getParentMetricGroup() {
         return parent;
     }
 
@@ -69,7 +69,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
         final String key = operatorID + truncatedOperatorName;
 
         synchronized (this) {
-            return operators.computeIfAbsent(
+            return operatorMetricGroups.computeIfAbsent(
                     key,
                     operator ->
                             new JobManagerOperatorMetricGroup(
@@ -96,7 +96,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
     @VisibleForTesting
     int numRegisteredOperatorMetricGroups() {
-        return operators.size();
+        return operatorMetricGroups.size();
     }
 
     void removeOperatorMetricGroup(OperatorID operatorID, String operatorName) {
@@ -108,7 +108,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
         synchronized (this) {
             if (!isClosed()) {
-                operators.remove(key);
+                operatorMetricGroups.remove(key);
             }
         }
     }
@@ -119,6 +119,6 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
     @Override
     protected Iterable<? extends ComponentMetricGroup> subComponents() {
-        return operators.values();
+        return operatorMetricGroups.values();
     }
 }
