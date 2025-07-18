@@ -172,17 +172,17 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
         if (savepointResource == null) {
             throw new IllegalArgumentException("Savepoint file does not exist.");
         }
-        ExecutionPlan jobToMigrate = createJobGraph(ExecutionMode.MIGRATE);
-        jobToMigrate.setSavepointRestoreSettings(
+        ExecutionPlan executionPlan = createExecutionPlan(ExecutionMode.MIGRATE);
+        executionPlan.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepointResource.getFile()));
 
-        assertNotNull(jobToMigrate.getJobID());
+        assertNotNull(executionPlan.getJobID());
 
-        clusterClient.submitJob(jobToMigrate).get();
+        clusterClient.submitJob(executionPlan).get();
 
         CompletableFuture<JobStatus> jobRunningFuture =
                 FutureUtils.retrySuccessfulWithDelay(
-                        () -> clusterClient.getJobStatus(jobToMigrate.getJobID()),
+                        () -> clusterClient.getJobStatus(executionPlan.getJobID()),
                         Duration.ofMillis(50),
                         deadline,
                         (jobStatus) -> jobStatus == JobStatus.RUNNING,
@@ -203,7 +203,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
                 savepointPath =
                         clusterClient
                                 .cancelWithSavepoint(
-                                        jobToMigrate.getJobID(),
+                                        executionPlan.getJobID(),
                                         targetDirectory.getAbsolutePath(),
                                         SavepointFormatType.CANONICAL)
                                 .get();
@@ -221,7 +221,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
 
         CompletableFuture<JobStatus> jobCanceledFuture =
                 FutureUtils.retrySuccessfulWithDelay(
-                        () -> clusterClient.getJobStatus(jobToMigrate.getJobID()),
+                        () -> clusterClient.getJobStatus(executionPlan.getJobID()),
                         Duration.ofMillis(50),
                         deadline,
                         (jobStatus) -> jobStatus == JobStatus.CANCELED,
@@ -235,7 +235,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
 
     private void restoreJob(ClusterClient<?> clusterClient, Deadline deadline, String savepointPath)
             throws Exception {
-        ExecutionPlan jobToRestore = createJobGraph(ExecutionMode.RESTORE);
+        ExecutionPlan jobToRestore = createExecutionPlan(ExecutionMode.RESTORE);
         jobToRestore.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepointPath, true));
 
@@ -255,7 +255,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
                 jobStatusFuture.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS));
     }
 
-    private ExecutionPlan createJobGraph(ExecutionMode mode) {
+    private ExecutionPlan createExecutionPlan(ExecutionMode mode) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
         RestartStrategyUtils.configureNoRestartStrategy(env);
