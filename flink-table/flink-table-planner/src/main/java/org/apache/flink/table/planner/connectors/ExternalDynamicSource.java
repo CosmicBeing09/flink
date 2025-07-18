@@ -116,7 +116,7 @@ final class ExternalDynamicSource<E>
         return new TransformationScanProvider() {
             @Override
             public Transformation<RowData> createTransformation(ProviderContext providerContext) {
-                return ExecNodeUtil.createOneInputTransformation(
+                return ExecNodeUtil.createOneInputTransformationInternal(
                         externalTransformation,
                         providerContext
                                 .generateUid(EXTERNAL_DATASTREAM_TRANSFORMATION)

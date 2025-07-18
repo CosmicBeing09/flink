@@ -203,7 +203,7 @@ public class StreamExecDeduplicate extends ExecNodeBase<RowData>
         }
 
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(DEDUPLICATE_TRANSFORMATION, config),
                         operator,

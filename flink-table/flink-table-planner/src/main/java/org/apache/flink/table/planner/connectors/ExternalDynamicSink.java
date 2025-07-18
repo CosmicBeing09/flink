@@ -104,7 +104,7 @@ final class ExternalDynamicSink implements DynamicTableSink, SupportsWritingMeta
                                                             generateOperatorName(),
                                                             generateOperatorDesc()));
 
-                    return ExecNodeUtil.createOneInputTransformation(
+                    return ExecNodeUtil.createOneInputTransformationInternal(
                             input,
                             transformationMeta,
                             new OutputConversionOperator(

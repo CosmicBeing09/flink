@@ -241,7 +241,7 @@ public class StreamExecOverAggregate extends ExecNodeBase<RowData>
                 new KeyedProcessOperator<>(overProcessFunction);
 
         OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(OVER_AGGREGATE_TRANSFORMATION, config),
                         operator,

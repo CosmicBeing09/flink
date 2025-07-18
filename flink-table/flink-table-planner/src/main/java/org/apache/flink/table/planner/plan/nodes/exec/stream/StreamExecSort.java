@@ -119,7 +119,7 @@ public class StreamExecSort extends ExecNodeBase<RowData> implements StreamExecN
         Transformation<RowData> inputTransform =
                 (Transformation<RowData>) inputEdge.translateToPlan(planner);
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(SORT_TRANSFORMATION, config),
                 sortOperator,

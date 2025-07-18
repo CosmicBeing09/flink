@@ -262,7 +262,7 @@ public class StreamExecPythonOverAggregate extends ExecNodeBase<RowData>
                         minIdleStateRetentionTime,
                         maxIdleStateRetentionTime);
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(PYTHON_OVER_AGGREGATE_TRANSFORMATION, config),
                 pythonOperator,

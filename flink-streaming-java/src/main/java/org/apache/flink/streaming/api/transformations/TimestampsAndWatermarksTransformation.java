@@ -67,12 +67,12 @@ public class TimestampsAndWatermarksTransformation<IN> extends PhysicalTransform
     }
 
     /** Returns the {@code TypeInformation} for the elements of the input. */
-    public TypeInformation<IN> getInputType() {
+    public TypeInformation<IN> getInputTypeInternal() {
         return input.getOutputType();
     }
 
     /** Returns the {@code WatermarkStrategy} to use. */
-    public WatermarkStrategy<IN> getWatermarkStrategy() {
+    public WatermarkStrategy<IN> getWatermarkStrategyInternal() {
         return watermarkStrategy;
     }
 

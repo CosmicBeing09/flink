@@ -94,7 +94,7 @@ public abstract class CommonExecWindowTableFunction extends ExecNodeBase<RowData
             ExecNodeConfig config, Transformation<RowData> inputTransform) {
         final WindowTableFunctionOperatorBase windowTableFunctionOperator =
                 createAlignedWindowTableFunctionOperator(config);
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(WINDOW_TRANSFORMATION, config),
                 windowTableFunctionOperator,

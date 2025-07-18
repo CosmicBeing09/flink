@@ -61,13 +61,13 @@ public class TimestampsAndWatermarksTransformationTranslator<IN>
 
         TimestampsAndWatermarksOperator<IN> operator =
                 new TimestampsAndWatermarksOperator<>(
-                        transformation.getWatermarkStrategy(), emitProgressiveWatermarks);
+                        transformation.getWatermarkStrategyInternal(), emitProgressiveWatermarks);
         SimpleOperatorFactory<IN> operatorFactory = SimpleOperatorFactory.of(operator);
         operatorFactory.setChainingStrategy(transformation.getChainingStrategy());
         return translateInternal(
                 transformation,
                 operatorFactory,
-                transformation.getInputType(),
+                transformation.getInputTypeInternal(),
                 null,
                 null,
                 context);

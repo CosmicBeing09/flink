@@ -250,7 +250,7 @@ public class BatchExecMultipleInput extends ExecNodeBase<RowData>
         }
 
         multipleInputTransform.setDescription(createTransformationDescription(config));
-        ExecNodeUtil.setManagedMemoryWeight(multipleInputTransform, memoryBytes);
+        ExecNodeUtil.setManagedMemoryWeightInternal(multipleInputTransform, memoryBytes);
 
         // set chaining strategy for source chaining
         multipleInputTransform.setChainingStrategy(ChainingStrategy.HEAD_WITH_SOURCES);

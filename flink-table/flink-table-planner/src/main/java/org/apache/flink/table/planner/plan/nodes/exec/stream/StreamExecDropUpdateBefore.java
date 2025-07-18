@@ -90,7 +90,7 @@ public class StreamExecDropUpdateBefore extends ExecNodeBase<RowData>
                 (Transformation<RowData>) getInputEdges().get(0).translateToPlan(planner);
         final StreamFilter<RowData> operator = new StreamFilter<>(new DropUpdateBeforeFunction());
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(DROP_UPDATE_BEFORE_TRANSFORMATION, config),
                 operator,

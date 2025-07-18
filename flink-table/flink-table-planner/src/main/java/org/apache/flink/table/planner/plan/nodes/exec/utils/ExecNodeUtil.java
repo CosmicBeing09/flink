@@ -43,7 +43,7 @@ public class ExecNodeUtil {
      * Sets {Transformation#declareManagedMemoryUseCaseAtOperatorScope(ManagedMemoryUseCase, int)}
      * using the given bytes for {@link ManagedMemoryUseCase#OPERATOR}.
      */
-    public static <T> void setManagedMemoryWeight(
+    public static <T> void setManagedMemoryWeightInternal(
             Transformation<T> transformation, long memoryBytes) {
         if (memoryBytes > 0) {
             final int weightInMebibyte = Math.max(1, (int) (memoryBytes >> 20));
@@ -58,7 +58,7 @@ public class ExecNodeUtil {
     }
 
     /** Create a {@link OneInputTransformation}. */
-    public static <I, O> OneInputTransformation<I, O> createOneInputTransformation(
+    public static <I, O> OneInputTransformation<I, O> createOneInputTransformationInternal(
             Transformation<I> input,
             TransformationMetadata transformationMeta,
             StreamOperator<O> operator,
@@ -187,7 +187,7 @@ public class ExecNodeUtil {
                         outputType,
                         parallelism,
                         parallelismConfigured);
-        setManagedMemoryWeight(transformation, memoryBytes);
+        setManagedMemoryWeightInternal(transformation, memoryBytes);
         transformationMeta.fill(transformation);
         return transformation;
     }
@@ -307,7 +307,7 @@ public class ExecNodeUtil {
                         operatorFactory,
                         outputType,
                         parallelism);
-        setManagedMemoryWeight(transformation, memoryBytes);
+        setManagedMemoryWeightInternal(transformation, memoryBytes);
         transformationMeta.fill(transformation);
         return transformation;
     }
@@ -330,7 +330,7 @@ public class ExecNodeUtil {
                         outputType,
                         parallelism,
                         parallelismConfigured);
-        setManagedMemoryWeight(transformation, memoryBytes);
+        setManagedMemoryWeightInternal(transformation, memoryBytes);
         transformationMeta.fill(transformation);
         return transformation;
     }

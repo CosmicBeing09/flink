@@ -191,7 +191,7 @@ public class StreamExecPythonGroupAggregate extends StreamExecAggregateBase {
                         countStarInserted);
         // partitioned aggregation
         OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(PYTHON_GROUP_AGGREGATE_TRANSFORMATION, config),
                         operator,

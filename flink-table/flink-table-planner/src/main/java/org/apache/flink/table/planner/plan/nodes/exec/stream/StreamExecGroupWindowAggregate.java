@@ -278,7 +278,7 @@ public class StreamExecGroupWindowAggregate extends StreamExecAggregateBase {
                         inputCountIndex);
 
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(GROUP_WINDOW_AGGREGATE_TRANSFORMATION, config),
                         operator,
