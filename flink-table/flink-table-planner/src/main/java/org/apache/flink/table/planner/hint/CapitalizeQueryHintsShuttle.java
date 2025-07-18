@@ -32,11 +32,11 @@ import java.util.stream.Collectors;
 public class CapitalizeQueryHintsShuttle extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
-        Hintable hBiRel = (Hintable) biRel;
-        AtomicBoolean changed = new AtomicBoolean(false);
-        List<RelHint> hintsWithCapitalJoinHints =
-                hBiRel.getHints().stream()
+    protected RelNode visitBinaryNode(BiRel binaryNode) {
+        Hintable hintableNode = (Hintable) binaryNode;
+        AtomicBoolean isModified = new AtomicBoolean(false);
+        List<RelHint> capitalizedHints =
+                hintableNode.getHints().stream()
                         .map(
                                 hint -> {
                                     String capitalHintName = hint.hintName.toUpperCase(Locale.ROOT);
@@ -45,7 +45,7 @@ public class CapitalizeQueryHintsShuttle extends QueryHintsRelShuttle {
                                         return hint;
                                     }
 
-                                    changed.set(true);
+                                    isModified.set(true);
                                     if (JoinStrategy.isJoinStrategy(capitalHintName)) {
                                         if (JoinStrategy.isLookupHint(hint.hintName)) {
                                             return RelHint.builder(capitalHintName)
@@ -68,10 +68,10 @@ public class CapitalizeQueryHintsShuttle extends QueryHintsRelShuttle {
                                 })
                         .collect(Collectors.toList());
 
-        if (changed.get()) {
-            return super.visit(hBiRel.withHints(hintsWithCapitalJoinHints));
+        if (isModified.get()) {
+            return super.visit(hintableNode.withHints(capitalizedHints));
         } else {
-            return super.visit(biRel);
+            return super.visit(binaryNode);
         }
     }
 }
