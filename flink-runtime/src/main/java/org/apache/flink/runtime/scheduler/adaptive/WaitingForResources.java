@@ -120,7 +120,7 @@ class WaitingForResources extends StateWithoutExecutionGraph
 
     @Override
     public boolean hasDesiredResources() {
-        return context.hasDesiredResources();
+        return context.hasDeclaredResourceRequirements();
     }
 
     @Override
@@ -142,7 +142,7 @@ class WaitingForResources extends StateWithoutExecutionGraph
          *
          * @return {@code true} if we have enough resources; otherwise {@code false}
          */
-        boolean hasDesiredResources();
+        boolean hasDeclaredResourceRequirements();
 
         /**
          * Checks if we currently have sufficient resources for executing the job.

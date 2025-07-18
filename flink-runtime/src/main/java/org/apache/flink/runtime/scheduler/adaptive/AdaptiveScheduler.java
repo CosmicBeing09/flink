@@ -405,7 +405,7 @@ public class AdaptiveScheduler
 
     private final BoundedFIFOQueue<RootExceptionHistoryEntry> exceptionHistory;
     private JobGraphJobInformation jobInformation;
-    private ResourceCounter desiredResources = ResourceCounter.empty();
+    private ResourceCounter declaredResourceRequirements = ResourceCounter.empty();
 
     private final JobManagerJobMetricGroup jobManagerJobMetricGroup;
 
@@ -1080,8 +1080,8 @@ public class AdaptiveScheduler
     // ----------------------------------------------------------------
 
     @Override
-    public boolean hasDesiredResources() {
-        return hasDesiredResources(desiredResources, declarativeSlotPool.getAllSlotsInformation());
+    public boolean hasDeclaredResourceRequirements() {
+        return hasDesiredResources(declaredResourceRequirements, declarativeSlotPool.getAllSlotsInformation());
     }
 
     @VisibleForTesting
@@ -1167,9 +1167,9 @@ public class AdaptiveScheduler
     private void declareDesiredResources() {
         final ResourceCounter newDesiredResources = calculateDesiredResources();
 
-        if (!newDesiredResources.equals(this.desiredResources)) {
-            this.desiredResources = newDesiredResources;
-            declarativeSlotPool.setResourceRequirements(this.desiredResources);
+        if (!newDesiredResources.equals(this.declaredResourceRequirements)) {
+            this.declaredResourceRequirements = newDesiredResources;
+            declarativeSlotPool.setResourceRequirements(this.declaredResourceRequirements);
         }
     }
 
