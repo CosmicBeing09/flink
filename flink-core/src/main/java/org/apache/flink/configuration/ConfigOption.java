@@ -67,14 +67,14 @@ public class ConfigOption<T> {
      *   <li>typeClass == atomic class and isList == true for {@code ConfigOption<List<Integer>>}
      * </ul>
      */
-    private final Class<?> clazz;
+    private final Class<?> valueTypeClass;
 
     private final boolean isList;
 
     // ------------------------------------------------------------------------
 
-    Class<?> getClazz() {
-        return clazz;
+    Class<?> getValueTypeClass() {
+        return valueTypeClass;
     }
 
     boolean isList() {
@@ -103,7 +103,7 @@ public class ConfigOption<T> {
         this.description = description;
         this.defaultValue = defaultValue;
         this.fallbackKeys = fallbackKeys == null || fallbackKeys.length == 0 ? EMPTY : fallbackKeys;
-        this.clazz = checkNotNull(clazz);
+        this.valueTypeClass = checkNotNull(clazz);
         this.isList = isList;
     }
 
@@ -130,7 +130,7 @@ public class ConfigOption<T> {
         final FallbackKey[] mergedAlternativeKeys =
                 Stream.concat(newFallbackKeys, currentAlternativeKeys).toArray(FallbackKey[]::new);
         return new ConfigOption<>(
-                key, clazz, description, defaultValue, isList, mergedAlternativeKeys);
+                key, valueTypeClass, description, defaultValue, isList, mergedAlternativeKeys);
     }
 
     /**
@@ -155,7 +155,7 @@ public class ConfigOption<T> {
                 Stream.concat(currentAlternativeKeys, newDeprecatedKeys)
                         .toArray(FallbackKey[]::new);
         return new ConfigOption<>(
-                key, clazz, description, defaultValue, isList, mergedAlternativeKeys);
+                key, valueTypeClass, description, defaultValue, isList, mergedAlternativeKeys);
     }
 
     /**
@@ -177,7 +177,8 @@ public class ConfigOption<T> {
      * @return A new config option, with given description.
      */
     public ConfigOption<T> withDescription(final Description description) {
-        return new ConfigOption<>(key, clazz, description, defaultValue, isList, fallbackKeys);
+        return new ConfigOption<>(key,
+                valueTypeClass, description, defaultValue, isList, fallbackKeys);
     }
 
     // ------------------------------------------------------------------------

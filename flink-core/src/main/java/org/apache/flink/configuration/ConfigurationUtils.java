@@ -613,7 +613,7 @@ public class ConfigurationUtils {
      * </pre>
      */
     public static boolean canBePrefixMap(ConfigOption<?> configOption) {
-        return configOption.getClazz() == Map.class && !configOption.isList();
+        return configOption.getValueTypeClass() == Map.class && !configOption.isList();
     }
 
     /** Filter condition for prefix map keys. */

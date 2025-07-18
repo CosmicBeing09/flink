@@ -272,7 +272,7 @@ public final class DelegatingConfiguration extends Configuration {
         FallbackKey[] deprecated = deprecatedKeys.toArray(new FallbackKey[0]);
         return new ConfigOption<T>(
                 key,
-                option.getClazz(),
+                option.getValueTypeClass(),
                 option.description(),
                 option.defaultValue(),
                 option.isList(),

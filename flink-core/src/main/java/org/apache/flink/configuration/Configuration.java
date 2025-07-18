@@ -366,7 +366,7 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
     @Override
     public <T> Optional<T> getOptional(ConfigOption<T> option) {
         Optional<Object> rawValue = getRawValueFromOption(option);
-        Class<?> clazz = option.getClazz();
+        Class<?> clazz = option.getValueTypeClass();
 
         try {
             if (option.isList()) {
