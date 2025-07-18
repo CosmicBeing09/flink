@@ -109,7 +109,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
     @Test
     void testRecoverFromSavepoint() throws Exception {
         Path stateBackend1 = Files.createDirectory(temporaryPath.resolve("stateBackend1"));
-        final JobGraph jobGraph = createJobGraph(stateBackend1.toFile());
+        final JobGraph jobGraph = createStreamJobGraph(stateBackend1.toFile());
         clusterClient
                 .submitJob(jobGraph)
                 .get(TestingUtils.infiniteTime().toMillis(), TimeUnit.MILLISECONDS);
@@ -131,7 +131,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
 
         // Start a new job with savepoint 2
         Path stateBackend2 = Files.createDirectory(temporaryPath.resolve("stateBackend2"));
-        final JobGraph jobGraphWithSavepoint = createJobGraph(stateBackend2.toFile());
+        final JobGraph jobGraphWithSavepoint = createStreamJobGraph(stateBackend2.toFile());
         final JobID jobId = jobGraphWithSavepoint.getJobID();
         jobGraphWithSavepoint.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepoint2Path));
@@ -166,14 +166,14 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
         return null;
     }
 
-    private JobGraph createJobGraph(File stateBackendFolder) throws Exception {
-        final StreamExecutionEnvironment sEnv =
+    private JobGraph createStreamJobGraph(File stateBackendFolder) throws Exception {
+        final StreamExecutionEnvironment streamEnv =
                 StreamExecutionEnvironment.getExecutionEnvironment();
-        StateBackendUtils.configureHashMapStateBackend(sEnv);
+        StateBackendUtils.configureHashMapStateBackend(streamEnv);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
-                sEnv, stateBackendFolder.toURI().toString(), 1);
+                streamEnv, stateBackendFolder.toURI().toString(), 1);
 
-        sEnv.addSource(new InfiniteSourceFunction())
+        streamEnv.addSource(new InfiniteSourceFunction())
                 .keyBy(e -> e)
                 .flatMap(
                         new RichFlatMapFunction<Integer, Integer>() {
@@ -204,7 +204,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
                 .uid(FLAT_MAP_UID)
                 .sinkTo(new DiscardingSink<>());
 
-        return sEnv.getStreamGraph().getJobGraph();
+        return streamEnv.getStreamGraph().getJobGraph();
     }
 
     private static final class InfiniteSourceFunction extends RichParallelSourceFunction<Integer>
