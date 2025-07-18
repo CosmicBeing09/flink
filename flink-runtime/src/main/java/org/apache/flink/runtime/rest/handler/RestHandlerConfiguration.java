@@ -110,7 +110,7 @@ public class RestHandlerConfiguration {
     }
 
     public static RestHandlerConfiguration fromConfiguration(Configuration configuration) {
-        final long refreshInterval = configuration.get(WebOptions.WEB_UI_REFRESH_INTERVAL).toMillis();
+        final long refreshInterval = configuration.get(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL).toMillis();
 
         final int checkpointHistorySize = configuration.get(WebOptions.CHECKPOINTS_HISTORY_SIZE);
         final Duration checkpointStatsSnapshotCacheExpireAfterWrite =

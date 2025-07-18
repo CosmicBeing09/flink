@@ -44,7 +44,7 @@ public class WebOptions {
                             "Access-Control-Allow-Origin header for all responses from the web-frontend.");
 
     /** The config parameter defining the refresh interval for the web-frontend in milliseconds. */
-    public static final ConfigOption<Duration> WEB_UI_REFRESH_INTERVAL =
+    public static final ConfigOption<Duration> SCHEDULER_UI_REFRESH_INTERVAL =
             key("web.refresh-interval")
                     .durationType()
                     .defaultValue(Duration.ofMillis(3000L))

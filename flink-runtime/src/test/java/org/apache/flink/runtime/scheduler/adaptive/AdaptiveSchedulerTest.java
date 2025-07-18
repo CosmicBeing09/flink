@@ -2047,7 +2047,7 @@ public class AdaptiveSchedulerTest {
         final Duration slotIdleTimeout = Duration.ofMillis(10);
 
         final Configuration configuration = createConfigurationWithNoTimeouts();
-        configuration.set(JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT, slotIdleTimeout);
+        configuration.set(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT, slotIdleTimeout);
 
         final DeclarativeSlotPool declarativeSlotPool =
                 createDeclarativeSlotPool(jobGraph.getJobID(), slotIdleTimeout);

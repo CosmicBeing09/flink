@@ -114,7 +114,7 @@ public class DefaultSchedulerLocalRecoveryITCase extends TestLogger {
     private ArchivedExecutionGraph executeSchedulingTest(
             Configuration configuration, int parallelism) throws Exception {
         final Duration slotIdleTimeout = Duration.ofMillis(TIMEOUT);
-        configuration.set(JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT, slotIdleTimeout);
+        configuration.set(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT, slotIdleTimeout);
 
         configuration.set(TaskManagerOptions.TOTAL_FLINK_MEMORY, MemorySize.parse("64mb"));
         configuration.set(TaskManagerOptions.FRAMEWORK_HEAP_MEMORY, MemorySize.parse("16mb"));

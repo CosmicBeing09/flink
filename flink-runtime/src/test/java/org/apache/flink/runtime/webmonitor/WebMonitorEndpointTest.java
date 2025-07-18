@@ -45,7 +45,7 @@ class WebMonitorEndpointTest {
     void cleansUpExpiredExecutionGraphs() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(RestOptions.ADDRESS, "localhost");
-        configuration.set(WebOptions.WEB_UI_REFRESH_INTERVAL, Duration.ofMillis(5L));
+        configuration.set(WebOptions.SCHEDULER_UI_REFRESH_INTERVAL, Duration.ofMillis(5L));
         final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
         final long timeout = 10000L;
 

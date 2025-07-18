@@ -40,7 +40,7 @@ import static org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorSer
 public class DeclarativeSlotPoolBridgeBuilder {
 
     private JobID jobId = new JobID();
-    private Duration batchSlotTimeout = JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT.defaultValue();
+    private Duration batchSlotTimeout = JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT.defaultValue();
     private Duration idleSlotTimeout = TestingUtils.infiniteDuration();
     private Clock clock = SystemClock.getInstance();
     private Duration slotRequestMaxInterval = JOB_MANAGER_SLOT_REQUEST_MAX_INTERVAL.defaultValue();

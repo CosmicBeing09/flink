@@ -439,7 +439,7 @@ public class JobManagerOptions {
 
     /** The timeout in milliseconds for a idle slot in Slot Pool. */
     @Documentation.Section(Documentation.Sections.EXPERT_SCHEDULING)
-    public static final ConfigOption<Duration> JOB_MANAGER_SLOT_IDLE_TIMEOUT =
+    public static final ConfigOption<Duration> SCHEDULER_SLOT_IDLE_TIMEOUT =
             key("slot.idle.timeout")
                     .durationType()
                     // default matches heartbeat.timeout so that sticky allocation is not lost on

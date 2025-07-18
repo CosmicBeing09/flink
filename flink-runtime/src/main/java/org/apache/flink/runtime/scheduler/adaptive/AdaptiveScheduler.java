@@ -285,7 +285,7 @@ public class AdaptiveScheduler
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
-                    configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT),
+                    configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT),
                     minScalingInterval,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
@@ -1584,7 +1584,7 @@ public class AdaptiveScheduler
     }
 
     /**
-     * Check for slots that are idle for more than {@link JobManagerOptions#JOB_MANAGER_SLOT_IDLE_TIMEOUT} and
+     * Check for slots that are idle for more than {@link JobManagerOptions#SCHEDULER_SLOT_IDLE_TIMEOUT} and
      * release them back to the ResourceManager.
      */
     private void checkIdleSlotTimeout() {
