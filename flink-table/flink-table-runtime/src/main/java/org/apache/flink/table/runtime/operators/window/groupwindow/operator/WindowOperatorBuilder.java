@@ -64,10 +64,10 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * </pre>
  */
 public class WindowOperatorBuilder {
-    protected LogicalType[] inputFieldTypes;
+    protected LogicalType[] inputDataTypes;
     protected GroupWindowAssigner<?> windowAssigner;
     protected Trigger<?> trigger;
-    protected LogicalType[] accumulatorTypes;
+    protected LogicalType[] accumulatorDataTypes;
     protected LogicalType[] aggResultTypes;
     protected LogicalType[] windowPropertyTypes;
     protected long allowedLateness = 0L;
@@ -81,7 +81,7 @@ public class WindowOperatorBuilder {
     }
 
     public WindowOperatorBuilder withInputFields(LogicalType[] inputFieldTypes) {
-        this.inputFieldTypes = inputFieldTypes;
+        this.inputDataTypes = inputFieldTypes;
         return this;
     }
 
@@ -198,7 +198,7 @@ public class WindowOperatorBuilder {
             LogicalType[] accumulatorTypes,
             LogicalType[] aggResultTypes,
             LogicalType[] windowPropertyTypes) {
-        this.accumulatorTypes = accumulatorTypes;
+        this.accumulatorDataTypes = accumulatorTypes;
         this.aggResultTypes = aggResultTypes;
         this.windowPropertyTypes = windowPropertyTypes;
     }
@@ -295,8 +295,8 @@ public class WindowOperatorBuilder {
                         windowOperatorBuilder.trigger,
                         windowOperatorBuilder.windowAssigner.getWindowSerializer(
                                 new ExecutionConfig()),
-                        windowOperatorBuilder.inputFieldTypes,
-                        windowOperatorBuilder.accumulatorTypes,
+                        windowOperatorBuilder.inputDataTypes,
+                        windowOperatorBuilder.accumulatorDataTypes,
                         windowOperatorBuilder.aggResultTypes,
                         windowOperatorBuilder.windowPropertyTypes,
                         windowOperatorBuilder.rowtimeIndex,
@@ -312,8 +312,8 @@ public class WindowOperatorBuilder {
                         windowOperatorBuilder.trigger,
                         windowOperatorBuilder.windowAssigner.getWindowSerializer(
                                 new ExecutionConfig()),
-                        windowOperatorBuilder.inputFieldTypes,
-                        windowOperatorBuilder.accumulatorTypes,
+                        windowOperatorBuilder.inputDataTypes,
+                        windowOperatorBuilder.accumulatorDataTypes,
                         windowOperatorBuilder.aggResultTypes,
                         windowOperatorBuilder.windowPropertyTypes,
                         windowOperatorBuilder.rowtimeIndex,
@@ -362,8 +362,8 @@ public class WindowOperatorBuilder {
                         windowOperatorBuilder.trigger,
                         windowOperatorBuilder.windowAssigner.getWindowSerializer(
                                 new ExecutionConfig()),
-                        windowOperatorBuilder.inputFieldTypes,
-                        windowOperatorBuilder.accumulatorTypes,
+                        windowOperatorBuilder.inputDataTypes,
+                        windowOperatorBuilder.accumulatorDataTypes,
                         windowOperatorBuilder.aggResultTypes,
                         windowOperatorBuilder.windowPropertyTypes,
                         windowOperatorBuilder.rowtimeIndex,
@@ -380,8 +380,8 @@ public class WindowOperatorBuilder {
                         windowOperatorBuilder.trigger,
                         windowOperatorBuilder.windowAssigner.getWindowSerializer(
                                 new ExecutionConfig()),
-                        windowOperatorBuilder.inputFieldTypes,
-                        windowOperatorBuilder.accumulatorTypes,
+                        windowOperatorBuilder.inputDataTypes,
+                        windowOperatorBuilder.accumulatorDataTypes,
                         windowOperatorBuilder.aggResultTypes,
                         windowOperatorBuilder.windowPropertyTypes,
                         windowOperatorBuilder.rowtimeIndex,
