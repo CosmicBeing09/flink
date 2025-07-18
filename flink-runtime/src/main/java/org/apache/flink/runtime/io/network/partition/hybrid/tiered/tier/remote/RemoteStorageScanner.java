@@ -230,15 +230,15 @@ public class RemoteStorageScanner implements Runnable {
      */
     private void scanMaxSegmentId(
             TieredStoragePartitionId partitionId, TieredStorageSubpartitionId subpartitionId) {
-        Path segmentFinishDir =
+        Path segmentFinishDirectoryPath =
                 getSegmentFinishDirPath(
                         baseRemoteStoragePath, partitionId, subpartitionId.getSubpartitionId());
         FileStatus[] fileStatuses = new FileStatus[0];
         try {
-            if (!remoteFileSystem.exists(segmentFinishDir)) {
+            if (!remoteFileSystem.exists(segmentFinishDirectoryPath)) {
                 return;
             }
-            fileStatuses = remoteFileSystem.listStatus(segmentFinishDir);
+            fileStatuses = remoteFileSystem.listStatus(segmentFinishDirectoryPath);
             currentRetryTime = 0;
         } catch (Throwable t) {
             if (t instanceof java.io.FileNotFoundException) {
@@ -259,7 +259,7 @@ public class RemoteStorageScanner implements Runnable {
             TieredStoragePartitionId partitionId,
             TieredStorageSubpartitionId subpartitionId,
             int segmentId) {
-        Path segmentPath =
+        Path targetSegmentFilePath =
                 getSegmentPath(
                         baseRemoteStoragePath,
                         partitionId,
@@ -267,7 +267,7 @@ public class RemoteStorageScanner implements Runnable {
                         segmentId);
         boolean isExist = false;
         try {
-            isExist = remoteFileSystem.exists(segmentPath);
+            isExist = remoteFileSystem.exists(targetSegmentFilePath);
             currentRetryTime = 0;
         } catch (Throwable t) {
             currentRetryTime++;
