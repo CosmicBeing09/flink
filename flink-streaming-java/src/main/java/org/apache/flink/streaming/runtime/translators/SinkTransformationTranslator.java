@@ -84,7 +84,7 @@ public class SinkTransformationTranslator<Input, Output>
             SinkTransformation<Input, Output> transformation, Context context, boolean batch) {
         SinkExpander<Input> expander =
                 new SinkExpander<>(
-                        transformation.getInputStream(),
+                        transformation.getInputStreamInternal(),
                         transformation.getSink(),
                         transformation,
                         context,
@@ -373,9 +373,9 @@ public class SinkTransformationTranslator<Input, Output>
                     PhysicalTransformation<?> physicalSubTransformation =
                             (PhysicalTransformation<?>) subTransformation;
 
-                    if (transformation.getChainingStrategy() != null) {
+                    if (transformation.getChainingStrategyInternal() != null) {
                         physicalSubTransformation.setChainingStrategy(
-                                transformation.getChainingStrategy());
+                                transformation.getChainingStrategyInternal());
                     }
 
                     // overrides the supportsConcurrentExecutionAttempts of transformation because

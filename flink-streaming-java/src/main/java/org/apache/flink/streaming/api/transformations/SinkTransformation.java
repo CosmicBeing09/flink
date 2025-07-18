@@ -86,11 +86,11 @@ public class SinkTransformation<InputT, OutputT> extends PhysicalTransformation<
     }
 
     @Nullable
-    public ChainingStrategy getChainingStrategy() {
+    public ChainingStrategy getChainingStrategyInternal() {
         return chainingStrategy;
     }
 
-    public DataStream<InputT> getInputStream() {
+    public DataStream<InputT> getInputStreamInternal() {
         return inputStream;
     }
 

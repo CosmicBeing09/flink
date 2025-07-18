@@ -520,7 +520,7 @@ public class PythonOperatorChainingOptimizer {
                         DataStream.class.getDeclaredField("transformation");
                 transformationField.setAccessible(true);
                 transformationField.set(
-                        ((SinkTransformation<?, ?>) transformation).getInputStream(), newInput);
+                        ((SinkTransformation<?, ?>) transformation).getInputStreamInternal(), newInput);
             } else if (transformation instanceof TwoInputTransformation) {
                 final Field inputField;
                 if (((TwoInputTransformation<?, ?, ?>) transformation).getInput1() == oldInput) {
