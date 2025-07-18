@@ -65,8 +65,7 @@ public class EmbeddedHaServices extends AbstractNonHaServices {
     //  services
     // ------------------------------------------------------------------------
 
-    @Override
-    public LeaderRetrievalService getResourceManagerLeaderRetriever() {
+    public LeaderRetrievalService getResourceManagerLeaderRetrieverAsync() {
         return resourceManagerLeaderService.createLeaderRetrievalService();
     }
 
@@ -85,8 +84,7 @@ public class EmbeddedHaServices extends AbstractNonHaServices {
         return dispatcherLeaderService.createLeaderElectionService("dispatcher");
     }
 
-    @Override
-    public LeaderRetrievalService getJobManagerLeaderRetriever(JobID jobID) {
+    public LeaderRetrievalService getJobManagerLeaderRetrieverAsync(JobID jobID) {
         checkNotNull(jobID);
 
         synchronized (lock) {
@@ -99,7 +97,7 @@ public class EmbeddedHaServices extends AbstractNonHaServices {
     @Override
     public LeaderRetrievalService getJobManagerLeaderRetriever(
             JobID jobID, String defaultJobManagerAddress) {
-        return getJobManagerLeaderRetriever(jobID);
+        return getJobManagerLeaderRetrieverAsync(jobID);
     }
 
     @Override
@@ -164,13 +162,13 @@ public class EmbeddedHaServices extends AbstractNonHaServices {
             if (!isShutDown()) {
                 // stop all job manager leader services
                 for (EmbeddedLeaderService service : jobManagerLeaderServices.values()) {
-                    service.shutdown();
+                    service.shutdownAsync();
                 }
                 jobManagerLeaderServices.clear();
 
-                resourceManagerLeaderService.shutdown();
+                resourceManagerLeaderService.shutdownAsync();
 
-                clusterRestEndpointLeaderService.shutdown();
+                clusterRestEndpointLeaderService.shutdownAsync();
             }
 
             super.close();

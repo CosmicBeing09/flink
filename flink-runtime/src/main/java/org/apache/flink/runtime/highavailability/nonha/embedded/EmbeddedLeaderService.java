@@ -98,7 +98,7 @@ public class EmbeddedLeaderService {
      * to any leader listeners. It simply notifies all contenders and listeners that the service is
      * no longer available.
      */
-    public void shutdown() {
+    public void shutdownAsync() {
         synchronized (lock) {
             shutdownInternally(new Exception("Leader election service is shutting down"));
         }
@@ -184,7 +184,7 @@ public class EmbeddedLeaderService {
                 embeddedLeaderElection.contender = contender;
                 embeddedLeaderElection.running = true;
 
-                updateLeader()
+                updateLeaderAsync()
                         .whenComplete(
                                 (aVoid, throwable) -> {
                                     if (throwable != null) {
@@ -230,7 +230,7 @@ public class EmbeddedLeaderService {
                     currentLeaderSessionId = null;
                 }
 
-                updateLeader()
+                updateLeaderAsync()
                         .whenComplete(
                                 (aVoid, throwable) -> {
                                     if (throwable != null) {
@@ -269,7 +269,7 @@ public class EmbeddedLeaderService {
                     currentLeaderProposed = null;
 
                     // notify all listeners
-                    notifyAllListeners(leaderAddress, leaderSessionId);
+                    notifyAllListenersAsync(leaderAddress, leaderSessionId);
                 } else {
                     LOG.debug(
                             "Received confirmation of leadership for a stale leadership grant. Ignoring.");
@@ -280,19 +280,19 @@ public class EmbeddedLeaderService {
         }
     }
 
-    private CompletableFuture<Void> notifyAllListeners(String address, UUID leaderSessionId) {
+    private CompletableFuture<Void> notifyAllListenersAsync(String address, UUID leaderSessionId) {
         final List<CompletableFuture<Void>> notifyListenerFutures =
                 new ArrayList<>(listeners.size());
 
         for (EmbeddedLeaderRetrievalService listener : listeners) {
-            notifyListenerFutures.add(notifyListener(address, leaderSessionId, listener.listener));
+            notifyListenerFutures.add(notifyListenerAsync(address, leaderSessionId, listener.listener));
         }
 
         return FutureUtils.waitForAll(notifyListenerFutures);
     }
 
     @GuardedBy("lock")
-    private CompletableFuture<Void> updateLeader() {
+    private CompletableFuture<Void> updateLeaderAsync() {
         // this must be called under the lock
         Preconditions.checkState(Thread.holdsLock(lock));
 
@@ -300,7 +300,7 @@ public class EmbeddedLeaderService {
             // we need a new leader
             if (allLeaderContenders.isEmpty()) {
                 // no new leader available, tell everyone that there is no leader currently
-                return notifyAllListeners(null, null);
+                return notifyAllListenersAsync(null, null);
             } else {
                 // propose a leader and ask it
                 final UUID leaderSessionId = UUID.randomUUID();
@@ -315,7 +315,7 @@ public class EmbeddedLeaderService {
                         "Proposing leadership to the contender that is registered under component ID '{}'.",
                         embeddedLeaderElection.componentId);
 
-                return execute(
+                return executeAsync(
                         new GrantLeadershipCall(
                                 embeddedLeaderElection.contender, leaderSessionId, LOG));
             }
@@ -324,7 +324,7 @@ public class EmbeddedLeaderService {
         }
     }
 
-    private CompletableFuture<Void> notifyListener(
+    private CompletableFuture<Void> notifyListenerAsync(
             @Nullable String address,
             @Nullable UUID leaderSessionId,
             LeaderRetrievalListener listener) {
@@ -350,7 +350,7 @@ public class EmbeddedLeaderService {
 
                 // if we already have a leader, immediately notify this new listener
                 if (currentLeaderConfirmed != null) {
-                    notifyListener(currentLeaderAddress, currentLeaderSessionId, listener);
+                    notifyListenerAsync(currentLeaderAddress, currentLeaderSessionId, listener);
                 }
             } catch (Throwable t) {
                 fatalError(t);
@@ -381,26 +381,26 @@ public class EmbeddedLeaderService {
     }
 
     @VisibleForTesting
-    CompletableFuture<Void> grantLeadership() {
+    CompletableFuture<Void> grantLeadershipAsync() {
         synchronized (lock) {
             if (shutdown) {
-                return getShutDownFuture();
+                return getShutDownFutureAsync();
             }
 
-            return updateLeader();
+            return updateLeaderAsync();
         }
     }
 
-    private CompletableFuture<Void> getShutDownFuture() {
+    private CompletableFuture<Void> getShutDownFutureAsync() {
         return FutureUtils.completedExceptionally(
                 new FlinkException("EmbeddedLeaderService has been shut down."));
     }
 
     @VisibleForTesting
-    CompletableFuture<Void> revokeLeadership() {
+    CompletableFuture<Void> revokeLeadershipAsync() {
         synchronized (lock) {
             if (shutdown) {
-                return getShutDownFuture();
+                return getShutDownFutureAsync();
             }
 
             if (currentLeaderProposed != null || currentLeaderConfirmed != null) {
@@ -415,9 +415,9 @@ public class EmbeddedLeaderService {
                 LOG.info("Revoking leadership of {}.", embeddedLeaderElection.contender);
                 embeddedLeaderElection.isLeader = false;
                 CompletableFuture<Void> revokeLeadershipCallFuture =
-                        execute(new RevokeLeadershipCall(embeddedLeaderElection.contender));
+                        executeAsync(new RevokeLeadershipCall(embeddedLeaderElection.contender));
 
-                CompletableFuture<Void> notifyAllListenersFuture = notifyAllListeners(null, null);
+                CompletableFuture<Void> notifyAllListenersFuture = notifyAllListenersAsync(null, null);
 
                 currentLeaderProposed = null;
                 currentLeaderConfirmed = null;
@@ -432,7 +432,7 @@ public class EmbeddedLeaderService {
         }
     }
 
-    private CompletableFuture<Void> execute(Runnable runnable) {
+    private CompletableFuture<Void> executeAsync(Runnable runnable) {
         return CompletableFuture.runAsync(runnable, notificationExecutor);
     }
 

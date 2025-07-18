@@ -215,7 +215,7 @@ public class LeaderElectionTest {
         @Override
         public void teardown() {
             if (embeddedLeaderService != null) {
-                embeddedLeaderService.shutdown();
+                embeddedLeaderService.shutdownAsync();
                 embeddedLeaderService = null;
             }
         }

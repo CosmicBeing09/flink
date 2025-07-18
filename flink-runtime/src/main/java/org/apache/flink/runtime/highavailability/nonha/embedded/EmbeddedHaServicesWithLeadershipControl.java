@@ -74,39 +74,39 @@ public class EmbeddedHaServicesWithLeadershipControl extends EmbeddedHaServices
     @Override
     public CompletableFuture<Void> revokeDispatcherLeadership() {
         final EmbeddedLeaderService dispatcherLeaderService = getDispatcherLeaderService();
-        return dispatcherLeaderService.revokeLeadership();
+        return dispatcherLeaderService.revokeLeadershipAsync();
     }
 
     @Override
     public CompletableFuture<Void> grantDispatcherLeadership() {
         final EmbeddedLeaderService dispatcherLeaderService = getDispatcherLeaderService();
-        return dispatcherLeaderService.grantLeadership();
+        return dispatcherLeaderService.grantLeadershipAsync();
     }
 
     @Override
     public CompletableFuture<Void> revokeJobMasterLeadership(JobID jobId) {
         final EmbeddedLeaderService jobMasterLeaderService = getJobManagerLeaderService(jobId);
-        return jobMasterLeaderService.revokeLeadership();
+        return jobMasterLeaderService.revokeLeadershipAsync();
     }
 
     @Override
     public CompletableFuture<Void> grantJobMasterLeadership(JobID jobId) {
         final EmbeddedLeaderService jobMasterLeaderService = getJobManagerLeaderService(jobId);
-        return jobMasterLeaderService.grantLeadership();
+        return jobMasterLeaderService.grantLeadershipAsync();
     }
 
     @Override
     public CompletableFuture<Void> revokeResourceManagerLeadership() {
         final EmbeddedLeaderService resourceManagerLeaderService =
                 getResourceManagerLeaderService();
-        return resourceManagerLeaderService.revokeLeadership();
+        return resourceManagerLeaderService.revokeLeadershipAsync();
     }
 
     @Override
     public CompletableFuture<Void> grantResourceManagerLeadership() {
         final EmbeddedLeaderService resourceManagerLeaderService =
                 getResourceManagerLeaderService();
-        return resourceManagerLeaderService.grantLeadership();
+        return resourceManagerLeaderService.grantLeadershipAsync();
     }
 
     @Override

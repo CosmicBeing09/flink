@@ -167,7 +167,7 @@ class LeaderChangeClusterComponentsTest {
         assertThat(
                         LeaderRetrievalUtils.retrieveLeaderInformation(
                                         highAvailabilityServices
-                                                .getResourceManagerLeaderRetriever(),
+                                                .getResourceManagerLeaderRetrieverAsync(),
                                         TESTING_TIMEOUT)
                                 .getLeaderSessionID())
                 .isNotNull();

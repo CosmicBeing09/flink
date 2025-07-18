@@ -57,7 +57,7 @@ class EmbeddedLeaderServiceTest {
             // the election service should still be running
             assertThat(embeddedLeaderService.isShutdown()).isFalse();
         } finally {
-            embeddedLeaderService.shutdown();
+            embeddedLeaderService.shutdownAsync();
 
             // triggers the grant event processing after shutdown
             executorService.triggerAll();
@@ -87,7 +87,7 @@ class EmbeddedLeaderServiceTest {
             contender.getLeaderSessionFuture().get();
 
             final CompletableFuture<Void> revokeLeadershipFuture =
-                    embeddedLeaderService.revokeLeadership();
+                    embeddedLeaderService.revokeLeadershipAsync();
             leaderElection.close();
 
             assertThat(revokeLeadershipFuture)
@@ -98,7 +98,7 @@ class EmbeddedLeaderServiceTest {
             // the election service should still be running
             assertThat(embeddedLeaderService.isShutdown()).isFalse();
         } finally {
-            embeddedLeaderService.shutdown();
+            embeddedLeaderService.shutdownAsync();
 
             // triggers the revoke event processing after shutdown
             executorService.triggerAll();

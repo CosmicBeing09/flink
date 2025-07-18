@@ -123,7 +123,7 @@ public class EmbeddedHaServicesTest extends TestLogger {
 
         LeaderElection leaderElection = embeddedHaServices.getJobManagerLeaderElection(jobId);
         LeaderRetrievalService leaderRetrievalService =
-                embeddedHaServices.getJobManagerLeaderRetriever(jobId);
+                embeddedHaServices.getJobManagerLeaderRetrieverAsync(jobId);
 
         runLeaderRetrievalTest(leaderElection, leaderRetrievalService);
     }
@@ -154,7 +154,7 @@ public class EmbeddedHaServicesTest extends TestLogger {
     public void testResourceManagerLeaderRetrieval() throws Exception {
         LeaderElection leaderElection = embeddedHaServices.getResourceManagerLeaderElection();
         LeaderRetrievalService leaderRetrievalService =
-                embeddedHaServices.getResourceManagerLeaderRetriever();
+                embeddedHaServices.getResourceManagerLeaderRetrieverAsync();
 
         runLeaderRetrievalTest(leaderElection, leaderRetrievalService);
     }
@@ -174,10 +174,10 @@ public class EmbeddedHaServicesTest extends TestLogger {
 
         assertThat(leaderElection.hasLeadership(oldLeaderSessionId), is(true));
 
-        embeddedHaServices.getDispatcherLeaderService().revokeLeadership().get();
+        embeddedHaServices.getDispatcherLeaderService().revokeLeadershipAsync().get();
         assertThat(leaderElection.hasLeadership(oldLeaderSessionId), is(false));
 
-        embeddedHaServices.getDispatcherLeaderService().grantLeadership();
+        embeddedHaServices.getDispatcherLeaderService().grantLeadershipAsync();
         final UUID newLeaderSessionId = leaderContender.getLeaderSessionFuture().get();
 
         assertThat(leaderElection.hasLeadership(newLeaderSessionId), is(true));
