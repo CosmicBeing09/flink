@@ -78,7 +78,7 @@ class TaskDeploymentDescriptorFactoryTest {
     void testCacheShuffleDescriptorAsNonOffloaded() throws Exception {
         final Configuration jobMasterConfig = new Configuration();
         jobMasterConfig.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD,
                 Integer.MAX_VALUE);
         testCacheShuffleDescriptor(jobMasterConfig);
     }
@@ -87,7 +87,7 @@ class TaskDeploymentDescriptorFactoryTest {
     void testCacheShuffleDescriptorAsOffloaded() throws Exception {
         final Configuration jobMasterConfig = new Configuration();
         jobMasterConfig.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD, 0);
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD, 0);
         testCacheShuffleDescriptor(jobMasterConfig);
     }
 
@@ -165,7 +165,7 @@ class TaskDeploymentDescriptorFactoryTest {
         final JobID jobId = new JobID();
         final Configuration jobMasterConfig = new Configuration();
         jobMasterConfig.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD, 0);
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD, 0);
 
         final Tuple2<ExecutionJobVertex, ExecutionJobVertex> executionJobVertices =
                 setupExecutionGraphAndGetVertices(jobId, blobWriter, jobMasterConfig);
