@@ -53,7 +53,7 @@ public class TestingSchedulingPipelinedRegion implements SchedulingPipelinedRegi
                 for (IntermediateResultPartitionID consumerId : consumedGroup) {
                     TestingSchedulingResultPartition rp = resultPartitionsById.get(consumerId);
                     if (!vertices.contains(rp.getProducer())) {
-                        if (!rp.getResultType().canBePipelinedConsumed()) {
+                        if (!rp.getResultType().allowsPipelinedConsumption()) {
                             blockingConsumedPartitionGroups.add(consumedGroup);
                         }
                         if (rp.getResultType().isReleaseByScheduler()) {

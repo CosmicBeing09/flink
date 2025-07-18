@@ -183,7 +183,7 @@ public class IntermediateResultPartition {
     }
 
     void resetForNewExecution() {
-        if (!getResultType().canBePipelinedConsumed() && dataAllProduced) {
+        if (!getResultType().allowsPipelinedConsumption() && dataAllProduced) {
             // A BLOCKING result partition with data produced means it is finished
             // Need to add the running producer count of the result on resetting it
             for (ConsumedPartitionGroup consumedPartitionGroup : getConsumedPartitionGroups()) {
@@ -207,7 +207,7 @@ public class IntermediateResultPartition {
 
     void markFinished() {
         // Sanity check that this is only called on not must be pipelined partitions.
-        if (getResultType().mustBePipelinedConsumed()) {
+        if (getResultType().requiresPipelinedConsumption()) {
             throw new IllegalStateException(
                     "Tried to mark a must-be-pipelined result partition as finished");
         }

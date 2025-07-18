@@ -27,7 +27,6 @@ import java.util.Optional;
 
 import static org.apache.flink.runtime.io.network.partition.consumer.InputGateSpecUtils.DEFAULT_MAX_REQUIRED_BUFFERS_PER_GATE_FOR_BATCH;
 import static org.apache.flink.runtime.io.network.partition.consumer.InputGateSpecUtils.DEFAULT_MAX_REQUIRED_BUFFERS_PER_GATE_FOR_STREAM;
-import static org.apache.flink.runtime.io.network.partition.consumer.InputGateSpecUtils.getEffectiveMaxRequiredBuffersPerGate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /** Tests for {@link GateBuffersSpec}. */
@@ -139,12 +138,12 @@ class GateBuffersSpecTest {
         boolean enabledTieredStorage = false;
         Optional<Integer> configuredMaxRequiredBuffers = Optional.of(100);
         int effectiveMaxRequiredBuffers =
-                getEffectiveMaxRequiredBuffersPerGate(
+                InputGateSpecUtils.calculateEffectiveMaxRequiredBuffersPerGate(
                         partitionType, configuredMaxRequiredBuffers, enabledTieredStorage);
         assertThat(effectiveMaxRequiredBuffers).isEqualTo(configuredMaxRequiredBuffers.get());
         enabledTieredStorage = true;
         effectiveMaxRequiredBuffers =
-                getEffectiveMaxRequiredBuffersPerGate(
+                InputGateSpecUtils.calculateEffectiveMaxRequiredBuffersPerGate(
                         partitionType, configuredMaxRequiredBuffers, enabledTieredStorage);
         assertThat(effectiveMaxRequiredBuffers).isEqualTo(configuredMaxRequiredBuffers.get());
     }
@@ -155,7 +154,7 @@ class GateBuffersSpecTest {
         Optional<Integer> emptyConfig = Optional.empty();
         boolean enabledTieredStorage = false;
         int effectiveMaxRequiredBuffers =
-                getEffectiveMaxRequiredBuffersPerGate(
+                InputGateSpecUtils.calculateEffectiveMaxRequiredBuffersPerGate(
                         partitionType, emptyConfig, enabledTieredStorage);
         int expectEffectiveMaxRequiredBuffers =
                 isPipelinedOrHybridResultPartitionNewMode(partitionType, enabledTieredStorage)
@@ -168,7 +167,7 @@ class GateBuffersSpecTest {
                         ? DEFAULT_MAX_REQUIRED_BUFFERS_PER_GATE_FOR_STREAM
                         : DEFAULT_MAX_REQUIRED_BUFFERS_PER_GATE_FOR_BATCH;
         effectiveMaxRequiredBuffers =
-                getEffectiveMaxRequiredBuffersPerGate(
+                InputGateSpecUtils.calculateEffectiveMaxRequiredBuffersPerGate(
                         partitionType, emptyConfig, enabledTieredStorage);
         assertThat(effectiveMaxRequiredBuffers).isEqualTo(expectEffectiveMaxRequiredBuffers);
     }

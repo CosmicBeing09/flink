@@ -1474,7 +1474,7 @@ public class StreamingJobGraphGenerator {
 
     private void checkBufferTimeout(ResultPartitionType type, StreamEdge edge) {
         long bufferTimeout = edge.getBufferTimeout();
-        if (!type.canBePipelinedConsumed()
+        if (!type.allowsPipelinedConsumption()
                 && bufferTimeout != ExecutionOptions.DISABLED_NETWORK_BUFFER_TIMEOUT) {
             throw new UnsupportedOperationException(
                     "only canBePipelinedConsumed partition support buffer timeout "

@@ -164,7 +164,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
     private Set<SchedulingPipelinedRegion> getBlockingDownstreamRegionsOfVertex(
             SchedulingExecutionVertex executionVertex) {
         return IterableUtils.toStream(executionVertex.getProducedResults())
-                .filter(partition -> !partition.getResultType().canBePipelinedConsumed())
+                .filter(partition -> !partition.getResultType().allowsPipelinedConsumption())
                 .flatMap(partition -> partition.getConsumedPartitionGroups().stream())
                 .filter(
                         group ->
@@ -250,7 +250,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
                                 (producedPartitionGroup) -> {
                                     if (!producedPartitionGroup
                                             .getResultPartitionType()
-                                            .canBePipelinedConsumed()) {
+                                            .allowsPipelinedConsumption()) {
                                         return;
                                     }
                                     // If this group has been visited, there is no need
@@ -314,7 +314,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
     private boolean isDownstreamConsumedPartitionGroupSchedulable(
             final ConsumedPartitionGroup consumedPartitionGroup,
             final Set<SchedulingPipelinedRegion> regionToSchedule) {
-        if (consumedPartitionGroup.getResultPartitionType().canBePipelinedConsumed()) {
+        if (consumedPartitionGroup.getResultPartitionType().allowsPipelinedConsumption()) {
             for (IntermediateResultPartitionID partitionId : consumedPartitionGroup) {
                 SchedulingPipelinedRegion producerRegion = getProducerRegion(partitionId);
                 if (!scheduledRegions.contains(producerRegion)
@@ -337,7 +337,7 @@ public class PipelinedRegionSchedulingStrategy implements SchedulingStrategy {
             final ConsumedPartitionGroup consumedPartitionGroup,
             final SchedulingPipelinedRegion pipelinedRegion,
             final Set<SchedulingPipelinedRegion> regionToSchedule) {
-        if (consumedPartitionGroup.getResultPartitionType().canBePipelinedConsumed()) {
+        if (consumedPartitionGroup.getResultPartitionType().allowsPipelinedConsumption()) {
             for (IntermediateResultPartitionID partitionId : consumedPartitionGroup) {
                 if (isExternalConsumedPartition(partitionId, pipelinedRegion)) {
                     SchedulingPipelinedRegion producerRegion = getProducerRegion(partitionId);

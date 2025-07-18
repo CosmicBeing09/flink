@@ -24,7 +24,7 @@ package org.apache.flink.runtime.io.network.partition.consumer;
  */
 public class GateBuffersSpec {
 
-    private final int effectiveExclusiveBuffersPerChannel;
+    private final int exclusiveBuffersPerChannel;
 
     private final int expectedBuffersPerGate;
 
@@ -33,11 +33,11 @@ public class GateBuffersSpec {
     private final int maxBuffersPerGate;
 
     GateBuffersSpec(
-            int effectiveExclusiveBuffersPerChannel,
+            int exclusiveBuffersPerChannel,
             int expectedBuffersPerGate,
             int minBuffersPerGate,
             int maxBuffersPerGate) {
-        this.effectiveExclusiveBuffersPerChannel = effectiveExclusiveBuffersPerChannel;
+        this.exclusiveBuffersPerChannel = exclusiveBuffersPerChannel;
         this.expectedBuffersPerGate = expectedBuffersPerGate;
         this.minBuffersPerGate = minBuffersPerGate;
         this.maxBuffersPerGate = maxBuffersPerGate;
@@ -56,6 +56,6 @@ public class GateBuffersSpec {
     }
 
     int getEffectiveExclusiveBuffersPerChannel() {
-        return effectiveExclusiveBuffersPerChannel;
+        return exclusiveBuffersPerChannel;
     }
 }

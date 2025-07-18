@@ -126,7 +126,7 @@ public class SingleInputGateFactory {
         this.partitionRequestListenerTimeout = networkConfig.getPartitionRequestListenerTimeout();
         this.maxRequiredBuffersPerGate = networkConfig.maxRequiredBuffersPerGate();
         this.configuredNetworkBuffersPerChannel =
-                NettyShuffleUtils.getNetworkBuffersPerInputChannel(
+                NettyShuffleUtils.identityNetworkBuffersPerChannel(
                         networkConfig.networkBuffersPerChannel());
         this.floatingNetworkBuffersPerGate = networkConfig.floatingNetworkBuffersPerGate();
         this.batchShuffleCompressionEnabled = networkConfig.isBatchShuffleCompressionEnabled();
@@ -163,7 +163,7 @@ public class SingleInputGateFactory {
                         configuredNetworkBuffersPerChannel,
                         floatingNetworkBuffersPerGate,
                         igdd.getConsumedPartitionType(),
-                        calculateNumChannels(
+                        computeChannelCount(
                                 igdd.getShuffleDescriptors().length,
                                 igdd.getConsumedSubpartitionIndexRange().size(),
                                 isSharedInputChannelSupported),
@@ -192,7 +192,7 @@ public class SingleInputGateFactory {
                         gateIndex,
                         igdd.getConsumedResultId(),
                         igdd.getConsumedPartitionType(),
-                        calculateNumChannels(
+                        computeChannelCount(
                                 igdd.getShuffleDescriptors().length,
                                 subpartitionIndexSet.size(),
                                 isSharedInputChannelSupported),
@@ -202,7 +202,7 @@ public class SingleInputGateFactory {
                         networkBufferPool,
                         networkBufferSize,
                         new ThroughputCalculator(SystemClock.getInstance()),
-                        maybeCreateBufferDebloater(
+                        createBufferDebloaterIfEnabled(
                                 owningTaskName, gateIndex, networkInputGroup.addGroup(gateIndex)));
 
         createInputChannelsAndTieredStorageService(
@@ -216,7 +216,7 @@ public class SingleInputGateFactory {
         return inputGate;
     }
 
-    private BufferDebloater maybeCreateBufferDebloater(
+    private BufferDebloater createBufferDebloaterIfEnabled(
             String owningTaskName, int gateIndex, MetricGroup inputGroup) {
         if (debloatConfiguration.isEnabled()) {
             final BufferDebloater bufferDebloater =
@@ -252,7 +252,7 @@ public class SingleInputGateFactory {
         // Create the input channels. There is one input channel for each consumed subpartition.
         InputChannel[] inputChannels =
                 new InputChannel
-                        [calculateNumChannels(
+                        [computeChannelCount(
                                 shuffleDescriptors.length,
                                 subpartitionIndexSet.size(),
                                 isSharedInputChannelSupported)];
@@ -372,7 +372,7 @@ public class SingleInputGateFactory {
                                 metrics));
     }
 
-    private static int calculateNumChannels(
+    private static int computeChannelCount(
             int numShuffleDescriptors,
             int numSubpartitions,
             boolean isSharedInputChannelSupported) {

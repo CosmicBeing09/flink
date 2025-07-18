@@ -47,7 +47,7 @@ public class NettyShuffleUtils {
     /**
      * Calculates and returns the number of required exclusive network buffers per input channel.
      */
-    public static int getNetworkBuffersPerInputChannel(
+    public static int identityNetworkBuffersPerChannel(
             final int configuredNetworkBuffersPerChannel) {
         return configuredNetworkBuffersPerChannel;
     }
@@ -56,7 +56,7 @@ public class NettyShuffleUtils {
      * Calculates and returns the floating network buffer pool size used by the input gate. The
      * left/right value of the returned pair represent the min/max buffers require by the pool.
      */
-    public static Pair<Integer, Integer> getMinMaxFloatingBuffersPerInputGate(
+    public static Pair<Integer, Integer> computeFloatingBufferBoundsForInputGate(
             final int numFloatingBuffersPerGate) {
         // We should guarantee at-least one floating buffer for local channel state recovery.
         return Pair.of(1, numFloatingBuffersPerGate);
@@ -200,7 +200,7 @@ public class NettyShuffleUtils {
         // should take the max value;
         // 2. For blocking shuffle, it is back pressure free and floating buffers can be recycled
         // in time, so that the minimum required buffers would be enough.
-        int ret = type.canBePipelinedConsumed() ? tuple.f2 : tuple.f0;
+        int ret = type.allowsPipelinedConsumption() ? tuple.f2 : tuple.f0;
 
         if (ret == Integer.MAX_VALUE) {
             // Should never reach this branch. Result partition will allocate an unbounded
