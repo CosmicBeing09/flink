@@ -62,7 +62,7 @@ public class DefaultRescaleManager implements RescaleManager {
     private final Supplier<Temporal> clock;
 
     @VisibleForTesting final Duration scalingIntervalMin;
-    @VisibleForTesting @Nullable final Duration scalingIntervalMax;
+    @VisibleForTesting @Nullable final Duration resourceStabilizationTimeout;
 
     private final RescaleManager.Context rescaleContext;
 
@@ -114,7 +114,7 @@ public class DefaultRescaleManager implements RescaleManager {
                 scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
         this.scalingIntervalMin = scalingIntervalMin;
-        this.scalingIntervalMax = scalingIntervalMax;
+        this.resourceStabilizationTimeout = scalingIntervalMax;
 
         this.rescaleContext = rescaleContext;
     }
@@ -165,19 +165,19 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
             rescaleContext.rescale();
-        } else if (scalingIntervalMax != null) {
+        } else if (resourceStabilizationTimeout != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
                             + "Last resource added does not meet the configured minimal parallelism change. Forced rescaling will be triggered after {} if the resource is still there.",
-                    scalingIntervalMax);
+                    resourceStabilizationTimeout);
 
             // reasoning for inconsistent scheduling:
             // https://lists.apache.org/thread/m2w2xzfjpxlw63j0k7tfxfgs0rshhwwr
-            if (timeSinceLastRescale().compareTo(scalingIntervalMax) > 0) {
+            if (timeSinceLastRescale().compareTo(resourceStabilizationTimeout) > 0) {
                 rescaleWithSufficientResources();
             } else {
                 rescaleContext.scheduleOperation(
-                        this::rescaleWithSufficientResources, scalingIntervalMax);
+                        this::rescaleWithSufficientResources, resourceStabilizationTimeout);
             }
         }
     }
@@ -186,7 +186,7 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasSufficientResources()) {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
-                    scalingIntervalMax);
+                    resourceStabilizationTimeout);
             rescaleContext.rescale();
         }
     }

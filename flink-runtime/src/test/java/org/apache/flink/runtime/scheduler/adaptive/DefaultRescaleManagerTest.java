@@ -42,12 +42,13 @@ class DefaultRescaleManagerTest {
     @Test
     void testProperConfiguration() throws ConfigurationException {
         final Duration scalingIntervalMin = Duration.ofMillis(1337);
-        final Duration scalingIntervalMax = Duration.ofMillis(7331);
+        final Duration resourceStabilizationTimeout = Duration.ofMillis(7331);
         final Duration maximumDelayForRescaleTrigger = Duration.ofMillis(4242);
 
         final Configuration configuration = new Configuration();
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
-        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX, scalingIntervalMax);
+        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX,
+                resourceStabilizationTimeout);
         configuration.set(
                 JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTrigger);
 
@@ -56,7 +57,7 @@ class DefaultRescaleManagerTest {
                                 AdaptiveScheduler.Settings.of(configuration))
                         .create(TestingRescaleManagerContext.stableContext(), Instant.now());
         assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
-        assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
+        assertThat(testInstance.resourceStabilizationTimeout).isEqualTo(resourceStabilizationTimeout);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
     }
 
@@ -628,7 +629,7 @@ class DefaultRescaleManagerTest {
             // initializationTime
             this.elapsedTime = elapsedTime.plus(SCALING_MIN);
 
-            // make sure that we're still below the scalingIntervalMax
+            // make sure that we're still below the resourceStabilizationTimeout
             this.elapsedTime = elapsedTime.plus(SCALING_MAX.minus(elapsedTime).dividedBy(2));
             this.triggerOutdatedTasks();
         }
