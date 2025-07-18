@@ -41,11 +41,11 @@ import java.util.function.Supplier;
  *
  * <ol>
  *   <li>Cooldown phase: No rescaling takes place (its upper threshold is defined by {@code
- *       scalingIntervalMin}.
+ *       cooldownInterval}.
  *   <li>Soft-rescaling phase: Rescaling is triggered if the desired amount of resources is
  *       available.
  *   <li>Hard-rescaling phase: Rescaling is triggered if a sufficient amount of resources is
- *       available (its lower threshold is defined by (@code scalingIntervalMax}).
+ *       available (its lower threshold is defined by (@code softRescaleIntervalMax}).
  * </ol>
  *
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
