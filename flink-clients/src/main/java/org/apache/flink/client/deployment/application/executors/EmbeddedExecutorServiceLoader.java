@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * A {@link PipelineExecutorServiceLoader} that always returns an {@link EmbeddedExecutorFactory}.
+ * A {@link PipelineExecutorServiceLoader} that always returns an {@link EmbeddedStreamingExecutorFactory}.
  * This is useful when running the user's main on the cluster.
  */
 @Internal
@@ -64,7 +64,7 @@ public class EmbeddedExecutorServiceLoader implements PipelineExecutorServiceLoa
 
     @Override
     public PipelineExecutorFactory getExecutorFactory(final Configuration configuration) {
-        return new EmbeddedExecutorFactory(submittedJobIds, dispatcherGateway, retryExecutor);
+        return new EmbeddedStreamingExecutorFactory(submittedJobIds, dispatcherGateway, retryExecutor);
     }
 
     @Override
