@@ -95,7 +95,7 @@ public class LocalBufferPool implements BufferPool {
     private final ArrayDeque<BufferListener> registeredListeners = new ArrayDeque<>();
 
     /**
-     * The number of expected memory segments of this buffer pool.
+     * The number of required memory segments of this buffer pool.
      *
      * <p>Usually, the buffers in {@link NetworkBufferPool} do not exactly meet the expectations of
      * all {@link LocalBufferPool}s, so typically this value is used as a weight to allocate buffers
