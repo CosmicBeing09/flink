@@ -191,7 +191,7 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
 
     @Override
     protected List<OUT> executeOnCollections(
-            List<IN> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         GroupReduceFunction<IN, OUT> function = this.userFunction.getUserCodeObject();
 
@@ -211,7 +211,7 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
             checkArgument(sortOrderings.length == 0);
         } else {
             final TypeComparator<IN> sortComparator =
-                    getTypeComparator(inputType, sortColumns, sortOrderings, executionConfig);
+                    getTypeComparator(inputType, sortColumns, sortOrderings, config);
             Collections.sort(
                     inputData,
                     new Comparator<IN>() {
@@ -228,10 +228,10 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
         ArrayList<OUT> result = new ArrayList<OUT>();
 
         if (inputData.size() > 0) {
-            final TypeSerializer<IN> inputSerializer = inputType.createSerializer(executionConfig);
+            final TypeSerializer<IN> inputSerializer = inputType.createSerializer(config);
             if (keyColumns.length == 0) {
                 TypeSerializer<OUT> outSerializer =
-                        getOperatorInfo().getOutputType().createSerializer(executionConfig);
+                        getOperatorInfo().getOutputType().createSerializer(config);
                 List<IN> inputDataCopy = new ArrayList<IN>(inputData.size());
                 for (IN in : inputData) {
                     inputDataCopy.add(inputSerializer.copy(in));
@@ -243,13 +243,13 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
             } else {
                 boolean[] keyOrderings = new boolean[keyColumns.length];
                 final TypeComparator<IN> comparator =
-                        getTypeComparator(inputType, keyColumns, keyOrderings, executionConfig);
+                        getTypeComparator(inputType, keyColumns, keyOrderings, config);
 
                 ListKeyGroupedIterator<IN> keyedIterator =
                         new ListKeyGroupedIterator<IN>(inputData, inputSerializer, comparator);
 
                 TypeSerializer<OUT> outSerializer =
-                        getOperatorInfo().getOutputType().createSerializer(executionConfig);
+                        getOperatorInfo().getOutputType().createSerializer(config);
                 CopyingListCollector<OUT> collector =
                         new CopyingListCollector<OUT>(result, outSerializer);
 
