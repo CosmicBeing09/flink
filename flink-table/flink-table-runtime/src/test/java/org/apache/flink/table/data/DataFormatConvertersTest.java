@@ -63,7 +63,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Test for {@link DataFormatConverters}. */
 public class DataFormatConvertersTest {
 
-    private TypeInformation[] simpleTypes =
+    private TypeInformation[] primitiveTypeInfos =
             new TypeInformation[] {
                 BasicTypeInfo.STRING_TYPE_INFO,
                 BasicTypeInfo.BOOLEAN_TYPE_INFO,
@@ -88,7 +88,7 @@ public class DataFormatConvertersTest {
                 StringDataTypeInfo.INSTANCE
             };
 
-    private Object[] simpleValues =
+    private Object[] primitiveValues =
             new Object[] {
                 "haha",
                 true,
@@ -178,11 +178,11 @@ public class DataFormatConvertersTest {
 
     @Test
     public void testTypes() {
-        for (int i = 0; i < simpleTypes.length; i++) {
-            test(simpleTypes[i], simpleValues[i]);
+        for (int i = 0; i < primitiveTypeInfos.length; i++) {
+            test(primitiveTypeInfos[i], primitiveValues[i]);
         }
-        test(new RowTypeInfo(simpleTypes), new Row(simpleTypes.length));
-        test(new RowTypeInfo(simpleTypes), Row.ofKind(RowKind.DELETE, simpleValues));
+        test(new RowTypeInfo(primitiveTypeInfos), new Row(primitiveTypeInfos.length));
+        test(new RowTypeInfo(primitiveTypeInfos), Row.ofKind(RowKind.DELETE, primitiveValues));
         test(
                 InternalTypeInfo.ofFields(VarCharType.STRING_TYPE, new IntType()),
                 GenericRowData.of(StringData.fromString("hehe"), 111));
