@@ -95,7 +95,7 @@ public class DataStreamQueryOperation<E> implements QueryOperation {
         if (identifier != null) {
             args.put("id", identifier.asSummaryString());
         } else {
-            args.put("id", dataStream.getId());
+            args.put("id", dataStream.getIdInternal());
         }
         args.put("fields", resolvedSchema.getColumnNames());
 

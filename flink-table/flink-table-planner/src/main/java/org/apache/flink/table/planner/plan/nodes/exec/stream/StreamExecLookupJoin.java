@@ -281,7 +281,7 @@ public class StreamExecLookupJoin extends CommonExecLookupJoin
         }
 
         OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         partitionedTransform,
                         createTransformationMeta(LOOKUP_JOIN_MATERIALIZE_TRANSFORMATION, config),
                         operator,

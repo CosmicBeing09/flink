@@ -347,7 +347,7 @@ public class ContinuousFileProcessingTest {
                 new ContinuousFileReaderOperatorFactory(
                         format, TypeExtractor.getInputFormatTypes(format), config),
                 TypeExtractor.getForClass(TimestampedFileInputSplit.class)
-                        .createSerializer(config.getSerializerConfig()));
+                        .createSerializer(config.getSerializerConfigInternal()));
     }
 
     private SteppingMailboxProcessor createLocalMailbox(

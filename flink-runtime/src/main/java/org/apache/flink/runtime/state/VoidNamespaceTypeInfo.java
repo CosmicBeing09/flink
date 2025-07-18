@@ -79,7 +79,7 @@ public class VoidNamespaceTypeInfo extends TypeInformation<VoidNamespace> {
     @Deprecated
     @PublicEvolving
     public TypeSerializer<VoidNamespace> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

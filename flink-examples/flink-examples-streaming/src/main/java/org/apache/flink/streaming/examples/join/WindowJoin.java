@@ -110,7 +110,7 @@ public class WindowJoin {
         }
 
         // execute program
-        env.execute("Windowed Join Example");
+        env.executeInternal("Windowed Join Example");
     }
 
     public static DataStream<Tuple3<String, Integer, Integer>> runWindowJoin(

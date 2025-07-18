@@ -84,7 +84,7 @@ public class CompactorRequestTypeInfo extends TypeInformation<CompactorRequest> 
 
     @Override
     public TypeSerializer<CompactorRequest> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

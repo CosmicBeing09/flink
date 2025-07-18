@@ -76,11 +76,11 @@ public class MapPartitionOperatorBase<IN, OUT, FT extends MapPartitionFunction<I
         TypeSerializer<IN> inSerializer =
                 getOperatorInfo()
                         .getInputType()
-                        .createSerializer(executionConfig.getSerializerConfig());
+                        .createSerializer(executionConfig.getSerializerConfigInternal());
         TypeSerializer<OUT> outSerializer =
                 getOperatorInfo()
                         .getOutputType()
-                        .createSerializer(executionConfig.getSerializerConfig());
+                        .createSerializer(executionConfig.getSerializerConfigInternal());
 
         CopyingIterator<IN> source = new CopyingIterator<IN>(inputData.iterator(), inSerializer);
         CopyingListCollector<OUT> resultCollector =

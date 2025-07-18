@@ -90,6 +90,6 @@ public class ClassLoaderTestProgram {
                                 })
                 .writeAsText(params.getRequired("output"), FileSystem.WriteMode.OVERWRITE);
 
-        env.execute("ClassLoader Test Program");
+        env.executeInternal("ClassLoader Test Program");
     }
 }

@@ -76,7 +76,7 @@ public class TimestampDataTypeInfo extends TypeInformation<TimestampData> {
 
     @Override
     public TypeSerializer<TimestampData> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

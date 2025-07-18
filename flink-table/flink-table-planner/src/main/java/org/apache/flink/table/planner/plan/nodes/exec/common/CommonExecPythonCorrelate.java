@@ -141,7 +141,7 @@ public abstract class CommonExecPythonCorrelate extends ExecNodeBase<RowData>
                         pythonOperatorOutputRowType,
                         pythonFunctionInfo,
                         pythonUdtfInputOffsets);
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(PYTHON_CORRELATE_TRANSFORMATION, pythonNodeConfig),
                 pythonOperator,

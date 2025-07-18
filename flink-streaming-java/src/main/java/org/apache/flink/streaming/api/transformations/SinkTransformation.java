@@ -73,10 +73,10 @@ public class SinkTransformation<InputT, OutputT> extends PhysicalTransformation<
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         final List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
-        result.addAll(input.getTransitivePredecessors());
+        result.addAll(input.getTransitivePredecessorsInternal());
         return result;
     }
 
@@ -86,11 +86,11 @@ public class SinkTransformation<InputT, OutputT> extends PhysicalTransformation<
     }
 
     @Nullable
-    public ChainingStrategy getChainingStrategy() {
+    public ChainingStrategy getChainingStrategyInternal() {
         return chainingStrategy;
     }
 
-    public DataStream<InputT> getInputStream() {
+    public DataStream<InputT> getInputStreamInternal() {
         return inputStream;
     }
 

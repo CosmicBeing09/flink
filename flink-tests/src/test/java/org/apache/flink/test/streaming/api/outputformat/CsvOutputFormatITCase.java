@@ -43,7 +43,7 @@ public class CsvOutputFormatITCase extends AbstractTestBase {
 
         counts.writeAsCsv(resultPath);
 
-        env.execute("WriteAsCsvTest");
+        env.executeInternal("WriteAsCsvTest");
 
         // Strip the parentheses from the expected text like output
         compareResultsByLinesInMemory(

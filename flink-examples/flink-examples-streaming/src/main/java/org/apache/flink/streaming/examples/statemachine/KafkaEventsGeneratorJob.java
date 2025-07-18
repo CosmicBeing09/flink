@@ -78,7 +78,7 @@ public class KafkaEventsGeneratorJob {
                                 .build());
 
         // trigger program execution
-        env.execute("State machine example Kafka events generator job");
+        env.executeInternal("State machine example Kafka events generator job");
     }
 
     // Used for backwards compatibility to convert legacy 'sleep' parameter to records per second.

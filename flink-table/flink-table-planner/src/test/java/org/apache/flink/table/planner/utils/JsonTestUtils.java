@@ -36,11 +36,11 @@ public final class JsonTestUtils {
 
     private JsonTestUtils() {}
 
-    public static JsonNode readFromResource(String path) throws IOException {
+    public static JsonNode readFromResourceInternal(String path) throws IOException {
         return OBJECT_MAPPER_INSTANCE.readTree(JsonTestUtils.class.getResource(path));
     }
 
-    public static JsonNode readFromString(String path) throws IOException {
+    public static JsonNode readFromStringInternal(String path) throws IOException {
         return OBJECT_MAPPER_INSTANCE.readTree(path);
     }
 

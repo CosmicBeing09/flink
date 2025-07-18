@@ -111,7 +111,7 @@ public class MultiInputTransformationTranslator<OUT>
             TypeSerializer<?> keySerializer =
                     keyedTransform
                             .getStateKeyType()
-                            .createSerializer(executionConfig.getSerializerConfig());
+                            .createSerializer(executionConfig.getSerializerConfigInternal());
             streamGraph.setMultipleInputStateKey(
                     transformationId, keyedTransform.getStateKeySelectors(), keySerializer);
         }
@@ -125,7 +125,7 @@ public class MultiInputTransformationTranslator<OUT>
         }
 
         streamGraph.setSupportsConcurrentExecutionAttempts(
-                transformationId, transformation.isSupportsConcurrentExecutionAttempts());
+                transformationId, transformation.isSupportsConcurrentExecutionAttemptsInternal());
 
         return Collections.singleton(transformationId);
     }

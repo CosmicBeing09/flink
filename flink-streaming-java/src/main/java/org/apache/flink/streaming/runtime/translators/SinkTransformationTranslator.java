@@ -69,13 +69,13 @@ public class SinkTransformationTranslator<Input, Output>
     private static final String WRITER_NAME = "Writer";
 
     @Override
-    public Collection<Integer> translateForBatch(
+    public Collection<Integer> translateForBatchInternal(
             SinkTransformation<Input, Output> transformation, Context context) {
         return translateInternal(transformation, context, true);
     }
 
     @Override
-    public Collection<Integer> translateForStreaming(
+    public Collection<Integer> translateForStreamingInternal(
             SinkTransformation<Input, Output> transformation, Context context) {
         return translateInternal(transformation, context, false);
     }
@@ -84,7 +84,7 @@ public class SinkTransformationTranslator<Input, Output>
             SinkTransformation<Input, Output> transformation, Context context, boolean batch) {
         SinkExpander<Input> expander =
                 new SinkExpander<>(
-                        transformation.getInputStream(),
+                        transformation.getInputStreamInternal(),
                         transformation.getSink(),
                         transformation,
                         context,
@@ -373,14 +373,14 @@ public class SinkTransformationTranslator<Input, Output>
                     PhysicalTransformation<?> physicalSubTransformation =
                             (PhysicalTransformation<?>) subTransformation;
 
-                    if (transformation.getChainingStrategy() != null) {
+                    if (transformation.getChainingStrategyInternal() != null) {
                         physicalSubTransformation.setChainingStrategy(
-                                transformation.getChainingStrategy());
+                                transformation.getChainingStrategyInternal());
                     }
 
                     // overrides the supportsConcurrentExecutionAttempts of transformation because
                     // it's not allowed to specify fine-grained concurrent execution attempts yet
-                    physicalSubTransformation.setSupportsConcurrentExecutionAttempts(
+                    physicalSubTransformation.setSupportsConcurrentExecutionAttemptsInternal(
                             supportsConcurrentExecutionAttempts);
                 }
             }

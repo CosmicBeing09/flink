@@ -159,7 +159,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new ReducingStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             reduceFunction,
-                            inputType.createSerializer(config.getSerializerConfig()));
+                            inputType.createSerializer(config.getSerializerConfigInternal()));
 
             return buildWindowOperator(
                     stateDesc, new InternalSingleValueWindowFunction<>(function));
@@ -185,7 +185,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new ReducingStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             reduceFunction,
-                            inputType.createSerializer(config.getSerializerConfig()));
+                            inputType.createSerializer(config.getSerializerConfigInternal()));
 
             return buildWindowOperator(
                     stateDesc, new InternalSingleValueProcessWindowFunction<>(function));
@@ -214,7 +214,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new AggregatingStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             aggregateFunction,
-                            accumulatorType.createSerializer(config.getSerializerConfig()));
+                            accumulatorType.createSerializer(config.getSerializerConfigInternal()));
 
             return buildWindowOperator(
                     stateDesc, new InternalSingleValueWindowFunction<>(windowFunction));
@@ -243,7 +243,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                     new AggregatingStateDescriptor<>(
                             WINDOW_STATE_NAME,
                             aggregateFunction,
-                            accumulatorType.createSerializer(config.getSerializerConfig()));
+                            accumulatorType.createSerializer(config.getSerializerConfigInternal()));
 
             return buildWindowOperator(
                     stateDesc, new InternalSingleValueProcessWindowFunction<>(windowFunction));
@@ -268,7 +268,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
             ListStateDescriptor<T> stateDesc =
                     new ListStateDescriptor<>(
                             WINDOW_STATE_NAME,
-                            inputType.createSerializer(config.getSerializerConfig()));
+                            inputType.createSerializer(config.getSerializerConfigInternal()));
 
             return buildWindowOperator(stateDesc, function);
         }
@@ -282,7 +282,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                 windowAssigner,
                 windowAssigner.getWindowSerializer(config),
                 keySelector,
-                keyType.createSerializer(config.getSerializerConfig()),
+                keyType.createSerializer(config.getSerializerConfigInternal()),
                 stateDesc,
                 function,
                 trigger,
@@ -296,7 +296,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
         TypeSerializer<StreamRecord<T>> streamRecordSerializer =
                 (TypeSerializer<StreamRecord<T>>)
                         new StreamElementSerializer(
-                                inputType.createSerializer(config.getSerializerConfig()));
+                                inputType.createSerializer(config.getSerializerConfigInternal()));
 
         ListStateDescriptor<StreamRecord<T>> stateDesc =
                 new ListStateDescriptor<>(WINDOW_STATE_NAME, streamRecordSerializer);
@@ -305,7 +305,7 @@ public class WindowOperatorBuilder<T, K, W extends Window> {
                 windowAssigner,
                 windowAssigner.getWindowSerializer(config),
                 keySelector,
-                keyType.createSerializer(config.getSerializerConfig()),
+                keyType.createSerializer(config.getSerializerConfigInternal()),
                 stateDesc,
                 function,
                 trigger,

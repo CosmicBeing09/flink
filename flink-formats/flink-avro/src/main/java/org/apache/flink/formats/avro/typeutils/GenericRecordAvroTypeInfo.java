@@ -82,7 +82,7 @@ public class GenericRecordAvroTypeInfo extends TypeInformation<GenericRecord> {
 
     @Override
     public TypeSerializer<GenericRecord> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

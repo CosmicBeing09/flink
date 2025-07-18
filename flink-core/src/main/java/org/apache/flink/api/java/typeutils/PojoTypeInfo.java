@@ -365,7 +365,7 @@ public class PojoTypeInfo<T> extends CompositeType<T> {
     @SuppressWarnings("unchecked")
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
         if (config.isForceKryoEnabled()) {
-            return new KryoSerializer<>(getTypeClass(), config.getSerializerConfig());
+            return new KryoSerializer<>(getTypeClass(), config.getSerializerConfigInternal());
         }
 
         if (config.isForceAvroEnabled()) {
@@ -377,7 +377,7 @@ public class PojoTypeInfo<T> extends CompositeType<T> {
 
     @Deprecated
     public PojoSerializer<T> createPojoSerializer(ExecutionConfig config) {
-        return createPojoSerializer(config.getSerializerConfig());
+        return createPojoSerializer(config.getSerializerConfigInternal());
     }
 
     @Override
@@ -461,7 +461,7 @@ public class PojoTypeInfo<T> extends CompositeType<T> {
             return new PojoComparator<T>(
                     keyFields.toArray(new Field[keyFields.size()]),
                     fieldComparators.toArray(new TypeComparator[fieldComparators.size()]),
-                    createSerializer(config.getSerializerConfig()),
+                    createSerializer(config.getSerializerConfigInternal()),
                     getTypeClass());
         }
     }

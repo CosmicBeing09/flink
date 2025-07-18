@@ -588,7 +588,7 @@ public class CoGroupedStreams<T1, T2> {
 
         @Override
         public TypeSerializer<TaggedUnion<T1, T2>> createSerializer(ExecutionConfig config) {
-            return createSerializer(config.getSerializerConfig());
+            return createSerializer(config.getSerializerConfigInternal());
         }
 
         @Override

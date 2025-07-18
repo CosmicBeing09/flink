@@ -222,7 +222,7 @@ public class BootstrapTransformation<T> {
         if (keyType != null) {
             TypeSerializer<?> keySerializer =
                     keyType.createSerializer(
-                            dataSet.getExecutionEnvironment().getConfig().getSerializerConfig());
+                            dataSet.getExecutionEnvironment().getConfig().getSerializerConfigInternal());
 
             config.setStateKeySerializer(keySerializer);
             config.setStatePartitioner(0, originalKeySelector);

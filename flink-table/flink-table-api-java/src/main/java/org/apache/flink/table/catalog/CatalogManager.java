@@ -213,7 +213,7 @@ public final class CatalogManager implements CatalogRegistry, AutoCloseable {
                                     config,
                                     executionConfig == null
                                             ? null
-                                            : executionConfig.getSerializerConfig()),
+                                            : executionConfig.getSerializerConfigInternal()),
                     new ManagedTableListener(classLoader, config),
                     catalogModificationListeners,
                     catalogStoreHolder);

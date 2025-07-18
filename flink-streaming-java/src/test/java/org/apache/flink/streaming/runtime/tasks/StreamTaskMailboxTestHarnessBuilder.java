@@ -115,7 +115,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
             FunctionWithException<Environment, ? extends StreamTask<OUT, ?>, Exception> taskFactory,
             TypeInformation<OUT> outputType) {
         this.taskFactory = checkNotNull(taskFactory);
-        outputSerializer = outputType.createSerializer(executionConfig.getSerializerConfig());
+        outputSerializer = outputType.createSerializer(executionConfig.getSerializerConfigInternal());
         streamConfig.setTimeCharacteristic(TimeCharacteristic.EventTime);
     }
 
@@ -170,7 +170,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
         streamConfig.setStatePartitioner(inputs.size(), keySelector);
         inputs.add(
                 new NetworkInputConfig(
-                        inputType.createSerializer(executionConfig.getSerializerConfig()),
+                        inputType.createSerializer(executionConfig.getSerializerConfigInternal()),
                         inputChannelsPerGate.size()));
         inputChannelsPerGate.add(inputChannels);
         return this;
@@ -189,7 +189,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
         return addSourceInput(
                 operatorId,
                 sourceOperatorFactory,
-                sourceType.createSerializer(executionConfig.getSerializerConfig()));
+                sourceType.createSerializer(executionConfig.getSerializerConfigInternal()));
     }
 
     public <SourceType> StreamTaskMailboxTestHarnessBuilder<OUT> addSourceInput(
@@ -455,7 +455,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
 
     public StreamTaskMailboxTestHarnessBuilder<OUT> setKeyType(TypeInformation<?> keyType) {
         streamConfig.setStateKeySerializer(
-                keyType.createSerializer(executionConfig.getSerializerConfig()));
+                keyType.createSerializer(executionConfig.getSerializerConfigInternal()));
         return this;
     }
 

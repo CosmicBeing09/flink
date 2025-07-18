@@ -155,7 +155,7 @@ public class StreamExecTemporalSort extends ExecNodeBase<RowData>
                     new ProcTimeSortOperator(InternalTypeInfo.of(inputType), rowComparator);
 
             OneInputTransformation<RowData, RowData> transform =
-                    ExecNodeUtil.createOneInputTransformation(
+                    ExecNodeUtil.createOneInputTransformationInternal(
                             inputTransform,
                             createTransformationMeta(TEMPORAL_SORT_TRANSFORMATION, config),
                             sortOperator,
@@ -204,7 +204,7 @@ public class StreamExecTemporalSort extends ExecNodeBase<RowData>
                         rowComparator);
 
         OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(TEMPORAL_SORT_TRANSFORMATION, config),
                         sortOperator,

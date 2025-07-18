@@ -80,7 +80,7 @@ public class DefaultScalaProductFieldAccessorFactory implements ScalaProductFiel
             this.serializer =
                     (TupleSerializerBase<T>)
                             typeInfo.createSerializer(
-                                    config == null ? null : config.getSerializerConfig());
+                                    config == null ? null : config.getSerializerConfigInternal());
             this.length = this.serializer.getArity();
             this.fields = new Object[this.length];
         }
@@ -134,7 +134,7 @@ public class DefaultScalaProductFieldAccessorFactory implements ScalaProductFiel
             this.serializer =
                     (TupleSerializerBase<T>)
                             typeInfo.createSerializer(
-                                    config == null ? null : config.getSerializerConfig());
+                                    config == null ? null : config.getSerializerConfigInternal());
             this.length = this.serializer.getArity();
             this.fields = new Object[this.length];
             this.innerAccessor = innerAccessor;

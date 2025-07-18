@@ -97,7 +97,7 @@ public class RocksDBStateMemoryControlTestProgram {
                     .uid(TIME_WINDOW_OPER.getUid());
         }
 
-        env.execute("RocksDB test job");
+        env.executeInternal("RocksDB test job");
     }
 
     private static class ValueStateMapper extends RichMapFunction<Event, Event> {

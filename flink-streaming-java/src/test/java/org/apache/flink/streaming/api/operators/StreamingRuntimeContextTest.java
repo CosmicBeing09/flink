@@ -89,7 +89,7 @@ class StreamingRuntimeContextTest {
     void testValueStateInstantiation() throws Exception {
 
         final ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(Path.class);
+        config.getSerializerConfigInternal().registerKryoType(Path.class);
 
         final AtomicReference<Object> descriptorCapture = new AtomicReference<>();
 
@@ -110,7 +110,7 @@ class StreamingRuntimeContextTest {
     void testReducingStateInstantiation() throws Exception {
 
         final ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(Path.class);
+        config.getSerializerConfigInternal().registerKryoType(Path.class);
 
         final AtomicReference<Object> descriptorCapture = new AtomicReference<>();
 
@@ -136,7 +136,7 @@ class StreamingRuntimeContextTest {
     @Test
     void testAggregatingStateInstantiation() throws Exception {
         final ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(Path.class);
+        config.getSerializerConfigInternal().registerKryoType(Path.class);
 
         final AtomicReference<Object> descriptorCapture = new AtomicReference<>();
 
@@ -165,7 +165,7 @@ class StreamingRuntimeContextTest {
     void testListStateInstantiation() throws Exception {
 
         final ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(Path.class);
+        config.getSerializerConfigInternal().registerKryoType(Path.class);
 
         final AtomicReference<Object> descriptorCapture = new AtomicReference<>();
 
@@ -206,7 +206,7 @@ class StreamingRuntimeContextTest {
     void testMapStateInstantiation() throws Exception {
 
         final ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(Path.class);
+        config.getSerializerConfigInternal().registerKryoType(Path.class);
 
         final AtomicReference<Object> descriptorCapture = new AtomicReference<>();
 
@@ -316,7 +316,7 @@ class StreamingRuntimeContextTest {
                             public <T> TypeSerializer<T> createSerializer(
                                     TypeInformation<T> typeInformation) {
                                 return typeInformation.createSerializer(
-                                        config.getSerializerConfig());
+                                        config.getSerializerConfigInternal());
                             }
                         });
 
@@ -356,7 +356,7 @@ class StreamingRuntimeContextTest {
                             public <T> TypeSerializer<T> createSerializer(
                                     TypeInformation<T> typeInformation) {
                                 return typeInformation.createSerializer(
-                                        config.getSerializerConfig());
+                                        config.getSerializerConfigInternal());
                             }
                         });
 
@@ -427,7 +427,7 @@ class StreamingRuntimeContextTest {
                             public <T> TypeSerializer<T> createSerializer(
                                     TypeInformation<T> typeInformation) {
                                 return typeInformation.createSerializer(
-                                        config.getSerializerConfig());
+                                        config.getSerializerConfigInternal());
                             }
                         });
 

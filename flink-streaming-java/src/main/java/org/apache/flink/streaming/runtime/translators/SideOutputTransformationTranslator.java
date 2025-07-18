@@ -69,7 +69,7 @@ public class SideOutputTransformationTranslator<OUT>
         final List<Integer> virtualResultIds = new ArrayList<>();
         final Transformation<?> parentTransformation = parentTransformations.get(0);
         for (int inputId : context.getStreamNodeIds(parentTransformation)) {
-            final int virtualId = Transformation.getNewNodeId();
+            final int virtualId = Transformation.getNewNodeIdInternal();
             streamGraph.addVirtualSideOutputNode(inputId, virtualId, transformation.getOutputTag());
             virtualResultIds.add(virtualId);
         }

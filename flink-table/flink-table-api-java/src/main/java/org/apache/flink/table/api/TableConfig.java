@@ -220,7 +220,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      * configuration.
      */
     @Internal
-    public ReadableConfig getRootConfiguration() {
+    public ReadableConfig getRootConfigurationInternal() {
         return rootConfiguration;
     }
 
@@ -477,7 +477,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      * @param rootConfiguration root configuration to be set
      */
     @Internal
-    public void setRootConfiguration(ReadableConfig rootConfiguration) {
+    public void setRootConfigurationInternal(ReadableConfig rootConfiguration) {
         this.rootConfiguration = rootConfiguration;
     }
 

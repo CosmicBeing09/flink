@@ -260,7 +260,7 @@ public class StreamExecSink extends CommonExecSink implements StreamExecNode<Obj
                         .collect(Collectors.toList());
 
         OneInputTransformation<RowData, RowData> materializeTransform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(
                                 UPSERT_MATERIALIZE_TRANSFORMATION,

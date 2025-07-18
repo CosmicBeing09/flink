@@ -74,7 +74,7 @@ public class HeavyDeploymentStressTestProgram {
                 .sinkTo(new DiscardingSink<>())
                 .setParallelism(1);
 
-        env.execute("HeavyDeploymentStressTestProgram");
+        env.executeInternal("HeavyDeploymentStressTestProgram");
     }
 
     /**

@@ -281,7 +281,7 @@ public class StreamExecGlobalGroupAggregate extends StreamExecAggregateBase {
 
         // partitioned aggregation
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(GLOBAL_GROUP_AGGREGATE_TRANSFORMATION, config),
                         operator,

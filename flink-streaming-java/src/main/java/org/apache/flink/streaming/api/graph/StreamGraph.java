@@ -302,7 +302,7 @@ public class StreamGraph implements Pipeline {
             TypeInformation<IN> inTypeInfo,
             TypeInformation<OUT> outTypeInfo,
             String operatorName) {
-        addOperator(
+        addOperatorInternal(
                 vertexID,
                 slotSharingGroup,
                 coLocationGroup,
@@ -368,7 +368,7 @@ public class StreamGraph implements Pipeline {
                 operatorFactory.isStreamSource()
                         ? SourceStreamTask.class
                         : OneInputStreamTask.class;
-        addOperator(
+        addOperatorInternal(
                 vertexID,
                 slotSharingGroup,
                 coLocationGroup,
@@ -379,7 +379,7 @@ public class StreamGraph implements Pipeline {
                 invokableClass);
     }
 
-    private <IN, OUT> void addOperator(
+    private <IN, OUT> void addOperatorInternal(
             Integer vertexID,
             @Nullable String slotSharingGroup,
             @Nullable String coLocationGroup,
@@ -389,7 +389,7 @@ public class StreamGraph implements Pipeline {
             String operatorName,
             Class<? extends TaskInvokable> invokableClass) {
 
-        addNode(
+        addNodeInternal(
                 vertexID,
                 slotSharingGroup,
                 coLocationGroup,
@@ -424,7 +424,7 @@ public class StreamGraph implements Pipeline {
 
         Class<? extends TaskInvokable> vertexClass = TwoInputStreamTask.class;
 
-        addNode(
+        addNodeInternal(
                 vertexID,
                 slotSharingGroup,
                 coLocationGroup,
@@ -436,8 +436,8 @@ public class StreamGraph implements Pipeline {
 
         setSerializers(
                 vertexID,
-                in1TypeInfo.createSerializer(executionConfig.getSerializerConfig()),
-                in2TypeInfo.createSerializer(executionConfig.getSerializerConfig()),
+                in1TypeInfo.createSerializer(executionConfig.getSerializerConfigInternal()),
+                in2TypeInfo.createSerializer(executionConfig.getSerializerConfigInternal()),
                 outSerializer);
 
         if (taskOperatorFactory.isOutputTypeConfigurable()) {
@@ -461,7 +461,7 @@ public class StreamGraph implements Pipeline {
 
         Class<? extends TaskInvokable> vertexClass = MultipleInputStreamTask.class;
 
-        addNode(
+        addNodeInternal(
                 vertexID,
                 slotSharingGroup,
                 coLocationGroup,
@@ -481,7 +481,7 @@ public class StreamGraph implements Pipeline {
         }
     }
 
-    protected StreamNode addNode(
+    protected StreamNode addNodeInternal(
             Integer vertexID,
             @Nullable String slotSharingGroup,
             @Nullable String coLocationGroup,
@@ -819,7 +819,7 @@ public class StreamGraph implements Pipeline {
                         .map(
                                 typeInfo ->
                                         typeInfo.createSerializer(
-                                                executionConfig.getSerializerConfig()))
+                                                executionConfig.getSerializerConfigInternal()))
                         .toArray(TypeSerializer[]::new));
         vertex.setSerializerOut(out);
     }
@@ -914,7 +914,7 @@ public class StreamGraph implements Pipeline {
         final String coLocationGroup = "IterationCoLocationGroup-" + loopId;
 
         StreamNode source =
-                this.addNode(
+                this.addNodeInternal(
                         sourceId,
                         null,
                         coLocationGroup,
@@ -927,7 +927,7 @@ public class StreamGraph implements Pipeline {
         setResources(source.getId(), minResources, preferredResources);
 
         StreamNode sink =
-                this.addNode(
+                this.addNodeInternal(
                         sinkId,
                         null,
                         coLocationGroup,
@@ -1009,7 +1009,7 @@ public class StreamGraph implements Pipeline {
 
     private <T> TypeSerializer<T> createSerializer(TypeInformation<T> typeInfo) {
         return typeInfo != null && !(typeInfo instanceof MissingTypeInfo)
-                ? typeInfo.createSerializer(executionConfig.getSerializerConfig())
+                ? typeInfo.createSerializer(executionConfig.getSerializerConfigInternal())
                 : null;
     }
 

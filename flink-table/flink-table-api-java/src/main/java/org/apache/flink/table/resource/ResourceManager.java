@@ -241,7 +241,7 @@ public class ResourceManager implements Closeable {
 
     /**
      * Adds the local jar resources to the given {@link TableConfig}. It implicitly considers the
-     * {@link TableConfig#getRootConfiguration()} and stores the merged result into {@link
+     * {@link TableConfig#getRootConfigurationInternal()} and stores the merged result into {@link
      * TableConfig#getConfiguration()}.
      */
     public void addJarConfiguration(TableConfig tableConfig) {

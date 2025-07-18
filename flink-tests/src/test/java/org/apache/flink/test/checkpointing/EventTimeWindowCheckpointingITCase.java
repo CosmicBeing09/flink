@@ -347,7 +347,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSize)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -444,7 +444,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSize)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -528,7 +528,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSlide)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -611,7 +611,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSize)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());
@@ -698,7 +698,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
                                             numKeys, numElementsPerKey, windowSlide)))
                     .setParallelism(1);
 
-            env.execute("Tumbling Window Test");
+            env.executeInternal("Tumbling Window Test");
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage());

@@ -210,7 +210,7 @@ public class StateBootstrapTransformation<T> {
         if (keyType != null) {
             TypeSerializer<?> keySerializer =
                     keyType.createSerializer(
-                            stream.getExecutionEnvironment().getConfig().getSerializerConfig());
+                            stream.getExecutionEnvironment().getConfig().getSerializerConfigInternal());
 
             config.setStateKeySerializer(keySerializer);
             config.setStatePartitioner(0, keySelector);

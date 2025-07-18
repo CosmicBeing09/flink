@@ -140,7 +140,7 @@ final class PatternStreamBuilder<IN> {
         final TypeSerializer<IN> inputSerializer =
                 inputStream
                         .getType()
-                        .createSerializer(inputStream.getExecutionConfig().getSerializerConfig());
+                        .createSerializer(inputStream.getExecutionConfig().getSerializerConfigInternal());
         final boolean isProcessingTime = timeBehaviour == TimeBehaviour.ProcessingTime;
 
         final boolean timeoutHandling = processFunction instanceof TimedOutPartialMatchHandler;

@@ -72,7 +72,7 @@ public class DataStreamStateTTLTestProgram {
                 .addSink(new PrintSinkFunction<>())
                 .name("PrintFailedVerifications");
 
-        env.execute("State TTL test job");
+        env.executeInternal("State TTL test job");
     }
 
     /**

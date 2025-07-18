@@ -76,7 +76,7 @@ public class SingleThreadAccessCheckingTypeInfo<T> extends TypeInformation<T> {
 
     @Override
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

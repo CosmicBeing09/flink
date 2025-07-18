@@ -464,7 +464,7 @@ public class StreamGraphGenerator {
                 .anyMatch(
                         transformation ->
                                 isUnboundedSource(transformation)
-                                        || transformation.getTransitivePredecessors().stream()
+                                        || transformation.getTransitivePredecessorsInternal().stream()
                                                 .anyMatch(this::isUnboundedSource));
     }
 
@@ -668,10 +668,10 @@ public class StreamGraphGenerator {
                 itSource.getId(),
                 null,
                 null,
-                iterate.getOutputType().createSerializer(executionConfig.getSerializerConfig()));
+                iterate.getOutputType().createSerializer(executionConfig.getSerializerConfigInternal()));
         streamGraph.setSerializers(
                 itSink.getId(),
-                iterate.getOutputType().createSerializer(executionConfig.getSerializerConfig()),
+                iterate.getOutputType().createSerializer(executionConfig.getSerializerConfigInternal()),
                 null,
                 null);
 
@@ -753,10 +753,10 @@ public class StreamGraphGenerator {
                 itSource.getId(),
                 null,
                 null,
-                coIterate.getOutputType().createSerializer(executionConfig.getSerializerConfig()));
+                coIterate.getOutputType().createSerializer(executionConfig.getSerializerConfigInternal()));
         streamGraph.setSerializers(
                 itSink.getId(),
-                coIterate.getOutputType().createSerializer(executionConfig.getSerializerConfig()),
+                coIterate.getOutputType().createSerializer(executionConfig.getSerializerConfigInternal()),
                 null,
                 null);
 
@@ -811,8 +811,8 @@ public class StreamGraphGenerator {
                 new ContextImpl(this, streamGraph, slotSharingGroup, configuration);
 
         return shouldExecuteInBatchMode
-                ? translator.translateForBatch(transform, context)
-                : translator.translateForStreaming(transform, context);
+                ? translator.translateForBatchInternal(transform, context)
+                : translator.translateForStreamingInternal(transform, context);
     }
 
     /**

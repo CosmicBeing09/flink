@@ -65,7 +65,7 @@ public class StreamTaskSelectiveReadingITCase {
                         "Custom Operator", BasicTypeInfo.STRING_TYPE_INFO, twoInputStreamOperator)
                 .addSink(resultSink);
 
-        env.execute("Selective reading test");
+        env.executeInternal("Selective reading test");
 
         List<String> result = resultSink.getResult();
 

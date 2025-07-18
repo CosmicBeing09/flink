@@ -129,7 +129,7 @@ public class StickyAllocationAndLocalRecoveryTestJob {
                 .flatMap(new StateCreatingFlatMap(valueSize, killJvmOnFail))
                 .addSink(new PrintSinkFunction<>());
 
-        env.execute("Sticky Allocation And Local Recovery Test");
+        env.executeInternal("Sticky Allocation And Local Recovery Test");
     }
 
     /**

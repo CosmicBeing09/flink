@@ -130,7 +130,7 @@ public class SavepointWriterITCase extends AbstractTestBase {
                 .withOperator(getUidHashFromUid(CURRENCY_UID), broadcastTransformation)
                 .write(savepointPath);
 
-        env.execute("Bootstrap");
+        env.executeInternal("Bootstrap");
     }
 
     private void validateBootstrap(StateBackend backend, String savepointPath) throws Exception {
@@ -182,7 +182,7 @@ public class SavepointWriterITCase extends AbstractTestBase {
                 .withOperator(getUidHashFromUid(MODIFY_UID), transformation)
                 .write(modifyPath);
 
-        env.execute("Modifying");
+        env.executeInternal("Modifying");
     }
 
     private void validateModification(StateBackend backend, String savepointPath) throws Exception {

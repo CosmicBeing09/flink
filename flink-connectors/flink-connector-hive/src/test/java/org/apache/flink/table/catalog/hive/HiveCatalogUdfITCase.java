@@ -228,7 +228,7 @@ public class HiveCatalogUdfITCase extends AbstractTestBase {
                     .toRetractStream(tEnv.sqlQuery(selectSql), Row.class)
                     .map(new JavaToScala())
                     .addSink((SinkFunction) sink);
-            env.execute("");
+            env.executeInternal("");
             results = JavaScalaConversionUtil.toJava(sink.getRetractResults());
         }
 

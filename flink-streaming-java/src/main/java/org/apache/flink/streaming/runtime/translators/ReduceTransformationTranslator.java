@@ -46,7 +46,7 @@ public class ReduceTransformationTranslator<IN, KEY>
                                 .createSerializer(
                                         context.getStreamGraph()
                                                 .getExecutionConfig()
-                                                .getSerializerConfig()));
+                                                .getSerializerConfigInternal()));
         SimpleOperatorFactory<IN> operatorFactory = SimpleOperatorFactory.of(groupedReduce);
         operatorFactory.setChainingStrategy(transformation.getChainingStrategy());
         Collection<Integer> ids =
@@ -74,7 +74,7 @@ public class ReduceTransformationTranslator<IN, KEY>
                                 .createSerializer(
                                         context.getStreamGraph()
                                                 .getExecutionConfig()
-                                                .getSerializerConfig()));
+                                                .getSerializerConfigInternal()));
 
         SimpleOperatorFactory<IN> operatorFactory = SimpleOperatorFactory.of(groupedReduce);
         operatorFactory.setChainingStrategy(transformation.getChainingStrategy());

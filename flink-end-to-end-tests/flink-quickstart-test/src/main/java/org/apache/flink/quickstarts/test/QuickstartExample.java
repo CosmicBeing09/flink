@@ -47,7 +47,7 @@ public class QuickstartExample {
                         .map((MapFunction<Long, String>) Utils::prefix);
 
         try (CloseableIterator<String> data = source.collectAsync()) {
-            env.execute("Quickstart example");
+            env.executeInternal("Quickstart example");
 
             int count = 0;
             while (data.hasNext()) {

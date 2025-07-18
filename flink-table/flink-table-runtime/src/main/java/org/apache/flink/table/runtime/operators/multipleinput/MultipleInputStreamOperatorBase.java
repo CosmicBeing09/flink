@@ -238,7 +238,7 @@ public abstract class MultipleInputStreamOperatorBase extends AbstractStreamOper
                                         edge.getSource()
                                                 .getOutputType()
                                                 .createSerializer(
-                                                        executionConfig.getSerializerConfig());
+                                                        executionConfig.getSerializerConfigInternal());
                         outputs[i] = createCopyingOutput(serializer, outputOperator, inputId);
                     }
                 }
@@ -291,10 +291,10 @@ public abstract class MultipleInputStreamOperatorBase extends AbstractStreamOper
         streamConfig.setNumberOfOutputs(wrapper.getOutputEdges().size());
         streamConfig.setupNetworkInputs(
                 wrapper.getAllInputTypes().stream()
-                        .map(t -> t.createSerializer(executionConfig.getSerializerConfig()))
+                        .map(t -> t.createSerializer(executionConfig.getSerializerConfigInternal()))
                         .toArray(TypeSerializer[]::new));
         streamConfig.setTypeSerializerOut(
-                wrapper.getOutputType().createSerializer(executionConfig.getSerializerConfig()));
+                wrapper.getOutputType().createSerializer(executionConfig.getSerializerConfigInternal()));
         streamConfig.serializeAllConfigs();
         return streamConfig;
     }

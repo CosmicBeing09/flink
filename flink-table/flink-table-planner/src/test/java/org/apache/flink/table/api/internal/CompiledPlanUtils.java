@@ -31,14 +31,14 @@ public class CompiledPlanUtils {
     private CompiledPlanUtils() {}
 
     /** Unwrap {@link ExecNodeGraphInternalPlan} from {@link CompiledPlan}. */
-    public static ExecNodeGraphInternalPlan unwrap(CompiledPlan compiledPlan) {
+    public static ExecNodeGraphInternalPlan unwrapInternal(CompiledPlan compiledPlan) {
         return (ExecNodeGraphInternalPlan) ((CompiledPlanImpl) compiledPlan).unwrap();
     }
 
     /** Converts the given plan into {@link Transformation}s. */
-    public static List<Transformation<?>> toTransformations(
+    public static List<Transformation<?>> toTransformationsInternal(
             TableEnvironment env, CompiledPlan compiledPlan) {
-        final ExecNodeGraphInternalPlan internalPlan = unwrap(compiledPlan);
+        final ExecNodeGraphInternalPlan internalPlan = unwrapInternal(compiledPlan);
         return ((TableEnvironmentImpl) env).getPlanner().translatePlan(internalPlan);
     }
 }

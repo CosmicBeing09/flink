@@ -85,7 +85,7 @@ public class CoordinatedSourceRescaleITCase extends TestLogger {
     private File generateCheckpoint(File checkpointDir, int p) throws IOException {
         final StreamExecutionEnvironment env = createEnv(checkpointDir, null, p);
 
-        assertThatThrownBy(() -> env.execute("create checkpoint"))
+        assertThatThrownBy(() -> env.executeInternal("create checkpoint"))
                 .satisfies(anyCauseMatches(CREATED_CHECKPOINT));
 
         return Files.find(checkpointDir.toPath(), 2, this::isCompletedCheckpoint)
@@ -103,7 +103,7 @@ public class CoordinatedSourceRescaleITCase extends TestLogger {
     private void resumeCheckpoint(File checkpointDir, File restoreCheckpoint, int p) {
         final StreamExecutionEnvironment env = createEnv(checkpointDir, restoreCheckpoint, p);
 
-        assertThatThrownBy(() -> env.execute("resume checkpoint"))
+        assertThatThrownBy(() -> env.executeInternal("resume checkpoint"))
                 .satisfies(anyCauseMatches(RESTORED_CHECKPOINT));
     }
 

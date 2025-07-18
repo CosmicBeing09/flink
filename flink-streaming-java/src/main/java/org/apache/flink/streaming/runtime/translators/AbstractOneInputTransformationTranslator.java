@@ -72,7 +72,7 @@ abstract class AbstractOneInputTransformationTranslator<IN, OUT, OP extends Tran
 
         if (stateKeySelector != null) {
             TypeSerializer<?> keySerializer =
-                    stateKeyType.createSerializer(executionConfig.getSerializerConfig());
+                    stateKeyType.createSerializer(executionConfig.getSerializerConfigInternal());
             streamGraph.setOneInputStateKey(transformationId, stateKeySelector, keySerializer);
         }
 
@@ -98,7 +98,7 @@ abstract class AbstractOneInputTransformationTranslator<IN, OUT, OP extends Tran
             streamGraph.setSupportsConcurrentExecutionAttempts(
                     transformationId,
                     ((PhysicalTransformation<OUT>) transformation)
-                            .isSupportsConcurrentExecutionAttempts());
+                            .isSupportsConcurrentExecutionAttemptsInternal());
         }
 
         return Collections.singleton(transformationId);

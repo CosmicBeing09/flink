@@ -49,7 +49,7 @@ public class CheckpointedStreamingProgram {
         DataStream<String> text = env.addSource(new SimpleStringGenerator());
         text.map(new StatefulMapper()).sinkTo(new DiscardingSink<>());
         env.setParallelism(1);
-        env.execute("Checkpointed Streaming Program");
+        env.executeInternal("Checkpointed Streaming Program");
     }
 
     // with Checkpointing

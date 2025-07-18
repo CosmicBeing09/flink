@@ -123,7 +123,7 @@ public class RecordWriterOutput<OUT>
 
     @Override
     public <X> boolean collectAndCheckIfChained(OutputTag<X> outputTag, StreamRecord<X> record) {
-        if (!OutputTag.isResponsibleFor(this.outputTag, outputTag)) {
+        if (!OutputTag.isResponsibleForInternal(this.outputTag, outputTag)) {
             // we are not responsible for emitting to the side-output specified by this
             // OutputTag.
             return false;

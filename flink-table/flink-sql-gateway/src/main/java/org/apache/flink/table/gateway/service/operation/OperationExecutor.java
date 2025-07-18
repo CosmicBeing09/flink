@@ -362,7 +362,7 @@ public class OperationExecutor {
                         operationConfig, sessionContext.getUserClassloader());
 
         TableConfig tableConfig = TableConfig.getDefault();
-        tableConfig.setRootConfiguration(sessionContext.getDefaultContext().getFlinkConfig());
+        tableConfig.setRootConfigurationInternal(sessionContext.getDefaultContext().getFlinkConfig());
         tableConfig.addConfiguration(operationConfig);
 
         final Executor executor =
@@ -512,7 +512,7 @@ public class OperationExecutor {
         operationConfig.addAll(executionConfig);
 
         TableConfig tableConfig = TableConfig.getDefault();
-        tableConfig.setRootConfiguration(sessionContext.getDefaultContext().getFlinkConfig());
+        tableConfig.setRootConfigurationInternal(sessionContext.getDefaultContext().getFlinkConfig());
         tableConfig.addConfiguration(operationConfig);
 
         return tableConfig;

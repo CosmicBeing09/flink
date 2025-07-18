@@ -43,7 +43,7 @@ public class TextOutputFormatITCase extends AbstractTestBase {
 
         counts.writeAsText(resultPath);
 
-        env.execute("WriteAsTextTest");
+        env.executeInternal("WriteAsTextTest");
 
         compareResultsByLinesInMemory(WordCountData.STREAMING_COUNTS_AS_TUPLES, resultPath);
     }

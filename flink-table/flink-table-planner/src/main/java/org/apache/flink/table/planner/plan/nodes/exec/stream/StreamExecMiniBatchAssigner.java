@@ -121,7 +121,7 @@ public class StreamExecMiniBatchAssigner extends ExecNodeBase<RowData>
                             miniBatchInterval.getMode()));
         }
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(MINI_BATCH_ASSIGNER_TRANSFORMATION, config),
                 operator,

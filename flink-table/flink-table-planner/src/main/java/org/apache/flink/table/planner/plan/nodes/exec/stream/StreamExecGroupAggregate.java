@@ -256,7 +256,7 @@ public class StreamExecGroupAggregate extends StreamExecAggregateBase {
 
         // partitioned aggregation
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(GROUP_AGGREGATE_TRANSFORMATION, config),
                         operator,

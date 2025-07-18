@@ -359,7 +359,7 @@ public class TableDescriptor {
          * given columns. The number of buckets is connector-defined.
          */
         public Builder distributedByHash(String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution = TableDistribution.ofHash(Arrays.asList(bucketKeys), null);
             return this;
         }
@@ -369,7 +369,7 @@ public class TableDescriptor {
          * hash algorithm over the given columns.
          */
         public Builder distributedByHash(int numberOfBuckets, String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution =
                     TableDistribution.ofHash(Arrays.asList(bucketKeys), numberOfBuckets);
             return this;
@@ -380,7 +380,7 @@ public class TableDescriptor {
          * the given columns. The number of buckets is connector-defined.
          */
         public Builder distributedByRange(String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution = TableDistribution.ofRange(Arrays.asList(bucketKeys), null);
             return this;
         }
@@ -390,7 +390,7 @@ public class TableDescriptor {
          * range algorithm over the given columns.
          */
         public Builder distributedByRange(int numberOfBuckets, String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution =
                     TableDistribution.ofRange(Arrays.asList(bucketKeys), numberOfBuckets);
             return this;
@@ -401,7 +401,7 @@ public class TableDescriptor {
          * number of buckets and used algorithm are connector-defined.
          */
         public Builder distributedBy(String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution = TableDistribution.ofUnknown(Arrays.asList(bucketKeys), null);
             return this;
         }
@@ -411,7 +411,7 @@ public class TableDescriptor {
          * given columns. The used algorithm is connector-defined.
          */
         public Builder distributedBy(int numberOfBuckets, String... bucketKeys) {
-            validateBucketKeys(bucketKeys);
+            validateBucketKeysInternal(bucketKeys);
             this.distribution =
                     TableDistribution.ofUnknown(Arrays.asList(bucketKeys), numberOfBuckets);
             return this;
@@ -426,7 +426,7 @@ public class TableDescriptor {
             return this;
         }
 
-        private static void validateBucketKeys(String[] bucketKeys) {
+        private static void validateBucketKeysInternal(String[] bucketKeys) {
             Preconditions.checkNotNull(bucketKeys, "Bucket keys must not be null.");
             if (bucketKeys.length == 0) {
                 throw new ValidationException(

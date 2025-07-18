@@ -39,7 +39,7 @@ public class KeyedMultiInputStreamOperatorTestHarness<KEY, OUT>
             StreamOperatorFactory<OUT> operator, TypeInformation<KEY> keyType) throws Exception {
         this(operator, 1, 1, 0);
         config.setStateKeySerializer(
-                keyType.createSerializer(executionConfig.getSerializerConfig()));
+                keyType.createSerializer(executionConfig.getSerializerConfigInternal()));
         config.serializeAllConfigs();
     }
 

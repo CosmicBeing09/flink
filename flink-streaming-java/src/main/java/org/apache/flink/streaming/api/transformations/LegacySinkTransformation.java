@@ -136,10 +136,10 @@ public class LegacySinkTransformation<T> extends PhysicalTransformation<T> {
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> result = Lists.newArrayList();
         result.add(this);
-        result.addAll(input.getTransitivePredecessors());
+        result.addAll(input.getTransitivePredecessorsInternal());
         return result;
     }
 
@@ -154,9 +154,9 @@ public class LegacySinkTransformation<T> extends PhysicalTransformation<T> {
     }
 
     @Override
-    public boolean isSupportsConcurrentExecutionAttempts() {
+    public boolean isSupportsConcurrentExecutionAttemptsInternal() {
         // first, check if the feature is disabled in physical transformation
-        if (!super.isSupportsConcurrentExecutionAttempts()) {
+        if (!super.isSupportsConcurrentExecutionAttemptsInternal()) {
             return false;
         }
         // second, check if the feature can be supported

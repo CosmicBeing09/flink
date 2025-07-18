@@ -44,7 +44,7 @@ public interface TransformationTranslator<OUT, T extends Transformation<OUT>> {
      *     corresponding to this transformation. These will be the nodes that a potential following
      *     transformation will need to connect to.
      */
-    Collection<Integer> translateForBatch(final T transformation, final Context context);
+    Collection<Integer> translateForBatchInternal(final T transformation, final Context context);
 
     /**
      * Translates a given {@link Transformation} to its runtime implementation for STREAMING-style
@@ -56,7 +56,7 @@ public interface TransformationTranslator<OUT, T extends Transformation<OUT>> {
      *     corresponding to this transformation. These will be the nodes that a potential following
      *     transformation will need to connect to.
      */
-    Collection<Integer> translateForStreaming(final T transformation, final Context context);
+    Collection<Integer> translateForStreamingInternal(final T transformation, final Context context);
 
     /** A context giving the necessary information for the translation of a given transformation. */
     @Internal

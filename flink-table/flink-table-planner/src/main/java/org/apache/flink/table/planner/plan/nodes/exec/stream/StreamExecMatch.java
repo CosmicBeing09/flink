@@ -130,7 +130,7 @@ public class StreamExecMatch extends CommonExecMatch
             // copy the rowtime field into the StreamRecord timestamp field
             int precision = getPrecision(timeOrderFieldType);
             Transformation<RowData> transform =
-                    ExecNodeUtil.createOneInputTransformation(
+                    ExecNodeUtil.createOneInputTransformationInternal(
                             inputTransform,
                             createTransformationMeta(
                                     TIMESTAMP_INSERTER_TRANSFORMATION,

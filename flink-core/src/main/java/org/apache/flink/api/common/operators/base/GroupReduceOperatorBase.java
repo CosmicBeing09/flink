@@ -229,12 +229,12 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
 
         if (inputData.size() > 0) {
             final TypeSerializer<IN> inputSerializer =
-                    inputType.createSerializer(executionConfig.getSerializerConfig());
+                    inputType.createSerializer(executionConfig.getSerializerConfigInternal());
             if (keyColumns.length == 0) {
                 TypeSerializer<OUT> outSerializer =
                         getOperatorInfo()
                                 .getOutputType()
-                                .createSerializer(executionConfig.getSerializerConfig());
+                                .createSerializer(executionConfig.getSerializerConfigInternal());
                 List<IN> inputDataCopy = new ArrayList<IN>(inputData.size());
                 for (IN in : inputData) {
                     inputDataCopy.add(inputSerializer.copy(in));
@@ -254,7 +254,7 @@ public class GroupReduceOperatorBase<IN, OUT, FT extends GroupReduceFunction<IN,
                 TypeSerializer<OUT> outSerializer =
                         getOperatorInfo()
                                 .getOutputType()
-                                .createSerializer(executionConfig.getSerializerConfig());
+                                .createSerializer(executionConfig.getSerializerConfigInternal());
                 CopyingListCollector<OUT> collector =
                         new CopyingListCollector<OUT>(result, outSerializer);
 

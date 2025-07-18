@@ -471,7 +471,7 @@ public class SourceOperator<OUT, SplitT extends SourceSplit> extends AbstractStr
 
     private void initializeLatencyMarkerEmitter(DataOutput<OUT> output) {
         long latencyTrackingInterval =
-                getExecutionConfig().isLatencyTrackingConfigured()
+                getExecutionConfig().isLatencyTrackingConfiguredInternal()
                         ? getExecutionConfig().getLatencyTrackingInterval()
                         : getContainingTask()
                                 .getEnvironment()

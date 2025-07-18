@@ -82,11 +82,11 @@ public abstract class JsonPlanTestBase {
         TestValuesTableFactory.clearAllData();
     }
 
-    protected TableResult compileSqlAndExecutePlan(String sql) {
-        return compileSqlAndExecutePlan(sql, json -> json);
+    protected TableResult compileSqlAndExecutePlanInternal(String sql) {
+        return compileSqlAndExecutePlanInternal(sql, json -> json);
     }
 
-    protected TableResult compileSqlAndExecutePlan(
+    protected TableResult compileSqlAndExecutePlanInternal(
             String sql, Function<String, String> jsonPlanTransformer) {
         CompiledPlan compiledPlan = tableEnv.compilePlanSql(sql);
         checkTransformationUids(compiledPlan);
@@ -100,10 +100,10 @@ public abstract class JsonPlanTestBase {
 
     protected void checkTransformationUids(CompiledPlan compiledPlan) {
         List<Transformation<?>> transformations =
-                CompiledPlanUtils.toTransformations(tableEnv, compiledPlan);
+                CompiledPlanUtils.toTransformationsInternal(tableEnv, compiledPlan);
 
         transformations.stream()
-                .flatMap(t -> t.getTransitivePredecessors().stream())
+                .flatMap(t -> t.getTransitivePredecessorsInternal().stream())
                 // UnionTransformations don't need an uid
                 .filter(t -> !(t instanceof UnionTransformation))
                 .forEach(

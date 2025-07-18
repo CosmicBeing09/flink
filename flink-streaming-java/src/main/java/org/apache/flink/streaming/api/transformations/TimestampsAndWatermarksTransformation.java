@@ -67,20 +67,20 @@ public class TimestampsAndWatermarksTransformation<IN> extends PhysicalTransform
     }
 
     /** Returns the {@code TypeInformation} for the elements of the input. */
-    public TypeInformation<IN> getInputType() {
+    public TypeInformation<IN> getInputTypeInternal() {
         return input.getOutputType();
     }
 
     /** Returns the {@code WatermarkStrategy} to use. */
-    public WatermarkStrategy<IN> getWatermarkStrategy() {
+    public WatermarkStrategy<IN> getWatermarkStrategyInternal() {
         return watermarkStrategy;
     }
 
     @Override
-    public List<Transformation<?>> getTransitivePredecessors() {
+    public List<Transformation<?>> getTransitivePredecessorsInternal() {
         List<Transformation<?>> transformations = Lists.newArrayList();
         transformations.add(this);
-        transformations.addAll(input.getTransitivePredecessors());
+        transformations.addAll(input.getTransitivePredecessorsInternal());
         return transformations;
     }
 

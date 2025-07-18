@@ -96,9 +96,9 @@ public class InnerJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
         TypeInformation<OUT> outInformation = getOperatorInfo().getOutputType();
 
         TypeSerializer<IN1> leftSerializer =
-                leftInformation.createSerializer(executionConfig.getSerializerConfig());
+                leftInformation.createSerializer(executionConfig.getSerializerConfigInternal());
         TypeSerializer<IN2> rightSerializer =
-                rightInformation.createSerializer(executionConfig.getSerializerConfig());
+                rightInformation.createSerializer(executionConfig.getSerializerConfigInternal());
 
         TypeComparator<IN1> leftComparator;
         TypeComparator<IN2> rightComparator;
@@ -146,7 +146,7 @@ public class InnerJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
         Collector<OUT> collector =
                 new CopyingListCollector<OUT>(
                         result,
-                        outInformation.createSerializer(executionConfig.getSerializerConfig()));
+                        outInformation.createSerializer(executionConfig.getSerializerConfigInternal()));
 
         Map<Integer, List<IN2>> probeTable = new HashMap<Integer, List<IN2>>();
 

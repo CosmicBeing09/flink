@@ -75,7 +75,7 @@ public class PickledByteArrayTypeInfo extends TypeInformation<byte[]> {
 
     @Override
     public TypeSerializer<byte[]> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

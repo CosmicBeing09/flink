@@ -45,6 +45,6 @@ public class FailureEnricherTestProgram {
                                 })
                 .writeAsText(params.getRequired("output"), FileSystem.WriteMode.OVERWRITE);
 
-        env.execute("Failure Enricher Test");
+        env.executeInternal("Failure Enricher Test");
     }
 }

@@ -127,7 +127,7 @@ public class MatrixVectorMul {
             result.print();
         }
         // Execute program
-        env.execute("Matrix-Vector Multiplication");
+        env.executeInternal("Matrix-Vector Multiplication");
     }
 
     // *************************************************************************

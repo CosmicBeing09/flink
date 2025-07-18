@@ -73,11 +73,11 @@ public class MapOperatorBase<IN, OUT, FT extends MapFunction<IN, OUT>>
         TypeSerializer<IN> inSerializer =
                 getOperatorInfo()
                         .getInputType()
-                        .createSerializer(executionConfig.getSerializerConfig());
+                        .createSerializer(executionConfig.getSerializerConfigInternal());
         TypeSerializer<OUT> outSerializer =
                 getOperatorInfo()
                         .getOutputType()
-                        .createSerializer(executionConfig.getSerializerConfig());
+                        .createSerializer(executionConfig.getSerializerConfigInternal());
 
         for (IN element : inputData) {
             IN inCopy = inSerializer.copy(element);

@@ -175,7 +175,7 @@ public class StreamExecLocalGroupAggregate extends StreamExecAggregateBase {
                 new MapBundleOperator<>(
                         aggFunction, MinibatchUtil.createMiniBatchTrigger(config), selector);
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(LOCAL_GROUP_AGGREGATE_TRANSFORMATION, config),
                 operator,

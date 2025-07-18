@@ -117,7 +117,7 @@ public class StreamExecWindowTableFunction extends CommonExecWindowTableFunction
         final WindowTableFunctionOperatorBase windowTableFunctionOperator =
                 createUnalignedWindowTableFunctionOperator(config, inputRowType);
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(WINDOW_TRANSFORMATION, config),
                         windowTableFunctionOperator,

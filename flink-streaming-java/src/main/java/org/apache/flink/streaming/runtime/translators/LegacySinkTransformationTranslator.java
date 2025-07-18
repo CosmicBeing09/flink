@@ -97,7 +97,7 @@ public class LegacySinkTransformationTranslator<IN>
         streamGraph.setMaxParallelism(transformationId, transformation.getMaxParallelism());
 
         streamGraph.setSupportsConcurrentExecutionAttempts(
-                transformationId, transformation.isSupportsConcurrentExecutionAttempts());
+                transformationId, transformation.isSupportsConcurrentExecutionAttemptsInternal());
 
         for (Integer inputId : context.getStreamNodeIds(input)) {
             streamGraph.addEdge(inputId, transformationId, 0);
@@ -107,7 +107,7 @@ public class LegacySinkTransformationTranslator<IN>
             TypeSerializer<?> keySerializer =
                     transformation
                             .getStateKeyType()
-                            .createSerializer(executionConfig.getSerializerConfig());
+                            .createSerializer(executionConfig.getSerializerConfigInternal());
             streamGraph.setOneInputStateKey(
                     transformationId, transformation.getStateKeySelector(), keySerializer);
         }

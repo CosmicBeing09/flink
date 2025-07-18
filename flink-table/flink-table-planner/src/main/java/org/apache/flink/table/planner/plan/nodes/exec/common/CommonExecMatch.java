@@ -177,7 +177,7 @@ public abstract class CommonExecMatch extends ExecNodeBase<RowData>
                         patternProcessFunction,
                         null);
         final OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         timestampedInputTransform,
                         createTransformationMeta(MATCH_TRANSFORMATION, config),
                         operator,

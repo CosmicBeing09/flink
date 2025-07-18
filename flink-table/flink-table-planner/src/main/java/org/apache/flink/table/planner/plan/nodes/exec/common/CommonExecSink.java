@@ -275,7 +275,7 @@ public abstract class CommonExecSink extends ExecNodeBase<Object>
 
         ConstraintEnforcer constraintEnforcer = validatorBuilder.build();
         if (constraintEnforcer != null) {
-            return ExecNodeUtil.createOneInputTransformation(
+            return ExecNodeUtil.createOneInputTransformationInternal(
                     inputTransform,
                     createTransformationMeta(
                             CONSTRAINT_VALIDATOR_TRANSFORMATION,
@@ -422,7 +422,7 @@ public abstract class CommonExecSink extends ExecNodeBase<Object>
 
     private Transformation<RowData> applyRowKindSetter(
             Transformation<RowData> inputTransform, RowKind rowKind, ExecNodeConfig config) {
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(
                         ROW_KIND_SETTER,
@@ -573,7 +573,7 @@ public abstract class CommonExecSink extends ExecNodeBase<Object>
         if (rowtimeFieldIndex == -1) {
             return inputTransform;
         }
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(
                         TIMESTAMP_INSERTER_TRANSFORMATION,

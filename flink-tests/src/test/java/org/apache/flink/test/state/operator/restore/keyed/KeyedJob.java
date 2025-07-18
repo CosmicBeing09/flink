@@ -84,7 +84,7 @@ public class KeyedJob {
         SingleOutputStreamOperator<Integer> second =
                 createSecondStatefulMap(ExecutionMode.GENERATE, first);
 
-        env.execute("job");
+        env.executeInternal("job");
     }
 
     public static SingleOutputStreamOperator<Tuple2<Integer, Integer>> createIntegerTupleSource(

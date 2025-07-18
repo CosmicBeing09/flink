@@ -156,7 +156,7 @@ public class WordCount {
 
         // Apache Flink applications are composed lazily. Calling execute
         // submits the Job and begins processing.
-        env.execute("WordCount");
+        env.executeInternal("WordCount");
     }
 
     // *************************************************************************

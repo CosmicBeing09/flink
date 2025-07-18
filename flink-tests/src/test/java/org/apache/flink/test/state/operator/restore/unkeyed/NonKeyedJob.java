@@ -79,7 +79,7 @@ public class NonKeyedJob {
         SingleOutputStreamOperator<Integer> third =
                 createThirdStatefulMap(ExecutionMode.GENERATE, stateless);
 
-        env.execute("job");
+        env.executeInternal("job");
     }
 
     public static SingleOutputStreamOperator<Integer> createSource(

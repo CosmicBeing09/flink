@@ -86,7 +86,7 @@ public final class ApiExpressionUtils {
         if (expression == null) {
             return valueLiteral(null, DataTypes.NULL());
         } else if (expression instanceof ApiExpression) {
-            return ((ApiExpression) expression).toExpr();
+            return ((ApiExpression) expression).toExprInternal();
         } else if (expression instanceof Expression) {
             return (Expression) expression;
         } else if (expression instanceof Row) {
@@ -233,7 +233,7 @@ public final class ApiExpressionUtils {
 
     public static Expression unwrapFromApi(Expression expression) {
         if (expression instanceof ApiExpression) {
-            return ((ApiExpression) expression).toExpr();
+            return ((ApiExpression) expression).toExprInternal();
         } else {
             return expression;
         }

@@ -347,7 +347,7 @@ public class StreamExecRank extends ExecNodeBase<RowData>
         processFunction.setKeyContext(operator);
 
         OneInputTransformation<RowData, RowData> transform =
-                ExecNodeUtil.createOneInputTransformation(
+                ExecNodeUtil.createOneInputTransformationInternal(
                         inputTransform,
                         createTransformationMeta(RANK_TRANSFORMATION, config),
                         operator,

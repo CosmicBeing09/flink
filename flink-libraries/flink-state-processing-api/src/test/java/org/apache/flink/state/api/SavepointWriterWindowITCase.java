@@ -163,7 +163,7 @@ public class SavepointWriterWindowITCase extends AbstractTestBase {
                         OperatorIdentifier.forUid(UID), windowBootstrap.bootstrap(transformation))
                 .write(savepointPath);
 
-        env.execute("write state");
+        env.executeInternal("write state");
 
         WindowedStream<Tuple2<String, Integer>, String, TimeWindow> stream =
                 env.addSource(new MaxWatermarkSource<Tuple2<String, Integer>>())
@@ -208,7 +208,7 @@ public class SavepointWriterWindowITCase extends AbstractTestBase {
                         OperatorIdentifier.forUid(UID), windowBootstrap.bootstrap(transformation))
                 .write(savepointPath);
 
-        env.execute("write state");
+        env.executeInternal("write state");
 
         WindowedStream<Tuple2<String, Integer>, String, TimeWindow> stream =
                 env.addSource(new MaxWatermarkSource<Tuple2<String, Integer>>())
@@ -254,7 +254,7 @@ public class SavepointWriterWindowITCase extends AbstractTestBase {
                         OperatorIdentifier.forUid(UID), windowBootstrap.bootstrap(transformation))
                 .write(savepointPath);
 
-        env.execute("write state");
+        env.executeInternal("write state");
 
         WindowedStream<Tuple2<String, Integer>, String, TimeWindow> stream =
                 env.addSource(new MaxWatermarkSource<Tuple2<String, Integer>>())
@@ -303,7 +303,7 @@ public class SavepointWriterWindowITCase extends AbstractTestBase {
                         OperatorIdentifier.forUid(UID), windowBootstrap.bootstrap(transformation))
                 .write(savepointPath);
 
-        env.execute("write state");
+        env.executeInternal("write state");
 
         WindowedStream<Tuple2<String, Integer>, String, TimeWindow> stream =
                 env.addSource(new MaxWatermarkSource<Tuple2<String, Integer>>())

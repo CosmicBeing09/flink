@@ -154,7 +154,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     private final List<CollectResultIterator<?>> collectIterators = new ArrayList<>();
 
     @Internal
-    public void registerCollectIterator(CollectResultIterator<?> iterator) {
+    public void registerCollectIteratorInternal(CollectResultIterator<?> iterator) {
         collectIterators.add(iterator);
     }
 
@@ -946,7 +946,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public <T extends Serializer<?> & Serializable> void addDefaultKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializer);
     }
 
     /**
@@ -964,7 +964,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public void addDefaultKryoSerializer(
             Class<?> type, Class<? extends Serializer<?>> serializerClass) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -990,7 +990,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public <T extends Serializer<?> & Serializable> void registerTypeWithKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializer);
     }
 
     /**
@@ -1010,7 +1010,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @SuppressWarnings("rawtypes")
     public void registerTypeWithKryoSerializer(
             Class<?> type, Class<? extends Serializer> serializerClass) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -1036,9 +1036,9 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         TypeInformation<?> typeInfo = TypeExtractor.createTypeInfo(type);
 
         if (typeInfo instanceof PojoTypeInfo) {
-            config.getSerializerConfig().registerPojoType(type);
+            config.getSerializerConfigInternal().registerPojoType(type);
         } else {
-            config.getSerializerConfig().registerKryoType(type);
+            config.getSerializerConfigInternal().registerKryoType(type);
         }
     }
 
@@ -2300,7 +2300,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @throws Exception which occurs during job execution.
      */
     public JobExecutionResult execute() throws Exception {
-        return execute((String) null);
+        return executeInternal((String) null);
     }
 
     /**
@@ -2314,7 +2314,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The result of the job execution, containing elapsed time and accumulators.
      * @throws Exception which occurs during job execution.
      */
-    public JobExecutionResult execute(String jobName) throws Exception {
+    public JobExecutionResult executeInternal(String jobName) throws Exception {
         final List<Transformation<?>> originalTransformations = new ArrayList<>(transformations);
         StreamGraph streamGraph = getStreamGraph();
         if (jobName != null) {
@@ -2600,7 +2600,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
 
     /**
      * Adds an operator to the list of operators that should be executed when calling {@link
-     * #execute}.
+     * #executeInternal}.
      *
      * <p>When calling {@link #execute()} only the operators that where previously added to the list
      * are executed.

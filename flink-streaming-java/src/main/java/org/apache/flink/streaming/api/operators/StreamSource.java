@@ -82,7 +82,7 @@ public class StreamSource<OUT, SRC extends SourceFunction<OUT>>
         final Configuration configuration =
                 this.getContainingTask().getEnvironment().getTaskManagerInfo().getConfiguration();
         final long latencyTrackingInterval =
-                getExecutionConfig().isLatencyTrackingConfigured()
+                getExecutionConfig().isLatencyTrackingConfiguredInternal()
                         ? getExecutionConfig().getLatencyTrackingInterval()
                         : configuration.get(MetricOptions.LATENCY_INTERVAL);
 

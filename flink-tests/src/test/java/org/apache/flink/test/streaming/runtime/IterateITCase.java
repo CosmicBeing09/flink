@@ -426,7 +426,7 @@ public class IterateITCase extends AbstractTestBase {
                 IterativeStream<Boolean> iteration = source.iterate(3000 * timeoutScale);
 
                 DataStream<Boolean> increment =
-                        iteration.flatMap(new IterationHead()).map(noOpBoolMap);
+                        iteration.flatMap(new IterationHeadInternal()).map(noOpBoolMap);
 
                 iteration.map(noOpBoolMap).addSink(new ReceiveCheckNoOpSink());
 
@@ -643,7 +643,7 @@ public class IterateITCase extends AbstractTestBase {
                         StreamExecutionEnvironment.getExecutionEnvironment();
 
                 try {
-                    createIteration(env, timeoutScale);
+                    createIterationInternal(env, timeoutScale);
                     env.execute();
 
                     // this statement should never be reached
@@ -655,7 +655,7 @@ public class IterateITCase extends AbstractTestBase {
                 // Test force checkpointing
 
                 try {
-                    createIteration(env, timeoutScale);
+                    createIterationInternal(env, timeoutScale);
                     env.enableCheckpointing(
                             CheckpointCoordinatorConfiguration.MINIMAL_CHECKPOINT_TIME,
                             org.apache.flink.streaming.api.CheckpointingMode.EXACTLY_ONCE,
@@ -668,7 +668,7 @@ public class IterateITCase extends AbstractTestBase {
                     // expected behaviour
                 }
 
-                createIteration(env, timeoutScale);
+                createIterationInternal(env, timeoutScale);
                 env.enableCheckpointing(
                         CheckpointCoordinatorConfiguration.MINIMAL_CHECKPOINT_TIME,
                         org.apache.flink.streaming.api.CheckpointingMode.EXACTLY_ONCE,
@@ -688,7 +688,7 @@ public class IterateITCase extends AbstractTestBase {
         }
     }
 
-    private void createIteration(StreamExecutionEnvironment env, int timeoutScale) {
+    private void createIterationInternal(StreamExecutionEnvironment env, int timeoutScale) {
         env.enableCheckpointing();
 
         DataStream<Boolean> source =
@@ -699,11 +699,11 @@ public class IterateITCase extends AbstractTestBase {
         IterativeStream<Boolean> iteration = source.iterate(3000 * timeoutScale);
 
         iteration
-                .closeWith(iteration.flatMap(new IterationHead()))
+                .closeWith(iteration.flatMap(new IterationHeadInternal()))
                 .addSink(new ReceiveCheckNoOpSink<Boolean>());
     }
 
-    private static final class IterationHead extends RichFlatMapFunction<Boolean, Boolean> {
+    private static final class IterationHeadInternal extends RichFlatMapFunction<Boolean, Boolean> {
         public void flatMap(Boolean value, Collector<Boolean> out) throws Exception {
             int indx = getRuntimeContext().getTaskInfo().getIndexOfThisSubtask();
             if (value) {

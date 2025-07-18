@@ -103,7 +103,7 @@ public final class ListTypeInfo<T> extends TypeInformation<List<T>> {
 
     @Override
     public TypeSerializer<List<T>> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     // ------------------------------------------------------------------------

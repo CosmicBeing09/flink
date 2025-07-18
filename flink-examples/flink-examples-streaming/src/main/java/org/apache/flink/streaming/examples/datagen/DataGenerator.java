@@ -46,6 +46,6 @@ public class DataGenerator {
                 env.fromSource(generatorSource, WatermarkStrategy.noWatermarks(), "Data Generator");
         streamSource.print();
 
-        env.execute("Data Generator Source Example");
+        env.executeInternal("Data Generator Source Example");
     }
 }

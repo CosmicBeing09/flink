@@ -182,7 +182,7 @@ public abstract class CommonExecPythonCalc extends ExecNodeBase<RowData>
                                                 PythonUtil.containsPythonCall(
                                                         x, PythonFunctionKind.PANDAS)));
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(PYTHON_CALC_TRANSFORMATION, config),
                 pythonOperator,

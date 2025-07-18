@@ -1520,7 +1520,7 @@ public class PythonTypeUtils {
                 data.stream()
                         .map(objects -> (T) converter.apply(objects))
                         .collect(Collectors.toList()),
-                dataType.createSerializer(config.getSerializerConfig()));
+                dataType.createSerializer(config.getSerializerConfigInternal()));
     }
 
     private static BiFunction<Integer, Function<Integer, Object>, Object> arrayConstructor(
@@ -1972,7 +1972,7 @@ public class PythonTypeUtils {
             // other typeinfos will use the corresponding serializer to deserialize data.
             byte[] b = (byte[]) c;
             TypeSerializer<?> dataSerializer =
-                    dataType.createSerializer(config.getSerializerConfig());
+                    dataType.createSerializer(config.getSerializerConfigInternal());
             ByteArrayInputStreamWithPos bais = new ByteArrayInputStreamWithPos();
             DataInputViewStreamWrapper baisWrapper = new DataInputViewStreamWrapper(bais);
             bais.setBuffer(b, 0, b.length);

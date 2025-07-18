@@ -118,9 +118,9 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
                 buildComparatorFor(1, executionConfig, rightInformation);
 
         TypeSerializer<IN1> leftSerializer =
-                leftInformation.createSerializer(executionConfig.getSerializerConfig());
+                leftInformation.createSerializer(executionConfig.getSerializerConfigInternal());
         TypeSerializer<IN2> rightSerializer =
-                rightInformation.createSerializer(executionConfig.getSerializerConfig());
+                rightInformation.createSerializer(executionConfig.getSerializerConfigInternal());
 
         OuterJoinListIterator<IN1, IN2> outerJoinIterator =
                 new OuterJoinListIterator<>(
@@ -144,7 +144,7 @@ public class OuterJoinOperatorBase<IN1, IN2, OUT, FT extends FlatJoinFunction<IN
         Collector<OUT> collector =
                 new CopyingListCollector<>(
                         result,
-                        outInformation.createSerializer(executionConfig.getSerializerConfig()));
+                        outInformation.createSerializer(executionConfig.getSerializerConfigInternal()));
 
         while (outerJoinIterator.next()) {
             IN1 left = outerJoinIterator.getLeft();

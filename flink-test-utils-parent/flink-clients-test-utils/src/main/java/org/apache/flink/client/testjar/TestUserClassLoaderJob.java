@@ -35,7 +35,7 @@ public class TestUserClassLoaderJob {
         mapper.sinkTo(new DiscardingSink<>());
 
         ParameterTool parameterTool = ParameterTool.fromArgs(args);
-        env.execute(
+        env.executeInternal(
                 TestUserClassLoaderJob.class.getCanonicalName()
                         + "-"
                         + parameterTool.getRequired("arg"));

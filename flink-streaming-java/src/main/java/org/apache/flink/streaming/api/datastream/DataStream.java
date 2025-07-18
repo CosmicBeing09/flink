@@ -151,7 +151,7 @@ public class DataStream<T> {
      * @return ID of the DataStream
      */
     @Internal
-    public int getId() {
+    public int getIdInternal() {
         return transformation.getId();
     }
 
@@ -1435,7 +1435,7 @@ public class DataStream<T> {
         TypeSerializer<T> serializer =
                 getType()
                         .createSerializer(
-                                getExecutionEnvironment().getConfig().getSerializerConfig());
+                                getExecutionEnvironment().getConfig().getSerializerConfigInternal());
         String accumulatorName = "dataStreamCollect_" + UUID.randomUUID().toString();
 
         StreamExecutionEnvironment env = getExecutionEnvironment();
@@ -1455,8 +1455,8 @@ public class DataStream<T> {
         sink.name("Data stream collect sink");
         env.addOperator(sink.getTransformation());
 
-        env.registerCollectIterator(iterator);
-        collector.setIterator(iterator);
+        env.registerCollectIteratorInternal(iterator);
+        collector.setIteratorInternal(iterator);
     }
 
     /**
@@ -1481,7 +1481,7 @@ public class DataStream<T> {
         private CloseableIterator<T> iterator;
 
         @Internal
-        void setIterator(CloseableIterator<T> iterator) {
+        void setIteratorInternal(CloseableIterator<T> iterator) {
             this.iterator = iterator;
         }
 

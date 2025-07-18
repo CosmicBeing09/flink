@@ -74,7 +74,7 @@ public class TimeIndicatorTypeInfo extends SqlTimeTypeInfo<Timestamp> {
 
     @Override
     public TypeSerializer<Timestamp> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     public boolean isEventTime() {

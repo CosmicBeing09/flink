@@ -118,7 +118,7 @@ public final class CollectDynamicSink implements DynamicTableSink {
 
                 final TypeSerializer<RowData> externalSerializer =
                         InternalTypeInfo.<RowData>of(consumedDataType.getLogicalType())
-                                .createSerializer(config.getSerializerConfig());
+                                .createSerializer(config.getSerializerConfigInternal());
                 final String accumulatorName = tableIdentifier.getObjectName();
 
                 final CollectSinkOperatorFactory<RowData> factory =

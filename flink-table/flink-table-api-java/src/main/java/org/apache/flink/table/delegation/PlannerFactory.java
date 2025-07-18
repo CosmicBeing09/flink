@@ -56,7 +56,7 @@ public interface PlannerFactory extends Factory {
         /**
          * The user classloader.
          *
-         * @see EnvironmentSettings#getUserClassLoader()
+         * @see EnvironmentSettings#getUserClassLoaderInternal()
          */
         ClassLoader getClassLoader();
 

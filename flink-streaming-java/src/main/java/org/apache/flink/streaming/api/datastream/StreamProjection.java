@@ -190,7 +190,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple1<T0>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -210,7 +210,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple2<T0, T1>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -230,7 +230,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple3<T0, T1, T2>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -251,7 +251,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple4<T0, T1, T2, T3>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -273,7 +273,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple5<T0, T1, T2, T3, T4>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -295,7 +295,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple6<T0, T1, T2, T3, T4, T5>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -317,7 +317,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple7<T0, T1, T2, T3, T4, T5, T6>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -339,7 +339,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -361,7 +361,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -384,7 +384,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -407,7 +407,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -431,7 +431,7 @@ public class StreamProjection<IN> {
                 new StreamProject<IN, Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -457,7 +457,7 @@ public class StreamProjection<IN> {
                         IN, Tuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -484,7 +484,7 @@ public class StreamProjection<IN> {
                         IN, Tuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -542,7 +542,7 @@ public class StreamProjection<IN> {
                         Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -618,7 +618,7 @@ public class StreamProjection<IN> {
                                 T15>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -715,7 +715,7 @@ public class StreamProjection<IN> {
                                 T16>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -816,7 +816,7 @@ public class StreamProjection<IN> {
                                 T17>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -921,7 +921,7 @@ public class StreamProjection<IN> {
                                 T18>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1050,7 +1050,7 @@ public class StreamProjection<IN> {
                                 T19>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1184,7 +1184,7 @@ public class StreamProjection<IN> {
                                 T20>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1323,7 +1323,7 @@ public class StreamProjection<IN> {
                                 T21>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1467,7 +1467,7 @@ public class StreamProjection<IN> {
                                 T22>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1616,7 +1616,7 @@ public class StreamProjection<IN> {
                                 T23>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     /**
@@ -1770,7 +1770,7 @@ public class StreamProjection<IN> {
                                 T24>>(
                         fieldIndexes,
                         tType.createSerializer(
-                                dataStream.getExecutionConfig().getSerializerConfig())));
+                                dataStream.getExecutionConfig().getSerializerConfigInternal())));
     }
 
     public static TypeInformation<?>[] extractFieldTypes(int[] fields, TypeInformation<?> inType) {

@@ -415,7 +415,7 @@ public class StreamExecPythonGroupWindowAggregate extends StreamExecAggregateBas
                         pythonUdafInputOffsets,
                         pythonFunctionInfos,
                         shiftTimeZone);
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(PYTHON_GROUP_WINDOW_AGGREGATE_TRANSFORMATION, config),
                 pythonOperator,
@@ -459,7 +459,7 @@ public class StreamExecPythonGroupWindowAggregate extends StreamExecAggregateBas
                         allowance,
                         shiftTimeZone);
 
-        return ExecNodeUtil.createOneInputTransformation(
+        return ExecNodeUtil.createOneInputTransformationInternal(
                 inputTransform,
                 createTransformationMeta(
                         PYTHON_GROUP_WINDOW_AGGREGATE_TRANSFORMATION, pythonNodeConfig),

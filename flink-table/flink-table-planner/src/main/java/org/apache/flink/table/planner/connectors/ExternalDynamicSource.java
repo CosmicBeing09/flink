@@ -110,13 +110,13 @@ final class ExternalDynamicSource<E>
         final Transformation<E> externalTransformation = dataStream.getTransformation();
         final boolean isBounded =
                 !isUnboundedSource(externalTransformation)
-                        && externalTransformation.getTransitivePredecessors().stream()
+                        && externalTransformation.getTransitivePredecessorsInternal().stream()
                                 .noneMatch(this::isUnboundedSource);
 
         return new TransformationScanProvider() {
             @Override
             public Transformation<RowData> createTransformation(ProviderContext providerContext) {
-                return ExecNodeUtil.createOneInputTransformation(
+                return ExecNodeUtil.createOneInputTransformationInternal(
                         externalTransformation,
                         providerContext
                                 .generateUid(EXTERNAL_DATASTREAM_TRANSFORMATION)
