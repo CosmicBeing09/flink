@@ -169,10 +169,10 @@ public final class TypeInferenceUtil {
             CallContext callContext, LinkedHashMap<String, StateTypeStrategy> stateTypeStrategies) {
         return stateTypeStrategies.entrySet().stream()
                 .map(
-                        e ->
+                        stateTypeEntry ->
                                 Map.entry(
-                                        e.getKey(),
-                                        inferStateInfo(callContext, e.getKey(), e.getValue())))
+                                        stateTypeEntry.getKey(),
+                                        inferStateInfo(callContext, stateTypeEntry.getKey(), stateTypeEntry.getValue())))
                 .collect(
                         Collectors.toMap(
                                 Map.Entry::getKey,
@@ -436,9 +436,9 @@ public final class TypeInferenceUtil {
         return String.format("%s(%s)", name, arguments);
     }
 
-    private static String formatSignature(String name, Signature s) {
+    private static String formatSignature(String name, Signature signature) {
         final String arguments =
-                s.getArguments().stream()
+                signature.getArguments().stream()
                         .map(TypeInferenceUtil::formatArgument)
                         .collect(Collectors.joining(", "));
         return String.format("%s(%s)", name, arguments);

@@ -42,9 +42,9 @@ import static org.apache.flink.table.expressions.ApiExpressionUtils.unresolvedCa
 final class ReferenceResolverRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
-                .map(expr -> expr.accept(new ExpressionResolverVisitor(context)))
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
+                .map(expression -> expression.accept(new ExpressionResolverVisitor(context)))
                 .collect(Collectors.toList());
     }
 
@@ -55,13 +55,13 @@ final class ReferenceResolverRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
             final List<Expression> resolvedArgs =
-                    unresolvedCall.getChildren().stream()
-                            .map(expr -> expr.accept(this))
+                    unresolvedCallExpr.getChildren().stream()
+                            .map(childExpression -> childExpression.accept(this))
                             .collect(Collectors.toList());
 
-            return unresolvedCall.replaceArgs(resolvedArgs);
+            return unresolvedCallExpr.replaceArgs(resolvedArgs);
         }
 
         @Override

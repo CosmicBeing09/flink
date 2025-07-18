@@ -38,9 +38,9 @@ import java.util.stream.Collectors;
 final class QualifyBuiltInFunctionsRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
-                .map(expr -> expr.accept(new QualifyBuiltInFunctionVisitor(context)))
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
+                .map(inputExpression -> inputExpression.accept(new QualifyBuiltInFunctionVisitor(context)))
                 .collect(Collectors.toList());
     }
 
@@ -51,25 +51,25 @@ final class QualifyBuiltInFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition = unresolvedCall.getFunctionDefinition();
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
+            final FunctionDefinition functionDefinition = unresolvedCallExpr.getFunctionDefinition();
 
             final List<Expression> args =
-                    unresolvedCall.getChildren().stream()
+                    unresolvedCallExpr.getChildren().stream()
                             .map(c -> c.accept(this))
                             .collect(Collectors.toList());
 
-            if (!unresolvedCall.getFunctionIdentifier().isPresent()
-                    && definition instanceof BuiltInFunctionDefinition) {
+            if (!unresolvedCallExpr.getFunctionIdentifier().isPresent()
+                    && functionDefinition instanceof BuiltInFunctionDefinition) {
                 final ContextResolvedFunction resolvedFunction =
                         resolutionContext
                                 .functionLookup()
                                 .lookupBuiltInFunction(
                                         ((BuiltInFunctionDefinition)
-                                                unresolvedCall.getFunctionDefinition()));
+                                                unresolvedCallExpr.getFunctionDefinition()));
                 return ApiExpressionUtils.unresolvedCall(resolvedFunction, args);
             }
-            return unresolvedCall.replaceArgs(args);
+            return unresolvedCallExpr.replaceArgs(args);
         }
 
         @Override

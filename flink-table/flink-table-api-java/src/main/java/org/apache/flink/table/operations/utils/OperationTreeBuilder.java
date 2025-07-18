@@ -643,21 +643,21 @@ public final class OperationTreeBuilder {
         }
 
         @Override
-        public AggregateWithAlias visit(UnresolvedCallExpression unresolvedCall) {
-            if (ApiExpressionUtils.isFunction(unresolvedCall, BuiltInFunctionDefinitions.AS)) {
-                Expression expression = unresolvedCall.getChildren().get(0);
+        public AggregateWithAlias visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (ApiExpressionUtils.isFunction(unresolvedCallExpr, BuiltInFunctionDefinitions.AS)) {
+                Expression expression = unresolvedCallExpr.getChildren().get(0);
                 if (expression instanceof UnresolvedCallExpression) {
-                    List<String> aliases = extractAliases(unresolvedCall);
+                    List<String> aliases = extractAliases(unresolvedCallExpr);
 
                     return getAggregate((UnresolvedCallExpression) expression, aliases)
-                            .orElseGet(() -> defaultMethod(unresolvedCall));
+                            .orElseGet(() -> defaultMethod(unresolvedCallExpr));
                 } else {
-                    return defaultMethod(unresolvedCall);
+                    return defaultMethod(unresolvedCallExpr);
                 }
             }
 
-            return getAggregate(unresolvedCall, Collections.emptyList())
-                    .orElseGet(() -> defaultMethod(unresolvedCall));
+            return getAggregate(unresolvedCallExpr, Collections.emptyList())
+                    .orElseGet(() -> defaultMethod(unresolvedCallExpr));
         }
 
         private List<String> extractAliases(UnresolvedCallExpression unresolvedCall) {

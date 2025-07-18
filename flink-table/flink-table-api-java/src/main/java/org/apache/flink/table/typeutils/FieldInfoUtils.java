@@ -556,20 +556,20 @@ public class FieldInfoUtils {
         }
 
         @Override
-        public FieldInfo visit(UnresolvedCallExpression unresolvedCall) {
-            if (unresolvedCall.getFunctionDefinition() == BuiltInFunctionDefinitions.AS) {
-                return visitAlias(unresolvedCall);
-            } else if (isRowTimeExpression(unresolvedCall)) {
-                validateRowtimeReplacesCompatibleType(unresolvedCall);
+        public FieldInfo visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (unresolvedCallExpr.getFunctionDefinition() == BuiltInFunctionDefinitions.AS) {
+                return visitAlias(unresolvedCallExpr);
+            } else if (isRowTimeExpression(unresolvedCallExpr)) {
+                validateRowtimeReplacesCompatibleType(unresolvedCallExpr);
                 return createTimeAttributeField(
-                        getChildAsReference(unresolvedCall), TimestampKind.ROWTIME, null);
-            } else if (isProcTimeExpression(unresolvedCall)) {
-                validateProcTimeAttributeAppended(unresolvedCall);
+                        getChildAsReference(unresolvedCallExpr), TimestampKind.ROWTIME, null);
+            } else if (isProcTimeExpression(unresolvedCallExpr)) {
+                validateProcTimeAttributeAppended(unresolvedCallExpr);
                 return createTimeAttributeField(
-                        getChildAsReference(unresolvedCall), TimestampKind.PROCTIME, null);
+                        getChildAsReference(unresolvedCallExpr), TimestampKind.PROCTIME, null);
             }
 
-            return defaultMethod(unresolvedCall);
+            return defaultMethod(unresolvedCallExpr);
         }
 
         private FieldInfo visitAlias(UnresolvedCallExpression unresolvedCall) {
@@ -649,16 +649,16 @@ public class FieldInfoUtils {
         }
 
         @Override
-        public FieldInfo visit(UnresolvedCallExpression unresolvedCall) {
-            if (unresolvedCall.getFunctionDefinition() == BuiltInFunctionDefinitions.AS) {
-                return visitAlias(unresolvedCall);
-            } else if (isRowTimeExpression(unresolvedCall)) {
-                return createRowtimeFieldInfo(unresolvedCall, null);
-            } else if (isProcTimeExpression(unresolvedCall)) {
-                return createProctimeFieldInfo(unresolvedCall, null);
+        public FieldInfo visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (unresolvedCallExpr.getFunctionDefinition() == BuiltInFunctionDefinitions.AS) {
+                return visitAlias(unresolvedCallExpr);
+            } else if (isRowTimeExpression(unresolvedCallExpr)) {
+                return createRowtimeFieldInfo(unresolvedCallExpr, null);
+            } else if (isProcTimeExpression(unresolvedCallExpr)) {
+                return createProctimeFieldInfo(unresolvedCallExpr, null);
             }
 
-            return defaultMethod(unresolvedCall);
+            return defaultMethod(unresolvedCallExpr);
         }
 
         private FieldInfo visitAlias(UnresolvedCallExpression unresolvedCall) {

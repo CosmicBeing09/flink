@@ -42,12 +42,12 @@ import java.util.stream.Collectors;
 final class ResolveSqlCallRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         // only the top-level expressions may access the output data type
         final LogicalType outputType =
                 context.getOutputDataType().map(DataType::getLogicalType).orElse(null);
         final TranslateSqlCallsVisitor visitor = new TranslateSqlCallsVisitor(context, outputType);
-        return expression.stream().map(expr -> expr.accept(visitor)).collect(Collectors.toList());
+        return inputExpressions.stream().map(expr -> expr.accept(visitor)).collect(Collectors.toList());
     }
 
     private static class TranslateSqlCallsVisitor extends RuleExpressionVisitor<Expression> {
@@ -70,27 +70,27 @@ final class ResolveSqlCallRule implements ResolverRule {
                     .referenceLookup()
                     .getAllInputFields()
                     .forEach(
-                            f ->
+                            inputField ->
                                     fields.add(
                                             new RowField(
-                                                    f.getName(),
-                                                    f.getOutputDataType().getLogicalType())));
+                                                    inputField.getName(),
+                                                    inputField.getOutputDataType().getLogicalType())));
             // local references
             resolutionContext
                     .getLocalReferences()
                     .forEach(
-                            refs ->
+                            localReference ->
                                     fields.add(
                                             new RowField(
-                                                    refs.getName(),
-                                                    refs.getOutputDataType().getLogicalType())));
+                                                    localReference.getName(),
+                                                    localReference.getOutputDataType().getLogicalType())));
             return resolver.resolveExpression(
                     sqlCall.getSqlExpression(), new RowType(false, fields), outputType);
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
-            return unresolvedCall.replaceArgs(resolveChildren(unresolvedCall.getChildren()));
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
+            return unresolvedCallExpr.replaceArgs(resolveChildren(unresolvedCallExpr.getChildren()));
         }
 
         @Override

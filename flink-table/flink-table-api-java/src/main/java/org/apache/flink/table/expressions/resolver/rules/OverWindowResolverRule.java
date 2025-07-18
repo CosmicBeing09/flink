@@ -49,8 +49,8 @@ final class OverWindowResolverRule implements ResolverRule {
     private static final WindowKindExtractor OVER_WINDOW_KIND_EXTRACTOR = new WindowKindExtractor();
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
                 .map(expr -> expr.accept(new ExpressionResolverVisitor(context)))
                 .collect(Collectors.toList());
     }
@@ -62,11 +62,11 @@ final class OverWindowResolverRule implements ResolverRule {
         }
 
         @Override
-        public Expression visit(UnresolvedCallExpression unresolvedCall) {
+        public Expression visit(UnresolvedCallExpression unresolvedCallExpr) {
 
-            if (unresolvedCall.getFunctionDefinition() == BuiltInFunctionDefinitions.OVER) {
-                List<Expression> children = unresolvedCall.getChildren();
-                Expression alias = children.get(1);
+            if (unresolvedCallExpr.getFunctionDefinition() == BuiltInFunctionDefinitions.OVER) {
+                List<Expression> overCallChildren = unresolvedCallExpr.getChildren();
+                Expression alias = overCallChildren.get(1);
 
                 LocalOverWindow referenceWindow =
                         resolutionContext
@@ -76,13 +76,13 @@ final class OverWindowResolverRule implements ResolverRule {
                                                 new ValidationException(
                                                         "Could not resolve over call."));
 
-                UnresolvedCallExpression agg = (UnresolvedCallExpression) children.get(0);
+                UnresolvedCallExpression aggregateCall = (UnresolvedCallExpression) overCallChildren.get(0);
 
                 final List<Expression> newArgs = new ArrayList<>();
-                newArgs.add(agg);
+                newArgs.add(aggregateCall);
                 newArgs.add(referenceWindow.getOrderBy());
-                if (agg.getFunctionDefinition() == BuiltInFunctionDefinitions.LAG
-                        || agg.getFunctionDefinition() == BuiltInFunctionDefinitions.LEAD) {
+                if (aggregateCall.getFunctionDefinition() == BuiltInFunctionDefinitions.LAG
+                        || aggregateCall.getFunctionDefinition() == BuiltInFunctionDefinitions.LEAD) {
                     if (referenceWindow.getPreceding().isPresent()
                             || referenceWindow.getFollowing().isPresent()) {
                         throw new ValidationException(
@@ -102,10 +102,10 @@ final class OverWindowResolverRule implements ResolverRule {
 
                 newArgs.addAll(referenceWindow.getPartitionBy());
 
-                return unresolvedCall.replaceArgs(newArgs);
+                return unresolvedCallExpr.replaceArgs(newArgs);
             } else {
-                return unresolvedCall.replaceArgs(
-                        unresolvedCall.getChildren().stream()
+                return unresolvedCallExpr.replaceArgs(
+                        unresolvedCallExpr.getChildren().stream()
                                 .map(expr -> expr.accept(this))
                                 .collect(Collectors.toList()));
             }

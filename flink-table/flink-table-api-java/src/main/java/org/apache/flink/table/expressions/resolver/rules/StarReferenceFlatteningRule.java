@@ -39,11 +39,12 @@ import static java.util.Collections.singletonList;
 final class StarReferenceFlatteningRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         final List<ColumnExpansionStrategy> strategies =
                 context.configuration().get(TableConfigOptions.TABLE_COLUMN_EXPANSION_STRATEGY);
-        return expression.stream()
-                .flatMap(e -> e.accept(new FieldFlatteningVisitor(context, strategies)).stream())
+        return inputExpressions.stream()
+                .flatMap(expression -> expression
+                        .accept(new FieldFlatteningVisitor(context, strategies)).stream())
                 .collect(Collectors.toList());
     }
 
@@ -68,12 +69,12 @@ final class StarReferenceFlatteningRule implements ResolverRule {
         }
 
         @Override
-        public List<Expression> visit(UnresolvedCallExpression unresolvedCall) {
+        public List<Expression> visit(UnresolvedCallExpression unresolvedCallExpr) {
             final List<Expression> newArgs =
-                    unresolvedCall.getChildren().stream()
-                            .flatMap(e -> e.accept(this).stream())
+                    unresolvedCallExpr.getChildren().stream()
+                            .flatMap(expression -> expression.accept(this).stream())
                             .collect(Collectors.toList());
-            return singletonList(unresolvedCall.replaceArgs(newArgs));
+            return singletonList(unresolvedCallExpr.replaceArgs(newArgs));
         }
 
         @Override

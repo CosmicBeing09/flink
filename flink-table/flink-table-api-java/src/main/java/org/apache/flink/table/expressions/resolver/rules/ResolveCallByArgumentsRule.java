@@ -90,12 +90,13 @@ import static org.apache.flink.table.types.utils.TypeConversions.fromLegacyInfoT
 final class ResolveCallByArgumentsRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         // only the top-level expressions may access the output data type
         final SurroundingInfo surroundingInfo =
                 context.getOutputDataType().map(SurroundingInfo::of).orElse(null);
-        return expression.stream()
-                .flatMap(e -> e.accept(new ResolvingCallVisitor(context, surroundingInfo)).stream())
+        return inputExpressions.stream()
+                .flatMap(inputExpr -> inputExpr
+                        .accept(new ResolvingCallVisitor(context, surroundingInfo)).stream())
                 .collect(Collectors.toList());
     }
 
@@ -112,33 +113,34 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         @Override
-        public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition;
+        public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCallExpr) {
+            final FunctionDefinition functionDefinition;
             // clean functions that were not registered in a catalog
-            if (unresolvedCall.getFunctionIdentifier().isEmpty()) {
-                definition =
-                        prepareInlineUserDefinedFunction(unresolvedCall.getFunctionDefinition());
+            if (unresolvedCallExpr.getFunctionIdentifier().isEmpty()) {
+                functionDefinition =
+                        prepareInlineUserDefinedFunction(unresolvedCallExpr.getFunctionDefinition());
             } else {
-                definition = unresolvedCall.getFunctionDefinition();
+                functionDefinition = unresolvedCallExpr.getFunctionDefinition();
             }
 
             final String functionName =
-                    unresolvedCall
+                    unresolvedCallExpr
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
-                            .orElseGet(definition::toString);
+                            .orElseGet(functionDefinition::toString);
 
-            final TypeInference typeInference = getTypeInferenceOrNull(definition);
+            final TypeInference typeInference = getTypeInferenceOrNull(functionDefinition);
 
             // Reorder named arguments and add replacements for optional ones
             final UnresolvedCallExpression adaptedCall =
-                    executeAssignment(functionName, definition, typeInference, unresolvedCall);
+                    executeAssignment(functionName,
+                            functionDefinition, typeInference, unresolvedCallExpr);
 
             // resolve the children with information from the current call
             final List<ResolvedExpression> resolvedArgs = new ArrayList<>();
-            final int argCount = adaptedCall.getChildren().size();
+            final int argumentCount = adaptedCall.getChildren().size();
 
-            for (int i = 0; i < argCount; i++) {
+            for (int argumentIndex = 0; argumentIndex < argumentCount; argumentIndex++) {
                 final SurroundingInfo surroundingInfo;
                 if (typeInference == null) {
                     surroundingInfo = null;
@@ -146,18 +148,18 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                     surroundingInfo =
                             SurroundingInfo.of(
                                     functionName,
-                                    definition,
+                                    functionDefinition,
                                     typeInference,
-                                    argCount,
-                                    i,
+                                    argumentCount,
+                                    argumentIndex,
                                     resolutionContext.isGroupedAggregation());
                 }
                 final ResolvingCallVisitor childResolver =
                         new ResolvingCallVisitor(resolutionContext, surroundingInfo);
-                resolvedArgs.addAll(adaptedCall.getChildren().get(i).accept(childResolver));
+                resolvedArgs.addAll(adaptedCall.getChildren().get(argumentIndex).accept(childResolver));
             }
 
-            if (definition == BuiltInFunctionDefinitions.FLATTEN) {
+            if (functionDefinition == BuiltInFunctionDefinitions.FLATTEN) {
                 return executeFlatten(resolvedArgs);
             }
 
@@ -178,11 +180,11 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             throw new TableException("Unexpected unresolved expression: " + expression);
         }
 
-        private List<ResolvedExpression> executeFlatten(List<ResolvedExpression> args) {
-            if (args.size() != 1) {
+        private List<ResolvedExpression> executeFlatten(List<ResolvedExpression> resolvedArguments) {
+            if (resolvedArguments.size() != 1) {
                 throw new ValidationException("Invalid number of arguments for flattening.");
             }
-            final ResolvedExpression composite = args.get(0);
+            final ResolvedExpression composite = resolvedArguments.get(0);
             final LogicalType compositeType = composite.getOutputDataType().getLogicalType();
             if (hasLegacyTypes(compositeType)) {
                 return flattenLegacyCompositeType(composite);
@@ -240,9 +242,9 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         /** Temporary method until all calls define a type inference. */
-        private @Nullable TypeInference getTypeInferenceOrNull(FunctionDefinition definition) {
+        private @Nullable TypeInference getTypeInferenceOrNull(FunctionDefinition functionDefinition) {
             final TypeInference inference =
-                    definition.getTypeInference(resolutionContext.typeFactory());
+                    functionDefinition.getTypeInference(resolutionContext.typeFactory());
             if (inference.getOutputTypeStrategy() != TypeStrategies.MISSING) {
                 return inference;
             } else {
@@ -266,9 +268,9 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 return unresolvedCall;
             }
 
-            final List<Expression> actualArgs = unresolvedCall.getChildren();
+            final List<Expression> originalArguments = unresolvedCall.getChildren();
             final Map<String, Expression> namedArgs = new HashMap<>();
-            actualArgs.stream()
+            originalArguments.stream()
                     .map(this::extractAssignment)
                     .filter(Objects::nonNull)
                     .forEach(
@@ -350,16 +352,16 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
             return unresolvedCall.replaceArgs(reorderedArgs);
         }
 
-        private Map.Entry<String, Expression> extractAssignment(Expression e) {
-            final List<Expression> children = e.getChildren();
-            if (!isFunction(e, BuiltInFunctionDefinitions.ASSIGNMENT) || children.size() != 2) {
+        private Map.Entry<String, Expression> extractAssignment(Expression expr) {
+            final List<Expression> childExpressions = expr.getChildren();
+            if (!isFunction(expr, BuiltInFunctionDefinitions.ASSIGNMENT) || childExpressions.size() != 2) {
                 return null;
             }
-            final String name = ExpressionUtils.stringValue(children.get(0));
+            final String name = ExpressionUtils.stringValue(childExpressions.get(0));
             if (name == null) {
                 return null;
             }
-            return Map.entry(name, children.get(1));
+            return Map.entry(name, childExpressions.get(1));
         }
 
         private ResolvedExpression runTypeInference(
@@ -415,20 +417,20 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         /** Validates and cleans an inline, unregistered {@link UserDefinedFunction}. */
-        private FunctionDefinition prepareInlineUserDefinedFunction(FunctionDefinition definition) {
-            if (definition instanceof ScalarFunctionDefinition) {
-                final ScalarFunctionDefinition sf = (ScalarFunctionDefinition) definition;
+        private FunctionDefinition prepareInlineUserDefinedFunction(FunctionDefinition functionDef) {
+            if (functionDef instanceof ScalarFunctionDefinition) {
+                final ScalarFunctionDefinition sf = (ScalarFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
                         resolutionContext.configuration(), sf.getScalarFunction());
                 return new ScalarFunctionDefinition(sf.getName(), sf.getScalarFunction());
-            } else if (definition instanceof TableFunctionDefinition) {
-                final TableFunctionDefinition tf = (TableFunctionDefinition) definition;
+            } else if (functionDef instanceof TableFunctionDefinition) {
+                final TableFunctionDefinition tf = (TableFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
                         resolutionContext.configuration(), tf.getTableFunction());
                 return new TableFunctionDefinition(
                         tf.getName(), tf.getTableFunction(), tf.getResultType());
-            } else if (definition instanceof AggregateFunctionDefinition) {
-                final AggregateFunctionDefinition af = (AggregateFunctionDefinition) definition;
+            } else if (functionDef instanceof AggregateFunctionDefinition) {
+                final AggregateFunctionDefinition af = (AggregateFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
                         resolutionContext.configuration(), af.getAggregateFunction());
                 return new AggregateFunctionDefinition(
@@ -436,9 +438,9 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                         af.getAggregateFunction(),
                         af.getResultTypeInfo(),
                         af.getAccumulatorTypeInfo());
-            } else if (definition instanceof TableAggregateFunctionDefinition) {
+            } else if (functionDef instanceof TableAggregateFunctionDefinition) {
                 final TableAggregateFunctionDefinition taf =
-                        (TableAggregateFunctionDefinition) definition;
+                        (TableAggregateFunctionDefinition) functionDef;
                 UserDefinedFunctionHelper.prepareInstance(
                         resolutionContext.configuration(), taf.getTableAggregateFunction());
                 return new TableAggregateFunctionDefinition(
@@ -446,11 +448,11 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                         taf.getTableAggregateFunction(),
                         taf.getResultTypeInfo(),
                         taf.getAccumulatorTypeInfo());
-            } else if (definition instanceof UserDefinedFunction) {
+            } else if (functionDef instanceof UserDefinedFunction) {
                 UserDefinedFunctionHelper.prepareInstance(
-                        resolutionContext.configuration(), (UserDefinedFunction) definition);
+                        resolutionContext.configuration(), (UserDefinedFunction) functionDef);
             }
-            return definition;
+            return functionDef;
         }
     }
 
@@ -464,20 +466,20 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         private final FunctionDefinition definition;
 
-        private final List<ResolvedExpression> resolvedArgs;
+        private final List<ResolvedExpression> resolvedArguments;
 
         private final boolean isGroupedAggregation;
 
         public TableApiCallContext(
                 DataTypeFactory typeFactory,
-                String name,
+                String functionName,
                 FunctionDefinition definition,
                 List<ResolvedExpression> resolvedArgs,
                 boolean isGroupedAggregation) {
             this.typeFactory = typeFactory;
-            this.name = name;
+            this.name = functionName;
             this.definition = definition;
-            this.resolvedArgs = resolvedArgs;
+            this.resolvedArguments = resolvedArgs;
             this.isGroupedAggregation = isGroupedAggregation;
         }
 
@@ -534,7 +536,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public List<DataType> getArgumentDataTypes() {
-            return resolvedArgs.stream()
+            return resolvedArguments.stream()
                     .map(ResolvedExpression::getOutputDataType)
                     .collect(Collectors.toList());
         }
@@ -550,13 +552,13 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         private ResolvedExpression getArgument(int pos) {
-            if (pos >= resolvedArgs.size()) {
+            if (pos >= resolvedArguments.size()) {
                 throw new IndexOutOfBoundsException(
                         String.format(
                                 "Not enough arguments to access literal at position %d for function '%s'.",
                                 pos, name));
             }
-            return resolvedArgs.get(pos);
+            return resolvedArguments.get(pos);
         }
     }
 }

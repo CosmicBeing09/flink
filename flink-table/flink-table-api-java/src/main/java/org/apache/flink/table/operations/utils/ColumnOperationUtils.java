@@ -135,15 +135,15 @@ final class ColumnOperationUtils {
     private static class RenameColumnExtractor extends ApiExpressionDefaultVisitor<String> {
 
         @Override
-        public String visit(UnresolvedCallExpression unresolvedCall) {
-            if (unresolvedCall.getFunctionDefinition() == AS
-                    && unresolvedCall.getChildren().get(0)
+        public String visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (unresolvedCallExpr.getFunctionDefinition() == AS
+                    && unresolvedCallExpr.getChildren().get(0)
                             instanceof UnresolvedReferenceExpression) {
                 UnresolvedReferenceExpression resolvedFieldReference =
-                        (UnresolvedReferenceExpression) unresolvedCall.getChildren().get(0);
+                        (UnresolvedReferenceExpression) unresolvedCallExpr.getChildren().get(0);
                 return resolvedFieldReference.getName();
             } else {
-                return defaultMethod(unresolvedCall);
+                return defaultMethod(unresolvedCallExpr);
             }
         }
 

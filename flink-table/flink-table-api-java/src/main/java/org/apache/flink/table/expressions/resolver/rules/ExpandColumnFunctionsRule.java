@@ -51,7 +51,7 @@ import static org.apache.flink.table.functions.BuiltInFunctionDefinitions.WITH_C
 final class ExpandColumnFunctionsRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         final List<ColumnExpansionStrategy> strategies =
                 context.configuration().get(TableConfigOptions.TABLE_COLUMN_EXPANSION_STRATEGY);
 
@@ -61,7 +61,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
                                 .map(p -> unresolvedRef(p.getName()))
                                 .collect(Collectors.toList()));
 
-        return expression.stream()
+        return inputExpressions.stream()
                 .flatMap(expr -> expr.accept(columnFunctionsExpander).stream())
                 .collect(Collectors.toList());
     }
@@ -79,28 +79,29 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public List<Expression> visit(UnresolvedCallExpression unresolvedCall) {
+        public List<Expression> visit(UnresolvedCallExpression unresolvedCallExpr) {
 
-            List<Expression> result;
+            List<Expression> expandedExpressions;
 
-            final FunctionDefinition definition = unresolvedCall.getFunctionDefinition();
+            final FunctionDefinition definition = unresolvedCallExpr.getFunctionDefinition();
             if (definition == WITH_COLUMNS) {
-                result = resolveArgsOfColumns(unresolvedCall.getChildren(), false);
+                expandedExpressions = resolveArgsOfColumns(unresolvedCallExpr.getChildren(), false);
             } else if (definition == WITHOUT_COLUMNS) {
-                result = resolveArgsOfColumns(unresolvedCall.getChildren(), true);
+                expandedExpressions = resolveArgsOfColumns(unresolvedCallExpr.getChildren(), true);
             } else {
-                List<Expression> args =
-                        unresolvedCall.getChildren().stream()
+                List<Expression> resolvedArguments =
+                        unresolvedCallExpr.getChildren().stream()
                                 .flatMap(c -> c.accept(this).stream())
                                 .collect(Collectors.toList());
-                result = Collections.singletonList(unresolvedCall.replaceArgs(args));
+                expandedExpressions = Collections.singletonList(unresolvedCallExpr.replaceArgs(
+                        resolvedArguments));
 
                 // validate alias
                 if (definition == AS) {
-                    for (int i = 1; i < args.size(); ++i) {
-                        if (!(args.get(i) instanceof ValueLiteralExpression)) {
+                    for (int i = 1; i < resolvedArguments.size(); ++i) {
+                        if (!(resolvedArguments.get(i) instanceof ValueLiteralExpression)) {
                             final String errorMessage =
-                                    args.stream()
+                                    resolvedArguments.stream()
                                             .map(Object::toString)
                                             .collect(Collectors.joining(", "));
                             throw new ValidationException(
@@ -111,7 +112,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
                 }
             }
 
-            return result;
+            return expandedExpressions;
         }
 
         @Override
@@ -176,18 +177,18 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
         }
 
         @Override
-        public List<UnresolvedReferenceExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            if (isIndexRangeCall(unresolvedCall)) {
+        public List<UnresolvedReferenceExpression> visit(UnresolvedCallExpression unresolvedCallExpr) {
+            if (isIndexRangeCall(unresolvedCallExpr)) {
                 int start =
                         ExpressionUtils.extractValue(
-                                        unresolvedCall.getChildren().get(0), Integer.class)
+                                        unresolvedCallExpr.getChildren().get(0), Integer.class)
                                 .orElseThrow(
                                         () ->
                                                 new ValidationException(
                                                         "Constant integer value expected."));
                 int end =
                         ExpressionUtils.extractValue(
-                                        unresolvedCall.getChildren().get(1), Integer.class)
+                                        unresolvedCallExpr.getChildren().get(1), Integer.class)
                                 .orElseThrow(
                                         () ->
                                                 new ValidationException(
@@ -200,12 +201,12 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
 
                 return inputFieldReferences.subList(start - 1, end);
 
-            } else if (isNameRangeCall(unresolvedCall)) {
+            } else if (isNameRangeCall(unresolvedCallExpr)) {
                 String startName =
-                        ((UnresolvedReferenceExpression) unresolvedCall.getChildren().get(0))
+                        ((UnresolvedReferenceExpression) unresolvedCallExpr.getChildren().get(0))
                                 .getName();
                 String endName =
-                        ((UnresolvedReferenceExpression) unresolvedCall.getChildren().get(1))
+                        ((UnresolvedReferenceExpression) unresolvedCallExpr.getChildren().get(1))
                                 .getName();
 
                 int start = indexOfName(inputFieldReferences, startName);
@@ -221,7 +222,7 @@ final class ExpandColumnFunctionsRule implements ResolverRule {
 
                 return inputFieldReferences.subList(start, end + 1);
             } else {
-                return defaultMethod(unresolvedCall);
+                return defaultMethod(unresolvedCallExpr);
             }
         }
 
