@@ -31,27 +31,27 @@ import java.util.function.Function;
 /** Maintains the configured parallelisms for vertices, which should be defined by a scheduler. */
 public class DefaultVertexParallelismStore implements MutableVertexParallelismStore {
 
-    private static final Function<Integer, Optional<String>> RESCALE_MAX_REJECT =
+    private static final Function<Integer, Optional<String>> MAX_RESCALE_REJECTION_MESSAGE =
             maxParallelism -> Optional.of("Cannot change the max parallelism.");
 
     /**
      * Create a new {@link VertexParallelismStore} that reflects given {@link
      * JobResourceRequirements}.
      *
-     * @param oldVertexParallelismStore old vertex parallelism store that serves as a base for the
+     * @param baseVertexParallelismStore old vertex parallelism store that serves as a base for the
      *     new one
      * @param jobResourceRequirements to apply over the old vertex parallelism store
      * @return new vertex parallelism store iff it was updated
      */
     public static Optional<VertexParallelismStore> applyJobResourceRequirements(
-            VertexParallelismStore oldVertexParallelismStore,
+            VertexParallelismStore baseVertexParallelismStore,
             JobResourceRequirements jobResourceRequirements) {
         final DefaultVertexParallelismStore newVertexParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
         for (final JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
             final VertexParallelismInformation oldVertexParallelismInfo =
-                    oldVertexParallelismStore.getParallelismInfo(jobVertexId);
+                    baseVertexParallelismStore.getParallelismInfo(jobVertexId);
             final JobVertexResourceRequirements.Parallelism parallelismSettings =
                     jobResourceRequirements.getParallelism(jobVertexId);
             final int minParallelism = parallelismSettings.getLowerBound();
@@ -62,7 +62,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
                             minParallelism,
                             parallelism,
                             oldVertexParallelismInfo.getMaxParallelism(),
-                            RESCALE_MAX_REJECT));
+                            MAX_RESCALE_REJECTION_MESSAGE));
             changed |=
                     oldVertexParallelismInfo.getMinParallelism() != minParallelism
                             || oldVertexParallelismInfo.getParallelism() != parallelism;
