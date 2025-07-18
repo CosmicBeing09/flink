@@ -40,9 +40,9 @@ public class FileMappingManagerTest {
         FileMappingManager fileMappingManager =
                 new FileMappingManager(localFS, localFS, tempDir.toString(), tempDir.toString());
         String src = tempDir + "/source";
-        FSDataOutputStream os = localFS.create(new Path(src), FileSystem.WriteMode.OVERWRITE);
-        os.write(233);
-        os.close();
+        FSDataOutputStream outputStream = localFS.create(new Path(src), FileSystem.WriteMode.OVERWRITE);
+        outputStream.write(233);
+        outputStream.close();
         fileMappingManager.createFile(new Path(src));
         String dst = tempDir.toString() + "/dst";
         fileMappingManager.link(src, dst);
@@ -58,9 +58,9 @@ public class FileMappingManagerTest {
         FileMappingManager fileMappingManager =
                 new FileMappingManager(localFS, localFS, tempDir.toString(), tempDir.toString());
         String src = tempDir + "/a";
-        FSDataOutputStream os = localFS.create(new Path(src), FileSystem.WriteMode.OVERWRITE);
-        os.write(233);
-        os.close();
+        FSDataOutputStream outputStreamNest = localFS.create(new Path(src), FileSystem.WriteMode.OVERWRITE);
+        outputStreamNest.write(233);
+        outputStreamNest.close();
         fileMappingManager.createFile(new Path(src));
         String dstB = tempDir.toString() + "/b";
         fileMappingManager.link(src, dstB);
