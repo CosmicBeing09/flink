@@ -106,7 +106,7 @@ public final class StreamTableEnvironmentImpl extends AbstractStreamTableEnviron
             StreamExecutionEnvironment executionEnvironment, EnvironmentSettings settings) {
         final MutableURLClassLoader userClassLoader =
                 FlinkUserCodeClassLoaders.create(
-                        new URL[0], settings.getUserClassLoader(), settings.getConfiguration());
+                        new URL[0], settings.getUserClassLoaderInternal(), settings.getConfiguration());
         final Executor executor = lookupExecutor(userClassLoader, executionEnvironment);
 
         final TableConfig tableConfig = TableConfig.getDefault();

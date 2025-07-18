@@ -235,7 +235,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
     public static TableEnvironmentImpl create(EnvironmentSettings settings) {
         final MutableURLClassLoader userClassLoader =
                 FlinkUserCodeClassLoaders.create(
-                        new URL[0], settings.getUserClassLoader(), settings.getConfiguration());
+                        new URL[0], settings.getUserClassLoaderInternal(), settings.getConfiguration());
 
         final ExecutorFactory executorFactory =
                 FactoryUtil.discoverFactory(

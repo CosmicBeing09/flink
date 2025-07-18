@@ -157,7 +157,7 @@ public class EnvironmentSettings {
      * operations requiring reflections on user code.
      */
     @Internal
-    public ClassLoader getUserClassLoader() {
+    public ClassLoader getUserClassLoaderInternal() {
         return classLoader;
     }
 
