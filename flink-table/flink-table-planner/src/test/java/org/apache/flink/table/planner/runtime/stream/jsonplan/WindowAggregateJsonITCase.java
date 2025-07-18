@@ -90,7 +90,7 @@ class WindowAggregateJsonITCase extends JsonPlanTestBase {
                 "cnt BIGINT",
                 "sum_int INT",
                 "distinct_cnt BIGINT");
-        compileSqlAndExecutePlan(
+        compileSqlAndExecutePlanInternal(
                         "insert into MySink select\n"
                                 + "  name,\n"
                                 + "  window_start,\n"
@@ -118,7 +118,7 @@ class WindowAggregateJsonITCase extends JsonPlanTestBase {
     @TestTemplate
     void testEventTimeHopWindow() throws Exception {
         createTestValuesSinkTable("MySink", "name STRING", "cnt BIGINT");
-        compileSqlAndExecutePlan(
+        compileSqlAndExecutePlanInternal(
                         "insert into MySink select\n"
                                 + "  name,\n"
                                 + "  COUNT(*)\n"
@@ -147,7 +147,7 @@ class WindowAggregateJsonITCase extends JsonPlanTestBase {
     @TestTemplate
     void testEventTimeCumulateWindow() throws Exception {
         createTestValuesSinkTable("MySink", "name STRING", "cnt BIGINT");
-        compileSqlAndExecutePlan(
+        compileSqlAndExecutePlanInternal(
                         "insert into MySink select\n"
                                 + "  name,\n"
                                 + "  COUNT(*)\n"
@@ -187,7 +187,7 @@ class WindowAggregateJsonITCase extends JsonPlanTestBase {
         createTestValuesSinkTable(
                 "MySink", "name STRING", "max_double DOUBLE", "cnt_distinct_int BIGINT");
 
-        compileSqlAndExecutePlan(
+        compileSqlAndExecutePlanInternal(
                         "insert into MySink select name, "
                                 + "   max(`double`),\n"
                                 + "   count(distinct `int`) "
@@ -223,7 +223,7 @@ class WindowAggregateJsonITCase extends JsonPlanTestBase {
     @TestTemplate
     public void testEventTimeSessionWindow() throws Exception {
         createTestValuesSinkTable("MySink", "name STRING", "cnt BIGINT");
-        compileSqlAndExecutePlan(
+        compileSqlAndExecutePlanInternal(
                         "insert into MySink select\n"
                                 + "  name,\n"
                                 + "  COUNT(*)\n"

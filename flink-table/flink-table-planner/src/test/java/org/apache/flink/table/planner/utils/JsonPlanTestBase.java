@@ -82,11 +82,11 @@ public abstract class JsonPlanTestBase {
         TestValuesTableFactory.clearAllData();
     }
 
-    protected TableResult compileSqlAndExecutePlan(String sql) {
-        return compileSqlAndExecutePlan(sql, json -> json);
+    protected TableResult compileSqlAndExecutePlanInternal(String sql) {
+        return compileSqlAndExecutePlanInternal(sql, json -> json);
     }
 
-    protected TableResult compileSqlAndExecutePlan(
+    protected TableResult compileSqlAndExecutePlanInternal(
             String sql, Function<String, String> jsonPlanTransformer) {
         CompiledPlan compiledPlan = tableEnv.compilePlanSql(sql);
         checkTransformationUids(compiledPlan);

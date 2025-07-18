@@ -39,7 +39,7 @@ class SargJsonPlanITCase extends JsonPlanTestBase {
         String sql =
                 "insert into `result` SELECT a\n"
                         + "FROM MyTable WHERE a = 1 OR a = 2 OR a IS NULL";
-        compileSqlAndExecutePlan(sql).await();
+        compileSqlAndExecutePlanInternal(sql).await();
         List<String> expected = Arrays.asList("+I[1]", "+I[2]", "+I[null]");
         assertResult(expected, TestValuesTableFactory.getResultsAsStrings("result"));
     }

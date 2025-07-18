@@ -147,7 +147,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
                 "`ord_cnt` BIGINT",
                 "`quantity_cnt` BIGINT",
                 "`total_amount` DOUBLE");
-        compileSqlAndExecutePlan(sql, jsonPlanTransformer).await();
+        compileSqlAndExecutePlanInternal(sql, jsonPlanTransformer).await();
 
         // with deduplicate state's TTL as 6s, record (+I,2,Jerry,2,99.9) will duplicate itself
         // +-------------------+--------------------------------------+------------------+
@@ -211,7 +211,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
 
         createTestValuesSinkTable(
                 "OrdersShipInfo", "`order_id` INT", "`line_order_id` INT", "`ship_mode` STRING");
-        compileSqlAndExecutePlan(sql, jsonPlanTransformer).await();
+        compileSqlAndExecutePlanInternal(sql, jsonPlanTransformer).await();
 
         // with left-state TTL as 3s and right-state TTL as 9s
         // +--------------+--------------+-------------------------------------+-------------------+
