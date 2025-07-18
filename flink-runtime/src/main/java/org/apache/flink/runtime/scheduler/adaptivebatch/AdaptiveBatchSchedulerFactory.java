@@ -102,8 +102,8 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
     public SchedulerNG createInstance(
             Logger log,
             ExecutionPlan executionPlan,
-            Executor ioExecutor,
-            Configuration jobMasterConfiguration,
+            Executor ioThreadPoolExecutor,
+            Configuration jobMasterConfig,
             SlotPoolService slotPoolService,
             ScheduledExecutorService futureExecutor,
             ClassLoader userCodeLoader,
@@ -143,12 +143,12 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                                                 "The AdaptiveBatchScheduler requires a SlotPool."));
 
         final ExecutionSlotAllocatorFactory allocatorFactory =
-                createExecutionSlotAllocatorFactory(jobMasterConfiguration, slotPool);
+                createExecutionSlotAllocatorFactory(jobMasterConfig, slotPool);
 
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
                                 executionPlan.getJobConfiguration(),
-                                jobMasterConfiguration,
+                                jobMasterConfig,
                                 executionPlan.isCheckpointingEnabled())
                         .create();
         log.info(
@@ -158,17 +158,17 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                 executionPlan.getJobID());
 
         final boolean isJobRecoveryEnabled =
-                jobMasterConfiguration.get(BatchExecutionOptions.JOB_RECOVERY_ENABLED)
+                jobMasterConfig.get(BatchExecutionOptions.JOB_RECOVERY_ENABLED)
                         && shuffleMaster.supportsBatchSnapshot();
 
         BatchJobRecoveryHandler jobRecoveryHandler;
         if (isJobRecoveryEnabled) {
             FileSystemJobEventStore jobEventStore =
-                    new FileSystemJobEventStore(executionPlan.getJobID(), jobMasterConfiguration);
+                    new FileSystemJobEventStore(executionPlan.getJobID(), jobMasterConfig);
             JobEventManager jobEventManager = new JobEventManager(jobEventStore);
             jobRecoveryHandler =
                     new DefaultBatchJobRecoveryHandler(
-                            jobEventManager, jobMasterConfiguration, executionPlan.getJobID());
+                            jobEventManager, jobMasterConfig, executionPlan.getJobID());
         } else {
             jobRecoveryHandler = new DummyBatchJobRecoveryHandler();
         }
@@ -177,8 +177,8 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                 log,
                 executionPlan,
                 executionConfig,
-                ioExecutor,
-                jobMasterConfiguration,
+                ioThreadPoolExecutor,
+                jobMasterConfig,
                 futureExecutor,
                 userCodeLoader,
                 checkpointRecoveryFactory,
@@ -198,7 +198,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                 restartBackoffTimeStrategy,
                 new ScheduledExecutorServiceAdapter(futureExecutor),
                 DefaultVertexParallelismAndInputInfosDecider.from(
-                        getDefaultMaxParallelism(jobMasterConfiguration, executionConfig),
+                        getDefaultMaxParallelism(jobMasterConfig, executionConfig),
                         executionPlan
                                 .getJobConfiguration()
                                 .get(
@@ -210,7 +210,7 @@ public class AdaptiveBatchSchedulerFactory implements SchedulerNGFactory {
                                         BatchExecutionOptionsInternal
                                                 .ADAPTIVE_SKEWED_OPTIMIZATION_SKEWED_THRESHOLD)
                                 .getBytes(),
-                        jobMasterConfiguration),
+                        jobMasterConfig),
                 jobRecoveryHandler);
     }
 

@@ -64,8 +64,8 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
     public SchedulerNG createInstance(
             final Logger log,
             final ExecutionPlan executionPlan,
-            final Executor ioExecutor,
-            final Configuration jobMasterConfiguration,
+            final Executor ioThreadPoolExecutor,
+            final Configuration jobMasterConfig,
             final SlotPoolService slotPoolService,
             final ScheduledExecutorService futureExecutor,
             final ClassLoader userCodeLoader,
@@ -107,13 +107,13 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                 createSchedulerComponents(
                         jobGraph.getJobType(),
                         jobGraph.isApproximateLocalRecoveryEnabled(),
-                        jobMasterConfiguration,
+                        jobMasterConfig,
                         slotPool,
                         slotRequestTimeout);
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
                                 jobGraph.getJobConfiguration(),
-                                jobMasterConfiguration,
+                                jobMasterConfig,
                                 jobGraph.isCheckpointingEnabled())
                         .create();
         log.info(
@@ -124,11 +124,11 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
 
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(
-                        jobMasterConfiguration,
+                        jobMasterConfig,
                         userCodeLoader,
                         executionDeploymentTracker,
                         futureExecutor,
-                        ioExecutor,
+                        ioThreadPoolExecutor,
                         rpcTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
@@ -137,13 +137,13 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
 
         final CheckpointsCleaner checkpointsCleaner =
                 new CheckpointsCleaner(
-                        jobMasterConfiguration.get(CheckpointingOptions.CLEANER_PARALLEL_MODE));
+                        jobMasterConfig.get(CheckpointingOptions.CLEANER_PARALLEL_MODE));
 
         return new DefaultScheduler(
                 log,
                 jobGraph,
-                ioExecutor,
-                jobMasterConfiguration,
+                ioThreadPoolExecutor,
+                jobMasterConfig,
                 schedulerComponents.getStartUpAction(),
                 new ScheduledExecutorServiceAdapter(futureExecutor),
                 userCodeLoader,
@@ -151,7 +151,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                 checkpointRecoveryFactory,
                 jobManagerJobMetricGroup,
                 schedulerComponents.getSchedulingStrategyFactory(),
-                FailoverStrategyFactoryLoader.loadFailoverStrategyFactory(jobMasterConfiguration),
+                FailoverStrategyFactoryLoader.loadFailoverStrategyFactory(jobMasterConfig),
                 restartBackoffTimeStrategy,
                 new DefaultExecutionOperations(),
                 new ExecutionVertexVersioner(),
