@@ -148,7 +148,7 @@ class UtilsTest {
             hdfsCluster.getFileSystem().mkdirs(new org.apache.hadoop.fs.Path(sharedLibPath));
 
             final Configuration flinkConfig = new Configuration();
-            flinkConfig.set(YarnConfigOptions.PROVIDED_USRLIB_DIR, sharedLibPath);
+            flinkConfig.set(YarnConfigOptions.PROVIDED_USER_LIB_DIR, sharedLibPath);
             final YarnConfiguration yarnConfig = new YarnConfiguration();
             yarnConfig.set(
                     CommonConfigurationKeysPublic.FS_DEFAULT_NAME_KEY, hdfsRootPath.toString());
@@ -157,7 +157,7 @@ class UtilsTest {
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage(
                             "The \"%s\" should be named with \"%s\".",
-                            YarnConfigOptions.PROVIDED_USRLIB_DIR.key(),
+                            YarnConfigOptions.PROVIDED_USER_LIB_DIR.key(),
                             ConfigConstants.DEFAULT_FLINK_USR_LIB_DIR);
         }
     }
@@ -167,7 +167,7 @@ class UtilsTest {
         final File localLib = new File(tempDir.toAbsolutePath().toString(), "usrlib");
         assertThat(localLib.mkdirs()).isTrue();
         final Configuration flinkConfig = new Configuration();
-        flinkConfig.set(YarnConfigOptions.PROVIDED_USRLIB_DIR, localLib.getAbsolutePath());
+        flinkConfig.set(YarnConfigOptions.PROVIDED_USER_LIB_DIR, localLib.getAbsolutePath());
         assertThatThrownBy(
                         () ->
                                 Utils.getQualifiedRemoteProvidedUsrLib(
@@ -176,7 +176,7 @@ class UtilsTest {
                 .hasMessage(
                         "The \"%s\" must point to a remote dir "
                                 + "which is accessible from all worker nodes.",
-                        YarnConfigOptions.PROVIDED_USRLIB_DIR.key());
+                        YarnConfigOptions.PROVIDED_USER_LIB_DIR.key());
     }
 
     @Test

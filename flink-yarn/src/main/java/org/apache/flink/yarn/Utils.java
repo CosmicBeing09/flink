@@ -708,7 +708,7 @@ public final class Utils {
             org.apache.flink.configuration.Configuration configuration,
             YarnConfiguration yarnConfiguration)
             throws IOException, IllegalArgumentException {
-        String usrlib = configuration.get(YarnConfigOptions.PROVIDED_USRLIB_DIR);
+        String usrlib = configuration.get(YarnConfigOptions.PROVIDED_USER_LIB_DIR);
         if (usrlib == null) {
             return Optional.empty();
         }
@@ -718,11 +718,11 @@ public final class Utils {
                 isRemotePath(qualifiedUsrLibPath.toString()),
                 "The \"%s\" must point to a remote dir "
                         + "which is accessible from all worker nodes.",
-                YarnConfigOptions.PROVIDED_USRLIB_DIR.key());
+                YarnConfigOptions.PROVIDED_USER_LIB_DIR.key());
         checkArgument(
                 isUsrLibDirectory(FileSystem.get(yarnConfiguration), qualifiedUsrLibPath),
                 "The \"%s\" should be named with \"%s\".",
-                YarnConfigOptions.PROVIDED_USRLIB_DIR.key(),
+                YarnConfigOptions.PROVIDED_USER_LIB_DIR.key(),
                 ConfigConstants.DEFAULT_FLINK_USR_LIB_DIR);
         return Optional.of(qualifiedUsrLibPath);
     }

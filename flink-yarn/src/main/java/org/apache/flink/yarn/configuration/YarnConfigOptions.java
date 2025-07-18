@@ -44,7 +44,7 @@ import static org.apache.flink.yarn.configuration.YarnConfigOptions.UserJarInclu
 public class YarnConfigOptions {
 
     /** The vcores used by YARN application master. */
-    public static final ConfigOption<Integer> APP_MASTER_VCORES =
+    public static final ConfigOption<Integer> APPLICATION_MASTER_VCORES =
             key("yarn.appmaster.vcores")
                     .intType()
                     .defaultValue(1)
@@ -391,7 +391,7 @@ public class YarnConfigOptions {
      * classloader for loading jars under the usrlib will be controlled by {@link
      * YarnConfigOptions#CLASSPATH_INCLUDE_USER_JAR}.
      */
-    public static final ConfigOption<String> PROVIDED_USRLIB_DIR =
+    public static final ConfigOption<String> PROVIDED_USER_LIB_DIR =
             key("yarn.provided.usrlib.dir")
                     .stringType()
                     .noDefaultValue()
