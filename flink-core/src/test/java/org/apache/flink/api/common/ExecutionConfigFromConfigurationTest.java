@@ -95,7 +95,7 @@ class ExecutionConfigFromConfigurationTest {
                                                         .setGenericTypes(false)))
                         .getterVia(
                                 execConfig ->
-                                        !execConfig.getSerializerConfig().hasGenericTypesDisabled())
+                                        !execConfig.getSerializerConfig().isGenericTypesDisabled())
                         .nonDefaultValue(false),
                 TestSpec.testValue(getTestGlobalJobParameters())
                         .whenSetFromFile(
@@ -118,8 +118,8 @@ class ExecutionConfigFromConfigurationTest {
                         .nonDefaultValue(true),
                 TestSpec.testValue(true)
                         .whenSetFromFile("execution.checkpointing.snapshot-compression", "true")
-                        .viaSetter(ExecutionConfig::setUseSnapshotCompression)
-                        .getterVia(ExecutionConfig::isUseSnapshotCompression)
+                        .viaSetter(ExecutionConfig::setSnapshotCompressionEnabled)
+                        .getterVia(ExecutionConfig::isSnapshotCompressionEnabled)
                         .nonDefaultValue(true),
                 TestSpec.testValue(12)
                         .whenSetFromFile("parallelism.default", "12")

@@ -438,9 +438,9 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
         public void processElement(
                 Integer value, Context ctx, Collector<Tuple2<Integer, Integer>> out)
                 throws Exception {
-            Integer count = countState.value();
+            Integer count = countState.getCurrentValue();
             Integer currentCount = count == null ? 1 : count + 1;
-            countState.update(currentCount);
+            countState.setCurrentValue(currentCount);
             out.collect(Tuple2.of(value, currentCount));
         }
     }

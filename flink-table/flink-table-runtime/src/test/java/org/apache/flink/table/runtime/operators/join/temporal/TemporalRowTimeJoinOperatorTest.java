@@ -177,7 +177,7 @@ class TemporalRowTimeJoinOperatorTest extends TemporalTimeJoinOperatorTestBase {
                                                 TemporalRowTimeJoinOperator
                                                         .getNextLeftIndexStateName(),
                                                 Types.LONG))
-                                .value())
+                                .getCurrentValue())
                 .isNull();
         assertThat(
                         joinOperator
@@ -187,7 +187,7 @@ class TemporalRowTimeJoinOperatorTest extends TemporalTimeJoinOperatorTestBase {
                                                 TemporalRowTimeJoinOperator
                                                         .getRegisteredTimerStateName(),
                                                 Types.LONG))
-                                .value())
+                                .getCurrentValue())
                 .isNull();
 
         testHarness.close();

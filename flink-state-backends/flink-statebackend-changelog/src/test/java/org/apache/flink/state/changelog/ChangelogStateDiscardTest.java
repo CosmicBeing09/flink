@@ -314,7 +314,7 @@ public class ChangelogStateDiscardTest {
                         "ns",
                         StringSerializer.INSTANCE,
                         new ValueStateDescriptor<>(randomString(), String.class))
-                .update(randomString());
+                .setCurrentValue(randomString());
     }
 
     private static List<UploadResult> uploadResult(UploadTask upload) {
@@ -348,7 +348,7 @@ public class ChangelogStateDiscardTest {
 
     private static void checkpoint(ChangelogKeyedStateBackend<String> backend, long checkpointId)
             throws Exception {
-        backend.snapshot(
+        backend.createStateSnapshot(
                 checkpointId,
                 1L,
                 new MemCheckpointStreamFactory(1000),

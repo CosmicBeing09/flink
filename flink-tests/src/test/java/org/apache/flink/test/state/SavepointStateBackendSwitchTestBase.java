@@ -43,7 +43,7 @@ import org.apache.flink.runtime.state.memory.MemCheckpointStreamFactory;
 import org.apache.flink.streaming.api.operators.StreamOperatorStateHandler;
 import org.apache.flink.streaming.api.operators.TimerHeapInternalTimer;
 import org.apache.flink.streaming.api.operators.TimerSerializer;
-import org.apache.flink.test.state.BackendSwitchSpecs.BackendSwitchSpec;
+import org.apache.flink.test.state.StateBackendSwitchSpecification.BackendSwitchSpec;
 import org.apache.flink.util.InstantiationUtil;
 
 import org.junit.ClassRule;
@@ -209,7 +209,7 @@ public abstract class SavepointStateBackendSwitchTestBase {
         mapState.put(55L, 55L);
 
         valueState.setCurrentNamespace(namespace3);
-        valueState.update(1239L);
+        valueState.setCurrentValue(1239L);
         listState.setCurrentNamespace(namespace3);
         listState.add(1L);
         listState.add(2L);
@@ -304,7 +304,7 @@ public abstract class SavepointStateBackendSwitchTestBase {
         assertEquals(55L, (long) mapState.get(55L));
         assertEquals(5, getStateSize(mapState));
         valueState.setCurrentNamespace(namespace3);
-        assertEquals(1239L, (long) valueState.value());
+        assertEquals(1239L, (long) valueState.getCurrentValue());
         listState.setCurrentNamespace(namespace3);
         assertThat(listState.get(), contains(1L, 2L, 3L));
 

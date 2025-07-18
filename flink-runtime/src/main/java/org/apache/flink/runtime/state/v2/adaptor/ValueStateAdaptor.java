@@ -41,7 +41,7 @@ public class ValueStateAdaptor<K, N, V>
     @Override
     public StateFuture<V> asyncValue() {
         try {
-            return StateFutureUtils.completedFuture(delegatedState.value());
+            return StateFutureUtils.completedFuture(delegatedState.getCurrentValue());
         } catch (Exception e) {
             throw new RuntimeException("Error while getting value from raw ValueState", e);
         }
@@ -50,7 +50,7 @@ public class ValueStateAdaptor<K, N, V>
     @Override
     public StateFuture<Void> asyncUpdate(V value) {
         try {
-            delegatedState.update(value);
+            delegatedState.setCurrentValue(value);
         } catch (IOException e) {
             throw new RuntimeException("Error while updating value to raw ValueState", e);
         }
@@ -60,7 +60,7 @@ public class ValueStateAdaptor<K, N, V>
     @Override
     public V value() {
         try {
-            return delegatedState.value();
+            return delegatedState.getCurrentValue();
         } catch (Exception e) {
             throw new RuntimeException("Error while getting value from raw ValueState", e);
         }
@@ -69,7 +69,7 @@ public class ValueStateAdaptor<K, N, V>
     @Override
     public void update(V value) {
         try {
-            delegatedState.update(value);
+            delegatedState.setCurrentValue(value);
         } catch (IOException e) {
             throw new RuntimeException("Error while updating value to raw ValueState", e);
         }

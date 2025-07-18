@@ -38,7 +38,7 @@ public interface CleanupState {
             throws Exception {
 
         // last registered timer
-        Long curCleanupTime = cleanupTimeState.value();
+        Long curCleanupTime = cleanupTimeState.getCurrentValue();
 
         // check if a cleanup timer is registered and
         // that the current cleanup timer won't delete state we need to keep
@@ -51,7 +51,7 @@ public interface CleanupState {
             if (curCleanupTime != null) {
                 timerService.deleteProcessingTimeTimer(curCleanupTime);
             }
-            cleanupTimeState.update(cleanupTime);
+            cleanupTimeState.setCurrentValue(cleanupTime);
         }
     }
 }

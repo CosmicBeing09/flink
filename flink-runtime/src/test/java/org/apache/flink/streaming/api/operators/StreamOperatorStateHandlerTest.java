@@ -128,7 +128,7 @@ class StreamOperatorStateHandlerTest {
                                     .getState(
                                             new ValueStateDescriptor<>(
                                                     keyedStateField, LongSerializer.INSTANCE))
-                                    .update(42L);
+                                    .setCurrentValue(42L);
                             context.getOperatorStateStore()
                                     .getListState(
                                             new ListStateDescriptor<>(

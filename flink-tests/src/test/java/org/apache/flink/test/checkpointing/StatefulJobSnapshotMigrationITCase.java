@@ -297,7 +297,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                 throws Exception {
             out.collect(value);
 
-            getRuntimeContext().getState(stateDescriptor).update(value.f1);
+            getRuntimeContext().getState(stateDescriptor).setCurrentValue(value.f1);
         }
     }
 
@@ -330,7 +330,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                 throw new RuntimeException("Missing key value state for " + value);
             }
 
-            assertEquals(value.f1, state.value());
+            assertEquals(value.f1, state.getCurrentValue());
             getRuntimeContext().getAccumulator(SUCCESSFUL_RESTORE_CHECK_ACCUMULATOR).add(1);
         }
     }
@@ -362,7 +362,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                                     LongSerializer.INSTANCE,
                                     stateDescriptor);
 
-            state.update(element.getValue().f1);
+            state.setCurrentValue(element.getValue().f1);
 
             timerService.registerEventTimeTimer(
                     element.getValue().f0, timerService.currentWatermark() + 10);
@@ -424,7 +424,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                                     LongSerializer.INSTANCE,
                                     stateDescriptor);
 
-            assertEquals(state.value(), element.getValue().f1);
+            assertEquals(state.getCurrentValue(), element.getValue().f1);
             getRuntimeContext().getAccumulator(SUCCESSFUL_PROCESS_CHECK_ACCUMULATOR).add(1);
 
             output.collect(element);
@@ -437,7 +437,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                             .getPartitionedState(
                                     timer.getNamespace(), LongSerializer.INSTANCE, stateDescriptor);
 
-            assertEquals(state.value(), timer.getNamespace());
+            assertEquals(state.getCurrentValue(), timer.getNamespace());
             getRuntimeContext().getAccumulator(SUCCESSFUL_EVENT_TIME_CHECK_ACCUMULATOR).add(1);
         }
 
@@ -448,7 +448,7 @@ public class StatefulJobSnapshotMigrationITCase extends SnapshotMigrationTestBas
                             .getPartitionedState(
                                     timer.getNamespace(), LongSerializer.INSTANCE, stateDescriptor);
 
-            assertEquals(state.value(), timer.getNamespace());
+            assertEquals(state.getCurrentValue(), timer.getNamespace());
             getRuntimeContext().getAccumulator(SUCCESSFUL_PROCESSING_TIME_CHECK_ACCUMULATOR).add(1);
         }
     }

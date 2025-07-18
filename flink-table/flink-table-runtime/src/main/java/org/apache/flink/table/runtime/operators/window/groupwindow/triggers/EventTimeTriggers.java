@@ -165,7 +165,7 @@ public class EventTimeTriggers {
 
         @Override
         public boolean onElement(Object element, long timestamp, W window) throws Exception {
-            Boolean hasFired = ctx.getPartitionedState(hasFiredOnTimeStateDesc).value();
+            Boolean hasFired = ctx.getPartitionedState(hasFiredOnTimeStateDesc).getCurrentValue();
             if (hasFired != null && hasFired) {
                 // this is to cover the case where we recover from a failure and the watermark
                 // is Long.MIN_VALUE but the window is already in the late phase.
@@ -189,7 +189,7 @@ public class EventTimeTriggers {
 
         @Override
         public boolean onProcessingTime(long time, W window) throws Exception {
-            Boolean hasFired = ctx.getPartitionedState(hasFiredOnTimeStateDesc).value();
+            Boolean hasFired = ctx.getPartitionedState(hasFiredOnTimeStateDesc).getCurrentValue();
             if (hasFired != null && hasFired) {
                 // late fire
                 return lateTrigger != null && lateTrigger.onProcessingTime(time, window);
@@ -202,14 +202,14 @@ public class EventTimeTriggers {
         @Override
         public boolean onEventTime(long time, W window) throws Exception {
             ValueState<Boolean> hasFiredState = ctx.getPartitionedState(hasFiredOnTimeStateDesc);
-            Boolean hasFired = hasFiredState.value();
+            Boolean hasFired = hasFiredState.getCurrentValue();
             if (hasFired != null && hasFired) {
                 // late fire
                 return lateTrigger != null && lateTrigger.onEventTime(time, window);
             } else {
                 if (time == triggerTime(window)) {
                     // fire on time and update state
-                    hasFiredState.update(true);
+                    hasFiredState.setCurrentValue(true);
                     return true;
                 } else {
                     // early fire
@@ -234,7 +234,7 @@ public class EventTimeTriggers {
             }
 
             // we assume that the new merged window has not fired yet its on-time timer.
-            ctx.getPartitionedState(hasFiredOnTimeStateDesc).update(false);
+            ctx.getPartitionedState(hasFiredOnTimeStateDesc).setCurrentValue(false);
 
             ctx.registerEventTimeTimer(triggerTime(window));
         }

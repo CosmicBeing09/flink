@@ -127,11 +127,11 @@ public class RocksDBStateMemoryControlTestProgram {
         @Override
         public Event map(Event event) throws Exception {
             if (useValueState) {
-                String value = valueState.value();
+                String value = valueState.getCurrentValue();
                 if (value != null) {
-                    valueState.update(event.getPayload().concat(value));
+                    valueState.setCurrentValue(event.getPayload().concat(value));
                 } else {
-                    valueState.update(event.getPayload());
+                    valueState.setCurrentValue(event.getPayload());
                 }
             }
             return event;

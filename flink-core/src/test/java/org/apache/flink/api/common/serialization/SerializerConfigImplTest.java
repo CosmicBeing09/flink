@@ -126,7 +126,7 @@ class SerializerConfigImplTest {
         serializers.put(
                 SerializerConfigImplTest.TestSerializer1.class,
                 SerializerConfigImplTest.TestSerializer2.class);
-        assertThat(config.getDefaultKryoSerializerClasses()).isEqualTo(serializers);
+        assertThat(config.getDefaultKryoSerializers()).isEqualTo(serializers);
     }
 
     @Test
@@ -160,7 +160,7 @@ class SerializerConfigImplTest {
 
         assertThat(serializerConfig.getRegisteredKryoTypes())
                 .containsExactly(SerializerConfigImplTest.class);
-        assertThat(serializerConfig.getDefaultKryoSerializerClasses())
+        assertThat(serializerConfig.getDefaultKryoSerializers())
                 .containsExactly(
                         new AbstractMap.SimpleEntry<>(
                                 TestSerializer1.class, TestSerializer2.class));
@@ -229,7 +229,7 @@ class SerializerConfigImplTest {
 
         serializerConfig.configure(configuration, SerializerConfigImplTest.class.getClassLoader());
         serializerConfig
-                .getDefaultKryoSerializerClasses()
+                .getDefaultKryoSerializers()
                 .forEach(serializerConfig::registerTypeWithKryoSerializer);
 
         assertThat(serializerConfig.copy()).isEqualTo(serializerConfig);

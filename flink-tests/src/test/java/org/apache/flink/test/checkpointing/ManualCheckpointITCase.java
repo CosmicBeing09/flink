@@ -163,8 +163,8 @@ public class ManualCheckpointITCase extends AbstractTestBaseJUnit4 {
 
         @Override
         public void flatMap(Integer value, Collector<Long> out) throws Exception {
-            final long sum = Optional.ofNullable(count.value()).orElse(0L) + value;
-            count.update(sum);
+            final long sum = Optional.ofNullable(count.getCurrentValue()).orElse(0L) + value;
+            count.setCurrentValue(sum);
             out.collect(sum);
         }
     }

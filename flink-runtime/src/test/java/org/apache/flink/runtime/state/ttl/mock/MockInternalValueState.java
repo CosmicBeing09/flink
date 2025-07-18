@@ -28,12 +28,12 @@ class MockInternalValueState<K, N, T> extends MockInternalKvState<K, N, T>
         implements InternalValueState<K, N, T> {
 
     @Override
-    public T value() {
+    public T getCurrentValue() {
         return getInternal();
     }
 
     @Override
-    public void update(T value) {
+    public void setCurrentValue(T value) {
         updateInternal(value);
     }
 

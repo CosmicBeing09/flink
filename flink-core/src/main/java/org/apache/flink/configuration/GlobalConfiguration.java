@@ -161,7 +161,7 @@ public final class GlobalConfiguration {
     }
 
     private static void logConfiguration(String prefix, Configuration config) {
-        config.confData.forEach(
+        config.configurationEntries.forEach(
                 (key, value) ->
                         LOG.info(
                                 "{} configuration property: {}, {}",

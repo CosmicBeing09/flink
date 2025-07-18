@@ -108,8 +108,8 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
     // User code class for testing the serializer
     public static class TestUserClass {
-        public int dumm1;
-        public String dumm2;
+        public int userId;
+        public String username;
         public double dumm3;
         public int[] dumm4;
         public Date dumm5;
@@ -125,8 +125,8 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
                 int[] dumm4,
                 Date dumm5,
                 NestedTestUserClass nestedClass) {
-            this.dumm1 = dumm1;
-            this.dumm2 = dumm2;
+            this.userId = dumm1;
+            this.username = dumm2;
             this.dumm3 = dumm3;
             this.dumm4 = dumm4;
             this.dumm5 = dumm5;
@@ -135,7 +135,7 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
 
         @Override
         public int hashCode() {
-            return Objects.hash(dumm1, dumm2, dumm3, dumm4, dumm5, nestedClass);
+            return Objects.hash(userId, username, dumm3, dumm4, dumm5, nestedClass);
         }
 
         @Override
@@ -144,11 +144,11 @@ class PojoSerializerTest extends SerializerTestBase<PojoSerializerTest.TestUserC
                 return false;
             }
             TestUserClass otherTUC = (TestUserClass) other;
-            if (dumm1 != otherTUC.dumm1) {
+            if (userId != otherTUC.userId) {
                 return false;
             }
-            if ((dumm2 == null && otherTUC.dumm2 != null)
-                    || (dumm2 != null && !dumm2.equals(otherTUC.dumm2))) {
+            if ((username == null && otherTUC.username != null)
+                    || (username != null && !username.equals(otherTUC.username))) {
                 return false;
             }
             if (dumm3 != otherTUC.dumm3) {

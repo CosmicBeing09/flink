@@ -1255,13 +1255,13 @@ class BatchExecutionStateBackendTest {
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
 
         backend.setCurrentKey(1);
-        assertThat(state.value()).isNull();
+        assertThat(state.getCurrentValue()).isNull();
 
-        state.update("Ciao");
-        assertThat(state.value()).isEqualTo("Ciao");
+        state.setCurrentValue("Ciao");
+        assertThat(state.getCurrentValue()).isEqualTo("Ciao");
 
         state.clear();
-        assertThat(state.value()).isNull();
+        assertThat(state.getCurrentValue()).isNull();
 
         backend.dispose();
     }
@@ -1279,13 +1279,13 @@ class BatchExecutionStateBackendTest {
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
 
         backend.setCurrentKey(1);
-        assertThat(state.value()).isEqualTo("Hello");
+        assertThat(state.getCurrentValue()).isEqualTo("Hello");
 
-        state.update("Ciao");
-        assertThat(state.value()).isEqualTo("Ciao");
+        state.setCurrentValue("Ciao");
+        assertThat(state.getCurrentValue()).isEqualTo("Ciao");
 
         state.clear();
-        assertThat(state.value()).isEqualTo("Hello");
+        assertThat(state.getCurrentValue()).isEqualTo("Hello");
 
         backend.dispose();
     }

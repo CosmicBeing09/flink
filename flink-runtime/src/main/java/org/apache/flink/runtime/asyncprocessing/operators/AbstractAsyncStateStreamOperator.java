@@ -80,10 +80,10 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
     private static final Logger LOG =
             LoggerFactory.getLogger(AbstractAsyncStateStreamOperator.class);
 
-    private AsyncExecutionController asyncExecutionController;
+    private AsyncExecutionController asyncStateController;
 
     /** Act as a cache for {@link #setAsyncKeyedContextElement} and {@link #postProcessElement}. */
-    private RecordContext currentProcessingContext;
+    private RecordContext activeRecordContext;
 
     private Environment environment;
 
@@ -105,14 +105,14 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
                 environment.getExecutionConfig().getAsyncInflightRecordsLimit();
         final int asyncBufferSize = environment.getExecutionConfig().getAsyncStateBufferSize();
         final long asyncBufferTimeout =
-                environment.getExecutionConfig().getAsyncStateBufferTimeout();
+                environment.getExecutionConfig().getAsyncStateBufferTimeoutMillis();
 
         this.declarationManager = new DeclarationManager();
         if (isAsyncStateProcessingEnabled()) {
             AsyncKeyedStateBackend asyncKeyedStateBackend =
                     stateHandler.getAsyncKeyedStateBackend();
             if (asyncKeyedStateBackend != null) {
-                this.asyncExecutionController =
+                this.asyncStateController =
                         new AsyncExecutionController(
                                 mailboxExecutor,
                                 this::handleAsyncStateException,
@@ -124,7 +124,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
                                 inFlightRecordsLimit,
                                 asyncKeyedStateBackend,
                                 getMetricGroup().addGroup("asyncStateProcessing"));
-                asyncKeyedStateBackend.setup(asyncExecutionController);
+                asyncKeyedStateBackend.setup(asyncStateController);
                 if (asyncKeyedStateBackend instanceof AsyncKeyedStateBackendAdaptor) {
                     LOG.warn(
                             "A normal KeyedStateBackend({}) is used when enabling the async state "
@@ -157,17 +157,17 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
     @SuppressWarnings("unchecked")
     public final <T> void setAsyncKeyedContextElement(
             StreamRecord<T> record, KeySelector<T, ?> keySelector) throws Exception {
-        currentProcessingContext =
-                asyncExecutionController.buildContext(
+        activeRecordContext =
+                asyncStateController.buildContext(
                         record.getValue(), keySelector.getKey(record.getValue()));
         // The processElement will be treated as a callback for dummy request. So reference
         // counting should be maintained.
         // When state request submitted, ref count +1, as described in FLIP-425:
         // To cover the statements without a callback, in addition to the reference count marked
         // in Fig.5, each state request itself is also protected by a paired reference count.
-        currentProcessingContext.retain();
-        asyncExecutionController.setCurrentContext(currentProcessingContext);
-        newKeySelected(currentProcessingContext.getKey());
+        activeRecordContext.retain();
+        asyncStateController.setCurrentContext(activeRecordContext);
+        newKeySelected(activeRecordContext.getKey());
     }
 
     /**
@@ -188,30 +188,30 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         // When a state request completes, ref count -1, as described in FLIP-425:
         // To cover the statements without a callback, in addition to the reference count marked
         // in Fig.5, each state request itself is also protected by a paired reference count.
-        currentProcessingContext.release();
+        activeRecordContext.release();
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public final void preserveRecordOrderAndProcess(ThrowingRunnable<Exception> processing) {
-        asyncExecutionController.syncPointRequestWithCallback(processing, false);
+        asyncStateController.syncPointRequestWithCallback(processing, false);
     }
 
     @Override
     @SuppressWarnings("unchecked")
     public <K> void asyncProcessWithKey(K key, ThrowingRunnable<Exception> processing) {
-        RecordContext<K> oldContext = asyncExecutionController.getCurrentContext();
+        RecordContext<K> oldContext = asyncStateController.getCurrentContext();
         // build a context and switch to the new context
-        RecordContext<K> newContext = asyncExecutionController.buildContext(null, key, true);
+        RecordContext<K> newContext = asyncStateController.buildContext(null, key, true);
         newContext.retain();
-        asyncExecutionController.setCurrentContext(newContext);
+        asyncStateController.setCurrentContext(newContext);
         // Same logic as RECORD_ORDER, since FIRST_STATE_ORDER is problematic when the call's key
         // pass the same key in.
-        asyncExecutionController.syncPointRequestWithCallback(processing, true);
+        asyncStateController.syncPointRequestWithCallback(processing, true);
         newContext.release();
 
         // switch to original context
-        asyncExecutionController.setCurrentContext(oldContext);
+        asyncStateController.setCurrentContext(oldContext);
     }
 
     @Override
@@ -262,7 +262,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
     @Override
     public void prepareSnapshotPreBarrier(long checkpointId) throws Exception {
         if (isAsyncStateProcessingEnabled()) {
-            asyncExecutionController.drainInflightRecords(0);
+            asyncStateController.drainInflightRecords(0);
         }
     }
 
@@ -309,10 +309,10 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
                 keyedTimeServiceHandler.getInternalTimerService(
                         name, keySerializer, namespaceSerializer, triggerable);
         if (service instanceof InternalTimerServiceAsyncImpl) {
-            ((InternalTimerServiceAsyncImpl<K, N>) service).setup(asyncExecutionController);
+            ((InternalTimerServiceAsyncImpl<K, N>) service).setup(asyncStateController);
         } else if (service instanceof BatchExecutionInternalTimeServiceWithAsyncState) {
             ((BatchExecutionInternalTimeServiceWithAsyncState<K, N>) service)
-                    .setup(asyncExecutionController);
+                    .setup(asyncStateController);
         }
         return service;
     }
@@ -338,7 +338,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
     @Override
     public Object getCurrentKey() {
         if (isAsyncStateProcessingEnabled()) {
-            RecordContext currentContext = asyncExecutionController.getCurrentContext();
+            RecordContext currentContext = asyncStateController.getCurrentContext();
             if (currentContext == null) {
                 throw new UnsupportedOperationException(
                         "Have not set the current key yet, this may because the operator has not "
@@ -361,7 +361,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             super.reportOrForwardLatencyMarker(marker);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> super.reportOrForwardLatencyMarker(marker));
     }
 
@@ -415,7 +415,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             return;
         }
         AtomicReference<Watermark> watermarkRef = new AtomicReference<>(null);
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 () -> {
                     watermarkRef.set(preProcessWatermark(mark));
                     if (timeServiceManager != null && watermarkRef.get() != null) {
@@ -437,7 +437,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             super.processWatermarkStatus(watermarkStatus);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> super.processWatermarkStatus(watermarkStatus));
     }
 
@@ -450,7 +450,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         }
         final AtomicBoolean wasIdle = new AtomicBoolean(false);
         final AtomicReference<Watermark> watermarkRef = new AtomicReference<>(null);
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 () -> {
                     wasIdle.set(combinedWatermark.isIdle());
                     // index is 0-based
@@ -481,7 +481,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             super.processRecordAttributes(recordAttributes);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> super.processRecordAttributes(recordAttributes));
     }
 
@@ -492,7 +492,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             super.processRecordAttributes1(recordAttributes);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> super.processRecordAttributes1(recordAttributes));
     }
 
@@ -503,7 +503,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             super.processRecordAttributes2(recordAttributes);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> super.processRecordAttributes2(recordAttributes));
     }
 
@@ -525,7 +525,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             this.processWatermarkInternal(watermark);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> this.processWatermarkInternal(watermark));
     }
 
@@ -535,7 +535,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             this.processWatermark1Internal(watermark);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> this.processWatermark1Internal(watermark));
     }
 
@@ -545,18 +545,18 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
             this.processWatermark2Internal(watermark);
             return;
         }
-        asyncExecutionController.processNonRecord(
+        asyncStateController.processNonRecord(
                 null, () -> this.processWatermark2Internal(watermark));
     }
 
     @VisibleForTesting
     AsyncExecutionController<?> getAsyncExecutionController() {
-        return asyncExecutionController;
+        return asyncStateController;
     }
 
     @VisibleForTesting
     RecordContext getCurrentProcessingContext() {
-        return currentProcessingContext;
+        return activeRecordContext;
     }
 
     public <K> AsyncKeyedStateBackend<K> getAsyncKeyedStateBackend() {
@@ -565,7 +565,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
 
     public void drainStateRequests() {
         if (isAsyncStateProcessingEnabled()) {
-            asyncExecutionController.drainInflightRecords(0);
+            asyncStateController.drainInflightRecords(0);
         }
     }
 
@@ -585,7 +585,7 @@ public abstract class AbstractAsyncStateStreamOperator<OUT> extends AbstractStre
         if (isAsyncStateProcessingEnabled()
                 && !getContainingTask().isFailing()
                 && !getContainingTask().isCanceled()) {
-            asyncExecutionController.drainInflightRecords(0);
+            asyncStateController.drainInflightRecords(0);
         }
     }
 }

@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.state;
 
-import org.apache.flink.test.state.BackendSwitchSpecs.BackendSwitchSpec;
+import org.apache.flink.test.state.StateBackendSwitchSpecification.BackendSwitchSpec;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -39,12 +39,12 @@ public class RocksSavepointStateBackendSwitchTest extends SavepointStateBackendS
     @Parameterized.Parameters(name = "from: {0} to: {1}")
     public static Collection<BackendSwitchSpec[]> targetBackends() {
         List<BackendSwitchSpec> fromBackends =
-                Arrays.asList(BackendSwitchSpecs.ROCKS_HEAP_TIMERS, BackendSwitchSpecs.ROCKS);
+                Arrays.asList(StateBackendSwitchSpecification.ROCKS_HEAP_TIMERS, StateBackendSwitchSpecification.ROCKSDB_STATE_BACKEND);
         List<BackendSwitchSpec> toBackends =
                 Arrays.asList(
-                        BackendSwitchSpecs.HEAP,
-                        BackendSwitchSpecs.ROCKS,
-                        BackendSwitchSpecs.ROCKS_HEAP_TIMERS);
+                        StateBackendSwitchSpecification.HEAP,
+                        StateBackendSwitchSpecification.ROCKSDB_STATE_BACKEND,
+                        StateBackendSwitchSpecification.ROCKS_HEAP_TIMERS);
         return fromBackends.stream()
                 .flatMap(from -> toBackends.stream().map(to -> new BackendSwitchSpec[] {from, to}))
                 .collect(Collectors.toList());

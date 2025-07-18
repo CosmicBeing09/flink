@@ -282,7 +282,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
             aec.drainInflightRecords(0);
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             1L,
                             System.currentTimeMillis(),
                             createStreamFactory(),
@@ -456,7 +456,7 @@ public abstract class StateBackendTestV2Base<B extends AbstractStateBackend> {
                 // snapshot
                 snapshots.add(
                         runSnapshot(
-                                backend.snapshot(
+                                backend.createStateSnapshot(
                                         0,
                                         0,
                                         streamFactory,

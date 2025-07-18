@@ -41,7 +41,7 @@ class ValueStateChangeApplier<K, N, T> extends KvStateChangeApplier<K, N> {
             throws Exception {
         switch (operation) {
             case SET:
-                state.update(state.getValueSerializer().deserialize(in));
+                state.setCurrentValue(state.getValueSerializer().deserialize(in));
                 break;
             case CLEAR:
                 state.clear();

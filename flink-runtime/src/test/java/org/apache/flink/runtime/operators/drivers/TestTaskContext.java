@@ -43,9 +43,9 @@ public class TestTaskContext<S, T> implements TaskContext<S, T> {
 
     private final AbstractInvokable owner = new DummyInvokable();
 
-    private MutableObjectIterator<?> input1;
+    private MutableObjectIterator<?> firstInputIterator;
 
-    private MutableObjectIterator<?> input2;
+    private MutableObjectIterator<?> secondInputIterator;
 
     private TypeSerializerFactory<?> serializer1;
 
@@ -83,18 +83,18 @@ public class TestTaskContext<S, T> implements TaskContext<S, T> {
     // --------------------------------------------------------------------------------------------
 
     public <X> void setInput1(MutableObjectIterator<X> input, TypeSerializerFactory<X> serializer) {
-        this.input1 = input;
+        this.firstInputIterator = input;
         this.serializer1 = serializer;
     }
 
     public <X> void setInput2(MutableObjectIterator<X> input, TypeSerializerFactory<X> serializer) {
-        this.input2 = input;
+        this.secondInputIterator = input;
         this.serializer2 = serializer;
     }
 
     @SuppressWarnings("unchecked")
     public <X> void setInput1(MutableObjectIterator<X> input, TypeSerializer<X> serializer) {
-        this.input1 = input;
+        this.firstInputIterator = input;
         this.serializer1 =
                 new RuntimeSerializerFactory<>(
                         serializer, (Class<X>) serializer.createInstance().getClass());
@@ -102,7 +102,7 @@ public class TestTaskContext<S, T> implements TaskContext<S, T> {
 
     @SuppressWarnings("unchecked")
     public <X> void setInput2(MutableObjectIterator<X> input, TypeSerializer<X> serializer) {
-        this.input2 = input;
+        this.secondInputIterator = input;
         this.serializer2 =
                 new RuntimeSerializerFactory<>(
                         serializer, (Class<X>) serializer.createInstance().getClass());
@@ -171,9 +171,9 @@ public class TestTaskContext<S, T> implements TaskContext<S, T> {
     public <X> MutableObjectIterator<X> getInput(int index) {
         switch (index) {
             case 0:
-                return (MutableObjectIterator<X>) this.input1;
+                return (MutableObjectIterator<X>) this.firstInputIterator;
             case 1:
-                return (MutableObjectIterator<X>) this.input2;
+                return (MutableObjectIterator<X>) this.secondInputIterator;
             default:
                 throw new RuntimeException();
         }

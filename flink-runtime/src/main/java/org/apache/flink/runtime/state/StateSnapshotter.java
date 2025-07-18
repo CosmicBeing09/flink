@@ -36,7 +36,7 @@ import java.util.concurrent.RunnableFuture;
  * @see SnapshotStrategyRunner
  */
 @Internal
-public interface Snapshotable<S extends StateObject> {
+public interface StateSnapshotter<S extends StateObject> {
 
     /**
      * Operation that writes a snapshot into a stream that is provided by the given {@link
@@ -52,7 +52,7 @@ public interface Snapshotable<S extends StateObject> {
      * @return A runnable future that will yield a {@link StateObject}.
      */
     @Nonnull
-    RunnableFuture<S> snapshot(
+    RunnableFuture<S> createStateSnapshot(
             long checkpointId,
             long timestamp,
             @Nonnull CheckpointStreamFactory streamFactory,

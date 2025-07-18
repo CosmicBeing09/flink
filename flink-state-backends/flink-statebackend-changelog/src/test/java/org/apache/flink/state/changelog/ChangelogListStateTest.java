@@ -61,11 +61,11 @@ public class ChangelogListStateTest {
 
     @Test
     public void testAddAllRecorded() throws Exception {
-        List<String> list = Arrays.asList("a", "b", "c");
+        List<String> elementsToAdd = Arrays.asList("a", "b", "c");
         testRecorded(
                 emptyList(),
-                state -> state.addAll(list),
-                logger -> assertEquals(list, logger.state));
+                state -> state.addAll(elementsToAdd),
+                logger -> assertEquals(elementsToAdd, logger.state));
     }
 
     @Test
@@ -85,12 +85,12 @@ public class ChangelogListStateTest {
     }
 
     private <T> void testIterator(
-            List<String> data,
+            List<String> initialElements,
             FunctionWithException<ChangelogListState, Iterator<T>, Exception> iteratorSupplier,
             T... elements)
             throws Exception {
-        TestChangeLoggerKv logger = TestChangeLoggerKv.forList(data);
-        ChangelogListState state = createState(data, logger);
+        TestChangeLoggerKv logger = TestChangeLoggerKv.forList(initialElements);
+        ChangelogListState state = createState(initialElements, logger);
 
         Iterator iterator = iteratorSupplier.apply(state);
         for (T el : elements) {

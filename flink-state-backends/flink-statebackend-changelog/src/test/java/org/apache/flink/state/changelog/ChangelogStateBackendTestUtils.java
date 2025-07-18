@@ -236,30 +236,30 @@ public class ChangelogStateBackendTestUtils {
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
 
             keyedBackend.setCurrentKey(1);
-            state.update(new StateBackendTestBase.TestPojo("u1", 1));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u1", 1));
 
             keyedBackend.setCurrentKey(2);
-            state.update(new StateBackendTestBase.TestPojo("u2", 2));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u2", 2));
 
             periodicMaterializationManager.triggerMaterialization();
 
             keyedBackend.setCurrentKey(2);
-            state.update(new StateBackendTestBase.TestPojo("u2", 22));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u2", 22));
 
             keyedBackend.setCurrentKey(3);
-            state.update(new StateBackendTestBase.TestPojo("u3", 3));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u3", 3));
 
             periodicMaterializationManager.triggerMaterialization();
 
             keyedBackend.setCurrentKey(4);
-            state.update(new StateBackendTestBase.TestPojo("u4", 4));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u4", 4));
 
             keyedBackend.setCurrentKey(2);
-            state.update(new StateBackendTestBase.TestPojo("u2", 222));
+            state.setCurrentValue(new StateBackendTestBase.TestPojo("u2", 222));
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            keyedBackend.snapshot(
+                            keyedBackend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -289,13 +289,13 @@ public class ChangelogStateBackendTestUtils {
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
 
             keyedBackend.setCurrentKey(1);
-            assertEquals(new StateBackendTestBase.TestPojo("u1", 1), state.value());
+            assertEquals(new StateBackendTestBase.TestPojo("u1", 1), state.getCurrentValue());
 
             keyedBackend.setCurrentKey(2);
-            assertEquals(new StateBackendTestBase.TestPojo("u2", 222), state.value());
+            assertEquals(new StateBackendTestBase.TestPojo("u2", 222), state.getCurrentValue());
 
             keyedBackend.setCurrentKey(3);
-            assertEquals(new StateBackendTestBase.TestPojo("u3", 3), state.value());
+            assertEquals(new StateBackendTestBase.TestPojo("u3", 3), state.getCurrentValue());
         } finally {
             IOUtils.closeQuietly(keyedBackend);
             keyedBackend.dispose();
@@ -348,7 +348,7 @@ public class ChangelogStateBackendTestUtils {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            keyedBackend.snapshot(
+                            keyedBackend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,

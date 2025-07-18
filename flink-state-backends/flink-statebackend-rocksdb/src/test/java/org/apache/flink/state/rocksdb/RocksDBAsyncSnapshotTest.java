@@ -440,7 +440,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
                     new ValueStateDescriptor<>("foobar", String.class));
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshotFuture =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             checkpointId,
                             timestamp,
                             new TestCheckpointStreamFactory(() -> outputStream),
@@ -509,7 +509,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
                             VoidNamespaceSerializer.INSTANCE,
                             new ValueStateDescriptor<>("count", StringSerializer.INSTANCE));
 
-            state.update(element.getValue());
+            state.setCurrentValue(element.getValue());
         }
     }
 

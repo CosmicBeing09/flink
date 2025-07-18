@@ -104,13 +104,13 @@ public final class OuterJoinRecordStateViews {
 
         @Override
         public void addRecord(RowData record, int numOfAssociations) throws Exception {
-            recordState.update(Tuple2.of(record, numOfAssociations));
+            recordState.setCurrentValue(Tuple2.of(record, numOfAssociations));
         }
 
         @Override
         public void updateNumOfAssociations(RowData record, int numOfAssociations)
                 throws Exception {
-            recordState.update(Tuple2.of(record, numOfAssociations));
+            recordState.setCurrentValue(Tuple2.of(record, numOfAssociations));
         }
 
         @Override
@@ -120,7 +120,7 @@ public final class OuterJoinRecordStateViews {
 
         @Override
         public Iterable<RowData> getRecords() throws Exception {
-            Tuple2<RowData, Integer> tuple = recordState.value();
+            Tuple2<RowData, Integer> tuple = recordState.getCurrentValue();
             if (tuple == null) {
                 reusedRecordList.clear();
             } else {
@@ -133,7 +133,7 @@ public final class OuterJoinRecordStateViews {
         public Iterable<Tuple2<RowData, Integer>> getRecordsAndNumOfAssociations()
                 throws Exception {
             reusedTupleList.clear();
-            Tuple2<RowData, Integer> tuple = recordState.value();
+            Tuple2<RowData, Integer> tuple = recordState.getCurrentValue();
             if (tuple != null) {
                 reusedTupleList.add(tuple);
             }

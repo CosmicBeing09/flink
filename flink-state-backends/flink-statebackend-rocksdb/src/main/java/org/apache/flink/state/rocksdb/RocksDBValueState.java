@@ -76,7 +76,7 @@ class RocksDBValueState<K, N, V> extends AbstractRocksDBState<K, N, V>
     }
 
     @Override
-    public V value() throws IOException {
+    public V getCurrentValue() throws IOException {
         try {
             byte[] valueBytes =
                     backend.db.get(columnFamily, serializeCurrentKeyWithGroupAndNamespace());
@@ -92,7 +92,7 @@ class RocksDBValueState<K, N, V> extends AbstractRocksDBState<K, N, V>
     }
 
     @Override
-    public void update(V value) throws IOException {
+    public void setCurrentValue(V value) throws IOException {
         if (value == null) {
             clear();
             return;

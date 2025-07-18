@@ -46,19 +46,19 @@ class FlatMapOperatorCollectionTest implements Serializable {
 
     @Test
     void testExecuteOnCollection() throws Exception {
-        IdRichFlatMap<String> udf = new IdRichFlatMap<>();
+        IdentityRichFlatMap<String> udf = new IdentityRichFlatMap<>();
         testExecuteOnCollection(udf, Arrays.asList("f", "l", "i", "n", "k"), true);
         assertThat(udf.isClosed).isTrue();
 
-        udf = new IdRichFlatMap<>();
+        udf = new IdentityRichFlatMap<>();
         testExecuteOnCollection(udf, Arrays.asList("f", "l", "i", "n", "k"), false);
         assertThat(udf.isClosed).isTrue();
 
-        udf = new IdRichFlatMap<>();
+        udf = new IdentityRichFlatMap<>();
         testExecuteOnCollection(udf, Collections.emptyList(), true);
         assertThat(udf.isClosed).isTrue();
 
-        udf = new IdRichFlatMap<>();
+        udf = new IdentityRichFlatMap<>();
         testExecuteOnCollection(udf, Collections.emptyList(), false);
         assertThat(udf.isClosed).isTrue();
     }
@@ -92,14 +92,14 @@ class FlatMapOperatorCollectionTest implements Serializable {
     }
 
     /** The test flat map function. */
-    public class IdRichFlatMap<IN> extends RichFlatMapFunction<IN, IN> {
+    public class IdentityRichFlatMap<IN> extends RichFlatMapFunction<IN, IN> {
 
-        private boolean isOpened = false;
+        private boolean opened = false;
         private boolean isClosed = false;
 
         @Override
         public void open(OpenContext openContext) {
-            isOpened = true;
+            opened = true;
 
             RuntimeContext ctx = getRuntimeContext();
             assertThat(ctx.getTaskInfo().getTaskName()).isEqualTo("Test UDF");
@@ -109,7 +109,7 @@ class FlatMapOperatorCollectionTest implements Serializable {
 
         @Override
         public void flatMap(IN value, Collector<IN> out) {
-            assertThat(isOpened).isTrue();
+            assertThat(opened).isTrue();
             assertThat(isClosed).isFalse();
 
             out.collect(value);

@@ -43,7 +43,7 @@ public interface SerializerConfig extends Serializable {
             getRegisteredTypesWithKryoSerializerClasses();
 
     /** Returns the registered default Kryo Serializer classes. */
-    LinkedHashMap<Class<?>, Class<? extends Serializer<?>>> getDefaultKryoSerializerClasses();
+    LinkedHashMap<Class<?>, Class<? extends Serializer<?>>> getDefaultKryoSerializers();
 
     /** Returns the registered Kryo types. */
     LinkedHashSet<Class<?>> getRegisteredKryoTypes();
@@ -60,7 +60,7 @@ public interface SerializerConfig extends Serializable {
      *
      * <p>Generic types are enabled by default.
      */
-    boolean hasGenericTypesDisabled();
+    boolean isGenericTypesDisabled();
 
     /** Returns whether Kryo is the serializer for POJOs. */
     boolean isForceKryoEnabled();

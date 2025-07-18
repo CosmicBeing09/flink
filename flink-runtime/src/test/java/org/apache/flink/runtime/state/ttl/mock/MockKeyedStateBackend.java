@@ -222,7 +222,7 @@ public class MockKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> {
 
     @Nonnull
     @Override
-    public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+    public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
             long checkpointId,
             long timestamp,
             @Nonnull CheckpointStreamFactory streamFactory,

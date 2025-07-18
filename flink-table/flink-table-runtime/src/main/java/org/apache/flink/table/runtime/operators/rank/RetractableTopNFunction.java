@@ -140,7 +140,7 @@ public class RetractableTopNFunction extends AbstractSyncStateTopNFunction {
     public void processElement(RowData input, Context ctx, Collector<RowData> out)
             throws Exception {
         initRankEnd(input);
-        SortedMap<RowData, Long> sortedMap = treeMap.value();
+        SortedMap<RowData, Long> sortedMap = treeMap.getCurrentValue();
         if (sortedMap == null) {
             sortedMap = new TreeMap<>(sortKeyComparator);
         }
@@ -215,7 +215,7 @@ public class RetractableTopNFunction extends AbstractSyncStateTopNFunction {
                 }
             }
         }
-        treeMap.update(sortedMap);
+        treeMap.setCurrentValue(sortedMap);
     }
 
     // ------------- ROW_NUMBER-------------------------------

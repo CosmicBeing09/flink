@@ -285,7 +285,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -376,7 +376,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setMaxParallelism(maxParallelism);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -421,20 +421,20 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
 
                                     // the window count state starts with the key, so that we get
                                     // different count results for each key
-                                    if (count.value() == 0) {
-                                        count.update(l.intValue());
+                                    if (count.getCurrentValue() == 0) {
+                                        count.setCurrentValue(l.intValue());
                                     }
 
                                     // validate that the function has been opened properly
                                     assertTrue(open);
 
-                                    count.update(count.value() + 1);
+                                    count.setCurrentValue(count.getCurrentValue() + 1);
                                     out.collect(
                                             new Tuple4<>(
                                                     l,
                                                     window.getStart(),
                                                     window.getEnd(),
-                                                    new IntType(count.value())));
+                                                    new IntType(count.getCurrentValue())));
                                 }
                             })
                     .addSink(
@@ -465,7 +465,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -547,7 +547,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(
@@ -631,7 +631,7 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-            env.getConfig().setUseSnapshotCompression(true);
+            env.getConfig().setSnapshotCompressionEnabled(true);
 
             env.addSource(
                             new FailingSource(

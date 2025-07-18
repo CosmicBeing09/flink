@@ -84,7 +84,7 @@ public abstract class KeyedProcessFunctionWithCleanupState<K, IN, OUT>
 
     protected Boolean needToCleanupState(Long timestamp) throws IOException {
         if (stateCleaningEnabled) {
-            Long cleanupTime = cleanupTimeState.value();
+            Long cleanupTime = cleanupTimeState.getCurrentValue();
             // check that the triggered timer is the last registered processing time timer.
             return timestamp.equals(cleanupTime);
         } else {

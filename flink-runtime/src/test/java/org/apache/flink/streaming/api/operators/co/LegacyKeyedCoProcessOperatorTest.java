@@ -441,9 +441,9 @@ class LegacyKeyedCoProcessOperatorTest {
                 Object value, Collector<String> out, TimerService timerService, int channel)
                 throws IOException {
             final ValueState<String> state = getRuntimeContext().getState(this.state);
-            if (state.value() == null) {
+            if (state.getCurrentValue() == null) {
                 out.collect("INPUT" + channel + ":" + value);
-                state.update(String.valueOf(value));
+                state.setCurrentValue(String.valueOf(value));
                 timerService.registerEventTimeTimer(timerService.currentWatermark() + 5);
             } else {
                 state.clear();
@@ -455,7 +455,7 @@ class LegacyKeyedCoProcessOperatorTest {
         public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out)
                 throws Exception {
             assertThat(ctx.timeDomain()).isEqualTo(TimeDomain.EVENT_TIME);
-            out.collect("STATE:" + getRuntimeContext().getState(state).value());
+            out.collect("STATE:" + getRuntimeContext().getState(state).getCurrentValue());
         }
     }
 
@@ -542,9 +542,9 @@ class LegacyKeyedCoProcessOperatorTest {
                 Object value, Collector<String> out, TimerService timerService, int channel)
                 throws IOException {
             final ValueState<String> state = getRuntimeContext().getState(this.state);
-            if (state.value() == null) {
+            if (state.getCurrentValue() == null) {
                 out.collect("INPUT" + channel + ":" + value);
-                state.update(String.valueOf(value));
+                state.setCurrentValue(String.valueOf(value));
                 timerService.registerProcessingTimeTimer(timerService.currentProcessingTime() + 5);
             } else {
                 state.clear();
@@ -556,7 +556,7 @@ class LegacyKeyedCoProcessOperatorTest {
         public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out)
                 throws Exception {
             assertThat(ctx.timeDomain()).isEqualTo(TimeDomain.PROCESSING_TIME);
-            out.collect("STATE:" + getRuntimeContext().getState(state).value());
+            out.collect("STATE:" + getRuntimeContext().getState(state).getCurrentValue());
         }
     }
 

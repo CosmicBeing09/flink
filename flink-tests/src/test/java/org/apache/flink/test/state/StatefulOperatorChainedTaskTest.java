@@ -251,7 +251,7 @@ public class StatefulOperatorChainedTaskTest {
             setCurrentKey("10");
 
             if (context.isRestored()) {
-                counter = counterState.value();
+                counter = counterState.getCurrentValue();
                 assertEquals(snapshotOutData, counter);
                 counterState.clear();
             }
@@ -259,7 +259,7 @@ public class StatefulOperatorChainedTaskTest {
 
         @Override
         public void snapshotState(StateSnapshotContext context) throws Exception {
-            counterState.update(counter);
+            counterState.setCurrentValue(counter);
             snapshotOutData = counter;
         }
     }

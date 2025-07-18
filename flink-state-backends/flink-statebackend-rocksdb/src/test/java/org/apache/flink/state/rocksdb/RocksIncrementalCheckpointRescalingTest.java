@@ -492,9 +492,9 @@ public class RocksIncrementalCheckpointRescalingTest extends TestLogger {
         @Override
         public void processElement(String value, Context ctx, Collector<Integer> out)
                 throws Exception {
-            Integer oldCount = counterState.value();
+            Integer oldCount = counterState.getCurrentValue();
             Integer newCount = oldCount != null ? oldCount + 1 : 1;
-            counterState.update(newCount);
+            counterState.setCurrentValue(newCount);
             out.collect(newCount);
         }
     }

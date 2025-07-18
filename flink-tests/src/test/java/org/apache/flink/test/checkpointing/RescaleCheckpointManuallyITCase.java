@@ -259,7 +259,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
             env.getConfig().setMaxParallelism(maxParallelism);
         }
         env.enableCheckpointing(checkpointingInterval);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         SharedReference<JobID> jobID = sharedObjects.add(new JobID());
         SharedReference<MiniCluster> miniClusterRef = sharedObjects.add(miniCluster);
@@ -393,13 +393,13 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
         @Override
         public void flatMap(Integer value, Collector<Tuple2<Integer, Integer>> out)
                 throws Exception {
-            Integer counterValue = counter.value();
+            Integer counterValue = counter.getCurrentValue();
             int count = counterValue == null ? 1 : counterValue + 1;
-            counter.update(count);
+            counter.setCurrentValue(count);
 
-            Integer sumValue = sum.value();
+            Integer sumValue = sum.getCurrentValue();
             int s = sumValue == null ? value : sumValue + value;
-            sum.update(s);
+            sum.setCurrentValue(s);
 
             if (count == numberElements) {
                 out.collect(

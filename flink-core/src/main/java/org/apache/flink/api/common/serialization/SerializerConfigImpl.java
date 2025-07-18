@@ -209,7 +209,7 @@ public final class SerializerConfigImpl implements SerializerConfig {
 
     /** Returns the registered default Kryo Serializer classes. */
     public LinkedHashMap<Class<?>, Class<? extends Serializer<?>>>
-            getDefaultKryoSerializerClasses() {
+    getDefaultKryoSerializers() {
         return defaultKryoSerializerClasses;
     }
 
@@ -242,7 +242,7 @@ public final class SerializerConfigImpl implements SerializerConfig {
      *
      * <p>Generic types are enabled by default.
      */
-    public boolean hasGenericTypesDisabled() {
+    public boolean isGenericTypesDisabled() {
         return !configuration.get(PipelineOptions.GENERIC_TYPES);
     }
 
@@ -497,7 +497,7 @@ public final class SerializerConfigImpl implements SerializerConfig {
                 .forEach(
                         (c, s) ->
                                 newSerializerConfig.addDefaultKryoSerializer(c, s.getSerializer()));
-        getDefaultKryoSerializerClasses().forEach(newSerializerConfig::addDefaultKryoSerializer);
+        getDefaultKryoSerializers().forEach(newSerializerConfig::addDefaultKryoSerializer);
         getRegisteredKryoTypes().forEach(newSerializerConfig::registerKryoType);
         getRegisteredPojoTypes().forEach(newSerializerConfig::registerPojoType);
         getRegisteredTypeInfoFactories()

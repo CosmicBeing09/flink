@@ -94,7 +94,7 @@ public abstract class AbstractStreamArrowPythonBoundedRowsOperator<K>
         if (stateCleaningEnabled) {
 
             Iterator<Long> keysIt = inputState.keys().iterator();
-            Long lastProcessedTime = lastTriggeringTsState.value();
+            Long lastProcessedTime = lastTriggeringTsState.getCurrentValue();
             if (lastProcessedTime == null) {
                 lastProcessedTime = 0L;
             }

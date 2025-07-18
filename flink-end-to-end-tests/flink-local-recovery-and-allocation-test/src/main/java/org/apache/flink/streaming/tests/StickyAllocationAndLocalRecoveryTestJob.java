@@ -286,13 +286,13 @@ public class StickyAllocationAndLocalRecoveryTestJob {
             }
 
             // sanity check
-            if (null != valueState.value()) {
+            if (null != valueState.getCurrentValue()) {
                 throw new IllegalStateException(
                         "This should never happen, keys are generated monotonously.");
             }
 
             // store artificial data to blow up the state
-            valueState.update(RandomStringUtils.random(valueSize, true, true));
+            valueState.setCurrentValue(RandomStringUtils.random(valueSize, true, true));
         }
 
         @Override

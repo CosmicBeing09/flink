@@ -146,7 +146,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
                         envFromConfiguration
                                 .getConfig()
                                 .getSerializerConfig()
-                                .getDefaultKryoSerializerClasses())
+                                .getDefaultKryoSerializers())
                 .isEqualTo(serializers);
     }
 

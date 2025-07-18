@@ -40,6 +40,6 @@ public class QueryableValueStateOperator<IN>
 
     @Override
     public void processElement(StreamRecord<IN> element) throws Exception {
-        state.update(element.getValue());
+        state.setCurrentValue(element.getValue());
     }
 }

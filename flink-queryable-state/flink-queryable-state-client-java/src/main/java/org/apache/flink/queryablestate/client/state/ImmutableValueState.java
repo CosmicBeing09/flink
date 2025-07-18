@@ -43,7 +43,7 @@ public final class ImmutableValueState<V> extends ImmutableState implements Valu
     }
 
     @Override
-    public V value() {
+    public V getCurrentValue() {
         return value;
     }
 

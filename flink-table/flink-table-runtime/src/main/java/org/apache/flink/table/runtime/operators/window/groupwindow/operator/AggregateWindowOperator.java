@@ -165,7 +165,7 @@ public class AggregateWindowOperator<K, W extends Window> extends WindowOperator
         RowData aggResult = aggWindowAggregator.getValue(window);
         if (produceUpdates) {
             previousState.setCurrentNamespace(window);
-            RowData previousAggResult = previousState.value();
+            RowData previousAggResult = previousState.getCurrentValue();
 
             if (!recordCounter.recordCountIsZero(acc)) {
                 // has emitted result for the window
@@ -180,7 +180,7 @@ public class AggregateWindowOperator<K, W extends Window> extends WindowOperator
                         // send UPDATE_AFTER
                         collect(RowKind.UPDATE_AFTER, (RowData) getCurrentKey(), aggResult);
                         // update previousState
-                        previousState.update(aggResult);
+                        previousState.setCurrentValue(aggResult);
                     }
                     // if the previous agg equals to the current agg, no need to send retract and
                     // accumulate
@@ -190,7 +190,7 @@ public class AggregateWindowOperator<K, W extends Window> extends WindowOperator
                     // send INSERT
                     collect(RowKind.INSERT, (RowData) getCurrentKey(), aggResult);
                     // update previousState
-                    previousState.update(aggResult);
+                    previousState.setCurrentValue(aggResult);
                 }
             } else {
                 // has emitted result for the window

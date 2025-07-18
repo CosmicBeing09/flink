@@ -49,34 +49,34 @@ class StateSnapshotCompressionTest {
     void testCompressionConfiguration() throws BackendBuildingException {
 
         ExecutionConfig executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(true);
+        executionConfig.setSnapshotCompressionEnabled(true);
 
-        AbstractKeyedStateBackend<String> stateBackend =
-                getStringHeapKeyedStateBackend(executionConfig);
+        AbstractKeyedStateBackend<String> stringStateBackend =
+                createStringHeapKeyedStateBackend(executionConfig);
 
         try {
             assertThat(
                             SnappyStreamCompressionDecorator.INSTANCE.equals(
-                                    stateBackend.getKeyGroupCompressionDecorator()))
+                                    stringStateBackend.getKeyGroupCompressionDecorator()))
                     .isTrue();
         } finally {
-            IOUtils.closeQuietly(stateBackend);
-            stateBackend.dispose();
+            IOUtils.closeQuietly(stringStateBackend);
+            stringStateBackend.dispose();
         }
 
         executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(false);
+        executionConfig.setSnapshotCompressionEnabled(false);
 
-        stateBackend = getStringHeapKeyedStateBackend(executionConfig);
+        stringStateBackend = createStringHeapKeyedStateBackend(executionConfig);
 
         try {
             assertThat(
                             UncompressedStreamCompressionDecorator.INSTANCE.equals(
-                                    stateBackend.getKeyGroupCompressionDecorator()))
+                                    stringStateBackend.getKeyGroupCompressionDecorator()))
                     .isTrue();
         } finally {
-            IOUtils.closeQuietly(stateBackend);
-            stateBackend.dispose();
+            IOUtils.closeQuietly(stringStateBackend);
+            stringStateBackend.dispose();
         }
     }
 
@@ -90,7 +90,7 @@ class StateSnapshotCompressionTest {
         snapshotRestoreRoundtrip(false);
     }
 
-    private HeapKeyedStateBackend<String> getStringHeapKeyedStateBackend(
+    private HeapKeyedStateBackend<String> createStringHeapKeyedStateBackend(
             ExecutionConfig executionConfig) throws BackendBuildingException {
         return getStringHeapKeyedStateBackend(executionConfig, Collections.emptyList());
     }
@@ -119,7 +119,7 @@ class StateSnapshotCompressionTest {
     private void snapshotRestoreRoundtrip(boolean useCompression) throws Exception {
 
         ExecutionConfig executionConfig = new ExecutionConfig();
-        executionConfig.setUseSnapshotCompression(useCompression);
+        executionConfig.setSnapshotCompressionEnabled(useCompression);
 
         KeyedStateHandle stateHandle;
 
@@ -128,7 +128,7 @@ class StateSnapshotCompressionTest {
         stateDescriptor.initializeSerializerUnlessSet(executionConfig);
 
         AbstractKeyedStateBackend<String> stateBackend =
-                getStringHeapKeyedStateBackend(executionConfig);
+                createStringHeapKeyedStateBackend(executionConfig);
 
         try {
 
@@ -138,19 +138,19 @@ class StateSnapshotCompressionTest {
 
             stateBackend.setCurrentKey("A");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("42");
+            state.setCurrentValue("42");
             stateBackend.setCurrentKey("B");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("43");
+            state.setCurrentValue("43");
             stateBackend.setCurrentKey("C");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("44");
+            state.setCurrentValue("44");
             stateBackend.setCurrentKey("D");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("45");
+            state.setCurrentValue("45");
             CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(4 * 1024 * 1024);
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    stateBackend.snapshot(
+                    stateBackend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,
@@ -176,16 +176,16 @@ class StateSnapshotCompressionTest {
 
             stateBackend.setCurrentKey("A");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("42");
+            assertThat(state.getCurrentValue()).isEqualTo("42");
             stateBackend.setCurrentKey("B");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("43");
+            assertThat(state.getCurrentValue()).isEqualTo("43");
             stateBackend.setCurrentKey("C");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("44");
+            assertThat(state.getCurrentValue()).isEqualTo("44");
             stateBackend.setCurrentKey("D");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("45");
+            assertThat(state.getCurrentValue()).isEqualTo("45");
 
         } finally {
             IOUtils.closeQuietly(stateBackend);

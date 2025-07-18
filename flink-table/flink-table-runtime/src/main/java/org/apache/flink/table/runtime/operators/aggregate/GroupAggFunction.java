@@ -85,7 +85,7 @@ public class GroupAggFunction extends GroupAggFunctionBase {
     public void processElement(RowData input, Context ctx, Collector<RowData> out)
             throws Exception {
         RowData currentKey = ctx.getCurrentKey();
-        aggHelper.processElement(input, currentKey, accState.value(), out);
+        aggHelper.processElement(input, currentKey, accState.getCurrentValue(), out);
     }
 
     private class SyncStateGroupAggHelper extends GroupAggHelper {
@@ -95,7 +95,7 @@ public class GroupAggFunction extends GroupAggFunctionBase {
 
         @Override
         protected void updateAccumulatorsState(RowData accumulators) throws Exception {
-            accState.update(accumulators);
+            accState.setCurrentValue(accumulators);
         }
 
         @Override

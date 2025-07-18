@@ -89,7 +89,7 @@ public class AppendOnlyFirstNFunction extends AbstractSyncStateTopNFunction {
             return;
         }
         currentRank++;
-        state.update(currentRank);
+        state.setCurrentValue(currentRank);
 
         if (outputRankNumber || hasOffset()) {
             collectInsert(out, input, currentRank);
@@ -99,7 +99,7 @@ public class AppendOnlyFirstNFunction extends AbstractSyncStateTopNFunction {
     }
 
     private int getCurrentRank() throws IOException {
-        Integer value = state.value();
+        Integer value = state.getCurrentValue();
         return value == null ? 0 : value;
     }
 }

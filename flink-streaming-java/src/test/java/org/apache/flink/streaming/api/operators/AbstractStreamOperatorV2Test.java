@@ -256,7 +256,7 @@ class AbstractStreamOperatorV2Test extends AbstractStreamOperatorTest {
                             String[] command = element.getValue().f1.split(":");
                             switch (command[0]) {
                                 case "SET_STATE":
-                                    getPartitionedState(stateDescriptor).update(command[1]);
+                                    getPartitionedState(stateDescriptor).setCurrentValue(command[1]);
                                     break;
                                 case "DELETE_STATE":
                                     getPartitionedState(stateDescriptor).clear();
@@ -271,7 +271,7 @@ class AbstractStreamOperatorV2Test extends AbstractStreamOperatorTest {
                                     break;
                                 case "EMIT_STATE":
                                     String stateValue =
-                                            getPartitionedState(stateDescriptor).value();
+                                            getPartitionedState(stateDescriptor).getCurrentValue();
                                     output.collect(
                                             new StreamRecord<>(
                                                     "ON_ELEMENT:"
@@ -288,13 +288,13 @@ class AbstractStreamOperatorV2Test extends AbstractStreamOperatorTest {
 
         @Override
         public void onEventTime(InternalTimer<Integer, VoidNamespace> timer) throws Exception {
-            String stateValue = getPartitionedState(stateDescriptor).value();
+            String stateValue = getPartitionedState(stateDescriptor).getCurrentValue();
             output.collect(new StreamRecord<>("ON_EVENT_TIME:" + stateValue));
         }
 
         @Override
         public void onProcessingTime(InternalTimer<Integer, VoidNamespace> timer) throws Exception {
-            String stateValue = getPartitionedState(stateDescriptor).value();
+            String stateValue = getPartitionedState(stateDescriptor).getCurrentValue();
             output.collect(new StreamRecord<>("ON_PROC_TIME:" + stateValue));
         }
     }

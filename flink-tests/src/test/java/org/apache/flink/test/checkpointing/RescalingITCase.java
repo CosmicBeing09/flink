@@ -97,9 +97,9 @@ public class RescalingITCase extends TestLogger {
     public static final TestExecutorResource<ScheduledExecutorService> EXECUTOR_RESOURCE =
             TestingUtils.defaultExecutorResource();
 
-    private static final int numTaskManagers = 2;
-    private static final int slotsPerTaskManager = 2;
-    private static final int numSlots = numTaskManagers * slotsPerTaskManager;
+    private static final int TASK_MANAGER_COUNT = 2;
+    private static final int SLOTS_PER_TASK_MANAGER = 2;
+    private static final int numSlots = TASK_MANAGER_COUNT * SLOTS_PER_TASK_MANAGER;
 
     @Parameterized.Parameters(name = "backend = {0}")
     public static Collection<Object[]> data() {
@@ -147,7 +147,7 @@ public class RescalingITCase extends TestLogger {
                     new MiniClusterWithClientResource(
                             new MiniClusterResourceConfiguration.Builder()
                                     .setConfiguration(config)
-                                    .setNumberTaskManagers(numTaskManagers)
+                                    .setNumberTaskManagers(TASK_MANAGER_COUNT)
                                     .setNumberSlotsPerTaskManager(numSlots)
                                     .build());
             cluster.before();
@@ -666,7 +666,7 @@ public class RescalingITCase extends TestLogger {
         }
         env.enableCheckpointing(checkpointingInterval);
         RestartStrategyUtils.configureNoRestartStrategy(env);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         DataStream<Integer> input =
                 env.addSource(
@@ -836,11 +836,11 @@ public class RescalingITCase extends TestLogger {
         public void flatMap(Integer value, Collector<Tuple2<Integer, Integer>> out)
                 throws Exception {
 
-            int count = counter.value() + 1;
-            counter.update(count);
+            int count = counter.getCurrentValue() + 1;
+            counter.setCurrentValue(count);
 
-            int s = sum.value() + value;
-            sum.update(s);
+            int s = sum.getCurrentValue() + value;
+            sum.setCurrentValue(s);
 
             if (count % numberElements == 0) {
                 out.collect(

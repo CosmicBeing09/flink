@@ -47,14 +47,14 @@ public class SemanticsCheckMapper extends RichFlatMapFunction<Event, String> {
     @Override
     public void flatMap(Event event, Collector<String> out) throws Exception {
 
-        Long currentValue = sequenceValue.value();
+        Long currentValue = sequenceValue.getCurrentValue();
         if (currentValue == null) {
             currentValue = 0L;
         }
 
         long nextValue = event.getSequenceNumber();
 
-        sequenceValue.update(nextValue);
+        sequenceValue.setCurrentValue(nextValue);
         if (!validator.check(currentValue, nextValue)) {
             out.collect(
                     "Alert: " + currentValue + " -> " + nextValue + " (" + event.getKey() + ")");

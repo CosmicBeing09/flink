@@ -326,7 +326,7 @@ public class SavepointWriterUidModificationITCase {
 
         @Override
         public void processElement(Integer value, Context ctx) throws Exception {
-            state.update(value);
+            state.setCurrentValue(value);
         }
     }
 
@@ -341,7 +341,7 @@ public class SavepointWriterUidModificationITCase {
 
         @Override
         public Integer map(Integer value) throws Exception {
-            return state.value();
+            return state.getCurrentValue();
         }
     }
 }

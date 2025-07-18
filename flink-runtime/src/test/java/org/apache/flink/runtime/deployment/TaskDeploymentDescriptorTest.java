@@ -64,9 +64,9 @@ class TaskDeploymentDescriptorTest {
 
     @TempDir Path temporaryFolder;
 
-    private static final JobID jobID = new JobID();
-    private static final JobVertexID vertexID = new JobVertexID();
-    private static final ExecutionAttemptID execId = createExecutionAttemptId(vertexID);
+    private static final JobID jobId = new JobID();
+    private static final JobVertexID jobVertexId = new JobVertexID();
+    private static final ExecutionAttemptID execId = createExecutionAttemptId(jobVertexId);
     private static final AllocationID allocationId = new AllocationID();
     private static final String jobName = "job name";
     private static final String taskName = "task name";
@@ -90,7 +90,7 @@ class TaskDeploymentDescriptorTest {
 
     private final JobInformation jobInformation =
             new JobInformation(
-                    jobID,
+                    jobId,
                     JobType.STREAMING,
                     jobName,
                     executionConfig,
@@ -102,7 +102,7 @@ class TaskDeploymentDescriptorTest {
 
     private final TaskInformation taskInformation =
             new TaskInformation(
-                    vertexID,
+                    jobVertexId,
                     taskName,
                     currentNumberOfSubtasks,
                     numberOfKeyGroups,
@@ -163,7 +163,7 @@ class TaskDeploymentDescriptorTest {
         try (BlobServer blobServer = setupBlobServer()) {
             // Serialize taskInformation to blobServer and get the permanentBlobKey
             Either<SerializedValue<TaskInformation>, PermanentBlobKey> taskInformationOrBlobKey =
-                    BlobWriter.serializeAndTryOffload(taskInformation, jobID, blobServer);
+                    BlobWriter.serializeAndTryOffload(taskInformation, jobId, blobServer);
             assertThat(taskInformationOrBlobKey.isRight()).isTrue();
             PermanentBlobKey permanentBlobKey = taskInformationOrBlobKey.right();
 
@@ -175,7 +175,7 @@ class TaskDeploymentDescriptorTest {
                     createTaskDeploymentDescriptor(
                             new TaskDeploymentDescriptor.NonOffloaded<>(serializedJobInformation),
                             new TaskDeploymentDescriptor.Offloaded<>(permanentBlobKey));
-            assertThat(taskInformationCache.get(jobID, permanentBlobKey)).isNull();
+            assertThat(taskInformationCache.get(jobId, permanentBlobKey)).isNull();
             tdd1.loadBigData(
                     blobServer,
                     new NoOpGroupCache<>(),
@@ -185,7 +185,7 @@ class TaskDeploymentDescriptorTest {
             assertThat(taskInformation1).isEqualTo(taskInformation);
             // The TaskInformation is cached in taskInformationCache, and it's equals to
             // taskInformation1.
-            assertThat(taskInformationCache.get(jobID, permanentBlobKey))
+            assertThat(taskInformationCache.get(jobId, permanentBlobKey))
                     .isNotNull()
                     .isEqualTo(taskInformation1);
 
@@ -232,7 +232,7 @@ class TaskDeploymentDescriptorTest {
             TaskDeploymentDescriptor.MaybeOffloaded<JobInformation> jobInformation,
             TaskDeploymentDescriptor.MaybeOffloaded<TaskInformation> taskInformation) {
         return new TaskDeploymentDescriptor(
-                jobID,
+                jobId,
                 jobInformation,
                 taskInformation,
                 execId,

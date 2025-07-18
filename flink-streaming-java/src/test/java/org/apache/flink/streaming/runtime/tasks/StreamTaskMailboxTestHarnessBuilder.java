@@ -98,8 +98,8 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
     protected CheckpointResponder checkpointResponder = new TestCheckpointResponder();
     protected boolean collectNetworkEvents;
 
-    protected final ArrayList<InputConfig> inputs = new ArrayList<>();
-    protected final ArrayList<Integer> inputChannelsPerGate = new ArrayList<>();
+    protected final ArrayList<InputConfig> inputConfigs = new ArrayList<>();
+    protected final ArrayList<Integer> channelsPerGate = new ArrayList<>();
 
     protected final ArrayList<ResultPartitionWriter> additionalOutputs = new ArrayList<>();
 
@@ -166,12 +166,12 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
             TypeInformation<?> inputType,
             int inputChannels,
             @Nullable KeySelector<?, ?> keySelector) {
-        streamConfig.setStatePartitioner(inputs.size(), keySelector);
-        inputs.add(
+        streamConfig.setStatePartitioner(inputConfigs.size(), keySelector);
+        inputConfigs.add(
                 new NetworkInputConfig(
                         inputType.createSerializer(executionConfig.getSerializerConfig()),
-                        inputChannelsPerGate.size()));
-        inputChannelsPerGate.add(inputChannels);
+                        channelsPerGate.size()));
+        channelsPerGate.add(inputChannels);
         return this;
     }
 
@@ -201,7 +201,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
             OperatorID operatorId,
             SourceOperatorFactory<SourceType> sourceOperatorFactory,
             TypeSerializer<SourceType> sourceSerializer) {
-        inputs.add(
+        inputConfigs.add(
                 new SourceInputConfigPlaceHolder<>(
                         operatorId, sourceOperatorFactory, sourceSerializer));
         return this;
@@ -273,7 +273,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
     }
 
     protected void initializeInputs(StreamMockEnvironment streamMockEnvironment) {
-        inputGates = new StreamTestSingleInputGate[inputChannelsPerGate.size()];
+        inputGates = new StreamTestSingleInputGate[channelsPerGate.size()];
         List<StreamEdge> inPhysicalEdges = new LinkedList<>();
 
         StreamNode mainNode =
@@ -284,24 +284,24 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
                         (StreamOperator<?>) null,
                         null,
                         null);
-        for (int i = 0; i < inputs.size(); i++) {
-            if ((inputs.get(i) instanceof NetworkInputConfig)) {
-                NetworkInputConfig networkInput = (NetworkInputConfig) inputs.get(i);
+        for (int i = 0; i < inputConfigs.size(); i++) {
+            if ((inputConfigs.get(i) instanceof NetworkInputConfig)) {
+                NetworkInputConfig networkInput = (NetworkInputConfig) inputConfigs.get(i);
                 initializeNetworkInput(
                         networkInput, mainNode, streamMockEnvironment, inPhysicalEdges);
-            } else if ((inputs.get(i)
+            } else if ((inputConfigs.get(i)
                     instanceof StreamTaskMailboxTestHarnessBuilder.SourceInputConfigPlaceHolder)) {
                 SourceInputConfigPlaceHolder sourceInput =
-                        (SourceInputConfigPlaceHolder) inputs.get(i);
-                inputs.set(i, initializeSourceInput(i, sourceInput, mainNode));
+                        (SourceInputConfigPlaceHolder) inputConfigs.get(i);
+                inputConfigs.set(i, initializeSourceInput(i, sourceInput, mainNode));
             } else {
-                throw new UnsupportedOperationException("Unknown input type " + inputs.get(i));
+                throw new UnsupportedOperationException("Unknown input type " + inputConfigs.get(i));
             }
         }
 
         streamConfig.setInPhysicalEdges(inPhysicalEdges);
         streamConfig.setNumberOfNetworkInputs(inputGates.length);
-        streamConfig.setInputs(inputs.toArray(new InputConfig[inputs.size()]));
+        streamConfig.setInputs(inputConfigs.toArray(new InputConfig[inputConfigs.size()]));
         streamConfig.serializeAllConfigs();
     }
 
@@ -315,7 +315,7 @@ public class StreamTaskMailboxTestHarnessBuilder<OUT> {
         TypeSerializer<?> inputSerializer = networkInput.getTypeSerializer();
         inputGates[gateIndex] =
                 new StreamTestSingleInputGate<>(
-                        inputChannelsPerGate.get(gateIndex),
+                        channelsPerGate.get(gateIndex),
                         gateIndex,
                         inputSerializer,
                         bufferSize,

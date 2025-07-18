@@ -91,8 +91,8 @@ public class SavepointDeepCopyTest extends AbstractTestBaseJUnit4 {
 
         @Override
         public void processElement(String value, Context ctx) throws Exception {
-            if (state.value() == null) {
-                state.update(new Tuple2<>(value, RANDOM_VALUE));
+            if (state.getCurrentValue() == null) {
+                state.setCurrentValue(new Tuple2<>(value, RANDOM_VALUE));
             }
         }
     }
@@ -112,7 +112,7 @@ public class SavepointDeepCopyTest extends AbstractTestBaseJUnit4 {
         @Override
         public void readKey(String key, Context ctx, Collector<Tuple2<String, String>> out)
                 throws Exception {
-            out.collect(state.value());
+            out.collect(state.getCurrentValue());
         }
     }
 

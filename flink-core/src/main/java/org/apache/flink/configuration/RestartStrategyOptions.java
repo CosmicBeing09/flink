@@ -100,12 +100,12 @@ public class RestartStrategyOptions {
             return allAvailableValues;
         }
 
-        public TextElement[] getAllTextElement() {
+        public TextElement[] getAllTextElements() {
             return allAvailableValues.stream().map(TextElement::code).toArray(TextElement[]::new);
         }
     }
 
-    private static InlineElement[] concat(InlineElement[] first, InlineElement... second) {
+    private static InlineElement[] concatInlineElements(InlineElement[] first, InlineElement... second) {
         InlineElement[] result = new InlineElement[first.length + second.length];
         System.arraycopy(first, 0, result, 0, first.length);
         System.arraycopy(second, 0, result, first.length, second.length);
@@ -126,25 +126,25 @@ public class RestartStrategyOptions {
                                     .list(
                                             text(
                                                     "%s, %s, %s: No restart strategy.",
-                                                    NO_RESTART_STRATEGY.getAllTextElement()),
+                                                    NO_RESTART_STRATEGY.getAllTextElements()),
                                             text(
                                                     "%s, %s: Fixed delay restart strategy. More details can be found %s.",
-                                                    concat(
-                                                            FIXED_DELAY.getAllTextElement(),
+                                                    concatInlineElements(
+                                                            FIXED_DELAY.getAllTextElements(),
                                                             link(
                                                                     "{{.Site.BaseURL}}{{.Site.LanguagePrefix}}/docs/ops/state/task_failure_recovery#fixed-delay-restart-strategy",
                                                                     "here"))),
                                             text(
                                                     "%s, %s: Failure rate restart strategy. More details can be found %s.",
-                                                    concat(
-                                                            FAILURE_RATE.getAllTextElement(),
+                                                    concatInlineElements(
+                                                            FAILURE_RATE.getAllTextElements(),
                                                             link(
                                                                     "{{.Site.BaseURL}}{{.Site.LanguagePrefix}}/docs/ops/state/task_failure_recovery#failure-rate-restart-strategy",
                                                                     "here"))),
                                             text(
                                                     "%s, %s: Exponential delay restart strategy. More details can be found %s.",
-                                                    concat(
-                                                            EXPONENTIAL_DELAY.getAllTextElement(),
+                                                    concatInlineElements(
+                                                            EXPONENTIAL_DELAY.getAllTextElements(),
                                                             link(
                                                                     "{{.Site.BaseURL}}{{.Site.LanguagePrefix}}/docs/ops/state/task_failure_recovery#exponential-delay-restart-strategy",
                                                                     "here"))))

@@ -357,8 +357,8 @@ public class SavepointFormatITCase extends TestLogger {
 
         @Override
         public Long map(Long value) throws Exception {
-            counter.update(Optional.ofNullable(counter.value()).orElse(0L) + value);
-            return counter.value();
+            counter.setCurrentValue(Optional.ofNullable(counter.getCurrentValue()).orElse(0L) + value);
+            return counter.getCurrentValue();
         }
     }
 }

@@ -325,7 +325,7 @@ class TaskCheckpointingBehaviourTest {
                             mock(SnapshotStrategyRunner.class)) {
                         @Nonnull
                         @Override
-                        public RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot(
+                        public RunnableFuture<SnapshotResult<OperatorStateHandle>> createStateSnapshot(
                                 long checkpointId,
                                 long timestamp,
                                 @Nonnull CheckpointStreamFactory streamFactory,

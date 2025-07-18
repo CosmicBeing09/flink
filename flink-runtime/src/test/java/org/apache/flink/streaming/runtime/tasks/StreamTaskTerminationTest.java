@@ -279,7 +279,7 @@ class StreamTaskTerminationTest {
         public OperatorStateBackend createOperatorStateBackend(
                 OperatorStateBackendParameters parameters) throws Exception {
             OperatorStateBackend operatorStateBackend = mock(OperatorStateBackend.class);
-            when(operatorStateBackend.snapshot(
+            when(operatorStateBackend.createStateSnapshot(
                             anyLong(),
                             anyLong(),
                             any(CheckpointStreamFactory.class),

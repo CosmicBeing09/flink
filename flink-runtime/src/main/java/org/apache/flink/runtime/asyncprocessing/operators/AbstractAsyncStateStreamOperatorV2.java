@@ -101,7 +101,7 @@ public abstract class AbstractAsyncStateStreamOperatorV2<OUT> extends AbstractSt
 
         final int inFlightRecordsLimit = getExecutionConfig().getAsyncInflightRecordsLimit();
         final int asyncBufferSize = getExecutionConfig().getAsyncStateBufferSize();
-        final long asyncBufferTimeout = getExecutionConfig().getAsyncStateBufferTimeout();
+        final long asyncBufferTimeout = getExecutionConfig().getAsyncStateBufferTimeoutMillis();
         int maxParallelism = getExecutionConfig().getMaxParallelism();
 
         this.declarationManager = new DeclarationManager();

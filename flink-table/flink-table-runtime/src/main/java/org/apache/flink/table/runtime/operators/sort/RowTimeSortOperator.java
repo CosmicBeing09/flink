@@ -102,7 +102,7 @@ public class RowTimeSortOperator extends BaseTemporalSortOperator {
         // timestamp of the processed row
         long rowTime = input.getLong(rowTimeIdx);
 
-        Long lastTriggeringTs = lastTriggeringTsState.value();
+        Long lastTriggeringTs = lastTriggeringTsState.getCurrentValue();
 
         // check if the row is late and drop it if it is late
         if (lastTriggeringTs == null || rowTime > lastTriggeringTs) {
@@ -139,7 +139,7 @@ public class RowTimeSortOperator extends BaseTemporalSortOperator {
 
             // remove emitted rows from state
             dataState.remove(timestamp);
-            lastTriggeringTsState.update(timestamp);
+            lastTriggeringTsState.setCurrentValue(timestamp);
         }
     }
 

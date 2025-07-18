@@ -45,7 +45,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
  * Base implementation of KeyedStateBackend. The state can be checkpointed to streams using {@link
- * #snapshot(long, long, CheckpointStreamFactory, CheckpointOptions)}.
+ * #createStateSnapshot(long, long, CheckpointStreamFactory, CheckpointOptions)}.
  *
  * @param <K> Type of the key by which state is keyed.
  */
@@ -213,7 +213,7 @@ public abstract class AbstractKeyedStateBackend<K>
 
     private static StreamCompressionDecorator determineStreamCompression(
             ExecutionConfig executionConfig) {
-        if (executionConfig != null && executionConfig.isUseSnapshotCompression()) {
+        if (executionConfig != null && executionConfig.isSnapshotCompressionEnabled()) {
             return SnappyStreamCompressionDecorator.INSTANCE;
         } else {
             return UncompressedStreamCompressionDecorator.INSTANCE;

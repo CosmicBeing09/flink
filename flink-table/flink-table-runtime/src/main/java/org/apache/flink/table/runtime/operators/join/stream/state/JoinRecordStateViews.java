@@ -91,7 +91,7 @@ public final class JoinRecordStateViews {
 
         @Override
         public void addRecord(RowData record) throws Exception {
-            recordState.update(record);
+            recordState.setCurrentValue(record);
         }
 
         @Override
@@ -102,7 +102,7 @@ public final class JoinRecordStateViews {
         @Override
         public Iterable<RowData> getRecords() throws Exception {
             reusedList.clear();
-            RowData record = recordState.value();
+            RowData record = recordState.getCurrentValue();
             if (record != null) {
                 reusedList.add(record);
             }

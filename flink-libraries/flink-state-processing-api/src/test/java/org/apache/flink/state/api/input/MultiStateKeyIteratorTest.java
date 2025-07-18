@@ -144,7 +144,7 @@ public class MultiStateKeyIteratorTest {
         backend.setCurrentKey(key);
         backend.getPartitionedState(
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, descriptor)
-                .update(0);
+                .setCurrentValue(0);
     }
 
     private static void clearKey(
@@ -311,7 +311,7 @@ public class MultiStateKeyIteratorTest {
 
         @Nonnull
         @Override
-        public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+        public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
                 long checkpointId,
                 long timestamp,
                 @Nonnull CheckpointStreamFactory streamFactory,

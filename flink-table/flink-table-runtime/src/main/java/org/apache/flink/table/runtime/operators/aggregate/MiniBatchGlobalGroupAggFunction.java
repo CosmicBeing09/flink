@@ -168,7 +168,7 @@ public class MiniBatchGlobalGroupAggFunction
 
             // set current key to access states under the current key
             ctx.setCurrentKey(currentKey);
-            RowData stateAcc = accState.value();
+            RowData stateAcc = accState.getCurrentValue();
             if (stateAcc == null) {
                 stateAcc = globalAgg.createAccumulators();
                 firstRow = true;
@@ -189,7 +189,7 @@ public class MiniBatchGlobalGroupAggFunction
                 // we aggregated at least one record for this key
 
                 // update acc to state
-                accState.update(stateAcc);
+                accState.setCurrentValue(stateAcc);
 
                 // if this was not the first row and we have to emit retractions
                 if (!firstRow) {

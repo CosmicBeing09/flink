@@ -269,7 +269,7 @@ public class StreamOperatorStateHandler {
 
             if (null != operatorStateBackend) {
                 snapshotInProgress.setOperatorStateManagedFuture(
-                        operatorStateBackend.snapshot(
+                        operatorStateBackend.createStateSnapshot(
                                 checkpointId, timestamp, factory, checkpointOptions));
             }
 
@@ -278,7 +278,7 @@ public class StreamOperatorStateHandler {
                     throw new UnsupportedOperationException("Not supported yet.");
                 } else {
                     snapshotInProgress.setKeyedStateManagedFuture(
-                            asyncKeyedStateBackend.snapshot(
+                            asyncKeyedStateBackend.createStateSnapshot(
                                     checkpointId, timestamp, factory, checkpointOptions));
                 }
             }
@@ -295,7 +295,7 @@ public class StreamOperatorStateHandler {
 
                 } else {
                     snapshotInProgress.setKeyedStateManagedFuture(
-                            keyedStateBackend.snapshot(
+                            keyedStateBackend.createStateSnapshot(
                                     checkpointId, timestamp, factory, checkpointOptions));
                 }
             }

@@ -927,12 +927,12 @@ class DataStreamJavaITCase {
                                     public void processElement(
                                             Row r, Context ctx, Collector<Tuple2<String, Long>> out)
                                             throws IOException {
-                                        Long currentCount = count.value();
+                                        Long currentCount = count.getCurrentValue();
                                         if (currentCount == null) {
                                             currentCount = 0L;
                                         }
                                         final long updatedCount = currentCount + 1;
-                                        count.update(updatedCount);
+                                        count.setCurrentValue(updatedCount);
 
                                         out.collect(Tuple2.of(ctx.getCurrentKey(), updatedCount));
                                     }

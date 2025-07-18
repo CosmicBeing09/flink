@@ -111,7 +111,7 @@ public class GroupTableAggFunction extends KeyedProcessFunction<RowData, RowData
         RowData currentKey = ctx.getCurrentKey();
 
         boolean firstRow;
-        RowData accumulators = accState.value();
+        RowData accumulators = accState.getCurrentValue();
         if (null == accumulators) {
             firstRow = true;
             accumulators = function.createAccumulators();
@@ -143,7 +143,7 @@ public class GroupTableAggFunction extends KeyedProcessFunction<RowData, RowData
             function.emitValue(out, currentKey, false);
 
             // update the state
-            accState.update(accumulators);
+            accState.setCurrentValue(accumulators);
 
         } else {
             // and clear all state

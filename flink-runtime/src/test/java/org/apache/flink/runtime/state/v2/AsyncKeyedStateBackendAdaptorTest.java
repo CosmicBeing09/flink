@@ -61,10 +61,10 @@ public class AsyncKeyedStateBackendAdaptorTest {
 
     @Test
     public void testValueStateAdaptor() throws Exception {
-        CheckpointableKeyedStateBackend<String> keyedStateBackend = createBackend();
+        CheckpointableKeyedStateBackend<String> checkpointableKeyedStateBackend = createBackend();
         AsyncKeyedStateBackendAdaptor<String> adaptor =
-                new AsyncKeyedStateBackendAdaptor<>(keyedStateBackend);
-        keyedStateBackend.setCurrentKey("test");
+                new AsyncKeyedStateBackendAdaptor<>(checkpointableKeyedStateBackend);
+        checkpointableKeyedStateBackend.setCurrentKey("test");
         StateDescriptor<Integer> descriptor =
                 new ValueStateDescriptor<>("testState", BasicTypeInfo.INT_TYPE_INFO);
 
@@ -100,10 +100,10 @@ public class AsyncKeyedStateBackendAdaptorTest {
 
     @Test
     public void testListStateAdaptor() throws Exception {
-        CheckpointableKeyedStateBackend<String> keyedStateBackend = createBackend();
+        CheckpointableKeyedStateBackend<String> checkpointableKeyedStateBackend = createBackend();
         AsyncKeyedStateBackendAdaptor<String> adaptor =
-                new AsyncKeyedStateBackendAdaptor<>(keyedStateBackend);
-        keyedStateBackend.setCurrentKey("test");
+                new AsyncKeyedStateBackendAdaptor<>(checkpointableKeyedStateBackend);
+        checkpointableKeyedStateBackend.setCurrentKey("test");
         StateDescriptor<Integer> descriptor =
                 new ListStateDescriptor<>("testState", BasicTypeInfo.INT_TYPE_INFO);
 

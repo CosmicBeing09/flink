@@ -536,9 +536,9 @@ class KeyedProcessOperatorTest {
                 throws Exception {
             final TimerService timerService = ctx.timerService();
             final ValueState<Integer> state = getRuntimeContext().getState(this.state);
-            if (state.value() == null) {
+            if (state.getCurrentValue() == null) {
                 out.collect("INPUT:" + value);
-                state.update(value);
+                state.setCurrentValue(value);
                 if (expectedTimeDomain.equals(TimeDomain.EVENT_TIME)) {
                     timerService.registerEventTimeTimer(timerService.currentWatermark() + 5);
                 } else {
@@ -560,7 +560,7 @@ class KeyedProcessOperatorTest {
         public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out)
                 throws Exception {
             assertThat(ctx.timeDomain()).isEqualTo(expectedTimeDomain);
-            out.collect("STATE:" + getRuntimeContext().getState(state).value());
+            out.collect("STATE:" + getRuntimeContext().getState(state).getCurrentValue());
         }
     }
 

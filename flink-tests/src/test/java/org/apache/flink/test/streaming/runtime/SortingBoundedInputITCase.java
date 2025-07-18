@@ -288,12 +288,12 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
                                         } else {
                                             Long previousTimestamp =
                                                     Optional.ofNullable(
-                                                                    previousTimestampState.value())
+                                                                    previousTimestampState.getCurrentValue())
                                                             .orElse(0L);
                                             assertThat(
                                                     elementTimestamp,
                                                     greaterThanOrEqualTo(previousTimestamp));
-                                            previousTimestampState.update(elementTimestamp);
+                                            previousTimestampState.setCurrentValue(elementTimestamp);
 
                                             Integer currentCount =
                                                     Optional.ofNullable(countState.get(nextTen))
@@ -451,12 +451,12 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
                                         } else {
                                             Long previousTimestamp =
                                                     Optional.ofNullable(
-                                                                    previousTimestampState.value())
+                                                                    previousTimestampState.getCurrentValue())
                                                             .orElse(0L);
                                             assertThat(
                                                     elementTimestamp,
                                                     greaterThanOrEqualTo(previousTimestamp));
-                                            previousTimestampState.update(elementTimestamp);
+                                            previousTimestampState.setCurrentValue(elementTimestamp);
 
                                             Integer currentCount =
                                                     Optional.ofNullable(countState.get(nextTen))

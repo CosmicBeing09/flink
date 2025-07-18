@@ -78,11 +78,11 @@ public class ArchivedExecutionGraphTest {
         // Setup
         // -------------------------------------------------------------------------------------------------------------
 
-        JobVertexID v1ID = new JobVertexID();
-        JobVertexID v2ID = new JobVertexID();
+        JobVertexID sourceVertexId = new JobVertexID();
+        JobVertexID transformVertexId = new JobVertexID();
 
-        JobVertex v1 = new JobVertex("v1", v1ID);
-        JobVertex v2 = new JobVertex("v2", v2ID);
+        JobVertex v1 = new JobVertex("v1", sourceVertexId);
+        JobVertex v2 = new JobVertex("v2", transformVertexId);
 
         v1.setParallelism(1);
         v2.setParallelism(2);

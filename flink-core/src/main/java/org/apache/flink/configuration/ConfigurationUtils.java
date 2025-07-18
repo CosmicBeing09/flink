@@ -246,7 +246,7 @@ public class ConfigurationUtils {
             Configuration configuration, boolean flattenYaml) {
         if (!flattenYaml) {
             return YamlParserUtils.convertAndDumpYamlFromFlatMap(
-                    Collections.unmodifiableMap(configuration.confData));
+                    Collections.unmodifiableMap(configuration.configurationEntries));
         } else {
             Map<String, String> fileWritableMap = configuration.toFileWritableMap();
             return fileWritableMap.entrySet().stream()
@@ -613,7 +613,7 @@ public class ConfigurationUtils {
      * </pre>
      */
     public static boolean canBePrefixMap(ConfigOption<?> configOption) {
-        return configOption.getClazz() == Map.class && !configOption.isList();
+        return configOption.getValueTypeClass() == Map.class && !configOption.isList();
     }
 
     /** Filter condition for prefix map keys. */

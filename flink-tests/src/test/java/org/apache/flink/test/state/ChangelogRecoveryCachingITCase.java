@@ -151,7 +151,7 @@ public class ChangelogRecoveryCachingITCase extends TestLogger {
                             public Long map(Long value) throws Exception {
                                 getRuntimeContext()
                                         .getState(new ValueStateDescriptor<>("state", Long.class))
-                                        .update(value);
+                                        .setCurrentValue(value);
                                 return value;
                             }
                         })

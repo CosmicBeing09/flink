@@ -123,25 +123,25 @@ public class StatefulStreamingJob {
                             .setNum(555)
                             .build();
 
-            Address existingAddress = avroState.value();
+            Address existingAddress = avroState.getCurrentValue();
             if (existingAddress != null) {
                 if (!Objects.equals(existingAddress.getAppno(), EXPECTED_DEFAULT_VALUE)) {
                     // this is expected to fail the job, if found in the output files.
                     System.out.println("Wrong Default Value.");
                 }
             }
-            avroState.update(newAddress);
+            avroState.setCurrentValue(newAddress);
 
             return "";
         }
 
         private static <T> void touchState(ValueState<T> state, Supplier<T> elements)
                 throws IOException {
-            T elem = state.value();
+            T elem = state.getCurrentValue();
             if (elem == null) {
                 elem = elements.get();
             }
-            state.update(elem);
+            state.setCurrentValue(elem);
         }
     }
 

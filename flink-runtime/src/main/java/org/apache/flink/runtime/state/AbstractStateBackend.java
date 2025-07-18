@@ -37,7 +37,7 @@ public abstract class AbstractStateBackend implements StateBackend, java.io.Seri
 
     public static StreamCompressionDecorator getCompressionDecorator(
             ExecutionConfig executionConfig) {
-        if (executionConfig != null && executionConfig.isUseSnapshotCompression()) {
+        if (executionConfig != null && executionConfig.isSnapshotCompressionEnabled()) {
             return SnappyStreamCompressionDecorator.INSTANCE;
         } else {
             return UncompressedStreamCompressionDecorator.INSTANCE;

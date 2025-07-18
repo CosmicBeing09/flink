@@ -71,7 +71,7 @@ public class StreamArrowPythonRowTimeBoundedRowsOperator<K>
         // triggering timestamp for trigger calculation
         long triggeringTs = input.getLong(inputTimeFieldIndex);
 
-        Long lastTriggeringTs = lastTriggeringTsState.value();
+        Long lastTriggeringTs = lastTriggeringTsState.getCurrentValue();
         if (lastTriggeringTs == null) {
             lastTriggeringTs = 0L;
         }

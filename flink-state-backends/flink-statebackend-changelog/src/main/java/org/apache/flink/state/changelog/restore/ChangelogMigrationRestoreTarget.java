@@ -278,13 +278,13 @@ public class ChangelogMigrationRestoreTarget<K> implements ChangelogRestoreTarge
 
             @Nonnull
             @Override
-            public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+            public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
                     long checkpointId,
                     long timestamp,
                     @Nonnull CheckpointStreamFactory streamFactory,
                     @Nonnull CheckpointOptions checkpointOptions)
                     throws Exception {
-                return keyedStateBackend.snapshot(
+                return keyedStateBackend.createStateSnapshot(
                         checkpointId, timestamp, streamFactory, checkpointOptions);
             }
 

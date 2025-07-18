@@ -103,13 +103,13 @@ public class TestSharedBuffer<V> extends SharedBuffer<V> {
                 private T value;
 
                 @Override
-                public T value() throws IOException {
+                public T getCurrentValue() throws IOException {
                     stateReads++;
                     return value;
                 }
 
                 @Override
-                public void update(T value) throws IOException {
+                public void setCurrentValue(T value) throws IOException {
                     stateWrites++;
                     this.value = value;
                 }

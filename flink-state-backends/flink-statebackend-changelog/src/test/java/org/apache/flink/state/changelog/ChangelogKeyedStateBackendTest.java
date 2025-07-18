@@ -74,19 +74,19 @@ public class ChangelogKeyedStateBackendTest {
 
     @Test
     public void testCheckpointConfirmation() throws Exception {
-        MockKeyedStateBackend<Integer> mock = createMock();
-        ChangelogKeyedStateBackend<Integer> changelog = createChangelog(mock);
+        MockKeyedStateBackend<Integer> mockBackend = createMock();
+        ChangelogKeyedStateBackend<Integer> changelogBackend = createChangelog(mockBackend);
         try {
-            changelog.handleMaterializationResult(
+            changelogBackend.handleMaterializationResult(
                     SnapshotResult.empty(), materializationId, SequenceNumber.of(Long.MAX_VALUE));
-            checkpoint(changelog, checkpointId).get().discardState();
+            checkpoint(changelogBackend, checkpointId).get().discardState();
 
-            changelog.notifyCheckpointComplete(checkpointId);
-            assertEquals(materializationId, mock.getLastCompletedCheckpointID());
+            changelogBackend.notifyCheckpointComplete(checkpointId);
+            assertEquals(materializationId, mockBackend.getLastCompletedCheckpointID());
 
         } finally {
-            changelog.close();
-            changelog.dispose();
+            changelogBackend.close();
+            changelogBackend.dispose();
         }
     }
 
@@ -174,7 +174,7 @@ public class ChangelogKeyedStateBackendTest {
 
     private RunnableFuture<SnapshotResult<KeyedStateHandle>> checkpoint(
             ChangelogKeyedStateBackend<Integer> backend, long checkpointId) throws Exception {
-        return backend.snapshot(
+        return backend.createStateSnapshot(
                 checkpointId,
                 0L,
                 new MemCheckpointStreamFactory(1000),

@@ -221,12 +221,12 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     }
 
     @Internal
-    public boolean isPeriodicMaterializeEnabled() {
+    public boolean isPeriodicMaterializationEnabled() {
         return configuration.get(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED);
     }
 
     @Internal
-    public void enablePeriodicMaterialize(boolean enabled) {
+    public void setPeriodicMaterializationEnabled(boolean enabled) {
         configuration.set(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED, enabled);
     }
 
@@ -468,11 +468,11 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
         configuration.set(PipelineOptions.GLOBAL_JOB_PARAMETERS, parameters);
     }
 
-    public boolean isUseSnapshotCompression() {
+    public boolean isSnapshotCompressionEnabled() {
         return configuration.get(ExecutionOptions.SNAPSHOT_COMPRESSION);
     }
 
-    public void setUseSnapshotCompression(boolean useSnapshotCompression) {
+    public void setSnapshotCompressionEnabled(boolean useSnapshotCompression) {
         configuration.set(ExecutionOptions.SNAPSHOT_COMPRESSION, useSnapshotCompression);
     }
 
@@ -503,12 +503,12 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     }
 
     @Experimental
-    public long getAsyncStateBufferTimeout() {
+    public long getAsyncStateBufferTimeoutMillis() {
         return configuration.get(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT);
     }
 
     @Experimental
-    public ExecutionConfig setAsyncStateBufferTimeout(long timeout) {
+    public ExecutionConfig setAsyncStateBufferTimeoutMillis(long timeout) {
         configuration.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, timeout);
         return this;
     }
@@ -632,7 +632,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
 
         configuration
                 .getOptional(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED)
-                .ifPresent(this::enablePeriodicMaterialize);
+                .ifPresent(this::setPeriodicMaterializationEnabled);
         configuration
                 .getOptional(StateChangelogOptions.PERIODIC_MATERIALIZATION_INTERVAL)
                 .ifPresent(this::setPeriodicMaterializeIntervalMillis);
@@ -653,7 +653,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
                 .ifPresent(timeout -> setTaskCancellationTimeout(timeout.toMillis()));
         configuration
                 .getOptional(ExecutionOptions.SNAPSHOT_COMPRESSION)
-                .ifPresent(this::setUseSnapshotCompression);
+                .ifPresent(this::setSnapshotCompressionEnabled);
         configuration
                 .getOptional(RestartStrategyOptions.RESTART_STRATEGY)
                 .ifPresent(s -> this.setRestartStrategy(configuration));

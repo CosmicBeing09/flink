@@ -187,7 +187,7 @@ public class RowTimeUnboundedPrecedingOverFunctionV2<K>
             return;
         }
 
-        RowData lastAccumulator = accState.value();
+        RowData lastAccumulator = accState.getCurrentValue();
         if (lastAccumulator == null) {
             lastAccumulator = function.createAccumulators();
         }
@@ -196,7 +196,7 @@ public class RowTimeUnboundedPrecedingOverFunctionV2<K>
         processElementsWithSameTimestamp(timestamp, out);
 
         lastAccumulator = function.getAccumulators();
-        accState.update(lastAccumulator);
+        accState.setCurrentValue(lastAccumulator);
 
         registerProcessingCleanupTimer(ctx, ctx.timerService().currentProcessingTime());
     }

@@ -35,31 +35,32 @@ class ValueStateDescriptorTest {
 
     @Test
     void testHashCodeEquals() throws Exception {
-        final String name = "testName";
+        final String descriptorName = "testName";
 
-        ValueStateDescriptor<String> original = new ValueStateDescriptor<>(name, String.class);
-        ValueStateDescriptor<String> same = new ValueStateDescriptor<>(name, String.class);
+        ValueStateDescriptor<String> originalDescriptor = new ValueStateDescriptor<>(descriptorName, String.class);
+        ValueStateDescriptor<String> same = new ValueStateDescriptor<>(descriptorName, String.class);
         ValueStateDescriptor<String> sameBySerializer =
-                new ValueStateDescriptor<>(name, StringSerializer.INSTANCE);
+                new ValueStateDescriptor<>(descriptorName, StringSerializer.INSTANCE);
 
         // test that hashCode() works on state descriptors with initialized and uninitialized
         // serializers
-        assertThat(same).hasSameHashCodeAs(original);
-        assertThat(sameBySerializer).hasSameHashCodeAs(original);
+        assertThat(same).hasSameHashCodeAs(originalDescriptor);
+        assertThat(sameBySerializer).hasSameHashCodeAs(originalDescriptor);
 
-        assertThat(same).isEqualTo(original);
-        assertThat(sameBySerializer).isEqualTo(original);
+        assertThat(same).isEqualTo(originalDescriptor);
+        assertThat(sameBySerializer).isEqualTo(originalDescriptor);
 
         // equality with a clone
-        ValueStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(original);
-        assertThat(clone).isEqualTo(original);
+        ValueStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(
+                originalDescriptor);
+        assertThat(clone).isEqualTo(originalDescriptor);
 
         // equality with an initialized
         clone.initializeSerializerUnlessSet(new ExecutionConfig());
-        assertThat(clone).isEqualTo(original);
+        assertThat(clone).isEqualTo(originalDescriptor);
 
-        original.initializeSerializerUnlessSet(new ExecutionConfig());
-        assertThat(same).isEqualTo(original);
+        originalDescriptor.initializeSerializerUnlessSet(new ExecutionConfig());
+        assertThat(same).isEqualTo(originalDescriptor);
     }
 
     @Test

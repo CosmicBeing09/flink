@@ -789,7 +789,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(window.getEnd());
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -838,7 +838,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(window.getEnd());
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.FIRE;
                             }
                         })
@@ -906,7 +906,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(window.getEnd());
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.FIRE_AND_PURGE;
                             }
                         })
@@ -975,7 +975,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.PURGE;
                             }
                         })
@@ -1039,7 +1039,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // we don't want to fire the cleanup timer
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1106,7 +1106,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1194,7 +1194,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1284,7 +1284,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 1L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1786,7 +1786,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1802,7 +1802,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.OnMergeContext) invocation.getArguments()[1];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -1995,7 +1995,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -2011,7 +2011,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.OnMergeContext) invocation.getArguments()[1];
                                 // don't interfere with cleanup timers
                                 timeAdaptor.registerTimer(context, 0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -2442,7 +2442,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // very far in the future so our watermark does not trigger it
                                 timeAdaptor.registerTimer(context, 1000L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -2523,7 +2523,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // very far in the future so our watermark does not trigger it
                                 timeAdaptor.registerTimer(context, 1000L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.PURGE;
                             }
                         })
@@ -2607,7 +2607,7 @@ abstract class WindowOperatorContractTest {
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 // very far in the future so our watermark does not trigger it
                                 timeAdaptor.registerTimer(context, 1000);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.PURGE;
                             }
                         })
@@ -2792,7 +2792,7 @@ abstract class WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(0L);
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.CONTINUE;
                             }
                         })
@@ -2925,7 +2925,7 @@ abstract class WindowOperatorContractTest {
                                                 invocationOnMock.getArguments()[2];
                                 context.windowState()
                                         .getState(valueStateDescriptor)
-                                        .update("hello");
+                                        .setCurrentValue("hello");
                                 return null;
                             }
                         })
@@ -2995,7 +2995,7 @@ abstract class WindowOperatorContractTest {
                                                 invocationOnMock.getArguments()[2];
                                 context.windowState()
                                         .getState(valueStateDescriptor)
-                                        .update("hello");
+                                        .setCurrentValue("hello");
                                 return null;
                             }
                         })

@@ -93,7 +93,7 @@ public class TemporalProcessTimeJoinOperator extends BaseTwoInputStreamOperatorW
     @Override
     public void processElement1(StreamRecord<RowData> element) throws Exception {
         RowData leftSideRow = element.getValue();
-        RowData rightSideRow = rightState.value();
+        RowData rightSideRow = rightState.getCurrentValue();
 
         if (rightSideRow == null) {
             if (isLeftOuterJoin) {
@@ -123,7 +123,7 @@ public class TemporalProcessTimeJoinOperator extends BaseTwoInputStreamOperatorW
     @Override
     public void processElement2(StreamRecord<RowData> element) throws Exception {
         if (RowDataUtil.isAccumulateMsg(element.getValue())) {
-            rightState.update(element.getValue());
+            rightState.setCurrentValue(element.getValue());
             registerProcessingCleanupTimer();
         } else {
             rightState.clear();

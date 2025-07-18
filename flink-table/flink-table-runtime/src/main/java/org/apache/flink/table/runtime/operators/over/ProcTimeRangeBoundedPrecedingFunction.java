@@ -139,12 +139,12 @@ public class ProcTimeRangeBoundedPrecedingFunction<K>
         long minCleanupTimestamp = timestamp + precedingTimeBoundary + 1;
         long maxCleanupTimestamp = timestamp + (long) (precedingTimeBoundary * 1.5) + 1;
         // update timestamp and register timer if needed
-        Long curCleanupTimestamp = cleanupTsState.value();
+        Long curCleanupTimestamp = cleanupTsState.getCurrentValue();
         if (curCleanupTimestamp == null || curCleanupTimestamp < minCleanupTimestamp) {
             // we don't delete existing timer since it may delete timer for data processing
             // TODO Use timer with namespace to distinguish timers
             ctx.timerService().registerProcessingTimeTimer(maxCleanupTimestamp);
-            cleanupTsState.update(maxCleanupTimestamp);
+            cleanupTsState.setCurrentValue(maxCleanupTimestamp);
         }
     }
 
@@ -154,7 +154,7 @@ public class ProcTimeRangeBoundedPrecedingFunction<K>
             KeyedProcessFunction<K, RowData, RowData>.OnTimerContext ctx,
             Collector<RowData> out)
             throws Exception {
-        Long cleanupTimestamp = cleanupTsState.value();
+        Long cleanupTimestamp = cleanupTsState.getCurrentValue();
         // if cleanupTsState has not been updated then it is safe to cleanup states
         if (cleanupTimestamp != null && cleanupTimestamp <= timestamp) {
             inputState.clear();
@@ -182,7 +182,7 @@ public class ProcTimeRangeBoundedPrecedingFunction<K>
         }
 
         // initialize the accumulators
-        RowData accumulators = accState.value();
+        RowData accumulators = accState.getCurrentValue();
 
         if (null == accumulators) {
             accumulators = function.createAccumulators();
@@ -257,7 +257,7 @@ public class ProcTimeRangeBoundedPrecedingFunction<K>
 
         // update the value of accumulators for future incremental computation
         accumulators = function.getAccumulators();
-        accState.update(accumulators);
+        accState.setCurrentValue(accumulators);
     }
 
     @Override

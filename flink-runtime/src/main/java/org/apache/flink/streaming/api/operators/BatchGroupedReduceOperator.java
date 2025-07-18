@@ -64,7 +64,7 @@ public class BatchGroupedReduceOperator<IN, KEY>
     @Override
     public void processElement(StreamRecord<IN> element) throws Exception {
         IN value = element.getValue();
-        IN currentValue = values.value();
+        IN currentValue = values.getCurrentValue();
 
         if (currentValue == null) {
             // register a timer for emitting the result at the end when this is the
@@ -74,12 +74,12 @@ public class BatchGroupedReduceOperator<IN, KEY>
             // otherwise, reduce things
             value = userFunction.reduce(currentValue, value);
         }
-        values.update(value);
+        values.setCurrentValue(value);
     }
 
     @Override
     public void onEventTime(InternalTimer<KEY, VoidNamespace> timer) throws Exception {
-        IN currentValue = values.value();
+        IN currentValue = values.getCurrentValue();
         if (currentValue != null) {
             output.collect(new StreamRecord<>(currentValue, Long.MAX_VALUE));
         }

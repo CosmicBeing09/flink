@@ -73,7 +73,7 @@ public class ProcessingTimeoutTrigger<T, W extends Window> extends Trigger<T, W>
 
         ValueState<Long> timeoutState = ctx.getPartitionedState(this.timeoutStateDesc);
         long nextFireTimestamp = ctx.getCurrentProcessingTime() + this.interval;
-        Long timeoutTimestamp = timeoutState.value();
+        Long timeoutTimestamp = timeoutState.getCurrentValue();
         if (timeoutTimestamp != null && resetTimerOnNewRecord) {
             ctx.deleteProcessingTimeTimer(timeoutTimestamp);
             timeoutState.clear();
@@ -81,7 +81,7 @@ public class ProcessingTimeoutTrigger<T, W extends Window> extends Trigger<T, W>
         }
 
         if (timeoutTimestamp == null) {
-            timeoutState.update(nextFireTimestamp);
+            timeoutState.setCurrentValue(nextFireTimestamp);
             ctx.registerProcessingTimeTimer(nextFireTimestamp);
         }
 
@@ -111,7 +111,7 @@ public class ProcessingTimeoutTrigger<T, W extends Window> extends Trigger<T, W>
     @Override
     public void clear(W window, TriggerContext ctx) throws Exception {
         ValueState<Long> timeoutTimestampState = ctx.getPartitionedState(this.timeoutStateDesc);
-        Long timeoutTimestamp = timeoutTimestampState.value();
+        Long timeoutTimestamp = timeoutTimestampState.getCurrentValue();
         if (timeoutTimestamp != null) {
             ctx.deleteProcessingTimeTimer(timeoutTimestamp);
             timeoutTimestampState.clear();

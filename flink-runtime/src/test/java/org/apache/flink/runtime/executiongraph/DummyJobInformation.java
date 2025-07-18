@@ -33,11 +33,11 @@ public class DummyJobInformation extends JobInformation {
 
     private static final long serialVersionUID = 6611358237464645058L;
 
-    public DummyJobInformation(JobID jobId, String jobName) throws IOException {
+    public DummyJobInformation(JobID executionJobId, String jobDisplayName) throws IOException {
         super(
-                jobId,
+                executionJobId,
                 JobType.STREAMING,
-                jobName,
+                jobDisplayName,
                 new SerializedValue<>(new ExecutionConfig()),
                 new Configuration(),
                 Collections.emptyList(),

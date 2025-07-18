@@ -301,11 +301,11 @@ public class StreamOperatorSnapshotRestoreTest extends TestLogger {
             if (verifyRestore) {
                 // check restored managed keyed state
                 long exp = element.getValue() + 1;
-                long act = keyedState.value();
+                long act = keyedState.getCurrentValue();
                 Assert.assertEquals(exp, act);
             } else {
                 // write managed keyed state that goes into snapshot
-                keyedState.update(element.getValue() + 1);
+                keyedState.setCurrentValue(element.getValue() + 1);
                 // write managed operator state that goes into snapshot
                 opState.add(element.getValue());
             }

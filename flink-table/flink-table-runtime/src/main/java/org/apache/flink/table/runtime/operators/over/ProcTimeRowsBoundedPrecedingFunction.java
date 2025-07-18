@@ -134,7 +134,7 @@ public class ProcTimeRowsBoundedPrecedingFunction<K>
         registerProcessingCleanupTimer(ctx, currentTime);
 
         // initialize state for the processed element
-        RowData accumulators = accState.value();
+        RowData accumulators = accState.getCurrentValue();
         if (accumulators == null) {
             accumulators = function.createAccumulators();
         }
@@ -142,13 +142,13 @@ public class ProcTimeRowsBoundedPrecedingFunction<K>
         function.setAccumulators(accumulators);
 
         // get smallest timestamp
-        Long smallestTs = smallestTsState.value();
+        Long smallestTs = smallestTsState.getCurrentValue();
         if (smallestTs == null) {
             smallestTs = currentTime;
-            smallestTsState.update(smallestTs);
+            smallestTsState.setCurrentValue(smallestTs);
         }
         // get previous counter value
-        Long counter = counterState.value();
+        Long counter = counterState.getCurrentValue();
         if (counter == null) {
             counter = 0L;
         }
@@ -184,12 +184,12 @@ public class ProcTimeRowsBoundedPrecedingFunction<K>
                         newSmallestTs = currentTs;
                     }
                 }
-                smallestTsState.update(newSmallestTs);
+                smallestTsState.setCurrentValue(newSmallestTs);
             }
         } // we update the counter only while buffer is getting filled
         else {
             counter += 1;
-            counterState.update(counter);
+            counterState.setCurrentValue(counter);
         }
 
         // update map state, counter and timestamp
@@ -207,7 +207,7 @@ public class ProcTimeRowsBoundedPrecedingFunction<K>
         function.accumulate(input);
         // update the value of accumulators for future incremental computation
         accumulators = function.getAccumulators();
-        accState.update(accumulators);
+        accState.setCurrentValue(accumulators);
 
         // prepare output row
         RowData aggValue = function.getValue();

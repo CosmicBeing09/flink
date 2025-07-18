@@ -275,12 +275,12 @@ public class AutoRescalingITCase extends TestLogger {
 
             SubtaskIndexSource.SOURCE_LATCH.reset();
 
-            JobResourceRequirements.Builder builder = JobResourceRequirements.newBuilder();
+            JobResourceRequirements.Builder resourceRequirementsBuilder = JobResourceRequirements.newBuilder();
             for (JobVertex vertex : jobGraph.getVertices()) {
-                builder.setParallelismForJobVertex(vertex.getID(), parallelism2, parallelism2);
+                resourceRequirementsBuilder.setParallelismForJobVertex(vertex.getID(), parallelism2, parallelism2);
             }
 
-            restClusterClient.updateJobResourceRequirements(jobID, builder.build()).join();
+            restClusterClient.updateJobResourceRequirements(jobID, resourceRequirementsBuilder.build()).join();
 
             waitForRunningTasks(restClusterClient, jobID, 2 * parallelism2);
             waitForAvailableSlots(restClusterClient, totalSlots - parallelism2);
@@ -585,23 +585,23 @@ public class AutoRescalingITCase extends TestLogger {
 
         StateSourceBase.workStartedLatch = new CountDownLatch(parallelism);
 
-        SourceFunction<Integer> src;
+        SourceFunction<Integer> sourceFunction;
 
         switch (checkpointMethod) {
             case CHECKPOINTED_FUNCTION:
-                src = new PartitionedStateSource(false);
+                sourceFunction = new PartitionedStateSource(false);
                 break;
             case CHECKPOINTED_FUNCTION_BROADCAST:
-                src = new PartitionedStateSource(true);
+                sourceFunction = new PartitionedStateSource(true);
                 break;
             case NON_PARTITIONED:
-                src = new NonPartitionedStateSource();
+                sourceFunction = new NonPartitionedStateSource();
                 break;
             default:
                 throw new IllegalArgumentException(checkpointMethod.name());
         }
 
-        DataStream<Integer> input = env.addSource(src);
+        DataStream<Integer> input = env.addSource(sourceFunction);
 
         input.sinkTo(new DiscardingSink<>());
 
@@ -623,7 +623,7 @@ public class AutoRescalingITCase extends TestLogger {
 
         configureCheckpointing(env.getCheckpointConfig());
         RestartStrategyUtils.configureNoRestartStrategy(env);
-        env.getConfig().setUseSnapshotCompression(true);
+        env.getConfig().setSnapshotCompressionEnabled(true);
 
         DataStream<Integer> input =
                 env.addSource(new SubtaskIndexSource(numberKeys, numberElements, parallelism))
@@ -805,11 +805,11 @@ public class AutoRescalingITCase extends TestLogger {
         public void flatMap(Integer value, Collector<Tuple2<Integer, Integer>> out)
                 throws Exception {
 
-            int count = counter.value() + 1;
-            counter.update(count);
+            int count = counter.getCurrentValue() + 1;
+            counter.setCurrentValue(count);
 
-            int s = sum.value() + value;
-            sum.update(s);
+            int s = sum.getCurrentValue() + value;
+            sum.setCurrentValue(s);
 
             if (count % numberElements == 0) {
                 out.collect(

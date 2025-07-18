@@ -76,7 +76,7 @@ public abstract class AbstractStreamArrowPythonBoundedRangeOperator<K>
     @Override
     public void onEventTime(InternalTimer<K, VoidNamespace> timer) throws Exception {
         long timestamp = timer.getTimestamp();
-        Long cleanupTimestamp = cleanupTsState.value();
+        Long cleanupTimestamp = cleanupTsState.getCurrentValue();
         // if cleanupTsState has not been updated then it is safe to cleanup states
         if (cleanupTimestamp != null && cleanupTimestamp <= timestamp) {
             inputState.clear();
@@ -87,13 +87,13 @@ public abstract class AbstractStreamArrowPythonBoundedRangeOperator<K>
         // gets all window data from state for the calculation
         List<RowData> inputs = inputState.get(timestamp);
         triggerWindowProcess(timestamp, inputs);
-        lastTriggeringTsState.update(timestamp);
+        lastTriggeringTsState.setCurrentValue(timestamp);
     }
 
     @Override
     public void onProcessingTime(InternalTimer<K, VoidNamespace> timer) throws Exception {
         long timestamp = timer.getTimestamp();
-        Long cleanupTimestamp = cleanupTsState.value();
+        Long cleanupTimestamp = cleanupTsState.getCurrentValue();
         // if cleanupTsState has not been updated then it is safe to cleanup states
         if (cleanupTimestamp != null && cleanupTimestamp <= timestamp) {
             inputState.clear();
@@ -133,7 +133,7 @@ public abstract class AbstractStreamArrowPythonBoundedRangeOperator<K>
         long minCleanupTimestamp = timestamp + lowerBoundary + 1;
         long maxCleanupTimestamp = timestamp + (long) (lowerBoundary * 1.5) + 1;
         // update timestamp and register timer if needed
-        Long curCleanupTimestamp = cleanupTsState.value();
+        Long curCleanupTimestamp = cleanupTsState.getCurrentValue();
         if (curCleanupTimestamp == null || curCleanupTimestamp < minCleanupTimestamp) {
             // we don't delete existing timer since it may delete timer for data processing
             if (domain == TimeDomain.EVENT_TIME) {
@@ -141,7 +141,7 @@ public abstract class AbstractStreamArrowPythonBoundedRangeOperator<K>
             } else {
                 timerService.registerProcessingTimeTimer(maxCleanupTimestamp);
             }
-            cleanupTsState.update(maxCleanupTimestamp);
+            cleanupTsState.setCurrentValue(maxCleanupTimestamp);
         }
     }
 

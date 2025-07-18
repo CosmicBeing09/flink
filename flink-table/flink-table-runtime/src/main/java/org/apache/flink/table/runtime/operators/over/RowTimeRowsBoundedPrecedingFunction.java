@@ -161,7 +161,7 @@ public class RowTimeRowsBoundedPrecedingFunction<K>
         // triggering timestamp for trigger calculation
         long triggeringTs = input.getLong(rowTimeIdx);
 
-        Long lastTriggeringTs = lastTriggeringTsState.value();
+        Long lastTriggeringTs = lastTriggeringTsState.getCurrentValue();
         if (lastTriggeringTs == null) {
             lastTriggeringTs = 0L;
         }
@@ -194,7 +194,7 @@ public class RowTimeRowsBoundedPrecedingFunction<K>
             if (stateCleaningEnabled) {
 
                 Iterator<Long> keysIt = inputState.keys().iterator();
-                Long lastProcessedTime = lastTriggeringTsState.value();
+                Long lastProcessedTime = lastTriggeringTsState.getCurrentValue();
                 if (lastProcessedTime == null) {
                     lastProcessedTime = 0L;
                 }
@@ -228,12 +228,12 @@ public class RowTimeRowsBoundedPrecedingFunction<K>
 
         if (null != inputs) {
 
-            Long dataCount = counterState.value();
+            Long dataCount = counterState.getCurrentValue();
             if (dataCount == null) {
                 dataCount = 0L;
             }
 
-            RowData accumulators = accState.value();
+            RowData accumulators = accState.getCurrentValue();
             if (accumulators == null) {
                 accumulators = function.createAccumulators();
             }
@@ -299,13 +299,13 @@ public class RowTimeRowsBoundedPrecedingFunction<K>
                     inputState.put(retractTs, retractList);
                 }
             }
-            counterState.update(dataCount);
+            counterState.setCurrentValue(dataCount);
             // update the value of accumulators for future incremental computation
             accumulators = function.getAccumulators();
-            accState.update(accumulators);
+            accState.setCurrentValue(accumulators);
         }
 
-        lastTriggeringTsState.update(timestamp);
+        lastTriggeringTsState.setCurrentValue(timestamp);
 
         // update cleanup timer
         registerProcessingCleanupTimer(ctx, ctx.timerService().currentProcessingTime());

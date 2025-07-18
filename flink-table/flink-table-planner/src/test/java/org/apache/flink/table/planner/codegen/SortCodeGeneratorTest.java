@@ -455,23 +455,23 @@ class SortCodeGeneratorTest {
     }
 
     private void testInner() throws Exception {
-        List<MemorySegment> segments = new ArrayList<>();
+        List<MemorySegment> memorySegments = new ArrayList<>();
         for (int i = 0; i < 100; i++) {
-            segments.add(MemorySegmentFactory.wrap(new byte[32768]));
+            memorySegments.add(MemorySegmentFactory.wrap(new byte[32768]));
         }
 
-        Tuple2<NormalizedKeyComputer, RecordComparator> tuple2 =
+        Tuple2<NormalizedKeyComputer, RecordComparator> sortComponents =
                 getSortBaseWithNulls(this.getClass().getSimpleName(), inputType, sortSpec);
 
         BinaryRowDataSerializer serializer = new BinaryRowDataSerializer(inputType.getFieldCount());
 
         BinaryInMemorySortBuffer sortBuffer =
                 BinaryInMemorySortBuffer.createBuffer(
-                        tuple2.f0,
+                        sortComponents.f0,
                         (AbstractRowDataSerializer) serializer,
                         serializer,
-                        tuple2.f1,
-                        new ListMemorySegmentPool(segments));
+                        sortComponents.f1,
+                        new ListMemorySegmentPool(memorySegments));
 
         BinaryRowData[] dataArray = getTestData();
 

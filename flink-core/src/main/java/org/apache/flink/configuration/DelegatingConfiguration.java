@@ -103,8 +103,8 @@ public final class DelegatingConfiguration extends Configuration {
     @Override
     public void addAllToProperties(Properties props) {
         // only add keys with our prefix
-        synchronized (backingConfig.confData) {
-            for (Map.Entry<String, Object> entry : backingConfig.confData.entrySet()) {
+        synchronized (backingConfig.configurationEntries) {
+            for (Map.Entry<String, Object> entry : backingConfig.configurationEntries.entrySet()) {
                 if (entry.getKey().startsWith(prefix)) {
                     String keyWithoutPrefix =
                             entry.getKey().substring(prefix.length(), entry.getKey().length());
@@ -272,7 +272,7 @@ public final class DelegatingConfiguration extends Configuration {
         FallbackKey[] deprecated = deprecatedKeys.toArray(new FallbackKey[0]);
         return new ConfigOption<T>(
                 key,
-                option.getClazz(),
+                option.getValueTypeClass(),
                 option.description(),
                 option.defaultValue(),
                 option.isList(),

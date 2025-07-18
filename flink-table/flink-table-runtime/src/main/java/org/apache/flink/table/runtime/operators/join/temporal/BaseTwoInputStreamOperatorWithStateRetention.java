@@ -113,7 +113,7 @@ public abstract class BaseTwoInputStreamOperatorWithStateRetention
         if (stateCleaningEnabled) {
             long currentProcessingTime = timerService.currentProcessingTime();
             Optional<Long> currentCleanupTime =
-                    Optional.ofNullable(latestRegisteredCleanupTimer.value());
+                    Optional.ofNullable(latestRegisteredCleanupTimer.getCurrentValue());
 
             if (!currentCleanupTime.isPresent()
                     || (currentProcessingTime + minRetentionTime) > currentCleanupTime.get()) {
@@ -129,13 +129,13 @@ public abstract class BaseTwoInputStreamOperatorWithStateRetention
 
         long newCleanupTime = currentProcessingTime + maxRetentionTime;
         timerService.registerProcessingTimeTimer(newCleanupTime);
-        latestRegisteredCleanupTimer.update(newCleanupTime);
+        latestRegisteredCleanupTimer.setCurrentValue(newCleanupTime);
     }
 
     protected void cleanupLastTimer() throws IOException {
         if (stateCleaningEnabled) {
             Optional<Long> currentCleanupTime =
-                    Optional.ofNullable(latestRegisteredCleanupTimer.value());
+                    Optional.ofNullable(latestRegisteredCleanupTimer.getCurrentValue());
             if (currentCleanupTime.isPresent()) {
                 latestRegisteredCleanupTimer.clear();
                 timerService.deleteProcessingTimeTimer(currentCleanupTime.get());
@@ -149,7 +149,7 @@ public abstract class BaseTwoInputStreamOperatorWithStateRetention
             throws Exception {
         if (stateCleaningEnabled) {
             long timerTime = timer.getTimestamp();
-            Long cleanupTime = latestRegisteredCleanupTimer.value();
+            Long cleanupTime = latestRegisteredCleanupTimer.getCurrentValue();
 
             if (cleanupTime != null && cleanupTime == timerTime) {
                 cleanupState(cleanupTime);

@@ -148,7 +148,7 @@ class KvStateServerTest {
 
             int key = 99812822;
             backend.setCurrentKey(key);
-            state.update(expectedValue);
+            state.setCurrentValue(expectedValue);
 
             // Request
             byte[] serializedKeyAndNamespace =

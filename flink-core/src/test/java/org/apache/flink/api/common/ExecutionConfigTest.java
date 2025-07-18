@@ -145,7 +145,7 @@ public class ExecutionConfigTest {
         assertThat(forceAvroEnabled).isEqualTo(copy1.getSerializerConfig().isForceAvroEnabled());
         assertThat(forceKryoEnabled).isEqualTo(copy1.getSerializerConfig().isForceKryoEnabled());
         assertThat(disableGenericTypes)
-                .isEqualTo(copy1.getSerializerConfig().hasGenericTypesDisabled());
+                .isEqualTo(copy1.getSerializerConfig().isGenericTypesDisabled());
         assertThat(objectReuseEnabled).isEqualTo(copy1.isObjectReuseEnabled());
         assertThat(parallelism).isEqualTo(copy1.getParallelism());
     }
@@ -299,7 +299,7 @@ public class ExecutionConfigTest {
         LinkedHashMap<Class<?>, Class<? extends Serializer>> serialiers = new LinkedHashMap<>();
         serialiers.put(ExecutionConfigTest.class, TestSerializer1.class);
         serialiers.put(TestSerializer1.class, TestSerializer2.class);
-        assertThat(config.getSerializerConfig().getDefaultKryoSerializerClasses())
+        assertThat(config.getSerializerConfig().getDefaultKryoSerializers())
                 .isEqualTo(serialiers);
     }
 
