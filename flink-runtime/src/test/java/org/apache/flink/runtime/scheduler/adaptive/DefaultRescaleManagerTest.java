@@ -82,13 +82,13 @@ class DefaultRescaleManagerTest {
     }
 
     @Test
-    void triggerWithoutChangeEventNoopInSoftRescalingPhase() {
+    void triggerWithoutChangeEventNoopInSoftRescalePhase() {
         triggerWithoutChangeEventNoop(
                 TestingRescaleManagerContext::createTestInstanceInSoftRescalePhase);
     }
 
     @Test
-    void triggerWithoutChangeEventNoopInHardRescalingPhase() {
+    void triggerWithoutChangeEventNoopInHardRescalePhase() {
         triggerWithoutChangeEventNoop(
                 TestingRescaleManagerContext::createTestInstanceInHardRescalePhase);
     }
@@ -215,7 +215,7 @@ class DefaultRescaleManagerTest {
     }
 
     @Test
-    void testNoResaleInHardRescalePhase() {
+    void testNoRescaleInHardRescalePhase() {
         final TestingRescaleManagerContext noRescalePossibleCtx =
                 TestingRescaleManagerContext.stableContext();
         final DefaultRescaleManager testInstance =
