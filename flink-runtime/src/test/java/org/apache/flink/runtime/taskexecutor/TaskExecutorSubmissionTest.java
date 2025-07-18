@@ -109,11 +109,11 @@ class TaskExecutorSubmissionTest {
      */
     @Test
     void testTaskSubmission() throws Exception {
-        final ExecutionAttemptID eid = createExecutionAttemptId();
+        final ExecutionAttemptID executionAttemptId = createExecutionAttemptId();
 
         final TaskDeploymentDescriptor tdd =
                 createTestTaskDeploymentDescriptor(
-                        "test task", eid, FutureCompletingInvokable.class);
+                        "test task", executionAttemptId, FutureCompletingInvokable.class);
 
         final CompletableFuture<Void> taskRunningFuture = new CompletableFuture<>();
 
@@ -121,7 +121,7 @@ class TaskExecutorSubmissionTest {
                 new TaskSubmissionTestEnvironment.Builder(jobId)
                         .setSlotSize(1)
                         .addTaskManagerActionListener(
-                                eid, ExecutionState.RUNNING, taskRunningFuture)
+                                executionAttemptId, ExecutionState.RUNNING, taskRunningFuture)
                         .build(EXECUTOR_EXTENSION.getExecutor())) {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable taskSlotTable = env.getTaskSlotTable();
@@ -139,12 +139,12 @@ class TaskExecutorSubmissionTest {
      */
     @Test
     void testSubmitTaskFailure() throws Exception {
-        final ExecutionAttemptID eid = createExecutionAttemptId();
+        final ExecutionAttemptID executionAttemptId = createExecutionAttemptId();
 
         final TaskDeploymentDescriptor tdd =
                 createTestTaskDeploymentDescriptor(
                         "test task",
-                        eid,
+                        executionAttemptId,
                         BlockingNoOpInvokable.class,
                         0); // this will make the submission fail because the number of key groups
         // must be >= 1
