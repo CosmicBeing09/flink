@@ -49,7 +49,7 @@ import java.util.Iterator;
  */
 public class HadoopMapredCompatWordCount {
 
-    public static void main(String[] args) throws Exception {
+    public static void run(String[] args) throws Exception {
         if (args.length < 2) {
             System.err.println("Usage: WordCount <input path> <result path>");
             return;
