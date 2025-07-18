@@ -309,11 +309,11 @@ class TieredResultPartitionTest {
         return resultPartition;
     }
 
-    private void verifySubpartitionBytes(long... expectedNumBytes) {
+    private void verifySubpartitionBytes(long... requiredNumBytes) {
         IOMetrics ioMetrics = taskIOMetricGroup.createSnapshot();
         assertThat(ioMetrics.getResultPartitionBytes()).hasSize(1);
         ResultPartitionBytes partitionBytes =
                 ioMetrics.getResultPartitionBytes().values().iterator().next();
-        assertThat(partitionBytes.getSubpartitionBytes()).containsExactly(expectedNumBytes);
+        assertThat(partitionBytes.getSubpartitionBytes()).containsExactly(requiredNumBytes);
     }
 }
