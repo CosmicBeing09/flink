@@ -39,10 +39,10 @@ public interface ComponentMainThreadExecutor extends ScheduledExecutor {
     final class DummyComponentMainThreadExecutor implements ComponentMainThreadExecutor {
 
         /** Customized message for the exception that is thrown on method invocation. */
-        private final String exceptionMessageOnInvocation;
+        private final String invocationErrorMessage;
 
-        public DummyComponentMainThreadExecutor(String exceptionMessageOnInvocation) {
-            this.exceptionMessageOnInvocation = exceptionMessageOnInvocation;
+        public DummyComponentMainThreadExecutor(String invocationErrorMessage) {
+            this.invocationErrorMessage = invocationErrorMessage;
         }
 
         @Override
@@ -78,7 +78,7 @@ public interface ComponentMainThreadExecutor extends ScheduledExecutor {
         }
 
         private UnsupportedOperationException createException() {
-            return new UnsupportedOperationException(exceptionMessageOnInvocation);
+            return new UnsupportedOperationException(invocationErrorMessage);
         }
     }
 }
