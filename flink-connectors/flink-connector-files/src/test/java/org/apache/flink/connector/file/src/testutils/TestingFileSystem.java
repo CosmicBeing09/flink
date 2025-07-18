@@ -192,13 +192,14 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
         final TestFileStatus status =
-                file instanceof TestFileStatus ? (TestFileStatus) file : files.get(file.getPath());
+                fileStatus instanceof TestFileStatus ? (TestFileStatus) fileStatus : files.get(
+                        fileStatus.getPath());
 
         if (status == null) {
-            throw new FileNotFoundException(file.getPath().toString());
+            throw new FileNotFoundException(fileStatus.getPath().toString());
         }
 
         return status.getBlocks();
@@ -245,7 +246,7 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
         throw new UnsupportedOperationException();
     }
 

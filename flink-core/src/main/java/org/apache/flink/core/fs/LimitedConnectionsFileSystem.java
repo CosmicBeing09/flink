@@ -344,9 +344,9 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return originalFs.getFileBlockLocations(file, start, len);
+        return originalFs.getFileBlockLocations(fileStatus, start, len);
     }
 
     @Override
@@ -365,13 +365,13 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
-        return originalFs.rename(src, dst);
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
+        return originalFs.rename(sourcePath, destinationPath);
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return originalFs.exists(f);
+    public boolean exists(Path filePath) throws IOException {
+        return originalFs.exists(filePath);
     }
 
     @Override

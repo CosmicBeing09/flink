@@ -645,7 +645,7 @@ public abstract class FileSystem implements IFileSystem {
     public abstract FileStatus getFileStatus(Path f) throws IOException;
 
     @Override
-    public abstract BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public abstract BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException;
 
     @Override
@@ -673,8 +673,8 @@ public abstract class FileSystem implements IFileSystem {
     public abstract FileStatus[] listStatus(Path f) throws IOException;
 
     @Override
-    public boolean exists(final Path f) throws IOException {
-        return IFileSystem.super.exists(f);
+    public boolean exists(final Path filePath) throws IOException {
+        return IFileSystem.super.exists(filePath);
     }
 
     @Override
@@ -687,7 +687,7 @@ public abstract class FileSystem implements IFileSystem {
     public abstract FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException;
 
     @Override
-    public abstract boolean rename(Path src, Path dst) throws IOException;
+    public abstract boolean rename(Path sourcePath, Path destinationPath) throws IOException;
 
     @Override
     public abstract boolean isDistributedFS();

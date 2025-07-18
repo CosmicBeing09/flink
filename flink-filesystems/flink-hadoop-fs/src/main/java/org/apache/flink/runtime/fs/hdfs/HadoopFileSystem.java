@@ -91,18 +91,18 @@ public class HadoopFileSystem extends FileSystem {
 
     @Override
     public BlockLocation[] getFileBlockLocations(
-            final FileStatus file, final long start, final long len) throws IOException {
-        if (!(file instanceof HadoopFileStatus)) {
+            final FileStatus fileStatus, final long start, final long len) throws IOException {
+        if (!(fileStatus instanceof HadoopFileStatus)) {
             throw new IOException("file is not an instance of DistributedFileStatus");
         }
 
         // shortcut - if the status already has the information, return it.
-        if (file instanceof LocatedHadoopFileStatus) {
-            return ((LocatedHadoopFileStatus) file).getBlockLocations();
+        if (fileStatus instanceof LocatedHadoopFileStatus) {
+            return ((LocatedHadoopFileStatus) fileStatus).getBlockLocations();
         }
 
         final org.apache.hadoop.fs.FileStatus hadoopStatus =
-                ((HadoopFileStatus) file).getInternalFileStatus();
+                ((HadoopFileStatus) fileStatus).getInternalFileStatus();
 
         // second shortcut - if the internal status already has the information, return it.
         // only if that is not the case, to the actual HDFS call (RPC to Name Node)
@@ -164,8 +164,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return this.fs.exists(toHadoopPath(f));
+    public boolean exists(Path filePath) throws IOException {
+        return this.fs.exists(toHadoopPath(filePath));
     }
 
     @Override
@@ -187,8 +187,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
-        return this.fs.rename(toHadoopPath(src), toHadoopPath(dst));
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
+        return this.fs.rename(toHadoopPath(sourcePath), toHadoopPath(destinationPath));
     }
 
     @SuppressWarnings("deprecation")
