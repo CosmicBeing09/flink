@@ -1149,7 +1149,7 @@ public class AdaptiveScheduler
             JobStatus jobStatus, @Nullable Throwable cause) {
         return ArchivedExecutionGraph.createSparseArchivedExecutionGraphWithJobVertices(
                 jobInformation.getJobID(),
-                jobInformation.getName(),
+                jobInformation.getJobName(),
                 jobStatus,
                 jobGraph.getJobType(),
                 cause,
