@@ -21,15 +21,8 @@ package org.apache.flink.streaming.api.environment;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.configuration.ConfigUtils;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.configuration.RestartStrategyOptions;
-import org.apache.flink.configuration.StateBackendOptions;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.JobListener;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAdapter;
@@ -223,7 +216,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     void testGettingEnvironmentWithConfiguration() {
         Configuration configuration = new Configuration();
         configuration.set(CoreOptions.DEFAULT_PARALLELISM, 10);
-        configuration.set(PipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(100));
+        configuration.set(StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(100));
 
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
@@ -236,7 +229,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     void testLocalEnvironmentExplicitParallelism() {
         Configuration configuration = new Configuration();
         configuration.set(CoreOptions.DEFAULT_PARALLELISM, 10);
-        configuration.set(PipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(100));
+        configuration.set(StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(100));
 
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.createLocalEnvironment(2, configuration);

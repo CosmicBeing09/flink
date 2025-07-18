@@ -23,7 +23,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.JarUtils;
@@ -71,7 +71,7 @@ public class RemoteEnvironmentConfigUtils {
     public static void setJarURLsToConfig(final String[] jars, final Configuration configuration) {
         final List<URL> jarURLs = getJarFiles(jars);
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.JARS, jarURLs, URL::toString);
+                configuration, StreamingPipelineOptions.JARS, jarURLs, URL::toString);
     }
 
     private static List<URL> getJarFiles(final String[] jars) {

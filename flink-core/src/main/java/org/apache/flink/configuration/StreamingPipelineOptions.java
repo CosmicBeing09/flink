@@ -34,7 +34,7 @@ import static org.apache.flink.configuration.description.TextElement.text;
 
 /** The {@link ConfigOption configuration options} for job execution. */
 @PublicEvolving
-public class PipelineOptions {
+public class StreamingPipelineOptions {
 
     /** The job name used for printing and logging. */
     public static final ConfigOption<String> NAME =

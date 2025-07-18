@@ -24,7 +24,7 @@ import org.apache.flink.client.deployment.application.FromClasspathEntryClassInf
 import org.apache.flink.client.deployment.application.FromJarEntryClassInformationProvider;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.util.FileUtils;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.function.FunctionUtils;
@@ -271,6 +271,6 @@ public class DefaultPackagedProgramRetriever implements PackagedProgramRetriever
             return Collections.emptyList();
         }
         return ConfigUtils.decodeListFromConfig(
-                configuration, PipelineOptions.CLASSPATHS, URL::new);
+                configuration, StreamingPipelineOptions.CLASSPATHS, URL::new);
     }
 }

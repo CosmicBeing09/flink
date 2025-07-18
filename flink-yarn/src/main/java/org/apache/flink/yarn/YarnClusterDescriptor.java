@@ -40,7 +40,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ResourceManagerOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.SecurityOptions;
@@ -532,7 +532,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
                 || PackagedProgramUtils.isPython(applicationConfiguration.getProgramArguments()))) {
             final List<String> pipelineJars =
                     flinkConfiguration
-                            .getOptional(PipelineOptions.JARS)
+                            .getOptional(StreamingPipelineOptions.JARS)
                             .orElse(Collections.emptyList());
             Preconditions.checkArgument(pipelineJars.size() == 1, "Should only have one jar");
         }
@@ -936,7 +936,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         }
 
         final List<URI> jarUrls =
-                ConfigUtils.decodeListFromConfig(configuration, PipelineOptions.JARS, URI::create);
+                ConfigUtils.decodeListFromConfig(configuration, StreamingPipelineOptions.JARS, URI::create);
         if (jarUrls != null
                 && YarnApplicationClusterEntryPoint.class.getName().equals(yarnClusterEntrypoint)) {
             userJarFiles.addAll(jarUrls.stream().map(Path::new).collect(Collectors.toSet()));

@@ -48,7 +48,7 @@ import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.fs.Path;
@@ -1096,9 +1096,9 @@ class StreamingJobGraphGeneratorTest {
             boolean chainingOfOperatorsWithDifferentMaxParallelismEnabled) throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(
-                PipelineOptions.OPERATOR_CHAINING_CHAIN_OPERATORS_WITH_DIFFERENT_MAX_PARALLELISM,
+                StreamingPipelineOptions.OPERATOR_CHAINING_CHAIN_OPERATORS_WITH_DIFFERENT_MAX_PARALLELISM,
                 chainingOfOperatorsWithDifferentMaxParallelismEnabled);
-        configuration.set(PipelineOptions.MAX_PARALLELISM, 10);
+        configuration.set(StreamingPipelineOptions.MAX_PARALLELISM, 10);
         try (StreamExecutionEnvironment chainEnv =
                 StreamExecutionEnvironment.createLocalEnvironment(1, configuration)) {
             chainEnv.fromData(1)
@@ -1673,8 +1673,8 @@ class StreamingJobGraphGeneratorTest {
     void testCascadingDescription() {
         final Configuration config = new Configuration();
         config.set(
-                PipelineOptions.VERTEX_DESCRIPTION_MODE,
-                PipelineOptions.VertexDescriptionMode.CASCADING);
+                StreamingPipelineOptions.VERTEX_DESCRIPTION_MODE,
+                StreamingPipelineOptions.VertexDescriptionMode.CASCADING);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(config);
         JobGraph job = createJobGraphWithDescription(env, "test source");
@@ -1689,8 +1689,8 @@ class StreamingJobGraphGeneratorTest {
     void testCascadingDescriptionWithChainedSource() {
         final Configuration config = new Configuration();
         config.set(
-                PipelineOptions.VERTEX_DESCRIPTION_MODE,
-                PipelineOptions.VertexDescriptionMode.CASCADING);
+                StreamingPipelineOptions.VERTEX_DESCRIPTION_MODE,
+                StreamingPipelineOptions.VertexDescriptionMode.CASCADING);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(config);
         JobGraph job = createJobGraphWithDescription(env, "test source 1", "test source 2");
@@ -1715,7 +1715,7 @@ class StreamingJobGraphGeneratorTest {
     @Test
     void testNamingWithIndex() {
         Configuration config = new Configuration();
-        config.set(PipelineOptions.VERTEX_NAME_INCLUDE_INDEX_PREFIX, true);
+        config.set(StreamingPipelineOptions.VERTEX_NAME_INCLUDE_INDEX_PREFIX, true);
         JobGraph job = createStreamGraphForSlotSharingTest(config).getJobGraph();
         List<JobVertex> allVertices = job.getVerticesSortedTopologicallyFromSources();
         assertThat(allVertices).hasSize(4);

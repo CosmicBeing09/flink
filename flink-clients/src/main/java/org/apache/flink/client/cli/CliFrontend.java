@@ -25,7 +25,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.ClientUtils;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientServiceLoader;
 import org.apache.flink.client.deployment.ClusterDescriptor;
@@ -372,7 +372,7 @@ public class CliFrontend {
                     PackagedProgramUtils.getPipelineFromProgram(
                             program, effectiveConfiguration, parallelism, true);
             String jsonPlan =
-                    FlinkPipelineTranslationUtil.translateToJSONExecutionPlan(
+                    FlinkStreamingPipelineTranslationUtil.translateToJSONExecutionPlan(
                             program.getUserCodeClassLoader(), pipeline);
 
             if (jsonPlan != null) {

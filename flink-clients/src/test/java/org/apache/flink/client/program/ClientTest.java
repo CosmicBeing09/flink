@@ -25,7 +25,7 @@ import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.ClientUtils;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
 import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
 import org.apache.flink.client.testjar.ForbidConfigurationJob;
@@ -34,7 +34,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.execution.DetachedJobExecutionResult;
 import org.apache.flink.core.execution.JobClient;
@@ -106,10 +106,10 @@ class ClientTest {
         configuration.set(CoreOptions.DEFAULT_PARALLELISM, parallelism);
         configuration.set(DeploymentOptions.ATTACHED, !detached);
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.CLASSPATHS, program.getClasspaths(), URL::toString);
+                configuration, StreamingPipelineOptions.CLASSPATHS, program.getClasspaths(), URL::toString);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 program.getJobJarAndDependencies(),
                 URL::toString);
         return configuration;
@@ -315,7 +315,7 @@ class ClientTest {
         Pipeline pipeline =
                 PackagedProgramUtils.getPipelineFromProgram(prg, new Configuration(), 666, true);
         String jsonExecutionPlan =
-                FlinkPipelineTranslationUtil.translateToJSONExecutionPlan(
+                FlinkStreamingPipelineTranslationUtil.translateToJSONExecutionPlan(
                         prg.getUserCodeClassLoader(), pipeline);
         assertThat(jsonExecutionPlan).isNotNull();
         assertThat(jsonExecutionPlan)
@@ -478,7 +478,7 @@ class ClientTest {
         }
 
         @Override
-        public PipelineExecutorFactory getExecutorFactory(@Nonnull Configuration configuration) {
+        public PipelineExecutorFactory getStreamingExecutorFactory(@Nonnull Configuration configuration) {
             return new PipelineExecutorFactory() {
 
                 @Override

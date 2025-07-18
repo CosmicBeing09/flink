@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.failure.FailureEnricher;
 import org.apache.flink.core.testutils.FlinkAssertions;
@@ -1215,7 +1215,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
         jobGraph = new JobGraph(jobGraph.getJobID(), "job", v1, v2, v3);
 
         configuration.set(
-                PipelineOptions.PARALLELISM_OVERRIDES,
+                StreamingPipelineOptions.PARALLELISM_OVERRIDES,
                 ImmutableMap.of(
                         v1.getID().toHexString(), "10",
                         // v2 is omitted
@@ -1225,7 +1225,7 @@ public class DispatcherTest extends AbstractDispatcherTest {
 
         jobGraph.getJobConfiguration()
                 .set(
-                        PipelineOptions.PARALLELISM_OVERRIDES,
+                        StreamingPipelineOptions.PARALLELISM_OVERRIDES,
                         ImmutableMap.of(
                                 // verifies that job graph configuration has higher priority
                                 v3.getID().toHexString(), "42",

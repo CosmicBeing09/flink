@@ -30,7 +30,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentFactory;
-import org.apache.flink.test.util.MiniClusterPipelineExecutorServiceLoader;
+import org.apache.flink.test.util.MiniClusterStreamingExecutorServiceLoader;
 
 import java.net.URL;
 import java.time.Duration;
@@ -64,8 +64,8 @@ public class TestStreamEnvironment extends StreamExecutionEnvironment {
             Collection<Path> jarFiles,
             Collection<URL> classPaths) {
         super(
-                new MiniClusterPipelineExecutorServiceLoader(miniCluster),
-                MiniClusterPipelineExecutorServiceLoader.updateConfigurationForMiniCluster(
+                new MiniClusterStreamingExecutorServiceLoader(miniCluster),
+                MiniClusterStreamingExecutorServiceLoader.updateConfigurationForMiniCluster(
                         config, jarFiles, classPaths),
                 null);
 

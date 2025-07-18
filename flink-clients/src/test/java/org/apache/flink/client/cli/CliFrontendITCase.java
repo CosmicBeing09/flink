@@ -20,7 +20,7 @@ package org.apache.flink.client.cli;
 
 import org.apache.flink.client.deployment.executors.LocalExecutor;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
@@ -71,7 +71,7 @@ class CliFrontendITCase {
         Configuration config = new Configuration();
         CustomCommandLine commandLine = new DefaultCLI();
 
-        config.set(PipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(42L));
+        config.set(StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(42L));
 
         CliFrontend cliFrontend = new CliFrontend(config, Collections.singletonList(commandLine));
 
@@ -90,7 +90,7 @@ class CliFrontendITCase {
         // we use GenericCli because it allows specifying arbitrary options via "-Dfoo=bar" syntax
         CustomCommandLine commandLine = new GenericCLI(config, "/dev/null");
 
-        config.set(PipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(42L));
+        config.set(StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL, Duration.ofMillis(42L));
 
         CliFrontend cliFrontend = new CliFrontend(config, Collections.singletonList(commandLine));
 
@@ -101,7 +101,7 @@ class CliFrontendITCase {
                     LocalExecutor.NAME,
                     "-c",
                     TestingJob.class.getName(),
-                    "-D" + PipelineOptions.AUTO_WATERMARK_INTERVAL.key() + "=142",
+                    "-D" + StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL.key() + "=142",
                     CliFrontendTestUtils.getTestJarPath()
                 });
 

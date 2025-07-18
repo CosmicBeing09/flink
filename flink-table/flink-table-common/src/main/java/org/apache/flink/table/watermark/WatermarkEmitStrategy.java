@@ -19,7 +19,7 @@
 package org.apache.flink.table.watermark;
 
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 
 /** The strategy for emitting watermark. */
 @PublicEvolving
@@ -29,7 +29,7 @@ public enum WatermarkEmitStrategy {
 
     /**
      * Emit watermark periodically. the period is configured by {@link
-     * PipelineOptions#AUTO_WATERMARK_INTERVAL}
+     * StreamingPipelineOptions#AUTO_WATERMARK_INTERVAL}
      */
     ON_PERIODIC("on-periodic"),
     ;

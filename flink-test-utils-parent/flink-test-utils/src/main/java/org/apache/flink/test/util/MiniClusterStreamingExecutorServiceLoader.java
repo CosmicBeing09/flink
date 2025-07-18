@@ -24,7 +24,7 @@ import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.CacheSupportedPipelineExecutor;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.JobStatusChangedListener;
@@ -60,39 +60,39 @@ import java.util.stream.Stream;
  * A {@link PipelineExecutorServiceLoader} that is hardwired to return {@link PipelineExecutor
  * PipelineExecutors} that use a given {@link MiniCluster}.
  */
-public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecutorServiceLoader {
+public class MiniClusterStreamingExecutorServiceLoader implements PipelineExecutorServiceLoader {
 
     private static final Logger LOG =
-            LoggerFactory.getLogger(MiniClusterPipelineExecutorServiceLoader.class);
+            LoggerFactory.getLogger(MiniClusterStreamingExecutorServiceLoader.class);
 
     public static final String NAME = "minicluster";
 
     private final MiniCluster miniCluster;
 
-    public MiniClusterPipelineExecutorServiceLoader(MiniCluster miniCluster) {
+    public MiniClusterStreamingExecutorServiceLoader(MiniCluster miniCluster) {
         this.miniCluster = miniCluster;
     }
 
     /**
      * Populates a {@link Configuration} that is compatible with this {@link
-     * MiniClusterPipelineExecutorServiceLoader}.
+     * MiniClusterStreamingExecutorServiceLoader}.
      */
     public static Configuration updateConfigurationForMiniCluster(
             Configuration config, Collection<Path> jarFiles, Collection<URL> classPaths) {
 
-        checkOverridesOption(config, PipelineOptions.JARS);
-        checkOverridesOption(config, PipelineOptions.CLASSPATHS);
+        checkOverridesOption(config, StreamingPipelineOptions.JARS);
+        checkOverridesOption(config, StreamingPipelineOptions.CLASSPATHS);
         checkOverridesOption(config, DeploymentOptions.TARGET);
         checkOverridesOption(config, DeploymentOptions.ATTACHED);
 
         ConfigUtils.encodeCollectionToConfig(
                 config,
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 jarFiles,
-                MiniClusterPipelineExecutorServiceLoader::getAbsoluteURL);
+                MiniClusterStreamingExecutorServiceLoader::getAbsoluteURL);
         ConfigUtils.encodeCollectionToConfig(
-                config, PipelineOptions.CLASSPATHS, classPaths, URL::toString);
-        config.set(DeploymentOptions.TARGET, MiniClusterPipelineExecutorServiceLoader.NAME);
+                config, StreamingPipelineOptions.CLASSPATHS, classPaths, URL::toString);
+        config.set(DeploymentOptions.TARGET, MiniClusterStreamingExecutorServiceLoader.NAME);
         config.set(DeploymentOptions.ATTACHED, true);
         return config;
     }
@@ -118,13 +118,13 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
     }
 
     @Override
-    public PipelineExecutorFactory getExecutorFactory(Configuration configuration) {
+    public PipelineExecutorFactory getStreamingExecutorFactory(Configuration configuration) {
         return new MiniClusterPipelineExecutorFactory(miniCluster);
     }
 
     @Override
     public Stream<String> getExecutorNames() {
-        return Stream.of(MiniClusterPipelineExecutorServiceLoader.NAME);
+        return Stream.of(MiniClusterStreamingExecutorServiceLoader.NAME);
     }
 
     private static class MiniClusterPipelineExecutorFactory implements PipelineExecutorFactory {
@@ -136,7 +136,7 @@ public class MiniClusterPipelineExecutorServiceLoader implements PipelineExecuto
 
         @Override
         public String getName() {
-            return MiniClusterPipelineExecutorServiceLoader.NAME;
+            return MiniClusterStreamingExecutorServiceLoader.NAME;
         }
 
         @Override

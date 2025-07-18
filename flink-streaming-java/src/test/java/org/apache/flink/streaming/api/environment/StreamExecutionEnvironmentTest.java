@@ -29,7 +29,7 @@ import org.apache.flink.api.java.typeutils.GenericTypeInfo;
 import org.apache.flink.api.java.typeutils.ResultTypeQueryable;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.connector.datagen.source.DataGeneratorSource;
 import org.apache.flink.core.testutils.CheckedThread;
@@ -353,7 +353,7 @@ class StreamExecutionEnvironmentTest {
     void testUserDefinedJobName() {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
-        config.set(PipelineOptions.NAME, jobName);
+        config.set(StreamingPipelineOptions.NAME, jobName);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(config);
         testJobName(jobName, env);
     }
@@ -362,7 +362,7 @@ class StreamExecutionEnvironmentTest {
     void testUserDefinedJobNameWithConfigure() {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
-        config.set(PipelineOptions.NAME, jobName);
+        config.set(StreamingPipelineOptions.NAME, jobName);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         testJobName(jobName, env);

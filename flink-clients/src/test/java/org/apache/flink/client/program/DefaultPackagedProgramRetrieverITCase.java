@@ -26,7 +26,7 @@ import org.apache.flink.client.testjar.ClasspathProviderExtension;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.PipelineOptionsInternal;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
@@ -438,7 +438,7 @@ class DefaultPackagedProgramRetrieverITCase {
             pipelineJars.add(jarFile.toString());
             expectedMergedURLs.add(jarFile);
         }
-        configuration.set(PipelineOptions.CLASSPATHS, pipelineJars);
+        configuration.set(StreamingPipelineOptions.CLASSPATHS, pipelineJars);
 
         final PackagedProgramRetriever retrieverUnderTest =
                 DefaultPackagedProgramRetriever.create(
@@ -658,12 +658,12 @@ class DefaultPackagedProgramRetrieverITCase {
         final int defaultParallelism = configuration.get(CoreOptions.DEFAULT_PARALLELISM);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 packagedProgram.getJobJarAndDependencies(),
                 URL::toString);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.CLASSPATHS,
+                StreamingPipelineOptions.CLASSPATHS,
                 packagedProgram.getClasspaths(),
                 URL::toString);
 

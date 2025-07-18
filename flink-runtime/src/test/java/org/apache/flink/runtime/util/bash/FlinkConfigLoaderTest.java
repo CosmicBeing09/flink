@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ConfigurationFileMigrationUtils;
 import org.apache.flink.configuration.ConfigurationUtils;
 import org.apache.flink.configuration.GlobalConfiguration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -283,11 +283,11 @@ public class FlinkConfigLoaderTest {
 
         List<String> cachedFiles =
                 ConfigurationUtils.convertToList(
-                        configuration.get(PipelineOptions.CACHED_FILES.key()), String.class);
+                        configuration.get(StreamingPipelineOptions.CACHED_FILES.key()), String.class);
         assertThat(DistributedCache.parseCachedFilesFromString(cachedFiles))
                 .isEqualTo(
                         DistributedCache.parseCachedFilesFromString(
-                                standardYamlConfig.get(PipelineOptions.CACHED_FILES)));
+                                standardYamlConfig.get(StreamingPipelineOptions.CACHED_FILES)));
     }
 
     private void verifyConfiguration(Configuration config, String key, String expectedValue) {

@@ -21,7 +21,7 @@ package org.apache.flink.table.api;
 import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.bridge.java.StreamTableEnvironment;
 import org.apache.flink.table.api.bridge.java.internal.StreamTableEnvironmentImpl;
@@ -55,7 +55,7 @@ class EnvironmentTest {
                         new Configuration()
                                 .set(CoreOptions.DEFAULT_PARALLELISM, 128)
                                 .set(
-                                        PipelineOptions.AUTO_WATERMARK_INTERVAL,
+                                        StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL,
                                         Duration.ofMillis(800))
                                 .set(
                                         CheckpointingOptions.CHECKPOINTING_INTERVAL,

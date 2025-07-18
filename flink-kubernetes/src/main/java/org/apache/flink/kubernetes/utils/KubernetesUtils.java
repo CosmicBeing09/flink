@@ -22,7 +22,7 @@ import org.apache.flink.api.common.resources.ExternalResource;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions;
 import org.apache.flink.kubernetes.highavailability.KubernetesCheckpointStoreUtil;
@@ -400,7 +400,7 @@ public class KubernetesUtils {
     }
 
     public static List<URI> checkJarFileForApplicationMode(Configuration configuration) {
-        return configuration.get(PipelineOptions.JARS).stream()
+        return configuration.get(StreamingPipelineOptions.JARS).stream()
                 .map(FunctionUtils.uncheckedFunction(PackagedProgramUtils::resolveURI))
                 .collect(Collectors.toList());
     }

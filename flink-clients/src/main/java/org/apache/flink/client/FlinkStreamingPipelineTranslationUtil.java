@@ -21,7 +21,7 @@ package org.apache.flink.client;
 
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 
 /**
@@ -29,10 +29,10 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
  * reflection or service discovery to find the right {@link FlinkPipelineTranslator} for a given
  * subclass of {@link Pipeline}.
  */
-public final class FlinkPipelineTranslationUtil {
+public final class FlinkStreamingPipelineTranslationUtil {
 
     /** Transmogrifies the given {@link Pipeline} to a {@link JobGraph}. */
-    public static JobGraph getJobGraph(
+    public static JobGraph getStreamingJobGraph(
             ClassLoader userClassloader,
             Pipeline pipeline,
             Configuration optimizerConfiguration,
@@ -46,11 +46,11 @@ public final class FlinkPipelineTranslationUtil {
                         pipeline, optimizerConfiguration, defaultParallelism);
 
         optimizerConfiguration
-                .getOptional(PipelineOptions.PARALLELISM_OVERRIDES)
+                .getOptional(StreamingPipelineOptions.PARALLELISM_OVERRIDES)
                 .ifPresent(
                         map ->
                                 jobGraph.getJobConfiguration()
-                                        .set(PipelineOptions.PARALLELISM_OVERRIDES, map));
+                                        .set(StreamingPipelineOptions.PARALLELISM_OVERRIDES, map));
 
         return jobGraph;
     }
@@ -66,7 +66,7 @@ public final class FlinkPipelineTranslationUtil {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
         try {
             Thread.currentThread().setContextClassLoader(userClassloader);
-            return FlinkPipelineTranslationUtil.getJobGraph(
+            return FlinkStreamingPipelineTranslationUtil.getStreamingJobGraph(
                     userClassloader, pipeline, configuration, defaultParallelism);
         } finally {
             Thread.currentThread().setContextClassLoader(contextClassLoader);

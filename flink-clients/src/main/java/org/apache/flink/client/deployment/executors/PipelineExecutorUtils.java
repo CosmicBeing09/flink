@@ -21,7 +21,7 @@ package org.apache.flink.client.deployment.executors;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
 import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.configuration.Configuration;
@@ -68,7 +68,7 @@ public class PipelineExecutorUtils {
         final StreamingExecutionConfigAccessor executionConfigAccessor =
                 StreamingExecutionConfigAccessor.fromConfiguration(configuration);
         final JobGraph jobGraph =
-                FlinkPipelineTranslationUtil.getJobGraph(
+                FlinkStreamingPipelineTranslationUtil.getStreamingJobGraph(
                         userClassloader,
                         pipeline,
                         configuration,

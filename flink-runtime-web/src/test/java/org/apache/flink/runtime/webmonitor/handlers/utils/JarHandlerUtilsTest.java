@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
 import org.apache.flink.runtime.webmonitor.handlers.JarPlanRequestBody;
@@ -130,7 +130,7 @@ class JarHandlerUtilsTest {
                         null,
                         null,
                         Collections.singletonMap(
-                                PipelineOptions.CLASSPATHS.key(),
+                                StreamingPipelineOptions.CLASSPATHS.key(),
                                 "file:/tmp/some.jar;file:/tmp/another.jar"));
 
         final HandlerRequest<JarPlanRequestBody> request = getDummyRequest(requestBody);
@@ -146,7 +146,7 @@ class JarHandlerUtilsTest {
                         .map(URL::toString)
                         .collect(Collectors.toList());
 
-        assertThat(retrievedClasspaths).isEqualTo(originalConfig.get(PipelineOptions.CLASSPATHS));
+        assertThat(retrievedClasspaths).isEqualTo(originalConfig.get(StreamingPipelineOptions.CLASSPATHS));
     }
 
     @Test
@@ -156,7 +156,7 @@ class JarHandlerUtilsTest {
                         null,
                         null,
                         Collections.singletonMap(
-                                PipelineOptions.CLASSPATHS.key(), "invalid|:/jar"));
+                                StreamingPipelineOptions.CLASSPATHS.key(), "invalid|:/jar"));
         final HandlerRequest<JarPlanRequestBody> request = getDummyRequest(requestBody);
 
         final JarHandlerUtils.JarHandlerContext jarHandlerContext =

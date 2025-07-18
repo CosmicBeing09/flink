@@ -19,7 +19,7 @@
 package org.apache.flink.client.cli;
 
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.client.program.ProgramInvocationException;
@@ -322,7 +322,7 @@ class CliFrontendPackageProgramTest {
 
             // we expect this to fail with a "ClassNotFoundException"
             Pipeline pipeline = PackagedProgramUtils.getPipelineFromProgram(prog, c, 666, true);
-            FlinkPipelineTranslationUtil.translateToJSONExecutionPlan(
+            FlinkStreamingPipelineTranslationUtil.translateToJSONExecutionPlan(
                     prog.getUserCodeClassLoader(), pipeline);
             fail("Should have failed with a ClassNotFoundException");
         } catch (ProgramInvocationException e) {

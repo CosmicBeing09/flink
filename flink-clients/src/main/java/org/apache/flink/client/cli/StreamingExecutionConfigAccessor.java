@@ -23,7 +23,7 @@ import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 
 import java.net.MalformedURLException;
@@ -63,7 +63,7 @@ public class StreamingExecutionConfigAccessor {
 
         options.applyToConfiguration(configuration);
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.JARS, jobJars, Object::toString);
+                configuration, StreamingPipelineOptions.JARS, jobJars, Object::toString);
 
         return new StreamingExecutionConfigAccessor(configuration);
     }
@@ -74,12 +74,12 @@ public class StreamingExecutionConfigAccessor {
     }
 
     public List<URL> getJars() throws MalformedURLException {
-        return ConfigUtils.decodeListFromConfig(configuration, PipelineOptions.JARS, URL::new);
+        return ConfigUtils.decodeListFromConfig(configuration, StreamingPipelineOptions.JARS, URL::new);
     }
 
     public List<URL> getClasspaths() throws MalformedURLException {
         return ConfigUtils.decodeListFromConfig(
-                configuration, PipelineOptions.CLASSPATHS, URL::new);
+                configuration, StreamingPipelineOptions.CLASSPATHS, URL::new);
     }
 
     public int getParallelism() {

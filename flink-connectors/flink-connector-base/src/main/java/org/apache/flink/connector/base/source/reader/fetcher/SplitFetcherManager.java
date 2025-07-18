@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
-import static org.apache.flink.configuration.PipelineOptions.ALLOW_UNALIGNED_SOURCE_SPLITS;
+import static org.apache.flink.configuration.StreamingPipelineOptions.ALLOW_UNALIGNED_SOURCE_SPLITS;
 
 /**
  * A class responsible for starting the {@link SplitFetcher} and manage the life cycles of them.

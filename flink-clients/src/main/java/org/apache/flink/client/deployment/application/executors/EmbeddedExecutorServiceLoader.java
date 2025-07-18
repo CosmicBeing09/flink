@@ -63,7 +63,7 @@ public class EmbeddedExecutorServiceLoader implements PipelineExecutorServiceLoa
     }
 
     @Override
-    public PipelineExecutorFactory getExecutorFactory(final Configuration configuration) {
+    public PipelineExecutorFactory getStreamingExecutorFactory(final Configuration configuration) {
         return new EmbeddedStreamingExecutorFactory(submittedJobIds, dispatcherGateway, retryExecutor);
     }
 

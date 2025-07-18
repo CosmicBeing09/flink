@@ -23,6 +23,7 @@ import org.apache.flink.annotation.Public;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ConfigurationUtils;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.fs.Path;
 
 import java.io.File;
@@ -214,9 +215,9 @@ public class DistributedCache {
 
     /**
      * Parses a list of distributed cache entries encoded in a string. Can be used to parse a config
-     * option described by {@link org.apache.flink.configuration.PipelineOptions#CACHED_FILES}.
+     * option described by {@link StreamingPipelineOptions#CACHED_FILES}.
      *
-     * <p>See {@link org.apache.flink.configuration.PipelineOptions#CACHED_FILES} for the format.
+     * <p>See {@link StreamingPipelineOptions#CACHED_FILES} for the format.
      *
      * @param files List of string encoded distributed cache entries.
      */

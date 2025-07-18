@@ -32,7 +32,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.configuration.StateChangelogOptions;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
@@ -296,9 +296,9 @@ public class StreamGraphGenerator {
     private void configureStreamGraph(final StreamGraph graph) {
         checkNotNull(graph);
 
-        graph.setVertexDescriptionMode(configuration.get(PipelineOptions.VERTEX_DESCRIPTION_MODE));
+        graph.setVertexDescriptionMode(configuration.get(StreamingPipelineOptions.VERTEX_DESCRIPTION_MODE));
         graph.setVertexNameIncludeIndexPrefix(
-                configuration.get(PipelineOptions.VERTEX_NAME_INCLUDE_INDEX_PREFIX));
+                configuration.get(StreamingPipelineOptions.VERTEX_NAME_INCLUDE_INDEX_PREFIX));
         graph.setAutoParallelismEnabled(
                 configuration.get(BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_ENABLED));
         graph.setEnableCheckpointsAfterTasksFinish(
@@ -336,7 +336,7 @@ public class StreamGraphGenerator {
     }
 
     private String deriveJobName(String defaultJobName) {
-        return configuration.getOptional(PipelineOptions.NAME).orElse(defaultJobName);
+        return configuration.getOptional(StreamingPipelineOptions.NAME).orElse(defaultJobName);
     }
 
     private GlobalStreamExchangeMode deriveGlobalStreamExchangeModeBatch() {

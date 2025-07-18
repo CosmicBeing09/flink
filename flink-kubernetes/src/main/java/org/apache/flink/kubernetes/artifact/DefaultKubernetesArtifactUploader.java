@@ -23,7 +23,7 @@ import org.apache.flink.client.cli.ArtifactFetchOptions;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.fs.FSDataOutputStream;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
@@ -61,7 +61,7 @@ public class DefaultKubernetesArtifactUploader implements KubernetesArtifactUplo
         }
 
         final String jobUri = upload(config, getJobUri(config));
-        updateConfig(config, PipelineOptions.JARS, Collections.singletonList(jobUri));
+        updateConfig(config, StreamingPipelineOptions.JARS, Collections.singletonList(jobUri));
 
         final List<String> additionalUris =
                 config.getOptional(ArtifactFetchOptions.ARTIFACT_LIST)
@@ -138,12 +138,12 @@ public class DefaultKubernetesArtifactUploader implements KubernetesArtifactUplo
     }
 
     private String getJobUri(Configuration config) {
-        final List<String> jars = config.get(PipelineOptions.JARS);
+        final List<String> jars = config.get(StreamingPipelineOptions.JARS);
         checkArgument(
                 jars.size() == 1,
-                String.format("The '%s' config must contain one JAR.", PipelineOptions.JARS.key()));
+                String.format("The '%s' config must contain one JAR.", StreamingPipelineOptions.JARS.key()));
 
-        return config.get(PipelineOptions.JARS).get(0);
+        return config.get(StreamingPipelineOptions.JARS).get(0);
     }
 
     private boolean hasLocal(List<String> originalUris) {

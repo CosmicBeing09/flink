@@ -21,7 +21,7 @@ package org.apache.flink.client.program;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
@@ -166,7 +166,7 @@ class PerJobMiniClusterFactoryTest {
 
         Configuration configuration = new Configuration();
         configuration.set(
-                PipelineOptions.PARALLELISM_OVERRIDES,
+                StreamingPipelineOptions.PARALLELISM_OVERRIDES,
                 ImmutableMap.of(
                         jobVertex.getID().toHexString(), String.valueOf(overwriteParallelism)));
 

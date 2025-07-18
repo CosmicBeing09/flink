@@ -20,7 +20,7 @@ package org.apache.flink.kubernetes.artifact;
 
 import org.apache.flink.client.cli.ArtifactFetchOptions;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions;
 import org.apache.flink.kubernetes.utils.KubernetesUtils;
 import org.apache.flink.testutils.TestingUtils;
@@ -67,12 +67,12 @@ class DefaultKubernetesArtifactUploaderTest {
     void testInvalidJobJar() {
         String msg = "The 'pipeline.jars' config must contain one JAR.";
 
-        config.set(PipelineOptions.JARS, Collections.emptyList());
+        config.set(StreamingPipelineOptions.JARS, Collections.emptyList());
         assertThatThrownBy(() -> artifactUploader.uploadAll(config))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(msg);
 
-        config.set(PipelineOptions.JARS, Arrays.asList("a", "b"));
+        config.set(StreamingPipelineOptions.JARS, Arrays.asList("a", "b"));
         assertThatThrownBy(() -> artifactUploader.uploadAll(config))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage(msg);
@@ -83,7 +83,7 @@ class DefaultKubernetesArtifactUploaderTest {
         File jar = getFlinkKubernetesJar();
         String localUri = "local://" + jar.getAbsolutePath();
 
-        config.set(PipelineOptions.JARS, Collections.singletonList(localUri));
+        config.set(StreamingPipelineOptions.JARS, Collections.singletonList(localUri));
         artifactUploader.uploadAll(config);
 
         assertJobJarUri(jar.getName());
@@ -98,7 +98,7 @@ class DefaultKubernetesArtifactUploaderTest {
         String localAddArtUri = "local://" + addArtifact1.getAbsolutePath();
         String nonLocalAddArtUri = "dummyfs://" + addArtifact2.getAbsolutePath();
 
-        config.set(PipelineOptions.JARS, Collections.singletonList(localJobUri));
+        config.set(StreamingPipelineOptions.JARS, Collections.singletonList(localJobUri));
         config.set(
                 ArtifactFetchOptions.ARTIFACT_LIST,
                 Arrays.asList(nonLocalAddArtUri, localAddArtUri));
@@ -210,7 +210,7 @@ class DefaultKubernetesArtifactUploaderTest {
     private void assertJobJarUri(String filename) {
         String expectedUri = "dummyfs:" + tmpDir.resolve(filename);
 
-        List<String> result = config.get(PipelineOptions.JARS);
+        List<String> result = config.get(StreamingPipelineOptions.JARS);
         assertThat(result).hasSize(1);
         assertThat(result.get(0)).isEqualTo(expectedUri);
     }

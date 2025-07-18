@@ -23,7 +23,7 @@ import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.graph.GlobalStreamExchangeMode;
@@ -49,7 +49,7 @@ class DefaultExecutorTest {
                         env.fromData(1, 2, 3).sinkTo(new DiscardingSink<>()).getTransformation());
 
         final Configuration configuration = new Configuration();
-        configuration.set(PipelineOptions.NAME, "Custom Name");
+        configuration.set(StreamingPipelineOptions.NAME, "Custom Name");
 
         // default
         testJobName(

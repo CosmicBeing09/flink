@@ -19,7 +19,7 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.JobClient;
@@ -126,7 +126,7 @@ public final class PerJobMiniClusterFactory {
         int numTaskManagers = configuration.get(TaskManagerOptions.MINI_CLUSTER_NUM_TASK_MANAGERS);
 
         Map<String, String> overwriteParallelisms =
-                configuration.get(PipelineOptions.PARALLELISM_OVERRIDES);
+                configuration.get(StreamingPipelineOptions.PARALLELISM_OVERRIDES);
         if (overwriteParallelisms != null) {
             for (String overrideParallelism : overwriteParallelisms.values()) {
                 maximumParallelism =

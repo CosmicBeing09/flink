@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.JobStatusHook;
@@ -54,7 +54,7 @@ public interface Executor {
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
-     * @param defaultJobName default job name if not specified via {@link PipelineOptions#NAME}
+     * @param defaultJobName default job name if not specified via {@link StreamingPipelineOptions#NAME}
      * @return The pipeline representing the transformations.
      */
     Pipeline createPipeline(
@@ -68,7 +68,7 @@ public interface Executor {
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
-     * @param defaultJobName default job name if not specified via {@link PipelineOptions#NAME}
+     * @param defaultJobName default job name if not specified via {@link StreamingPipelineOptions#NAME}
      * @param jobStatusHookList list of {@link JobStatusHook}s
      * @return The pipeline representing the transformations.
      */

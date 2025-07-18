@@ -21,7 +21,7 @@ package org.apache.flink.api.common.serialization;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.util.TernaryBoolean;
 
@@ -190,7 +190,7 @@ public interface SerializerConfig extends Serializable {
 
     /**
      * Sets all relevant options contained in the {@link ReadableConfig} such as e.g. {@link
-     * PipelineOptions#FORCE_KRYO}.
+     * StreamingPipelineOptions#FORCE_KRYO}.
      *
      * <p>It will change the value of a setting only if a corresponding option was set in the {@code
      * configuration}. If a key is not present, the current value of a field will remain untouched.

@@ -26,7 +26,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.IllegalConfigurationException;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ResourceManagerOptions;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.runtime.jobmanager.JobManagerProcessSpec;
@@ -834,7 +834,7 @@ class YarnClusterDescriptorTest {
     void testDeployApplicationClusterWithDeploymentTargetNotCorrectlySet() {
         final Configuration flinkConfig = new Configuration();
         flinkConfig.set(
-                PipelineOptions.JARS, Collections.singletonList("file:///path/of/user.jar"));
+                StreamingPipelineOptions.JARS, Collections.singletonList("file:///path/of/user.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, YarnDeploymentTarget.SESSION.getName());
         try (final YarnClusterDescriptor yarnClusterDescriptor =
                 createYarnClusterDescriptor(flinkConfig)) {
@@ -881,7 +881,7 @@ class YarnClusterDescriptorTest {
     void testDeployApplicationClusterWithMultipleJarsSet() {
         final Configuration flinkConfig = new Configuration();
         flinkConfig.set(
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 Arrays.asList("local:///path/of/user.jar", "local:///user2.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, YarnDeploymentTarget.APPLICATION.getName());
         try (final YarnClusterDescriptor yarnClusterDescriptor =

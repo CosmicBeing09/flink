@@ -336,7 +336,7 @@ public class ExecutionEnvironmentImpl implements ExecutionEnvironment {
                 "No execution.target specified in your configuration file.");
 
         final PipelineExecutorFactory executorFactory =
-                executorServiceLoader.getExecutorFactory(configuration);
+                executorServiceLoader.getStreamingExecutorFactory(configuration);
 
         checkNotNull(
                 executorFactory,

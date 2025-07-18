@@ -24,7 +24,7 @@ import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.JobStatusHook;
@@ -125,7 +125,7 @@ public class DefaultExecutor implements Executor {
                         ? DEFAULT_JOB_NAME
                         : defaultJobName;
         final String jobName =
-                getConfiguration().getOptional(PipelineOptions.NAME).orElse(adjustedDefaultJobName);
+                getConfiguration().getOptional(StreamingPipelineOptions.NAME).orElse(adjustedDefaultJobName);
         streamGraph.setJobName(jobName);
     }
 }

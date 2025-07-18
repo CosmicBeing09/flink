@@ -51,7 +51,7 @@ public class DefaultExecutorServiceLoader implements PipelineExecutorServiceLoad
     private static final Logger LOG = LoggerFactory.getLogger(DefaultExecutorServiceLoader.class);
 
     @Override
-    public PipelineExecutorFactory getExecutorFactory(final Configuration configuration) {
+    public PipelineExecutorFactory getStreamingExecutorFactory(final Configuration configuration) {
         checkNotNull(configuration);
 
         final ServiceLoader<PipelineExecutorFactory> loader =

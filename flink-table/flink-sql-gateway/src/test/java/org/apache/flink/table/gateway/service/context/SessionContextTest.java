@@ -46,9 +46,9 @@ import java.util.Collections;
 import java.util.concurrent.ExecutorService;
 import java.util.stream.Collectors;
 
-import static org.apache.flink.configuration.PipelineOptions.MAX_PARALLELISM;
-import static org.apache.flink.configuration.PipelineOptions.NAME;
-import static org.apache.flink.configuration.PipelineOptions.OBJECT_REUSE;
+import static org.apache.flink.configuration.StreamingPipelineOptions.MAX_PARALLELISM;
+import static org.apache.flink.configuration.StreamingPipelineOptions.NAME;
+import static org.apache.flink.configuration.StreamingPipelineOptions.OBJECT_REUSE;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_CATALOG_MODIFICATION_LISTENERS;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_CATALOG_NAME;
 import static org.apache.flink.table.api.config.TableConfigOptions.TABLE_SQL_DIALECT;

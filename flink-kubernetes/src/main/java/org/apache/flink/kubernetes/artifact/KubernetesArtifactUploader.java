@@ -21,7 +21,7 @@ package org.apache.flink.kubernetes.artifact;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.client.cli.ArtifactFetchOptions;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions;
 
 /** Local artifact uploader for Kubernetes programs. */
@@ -32,7 +32,7 @@ public interface KubernetesArtifactUploader {
      * Uploads all {@code local://} schemed artifact that is present, according to the given
      * configuration. Any remote artifact remains as it was passed originally.
      *
-     * <p>Takes the job JAR from the {@link PipelineOptions#JARS} config and any additional
+     * <p>Takes the job JAR from the {@link StreamingPipelineOptions#JARS} config and any additional
      * artifacts from the {@link ArtifactFetchOptions#ARTIFACT_LIST} config. After the upload,
      * replaces the URIs of any local JAR in these configs to point to the remotely available one.
      *
