@@ -571,7 +571,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
 
         @Override
         public Optional<TaskManagerLocation> getStateLocation(ExecutionVertexID executionVertexId) {
-            return stateLocationRetriever.getStateLocation(executionVertexId);
+            return executionVertexStateLocationProvider.getStateLocation(executionVertexId);
         }
 
         @Override
