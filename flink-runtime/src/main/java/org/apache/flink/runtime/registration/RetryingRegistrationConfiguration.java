@@ -30,9 +30,9 @@ public class RetryingRegistrationConfiguration {
 
     private final long maxRegistrationTimeoutMillis;
 
-    private final long errorDelayMillis;
+    private final long registrationErrorDelayMillis;
 
-    private final long refusedDelayMillis;
+    private final long registrationRefusalDelayMillis;
 
     public RetryingRegistrationConfiguration(
             long initialRegistrationTimeoutMillis,
@@ -51,8 +51,8 @@ public class RetryingRegistrationConfiguration {
 
         this.initialRegistrationTimeoutMillis = initialRegistrationTimeoutMillis;
         this.maxRegistrationTimeoutMillis = maxRegistrationTimeoutMillis;
-        this.errorDelayMillis = errorDelayMillis;
-        this.refusedDelayMillis = refusedDelayMillis;
+        this.registrationErrorDelayMillis = errorDelayMillis;
+        this.registrationRefusalDelayMillis = refusedDelayMillis;
     }
 
     public long getInitialRegistrationTimeoutMillis() {
@@ -64,11 +64,11 @@ public class RetryingRegistrationConfiguration {
     }
 
     public long getErrorDelayMillis() {
-        return errorDelayMillis;
+        return registrationErrorDelayMillis;
     }
 
     public long getRefusedDelayMillis() {
-        return refusedDelayMillis;
+        return registrationRefusalDelayMillis;
     }
 
     public static RetryingRegistrationConfiguration fromConfiguration(
