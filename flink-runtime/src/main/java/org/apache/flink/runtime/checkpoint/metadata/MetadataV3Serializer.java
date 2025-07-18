@@ -95,7 +95,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     // ------------------------------------------------------------------------
 
     @Override
-    protected void serializeOperatorState(OperatorState operatorState, DataOutputStream dos)
+    protected void writeOperatorState(OperatorState operatorState, DataOutputStream dos)
             throws IOException {
         // Operator ID
         dos.writeLong(operatorState.getOperatorID().getLowerPart());
@@ -149,7 +149,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
     }
 
     @Override
-    protected OperatorState deserializeOperatorState(
+    protected OperatorState readOperatorState(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         final OperatorID jobVertexId = new OperatorID(dis.readLong(), dis.readLong());
         final int parallelism = dis.readInt();

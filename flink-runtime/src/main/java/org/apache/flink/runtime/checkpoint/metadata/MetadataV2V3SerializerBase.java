@@ -162,7 +162,7 @@ public abstract class MetadataV2V3SerializerBase {
         dos.writeInt(operatorStates.size());
 
         for (OperatorState operatorState : operatorStates) {
-            serializeOperatorState(operatorState, dos);
+            writeOperatorState(operatorState, dos);
         }
     }
 
@@ -198,7 +198,7 @@ public abstract class MetadataV2V3SerializerBase {
         final List<OperatorState> operatorStates = new ArrayList<>(numTaskStates);
 
         for (int i = 0; i < numTaskStates; i++) {
-            operatorStates.add(deserializeOperatorState(dis, context));
+            operatorStates.add(readOperatorState(dis, context));
         }
 
         return new CheckpointMetadata(checkpointId, operatorStates, masterStates);
@@ -266,10 +266,10 @@ public abstract class MetadataV2V3SerializerBase {
     //  operator state (de)serialization methods
     // ------------------------------------------------------------------------
 
-    protected abstract void serializeOperatorState(
+    protected abstract void writeOperatorState(
             OperatorState operatorState, DataOutputStream dos) throws IOException;
 
-    protected abstract OperatorState deserializeOperatorState(
+    protected abstract OperatorState readOperatorState(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException;
 
     protected void serializeSubtaskState(OperatorSubtaskState subtaskState, DataOutputStream dos)

@@ -46,7 +46,7 @@ public class MetadataV5Serializer extends MetadataV4Serializer {
     }
 
     @Override
-    protected void serializeOperatorState(OperatorState operatorState, DataOutputStream dos)
+    protected void writeOperatorState(OperatorState operatorState, DataOutputStream dos)
             throws IOException {
         if (operatorState.getOperatorName().isPresent()
                 && operatorState.getOperatorName().get().isEmpty()) {
@@ -60,11 +60,11 @@ public class MetadataV5Serializer extends MetadataV4Serializer {
         // strings in metadata we do conversion here
         dos.writeUTF(operatorState.getOperatorName().orElse(""));
         dos.writeUTF(operatorState.getOperatorUid().orElse(""));
-        super.serializeOperatorState(operatorState, dos);
+        super.writeOperatorState(operatorState, dos);
     }
 
     @Override
-    protected OperatorState deserializeOperatorState(
+    protected OperatorState readOperatorState(
             DataInputStream dis, @Nullable DeserializationContext context) throws IOException {
         final String name = dis.readUTF();
         final String uid = dis.readUTF();
