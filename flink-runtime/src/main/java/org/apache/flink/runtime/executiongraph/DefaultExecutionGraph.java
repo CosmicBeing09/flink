@@ -1473,10 +1473,10 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 accumulators = deserializeAccumulators(state);
                 attempt.markFailed(
                         state.getError(userClassLoader),
-                        state.getCancelTask(),
+                        state.shouldCancelTask(),
                         accumulators,
                         state.getIOMetrics(),
-                        state.getReleasePartitions(),
+                        state.shouldReleasePartitions(),
                         true);
                 return true;
 
