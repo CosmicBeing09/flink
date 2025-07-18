@@ -450,7 +450,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                 new org.apache.flink.configuration.Configuration();
         catalogTable.getOptions().forEach(conf::setString);
         HadoopFileSystemFactory fsFactory = fsFactory();
-        org.apache.flink.core.fs.Path tmpPath =
+        org.apache.flink.core.fs.Path stagingDirPath =
                 new org.apache.flink.core.fs.Path(toStagingDir(stagingParentDir, jobConf));
 
         PartitionCommitPolicyFactory partitionCommitPolicyFactory =
@@ -463,9 +463,9 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                                 FileSystemConnectorOptions
                                         .SINK_PARTITION_COMMIT_POLICY_CLASS_PARAMETERS));
 
-        org.apache.flink.core.fs.Path path = new org.apache.flink.core.fs.Path(sd.getLocation());
+        org.apache.flink.core.fs.Path outputPath = new org.apache.flink.core.fs.Path(sd.getLocation());
         BucketsBuilder<RowData, String, ? extends BucketsBuilder<RowData, ?, ?>> builder =
-                getBucketsBuilder(path, recordWriterFactory, sd, fileNaming, conf);
+                getBucketsBuilder(outputPath, recordWriterFactory, sd, fileNaming, conf);
 
         CompactReader.Factory<RowData> readerFactory = createCompactReaderFactory(sd, tableProps);
 
@@ -489,7 +489,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                         TypeInformation.of(CoordinatorInput.class),
                         new BatchFileWriter<>(
                                 fsFactory,
-                                tmpPath,
+                                stagingDirPath,
                                 partitionColumns,
                                 dynamicGrouping,
                                 staticPartitionSpec,
@@ -516,7 +516,7 @@ public class HiveTableSink implements DynamicTableSink, SupportsPartitioning, Su
                 partitionCommitPolicyFactory,
                 partitionColumns,
                 staticPartitionSpec,
-                tmpPath,
+                stagingDirPath,
                 identifier,
                 compactAverageSize,
                 compactTargetSize,
