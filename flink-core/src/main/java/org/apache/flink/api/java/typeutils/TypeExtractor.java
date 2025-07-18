@@ -578,13 +578,13 @@ public class TypeExtractor {
                 // e.g. when using local variables inside lambda function
                 // paramLen is the total number of parameters of the provided lambda, it includes
                 // parameters added through closure
-                final int paramLen = exec.getParameterTypes().length;
+                final int totalParameterCount = exec.getParameterTypes().length;
 
                 final Method sam = TypeExtractionUtils.getSingleAbstractMethod(baseClass);
 
                 // number of parameters the SAM of implemented interface has; the parameter indexing
                 // applies to this range
-                final int baseParametersLen = sam.getParameterCount();
+                final int abstractMethodParameterCount = sam.getParameterCount();
 
                 final Type output;
                 if (lambdaOutputTypeArgumentIndices.length > 0) {
@@ -593,8 +593,8 @@ public class TypeExtractor {
                                     baseClass,
                                     exec,
                                     lambdaOutputTypeArgumentIndices,
-                                    paramLen,
-                                    baseParametersLen);
+                                    totalParameterCount,
+                                    abstractMethodParameterCount);
                 } else {
                     output = exec.getReturnType();
                     TypeExtractionUtils.validateLambdaType(baseClass, output);
