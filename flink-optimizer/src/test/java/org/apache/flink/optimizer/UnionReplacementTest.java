@@ -23,7 +23,7 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -54,10 +54,10 @@ public class UnionReplacementTest extends CompilerTestBase {
     public void testUnionReplacement() {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-            DataSet<String> input1 = env.fromElements("test1");
-            DataSet<String> input2 = env.fromElements("test2");
+            DataStream<String> input1 = env.fromElements("test1");
+            DataStream<String> input2 = env.fromElements("test2");
 
-            DataSet<String> union = input1.union(input2);
+            DataStream<String> union = input1.union(input2);
 
             union.output(new DiscardingOutputFormat<String>());
             union.output(new DiscardingOutputFormat<String>());
@@ -97,14 +97,14 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src4 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src4 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> union23 = src2.union(src3);
-        DataSet<Tuple2<Long, Long>> union123 = src1.union(union23);
-        DataSet<Tuple2<Long, Long>> union234 = src4.union(union23);
+        DataStream<Tuple2<Long, Long>> union23 = src2.union(src3);
+        DataStream<Tuple2<Long, Long>> union123 = src1.union(union23);
+        DataStream<Tuple2<Long, Long>> union234 = src4.union(union23);
 
         union123.groupBy(0)
                 .sum(1)
@@ -207,12 +207,12 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> union12 = src1.union(src2);
-        DataSet<Tuple2<Long, Long>> union123 = union12.union(src3);
+        DataStream<Tuple2<Long, Long>> union12 = src1.union(src2);
+        DataStream<Tuple2<Long, Long>> union123 = union12.union(src3);
 
         union123.partitionByHash(1)
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>())
@@ -290,12 +290,12 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> union12 = src1.union(src2);
-        DataSet<Tuple2<Long, Long>> union123 = union12.union(src3);
+        DataStream<Tuple2<Long, Long>> union12 = src1.union(src2);
+        DataStream<Tuple2<Long, Long>> union123 = union12.union(src3);
 
         union123.rebalance().output(new DiscardingOutputFormat<Tuple2<Long, Long>>()).name("out");
 
@@ -364,12 +364,12 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> union12 = src1.union(src2);
-        DataSet<Tuple2<Long, Long>> union123 = union12.union(src3);
+        DataStream<Tuple2<Long, Long>> union12 = src1.union(src2);
+        DataStream<Tuple2<Long, Long>> union123 = union12.union(src3);
 
         union123.partitionByRange(1)
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>())
@@ -451,13 +451,13 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
-        DataSet<Tuple2<Long, Long>> src4 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src2 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src3 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src4 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> union12 = src1.union(src2);
-        DataSet<Tuple2<Long, Long>> union123 = union12.union(src3);
+        DataStream<Tuple2<Long, Long>> union12 = src1.union(src2);
+        DataStream<Tuple2<Long, Long>> union123 = union12.union(src3);
         union123.join(src4, JoinOperatorBase.JoinHint.BROADCAST_HASH_FIRST)
                 .where(0)
                 .equalTo(0)
@@ -514,21 +514,21 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
+        DataStream<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
 
-        DataSet<Tuple2<Long, Long>> u1 = src1.union(src1).map(new IdentityMapper<>());
+        DataStream<Tuple2<Long, Long>> u1 = src1.union(src1).map(new IdentityMapper<>());
 
-        DataSet<Tuple2<Long, Long>> s1 = u1.filter(x -> true).name("preFilter1");
-        DataSet<Tuple2<Long, Long>> s2 = u1.filter(x -> true).name("preFilter2");
+        DataStream<Tuple2<Long, Long>> s1 = u1.filter(x -> true).name("preFilter1");
+        DataStream<Tuple2<Long, Long>> s2 = u1.filter(x -> true).name("preFilter2");
 
-        DataSet<Tuple2<Long, Long>> reduced1 =
+        DataStream<Tuple2<Long, Long>> reduced1 =
                 s1.union(s2)
                         .filter(x -> true)
                         .name("postFilter1")
                         .groupBy(0)
                         .reduceGroup(new IdentityGroupReducer<>())
                         .name("reducer1");
-        DataSet<Tuple2<Long, Long>> reduced2 =
+        DataStream<Tuple2<Long, Long>> reduced2 =
                 s1.union(s2)
                         .filter(x -> true)
                         .name("postFilter2")
@@ -574,22 +574,22 @@ public class UnionReplacementTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple2<Long, Long>> in1 =
+        DataStream<Tuple2<Long, Long>> in1 =
                 env.fromElements(new Tuple2<>(0L, 0L))
                         .map(new IdentityMapper<>())
                         .setParallelism(fullDop)
                         .name("inDopFull");
-        DataSet<Tuple2<Long, Long>> in2 =
+        DataStream<Tuple2<Long, Long>> in2 =
                 env.fromElements(new Tuple2<>(0L, 0L))
                         .map(new IdentityMapper<>())
                         .setParallelism(halfDop)
                         .name("inDopHalf");
 
-        DataSet<Tuple2<Long, Long>> union = in1.union(in2);
+        DataStream<Tuple2<Long, Long>> union = in1.union(in2);
 
-        DataSet<Tuple2<Long, Long>> dopFullMap =
+        DataStream<Tuple2<Long, Long>> dopFullMap =
                 union.map(new IdentityMapper<>()).setParallelism(fullDop).name("outDopFull");
-        DataSet<Tuple2<Long, Long>> dopHalfMap =
+        DataStream<Tuple2<Long, Long>> dopHalfMap =
                 union.map(new IdentityMapper<>()).setParallelism(halfDop).name("outDopHalf");
 
         dopFullMap.output(new DiscardingOutputFormat<>());

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -43,7 +43,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#coGroup(DataSet)}. */
+/** Tests for {@link DataStream#coGroup(DataStream)}. */
 @SuppressWarnings("serial")
 class CoGroupOperatorTest {
 
@@ -70,9 +70,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -87,9 +87,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, incompatible cogroup key types
@@ -101,9 +101,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, incompatible number of cogroup keys
@@ -115,9 +115,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, cogroup key out of range
@@ -129,9 +129,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, negative key field position
@@ -143,9 +143,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyFields6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, cogroup key fields on custom type
         assertThatThrownBy(() -> ds1.coGroup(ds2).where(4).equalTo(0))
@@ -156,8 +156,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -171,8 +171,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible cogroup key types
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("myInt").equalTo("myString"))
@@ -183,8 +183,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible number of cogroup keys
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("myInt", "myString").equalTo("myString"))
@@ -195,8 +195,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, cogroup key non-existent
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("myNonExistent").equalTo("myInt"))
@@ -206,8 +206,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicExpression1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 1);
 
         ds1.coGroup(ds2).where("myInt").equalTo("*");
     }
@@ -215,8 +215,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicExpression2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         ds1.coGroup(ds2).where("*").equalTo("myInt");
     }
@@ -224,8 +224,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("*", "invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
     }
@@ -233,8 +233,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -243,8 +243,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression3() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 1);
 
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("myInt").equalTo("invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -253,8 +253,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression4() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 1);
 
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("myInt").equalTo("*", "invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -263,8 +263,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression5() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<>());
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
+        DataStream<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<>());
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 0);
 
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("*"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -273,8 +273,8 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyAtomicInvalidExpression6() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
-        DataSet<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<>());
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 0);
+        DataStream<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<>());
 
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("*").equalTo("*"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -284,8 +284,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions1Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -300,8 +300,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions2Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible cogroup key types
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("nested.myInt").equalTo("nested.myString"))
@@ -312,8 +312,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions3Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible number of cogroup keys
         assertThatThrownBy(
@@ -328,8 +328,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyExpressions4Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, cogroup key non-existent
         assertThatThrownBy(
@@ -344,8 +344,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeySelectors1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -361,8 +361,8 @@ class CoGroupOperatorTest {
     void testCoGroupKeyMixing1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -379,9 +379,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyMixing2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -397,9 +397,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyMixing3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible types
         assertThatThrownBy(
@@ -416,9 +416,9 @@ class CoGroupOperatorTest {
     void testCoGroupKeyMixing4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, more than one key field position
         assertThatThrownBy(
@@ -435,9 +435,9 @@ class CoGroupOperatorTest {
     void testSemanticPropsWithKeySelector1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         CoGroupOperator<?, ?, ?> coGroupOp =
@@ -472,9 +472,9 @@ class CoGroupOperatorTest {
     void testSemanticPropsWithKeySelector2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         CoGroupOperator<?, ?, ?> coGroupOp =

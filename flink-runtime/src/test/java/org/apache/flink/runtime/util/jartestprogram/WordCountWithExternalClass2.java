@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.util.jartestprogram;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -29,9 +29,9 @@ public class WordCountWithExternalClass2 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // get input data
-        DataSet<String> text = StaticData.getDefaultTextLineDataSet(env);
+        DataStream<String> text = StaticData.getDefaultTextLineDataSet(env);
 
-        DataSet<Tuple2<String, Integer>> counts =
+        DataStream<Tuple2<String, Integer>> counts =
                 // split up the lines in pairs (2-tuples) containing: (word,1)
                 text.flatMap(new ExternalTokenizer2())
                         // group by the tuple field "0" and sum up tuple field "1"

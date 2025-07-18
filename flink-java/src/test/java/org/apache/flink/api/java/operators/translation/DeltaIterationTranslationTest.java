@@ -28,7 +28,7 @@ import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.base.DeltaIterationBase;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -70,11 +70,11 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
                 env.setParallelism(defaultParallelism);
 
                 @SuppressWarnings("unchecked")
-                DataSet<Tuple3<Double, Long, String>> initialSolutionSet =
+                DataStream<Tuple3<Double, Long, String>> initialSolutionSet =
                         env.fromElements(new Tuple3<>(3.44, 5L, "abc"));
 
                 @SuppressWarnings("unchecked")
-                DataSet<Tuple2<Double, String>> initialWorkSet =
+                DataStream<Tuple2<Double, String>> initialWorkSet =
                         env.fromElements(new Tuple2<>(1.23, "abc"));
 
                 DeltaIteration<Tuple3<Double, Long, String>, Tuple2<Double, String>> iteration =
@@ -85,7 +85,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
                 iteration.registerAggregator(aggregatorName, new LongSumAggregator());
 
                 // test that multiple workset consumers are supported
-                DataSet<Tuple2<Double, String>> worksetSelfJoin =
+                DataStream<Tuple2<Double, String>> worksetSelfJoin =
                         iteration
                                 .getWorkset()
                                 .map(new IdentityMapper<Tuple2<Double, String>>())
@@ -94,14 +94,14 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
                                 .equalTo(1)
                                 .projectFirst(0, 1);
 
-                DataSet<Tuple3<Double, Long, String>> joined =
+                DataStream<Tuple3<Double, Long, String>> joined =
                         worksetSelfJoin
                                 .join(iteration.getSolutionSet())
                                 .where(1)
                                 .equalTo(2)
                                 .with(new SolutionWorksetJoin());
 
-                DataSet<Tuple3<Double, Long, String>> result =
+                DataStream<Tuple3<Double, Long, String>> result =
                         iteration.closeWith(
                                 joined,
                                 joined.map(new NextWorksetMapper()).name(beforeNextWorksetMap));
@@ -182,11 +182,11 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Double, Long, String>> initialSolutionSet =
+            DataStream<Tuple3<Double, Long, String>> initialSolutionSet =
                     env.fromElements(new Tuple3<Double, Long, String>(3.44, 5L, "abc"));
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Double, String>> initialWorkSet =
+            DataStream<Tuple2<Double, String>> initialWorkSet =
                     env.fromElements(new Tuple2<Double, String>(1.23, "abc"));
 
             DeltaIteration<Tuple3<Double, Long, String>, Tuple2<Double, String>> iteration =
@@ -218,11 +218,11 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Double, Long, String>> initialSolutionSet =
+            DataStream<Tuple3<Double, Long, String>> initialSolutionSet =
                     env.fromElements(new Tuple3<Double, Long, String>(3.44, 5L, "abc"));
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Double, String>> initialWorkSet =
+            DataStream<Tuple2<Double, String>> initialWorkSet =
                     env.fromElements(new Tuple2<Double, String>(1.23, "abc"));
 
             DeltaIteration<Tuple3<Double, Long, String>, Tuple2<Double, String>> iteration =

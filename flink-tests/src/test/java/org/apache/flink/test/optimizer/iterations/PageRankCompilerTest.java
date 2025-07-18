@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.iterations;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -54,17 +54,17 @@ public class PageRankCompilerTest extends CompilerTestBase {
             final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             // get input data
-            DataSet<Long> pagesInput = env.fromElements(1L);
+            DataStream<Long> pagesInput = env.fromElements(1L);
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> linksInput =
+            DataStream<Tuple2<Long, Long>> linksInput =
                     env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
             // assign initial rank to pages
-            DataSet<Tuple2<Long, Double>> pagesWithRanks =
+            DataStream<Tuple2<Long, Double>> pagesWithRanks =
                     pagesInput.map(new RankAssigner((1.0d / 10)));
 
             // build adjacency list from link input
-            DataSet<Tuple2<Long, Long[]>> adjacencyListInput =
+            DataStream<Tuple2<Long, Long[]>> adjacencyListInput =
                     linksInput.groupBy(0).reduceGroup(new BuildOutgoingEdgeList());
 
             // set iterative data set
@@ -74,7 +74,7 @@ public class PageRankCompilerTest extends CompilerTestBase {
             cfg.setString(
                     Optimizer.HINT_LOCAL_STRATEGY, Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_SECOND);
 
-            DataSet<Tuple2<Long, Double>> newRanks =
+            DataStream<Tuple2<Long, Double>> newRanks =
                     iteration
                             // join pages with outgoing edges and distribute rank
                             .join(adjacencyListInput)
@@ -88,7 +88,7 @@ public class PageRankCompilerTest extends CompilerTestBase {
                             // apply dampening factor
                             .map(new Dampener(0.85, 10));
 
-            DataSet<Tuple2<Long, Double>> finalPageRanks =
+            DataStream<Tuple2<Long, Double>> finalPageRanks =
                     iteration.closeWith(
                             newRanks,
                             newRanks.join(iteration)

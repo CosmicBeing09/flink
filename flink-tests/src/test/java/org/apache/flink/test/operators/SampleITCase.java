@@ -19,7 +19,7 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.FlatMapOperator;
 import org.apache.flink.api.java.operators.MapPartitionOperator;
@@ -135,7 +135,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
             throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         FlatMapOperator<Tuple3<Integer, Long, String>, String> ds = getSourceDataSet(env);
-        DataSet<String> sampled =
+        DataStream<String> sampled =
                 DataSetUtils.sampleWithSize(ds, withReplacement, numSamples, seed);
         List<String> result = sampled.collect();
         assertEquals(numSamples, result.size());

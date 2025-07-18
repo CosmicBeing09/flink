@@ -22,7 +22,7 @@ package org.apache.flink.test.example.java;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.test.testdata.WordCountData;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -53,9 +53,9 @@ public class WordCountSubclassPOJOITCase extends JavaProgramTestBaseJUnit4 imple
     @Override
     protected void testProgram() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<String> text = env.readTextFile(textPath);
+        DataStream<String> text = env.readTextFile(textPath);
 
-        DataSet<WCBase> counts =
+        DataStream<WCBase> counts =
                 text.flatMap(new Tokenizer())
                         .groupBy("word")
                         .reduce(

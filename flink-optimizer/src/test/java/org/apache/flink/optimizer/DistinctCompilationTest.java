@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -47,7 +47,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -103,7 +103,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -160,7 +160,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -230,7 +230,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")

@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.operators;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.TextInputFormat;
 import org.apache.flink.configuration.Configuration;
@@ -51,7 +51,7 @@ public class DataSourceITCase extends JavaProgramTestBaseJUnit4 {
         Configuration ifConf = new Configuration();
         ifConf.setString("prepend", "test");
 
-        DataSet<String> ds =
+        DataStream<String> ds =
                 env.createInput(new TestInputFormat(new Path(inputPath))).withParameters(ifConf);
         List<String> result = ds.collect();
 

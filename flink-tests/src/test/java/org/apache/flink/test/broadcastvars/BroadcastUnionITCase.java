@@ -21,7 +21,7 @@ package org.apache.flink.test.broadcastvars;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
 
@@ -38,9 +38,9 @@ public class BroadcastUnionITCase extends JavaProgramTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Long> input = env.generateSequence(1, 10);
-        DataSet<Long> bc1 = env.generateSequence(1, 5);
-        DataSet<Long> bc2 = env.generateSequence(6, 10);
+        DataStream<Long> input = env.generateSequence(1, 10);
+        DataStream<Long> bc1 = env.generateSequence(1, 5);
+        DataStream<Long> bc2 = env.generateSequence(6, 10);
 
         List<Long> result =
                 input.map(new Mapper())

@@ -19,7 +19,7 @@
 package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -31,7 +31,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Tests for {@link DataSet#project(int...)}. */
+/** Tests for {@link DataStream#project(int...)}. */
 class ProjectionOperatorTest {
 
     // TUPLE DATA
@@ -55,7 +55,7 @@ class ProjectionOperatorTest {
     void testFieldsProjection() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -74,7 +74,7 @@ class ProjectionOperatorTest {
                 .isInstanceOf(IndexOutOfBoundsException.class);
 
         // should not work: not applied to tuple dataset
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         assertThatThrownBy(() -> longDs.project(0))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
@@ -83,7 +83,7 @@ class ProjectionOperatorTest {
     void testProjectionTypes() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -97,7 +97,7 @@ class ProjectionOperatorTest {
     void testProjectionWithoutTypes() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work

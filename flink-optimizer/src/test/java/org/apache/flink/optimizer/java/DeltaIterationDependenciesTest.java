@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -39,12 +39,12 @@ public class DeltaIterationDependenciesTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> deltaIteration =
                     input.iterateDelta(input, 10, 0);
 
-            DataSet<Tuple2<Long, Long>> delta =
+            DataStream<Tuple2<Long, Long>> delta =
                     deltaIteration
                             .getSolutionSet()
                             .join(deltaIteration.getWorkset())
@@ -53,7 +53,7 @@ public class DeltaIterationDependenciesTest extends CompilerTestBase {
                             .projectFirst(1)
                             .projectSecond(1);
 
-            DataSet<Tuple2<Long, Long>> nextWorkset =
+            DataStream<Tuple2<Long, Long>> nextWorkset =
                     deltaIteration
                             .getSolutionSet()
                             .join(input)
@@ -62,7 +62,7 @@ public class DeltaIterationDependenciesTest extends CompilerTestBase {
                             .projectFirst(1)
                             .projectSecond(1);
 
-            DataSet<Tuple2<Long, Long>> result = deltaIteration.closeWith(delta, nextWorkset);
+            DataStream<Tuple2<Long, Long>> result = deltaIteration.closeWith(delta, nextWorkset);
 
             result.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 

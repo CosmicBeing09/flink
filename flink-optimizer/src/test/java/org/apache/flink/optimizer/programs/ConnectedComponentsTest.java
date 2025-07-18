@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -260,7 +260,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Tuple2<Long, Long>> verticesWithId =
+        DataStream<Tuple2<Long, Long>> verticesWithId =
                 env.generateSequence(0, 1000)
                         .name("Vertices")
                         .map(
@@ -278,10 +278,10 @@ public class ConnectedComponentsTest extends CompilerTestBase {
                         .name("Connected Components Iteration");
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 env.fromElements(new Tuple2<Long, Long>(0L, 0L)).name("Edges");
 
-        DataSet<Tuple2<Long, Long>> minCandidateId =
+        DataStream<Tuple2<Long, Long>> minCandidateId =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -294,7 +294,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
                         .min(1)
                         .name("Find Minimum Candidate Id");
 
-        DataSet<Tuple2<Long, Long>> updateComponentId;
+        DataStream<Tuple2<Long, Long>> updateComponentId;
 
         if (solutionSetFirst) {
             updateComponentId =

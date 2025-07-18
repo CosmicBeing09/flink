@@ -20,7 +20,7 @@ package org.apache.flink.formats.avro;
 
 import org.apache.flink.api.common.io.InputFormat;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.typeutils.PojoTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
@@ -44,7 +44,7 @@ class AvroInputFormatTypeExtractionTest {
             TypeInformation<?> typeInfoDirect = TypeExtractor.getInputFormatTypes(format);
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-            DataSet<MyAvroType> input = env.createInput(format);
+            DataStream<MyAvroType> input = env.createInput(format);
             TypeInformation<?> typeInfoDataSet = input.getType();
 
             assertThat(typeInfoDirect).isInstanceOf(PojoTypeInfo.class);

@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.JoinOperator.DefaultJoin;
@@ -36,7 +36,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor;
 /**
  * Intermediate step of an Outer Join transformation.
  *
- * <p>To continue the Join transformation, select the join key of the first input {@link DataSet} by
+ * <p>To continue the Join transformation, select the join key of the first input {@link DataStream} by
  * calling {@link JoinOperatorSetsBase#where(int...)} or {@link
  * JoinOperatorSetsBase#where(KeySelector)}.
  *
@@ -52,22 +52,22 @@ import org.apache.flink.api.java.typeutils.TypeExtractor;
 @Public
 public class JoinOperatorSetsBase<I1, I2> {
 
-    protected final DataSet<I1> input1;
-    protected final DataSet<I2> input2;
+    protected final DataStream<I1> input1;
+    protected final DataStream<I2> input2;
 
     protected final JoinHint joinHint;
     protected final JoinType joinType;
 
-    public JoinOperatorSetsBase(DataSet<I1> input1, DataSet<I2> input2) {
+    public JoinOperatorSetsBase(DataStream<I1> input1, DataStream<I2> input2) {
         this(input1, input2, JoinHint.OPTIMIZER_CHOOSES);
     }
 
-    public JoinOperatorSetsBase(DataSet<I1> input1, DataSet<I2> input2, JoinHint hint) {
+    public JoinOperatorSetsBase(DataStream<I1> input1, DataStream<I2> input2, JoinHint hint) {
         this(input1, input2, hint, JoinType.INNER);
     }
 
     public JoinOperatorSetsBase(
-            DataSet<I1> input1, DataSet<I2> input2, JoinHint hint, JoinType type) {
+            DataStream<I1> input1, DataStream<I2> input2, JoinHint hint, JoinType type) {
         if (input1 == null || input2 == null) {
             throw new NullPointerException();
         }
@@ -81,7 +81,7 @@ public class JoinOperatorSetsBase<I1, I2> {
     /**
      * Continues a Join transformation.
      *
-     * <p>Defines the {@link Tuple} fields of the first join {@link DataSet} that should be used as
+     * <p>Defines the {@link Tuple} fields of the first join {@link DataStream} that should be used as
      * join keys.
      *
      * <p><b>Note: Fields can only be selected as join keys on Tuple DataSets.</b>
@@ -94,7 +94,7 @@ public class JoinOperatorSetsBase<I1, I2> {
      *     org.apache.flink.api.java.operators.join.JoinOperatorSetsBase.JoinOperatorSetsPredicateBase#equalTo(KeySelector)}
      *     to continue the Join.
      * @see Tuple
-     * @see DataSet
+     * @see DataStream
      */
     public JoinOperatorSetsPredicateBase where(int... fields) {
         return new JoinOperatorSetsPredicateBase(
@@ -104,7 +104,7 @@ public class JoinOperatorSetsBase<I1, I2> {
     /**
      * Continues a Join transformation.
      *
-     * <p>Defines the fields of the first join {@link DataSet} that should be used as grouping keys.
+     * <p>Defines the fields of the first join {@link DataStream} that should be used as grouping keys.
      * Fields are the names of member fields of the underlying type of the data set.
      *
      * @param fields The fields of the first join DataSets that should be used as keys.
@@ -114,7 +114,7 @@ public class JoinOperatorSetsBase<I1, I2> {
      *     org.apache.flink.api.java.operators.join.JoinOperatorSetsBase.JoinOperatorSetsPredicateBase#equalTo(KeySelector)}
      *     to continue the Join.
      * @see Tuple
-     * @see DataSet
+     * @see DataStream
      */
     public JoinOperatorSetsPredicateBase where(String... fields) {
         return new JoinOperatorSetsPredicateBase(
@@ -123,7 +123,7 @@ public class JoinOperatorSetsBase<I1, I2> {
 
     /**
      * Continues a Join transformation and defines a {@link KeySelector} function for the first join
-     * {@link DataSet}.
+     * {@link DataStream}.
      *
      * <p>The KeySelector function is called for each element of the first DataSet and extracts a
      * single key value on which the DataSet is joined.
@@ -136,7 +136,7 @@ public class JoinOperatorSetsBase<I1, I2> {
      *     org.apache.flink.api.java.operators.join.JoinOperatorSetsBase.JoinOperatorSetsPredicateBase#equalTo(KeySelector)}
      *     to continue the Join.
      * @see KeySelector
-     * @see DataSet
+     * @see DataStream
      */
     public <K> JoinOperatorSetsPredicateBase where(KeySelector<I1, K> keySelector) {
         TypeInformation<K> keyType =
@@ -149,7 +149,7 @@ public class JoinOperatorSetsBase<I1, I2> {
      * Intermediate step of a Join transformation.
      *
      * <p>To continue the Join transformation, select the join key of the second input {@link
-     * DataSet} by calling {@link
+     * DataStream} by calling {@link
      * org.apache.flink.api.java.operators.join.JoinOperatorSetsBase.JoinOperatorSetsPredicateBase#equalTo(int...)}
      * or {@link
      * org.apache.flink.api.java.operators.join.JoinOperatorSetsBase.JoinOperatorSetsPredicateBase#equalTo(KeySelector)}.
@@ -172,7 +172,7 @@ public class JoinOperatorSetsBase<I1, I2> {
 
         /**
          * Continues a Join transformation and defines the {@link Tuple} fields of the second join
-         * {@link DataSet} that should be used as join keys.
+         * {@link DataStream} that should be used as join keys.
          *
          * <p><b>Note: Fields can only be selected as join keys on Tuple DataSets.</b>
          *
@@ -188,7 +188,7 @@ public class JoinOperatorSetsBase<I1, I2> {
         }
 
         /**
-         * Continues a Join transformation and defines the fields of the second join {@link DataSet}
+         * Continues a Join transformation and defines the fields of the second join {@link DataStream}
          * that should be used as join keys.
          *
          * <p>The resulting {@link JoinFunctionAssigner} needs to be finished by providing a {@link
@@ -203,7 +203,7 @@ public class JoinOperatorSetsBase<I1, I2> {
 
         /**
          * Continues a Join transformation and defines a {@link KeySelector} function for the second
-         * join {@link DataSet}.
+         * join {@link DataStream}.
          *
          * <p>The KeySelector function is called for each element of the second DataSet and extracts
          * a single key value on which the DataSet is joined.

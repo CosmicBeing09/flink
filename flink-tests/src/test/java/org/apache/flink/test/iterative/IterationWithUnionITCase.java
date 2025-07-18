@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -59,12 +59,12 @@ public class IterationWithUnionITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Integer, CoordVector>> initialInput =
+        DataStream<Tuple2<Integer, CoordVector>> initialInput =
                 env.readFile(new PointInFormat(), this.dataPath).setParallelism(1);
 
         IterativeDataSet<Tuple2<Integer, CoordVector>> iteration = initialInput.iterate(2);
 
-        DataSet<Tuple2<Integer, CoordVector>> result =
+        DataStream<Tuple2<Integer, CoordVector>> result =
                 iteration.union(iteration).map(new IdentityMapper());
 
         iteration.closeWith(result).writeAsFormattedText(this.resultPath, new PointFormatter());

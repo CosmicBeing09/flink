@@ -20,7 +20,7 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.GroupReduceOperator;
@@ -38,7 +38,7 @@ import java.util.List;
 
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsText;
 
-/** Integration tests for {@link DataSet#first}. */
+/** Integration tests for {@link DataStream#first}. */
 @RunWith(Parameterized.class)
 public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
     public FirstNITCase(TestExecutionMode mode) {
@@ -53,8 +53,8 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple1<Integer>> seven = ds.first(7).map(new OneMapper()).sum(0);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple1<Integer>> seven = ds.first(7).map(new OneMapper()).sum(0);
 
         List<Tuple1<Integer>> result = seven.collect();
 
@@ -71,8 +71,8 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Long, Integer>> first =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Long, Integer>> first =
                 ds.groupBy(1).first(4).map(new OneMapper2()).groupBy(0).sum(1);
 
         List<Tuple2<Long, Integer>> result = first.collect();
@@ -90,8 +90,8 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Long, Integer>> first =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Long, Integer>> first =
                 ds.groupBy(1).sortGroup(0, Order.DESCENDING).first(3).project(1, 0);
 
         List<Tuple2<Long, Integer>> result = first.collect();
@@ -112,7 +112,7 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testFaultyCast() throws Exception {
         ExecutionEnvironment ee = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> b = ee.fromElements("a", "b");
+        DataStream<String> b = ee.fromElements("a", "b");
         GroupReduceOperator<String, String> a =
                 b.groupBy(
                                 new KeySelector<String, Long>() {

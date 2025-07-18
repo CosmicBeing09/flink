@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.dag.TempMode;
@@ -42,8 +42,8 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<String> source1 = env.fromElements("test");
-            DataSet<String> source2 = env.fromElements("test");
+            DataStream<String> source1 = env.fromElements("test");
+            DataStream<String> source2 = env.fromElements("test");
 
             source1.map(new IdentityMapper<String>())
                     .withBroadcastSet(source2, "some name")
@@ -73,7 +73,7 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<String> source1 = env.fromElements("test");
+            DataStream<String> source1 = env.fromElements("test");
 
             source1.map(new IdentityMapper<String>())
                     .map(new IdentityMapper<String>())

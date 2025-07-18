@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.dataexchange;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -127,7 +127,7 @@ public class DataExchangeModeOpenBranchingTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.generateSequence(1, 100000)
                             .map(
                                     new MapFunction<Long, Tuple2<Long, Long>>() {

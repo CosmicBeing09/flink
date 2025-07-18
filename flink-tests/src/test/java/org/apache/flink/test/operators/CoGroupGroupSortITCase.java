@@ -20,7 +20,7 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -38,7 +38,7 @@ public class CoGroupGroupSortITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> input1 =
+        DataStream<Tuple2<Long, Long>> input1 =
                 env.fromElements(
                         new Tuple2<Long, Long>(0L, 5L),
                         new Tuple2<Long, Long>(0L, 4L),
@@ -50,7 +50,7 @@ public class CoGroupGroupSortITCase extends JavaProgramTestBaseJUnit4 {
                         new Tuple2<Long, Long>(1L, 9L),
                         new Tuple2<Long, Long>(1L, 7L));
 
-        DataSet<TestPojo> input2 =
+        DataStream<TestPojo> input2 =
                 env.fromElements(
                         new TestPojo(0L, 10L, 3L),
                         new TestPojo(0L, 8L, 3L),

@@ -18,7 +18,7 @@
 
 package org.apache.flink.examples.java.relational.util;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -686,7 +686,7 @@ public class WebLogData {
         new Object[] {"url_16", "2009-4-7"}
     };
 
-    public static DataSet<Tuple2<String, String>> getDocumentDataSet(ExecutionEnvironment env) {
+    public static DataStream<Tuple2<String, String>> getDocumentDataSet(ExecutionEnvironment env) {
 
         List<Tuple2<String, String>> data = new ArrayList<Tuple2<String, String>>(100);
         for (Object[] document : DOCUMENTS) {
@@ -696,7 +696,7 @@ public class WebLogData {
         return env.fromCollection(data);
     }
 
-    public static DataSet<Tuple3<Integer, String, Integer>> getRankDataSet(
+    public static DataStream<Tuple3<Integer, String, Integer>> getRankDataSet(
             ExecutionEnvironment env) {
 
         List<Tuple3<Integer, String, Integer>> data =
@@ -709,7 +709,7 @@ public class WebLogData {
         return env.fromCollection(data);
     }
 
-    public static DataSet<Tuple2<String, String>> getVisitDataSet(ExecutionEnvironment env) {
+    public static DataStream<Tuple2<String, String>> getVisitDataSet(ExecutionEnvironment env) {
 
         List<Tuple2<String, String>> data = new ArrayList<Tuple2<String, String>>(100);
 

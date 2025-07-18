@@ -21,7 +21,7 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -204,12 +204,12 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Tuple3<Long, Long, Long>> bigInput =
+        DataStream<Tuple3<Long, Long, Long>> bigInput =
                 env.readCsvFile("file://bigFile")
                         .types(Long.class, Long.class, Long.class)
                         .name("bigFile");
 
-        DataSet<Tuple3<Long, Long, Long>> smallInput =
+        DataStream<Tuple3<Long, Long, Long>> smallInput =
                 env.readCsvFile("file://smallFile")
                         .types(Long.class, Long.class, Long.class)
                         .name("smallFile");
@@ -224,7 +224,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
             joinStrategy.setString(Optimizer.HINT_LOCAL_STRATEGY, strategy);
         }
 
-        DataSet<Tuple3<Long, Long, Long>> inner =
+        DataStream<Tuple3<Long, Long, Long>> inner =
                 iteration
                         .join(smallInput)
                         .where(0)
@@ -233,7 +233,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
                         .name("DummyJoiner")
                         .withParameters(joinStrategy);
 
-        DataSet<Tuple3<Long, Long, Long>> output = iteration.closeWith(inner);
+        DataStream<Tuple3<Long, Long, Long>> output = iteration.closeWith(inner);
 
         output.output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
 
@@ -246,7 +246,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
         env.setParallelism(DEFAULT_PARALLELISM);
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> bigInput =
+        DataStream<Tuple3<Long, Long, Long>> bigInput =
                 env.fromElements(
                                 new Tuple3<Long, Long, Long>(1L, 2L, 3L),
                                 new Tuple3<Long, Long, Long>(1L, 2L, 3L),
@@ -254,7 +254,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
                         .name("Big");
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> smallInput =
+        DataStream<Tuple3<Long, Long, Long>> smallInput =
                 env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Small");
 
         IterativeDataSet<Tuple3<Long, Long, Long>> iteration = bigInput.iterate(10);
@@ -262,7 +262,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
         Configuration joinStrategy = new Configuration();
         joinStrategy.setString(Optimizer.HINT_LOCAL_STRATEGY, strategy);
 
-        DataSet<Tuple3<Long, Long, Long>> inner =
+        DataStream<Tuple3<Long, Long, Long>> inner =
                 smallInput
                         .join(iteration)
                         .where(0)
@@ -271,7 +271,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
                         .name("DummyJoiner")
                         .withParameters(joinStrategy);
 
-        DataSet<Tuple3<Long, Long, Long>> output = iteration.closeWith(inner);
+        DataStream<Tuple3<Long, Long, Long>> output = iteration.closeWith(inner);
 
         output.output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
 

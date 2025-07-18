@@ -20,7 +20,7 @@ package org.apache.flink.test.hadoopcompatibility.mapreduce;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.hadoop.mapreduce.HadoopOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -75,13 +75,13 @@ class WordCountMapreduceITCase extends JavaProgramTestBase {
     private void internalRun() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<LongWritable, Text>> input;
+        DataStream<Tuple2<LongWritable, Text>> input;
         input =
                 env.createInput(
                         HadoopInputs.readHadoopFile(
                                 new TextInputFormat(), LongWritable.class, Text.class, textPath));
 
-        DataSet<String> text =
+        DataStream<String> text =
                 input.map(
                         new MapFunction<Tuple2<LongWritable, Text>, String>() {
                             @Override
@@ -90,14 +90,14 @@ class WordCountMapreduceITCase extends JavaProgramTestBase {
                             }
                         });
 
-        DataSet<Tuple2<String, Integer>> counts =
+        DataStream<Tuple2<String, Integer>> counts =
                 // split up the lines in pairs (2-tuples) containing: (word,1)
                 text.flatMap(new Tokenizer())
                         // group by the tuple field "0" and sum up tuple field "1"
                         .groupBy(0)
                         .sum(1);
 
-        DataSet<Tuple2<Text, LongWritable>> words =
+        DataStream<Tuple2<Text, LongWritable>> words =
                 counts.map(
                         new MapFunction<Tuple2<String, Integer>, Tuple2<Text, LongWritable>>() {
 

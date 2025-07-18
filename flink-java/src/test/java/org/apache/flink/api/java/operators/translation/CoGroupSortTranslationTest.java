@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.base.CoGroupOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -44,8 +44,8 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(0L, 0L));
-            DataSet<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(0L, 0L, 0L));
+            DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(0L, 0L));
+            DataStream<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(0L, 0L, 0L));
 
             input1.coGroup(input2)
                     .where(1)
@@ -94,8 +94,8 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
-            DataSet<TestPoJo> input2 = env.fromElements(new TestPoJo());
+            DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<TestPoJo> input2 = env.fromElements(new TestPoJo());
 
             input1.coGroup(input2)
                     .where(1)

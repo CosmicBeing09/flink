@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -44,7 +44,7 @@ class AggregateTranslationTest {
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Double, StringValue, Long>> initialData =
+            DataStream<Tuple3<Double, StringValue, Long>> initialData =
                     env.fromElements(new Tuple3<>(3.141592, new StringValue("foobar"), 77L));
 
             initialData

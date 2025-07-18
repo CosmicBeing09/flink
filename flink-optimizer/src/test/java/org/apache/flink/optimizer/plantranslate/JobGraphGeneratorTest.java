@@ -25,7 +25,7 @@ import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.ResourceSpec;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.BlockingShuffleOutputFormat;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -108,24 +108,24 @@ public class JobGraphGeneratorTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> input = env.fromElements(1L, 2L, 3L);
+        DataStream<Long> input = env.fromElements(1L, 2L, 3L);
         opMethod.invoke(input, resource1);
 
-        DataSet<Long> map1 = input.map(mapFunction);
+        DataStream<Long> map1 = input.map(mapFunction);
         opMethod.invoke(map1, resource2);
 
         // CHAIN(Source -> Map -> Filter)
-        DataSet<Long> filter1 = map1.filter(filterFunction);
+        DataStream<Long> filter1 = map1.filter(filterFunction);
         opMethod.invoke(filter1, resource3);
 
         IterativeDataSet<Long> startOfIteration = filter1.iterate(10);
         opMethod.invoke(startOfIteration, resource4);
 
-        DataSet<Long> map2 = startOfIteration.map(mapFunction);
+        DataStream<Long> map2 = startOfIteration.map(mapFunction);
         opMethod.invoke(map2, resource5);
 
         // CHAIN(Map -> Filter)
-        DataSet<Long> feedback = map2.filter(filterFunction);
+        DataStream<Long> feedback = map2.filter(filterFunction);
         opMethod.invoke(feedback, resource6);
 
         DataSink<Long> sink =
@@ -192,21 +192,21 @@ public class JobGraphGeneratorTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<>(1L, 2L));
+        DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<>(1L, 2L));
         opMethod.invoke(input, resource1);
 
         // CHAIN(Map -> Filter)
-        DataSet<Tuple2<Long, Long>> map = input.map(mapFunction);
+        DataStream<Tuple2<Long, Long>> map = input.map(mapFunction);
         opMethod.invoke(map, resource2);
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                 map.iterateDelta(map, 100, 0).registerAggregator("test", new LongSumAggregator());
         deltaMethod.invoke(iteration, resource3);
 
-        DataSet<Tuple2<Long, Long>> delta = iteration.getWorkset().map(mapFunction);
+        DataStream<Tuple2<Long, Long>> delta = iteration.getWorkset().map(mapFunction);
         opMethod.invoke(delta, resource4);
 
-        DataSet<Tuple2<Long, Long>> feedback = delta.filter(filterFunction);
+        DataStream<Tuple2<Long, Long>> feedback = delta.filter(filterFunction);
         opMethod.invoke(feedback, resource5);
 
         DataSink<Tuple2<Long, Long>> sink =
@@ -300,10 +300,10 @@ public class JobGraphGeneratorTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> input =
+        DataStream<Tuple2<Long, Long>> input =
                 env.fromElements(new Tuple2<>(1L, 2L)).setParallelism(1);
 
-        DataSet<Tuple2<Long, Long>> ds = input.map(new IdentityMapper<>()).setParallelism(3);
+        DataStream<Tuple2<Long, Long>> ds = input.map(new IdentityMapper<>()).setParallelism(3);
 
         AbstractID intermediateDataSetID = new AbstractID();
 

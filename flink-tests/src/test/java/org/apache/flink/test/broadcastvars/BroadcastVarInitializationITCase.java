@@ -21,7 +21,7 @@ package org.apache.flink.test.broadcastvars;
 import org.apache.flink.api.common.functions.BroadcastVariableInitializer;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -44,11 +44,11 @@ public class BroadcastVarInitializationITCase extends JavaProgramTestBaseJUnit4 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8);
+        DataStream<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8);
 
         IterativeDataSet<Integer> iteration = data.iterate(10);
 
-        DataSet<Integer> result =
+        DataStream<Integer> result =
                 data.reduceGroup(new PickOneAllReduce()).withBroadcastSet(iteration, "bc");
 
         final List<Integer> resultList = new ArrayList<Integer>();

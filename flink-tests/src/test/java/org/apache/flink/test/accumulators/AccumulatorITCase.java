@@ -28,7 +28,7 @@ import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -101,7 +101,7 @@ public class AccumulatorITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> input = env.readTextFile(dataPath);
+        DataStream<String> input = env.readTextFile(dataPath);
 
         input.flatMap(new TokenizeLine())
                 .groupBy(0)

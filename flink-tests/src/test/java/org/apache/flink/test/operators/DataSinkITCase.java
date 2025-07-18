@@ -20,7 +20,7 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -67,7 +67,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testIntSortingParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("*", Order.DESCENDING).setParallelism(1);
 
         env.execute();
@@ -80,7 +80,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testStringSortingParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("*", Order.ASCENDING).setParallelism(1);
 
         env.execute();
@@ -102,7 +102,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testTupleSortingSingleAscParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath).sortLocalOutput(0, Order.ASCENDING).setParallelism(1);
 
         env.execute();
@@ -137,7 +137,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testTupleSortingSingleDescParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath).sortLocalOutput(0, Order.DESCENDING).setParallelism(1);
 
         env.execute();
@@ -172,7 +172,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testTupleSortingDualParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath)
                 .sortLocalOutput(1, Order.DESCENDING)
                 .sortLocalOutput(0, Order.ASCENDING)
@@ -210,7 +210,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testTupleSortingNestedParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
+        DataStream<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet2(env);
         ds.writeAsText(resultPath)
                 .sortLocalOutput("f0.f1", Order.ASCENDING)
@@ -235,7 +235,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testTupleSortingNestedParallelism1_2() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
+        DataStream<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet2(env);
         ds.writeAsText(resultPath)
                 .sortLocalOutput(1, Order.ASCENDING)
@@ -260,7 +260,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPojoSortingSingleParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
+        DataStream<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("number", Order.ASCENDING).setParallelism(1);
 
         env.execute();
@@ -282,7 +282,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPojoSortingDualParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
+        DataStream<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath)
                 .sortLocalOutput("str", Order.ASCENDING)
                 .sortLocalOutput("number", Order.DESCENDING)
@@ -307,7 +307,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPojoSortingNestedParallelism1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
+        DataStream<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath)
                 .sortLocalOutput("nestedTupleWithCustom.f0", Order.ASCENDING)
                 .sortLocalOutput("nestedTupleWithCustom.f1.myInt", Order.DESCENDING)
@@ -333,7 +333,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testSortingParallelism4() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> ds = env.generateSequence(0, 1000);
+        DataStream<Long> ds = env.generateSequence(0, 1000);
         // randomize
         ds.map(
                         new MapFunction<Long, Long>() {

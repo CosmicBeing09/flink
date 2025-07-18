@@ -67,7 +67,7 @@ public final class Utils {
 
     /**
      * Utility sink function that counts elements and writes the count into an accumulator, from
-     * which it can be retrieved by the client. This sink is used by the {@link DataSet#count()}
+     * which it can be retrieved by the client. This sink is used by the {@link DataStream#count()}
      * function.
      *
      * @param <T> Type of elements to count.
@@ -103,7 +103,7 @@ public final class Utils {
 
     /**
      * Utility sink function that collects elements into an accumulator, from which it they can be
-     * retrieved by the client. This sink is used by the {@link DataSet#collect()} function.
+     * retrieved by the client. This sink is used by the {@link DataStream#collect()} function.
      *
      * @param <T> Type of elements to count.
      */

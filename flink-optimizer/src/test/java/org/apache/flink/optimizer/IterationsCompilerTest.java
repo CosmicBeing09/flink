@@ -21,7 +21,7 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.*;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
@@ -58,17 +58,17 @@ public class IterationsCompilerTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> source =
+            DataStream<Tuple2<Long, Long>> source =
                     env.generateSequence(1, 1000).map(new DuplicateValueScalar<Long>());
 
-            DataSet<Tuple2<Long, Long>> invariantInput =
+            DataStream<Tuple2<Long, Long>> invariantInput =
                     env.generateSequence(1, 1000).map(new DuplicateValueScalar<Long>());
 
             // iteration from here
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iter =
                     source.iterateDelta(source, 1000, 1);
 
-            DataSet<Tuple2<Long, Long>> result =
+            DataStream<Tuple2<Long, Long>> result =
                     invariantInput
                             .map(new IdentityMapper<Tuple2<Long, Long>>())
                             .withBroadcastSet(iter.getWorkset(), "bc data")
@@ -100,16 +100,16 @@ public class IterationsCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+            DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                     env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
+            DataStream<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> bulkResult = doBulkIteration(verticesWithInitialId, edges);
+            DataStream<Tuple2<Long, Long>> bulkResult = doBulkIteration(verticesWithInitialId, edges);
 
-            DataSet<Tuple2<Long, Long>> mappedBulk = bulkResult.map(new DummyMap());
+            DataStream<Tuple2<Long, Long>> mappedBulk = bulkResult.map(new DummyMap());
 
-            DataSet<Tuple2<Long, Long>> depResult = doDeltaIteration(mappedBulk, edges);
+            DataStream<Tuple2<Long, Long>> depResult = doDeltaIteration(mappedBulk, edges);
 
             depResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
@@ -146,14 +146,14 @@ public class IterationsCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+            DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                     env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
+            DataStream<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> bulkResult = doBulkIteration(verticesWithInitialId, edges);
+            DataStream<Tuple2<Long, Long>> bulkResult = doBulkIteration(verticesWithInitialId, edges);
 
-            DataSet<Tuple2<Long, Long>> depResult = doDeltaIteration(bulkResult, edges);
+            DataStream<Tuple2<Long, Long>> depResult = doDeltaIteration(bulkResult, edges);
 
             depResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
@@ -200,15 +200,15 @@ public class IterationsCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+            DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                     env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
+            DataStream<Tuple2<Long, Long>> edges = env.fromElements(new Tuple2<Long, Long>(1L, 2L));
 
-            DataSet<Tuple2<Long, Long>> firstResult =
+            DataStream<Tuple2<Long, Long>> firstResult =
                     doDeltaIteration(verticesWithInitialId, edges);
 
-            DataSet<Tuple2<Long, Long>> secondResult = doDeltaIteration(firstResult, edges);
+            DataStream<Tuple2<Long, Long>> secondResult = doDeltaIteration(firstResult, edges);
 
             secondResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
@@ -245,10 +245,10 @@ public class IterationsCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<Long, Long>> input1 =
+            DataStream<Tuple2<Long, Long>> input1 =
                     env.readCsvFile("/some/file/path").types(Long.class).map(new DuplicateValue());
 
-            DataSet<Tuple2<Long, Long>> input2 =
+            DataStream<Tuple2<Long, Long>> input2 =
                     env.readCsvFile("/some/file/path").types(Long.class, Long.class);
 
             // we do two join operations with input1 which is the partial solution
@@ -294,10 +294,10 @@ public class IterationsCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<Long, Long>> input1 =
+            DataStream<Tuple2<Long, Long>> input1 =
                     env.readCsvFile("/some/file/path").types(Long.class).map(new DuplicateValue());
 
-            DataSet<Tuple2<Long, Long>> input2 =
+            DataStream<Tuple2<Long, Long>> input2 =
                     env.readCsvFile("/some/file/path").types(Long.class, Long.class);
 
             // Use input1 as partial solution. Partial solution is used in a single join operation
@@ -341,20 +341,20 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
             // the workset (input two of the delta iteration) is the same as what is consumed be the
             // successive join
-            DataSet<Tuple2<Long, Long>> initialWorkset =
+            DataStream<Tuple2<Long, Long>> initialWorkset =
                     env.readCsvFile("/some/file/path").types(Long.class).map(new DuplicateValue());
 
-            DataSet<Tuple2<Long, Long>> initialSolutionSet =
+            DataStream<Tuple2<Long, Long>> initialSolutionSet =
                     env.readCsvFile("/some/file/path").types(Long.class).map(new DuplicateValue());
 
             // trivial iteration, since we are interested in the inputs to the iteration
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     initialSolutionSet.iterateDelta(initialWorkset, 100, 0);
 
-            DataSet<Tuple2<Long, Long>> next =
+            DataStream<Tuple2<Long, Long>> next =
                     iteration.getWorkset().map(new IdentityMapper<Tuple2<Long, Long>>());
 
-            DataSet<Tuple2<Long, Long>> result = iteration.closeWith(next, next);
+            DataStream<Tuple2<Long, Long>> result = iteration.closeWith(next, next);
 
             initialWorkset
                     .join(result, JoinHint.REPARTITION_HASH_FIRST)
@@ -377,11 +377,11 @@ public class IterationsCompilerTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Long> width = env.generateSequence(1, 10);
-            DataSet<Long> update = env.generateSequence(1, 10);
-            DataSet<Long> lastGradient = env.generateSequence(1, 10);
+            DataStream<Long> width = env.generateSequence(1, 10);
+            DataStream<Long> update = env.generateSequence(1, 10);
+            DataStream<Long> lastGradient = env.generateSequence(1, 10);
 
-            DataSet<Long> init = width.union(update).union(lastGradient);
+            DataStream<Long> init = width.union(update).union(lastGradient);
 
             IterativeDataSet<Long> iteration = init.iterate(10);
 
@@ -389,8 +389,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
             update = iteration.filter(new IdFilter<Long>());
             lastGradient = iteration.filter(new IdFilter<Long>());
 
-            DataSet<Long> gradient = width.map(new IdentityMapper<Long>());
-            DataSet<Long> term =
+            DataStream<Long> gradient = width.map(new IdentityMapper<Long>());
+            DataStream<Long> term =
                     gradient.join(lastGradient)
                             .where(new IdentityKeyExtractor<Long>())
                             .equalTo(new IdentityKeyExtractor<Long>())
@@ -410,7 +410,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
                                     })
                             .withBroadcastSet(term, "some-name");
 
-            DataSet<Long> result = iteration.closeWith(width.union(update).union(lastGradient));
+            DataStream<Long> result = iteration.closeWith(width.union(update).union(lastGradient));
 
             result.output(new DiscardingOutputFormat<Long>());
 
@@ -437,7 +437,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     public void testBulkIterationWithPartialSolutionProperties() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple1<Long>> input1 =
+        DataStream<Tuple1<Long>> input1 =
                 env.generateSequence(1, 10)
                         .map(
                                 new MapFunction<Long, Tuple1<Long>>() {
@@ -447,7 +447,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
                                     }
                                 });
 
-        DataSet<Tuple1<Long>> input2 =
+        DataStream<Tuple1<Long>> input2 =
                 env.generateSequence(1, 10)
                         .map(
                                 new MapFunction<Long, Tuple1<Long>>() {
@@ -457,11 +457,11 @@ public class IterationsCompilerTest extends CompilerTestBase {
                                     }
                                 });
 
-        DataSet<Tuple1<Long>> distinctInput = input1.distinct();
+        DataStream<Tuple1<Long>> distinctInput = input1.distinct();
 
         IterativeDataSet<Tuple1<Long>> iteration = distinctInput.iterate(10);
 
-        DataSet<Tuple1<Long>> iterationStep =
+        DataStream<Tuple1<Long>> iterationStep =
                 iteration
                         .coGroup(input2)
                         .where(0)
@@ -482,7 +482,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
                                     }
                                 });
 
-        DataSet<Tuple1<Long>> iterationResult = iteration.closeWith(iterationStep);
+        DataStream<Tuple1<Long>> iterationResult = iteration.closeWith(iterationStep);
 
         iterationResult.output(new DiscardingOutputFormat<Tuple1<Long>>());
 
@@ -494,13 +494,13 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
     // --------------------------------------------------------------------------------------------
 
-    public static DataSet<Tuple2<Long, Long>> doBulkIteration(
-            DataSet<Tuple2<Long, Long>> vertices, DataSet<Tuple2<Long, Long>> edges) {
+    public static DataStream<Tuple2<Long, Long>> doBulkIteration(
+            DataStream<Tuple2<Long, Long>> vertices, DataStream<Tuple2<Long, Long>> edges) {
 
         // open a bulk iteration
         IterativeDataSet<Tuple2<Long, Long>> iteration = vertices.iterate(20);
 
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration
                         .join(edges)
                         .where(0)
@@ -517,34 +517,34 @@ public class IterationsCompilerTest extends CompilerTestBase {
         return iteration.closeWith(changes);
     }
 
-    public static DataSet<Tuple2<Long, Long>> doSimpleBulkIteration(
-            DataSet<Tuple2<Long, Long>> vertices, DataSet<Tuple2<Long, Long>> edges) {
+    public static DataStream<Tuple2<Long, Long>> doSimpleBulkIteration(
+            DataStream<Tuple2<Long, Long>> vertices, DataStream<Tuple2<Long, Long>> edges) {
 
         // open a bulk iteration
         IterativeDataSet<Tuple2<Long, Long>> iteration = vertices.iterate(20);
 
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration.join(edges).where(0).equalTo(0).flatMap(new FlatMapJoin());
 
         // close the bulk iteration
         return iteration.closeWith(changes);
     }
 
-    public static DataSet<Tuple2<Long, Long>> doDeltaIteration(
-            DataSet<Tuple2<Long, Long>> vertices, DataSet<Tuple2<Long, Long>> edges) {
+    public static DataStream<Tuple2<Long, Long>> doDeltaIteration(
+            DataStream<Tuple2<Long, Long>> vertices, DataStream<Tuple2<Long, Long>> edges) {
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> depIteration =
                 vertices.iterateDelta(vertices, 100, 0);
 
-        DataSet<Tuple1<Long>> candidates =
+        DataStream<Tuple1<Long>> candidates =
                 depIteration.getWorkset().join(edges).where(0).equalTo(0).projectSecond(1);
 
-        DataSet<Tuple1<Long>> grouped = candidates.groupBy(0).reduceGroup(new Reduce101());
+        DataStream<Tuple1<Long>> grouped = candidates.groupBy(0).reduceGroup(new Reduce101());
 
-        DataSet<Tuple2<Long, Long>> candidatesDependencies =
+        DataStream<Tuple2<Long, Long>> candidatesDependencies =
                 grouped.join(edges).where(0).equalTo(1).projectSecond(0, 1);
 
-        DataSet<Tuple2<Long, Long>> verticesWithNewComponents =
+        DataStream<Tuple2<Long, Long>> verticesWithNewComponents =
                 candidatesDependencies
                         .join(depIteration.getSolutionSet())
                         .where(0)
@@ -553,14 +553,14 @@ public class IterationsCompilerTest extends CompilerTestBase {
                         .groupBy(0)
                         .aggregate(Aggregations.MIN, 1);
 
-        DataSet<Tuple2<Long, Long>> updatedComponentId =
+        DataStream<Tuple2<Long, Long>> updatedComponentId =
                 verticesWithNewComponents
                         .join(depIteration.getSolutionSet())
                         .where(0)
                         .equalTo(0)
                         .flatMap(new FlatMapJoin());
 
-        DataSet<Tuple2<Long, Long>> depResult =
+        DataStream<Tuple2<Long, Long>> depResult =
                 depIteration.closeWith(updatedComponentId, updatedComponentId);
 
         return depResult;

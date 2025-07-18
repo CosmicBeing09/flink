@@ -19,7 +19,7 @@
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.hadoop.mapred.HadoopInputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -195,8 +195,8 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                         HadoopInputFormat<LongWritable, Text> hif =
                                 new HadoopInputFormat<LongWritable, Text>(
                                         sfif, LongWritable.class, Text.class, hdconf);
-                        DataSet<Tuple2<LongWritable, Text>> ds = env.createInput(hif);
-                        DataSet<Tuple2<Long, Text>> sumed =
+                        DataStream<Tuple2<LongWritable, Text>> ds = env.createInput(hif);
+                        DataStream<Tuple2<Long, Text>> sumed =
                                 ds.map(
                                                 new MapFunction<
                                                         Tuple2<LongWritable, Text>,
@@ -211,7 +211,7 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                                                 })
                                         .sum(0);
                         sumed.writeAsText(resultPath[0]);
-                        DataSet<String> res =
+                        DataStream<String> res =
                                 ds.distinct(0)
                                         .map(
                                                 new MapFunction<
@@ -248,8 +248,8 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                         HadoopInputFormat<NullWritable, LongWritable> hif =
                                 new HadoopInputFormat<NullWritable, LongWritable>(
                                         sfif, NullWritable.class, LongWritable.class, hdconf);
-                        DataSet<Tuple2<NullWritable, LongWritable>> ds = env.createInput(hif);
-                        DataSet<Tuple2<Void, Long>> res =
+                        DataStream<Tuple2<NullWritable, LongWritable>> ds = env.createInput(hif);
+                        DataStream<Tuple2<Void, Long>> res =
                                 ds.map(
                                         new MapFunction<
                                                 Tuple2<NullWritable, LongWritable>,
@@ -261,7 +261,7 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                                                 return new Tuple2<Void, Long>(null, value.f1.get());
                                             }
                                         });
-                        DataSet<Tuple2<Void, Long>> res1 = res.groupBy(1).sum(1);
+                        DataStream<Tuple2<Void, Long>> res1 = res.groupBy(1).sum(1);
                         res1.writeAsText(resultPath[1]);
                         res.writeAsText(resultPath[0]);
                         env.execute();

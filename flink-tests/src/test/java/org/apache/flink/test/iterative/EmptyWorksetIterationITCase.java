@@ -19,7 +19,7 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -40,7 +40,7 @@ public class EmptyWorksetIterationITCase extends JavaProgramTestBaseJUnit4 {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> input = env.generateSequence(1, 20).map(new Dupl());
+        DataStream<Tuple2<Long, Long>> input = env.generateSequence(1, 20).map(new Dupl());
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iter =
                 input.iterateDelta(input, 20, 0);

@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
@@ -162,13 +162,13 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 
-        DataSet<Tuple1<Long>> initialVertices =
+        DataStream<Tuple1<Long>> initialVertices =
                 env.readCsvFile(args[1]).types(Long.class).name(VERTEX_SOURCE);
 
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 env.readCsvFile(args[2]).types(Long.class, Long.class).name(EDGES_SOURCE);
 
-        DataSet<Tuple2<Long, Long>> verticesWithId =
+        DataStream<Tuple2<Long, Long>> verticesWithId =
                 initialVertices.flatMap(new DummyMapFunction());
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
@@ -176,7 +176,7 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
                         .iterateDelta(verticesWithId, Integer.parseInt(args[4]), 0)
                         .name(ITERATION_NAME);
 
-        DataSet<Tuple2<Long, Long>> joinWithNeighbors =
+        DataStream<Tuple2<Long, Long>> joinWithNeighbors =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -185,7 +185,7 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
                         .with(new DummyJoinFunction())
                         .name(JOIN_NEIGHBORS_MATCH);
 
-        DataSet<Tuple2<Long, Long>> minAndUpdate =
+        DataStream<Tuple2<Long, Long>> minAndUpdate =
                 joinWithNeighbors
                         .coGroup(iteration.getSolutionSet())
                         .where(0)

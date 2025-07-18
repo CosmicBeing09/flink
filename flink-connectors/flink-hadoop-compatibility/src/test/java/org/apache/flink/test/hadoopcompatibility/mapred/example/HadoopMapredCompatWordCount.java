@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.hadoopcompatibility.mapred.example;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.hadoop.mapred.HadoopInputFormat;
 import org.apache.flink.api.java.hadoop.mapred.HadoopOutputFormat;
@@ -67,9 +67,9 @@ public class HadoopMapredCompatWordCount {
         TextInputFormat.addInputPath(hadoopInputFormat.getJobConf(), new Path(inputPath));
 
         // Create a Flink job with it
-        DataSet<Tuple2<LongWritable, Text>> text = env.createInput(hadoopInputFormat);
+        DataStream<Tuple2<LongWritable, Text>> text = env.createInput(hadoopInputFormat);
 
-        DataSet<Tuple2<Text, LongWritable>> words =
+        DataStream<Tuple2<Text, LongWritable>> words =
                 text.flatMap(
                                 new HadoopMapFunction<LongWritable, Text, Text, LongWritable>(
                                         new Tokenizer()))

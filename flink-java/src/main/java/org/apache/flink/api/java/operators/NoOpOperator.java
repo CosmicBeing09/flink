@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.util.Preconditions;
 
 /**
@@ -29,21 +29,21 @@ import org.apache.flink.util.Preconditions;
  * @param <IN> The type of the data set passed through the operator.
  */
 @Internal
-public class NoOpOperator<IN> extends DataSet<IN> {
+public class NoOpOperator<IN> extends DataStream<IN> {
 
-    private DataSet<IN> input;
+    private DataStream<IN> input;
 
-    public NoOpOperator(DataSet<IN> input, TypeInformation<IN> resultType) {
+    public NoOpOperator(DataStream<IN> input, TypeInformation<IN> resultType) {
         super(input.getExecutionEnvironment(), resultType);
 
         this.input = input;
     }
 
-    public DataSet<IN> getInput() {
+    public DataStream<IN> getInput() {
         return input;
     }
 
-    public void setInput(DataSet<IN> input) {
+    public void setInput(DataStream<IN> input) {
         Preconditions.checkNotNull(input);
 
         this.input = input;

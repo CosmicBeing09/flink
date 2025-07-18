@@ -19,7 +19,7 @@
 package org.apache.flink.test.runtime;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
@@ -87,9 +87,9 @@ public class IPv6HostnamesITCase extends TestLogger {
             env.setParallelism(4);
 
             // get input data
-            DataSet<String> text = env.fromElements(WordCountData.TEXT.split("\n"));
+            DataStream<String> text = env.fromElements(WordCountData.TEXT.split("\n"));
 
-            DataSet<Tuple2<String, Integer>> counts =
+            DataStream<Tuple2<String, Integer>> counts =
                     text.flatMap(
                                     new FlatMapFunction<String, Tuple2<String, Integer>>() {
                                         @Override

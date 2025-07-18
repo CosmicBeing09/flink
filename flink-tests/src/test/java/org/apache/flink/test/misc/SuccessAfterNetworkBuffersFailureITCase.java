@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.misc;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -92,15 +92,15 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
         env.setParallelism(PARALLELISM);
 
         // read vertex and edge data
-        DataSet<Long> vertices = ConnectedComponentsData.getDefaultVertexDataSet(env).rebalance();
+        DataStream<Long> vertices = ConnectedComponentsData.getDefaultVertexDataSet(env).rebalance();
 
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 ConnectedComponentsData.getDefaultEdgeDataSet(env)
                         .rebalance()
                         .flatMap(new ConnectedComponents.UndirectEdge());
 
         // assign the initial components (equal to the vertex id)
-        DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+        DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new ConnectedComponents.DuplicateValue<Long>());
 
         // open a delta iteration
@@ -109,7 +109,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
 
         // apply the step logic: join with the edges, select the minimum neighbor,
         // update if the component of the candidate is smaller
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -124,7 +124,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
                         .with(new ConnectedComponents.ComponentIdFilter());
 
         // close the delta iteration (delta and new workset are identical)
-        DataSet<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
+        DataStream<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
 
         result.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
@@ -136,14 +136,14 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
         env.setParallelism(PARALLELISM);
 
         // get input data
-        DataSet<KMeans.Point> points = KMeansData.getDefaultPointDataSet(env).rebalance();
-        DataSet<KMeans.Centroid> centroids = KMeansData.getDefaultCentroidDataSet(env).rebalance();
+        DataStream<KMeans.Point> points = KMeansData.getDefaultPointDataSet(env).rebalance();
+        DataStream<KMeans.Centroid> centroids = KMeansData.getDefaultCentroidDataSet(env).rebalance();
 
         // set number of bulk iterations for KMeans algorithm
         IterativeDataSet<KMeans.Centroid> loop = centroids.iterate(20);
 
         // add some re-partitions to increase network buffer use
-        DataSet<KMeans.Centroid> newCentroids =
+        DataStream<KMeans.Centroid> newCentroids =
                 points
                         // compute closest centroid for each point
                         .map(new KMeans.SelectNearestCenter())
@@ -158,9 +158,9 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
                         .map(new KMeans.CentroidAverager());
 
         // feed new centroids back into next iteration
-        DataSet<KMeans.Centroid> finalCentroids = loop.closeWith(newCentroids);
+        DataStream<KMeans.Centroid> finalCentroids = loop.closeWith(newCentroids);
 
-        DataSet<Tuple2<Integer, KMeans.Point>> clusteredPoints =
+        DataStream<Tuple2<Integer, KMeans.Point>> clusteredPoints =
                 points
                         // assign points to final clusters
                         .map(new KMeans.SelectNearestCenter())

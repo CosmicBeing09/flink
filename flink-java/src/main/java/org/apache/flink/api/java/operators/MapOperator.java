@@ -24,7 +24,7 @@ import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * This operator represents the application of a "map" function on a data set, and the result data
@@ -48,7 +48,7 @@ public class MapOperator<IN, OUT> extends SingleInputUdfOperator<IN, OUT, MapOpe
     protected final String defaultName;
 
     public MapOperator(
-            DataSet<IN> input,
+            DataStream<IN> input,
             TypeInformation<OUT> resultType,
             MapFunction<IN, OUT> function,
             String defaultName) {

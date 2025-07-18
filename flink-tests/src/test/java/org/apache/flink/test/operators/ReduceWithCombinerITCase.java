@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.CombineFunction;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.UnsortedGrouping;
@@ -55,7 +55,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple2<Integer, Boolean>> input = createNonKeyedInput(env);
+        DataStream<Tuple2<Integer, Boolean>> input = createNonKeyedInput(env);
         List<Tuple2<Integer, Boolean>> actual =
                 input.reduceGroup(new NonKeyedCombReducer()).collect();
         String expected = "10,true\n";
@@ -71,10 +71,10 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple2<Integer, Boolean>> input = createNonKeyedInput(env);
+        DataStream<Tuple2<Integer, Boolean>> input = createNonKeyedInput(env);
 
-        DataSet<Tuple2<Integer, Boolean>> r1 = input.reduceGroup(new NonKeyedCombReducer());
-        DataSet<Tuple2<Integer, Boolean>> r2 = input.reduceGroup(new NonKeyedGroupCombReducer());
+        DataStream<Tuple2<Integer, Boolean>> r1 = input.reduceGroup(new NonKeyedCombReducer());
+        DataStream<Tuple2<Integer, Boolean>> r2 = input.reduceGroup(new NonKeyedGroupCombReducer());
 
         List<Tuple2<Integer, Boolean>> actual = r1.union(r2).collect();
         String expected = "10,true\n10,true\n";
@@ -89,7 +89,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
+        DataStream<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
         List<Tuple3<String, Integer, Boolean>> actual =
                 input.groupBy(0).reduceGroup(new KeyedCombReducer()).collect();
         String expected = "k1,6,true\nk2,4,true\n";
@@ -105,7 +105,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
+        DataStream<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
 
         List<Tuple3<String, Integer, Boolean>> actual =
                 input.groupBy(new KeySelectorX()).reduceGroup(new KeyedCombReducer()).collect();
@@ -121,12 +121,12 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
+        DataStream<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
 
         UnsortedGrouping<Tuple3<String, Integer, Boolean>> counts = input.groupBy(0);
 
-        DataSet<Tuple3<String, Integer, Boolean>> r1 = counts.reduceGroup(new KeyedCombReducer());
-        DataSet<Tuple3<String, Integer, Boolean>> r2 =
+        DataStream<Tuple3<String, Integer, Boolean>> r1 = counts.reduceGroup(new KeyedCombReducer());
+        DataStream<Tuple3<String, Integer, Boolean>> r2 =
                 counts.reduceGroup(new KeyedGroupCombReducer());
 
         List<Tuple3<String, Integer, Boolean>> actual = r1.union(r2).collect();
@@ -141,13 +141,13 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
-        DataSet<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
+        DataStream<Tuple3<String, Integer, Boolean>> input = createKeyedInput(env);
 
         UnsortedGrouping<Tuple3<String, Integer, Boolean>> counts =
                 input.groupBy(new KeySelectorX());
 
-        DataSet<Tuple3<String, Integer, Boolean>> r1 = counts.reduceGroup(new KeyedCombReducer());
-        DataSet<Tuple3<String, Integer, Boolean>> r2 =
+        DataStream<Tuple3<String, Integer, Boolean>> r1 = counts.reduceGroup(new KeyedCombReducer());
+        DataStream<Tuple3<String, Integer, Boolean>> r2 =
                 counts.reduceGroup(new KeyedGroupCombReducer());
 
         List<Tuple3<String, Integer, Boolean>> actual = r1.union(r2).collect();
@@ -156,7 +156,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         compareResultAsTuples(actual, expected);
     }
 
-    private DataSet<Tuple2<Integer, Boolean>> createNonKeyedInput(ExecutionEnvironment env) {
+    private DataStream<Tuple2<Integer, Boolean>> createNonKeyedInput(ExecutionEnvironment env) {
         return env.fromCollection(
                         Arrays.asList(
                                 new Tuple2<>(1, false),
@@ -234,7 +234,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         }
     }
 
-    private DataSet<Tuple3<String, Integer, Boolean>> createKeyedInput(ExecutionEnvironment env) {
+    private DataStream<Tuple3<String, Integer, Boolean>> createKeyedInput(ExecutionEnvironment env) {
         return env.fromCollection(
                         Arrays.asList(
                                 new Tuple3<>("k1", 1, false),

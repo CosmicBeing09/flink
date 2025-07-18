@@ -27,7 +27,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.functions.FirstReducer;
@@ -52,7 +52,7 @@ import org.apache.flink.util.Preconditions;
 @Public
 public class UnsortedGrouping<T> extends Grouping<T> {
 
-    public UnsortedGrouping(DataSet<T> set, Keys<T> keys) {
+    public UnsortedGrouping(DataStream<T> set, Keys<T> keys) {
         super(set, keys);
     }
 
@@ -76,7 +76,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
 
     /**
      * Applies an Aggregate transformation on a grouped {@link
-     * org.apache.flink.api.java.tuple.Tuple} {@link DataSet}.
+     * org.apache.flink.api.java.tuple.Tuple} {@link DataStream}.
      *
      * <p><b>Note: Only Tuple DataSets can be aggregated.</b> The transformation applies a built-in
      * {@link Aggregations Aggregation} on a specified field of a Tuple group. Additional
@@ -89,7 +89,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
      * @see org.apache.flink.api.java.tuple.Tuple
      * @see Aggregations
      * @see AggregateOperator
-     * @see DataSet
+     * @see DataStream
      */
     public AggregateOperator<T> aggregate(Aggregations agg, int field) {
         return aggregate(agg, field, Utils.getCallLocationName());
@@ -134,7 +134,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a Reduce transformation on a grouped {@link DataSet}.
+     * Applies a Reduce transformation on a grouped {@link DataStream}.
      *
      * <p>For each group, the transformation consecutively calls a {@link
      * org.apache.flink.api.common.functions.RichReduceFunction} until only a single element for
@@ -145,7 +145,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
      * @return A ReduceOperator that represents the reduced DataSet.
      * @see org.apache.flink.api.common.functions.RichReduceFunction
      * @see ReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public ReduceOperator<T> reduce(ReduceFunction<T> reducer) {
         if (reducer == null) {
@@ -156,7 +156,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a GroupReduce transformation on a grouped {@link DataSet}.
+     * Applies a GroupReduce transformation on a grouped {@link DataStream}.
      *
      * <p>The transformation calls a {@link
      * org.apache.flink.api.common.functions.RichGroupReduceFunction} for each group of the DataSet.
@@ -167,7 +167,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
      * @return A GroupReduceOperator that represents the reduced DataSet.
      * @see org.apache.flink.api.common.functions.RichGroupReduceFunction
      * @see GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public <R> GroupReduceOperator<T, R> reduceGroup(GroupReduceFunction<T, R> reducer) {
         if (reducer == null) {
@@ -185,7 +185,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a GroupCombineFunction on a grouped {@link DataSet}. A GroupCombineFunction is
+     * Applies a GroupCombineFunction on a grouped {@link DataStream}. A GroupCombineFunction is
      * similar to a GroupReduceFunction but does not perform a full data exchange. Instead, the
      * CombineFunction calls the combine method once per partition for combining a group of results.
      * This operator is suitable for combining values into an intermediate format before doing a
@@ -213,7 +213,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Returns a new set containing the first n elements in this grouped {@link DataSet}.
+     * Returns a new set containing the first n elements in this grouped {@link DataStream}.
      *
      * @param n The desired number of elements for each group.
      * @return A GroupReduceOperator that represents the DataSet containing the elements.
@@ -227,7 +227,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a special case of a reduce transformation (minBy) on a grouped {@link DataSet}.
+     * Applies a special case of a reduce transformation (minBy) on a grouped {@link DataStream}.
      *
      * <p>The transformation consecutively calls a {@link ReduceFunction} until only a single
      * element remains which is the result of the transformation. A ReduceFunction combines two
@@ -252,7 +252,7 @@ public class UnsortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a special case of a reduce transformation (maxBy) on a grouped {@link DataSet}.
+     * Applies a special case of a reduce transformation (maxBy) on a grouped {@link DataStream}.
      *
      * <p>The transformation consecutively calls a {@link ReduceFunction} until only a single
      * element remains which is the result of the transformation. A ReduceFunction combines two

@@ -21,7 +21,7 @@ package org.apache.flink.client;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.configuration.Configuration;
@@ -52,9 +52,9 @@ class ExecutionEnvironmentTest implements Serializable {
     void testExecuteAfterGetExecutionPlanContextEnvironment() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> baseSet = env.fromElements(1, 2);
+        DataStream<Integer> baseSet = env.fromElements(1, 2);
 
-        DataSet<Integer> result = baseSet.map((MapFunction<Integer, Integer>) value -> value * 2);
+        DataStream<Integer> result = baseSet.map((MapFunction<Integer, Integer>) value -> value * 2);
         result.output(new DiscardingOutputFormat<>());
 
         try {

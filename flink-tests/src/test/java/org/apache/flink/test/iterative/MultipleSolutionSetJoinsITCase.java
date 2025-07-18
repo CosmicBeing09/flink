@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.iterative;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -43,7 +43,7 @@ public class MultipleSolutionSetJoinsITCase extends JavaProgramTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Double>> initialData =
+        DataStream<Tuple2<Long, Double>> initialData =
                 env.fromElements(
                         new Tuple2<Long, Double>(1L, 1.0),
                         new Tuple2<Long, Double>(2L, 2.0),
@@ -52,7 +52,7 @@ public class MultipleSolutionSetJoinsITCase extends JavaProgramTestBaseJUnit4 {
                         new Tuple2<Long, Double>(5L, 5.0),
                         new Tuple2<Long, Double>(6L, 6.0));
 
-        DataSet<Tuple2<Long, Double>> result =
+        DataStream<Tuple2<Long, Double>> result =
                 MultipleJoinsWithSolutionSetCompilerTest.constructPlan(initialData, numIters);
 
         List<Tuple2<Long, Double>> resultCollector = new ArrayList<Tuple2<Long, Double>>();

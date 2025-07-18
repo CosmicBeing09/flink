@@ -24,7 +24,7 @@ import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.CompositeType;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -46,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#join(DataSet)}. */
+/** Tests for {@link DataStream#join(DataStream)}. */
 @SuppressWarnings("serial")
 class JoinOperatorTest {
 
@@ -104,9 +104,9 @@ class JoinOperatorTest {
     void testJoinKeyFields1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -121,9 +121,9 @@ class JoinOperatorTest {
     void testJoinKeyFields2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, incompatible join key types
@@ -135,9 +135,9 @@ class JoinOperatorTest {
     void testJoinKeyFields3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, incompatible number of join keys
@@ -149,9 +149,9 @@ class JoinOperatorTest {
     void testJoinKeyFields4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, join key out of range
@@ -163,9 +163,9 @@ class JoinOperatorTest {
     void testJoinKeyFields5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, negative key field position
@@ -177,9 +177,9 @@ class JoinOperatorTest {
     void testJoinKeyFields6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, join key fields on custom type
         assertThatThrownBy(() -> ds1.join(ds2).where(4).equalTo(0))
@@ -190,8 +190,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -205,8 +205,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressionsNested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<NestedCustomType> ds1 = env.fromCollection(customNestedTypeData);
-        DataSet<NestedCustomType> ds2 = env.fromCollection(customNestedTypeData);
+        DataStream<NestedCustomType> ds1 = env.fromCollection(customNestedTypeData);
+        DataStream<NestedCustomType> ds2 = env.fromCollection(customNestedTypeData);
 
         // should work
         try {
@@ -220,8 +220,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible join key types
         assertThatThrownBy(() -> ds1.join(ds2).where("myInt").equalTo("myString"))
@@ -232,8 +232,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible number of join keys
         assertThatThrownBy(() -> ds1.join(ds2).where("myInt", "myString").equalTo("myString"))
@@ -244,8 +244,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, join key non-existent
         assertThatThrownBy(() -> ds1.join(ds2).where("myNonExistent").equalTo("myInt"))
@@ -256,8 +256,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedKeySelector() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         try {
             ds1.join(ds2)
                     .where("myInt")
@@ -277,8 +277,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedKeySelectorTurned() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         try {
             ds1.join(ds2)
                     .where(
@@ -298,9 +298,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedTupleIndex() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         try {
             ds1.join(ds2).where("f0").equalTo(4);
@@ -313,9 +313,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyNestedTuples() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         try {
             ds1.join(ds2).where("f0.f0").equalTo(4);
@@ -328,9 +328,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyNestedTuplesWithCustom() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<CustomType, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<CustomType, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedCustomTupleData, nestedCustomTupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         try {
             TypeInformation<?> t = ds1.join(ds2).where("f0.myInt").equalTo(4).getType();
@@ -344,8 +344,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyWithCustomContainingTuple0() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
-        DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
             ds1.join(ds2).where("intByString.f0").equalTo("myInt");
         } catch (Exception e) {
@@ -357,8 +357,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyWithCustomContainingTuple1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
-        DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
             ds1.join(ds2).where("nested.myInt").equalTo("intByString.f0");
         } catch (Exception e) {
@@ -370,8 +370,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyWithCustomContainingTuple2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
-        DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
+        DataStream<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
             ds1.join(ds2)
                     .where("nested.myInt", "myInt", "intByString.f1")
@@ -385,9 +385,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyNestedTuplesWrongType() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         assertThatThrownBy(
                         () -> {
@@ -399,9 +399,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedTupleIndexTurned() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         try {
             ds1.join(ds2).where(0).equalTo("f0");
@@ -414,9 +414,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedTupleIndexWrongType() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         assertThatThrownBy(
                         () -> {
@@ -430,8 +430,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedTupleIndex2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         try {
             ds1.join(ds2).where("myInt").equalTo(4);
@@ -444,8 +444,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixedWrong() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         // wrongly mix String and Integer
         assertThatThrownBy(
                         () ->
@@ -461,8 +461,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions1Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -477,8 +477,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions2Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible join key types
         assertThatThrownBy(() -> ds1.join(ds2).where("nested.myInt").equalTo("nested.myString"))
@@ -489,8 +489,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions3Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible number of join keys
         assertThatThrownBy(
@@ -505,8 +505,8 @@ class JoinOperatorTest {
     void testJoinKeyExpressions4Nested() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, join key non-existent
         assertThatThrownBy(
@@ -518,8 +518,8 @@ class JoinOperatorTest {
     void testJoinKeySelectors1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -535,8 +535,8 @@ class JoinOperatorTest {
     void testJoinKeyMixing1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -552,9 +552,9 @@ class JoinOperatorTest {
     void testJoinKeyMixing2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -568,9 +568,9 @@ class JoinOperatorTest {
     void testJoinKeyMixing3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, incompatible types
         assertThatThrownBy(
@@ -587,9 +587,9 @@ class JoinOperatorTest {
     void testJoinKeyMixing4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should not work, more than one key field position
         assertThatThrownBy(
@@ -605,8 +605,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyAtomic1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 0);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         ds1.join(ds2).where("*").equalTo(0);
@@ -615,9 +615,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyAtomic2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 0);
 
         ds1.join(ds2).where(0).equalTo("*");
     }
@@ -625,8 +625,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 0);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         assertThatThrownBy(() -> ds1.join(ds2).where("*", "invalidKey"))
@@ -636,9 +636,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 0);
 
         assertThatThrownBy(() -> ds1.join(ds2).where(0).equalTo("*", "invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -647,8 +647,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic3() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 0);
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         assertThatThrownBy(() -> ds1.join(ds2).where("invalidKey"))
@@ -658,9 +658,9 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic4() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 0);
 
         assertThatThrownBy(() -> ds1.join(ds2).where(0).equalTo("invalidKey"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -669,8 +669,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic5() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<Integer>());
-        DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
+        DataStream<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<Integer>());
+        DataStream<Integer> ds2 = env.fromElements(0, 0, 0);
 
         assertThatThrownBy(() -> ds1.join(ds2).where("*").equalTo("*"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -679,8 +679,8 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyInvalidAtomic6() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
-        DataSet<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<Integer>());
+        DataStream<Integer> ds1 = env.fromElements(0, 0, 0);
+        DataStream<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<Integer>());
 
         assertThatThrownBy(() -> ds1.join(ds2).where("*").equalTo("*"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -690,9 +690,9 @@ class JoinOperatorTest {
     void testJoinProjection1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -707,9 +707,9 @@ class JoinOperatorTest {
     void testJoinProjection21() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -744,9 +744,9 @@ class JoinOperatorTest {
     void testJoinProjection2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -761,9 +761,9 @@ class JoinOperatorTest {
     void testJoinProjection3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -778,9 +778,9 @@ class JoinOperatorTest {
     void testJoinProjection4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -800,9 +800,9 @@ class JoinOperatorTest {
     void testJoinProjection5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -822,8 +822,8 @@ class JoinOperatorTest {
     void testJoinProjection6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         // should work
         try {
             ds1.join(ds2)
@@ -842,8 +842,8 @@ class JoinOperatorTest {
     void testJoinProjection26() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
         // should work
         try {
             ds1.join(ds2)
@@ -862,9 +862,9 @@ class JoinOperatorTest {
     void testJoinProjection7() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -879,9 +879,9 @@ class JoinOperatorTest {
     void testJoinProjection27() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -896,9 +896,9 @@ class JoinOperatorTest {
     void testJoinProjection8() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -910,9 +910,9 @@ class JoinOperatorTest {
     void testJoinProjection28() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -924,9 +924,9 @@ class JoinOperatorTest {
     void testJoinProjection9() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -938,9 +938,9 @@ class JoinOperatorTest {
     void testJoinProjection29() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -951,9 +951,9 @@ class JoinOperatorTest {
     void testJoinProjection10() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -964,9 +964,9 @@ class JoinOperatorTest {
     void testJoinProjection30() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, type does not match
@@ -977,9 +977,9 @@ class JoinOperatorTest {
     void testJoinProjection11() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, type does not match
@@ -989,9 +989,9 @@ class JoinOperatorTest {
     void testJoinProjection12() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should  work
@@ -1002,9 +1002,9 @@ class JoinOperatorTest {
     void testJoinProjection13() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -1016,9 +1016,9 @@ class JoinOperatorTest {
     void testJoinProjection33() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -1031,9 +1031,9 @@ class JoinOperatorTest {
     void testJoinProjection14() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -1045,9 +1045,9 @@ class JoinOperatorTest {
     void testJoinProjection34() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -1060,9 +1060,9 @@ class JoinOperatorTest {
     void testSemanticPropsWithKeySelector1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         JoinOperator<?, ?, ?> joinOp =
@@ -1097,9 +1097,9 @@ class JoinOperatorTest {
     void testSemanticPropsWithKeySelector2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         JoinOperator<?, ?, ?> joinOp =
@@ -1137,9 +1137,9 @@ class JoinOperatorTest {
     void testSemanticPropsWithKeySelector3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         JoinOperator<?, ?, ? extends Tuple> joinOp =

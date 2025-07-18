@@ -34,7 +34,7 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.operators.base.CoGroupOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
@@ -55,12 +55,12 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A {@link DataSet} that is the result of a CoGroup transformation.
+ * A {@link DataStream} that is the result of a CoGroup transformation.
  *
  * @param <I1> The type of the first input DataSet of the CoGroup transformation.
  * @param <I2> The type of the second input DataSet of the CoGroup transformation.
  * @param <OUT> The type of the result of the CoGroup transformation.
- * @see DataSet
+ * @see DataStream
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -85,8 +85,8 @@ public class CoGroupOperator<I1, I2, OUT>
     private Partitioner<?> customPartitioner;
 
     public CoGroupOperator(
-            DataSet<I1> input1,
-            DataSet<I2> input2,
+            DataStream<I1> input1,
+            DataStream<I2> input2,
             Keys<I1> keys1,
             Keys<I2> keys2,
             CoGroupFunction<I1, I2, OUT> function,
@@ -107,8 +107,8 @@ public class CoGroupOperator<I1, I2, OUT>
     }
 
     public CoGroupOperator(
-            DataSet<I1> input1,
-            DataSet<I2> input2,
+            DataStream<I1> input1,
+            DataStream<I2> input2,
             Keys<I1> keys1,
             Keys<I2> keys2,
             CoGroupFunction<I1, I2, OUT> function,
@@ -474,7 +474,7 @@ public class CoGroupOperator<I1, I2, OUT>
      * Intermediate step of a CoGroup transformation.
      *
      * <p>To continue the CoGroup transformation, select the grouping key of the first input {@link
-     * DataSet} by calling {@link
+     * DataStream} by calling {@link
      * org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets#where(int...)} or
      * {@link
      * org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets#where(KeySelector)}.
@@ -484,10 +484,10 @@ public class CoGroupOperator<I1, I2, OUT>
      */
     public static final class CoGroupOperatorSets<I1, I2> {
 
-        private final DataSet<I1> input1;
-        private final DataSet<I2> input2;
+        private final DataStream<I1> input1;
+        private final DataStream<I2> input2;
 
-        public CoGroupOperatorSets(DataSet<I1> input1, DataSet<I2> input2) {
+        public CoGroupOperatorSets(DataStream<I1> input1, DataStream<I2> input2) {
             if (input1 == null || input2 == null) {
                 throw new NullPointerException();
             }
@@ -499,7 +499,7 @@ public class CoGroupOperator<I1, I2, OUT>
         /**
          * Continues a CoGroup transformation.
          *
-         * <p>Defines the {@link Tuple} fields of the first co-grouped {@link DataSet} that should
+         * <p>Defines the {@link Tuple} fields of the first co-grouped {@link DataStream} that should
          * be used as grouping keys.
          *
          * <p><b>Note: Fields can only be selected as grouping keys on Tuple DataSets.</b>
@@ -510,7 +510,7 @@ public class CoGroupOperator<I1, I2, OUT>
          *     org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets.CoGroupOperatorSetsPredicate#equalTo(int...)}
          *     to continue the CoGroup.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public CoGroupOperatorSetsPredicate where(int... fields) {
             return new CoGroupOperatorSetsPredicate(
@@ -520,7 +520,7 @@ public class CoGroupOperator<I1, I2, OUT>
         /**
          * Continues a CoGroup transformation.
          *
-         * <p>Defines the fields of the first co-grouped {@link DataSet} that should be used as
+         * <p>Defines the fields of the first co-grouped {@link DataStream} that should be used as
          * grouping keys. Fields are the names of member fields of the underlying type of the data
          * set.
          *
@@ -529,7 +529,7 @@ public class CoGroupOperator<I1, I2, OUT>
          *     org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets.CoGroupOperatorSetsPredicate#equalTo(int...)}
          *     to continue the CoGroup.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public CoGroupOperatorSetsPredicate where(String... fields) {
             return new CoGroupOperatorSetsPredicate(
@@ -538,7 +538,7 @@ public class CoGroupOperator<I1, I2, OUT>
 
         /**
          * Continues a CoGroup transformation and defines a {@link KeySelector} function for the
-         * first co-grouped {@link DataSet}.
+         * first co-grouped {@link DataStream}.
          *
          * <p>The KeySelector function is called for each element of the first DataSet and extracts
          * a single key value on which the DataSet is grouped.
@@ -549,7 +549,7 @@ public class CoGroupOperator<I1, I2, OUT>
          *     org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets.CoGroupOperatorSetsPredicate#equalTo(int...)}
          *     to continue the CoGroup.
          * @see KeySelector
-         * @see DataSet
+         * @see DataStream
          */
         public <K> CoGroupOperatorSetsPredicate where(KeySelector<I1, K> keyExtractor) {
             TypeInformation<K> keyType =
@@ -565,7 +565,7 @@ public class CoGroupOperator<I1, I2, OUT>
          * Intermediate step of a CoGroup transformation.
          *
          * <p>To continue the CoGroup transformation, select the grouping key of the second input
-         * {@link DataSet} by calling {@link
+         * {@link DataStream} by calling {@link
          * org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets.CoGroupOperatorSetsPredicate#equalTo(int...)}
          * or {@link
          * org.apache.flink.api.java.operators.CoGroupOperator.CoGroupOperatorSets.CoGroupOperatorSetsPredicate#equalTo(KeySelector)}.
@@ -588,7 +588,7 @@ public class CoGroupOperator<I1, I2, OUT>
 
             /**
              * Continues a CoGroup transformation and defines the {@link Tuple} fields of the second
-             * co-grouped {@link DataSet} that should be used as grouping keys.
+             * co-grouped {@link DataStream} that should be used as grouping keys.
              *
              * <p><b>Note: Fields can only be selected as grouping keys on Tuple DataSets.</b>
              *
@@ -604,7 +604,7 @@ public class CoGroupOperator<I1, I2, OUT>
 
             /**
              * Continues a CoGroup transformation and defines the fields of the second co-grouped
-             * {@link DataSet} that should be used as grouping keys.
+             * {@link DataStream} that should be used as grouping keys.
              *
              * @param fields The fields of the first co-grouped DataSets that should be used as
              *     keys.
@@ -618,7 +618,7 @@ public class CoGroupOperator<I1, I2, OUT>
 
             /**
              * Continues a CoGroup transformation and defines a {@link KeySelector} function for the
-             * second co-grouped {@link DataSet}.
+             * second co-grouped {@link DataStream}.
              *
              * <p>The KeySelector function is called for each element of the second DataSet and
              * extracts a single key value on which the DataSet is grouped.
@@ -730,7 +730,7 @@ public class CoGroupOperator<I1, I2, OUT>
                  *     with identical keys.
                  * @return An CoGroupOperator that represents the co-grouped result DataSet.
                  * @see org.apache.flink.api.common.functions.RichCoGroupFunction
-                 * @see DataSet
+                 * @see DataStream
                  */
                 public <R> CoGroupOperator<I1, I2, R> with(CoGroupFunction<I1, I2, R> function) {
                     if (function == null) {

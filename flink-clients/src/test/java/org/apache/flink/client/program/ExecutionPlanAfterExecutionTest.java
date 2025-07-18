@@ -19,7 +19,7 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.LocalEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
@@ -44,9 +44,9 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
     void testExecuteAfterGetExecutionPlan() {
         ExecutionEnvironment env = new LocalEnvironment();
 
-        DataSet<Integer> baseSet = env.fromElements(1, 2);
+        DataStream<Integer> baseSet = env.fromElements(1, 2);
 
-        DataSet<Integer> result =
+        DataStream<Integer> result =
                 baseSet.map(
                         new MapFunction<Integer, Integer>() {
                             @Override
@@ -69,9 +69,9 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
     void testCreatePlanAfterGetExecutionPlan() {
         ExecutionEnvironment env = new LocalEnvironment();
 
-        DataSet<Integer> baseSet = env.fromElements(1, 2);
+        DataStream<Integer> baseSet = env.fromElements(1, 2);
 
-        DataSet<Integer> result = baseSet.map((MapFunction<Integer, Integer>) value -> value * 2);
+        DataStream<Integer> result = baseSet.map((MapFunction<Integer, Integer>) value -> value * 2);
         result.output(new DiscardingOutputFormat<Integer>());
 
         try {
@@ -87,9 +87,9 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
     void testGetExecutionPlanOfRangePartition() {
         ExecutionEnvironment env = new LocalEnvironment();
 
-        DataSet<Integer> baseSet = env.fromElements(1, 2);
+        DataStream<Integer> baseSet = env.fromElements(1, 2);
 
-        DataSet<Tuple2<Integer, Integer>> result =
+        DataStream<Tuple2<Integer, Integer>> result =
                 baseSet.map(
                                 new MapFunction<Integer, Tuple2<Integer, Integer>>() {
                                     @Override

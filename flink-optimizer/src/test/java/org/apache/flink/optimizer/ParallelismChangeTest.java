@@ -18,7 +18,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.Channel;
@@ -65,7 +65,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(p);
-        DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
+        DataStream<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
         set1.map(new IdentityMapper<Long>())
                 .withForwardedFields("*")
@@ -126,7 +126,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(p);
-        DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
+        DataStream<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
         set1.map(new IdentityMapper<Long>())
                 .withForwardedFields("*")
@@ -190,7 +190,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(p);
-        DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
+        DataStream<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
         set1.map(new IdentityMapper<Long>())
                 .withForwardedFields("*")
@@ -318,15 +318,15 @@ public class ParallelismChangeTest extends CompilerTestBase {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
-        DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(5);
-        DataSet<Long> set2 = env.generateSequence(0, 1).setParallelism(7);
+        DataStream<Long> set1 = env.generateSequence(0, 1).setParallelism(5);
+        DataStream<Long> set2 = env.generateSequence(0, 1).setParallelism(7);
 
-        DataSet<Long> reduce1 =
+        DataStream<Long> reduce1 =
                 set1.groupBy("*")
                         .reduceGroup(new IdentityGroupReducer<Long>())
                         .withForwardedFields("*")
                         .setParallelism(5);
-        DataSet<Long> reduce2 =
+        DataStream<Long> reduce2 =
                 set2.groupBy("*")
                         .reduceGroup(new IdentityGroupReducer<Long>())
                         .withForwardedFields("*")

@@ -21,7 +21,7 @@ package org.apache.flink.examples.java.distcp;
 import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.LocalEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
@@ -103,7 +103,7 @@ public class DistCp {
         LOGGER.info(
                 "Copy task initialization took " + (System.currentTimeMillis() - startTime) + "ms");
 
-        DataSet<FileCopyTask> inputTasks =
+        DataStream<FileCopyTask> inputTasks =
                 new DataSource<>(
                         env,
                         new FileCopyTaskInputFormat(tasks),

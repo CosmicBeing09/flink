@@ -23,7 +23,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -59,7 +59,7 @@ public class WordCountCompilerTest extends CompilerTestBase {
         env.setParallelism(DEFAULT_PARALLELISM);
 
         // get input data
-        DataSet<String> lines = env.readTextFile(IN_FILE).name("Input Lines");
+        DataStream<String> lines = env.readTextFile(IN_FILE).name("Input Lines");
 
         lines
                 // dummy map

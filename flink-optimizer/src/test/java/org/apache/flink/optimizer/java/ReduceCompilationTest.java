@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -48,7 +48,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
+            DataStream<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
 
             data.reduce(
                             new RichReduceFunction<Double>() {
@@ -94,7 +94,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Long> data = env.generateSequence(1, 8000000).name("source");
+            DataStream<Long> data = env.generateSequence(1, 8000000).name("source");
 
             data.reduce(
                             new RichReduceFunction<Long>() {
@@ -148,7 +148,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -213,7 +213,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -292,7 +292,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -375,7 +375,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(8);
 
-        DataSet<Tuple2<String, Double>> data =
+        DataStream<Tuple2<String, Double>> data =
                 env.readCsvFile("file:///will/never/be/read")
                         .types(String.class, Double.class)
                         .name("source")

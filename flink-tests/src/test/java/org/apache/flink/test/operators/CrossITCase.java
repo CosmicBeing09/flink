@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.CrossFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCrossFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -57,11 +57,11 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple2<Integer, String>> crossDs = ds.cross(ds2).with(new Tuple5Cross());
+        DataStream<Tuple2<Integer, String>> crossDs = ds.cross(ds2).with(new Tuple5Cross());
 
         List<Tuple2<Integer, String>> result = crossDs.collect();
 
@@ -87,10 +87,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> crossDs = ds.cross(ds2).with(new Tuple3ReturnLeft());
+        DataStream<Tuple3<Integer, Long, String>> crossDs = ds.cross(ds2).with(new Tuple3ReturnLeft());
 
         List<Tuple3<Integer, Long, String>> result = crossDs.collect();
 
@@ -116,10 +116,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> crossDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> crossDs =
                 ds.cross(ds2).with(new Tuple5ReturnRight());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = crossDs.collect();
@@ -146,13 +146,13 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Integer, Integer>> crossDs =
+        DataStream<Tuple3<Integer, Integer, Integer>> crossDs =
                 ds.cross(ds2).with(new Tuple5CrossBC()).withBroadcastSet(intDs, "ints");
 
         List<Tuple3<Integer, Integer, Integer>> result = crossDs.collect();
@@ -179,11 +179,11 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple2<Integer, String>> crossDs = ds.crossWithHuge(ds2).with(new Tuple5Cross());
+        DataStream<Tuple2<Integer, String>> crossDs = ds.crossWithHuge(ds2).with(new Tuple5Cross());
 
         List<Tuple2<Integer, String>> result = crossDs.collect();
 
@@ -209,11 +209,11 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple2<Integer, String>> crossDs = ds.crossWithTiny(ds2).with(new Tuple5Cross());
+        DataStream<Tuple2<Integer, String>> crossDs = ds.crossWithTiny(ds2).with(new Tuple5Cross());
 
         List<Tuple2<Integer, String>> result = crossDs.collect();
 
@@ -239,10 +239,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple6<String, Long, String, Integer, Long, Long>> crossDs =
+        DataStream<Tuple6<String, Long, String, Integer, Long, Long>> crossDs =
                 ds.cross(ds2)
                         .projectFirst(2, 1)
                         .projectSecond(3)
@@ -273,10 +273,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple6<String, String, Long, Long, Long, Integer>> crossDs =
+        DataStream<Tuple6<String, String, Long, Long, Long, Integer>> crossDs =
                 ds.cross(ds2)
                         .projectSecond(3)
                         .projectFirst(2, 1)
@@ -307,10 +307,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
+        DataStream<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
                 crossDs = ds.cross(ds2);
 
         List<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
@@ -338,9 +338,9 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getSmallCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
-        DataSet<CustomType> crossDs = ds.cross(ds2).with(new CustomTypeCross());
+        DataStream<CustomType> ds = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<CustomType> crossDs = ds.cross(ds2).with(new CustomTypeCross());
 
         List<CustomType> result = crossDs.collect();
 
@@ -366,10 +366,10 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> crossDs = ds.cross(ds2).with(new MixedCross());
+        DataStream<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> crossDs = ds.cross(ds2).with(new MixedCross());
 
         List<Tuple3<Integer, Long, String>> result = crossDs.collect();
 

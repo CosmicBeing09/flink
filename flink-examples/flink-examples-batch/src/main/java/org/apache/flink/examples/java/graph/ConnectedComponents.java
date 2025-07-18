@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
@@ -108,11 +108,11 @@ public class ConnectedComponents {
         env.getConfig().setGlobalJobParameters(params);
 
         // read vertex and edge data
-        DataSet<Long> vertices = getVertexDataSet(env, params);
-        DataSet<Tuple2<Long, Long>> edges = getEdgeDataSet(env, params).flatMap(new UndirectEdge());
+        DataStream<Long> vertices = getVertexDataSet(env, params);
+        DataStream<Tuple2<Long, Long>> edges = getEdgeDataSet(env, params).flatMap(new UndirectEdge());
 
         // assign the initial components (equal to the vertex id)
-        DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+        DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new DuplicateValue<Long>());
 
         // open a delta iteration
@@ -121,7 +121,7 @@ public class ConnectedComponents {
 
         // apply the step logic: join with the edges, select the minimum neighbor, update if the
         // component of the candidate is smaller
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -136,7 +136,7 @@ public class ConnectedComponents {
                         .with(new ComponentIdFilter());
 
         // close the delta iteration (delta and new workset are identical)
-        DataSet<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
+        DataStream<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
 
         // emit result
         if (params.has("output")) {
@@ -221,7 +221,7 @@ public class ConnectedComponents {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Long> getVertexDataSet(ExecutionEnvironment env, ParameterTool params) {
+    private static DataStream<Long> getVertexDataSet(ExecutionEnvironment env, ParameterTool params) {
         if (params.has("vertices")) {
             return env.readCsvFile(params.get("vertices"))
                     .types(Long.class)
@@ -239,7 +239,7 @@ public class ConnectedComponents {
         }
     }
 
-    private static DataSet<Tuple2<Long, Long>> getEdgeDataSet(
+    private static DataStream<Tuple2<Long, Long>> getEdgeDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         if (params.has("edges")) {
             return env.readCsvFile(params.get("edges"))

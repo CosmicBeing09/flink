@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -125,8 +125,8 @@ public class JoinTranslationTest extends CompilerTestBase {
     private DualInputPlanNode createPlanAndGetJoinNode(JoinHint hint) {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> i1 = env.generateSequence(1, 1000);
-        DataSet<Long> i2 = env.generateSequence(1, 1000);
+        DataStream<Long> i1 = env.generateSequence(1, 1000);
+        DataStream<Long> i2 = env.generateSequence(1, 1000);
 
         i1.join(i2, hint)
                 .where(new IdentityKeySelector<Long>())

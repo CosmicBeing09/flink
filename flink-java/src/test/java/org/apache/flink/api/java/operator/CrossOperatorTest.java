@@ -19,7 +19,7 @@
 package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -34,7 +34,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#cross(DataSet)}. */
+/** Tests for {@link DataStream#cross(DataStream)}. */
 class CrossOperatorTest {
 
     // TUPLE DATA
@@ -60,9 +60,9 @@ class CrossOperatorTest {
     void testCrossProjection1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -77,9 +77,9 @@ class CrossOperatorTest {
     void testCrossProjection21() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -94,9 +94,9 @@ class CrossOperatorTest {
     void testCrossProjection2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -111,9 +111,9 @@ class CrossOperatorTest {
     void testCrossProjection22() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -128,9 +128,9 @@ class CrossOperatorTest {
     void testCrossProjection3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -145,9 +145,9 @@ class CrossOperatorTest {
     void testCrossProjection23() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -162,9 +162,9 @@ class CrossOperatorTest {
     void testCrossProjection4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -179,9 +179,9 @@ class CrossOperatorTest {
     void testCrossProjection24() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -196,9 +196,9 @@ class CrossOperatorTest {
     void testCrossProjection5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -213,9 +213,9 @@ class CrossOperatorTest {
     void testCrossProjection25() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -230,8 +230,8 @@ class CrossOperatorTest {
     void testCrossProjection6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -245,8 +245,8 @@ class CrossOperatorTest {
     void testCrossProjection26() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
-        DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds1 = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds2 = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -260,9 +260,9 @@ class CrossOperatorTest {
     void testCrossProjection7() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -277,9 +277,9 @@ class CrossOperatorTest {
     void testCrossProjection27() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -294,9 +294,9 @@ class CrossOperatorTest {
     void testCrossProjection8() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -308,9 +308,9 @@ class CrossOperatorTest {
     void testCrossProjection28() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -322,9 +322,9 @@ class CrossOperatorTest {
     void testCrossProjection9() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -336,9 +336,9 @@ class CrossOperatorTest {
     void testCrossProjection29() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -350,9 +350,9 @@ class CrossOperatorTest {
     void testCrossProjection10() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -363,9 +363,9 @@ class CrossOperatorTest {
     void testCrossProjection30() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, type does not match
@@ -376,9 +376,9 @@ class CrossOperatorTest {
     void testCrossProjection11() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -389,9 +389,9 @@ class CrossOperatorTest {
     void testCrossProjection31() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, type does not match
@@ -402,9 +402,9 @@ class CrossOperatorTest {
     void testCrossProjection12() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -415,9 +415,9 @@ class CrossOperatorTest {
     void testCrossProjection32() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, number of types and fields does not match
@@ -429,9 +429,9 @@ class CrossOperatorTest {
     void testCrossProjection13() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range
@@ -443,9 +443,9 @@ class CrossOperatorTest {
     void testCrossProjection14() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, index out of range

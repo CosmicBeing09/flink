@@ -18,7 +18,7 @@
 
 package org.apache.flink.examples.java.misc;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -99,11 +99,11 @@ public class CollectionExecutionExample {
         };
 
         // convert objects into a DataSet
-        DataSet<User> users = env.fromElements(usersArray);
-        DataSet<EMail> emails = env.fromElements(emailsArray);
+        DataStream<User> users = env.fromElements(usersArray);
+        DataStream<EMail> emails = env.fromElements(emailsArray);
 
         // join the two DataSets
-        DataSet<Tuple2<User, EMail>> joined =
+        DataStream<Tuple2<User, EMail>> joined =
                 users.join(emails).where("userIdentifier").equalTo("userId");
 
         // retrieve the resulting Tuple2 elements into a ArrayList.

@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -63,7 +63,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
             final int numIterations = 25;
             final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Boolean>> vertices =
+            DataStream<Tuple2<Long, Boolean>> vertices =
                     env.fromElements(
                             new Tuple2<>(1L, false),
                             new Tuple2<>(2L, false),
@@ -71,7 +71,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
                             new Tuple2<>(3L, true),
                             new Tuple2<>(4L, false));
 
-            DataSet<PageWithLinks> edges =
+            DataStream<PageWithLinks> edges =
                     env.fromElements(
                             new PageWithLinks(2L, new long[] {1}),
                             new PageWithLinks(5L, new long[] {2, 4}),
@@ -89,7 +89,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
                                     })
                             .count();
 
-            DataSet<PageWithRankAndDangling> verticesWithInitialRank =
+            DataStream<PageWithRankAndDangling> verticesWithInitialRank =
                     vertices.map(
                             new MapFunction<Tuple2<Long, Boolean>, PageWithRankAndDangling>() {
 
@@ -110,7 +110,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
                             new PageRankStatsAggregator(),
                             new DiffL1NormConvergenceCriterion());
 
-            DataSet<PageWithRank> partialRanks =
+            DataStream<PageWithRank> partialRanks =
                     iteration
                             .join(edges)
                             .where("pageId")
@@ -139,7 +139,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
                                         }
                                     });
 
-            DataSet<PageWithRankAndDangling> newRanks =
+            DataStream<PageWithRankAndDangling> newRanks =
                     iteration
                             .coGroup(partialRanks)
                             .where("pageId")

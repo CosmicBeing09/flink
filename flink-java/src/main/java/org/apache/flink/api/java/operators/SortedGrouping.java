@@ -28,7 +28,7 @@ import org.apache.flink.api.common.operators.Keys.ExpressionKeys;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.FirstReducer;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
@@ -64,7 +64,7 @@ public class SortedGrouping<T> extends Grouping<T> {
     /*
      * int sorting keys for tuples
      */
-    public SortedGrouping(DataSet<T> set, Keys<T> keys, int field, Order order) {
+    public SortedGrouping(DataStream<T> set, Keys<T> keys, int field, Order order) {
         super(set, keys);
 
         if (!Keys.ExpressionKeys.isSortKey(field, inputDataSet.getType())) {
@@ -82,7 +82,7 @@ public class SortedGrouping<T> extends Grouping<T> {
     /*
      * String sorting for Pojos and tuples
      */
-    public SortedGrouping(DataSet<T> set, Keys<T> keys, String field, Order order) {
+    public SortedGrouping(DataStream<T> set, Keys<T> keys, String field, Order order) {
         super(set, keys);
 
         if (!Keys.ExpressionKeys.isSortKey(field, inputDataSet.getType())) {
@@ -101,7 +101,7 @@ public class SortedGrouping<T> extends Grouping<T> {
      * KeySelector sorting for any data type
      */
     public <K> SortedGrouping(
-            DataSet<T> set,
+            DataStream<T> set,
             Keys<T> keys,
             Keys.SelectorFunctionKeys<T, K> keySelector,
             Order order) {
@@ -166,7 +166,7 @@ public class SortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a GroupReduce transformation on a grouped and sorted {@link DataSet}.
+     * Applies a GroupReduce transformation on a grouped and sorted {@link DataStream}.
      *
      * <p>The transformation calls a {@link
      * org.apache.flink.api.common.functions.RichGroupReduceFunction} for each group of the DataSet.
@@ -177,7 +177,7 @@ public class SortedGrouping<T> extends Grouping<T> {
      * @return A GroupReduceOperator that represents the reduced DataSet.
      * @see org.apache.flink.api.common.functions.RichGroupReduceFunction
      * @see GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public <R> GroupReduceOperator<T, R> reduceGroup(GroupReduceFunction<T, R> reducer) {
         if (reducer == null) {
@@ -191,7 +191,7 @@ public class SortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Applies a GroupCombineFunction on a grouped {@link DataSet}. A CombineFunction is similar to
+     * Applies a GroupCombineFunction on a grouped {@link DataStream}. A CombineFunction is similar to
      * a GroupReduceFunction but does not perform a full data exchange. Instead, the CombineFunction
      * calls the combine method once per partition for combining a group of results. This operator
      * is suitable for combining values into an intermediate format before doing a proper
@@ -219,7 +219,7 @@ public class SortedGrouping<T> extends Grouping<T> {
     }
 
     /**
-     * Returns a new set containing the first n elements in this grouped and sorted {@link DataSet}.
+     * Returns a new set containing the first n elements in this grouped and sorted {@link DataStream}.
      *
      * @param n The desired number of elements for each group.
      * @return A GroupReduceOperator that represents the DataSet containing the elements.

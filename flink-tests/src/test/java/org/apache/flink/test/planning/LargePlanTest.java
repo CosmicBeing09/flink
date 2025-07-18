@@ -20,7 +20,7 @@ package org.apache.flink.test.planning;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -38,8 +38,8 @@ public class LargePlanTest {
     private static void runProgram(int depth, int width) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> input = env.fromElements("a", "b", "c");
-        DataSet<String> stats = null;
+        DataStream<String> input = env.fromElements("a", "b", "c");
+        DataStream<String> stats = null;
 
         for (int i = 0; i < depth; i++) {
             stats = analyze(input, stats, width / (i + 1) + 1);
@@ -50,8 +50,8 @@ public class LargePlanTest {
         env.createProgramPlan("depth " + depth + " width " + width);
     }
 
-    private static DataSet<String> analyze(
-            DataSet<String> input, DataSet<String> stats, int branches) {
+    private static DataStream<String> analyze(
+            DataStream<String> input, DataStream<String> stats, int branches) {
         for (int i = 0; i < branches; i++) {
             final int ii = i;
 
@@ -67,7 +67,7 @@ public class LargePlanTest {
                                 .withBroadcastSet(stats.map(s -> "(" + s + ").map"), "stats");
             }
 
-            DataSet<String> branch =
+            DataStream<String> branch =
                     input.map(s -> new Tuple2<>(0, s + ii))
                             .returns(Types.TUPLE(Types.STRING, Types.INT))
                             .groupBy(0)

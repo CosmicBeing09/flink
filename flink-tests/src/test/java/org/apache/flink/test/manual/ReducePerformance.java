@@ -21,7 +21,7 @@ package org.apache.flink.test.manual;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -106,7 +106,7 @@ public class ReducePerformance {
         env.getConfig().enableObjectReuse();
 
         @SuppressWarnings("unchecked")
-        DataSet<T> output =
+        DataStream<T> output =
                 env.fromParallelCollection(
                                 new SplittableRandomIterator<T, B>(numRecords, iterator), typeInfo)
                         .groupBy("0")

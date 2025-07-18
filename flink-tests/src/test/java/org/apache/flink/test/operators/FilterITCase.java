@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
@@ -53,8 +53,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter1());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter1());
 
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 
@@ -80,8 +80,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter2());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter2());
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 
         String expected =
@@ -127,8 +127,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter3());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter3());
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 
         String expected = "3,2,Hello world\n" + "4,3,Hello world, how are you?\n";
@@ -153,8 +153,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter4());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter4());
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 
         String expected =
@@ -189,8 +189,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> filterDs = ds.filter(new Filter5());
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> filterDs = ds.filter(new Filter5());
         List<String> result = filterDs.collect();
 
         String expected = "Hi\n" + "Hello\n" + "Hello world\n" + "Hello world, how are you?\n";
@@ -215,8 +215,8 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> filterDs = ds.filter(new Filter6());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> filterDs = ds.filter(new Filter6());
         List<CustomType> result = filterDs.collect();
 
         String expected =
@@ -242,10 +242,10 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs =
                 ds.filter(new RichFilter1()).withBroadcastSet(ints, "ints");
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 
@@ -285,10 +285,10 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> filterDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> filterDs =
                 ds.filter(new RichFilter2()).withBroadcastSet(intDs, "ints");
         List<Tuple3<Integer, Long, String>> result = filterDs.collect();
 

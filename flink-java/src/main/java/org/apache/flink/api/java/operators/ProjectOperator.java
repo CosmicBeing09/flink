@@ -26,7 +26,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.CompositeType;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.api.java.operators.translation.PlanProjectOperator;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -79,7 +79,7 @@ public class ProjectOperator<IN, OUT extends Tuple>
 
     protected final int[] fields;
 
-    public ProjectOperator(DataSet<IN> input, int[] fields, TupleTypeInfo<OUT> returnType) {
+    public ProjectOperator(DataStream<IN> input, int[] fields, TupleTypeInfo<OUT> returnType) {
         super(input, returnType);
 
         this.fields = fields;
@@ -130,17 +130,17 @@ public class ProjectOperator<IN, OUT extends Tuple>
     }
 
     /**
-     * A projection of {@link DataSet}.
+     * A projection of {@link DataStream}.
      *
      * @param <T>
      */
     @Internal
     public static class Projection<T> {
 
-        private final DataSet<T> ds;
+        private final DataStream<T> ds;
         private int[] fieldIndexes;
 
-        public Projection(DataSet<T> ds, int[] fieldIndexes) {
+        public Projection(DataStream<T> ds, int[] fieldIndexes) {
 
             if (!(ds.getType() instanceof TupleTypeInfo)) {
                 throw new UnsupportedOperationException(
@@ -265,11 +265,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0> ProjectOperator<T, Tuple1<T0>> projectTuple1() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes, ds.getType());
@@ -279,11 +279,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1> ProjectOperator<T, Tuple2<T0, T1>> projectTuple2() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes, ds.getType());
@@ -293,11 +293,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2> ProjectOperator<T, Tuple3<T0, T1, T2>> projectTuple3() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes, ds.getType());
@@ -307,11 +307,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3> ProjectOperator<T, Tuple4<T0, T1, T2, T3>> projectTuple4() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes, ds.getType());
@@ -323,11 +323,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4> ProjectOperator<T, Tuple5<T0, T1, T2, T3, T4>> projectTuple5() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes, ds.getType());
@@ -339,11 +339,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5>
                 ProjectOperator<T, Tuple6<T0, T1, T2, T3, T4, T5>> projectTuple6() {
@@ -356,11 +356,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6>
                 ProjectOperator<T, Tuple7<T0, T1, T2, T3, T4, T5, T6>> projectTuple7() {
@@ -373,11 +373,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7>
                 ProjectOperator<T, Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>> projectTuple8() {
@@ -390,11 +390,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 ProjectOperator<T, Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>> projectTuple9() {
@@ -407,11 +407,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 ProjectOperator<T, Tuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>
@@ -425,11 +425,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 ProjectOperator<T, Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
@@ -443,11 +443,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
                 ProjectOperator<T, Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>
@@ -463,11 +463,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
                 ProjectOperator<T, Tuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>
@@ -483,11 +483,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
                 ProjectOperator<
@@ -520,11 +520,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
                 ProjectOperator<
@@ -573,11 +573,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
                 ProjectOperator<
@@ -646,11 +646,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
                 ProjectOperator<
@@ -738,11 +738,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
                 ProjectOperator<
@@ -834,11 +834,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>
                 ProjectOperator<
@@ -934,11 +934,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1058,11 +1058,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1187,11 +1187,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1321,11 +1321,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1460,11 +1460,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1604,11 +1604,11 @@ public class ProjectOperator<IN, OUT extends Tuple>
         }
 
         /**
-         * Projects a {@link Tuple} {@link DataSet} to the previously selected fields.
+         * Projects a {@link Tuple} {@link DataStream} to the previously selected fields.
          *
          * @return The projected DataSet.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,

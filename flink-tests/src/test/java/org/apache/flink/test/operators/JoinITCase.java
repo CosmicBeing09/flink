@@ -26,7 +26,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatJoinFunction;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -71,10 +71,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.join(ds2).where(1).equalTo(1).with(new T3T5FlatJoin());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -92,10 +92,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.join(ds2).where(0, 1).equalTo(0, 4).with(new T3T5FlatJoin());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -119,10 +119,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
+        DataStream<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
                 joinDs = ds1.join(ds2).where(0).equalTo(2);
 
         List<Tuple2<Tuple3<Integer, Long, String>, Tuple5<Integer, Long, Integer, String, Long>>>
@@ -144,10 +144,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.joinWithHuge(ds2).where(1).equalTo(1).with(new T3T5FlatJoin());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -165,10 +165,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.joinWithTiny(ds2).where(1).equalTo(1).with(new T3T5FlatJoin());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -186,10 +186,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> joinDs =
+        DataStream<Tuple3<Integer, Long, String>> joinDs =
                 ds1.join(ds2).where(1).equalTo(1).with(new LeftReturningJoin());
 
         List<Tuple3<Integer, Long, String>> result = joinDs.collect();
@@ -207,10 +207,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> joinDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> joinDs =
                 ds1.join(ds2).where(1).equalTo(1).with(new RightReturningJoin());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = joinDs.collect();
@@ -228,12 +228,12 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple3<String, String, Integer>> joinDs =
+        DataStream<Tuple3<String, String, Integer>> joinDs =
                 ds1.join(ds2)
                         .where(1)
                         .equalTo(4)
@@ -260,9 +260,9 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds1 = CollectionDataSets.getSmallCustomTypeDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<CustomType> ds1 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.join(ds2).where(new KeySelector1()).equalTo(0).with(new CustT3Join());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -287,10 +287,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple6<String, Long, String, Integer, Long, Long>> joinDs =
+        DataStream<Tuple6<String, Long, String, Integer, Long, Long>> joinDs =
                 ds1.join(ds2)
                         .where(1)
                         .equalTo(1)
@@ -317,10 +317,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple6<String, String, Long, Long, Long, Integer>> joinDs =
+        DataStream<Tuple6<String, String, Long, Long, Long, Integer>> joinDs =
                 ds1.join(ds2)
                         .where(1)
                         .equalTo(1)
@@ -348,9 +348,9 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.join(ds2).where(1).equalTo(new KeySelector2()).with(new T3CustJoin());
 
         List<Tuple2<String, String>> result = joinDs.collect();
@@ -375,10 +375,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
 
-        DataSet<Tuple2<CustomType, CustomType>> joinDs =
+        DataStream<Tuple2<CustomType, CustomType>> joinDs =
                 ds1.join(ds2).where(new KeySelector5()).equalTo(new KeySelector6());
 
         List<Tuple2<CustomType, CustomType>> result = joinDs.collect();
@@ -403,10 +403,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
 
-        DataSet<Tuple2<CustomType, CustomType>> joinDs =
+        DataStream<Tuple2<CustomType, CustomType>> joinDs =
                 ds1.join(ds2)
                         .where(
                                 new KeySelector<CustomType, Integer>() {
@@ -447,11 +447,11 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
-        DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
+        DataStream<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
         boolean correctExceptionTriggered = false;
         try {
-            DataSet<Tuple2<CustomType, CustomType>> joinDs =
+            DataStream<Tuple2<CustomType, CustomType>> joinDs =
                     ds1.join(ds2)
                             .where(
                                     new KeySelector<CustomType, Integer>() {
@@ -496,10 +496,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 ds1.join(ds2)
                         .where(new KeySelector3())
                         .equalTo(new KeySelector4())
@@ -546,10 +546,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
+        DataStream<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
                 joinDs = ds1.join(ds2).where("nestedPojo.longNumber").equalTo("f6");
 
         List<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>> result =
@@ -570,10 +570,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
+        DataStream<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
                 joinDs =
                         ds1.join(ds2).where("nestedPojo.longNumber").equalTo(6); // <--- difference!
 
@@ -595,10 +595,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
+        DataStream<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
                 joinDs =
                         ds1.join(ds2)
                                 .where("nestedPojo.longNumber", "number", "str")
@@ -623,10 +623,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
+        DataStream<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
                 joinDs =
                         ds1.join(ds2)
                                 .where(
@@ -654,10 +654,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
+        DataStream<Tuple2<POJO, Tuple7<Integer, String, Integer, Integer, Long, String, Long>>>
                 joinDs =
                         ds1.join(ds2)
                                 .where(
@@ -685,14 +685,14 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds2 =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds2 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
-        DataSet<
-                        Tuple2<
-                                Tuple2<Tuple2<Integer, Integer>, String>,
-                                Tuple2<Tuple2<Integer, Integer>, String>>>
+        DataStream<
+                                Tuple2<
+                                        Tuple2<Tuple2<Integer, Integer>, String>,
+                                        Tuple2<Tuple2<Integer, Integer>, String>>>
                 joinDs =
                         ds1.join(ds2)
                                 .where(0)
@@ -720,14 +720,14 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds2 =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds2 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
-        DataSet<
-                        Tuple2<
-                                Tuple2<Tuple2<Integer, Integer>, String>,
-                                Tuple2<Tuple2<Integer, Integer>, String>>>
+        DataStream<
+                                Tuple2<
+                                        Tuple2<Tuple2<Integer, Integer>, String>,
+                                        Tuple2<Tuple2<Integer, Integer>, String>>>
                 joinDs =
                         ds1.join(ds2)
                                 .where("f0.f0")
@@ -756,10 +756,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Long, Integer, Integer, Long, String, Integer, String>> ds2 =
+        DataStream<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Long, Integer, Integer, Long, String, Integer, String>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSetMatchingPojo(env);
-        DataSet<Tuple2<POJO, Tuple7<Long, Integer, Integer, Long, String, Integer, String>>>
+        DataStream<Tuple2<POJO, Tuple7<Long, Integer, Integer, Long, String, Integer, String>>>
                 joinDs = ds1.join(ds2).where("*").equalTo("*");
 
         env.setParallelism(1);
@@ -782,17 +782,17 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple2<Tuple3<Integer, Long, String>, Tuple3<Integer, Long, String>>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple2<Tuple3<Integer, Long, String>, Tuple3<Integer, Long, String>>> ds2 =
                 ds1.join(ds1).where(0).equalTo(0);
-        DataSet<
-                        Tuple2<
+        DataStream<
                                 Tuple2<
-                                        Tuple3<Integer, Long, String>,
-                                        Tuple3<Integer, Long, String>>,
-                                Tuple2<
-                                        Tuple3<Integer, Long, String>,
-                                        Tuple3<Integer, Long, String>>>>
+                                        Tuple2<
+                                                Tuple3<Integer, Long, String>,
+                                                Tuple3<Integer, Long, String>>,
+                                        Tuple2<
+                                                Tuple3<Integer, Long, String>,
+                                                Tuple3<Integer, Long, String>>>>
                 joinDs = ds2.join(ds2).where("f1.f0").equalTo("f0.f0");
 
         env.setParallelism(1);
@@ -818,10 +818,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testJoinWithAtomicType1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> ds2 = env.fromElements(1, 2);
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> ds2 = env.fromElements(1, 2);
 
-        DataSet<Tuple2<Tuple3<Integer, Long, String>, Integer>> joinDs =
+        DataStream<Tuple2<Tuple3<Integer, Long, String>, Integer>> joinDs =
                 ds1.join(ds2).where(0).equalTo("*");
 
         List<Tuple2<Tuple3<Integer, Long, String>, Integer>> result = joinDs.collect();
@@ -835,10 +835,10 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testJoinWithAtomicType2() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ds1 = env.fromElements(1, 2);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> ds1 = env.fromElements(1, 2);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
 
-        DataSet<Tuple2<Integer, Tuple3<Integer, Long, String>>> joinDs =
+        DataStream<Tuple2<Integer, Tuple3<Integer, Long, String>>> joinDs =
                 ds1.join(ds2).where("*").equalTo(0);
 
         List<Tuple2<Integer, Tuple3<Integer, Long, String>>> result = joinDs.collect();
@@ -856,13 +856,13 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
 
         env.setParallelism(4);
         TestDistribution testDis = new TestDistribution();
-        DataSet<Tuple2<String, String>> joinDs =
+        DataStream<Tuple2<String, String>> joinDs =
                 DataSetUtils.partitionByRange(ds1, testDis, 0, 1)
                         .join(DataSetUtils.partitionByRange(ds2, testDis, 0, 4))
                         .where(0, 1)

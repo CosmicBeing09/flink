@@ -28,7 +28,7 @@ import org.apache.flink.api.common.operators.DualInputOperator;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.SingleInputOperator;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
@@ -436,7 +436,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
         env.setParallelism(Integer.parseInt(args[0]));
 
         // order id, order status, order data, order prio, ship prio
-        DataSet<Tuple5<Long, String, String, String, Integer>> orders =
+        DataStream<Tuple5<Long, String, String, String, Integer>> orders =
                 env.readCsvFile(args[1])
                         .fieldDelimiter("|")
                         .lineDelimiter("\n")
@@ -445,7 +445,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
                         .name(ORDERS);
 
         // order id, extended price
-        DataSet<Tuple2<Long, Double>> lineItems =
+        DataStream<Tuple2<Long, Double>> lineItems =
                 env.readCsvFile(args[2])
                         .fieldDelimiter("|")
                         .lineDelimiter("\n")
@@ -453,12 +453,12 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
                         .types(Long.class, Double.class)
                         .name(LINEITEM);
 
-        DataSet<Tuple2<Long, Integer>> filterO = orders.flatMap(new FilterO()).name(MAPPER_NAME);
+        DataStream<Tuple2<Long, Integer>> filterO = orders.flatMap(new FilterO()).name(MAPPER_NAME);
 
-        DataSet<Tuple3<Long, Integer, Double>> joinLiO =
+        DataStream<Tuple3<Long, Integer, Double>> joinLiO =
                 filterO.join(lineItems).where(0).equalTo(0).with(new JoinLiO()).name(JOIN_NAME);
 
-        DataSet<Tuple3<Long, Integer, Double>> aggLiO =
+        DataStream<Tuple3<Long, Integer, Double>> aggLiO =
                 joinLiO.groupBy(0, 1).reduceGroup(new AggLiO()).name(REDUCE_NAME);
 
         aggLiO.writeAsCsv(args[3], "\n", "|").name(SINK);

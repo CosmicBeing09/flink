@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.MapPartitionFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.AggregateOperator;
@@ -70,8 +70,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs = ds.partitionByHash(1).mapPartition(new UniqueTupleLongMapper());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs = ds.partitionByHash(1).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
         String expected = "1\n" + "2\n" + "3\n" + "4\n" + "5\n" + "6\n";
@@ -87,8 +87,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs = ds.partitionByRange(1).mapPartition(new UniqueTupleLongMapper());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs = ds.partitionByRange(1).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
         String expected = "1\n" + "2\n" + "3\n" + "4\n" + "5\n" + "6\n";
@@ -104,7 +104,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         AggregateOperator<Tuple3<Integer, Long, String>> sum =
                 ds.map(new PrefixMapper()).partitionByHash(1, 2).groupBy(1, 2).sum(0);
 
@@ -131,7 +131,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         AggregateOperator<Tuple3<Integer, Long, String>> sum =
                 ds.map(new PrefixMapper()).partitionByRange(1, 2).groupBy(1, 2).sum(0);
 
@@ -158,7 +158,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> uniqLongs =
+        DataStream<Long> uniqLongs =
                 env.generateSequence(1, 6)
                         .union(env.generateSequence(1, 6))
                         .rebalance()
@@ -179,7 +179,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> uniqLongs =
+        DataStream<Long> uniqLongs =
                 env.generateSequence(1, 6)
                         .union(env.generateSequence(1, 6))
                         .rebalance()
@@ -200,8 +200,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByHash(new KeySelector1()).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
@@ -230,8 +230,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByRange(new KeySelector1()).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
@@ -258,8 +258,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // generate some number in parallel
-        DataSet<Long> ds = env.generateSequence(1, 3000);
-        DataSet<Tuple2<Integer, Integer>> uniqLongs =
+        DataStream<Long> ds = env.generateSequence(1, 3000);
+        DataStream<Tuple2<Integer, Integer>> uniqLongs =
                 ds
                         // introduce some partition skew by filtering
                         .filter(new Filter1())
@@ -323,8 +323,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByHash(1).setParallelism(4).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
@@ -342,8 +342,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByRange(1).setParallelism(4).mapPartition(new UniqueTupleLongMapper());
         List<Long> result = uniqLongs.collect();
 
@@ -361,8 +361,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByHash("nestedPojo.longNumber")
                         .setParallelism(4)
                         .mapPartition(new UniqueNestedPojoLongMapper());
@@ -382,8 +382,8 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
-        DataSet<Long> uniqLongs =
+        DataStream<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
+        DataStream<Long> uniqLongs =
                 ds.partitionByRange("nestedPojo.longNumber")
                         .setParallelism(4)
                         .mapPartition(new UniqueNestedPojoLongMapper());
@@ -492,7 +492,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSource<Long> source = env.generateSequence(0, 10000);
 
-        DataSet<Tuple2<Long, String>> tuples =
+        DataStream<Tuple2<Long, String>> tuples =
                 source.map(
                         new MapFunction<Long, Tuple2<Long, String>>() {
                             @Override
@@ -503,7 +503,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         DeltaIteration<Tuple2<Long, String>, Tuple2<Long, String>> it =
                 tuples.iterateDelta(tuples, 10, 0);
-        DataSet<Tuple2<Long, String>> body =
+        DataStream<Tuple2<Long, String>> body =
                 it.getWorkset()
                         .partitionByRange(
                                 1) // Verify that range partition is not allowed in iteration
@@ -512,7 +512,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
                         .equalTo(0)
                         .projectFirst(0)
                         .projectSecond(1);
-        DataSet<Tuple2<Long, String>> result = it.closeWith(body, body);
+        DataStream<Tuple2<Long, String>> result = it.closeWith(body, body);
 
         result.collect(); // should fail
     }
@@ -520,7 +520,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testRangePartitionerOnSequenceDataWithOrders() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<Long, Long>> dataSet =
+        DataStream<Tuple2<Long, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(
                                 new MapFunction<Long, Tuple2<Long, Long>>() {
@@ -569,7 +569,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testRangePartitionerOnSequenceNestedDataWithOrders() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        final DataSet<Tuple2<Tuple2<Long, Long>, Long>> dataSet =
+        final DataStream<Tuple2<Tuple2<Long, Long>, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(
                                 new MapFunction<Long, Tuple2<Tuple2<Long, Long>, Long>>() {
@@ -632,7 +632,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testRangePartitionerWithKeySelectorOnSequenceNestedDataWithOrders()
             throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        final DataSet<Tuple2<ComparablePojo, Long>> dataSet =
+        final DataStream<Tuple2<ComparablePojo, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(
                                 new MapFunction<Long, Tuple2<ComparablePojo, Long>>() {

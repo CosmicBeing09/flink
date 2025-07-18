@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.time.Deadline;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.configuration.Configuration;
@@ -156,7 +156,7 @@ class JobManagerHAProcessFailureRecoveryITCase {
         env.getConfig().setExecutionMode(executionMode);
 
         final long numElements = 100000L;
-        final DataSet<Long> result =
+        final DataStream<Long> result =
                 env.generateSequence(1, numElements)
                         // make sure every mapper is involved (no one is skipped because of lazy
                         // split assignment)

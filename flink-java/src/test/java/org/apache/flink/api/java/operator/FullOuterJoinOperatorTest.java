@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.CompositeType;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -36,7 +36,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Tests for {@link DataSet#fullOuterJoin(DataSet)}. */
+/** Tests for {@link DataStream#fullOuterJoin(DataStream)}. */
 class FullOuterJoinOperatorTest {
 
     // TUPLE DATA
@@ -55,9 +55,9 @@ class FullOuterJoinOperatorTest {
     void testFullOuter1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -68,9 +68,9 @@ class FullOuterJoinOperatorTest {
     void testFullOuter2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -81,9 +81,9 @@ class FullOuterJoinOperatorTest {
     void testFullOuter3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -96,9 +96,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter4() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -108,9 +108,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter5() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -120,9 +120,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter6() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -132,9 +132,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter7() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // invalid key position
@@ -145,9 +145,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter8() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // invalid key reference
@@ -159,9 +159,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter9() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // key types do not match
@@ -172,9 +172,9 @@ class FullOuterJoinOperatorTest {
     @Test
     void testFullOuter10() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // key types do not match
@@ -222,9 +222,9 @@ class FullOuterJoinOperatorTest {
     private void testFullOuterStrategies(JoinHint hint) {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work

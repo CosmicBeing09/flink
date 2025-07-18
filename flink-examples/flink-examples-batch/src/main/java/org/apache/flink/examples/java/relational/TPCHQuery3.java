@@ -20,7 +20,7 @@ package org.apache.flink.examples.java.relational;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -120,9 +120,9 @@ public class TPCHQuery3 {
         env.getConfig().setGlobalJobParameters(params);
 
         // get input data
-        DataSet<Lineitem> lineitems = getLineitemDataSet(env, params.get("lineitem"));
-        DataSet<Customer> customers = getCustomerDataSet(env, params.get("customer"));
-        DataSet<Order> orders = getOrdersDataSet(env, params.get("orders"));
+        DataStream<Lineitem> lineitems = getLineitemDataSet(env, params.get("lineitem"));
+        DataStream<Customer> customers = getCustomerDataSet(env, params.get("customer"));
+        DataStream<Order> orders = getOrdersDataSet(env, params.get("orders"));
 
         // Filter market segment "AUTOMOBILE"
         customers =
@@ -161,7 +161,7 @@ public class TPCHQuery3 {
                         });
 
         // Join customers with orders and package them into a ShippingPriorityItem
-        DataSet<ShippingPriorityItem> customerWithOrders =
+        DataStream<ShippingPriorityItem> customerWithOrders =
                 customers
                         .join(orders)
                         .where(0)
@@ -179,7 +179,7 @@ public class TPCHQuery3 {
                                 });
 
         // Join the last join result with Lineitems
-        DataSet<ShippingPriorityItem> result =
+        DataStream<ShippingPriorityItem> result =
                 customerWithOrders
                         .join(lineitems)
                         .where(0)
@@ -308,7 +308,7 @@ public class TPCHQuery3 {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Lineitem> getLineitemDataSet(
+    private static DataStream<Lineitem> getLineitemDataSet(
             ExecutionEnvironment env, String lineitemPath) {
         return env.readCsvFile(lineitemPath)
                 .fieldDelimiter("|")
@@ -316,7 +316,7 @@ public class TPCHQuery3 {
                 .tupleType(Lineitem.class);
     }
 
-    private static DataSet<Customer> getCustomerDataSet(
+    private static DataStream<Customer> getCustomerDataSet(
             ExecutionEnvironment env, String customerPath) {
         return env.readCsvFile(customerPath)
                 .fieldDelimiter("|")
@@ -324,7 +324,7 @@ public class TPCHQuery3 {
                 .tupleType(Customer.class);
     }
 
-    private static DataSet<Order> getOrdersDataSet(ExecutionEnvironment env, String ordersPath) {
+    private static DataStream<Order> getOrdersDataSet(ExecutionEnvironment env, String ordersPath) {
         return env.readCsvFile(ordersPath)
                 .fieldDelimiter("|")
                 .includeFields("110010010")

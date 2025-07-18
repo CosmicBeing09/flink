@@ -20,7 +20,7 @@ package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -68,7 +68,7 @@ public class IterationCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(43);
 
-            DataSet<Tuple2<Long, Long>> input =
+            DataStream<Tuple2<Long, Long>> input =
                     env.generateSequence(1, 20)
                             .map(
                                     new MapFunction<Long, Tuple2<Long, Long>>() {
@@ -140,7 +140,7 @@ public class IterationCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(43);
 
-            DataSet<Tuple2<Long, Long>> input =
+            DataStream<Tuple2<Long, Long>> input =
                     env.generateSequence(1, 20)
                             .map(
                                     new MapFunction<Long, Tuple2<Long, Long>>() {

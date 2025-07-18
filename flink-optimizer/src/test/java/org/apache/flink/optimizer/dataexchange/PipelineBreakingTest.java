@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.dataexchange;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -63,7 +63,7 @@ public class PipelineBreakingTest {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<String> dataSet = env.readTextFile("/never/accessed");
+            DataStream<String> dataSet = env.readTextFile("/never/accessed");
             dataSet.map(
                             new MapFunction<String, Integer>() {
                                 @Override
@@ -122,7 +122,7 @@ public class PipelineBreakingTest {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Integer> data =
+            DataStream<Integer> data =
                     env.readTextFile("/never/accessed")
                             .map(
                                     new MapFunction<String, Integer>() {
@@ -213,7 +213,7 @@ public class PipelineBreakingTest {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromElements(33L, 44L)
                             .map(
                                     new MapFunction<Long, Tuple2<Long, Long>>() {
@@ -223,11 +223,11 @@ public class PipelineBreakingTest {
                                         }
                                     });
 
-            DataSet<Tuple2<Long, Long>> reduced =
+            DataStream<Tuple2<Long, Long>> reduced =
                     data.groupBy(0).reduce(new SelectOneReducer<Tuple2<Long, Long>>());
             reduced.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            DataSet<Tuple2<Long, Long>> filtered =
+            DataStream<Tuple2<Long, Long>> filtered =
                     data.filter(
                             new FilterFunction<Tuple2<Long, Long>>() {
                                 @Override
@@ -236,7 +236,7 @@ public class PipelineBreakingTest {
                                 }
                             });
 
-            DataSet<Tuple2<Long, Long>> joined =
+            DataStream<Tuple2<Long, Long>> joined =
                     reduced.join(filtered)
                             .where(1)
                             .equalTo(1)

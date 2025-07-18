@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.dataexchange;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
@@ -112,7 +112,7 @@ public class DataExchangeModeForwardTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
-            DataSet<String> dataSet = env.readTextFile("/never/accessed");
+            DataStream<String> dataSet = env.readTextFile("/never/accessed");
             dataSet.map(
                             new MapFunction<String, Integer>() {
                                 @Override

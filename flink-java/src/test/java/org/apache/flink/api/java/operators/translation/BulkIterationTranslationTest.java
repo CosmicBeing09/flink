@@ -22,7 +22,7 @@ package org.apache.flink.api.java.operators.translation;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.base.BulkIterationBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -56,7 +56,7 @@ class BulkIterationTranslationTest implements java.io.Serializable {
             env.setParallelism(defaultParallelism);
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Double, Long, String>> initialDataSet =
+            DataStream<Tuple3<Double, Long, String>> initialDataSet =
                     env.fromElements(new Tuple3<>(3.44, 5L, "abc"));
 
             IterativeDataSet<Tuple3<Double, Long, String>> bulkIteration =
@@ -64,10 +64,10 @@ class BulkIterationTranslationTest implements java.io.Serializable {
             bulkIteration.setParallelism(iterationParallelism);
 
             // test that multiple iteration consumers are supported
-            DataSet<Tuple3<Double, Long, String>> identity =
+            DataStream<Tuple3<Double, Long, String>> identity =
                     bulkIteration.map(new IdentityMapper<>());
 
-            DataSet<Tuple3<Double, Long, String>> result = bulkIteration.closeWith(identity);
+            DataStream<Tuple3<Double, Long, String>> result = bulkIteration.closeWith(identity);
 
             result.output(new DiscardingOutputFormat<>());
             result.writeAsText("/dev/null");

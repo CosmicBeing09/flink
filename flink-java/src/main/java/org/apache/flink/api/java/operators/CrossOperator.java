@@ -29,7 +29,7 @@ import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.CrossOperatorBase;
 import org.apache.flink.api.common.operators.base.CrossOperatorBase.CrossHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -65,12 +65,12 @@ import org.apache.flink.util.Preconditions;
 import java.util.Arrays;
 
 /**
- * A {@link DataSet} that is the result of a Cross transformation.
+ * A {@link DataStream} that is the result of a Cross transformation.
  *
  * @param <I1> The type of the first input DataSet of the Cross transformation.
  * @param <I2> The type of the second input DataSet of the Cross transformation.
  * @param <OUT> The type of the result of the Cross transformation.
- * @see DataSet
+ * @see DataStream
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -89,8 +89,8 @@ public class CrossOperator<I1, I2, OUT>
     private final CrossHint hint;
 
     public CrossOperator(
-            DataSet<I1> input1,
-            DataSet<I2> input2,
+            DataStream<I1> input1,
+            DataStream<I2> input2,
             CrossFunction<I1, I2, OUT> function,
             TypeInformation<OUT> returnType,
             CrossHint hint,
@@ -144,18 +144,18 @@ public class CrossOperator<I1, I2, OUT>
     /**
      * A Cross transformation that wraps pairs of crossed elements into {@link Tuple2}.
      *
-     * <p>It also represents the {@link DataSet} that is the result of a Cross transformation.
+     * <p>It also represents the {@link DataStream} that is the result of a Cross transformation.
      *
      * @param <I1> The type of the first input DataSet of the Cross transformation.
      * @param <I2> The type of the second input DataSet of the Cross transformation.
      * @see Tuple2
-     * @see DataSet
+     * @see DataStream
      */
     @Public
     public static final class DefaultCross<I1, I2> extends CrossOperator<I1, I2, Tuple2<I1, I2>> {
 
         public DefaultCross(
-                DataSet<I1> input1, DataSet<I2> input2, CrossHint hint, String defaultName) {
+                DataStream<I1> input1, DataStream<I2> input2, CrossHint hint, String defaultName) {
             super(
                     input1,
                     input2,
@@ -176,7 +176,7 @@ public class CrossOperator<I1, I2, OUT>
          * @param function The CrossFunction that is called for each pair of crossed elements.
          * @return An CrossOperator that represents the crossed result DataSet
          * @see CrossFunction
-         * @see DataSet
+         * @see DataStream
          */
         public <R> CrossOperator<I1, I2, R> with(CrossFunction<I1, I2, R> function) {
             if (function == null) {
@@ -201,7 +201,7 @@ public class CrossOperator<I1, I2, OUT>
         /**
          * Initiates a ProjectCross transformation and projects the first cross input.
          *
-         * <p>If the first cross input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first cross input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -219,7 +219,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectCross which represents the projected cross result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
         public <OUT extends Tuple> ProjectCross<I1, I2, OUT> projectFirst(
@@ -232,7 +232,7 @@ public class CrossOperator<I1, I2, OUT>
         /**
          * Initiates a ProjectCross transformation and projects the second cross input.
          *
-         * <p>If the second cross input is a {@link Tuple} {@link DataSet}, fields can be selected
+         * <p>If the second cross input is a {@link Tuple} {@link DataStream}, fields can be selected
          * by their index. If the second cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -250,7 +250,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectCross which represents the projected cross result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
         public <OUT extends Tuple> ProjectCross<I1, I2, OUT> projectSecond(
@@ -265,13 +265,13 @@ public class CrossOperator<I1, I2, OUT>
      * A Cross transformation that projects crossing elements or fields of crossing {@link Tuple
      * Tuples} into result {@link Tuple Tuples}.
      *
-     * <p>It also represents the {@link DataSet} that is the result of a Cross transformation.
+     * <p>It also represents the {@link DataStream} that is the result of a Cross transformation.
      *
      * @param <I1> The type of the first input DataSet of the Cross transformation.
      * @param <I2> The type of the second input DataSet of the Cross transformation.
      * @param <OUT> The type of the result of the Cross transformation.
      * @see Tuple
-     * @see DataSet
+     * @see DataStream
      */
     @Public
     public static final class ProjectCross<I1, I2, OUT extends Tuple>
@@ -280,8 +280,8 @@ public class CrossOperator<I1, I2, OUT>
         private CrossProjection<I1, I2> crossProjection;
 
         protected ProjectCross(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 int[] fields,
                 boolean[] isFromFirst,
                 TupleTypeInfo<OUT> returnType,
@@ -306,8 +306,8 @@ public class CrossOperator<I1, I2, OUT>
         }
 
         protected ProjectCross(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 int[] fields,
                 boolean[] isFromFirst,
                 TupleTypeInfo<OUT> returnType,
@@ -341,7 +341,7 @@ public class CrossOperator<I1, I2, OUT>
          * Continues a ProjectCross transformation and adds fields of the first cross input to the
          * projection.
          *
-         * <p>If the first cross input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first cross input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -359,7 +359,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectCross which represents the projected cross result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
         @SuppressWarnings("hiding")
@@ -374,7 +374,7 @@ public class CrossOperator<I1, I2, OUT>
          * Continues a ProjectCross transformation and adds fields of the second cross input to the
          * projection.
          *
-         * <p>If the second cross input is a {@link Tuple} {@link DataSet}, fields can be selected
+         * <p>If the second cross input is a {@link Tuple} {@link DataStream}, fields can be selected
          * by their index. If the second cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -392,7 +392,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectCross which represents the projected cross result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
         @SuppressWarnings("hiding")
@@ -526,8 +526,8 @@ public class CrossOperator<I1, I2, OUT>
     @Internal
     public static final class CrossProjection<I1, I2> {
 
-        private final DataSet<I1> ds1;
-        private final DataSet<I2> ds2;
+        private final DataStream<I1> ds1;
+        private final DataStream<I2> ds2;
 
         private int[] fieldIndexes;
         private boolean[] isFieldInFirst;
@@ -538,8 +538,8 @@ public class CrossOperator<I1, I2, OUT>
         private final CrossHint hint;
 
         public CrossProjection(
-                DataSet<I1> ds1,
-                DataSet<I2> ds2,
+                DataStream<I1> ds1,
+                DataStream<I2> ds2,
                 int[] firstFieldIndexes,
                 int[] secondFieldIndexes,
                 CrossHint hint) {
@@ -629,7 +629,7 @@ public class CrossOperator<I1, I2, OUT>
         /**
          * Continues a ProjectCross transformation and adds fields of the first cross input.
          *
-         * <p>If the first cross input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first cross input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -644,7 +644,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return An extended CrossProjection.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.CrossProjection
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
@@ -707,7 +707,7 @@ public class CrossOperator<I1, I2, OUT>
         /**
          * Continues a ProjectCross transformation and adds fields of the second cross input.
          *
-         * <p>If the second cross input is a {@link Tuple} {@link DataSet}, fields can be selected
+         * <p>If the second cross input is a {@link Tuple} {@link DataStream}, fields can be selected
          * by their index. If the second cross input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -722,7 +722,7 @@ public class CrossOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return An extended CrossProjection.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.CrossOperator.CrossProjection
          * @see org.apache.flink.api.java.operators.CrossOperator.ProjectCross
          */
@@ -887,7 +887,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0> ProjectCross<I1, I2, Tuple1<T0>> projectTuple1() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -903,7 +903,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1> ProjectCross<I1, I2, Tuple2<T0, T1>> projectTuple2() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -919,7 +919,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2> ProjectCross<I1, I2, Tuple3<T0, T1, T2>> projectTuple3() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -935,7 +935,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3> ProjectCross<I1, I2, Tuple4<T0, T1, T2, T3>> projectTuple4() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -952,7 +952,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4>
                 ProjectCross<I1, I2, Tuple5<T0, T1, T2, T3, T4>> projectTuple5() {
@@ -970,7 +970,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5>
                 ProjectCross<I1, I2, Tuple6<T0, T1, T2, T3, T4, T5>> projectTuple6() {
@@ -988,7 +988,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6>
                 ProjectCross<I1, I2, Tuple7<T0, T1, T2, T3, T4, T5, T6>> projectTuple7() {
@@ -1006,7 +1006,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7>
                 ProjectCross<I1, I2, Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>> projectTuple8() {
@@ -1024,7 +1024,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 ProjectCross<I1, I2, Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>> projectTuple9() {
@@ -1042,7 +1042,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 ProjectCross<I1, I2, Tuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>
@@ -1061,7 +1061,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 ProjectCross<I1, I2, Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
@@ -1080,7 +1080,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
                 ProjectCross<I1, I2, Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>
@@ -1101,7 +1101,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
                 ProjectCross<I1, I2, Tuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>
@@ -1122,7 +1122,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
                 ProjectCross<
@@ -1161,7 +1161,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
                 ProjectCross<
@@ -1218,7 +1218,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
                 ProjectCross<
@@ -1294,7 +1294,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
                 ProjectCross<
@@ -1390,7 +1390,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
                 ProjectCross<
@@ -1490,7 +1490,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>
                 ProjectCross<
@@ -1594,7 +1594,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1722,7 +1722,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1855,7 +1855,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -1993,7 +1993,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -2136,7 +2136,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -2284,7 +2284,7 @@ public class CrossOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,

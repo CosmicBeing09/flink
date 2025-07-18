@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -55,9 +55,9 @@ public class PipelineBreakerTest extends CompilerTestBase {
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
-            DataSet<Long> source = env.generateSequence(1, 10).map(new IdentityMapper<Long>());
+            DataStream<Long> source = env.generateSequence(1, 10).map(new IdentityMapper<Long>());
 
-            DataSet<Long> result =
+            DataStream<Long> result =
                     source.map(new IdentityMapper<Long>())
                             .map(new IdentityMapper<Long>())
                             .withBroadcastSet(source, "bc");
@@ -92,16 +92,16 @@ public class PipelineBreakerTest extends CompilerTestBase {
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
-            DataSet<Long> sourceWithMapper =
+            DataStream<Long> sourceWithMapper =
                     env.generateSequence(1, 10).map(new IdentityMapper<Long>());
 
-            DataSet<Long> bcInput1 =
+            DataStream<Long> bcInput1 =
                     sourceWithMapper
                             .map(new IdentityMapper<Long>())
                             .reduce(new SelectOneReducer<Long>());
-            DataSet<Long> bcInput2 = env.generateSequence(1, 10);
+            DataStream<Long> bcInput2 = env.generateSequence(1, 10);
 
-            DataSet<Long> result =
+            DataStream<Long> result =
                     sourceWithMapper
                             .map(new IdentityMapper<Long>())
                             .withBroadcastSet(bcInput1, "bc1")
@@ -148,18 +148,18 @@ public class PipelineBreakerTest extends CompilerTestBase {
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
-            DataSet<Long> initialSource = env.generateSequence(1, 10);
+            DataStream<Long> initialSource = env.generateSequence(1, 10);
             IterativeDataSet<Long> iteration = initialSource.iterate(100);
 
-            DataSet<Long> sourceWithMapper =
+            DataStream<Long> sourceWithMapper =
                     env.generateSequence(1, 10).map(new IdentityMapper<Long>());
 
-            DataSet<Long> bcInput1 =
+            DataStream<Long> bcInput1 =
                     sourceWithMapper
                             .map(new IdentityMapper<Long>())
                             .reduce(new SelectOneReducer<Long>());
 
-            DataSet<Long> result =
+            DataStream<Long> result =
                     sourceWithMapper
                             .map(new IdentityMapper<Long>())
                             .withBroadcastSet(iteration, "bc2")
@@ -191,7 +191,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
                 ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
                 env.setParallelism(64);
 
-                DataSet<Long> initialSource = env.generateSequence(1, 10);
+                DataStream<Long> initialSource = env.generateSequence(1, 10);
 
                 Configuration conf = new Configuration();
                 conf.setString(
@@ -219,7 +219,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
                 ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
                 env.setParallelism(64);
 
-                DataSet<Long> initialSource = env.generateSequence(1, 10);
+                DataStream<Long> initialSource = env.generateSequence(1, 10);
 
                 Configuration conf = new Configuration();
                 conf.setString(
@@ -248,7 +248,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
                 ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
                 env.setParallelism(64);
 
-                DataSet<Long> initialSource = env.generateSequence(1, 10);
+                DataStream<Long> initialSource = env.generateSequence(1, 10);
 
                 Configuration conf = new Configuration();
                 conf.setString(
@@ -277,7 +277,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
                 ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
                 env.setParallelism(64);
 
-                DataSet<Long> initialSource = env.generateSequence(1, 10);
+                DataStream<Long> initialSource = env.generateSequence(1, 10);
 
                 Configuration conf = new Configuration();
                 conf.setString(

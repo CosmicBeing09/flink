@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.util.Preconditions;
 
 /**
@@ -40,16 +40,16 @@ import org.apache.flink.util.Preconditions;
 public abstract class TwoInputOperator<IN1, IN2, OUT, O extends TwoInputOperator<IN1, IN2, OUT, O>>
         extends Operator<OUT, O> {
 
-    private final DataSet<IN1> input1;
-    private final DataSet<IN2> input2;
+    private final DataStream<IN1> input1;
+    private final DataStream<IN2> input2;
 
     protected TwoInputOperator(
-            DataSet<IN1> input1, DataSet<IN2> input2, TypeInformation<OUT> resultType) {
+            DataStream<IN1> input1, DataStream<IN2> input2, TypeInformation<OUT> resultType) {
         super(
                 Preconditions.checkNotNull(input1, "input1 is null").getExecutionEnvironment(),
                 resultType);
         Preconditions.checkNotNull(input2, "input2 is null");
-        DataSet.checkSameExecutionContext(input1, input2);
+        DataStream.checkSameExecutionContext(input1, input2);
         this.input1 = input1;
         this.input2 = input2;
     }
@@ -59,7 +59,7 @@ public abstract class TwoInputOperator<IN1, IN2, OUT, O extends TwoInputOperator
      *
      * @return The data set that this operation uses as its first input.
      */
-    public DataSet<IN1> getInput1() {
+    public DataStream<IN1> getInput1() {
         return this.input1;
     }
 
@@ -68,7 +68,7 @@ public abstract class TwoInputOperator<IN1, IN2, OUT, O extends TwoInputOperator
      *
      * @return The data set that this operation uses as its second input.
      */
-    public DataSet<IN2> getInput2() {
+    public DataStream<IN2> getInput2() {
         return this.input2;
     }
 

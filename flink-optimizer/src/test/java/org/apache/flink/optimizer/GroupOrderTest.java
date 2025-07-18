@@ -21,7 +21,7 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple4;
@@ -54,7 +54,7 @@ public class GroupOrderTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Tuple4<Long, Long, Long, Long>> set1 =
+        DataStream<Tuple4<Long, Long, Long, Long>> set1 =
                 env.readCsvFile("/tmp/fake.csv")
                         .types(Long.class, Long.class, Long.class, Long.class);
 
@@ -102,7 +102,7 @@ public class GroupOrderTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Tuple7<Long, Long, Long, Long, Long, Long, Long>> set1 =
+        DataStream<Tuple7<Long, Long, Long, Long, Long, Long, Long>> set1 =
                 env.readCsvFile("/tmp/fake1.csv")
                         .types(
                                 Long.class,
@@ -112,7 +112,7 @@ public class GroupOrderTest extends CompilerTestBase {
                                 Long.class,
                                 Long.class,
                                 Long.class);
-        DataSet<Tuple7<Long, Long, Long, Long, Long, Long, Long>> set2 =
+        DataStream<Tuple7<Long, Long, Long, Long, Long, Long, Long>> set2 =
                 env.readCsvFile("/tmp/fake2.csv")
                         .types(
                                 Long.class,

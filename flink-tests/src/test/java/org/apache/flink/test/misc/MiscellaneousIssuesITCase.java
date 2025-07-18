@@ -23,7 +23,7 @@ import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.core.fs.FileSystem;
@@ -66,7 +66,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(1);
 
-            DataSet<String> data =
+            DataStream<String> data =
                     env.fromElements("hallo")
                             .map(
                                     new MapFunction<String, String>() {
