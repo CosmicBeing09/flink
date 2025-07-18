@@ -116,9 +116,9 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public FSDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
+        public FSDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.open(flinkPath, bufferSize);
+                return inner.open(sourcePath, bufferSize);
             }
         }
 
@@ -180,10 +180,10 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public FSDataOutputStream create(final Path f, final WriteMode overwriteMode)
+        public FSDataOutputStream create(final Path targetPath, final WriteMode overwriteMode)
                 throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.create(f, overwriteMode);
+                return inner.create(targetPath, overwriteMode);
             }
         }
 

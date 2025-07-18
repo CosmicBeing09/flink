@@ -103,8 +103,8 @@ class AnotherDummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
-        return open(flinkPath);
+    public FSDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
+        return open(sourcePath);
     }
 
     @Override

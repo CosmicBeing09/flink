@@ -269,8 +269,8 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     // ------------------------------------------------------------------------
 
     @Override
-    public FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException {
-        return createOutputStream(() -> originalFs.create(f, overwriteMode));
+    public FSDataOutputStream create(Path targetPath, WriteMode overwriteMode) throws IOException {
+        return createOutputStream(() -> originalFs.create(targetPath, overwriteMode));
     }
 
     @Override
@@ -285,8 +285,8 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
-        return createInputStream(() -> originalFs.open(flinkPath, bufferSize));
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
+        return createInputStream(() -> originalFs.open(sourcePath, bufferSize));
     }
 
     @Override

@@ -122,8 +122,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public HadoopDataInputStream open(final Path flinkPath, final int bufferSize) throws IOException {
-        final org.apache.hadoop.fs.Path path = toHadoopPath(flinkPath);
+    public HadoopDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
+        final org.apache.hadoop.fs.Path path = toHadoopPath(sourcePath);
         final org.apache.hadoop.fs.FSDataInputStream fdis = this.fs.open(path, bufferSize);
         return new HadoopDataInputStream(fdis);
     }
@@ -151,10 +151,10 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public HadoopDataOutputStream create(final Path f, final WriteMode overwrite)
+    public HadoopDataOutputStream create(final Path targetPath, final WriteMode overwrite)
             throws IOException {
         final org.apache.hadoop.fs.FSDataOutputStream fsDataOutputStream =
-                this.fs.create(toHadoopPath(f), overwrite == WriteMode.OVERWRITE);
+                this.fs.create(toHadoopPath(targetPath), overwrite == WriteMode.OVERWRITE);
         return new HadoopDataOutputStream(fsDataOutputStream);
     }
 

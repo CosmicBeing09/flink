@@ -649,7 +649,7 @@ public abstract class FileSystem implements IFileSystem {
             throws IOException;
 
     @Override
-    public abstract FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException;
+    public abstract FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException;
 
     @Override
     public abstract FSDataInputStream open(Path filePath) throws IOException;
@@ -684,7 +684,7 @@ public abstract class FileSystem implements IFileSystem {
     public abstract boolean mkdirs(Path f) throws IOException;
 
     @Override
-    public abstract FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException;
+    public abstract FSDataOutputStream create(Path targetPath, WriteMode overwriteMode) throws IOException;
 
     @Override
     public abstract boolean rename(Path sourcePath, Path destinationPath) throws IOException;

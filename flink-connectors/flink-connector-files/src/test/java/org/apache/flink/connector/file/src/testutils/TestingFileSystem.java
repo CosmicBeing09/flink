@@ -206,8 +206,8 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
-        return open(flinkPath);
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
+        return open(sourcePath);
     }
 
     @Override
@@ -241,7 +241,7 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException {
+    public FSDataOutputStream create(Path targetPath, WriteMode overwriteMode) throws IOException {
         throw new UnsupportedOperationException();
     }
 

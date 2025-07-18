@@ -62,9 +62,9 @@ public class TestFileSystem extends LocalFileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path flinkPath, int bufferSize) throws IOException {
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
         streamOpenCounter.incrementAndGet();
-        return super.open(flinkPath, bufferSize);
+        return super.open(sourcePath, bufferSize);
     }
 
     @Override
