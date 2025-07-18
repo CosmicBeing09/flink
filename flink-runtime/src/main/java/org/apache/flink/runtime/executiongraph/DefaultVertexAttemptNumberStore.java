@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.Map;
 
 /** Maintains the attempt number per subtask. */
-public class DefaultVertexAttemptNumberStore implements MutableVertexAttemptNumberStore {
+public class DefaultVertexAttemptNumberStore implements MutableSubtaskAttemptStore {
     private final Map<JobVertexID, List<Integer>> vertexSubtaskToAttemptCounts = new HashMap<>();
 
     @Override
@@ -40,7 +40,7 @@ public class DefaultVertexAttemptNumberStore implements MutableVertexAttemptNumb
     }
 
     @Override
-    public void setAttemptCount(JobVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
+    public void setSubtaskAttemptNumber(JobVertexID jobVertexId, int subtaskIndex, int attemptNumber) {
         Preconditions.checkArgument(subtaskIndex >= 0);
         Preconditions.checkArgument(attemptNumber >= 0);
 

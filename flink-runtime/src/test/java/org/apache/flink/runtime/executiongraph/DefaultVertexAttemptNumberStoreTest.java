@@ -35,7 +35,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final int subtaskIndex = 4;
         final int attemptCount = 2;
 
-        vertexAttemptNumberStore.setAttemptCount(jobVertexId, subtaskIndex, attemptCount);
+        vertexAttemptNumberStore.setSubtaskAttemptNumber(jobVertexId, subtaskIndex, attemptCount);
         assertThat(
                         vertexAttemptNumberStore
                                 .getAttemptCounts(jobVertexId)
@@ -48,7 +48,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final DefaultVertexAttemptNumberStore vertexAttemptNumberStore =
                 new DefaultVertexAttemptNumberStore();
 
-        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new JobVertexID(), -1, 0))
+        assertThatThrownBy(() -> vertexAttemptNumberStore.setSubtaskAttemptNumber(new JobVertexID(), -1, 0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -57,7 +57,7 @@ class DefaultVertexAttemptNumberStoreTest {
         final DefaultVertexAttemptNumberStore vertexAttemptNumberStore =
                 new DefaultVertexAttemptNumberStore();
 
-        assertThatThrownBy(() -> vertexAttemptNumberStore.setAttemptCount(new JobVertexID(), 0, -1))
+        assertThatThrownBy(() -> vertexAttemptNumberStore.setSubtaskAttemptNumber(new JobVertexID(), 0, -1))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 }

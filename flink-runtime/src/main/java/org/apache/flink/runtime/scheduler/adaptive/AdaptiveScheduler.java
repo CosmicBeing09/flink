@@ -62,7 +62,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
-import org.apache.flink.runtime.executiongraph.MutableVertexAttemptNumberStore;
+import org.apache.flink.runtime.executiongraph.MutableSubtaskAttemptStore;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.executiongraph.failover.ExecutionFailureHandler;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
@@ -406,7 +406,7 @@ public class AdaptiveScheduler
 
     private int numRescales = 0;
 
-    private final MutableVertexAttemptNumberStore vertexAttemptNumberStore =
+    private final MutableSubtaskAttemptStore vertexAttemptNumberStore =
             new DefaultVertexAttemptNumberStore();
 
     private BackgroundTask<ExecutionGraph> backgroundTask = BackgroundTask.finishedBackgroundTask();
@@ -1255,7 +1255,7 @@ public class AdaptiveScheduler
             final int attemptNumber =
                     executionVertex.getCurrentExecutionAttempt().getAttemptNumber();
 
-            this.vertexAttemptNumberStore.setAttemptCount(
+            this.vertexAttemptNumberStore.setSubtaskAttemptNumber(
                     executionVertex.getJobvertexId(),
                     executionVertex.getParallelSubtaskIndex(),
                     attemptNumber + 1);
