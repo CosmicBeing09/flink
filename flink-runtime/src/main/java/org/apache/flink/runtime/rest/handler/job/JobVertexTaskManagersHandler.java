@@ -157,7 +157,7 @@ public class JobVertexTaskManagersHandler
             String host =
                     location == null
                             ? "(unassigned)"
-                            : location.getHostname() + ':' + location.dataPort();
+                            : location.getHostname() + ':' + location.getDataPort();
             String endpoint = location == null ? "(unassigned)" : location.getEndpoint();
             String taskmanagerId =
                     location == null ? "(unassigned)" : location.getResourceID().toString();

@@ -49,7 +49,7 @@ public class ConnectionID implements Serializable {
     public ConnectionID(TaskManagerLocation connectionInfo, int connectionIndex) {
         this(
                 connectionInfo.getResourceID(),
-                new InetSocketAddress(connectionInfo.address(), connectionInfo.dataPort()),
+                new InetSocketAddress(connectionInfo.getInetAddress(), connectionInfo.getDataPort()),
                 connectionIndex);
     }
 

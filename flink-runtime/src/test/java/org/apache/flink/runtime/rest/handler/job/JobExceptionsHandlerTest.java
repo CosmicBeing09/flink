@@ -395,7 +395,7 @@ class JobExceptionsHandlerTest {
                         String.format(
                                 "%s:%s",
                                 taskManagerLocation.getFQDNHostname(),
-                                taskManagerLocation.dataPort()));
+                                taskManagerLocation.getDataPort()));
     }
 
     @Test
@@ -414,7 +414,7 @@ class JobExceptionsHandlerTest {
                         String.format(
                                 "%s:%s",
                                 taskManagerLocation.getFQDNHostname(),
-                                taskManagerLocation.dataPort()));
+                                taskManagerLocation.getDataPort()));
     }
 
     @Test
