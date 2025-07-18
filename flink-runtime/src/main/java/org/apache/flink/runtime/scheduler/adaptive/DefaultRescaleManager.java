@@ -41,11 +41,11 @@ import java.util.function.Supplier;
  *
  * <ol>
  *   <li>Cooldown phase: No rescaling takes place (its upper threshold is defined by {@code
- *       scalingIntervalMin}.
+ *       cooldownInterval}.
  *   <li>Soft-rescaling phase: Rescaling is triggered if the desired amount of resources is
  *       available.
  *   <li>Hard-rescaling phase: Rescaling is triggered if a sufficient amount of resources is
- *       available (its lower threshold is defined by (@code scalingIntervalMax}).
+ *       available (its lower threshold is defined by (@code softRescaleIntervalMax}).
  * </ol>
  *
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
@@ -61,8 +61,8 @@ public class DefaultRescaleManager implements RescaleManager {
     private final Temporal initializationTime;
     private final Supplier<Temporal> clock;
 
-    @VisibleForTesting final Duration scalingIntervalMin;
-    @VisibleForTesting @Nullable final Duration scalingIntervalMax;
+    @VisibleForTesting final Duration cooldownInterval;
+    @VisibleForTesting @Nullable final Duration softRescaleIntervalMax;
 
     private final RescaleManager.Context rescaleContext;
 
@@ -113,8 +113,8 @@ public class DefaultRescaleManager implements RescaleManager {
         Preconditions.checkArgument(
                 scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
-        this.scalingIntervalMin = scalingIntervalMin;
-        this.scalingIntervalMax = scalingIntervalMax;
+        this.cooldownInterval = scalingIntervalMin;
+        this.softRescaleIntervalMax = scalingIntervalMax;
 
         this.rescaleContext = rescaleContext;
     }
@@ -139,11 +139,11 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private void evaluateChangeEvent() {
-        if (timeSinceLastRescale().compareTo(scalingIntervalMin) > 0) {
+        if (timeSinceLastRescale().compareTo(cooldownInterval) > 0) {
             maybeRescale();
         } else if (!rescaleScheduled) {
             rescaleScheduled = true;
-            rescaleContext.scheduleOperation(this::maybeRescale, scalingIntervalMin);
+            rescaleContext.scheduleOperation(this::maybeRescale, cooldownInterval);
         }
     }
 
@@ -165,19 +165,19 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasDesiredResources()) {
             LOG.info("Desired parallelism for job was reached: Rescaling will be triggered.");
             rescaleContext.rescale();
-        } else if (scalingIntervalMax != null) {
+        } else if (softRescaleIntervalMax != null) {
             LOG.info(
                     "The longer the pipeline runs, the more the (small) resource gain is worth the restarting time. "
                             + "Last resource added does not meet the configured minimal parallelism change. Forced rescaling will be triggered after {} if the resource is still there.",
-                    scalingIntervalMax);
+                    softRescaleIntervalMax);
 
             // reasoning for inconsistent scheduling:
             // https://lists.apache.org/thread/m2w2xzfjpxlw63j0k7tfxfgs0rshhwwr
-            if (timeSinceLastRescale().compareTo(scalingIntervalMax) > 0) {
+            if (timeSinceLastRescale().compareTo(softRescaleIntervalMax) > 0) {
                 rescaleWithSufficientResources();
             } else {
                 rescaleContext.scheduleOperation(
-                        this::rescaleWithSufficientResources, scalingIntervalMax);
+                        this::rescaleWithSufficientResources, softRescaleIntervalMax);
             }
         }
     }
@@ -186,7 +186,7 @@ public class DefaultRescaleManager implements RescaleManager {
         if (rescaleContext.hasSufficientResources()) {
             LOG.info(
                     "Resources for desired job parallelism couldn't be collected after {}: Rescaling will be enforced.",
-                    scalingIntervalMax);
+                    softRescaleIntervalMax);
             rescaleContext.rescale();
         }
     }
