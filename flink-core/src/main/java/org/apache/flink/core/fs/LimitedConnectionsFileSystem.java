@@ -1061,9 +1061,9 @@ public class LimitedConnectionsFileSystem extends FileSystem {
                 return null;
             } else {
                 final ConfigOption<Long> openTimeoutOption =
-                        CoreOptions.fileSystemConnectionLimitTimeout(fsScheme);
+                        CoreOptions.fileSystemConnectionLimitAcquireTimeout(fsScheme);
                 final ConfigOption<Long> inactivityTimeoutOption =
-                        CoreOptions.fileSystemConnectionLimitStreamInactivityTimeout(fsScheme);
+                        CoreOptions.fileSystemConnectionLimitIdleTimeout(fsScheme);
 
                 final long openTimeout = config.get(openTimeoutOption);
                 final long inactivityTimeout = config.get(inactivityTimeoutOption);
