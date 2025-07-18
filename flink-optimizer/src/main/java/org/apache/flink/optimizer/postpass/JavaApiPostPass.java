@@ -70,12 +70,12 @@ public class JavaApiPostPass implements OptimizerPostPass {
 
     private final Set<PlanNode> alreadyDone = new HashSet<PlanNode>();
 
-    private ExecutionConfig executionConfig = null;
+    private ExecutionConfig config = null;
 
     @Override
     public void postPass(OptimizedPlan plan) {
 
-        executionConfig = plan.getOriginalPlan().getExecutionConfig();
+        config = plan.getOriginalPlan().getExecutionConfig();
 
         for (SinkPlanNode sink : plan.getDataSinks()) {
             traverse(sink);
@@ -307,7 +307,7 @@ public class JavaApiPostPass implements OptimizerPostPass {
     }
 
     private <T> TypeSerializerFactory<?> createSerializer(TypeInformation<T> typeInfo) {
-        TypeSerializer<T> serializer = typeInfo.createSerializer(executionConfig);
+        TypeSerializer<T> serializer = typeInfo.createSerializer(config);
 
         return new RuntimeSerializerFactory<T>(serializer, typeInfo.getTypeClass());
     }
@@ -320,10 +320,10 @@ public class JavaApiPostPass implements OptimizerPostPass {
         if (typeInfo instanceof CompositeType) {
             comparator =
                     ((CompositeType<T>) typeInfo)
-                            .createComparator(keys.toArray(), sortOrder, 0, executionConfig);
+                            .createComparator(keys.toArray(), sortOrder, 0, config);
         } else if (typeInfo instanceof AtomicType) {
             // handle grouping of atomic types
-            comparator = ((AtomicType<T>) typeInfo).createComparator(sortOrder[0], executionConfig);
+            comparator = ((AtomicType<T>) typeInfo).createComparator(sortOrder[0], config);
         } else {
             throw new RuntimeException("Unrecognized type: " + typeInfo);
         }
