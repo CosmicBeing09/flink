@@ -47,14 +47,14 @@ public interface DeclarativeSlotPool {
      *
      * @param increment increment by which to increase the resource requirements
      */
-    void increaseResourceRequirementsBy(ResourceCounter increment);
+    void increaseRequiredResources(ResourceCounter increment);
 
     /**
      * Decreases the resource requirements by decrement.
      *
      * @param decrement decrement by which to decrease the resource requirements
      */
-    void decreaseResourceRequirementsBy(ResourceCounter decrement);
+    void decreaseRequiredResources(ResourceCounter decrement);
 
     /**
      * Sets the resource requirements to the given resourceRequirements.

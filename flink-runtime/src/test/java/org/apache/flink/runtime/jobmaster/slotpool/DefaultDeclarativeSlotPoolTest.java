@@ -79,8 +79,8 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         final ResourceCounter increment1 = ResourceCounter.withResource(RESOURCE_PROFILE_1, 1);
         final ResourceCounter increment2 = createResourceRequirements();
-        slotPool.increaseResourceRequirementsBy(increment1);
-        slotPool.increaseResourceRequirementsBy(increment2);
+        slotPool.increaseRequiredResources(increment1);
+        slotPool.increaseRequiredResources(increment2);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -117,14 +117,14 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                 createDefaultDeclarativeSlotPool(requirementsListener, slotRequestMaxInterval);
 
         final ResourceCounter increment = ResourceCounter.withResource(RESOURCE_PROFILE_1, 3);
-        slotPool.increaseResourceRequirementsBy(increment);
+        slotPool.increaseRequiredResources(increment);
 
         slotPool.tryWaitSlotRequestIsDone();
 
         requirementsListener.takeResourceRequirements();
 
         final ResourceCounter decrement = ResourceCounter.withResource(RESOURCE_PROFILE_1, 2);
-        slotPool.decreaseResourceRequirementsBy(decrement);
+        slotPool.decreaseRequiredResources(decrement);
 
         final ResourceCounter totalResources = increment.subtract(decrement);
         assertThat(requirementsListener.takeResourceRequirements())
@@ -140,7 +140,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         final ResourceCounter resourceRequirements = createResourceRequirements();
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -156,7 +156,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         final ResourceCounter resourceRequirements = createResourceRequirements();
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -212,7 +212,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         final ResourceCounter resourceRequirements = createResourceRequirements();
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -239,7 +239,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         final ResourceCounter resourceRequirements = createResourceRequirements();
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -470,7 +470,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                         testingTaskExecutorGateway);
 
         // decrease the resource requirements so that slots are no longer needed
-        slotPool.decreaseResourceRequirementsBy(resourceRequirements);
+        slotPool.decreaseRequiredResources(resourceRequirements);
 
         slotPool.releaseIdleSlots(offerTime + idleSlotTimeout.toMillis());
 
@@ -504,7 +504,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         final Collection<SlotOffer> slotOffers =
                 createSlotOffersForResourceRequirements(resourceRequirements);
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -514,7 +514,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         final ResourceCounter requiredResources =
                 ResourceCounter.withResource(RESOURCE_PROFILE_1, 1);
         final ResourceCounter excessRequirements = resourceRequirements.subtract(requiredResources);
-        slotPool.decreaseResourceRequirementsBy(excessRequirements);
+        slotPool.decreaseRequiredResources(excessRequirements);
 
         slotPool.releaseIdleSlots(offerTime + idleSlotTimeout.toMillis());
 
@@ -595,7 +595,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         final ResourceProfile smallResourceProfile =
                 ResourceProfile.newBuilder().setManagedMemoryMB(512).build();
 
-        slotPool.increaseResourceRequirementsBy(
+        slotPool.increaseRequiredResources(
                 ResourceCounter.withResource(largeResourceProfile, 1));
 
         slotPool.tryWaitSlotRequestIsDone();
@@ -614,12 +614,12 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                                 .getResourceCount(largeResourceProfile))
                 .isEqualTo(1);
 
-        slotPool.increaseResourceRequirementsBy(
+        slotPool.increaseRequiredResources(
                 ResourceCounter.withResource(smallResourceProfile, 1));
 
         slotPool.tryWaitSlotRequestIsDone();
 
-        slotPool.decreaseResourceRequirementsBy(
+        slotPool.decreaseRequiredResources(
                 ResourceCounter.withResource(largeResourceProfile, 1));
 
         // free the slot; this should not cause the slot to be automatically re-matched to the small
@@ -645,7 +645,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                 ResourceProfile.newBuilder().setManagedMemoryMB(1024).build();
         final ResourceProfile smallResourceProfile = ResourceProfile.UNKNOWN;
 
-        slotPool.increaseResourceRequirementsBy(
+        slotPool.increaseRequiredResources(
                 ResourceCounter.withResource(largeResourceProfile, 1));
 
         slotPool.tryWaitSlotRequestIsDone();
@@ -654,7 +654,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
                 slotPool,
                 createSlotOffersForResourceRequirements(
                         ResourceCounter.withResource(largeResourceProfile, 1)));
-        slotPool.increaseResourceRequirementsBy(
+        slotPool.increaseRequiredResources(
                 ResourceCounter.withResource(smallResourceProfile, 1));
 
         slotPool.tryWaitSlotRequestIsDone();
@@ -726,13 +726,13 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
 
         assertThat(slotPool.getResourceRequirements()).isEmpty();
 
-        slotPool.increaseResourceRequirementsBy(ResourceCounter.withResource(requestedProfile, 1));
+        slotPool.increaseRequiredResources(ResourceCounter.withResource(requestedProfile, 1));
 
         slotPool.tryWaitSlotRequestIsDone();
 
         slotPool.reserveFreeSlot(allocationId, requestedProfile);
         slotPool.freeReservedSlot(allocationId, null, 1L);
-        slotPool.decreaseResourceRequirementsBy(ResourceCounter.withResource(requestedProfile, 1));
+        slotPool.decreaseRequiredResources(ResourceCounter.withResource(requestedProfile, 1));
 
         assertThat(slotPool.getResourceRequirements()).isEmpty();
     }
@@ -801,7 +801,7 @@ class DefaultDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBase 
         final Collection<SlotOffer> slotOffers =
                 createSlotOffersForResourceRequirements(resourceRequirements);
 
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 

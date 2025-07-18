@@ -135,12 +135,12 @@ final class TestingDeclarativeSlotPool implements DeclarativeSlotPool {
     }
 
     @Override
-    public void increaseResourceRequirementsBy(ResourceCounter increment) {
+    public void increaseRequiredResources(ResourceCounter increment) {
         increaseResourceRequirementsByConsumer.accept(increment);
     }
 
     @Override
-    public void decreaseResourceRequirementsBy(ResourceCounter decrement) {
+    public void decreaseRequiredResources(ResourceCounter decrement) {
         decreaseResourceRequirementsByConsumer.accept(decrement);
     }
 

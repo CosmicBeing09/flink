@@ -196,12 +196,12 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
             }
         }
 
-        getDeclarativeSlotPool().decreaseResourceRequirementsBy(decreasedResourceRequirements);
+        getDeclarativeSlotPool().decreaseRequiredResources(decreasedResourceRequirements);
     }
 
     @Override
     protected void onReleaseTaskManager(ResourceCounter previouslyFulfilledRequirement) {
-        getDeclarativeSlotPool().decreaseResourceRequirementsBy(previouslyFulfilledRequirement);
+        getDeclarativeSlotPool().decreaseRequiredResources(previouslyFulfilledRequirement);
     }
 
     @VisibleForTesting
@@ -328,7 +328,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
             AllocationID allocationId,
             ResourceProfile requiredSlotProfile) {
         getDeclarativeSlotPool()
-                .increaseResourceRequirementsBy(
+                .increaseRequiredResources(
                         ResourceCounter.withResource(requiredSlotProfile, 1));
         final PhysicalSlot physicalSlot =
                 getDeclarativeSlotPool().reserveFreeSlot(allocationId, requiredSlotProfile);
@@ -412,13 +412,13 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
         pendingRequests.put(pendingRequest.getSlotRequestId(), pendingRequest);
 
         getDeclarativeSlotPool()
-                .increaseResourceRequirementsBy(
+                .increaseRequiredResources(
                         ResourceCounter.withResource(pendingRequest.getResourceProfile(), 1));
     }
 
     @Override
     protected void onFailAllocation(ResourceCounter previouslyFulfilledRequirements) {
-        getDeclarativeSlotPool().decreaseResourceRequirementsBy(previouslyFulfilledRequirements);
+        getDeclarativeSlotPool().decreaseRequiredResources(previouslyFulfilledRequirements);
     }
 
     @Override
@@ -430,7 +430,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
 
         if (pendingRequest != null) {
             getDeclarativeSlotPool()
-                    .decreaseResourceRequirementsBy(
+                    .decreaseRequiredResources(
                             ResourceCounter.withResource(pendingRequest.getResourceProfile(), 1));
             pendingRequest.failRequest(
                     new FlinkException(
@@ -446,7 +446,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
                         getDeclarativeSlotPool()
                                 .freeReservedSlot(allocationId, cause, getRelativeTimeMillis());
                 getDeclarativeSlotPool()
-                        .decreaseResourceRequirementsBy(previouslyFulfilledRequirement);
+                        .decreaseRequiredResources(previouslyFulfilledRequirement);
             } else {
                 log.debug(
                         "Could not find slot which has fulfilled slot request {}. Ignoring the release operation.",
@@ -603,7 +603,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
 
     @VisibleForTesting
     void increaseResourceRequirementsBy(ResourceCounter increment) {
-        getDeclarativeSlotPool().increaseResourceRequirementsBy(increment);
+        getDeclarativeSlotPool().increaseRequiredResources(increment);
     }
 
     @VisibleForTesting

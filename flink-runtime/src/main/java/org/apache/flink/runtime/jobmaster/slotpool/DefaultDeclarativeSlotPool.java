@@ -135,7 +135,7 @@ public class DefaultDeclarativeSlotPool implements DeclarativeSlotPool {
     }
 
     @Override
-    public void increaseResourceRequirementsBy(ResourceCounter increment) {
+    public void increaseRequiredResources(ResourceCounter increment) {
         if (increment.isEmpty()) {
             return;
         }
@@ -145,7 +145,7 @@ public class DefaultDeclarativeSlotPool implements DeclarativeSlotPool {
     }
 
     @Override
-    public void decreaseResourceRequirementsBy(ResourceCounter decrement) {
+    public void decreaseRequiredResources(ResourceCounter decrement) {
         if (decrement.isEmpty()) {
             return;
         }
@@ -450,8 +450,8 @@ public class DefaultDeclarativeSlotPool implements DeclarativeSlotPool {
         // offered, so we have to adjust the requirements accordingly to ensure we still request
         // enough slots to
         // be able to fulfill the total requirements
-        decreaseResourceRequirementsBy(ResourceCounter.withResource(newResourceProfile, 1));
-        increaseResourceRequirementsBy(ResourceCounter.withResource(oldResourceProfile, 1));
+        decreaseRequiredResources(ResourceCounter.withResource(newResourceProfile, 1));
+        increaseRequiredResources(ResourceCounter.withResource(oldResourceProfile, 1));
     }
 
     @Override

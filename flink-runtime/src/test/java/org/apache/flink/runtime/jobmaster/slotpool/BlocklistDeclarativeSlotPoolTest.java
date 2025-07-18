@@ -90,7 +90,7 @@ class BlocklistDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBas
         slotPool.registerNewSlotsListener(notifyNewSlots);
 
         final ResourceCounter resourceRequirements = createResourceRequirements();
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
@@ -130,7 +130,7 @@ class BlocklistDeclarativeSlotPoolTest extends DefaultDeclarativeSlotPoolTestBas
                         .build();
         final ResourceCounter resourceRequirements =
                 ResourceCounter.withResource(RESOURCE_PROFILE, 2);
-        slotPool.increaseResourceRequirementsBy(resourceRequirements);
+        slotPool.increaseRequiredResources(resourceRequirements);
 
         slotPool.tryWaitSlotRequestIsDone();
 
