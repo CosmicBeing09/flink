@@ -24,7 +24,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.configuration.BatchExecutionOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.connector.file.src.reader.TextLineInputFormat;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.executiongraph.AccessExecutionGraph;
 import org.apache.flink.runtime.executiongraph.AccessExecutionJobVertex;
@@ -163,7 +163,7 @@ class FileSourceTextLinesITCase {
                 RecordCounterToFail.wrapWithFailureAfter(stream, LINES.length / 2);
 
         CloseableIterator<String> iterator = streamFailingInTheMiddleOfReading.collectAsync();
-        JobClient client = env.executeAsync("Bounded TextFiles Test");
+        StreamingJobClient client = env.executeAsync("Bounded TextFiles Test");
 
         final JobID jobId = client.getJobID();
 
@@ -240,7 +240,7 @@ class FileSourceTextLinesITCase {
         // done its first chunk of work already
 
         CloseableIterator<String> iter = stream.collectAsync();
-        JobClient client = env.executeAsync("jobExecutionName");
+        StreamingJobClient client = env.executeAsync("jobExecutionName");
         JobID jobId = client.getJobID();
 
         final int numLinesFirst = LINES_PER_FILE[0].length;
@@ -275,7 +275,7 @@ class FileSourceTextLinesITCase {
         }
 
         // shut down the job, now that we have all the results we expected.
-        client.cancel().get();
+        client.cancelStreamingJob().get();
 
         result1.addAll(result2);
         verifyResult(result1);

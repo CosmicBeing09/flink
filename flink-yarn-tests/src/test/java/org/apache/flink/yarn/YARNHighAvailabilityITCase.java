@@ -21,7 +21,7 @@ package org.apache.flink.yarn;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.client.deployment.ClusterDeploymentException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.rest.RestClusterClient;
 import org.apache.flink.configuration.Configuration;
@@ -355,7 +355,7 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
         final ClusterClient<ApplicationId> yarnClusterClient =
                 yarnClusterDescriptor
                         .deploySessionCluster(
-                                new ClusterSpecification.ClusterSpecificationBuilder()
+                                new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                                         .setMasterMemoryMB(masterMemory)
                                         .setTaskManagerMemoryMB(taskManagerMemory)
                                         .setSlotsPerTaskManager(1)

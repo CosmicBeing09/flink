@@ -20,11 +20,8 @@ package org.apache.flink.table.api;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.configuration.ConfigOption;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.configuration.WritableConfig;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.table.api.config.ExecutionConfigOptions;
 import org.apache.flink.table.api.config.OptimizerConfigOptions;
 import org.apache.flink.table.api.config.TableConfigOptions;
@@ -449,7 +446,7 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      * FunctionContext#getJobParameter(String, String)}.
      *
      * <p>This will add an entry to the current value of {@link
-     * PipelineOptions#GLOBAL_JOB_PARAMETERS}.
+     * StreamingPipelineOptions#GLOBAL_JOB_PARAMETERS}.
      *
      * <p>It is also possible to set multiple parameters at once, which will override any previously
      * set parameters:
@@ -462,11 +459,11 @@ public final class TableConfig implements WritableConfig, ReadableConfig {
      */
     public void addJobParameter(String key, String value) {
         final Map<String, String> params =
-                getOptional(PipelineOptions.GLOBAL_JOB_PARAMETERS)
+                getOptional(StreamingPipelineOptions.GLOBAL_JOB_PARAMETERS)
                         .map(HashMap::new)
                         .orElseGet(HashMap::new);
         params.put(key, value);
-        set(PipelineOptions.GLOBAL_JOB_PARAMETERS, params);
+        set(StreamingPipelineOptions.GLOBAL_JOB_PARAMETERS, params);
     }
 
     /**

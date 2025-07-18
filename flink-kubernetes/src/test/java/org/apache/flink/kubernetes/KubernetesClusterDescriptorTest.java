@@ -19,7 +19,7 @@
 package org.apache.flink.kubernetes;
 
 import org.apache.flink.client.deployment.ClusterDeploymentException;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions;
@@ -59,8 +59,8 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     private static final String MOCK_SERVICE_HOST_NAME = "mock-host-name-of-service";
     private static final String MOCK_SERVICE_IP = "192.168.0.1";
 
-    private final ClusterSpecification clusterSpecification =
-            new ClusterSpecification.ClusterSpecificationBuilder().createClusterSpecification();
+    private final StreamingClusterSpecification clusterSpecification =
+            new StreamingClusterSpecification.StreamingClusterSpecificationBuilder().createClusterSpecification();
 
     private final Service loadBalancerSvc =
             buildExternalServiceWithLoadBalancer(MOCK_SERVICE_HOST_NAME, MOCK_SERVICE_IP);
@@ -143,7 +143,7 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     @Test
     void testDeployApplicationCluster() {
         flinkConfig.set(
-                PipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
+                StreamingPipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, KubernetesDeploymentTarget.APPLICATION.getName());
         try {
             descriptor.deployApplicationCluster(clusterSpecification, appConfig);
@@ -160,7 +160,7 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     @Test
     void testDeployApplicationClusterWithClusterAlreadyExists() {
         flinkConfig.set(
-                PipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
+                StreamingPipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, KubernetesDeploymentTarget.APPLICATION.getName());
         mockExpectedServiceFromServerSide(loadBalancerSvc);
         assertThatThrownBy(
@@ -178,7 +178,7 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     @Test
     void testDeployApplicationClusterWithDeploymentTargetNotCorrectlySet() {
         flinkConfig.set(
-                PipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
+                StreamingPipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, KubernetesDeploymentTarget.SESSION.getName());
         assertThatThrownBy(
                         () -> descriptor.deployApplicationCluster(clusterSpecification, appConfig))
@@ -193,7 +193,7 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     @Test
     void testDeployApplicationClusterWithMultipleJarsSet() {
         flinkConfig.set(
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 Arrays.asList("local:///path/of/user.jar", "local:///user2.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, KubernetesDeploymentTarget.APPLICATION.getName());
         assertThatThrownBy(
@@ -208,7 +208,7 @@ class KubernetesClusterDescriptorTest extends KubernetesClientTestBase {
     @Test
     void testDeployApplicationClusterWithClusterIP() throws Exception {
         flinkConfig.set(
-                PipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
+                StreamingPipelineOptions.JARS, Collections.singletonList("local:///path/of/user.jar"));
         flinkConfig.set(DeploymentOptions.TARGET, KubernetesDeploymentTarget.APPLICATION.getName());
         flinkConfig.set(
                 KubernetesConfigOptions.REST_SERVICE_EXPOSED_TYPE,

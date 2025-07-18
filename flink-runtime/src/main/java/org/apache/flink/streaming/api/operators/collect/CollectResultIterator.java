@@ -22,7 +22,7 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.util.CloseableIterator;
 
@@ -115,7 +115,7 @@ public class CollectResultIterator<T> implements CloseableIterator<T> {
         fetcher.close();
     }
 
-    public void setJobClient(JobClient jobClient) {
+    public void setJobClient(StreamingJobClient jobClient) {
         fetcher.setJobClient(jobClient);
     }
 

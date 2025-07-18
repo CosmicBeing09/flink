@@ -30,7 +30,7 @@ import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.StateRecoveryOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.entrypoint.StandaloneSessionClusterEntrypoint;
 import org.apache.flink.runtime.rest.RestClient;
 import org.apache.flink.runtime.rest.messages.EmptyRequestBody;
@@ -103,7 +103,7 @@ class LocalRecoveryITCase {
             configurationTemplate.set(JobManagerOptions.PORT, clusterEntrypoint.getRpcPort());
             taskManagerProcesses = startTaskManagerProcesses(parallelism, configurationTemplate);
 
-            final JobClient jobClient = submitJob(parallelism, clusterEntrypoint);
+            final StreamingJobClient jobClient = submitJob(parallelism, clusterEntrypoint);
 
             final long waitingTimeInSeconds = 45L;
             waitUntilCheckpointCompleted(
@@ -243,7 +243,7 @@ class LocalRecoveryITCase {
                 });
     }
 
-    private JobClient submitJob(
+    private StreamingJobClient submitJob(
             int parallelism, StandaloneSessionClusterEntrypoint clusterEntrypoint)
             throws Exception {
         final StreamExecutionEnvironment env =
@@ -254,7 +254,7 @@ class LocalRecoveryITCase {
         env.enableCheckpointing(100, CheckpointingMode.EXACTLY_ONCE);
 
         env.addSource(new LocalRecoverySource()).keyBy(x -> x).sinkTo(new DiscardingSink<>());
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
         return jobClient;
     }
 

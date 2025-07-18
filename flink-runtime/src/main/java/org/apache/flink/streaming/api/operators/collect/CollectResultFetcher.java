@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.accumulators.SerializedListAccumulator;
 import org.apache.flink.api.common.typeutils.base.array.BytePrimitiveArraySerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.dispatcher.UnavailableDispatcherOperationException;
 import org.apache.flink.runtime.messages.FlinkJobNotFoundException;
 import org.apache.flink.runtime.operators.coordination.CoordinationRequestGateway;
@@ -55,7 +55,7 @@ public class CollectResultFetcher<T> {
     private final int retryMillis;
     private final long resultFetchTimeout;
 
-    @Nullable private JobClient jobClient;
+    @Nullable private StreamingJobClient jobClient;
     @Nullable private CoordinationRequestGateway gateway;
 
     private boolean jobTerminated;
@@ -86,7 +86,7 @@ public class CollectResultFetcher<T> {
         this.closed = false;
     }
 
-    public void setJobClient(JobClient jobClient) {
+    public void setJobClient(StreamingJobClient jobClient) {
         Preconditions.checkArgument(
                 jobClient instanceof CoordinationRequestGateway,
                 "Job client must be a CoordinationRequestGateway. This is a bug.");
@@ -230,7 +230,7 @@ public class CollectResultFetcher<T> {
         checkJobClientConfigured();
 
         if (!isJobTerminated()) {
-            jobClient.cancel();
+            jobClient.cancelStreamingJob();
         }
     }
 

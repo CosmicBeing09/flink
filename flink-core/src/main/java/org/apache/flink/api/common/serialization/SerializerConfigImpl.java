@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeinfo.TypeInfoFactory;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ConfigurationUtils;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.TernaryBoolean;
@@ -243,40 +243,40 @@ public final class SerializerConfigImpl implements SerializerConfig {
      * <p>Generic types are enabled by default.
      */
     public boolean hasGenericTypesDisabled() {
-        return !configuration.get(PipelineOptions.GENERIC_TYPES);
+        return !configuration.get(StreamingPipelineOptions.GENERIC_TYPES);
     }
 
     public void setGenericTypes(boolean genericTypes) {
-        configuration.set(PipelineOptions.GENERIC_TYPES, genericTypes);
+        configuration.set(StreamingPipelineOptions.GENERIC_TYPES, genericTypes);
     }
 
     /** Returns whether Kryo is the serializer for POJOs. */
     public boolean isForceKryoEnabled() {
-        return configuration.get(PipelineOptions.FORCE_KRYO);
+        return configuration.get(StreamingPipelineOptions.FORCE_KRYO);
     }
 
     public void setForceKryo(boolean forceKryo) {
-        configuration.set(PipelineOptions.FORCE_KRYO, forceKryo);
+        configuration.set(StreamingPipelineOptions.FORCE_KRYO, forceKryo);
     }
 
     /** Returns whether the Apache Avro is the serializer for POJOs. */
     public boolean isForceAvroEnabled() {
-        return configuration.get(PipelineOptions.FORCE_AVRO);
+        return configuration.get(StreamingPipelineOptions.FORCE_AVRO);
     }
 
     public void setForceAvro(boolean forceAvro) {
-        configuration.set(PipelineOptions.FORCE_AVRO, forceAvro);
+        configuration.set(StreamingPipelineOptions.FORCE_AVRO, forceAvro);
     }
 
     @Override
     public void setForceKryoAvro(boolean forceKryoAvro) {
-        configuration.set(PipelineOptions.FORCE_KRYO_AVRO, forceKryoAvro);
+        configuration.set(StreamingPipelineOptions.FORCE_KRYO_AVRO, forceKryoAvro);
     }
 
     @Override
     public TernaryBoolean isForceKryoAvroEnabled() {
         return configuration
-                .getOptional(PipelineOptions.FORCE_KRYO_AVRO)
+                .getOptional(StreamingPipelineOptions.FORCE_KRYO_AVRO)
                 .map(TernaryBoolean::fromBoolean)
                 .orElse(TernaryBoolean.UNDEFINED);
     }
@@ -341,7 +341,7 @@ public final class SerializerConfigImpl implements SerializerConfig {
 
     /**
      * Sets all relevant options contained in the {@link ReadableConfig} such as e.g. {@link
-     * PipelineOptions#FORCE_KRYO}.
+     * StreamingPipelineOptions#FORCE_KRYO}.
      *
      * <p>It will change the value of a setting only if a corresponding option was set in the {@code
      * configuration}. If a key is not present, the current value of a field will remain untouched.
@@ -350,16 +350,16 @@ public final class SerializerConfigImpl implements SerializerConfig {
      * @param classLoader a class loader to use when loading classes
      */
     public void configure(ReadableConfig configuration, ClassLoader classLoader) {
-        configuration.getOptional(PipelineOptions.GENERIC_TYPES).ifPresent(this::setGenericTypes);
-        configuration.getOptional(PipelineOptions.FORCE_KRYO).ifPresent(this::setForceKryo);
-        configuration.getOptional(PipelineOptions.FORCE_AVRO).ifPresent(this::setForceAvro);
+        configuration.getOptional(StreamingPipelineOptions.GENERIC_TYPES).ifPresent(this::setGenericTypes);
+        configuration.getOptional(StreamingPipelineOptions.FORCE_KRYO).ifPresent(this::setForceKryo);
+        configuration.getOptional(StreamingPipelineOptions.FORCE_AVRO).ifPresent(this::setForceAvro);
         configuration
-                .getOptional(PipelineOptions.FORCE_KRYO_AVRO)
+                .getOptional(StreamingPipelineOptions.FORCE_KRYO_AVRO)
                 .ifPresent(this::setForceKryoAvro);
 
         try {
             configuration
-                    .getOptional(PipelineOptions.SERIALIZATION_CONFIG)
+                    .getOptional(StreamingPipelineOptions.SERIALIZATION_CONFIG)
                     .ifPresent(c -> parseSerializationConfigWithExceptionHandling(classLoader, c));
         } catch (Exception e) {
             throw e;

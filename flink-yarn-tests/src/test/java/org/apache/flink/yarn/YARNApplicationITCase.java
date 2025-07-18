@@ -18,14 +18,14 @@
 
 package org.apache.flink.yarn;
 
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.configuration.MemorySize;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.yarn.configuration.YarnConfigOptions;
@@ -98,8 +98,8 @@ class YARNApplicationITCase extends YarnTestBase {
                             .getFlinkConfiguration()
                             .get(JobManagerOptions.TOTAL_PROCESS_MEMORY)
                             .getMebiBytes();
-            final ClusterSpecification clusterSpecification =
-                    new ClusterSpecification.ClusterSpecificationBuilder()
+            final StreamingClusterSpecification clusterSpecification =
+                    new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                             .setMasterMemoryMB(masterMemory)
                             .setTaskManagerMemoryMB(1024)
                             .setSlotsPerTaskManager(1)
@@ -135,7 +135,7 @@ class YARNApplicationITCase extends YarnTestBase {
         configuration.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(30));
         configuration.set(DeploymentOptions.TARGET, YarnDeploymentTarget.APPLICATION.getName());
         configuration.set(CLASSPATH_INCLUDE_USER_JAR, userJarInclusion);
-        configuration.set(PipelineOptions.JARS, Collections.singletonList(userJar.toString()));
+        configuration.set(StreamingPipelineOptions.JARS, Collections.singletonList(userJar.toString()));
 
         // Apply the JVM arguments that were set for unit tests to any Flink JVMs
         configuration.set(FLINK_JVM_OPTIONS, System.getProperty("surefire.module.config"));

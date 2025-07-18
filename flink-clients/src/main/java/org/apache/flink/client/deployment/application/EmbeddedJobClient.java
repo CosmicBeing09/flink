@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.common.accumulators.AccumulatorHelper;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
 import org.apache.flink.runtime.dispatcher.TriggerSavepointMode;
@@ -46,11 +46,11 @@ import java.util.concurrent.CompletionException;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * A {@link JobClient} with the ability to also submit jobs which uses directly the {@link
+ * A {@link StreamingJobClient} with the ability to also submit jobs which uses directly the {@link
  * DispatcherGateway}.
  */
 @Internal
-public class EmbeddedJobClient implements JobClient, CoordinationRequestGateway {
+public class EmbeddedJobClient implements StreamingJobClient, CoordinationRequestGateway {
 
     private final JobID jobId;
 
@@ -86,7 +86,7 @@ public class EmbeddedJobClient implements JobClient, CoordinationRequestGateway 
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         return dispatcherGateway.cancelJob(jobId, timeout).thenApply(ignores -> null);
     }
 

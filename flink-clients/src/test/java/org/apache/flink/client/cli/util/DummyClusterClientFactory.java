@@ -20,7 +20,7 @@ package org.apache.flink.client.cli.util;
 
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterDescriptor;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
@@ -61,7 +61,7 @@ public class DummyClusterClientFactory<ClusterID> implements ClusterClientFactor
     }
 
     @Override
-    public ClusterSpecification getClusterSpecification(Configuration configuration) {
-        return new ClusterSpecification.ClusterSpecificationBuilder().createClusterSpecification();
+    public StreamingClusterSpecification getClusterSpecification(Configuration configuration) {
+        return new StreamingClusterSpecification.StreamingClusterSpecificationBuilder().createClusterSpecification();
     }
 }

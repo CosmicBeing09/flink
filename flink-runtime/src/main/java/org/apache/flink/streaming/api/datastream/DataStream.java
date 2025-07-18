@@ -47,7 +47,7 @@ import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.typeutils.InputTypeConfigurable;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.configuration.RpcOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
 import org.apache.flink.streaming.api.functions.sink.legacy.OutputFormatSinkFunction;
@@ -1088,7 +1088,7 @@ public class DataStream<T> {
     ClientAndIterator<T> executeAndCollectWithClient(String jobExecutionName) throws Exception {
         final CloseableIterator<T> iterator = collectAsync();
 
-        final JobClient jobClient = getExecutionEnvironment().executeAsync(jobExecutionName);
+        final StreamingJobClient jobClient = getExecutionEnvironment().executeAsync(jobExecutionName);
 
         return new ClientAndIterator<>(jobClient, iterator);
     }

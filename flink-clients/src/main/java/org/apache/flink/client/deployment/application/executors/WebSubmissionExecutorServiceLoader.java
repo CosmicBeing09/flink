@@ -57,7 +57,7 @@ public class WebSubmissionExecutorServiceLoader implements PipelineExecutorServi
     }
 
     @Override
-    public PipelineExecutorFactory getExecutorFactory(final Configuration configuration) {
+    public PipelineExecutorFactory getStreamingExecutorFactory(final Configuration configuration) {
         return new WebSubmissionExecutorFactory(submittedJobIds, dispatcherGateway);
     }
 

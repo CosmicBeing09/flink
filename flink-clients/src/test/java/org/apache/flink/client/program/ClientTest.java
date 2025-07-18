@@ -25,8 +25,8 @@ import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.ClientUtils;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
-import org.apache.flink.client.cli.ExecutionConfigAccessor;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
+import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
 import org.apache.flink.client.testjar.ForbidConfigurationJob;
 import org.apache.flink.configuration.ConfigUtils;
@@ -34,10 +34,10 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.JobManagerOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.execution.DetachedJobExecutionResult;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
@@ -106,10 +106,10 @@ class ClientTest {
         configuration.set(CoreOptions.DEFAULT_PARALLELISM, parallelism);
         configuration.set(DeploymentOptions.ATTACHED, !detached);
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.CLASSPATHS, program.getClasspaths(), URL::toString);
+                configuration, StreamingPipelineOptions.CLASSPATHS, program.getClasspaths(), URL::toString);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 program.getJobJarAndDependencies(),
                 URL::toString);
         return configuration;
@@ -315,7 +315,7 @@ class ClientTest {
         Pipeline pipeline =
                 PackagedProgramUtils.getPipelineFromProgram(prg, new Configuration(), 666, true);
         String jsonExecutionPlan =
-                FlinkPipelineTranslationUtil.translateToJSONExecutionPlan(
+                FlinkStreamingPipelineTranslationUtil.translateToJSONExecutionPlan(
                         prg.getUserCodeClassLoader(), pipeline);
         assertThat(jsonExecutionPlan).isNotNull();
         assertThat(jsonExecutionPlan)
@@ -414,7 +414,7 @@ class ClientTest {
 
             for (int i = 0; i < 2; i++) {
                 env.fromData(1, 2).sinkTo(new DiscardingSink<>());
-                JobClient jc = env.executeAsync();
+                StreamingJobClient jc = env.executeAsync();
 
                 jc.getJobExecutionResult();
             }
@@ -478,7 +478,7 @@ class ClientTest {
         }
 
         @Override
-        public PipelineExecutorFactory getExecutorFactory(@Nonnull Configuration configuration) {
+        public PipelineExecutorFactory getStreamingExecutorFactory(@Nonnull Configuration configuration) {
             return new PipelineExecutorFactory() {
 
                 @Override
@@ -498,8 +498,8 @@ class ClientTest {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
                         final JobGraph jobGraph = streamGraph.getJobGraph();
 
-                        final ExecutionConfigAccessor accessor =
-                                ExecutionConfigAccessor.fromConfiguration(config);
+                        final StreamingExecutionConfigAccessor accessor =
+                                StreamingExecutionConfigAccessor.fromConfiguration(config);
                         jobGraph.addJars(accessor.getJars());
                         jobGraph.setClasspaths(accessor.getClasspaths());
 

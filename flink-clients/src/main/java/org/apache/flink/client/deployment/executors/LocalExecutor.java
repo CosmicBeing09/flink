@@ -19,13 +19,13 @@
 package org.apache.flink.client.deployment.executors;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamingExecutionPlan;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.program.PerJobMiniClusterFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusChangedListener;
 import org.apache.flink.core.execution.JobStatusChangedListenerUtils;
 import org.apache.flink.core.execution.PipelineExecutor;
@@ -83,7 +83,7 @@ public class LocalExecutor implements PipelineExecutor {
     }
 
     @Override
-    public CompletableFuture<JobClient> execute(
+    public CompletableFuture<StreamingJobClient> execute(
             Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws Exception {
         checkNotNull(pipeline);
@@ -96,15 +96,15 @@ public class LocalExecutor implements PipelineExecutor {
         // we only support attached execution with the local executor.
         checkState(configuration.get(DeploymentOptions.ATTACHED));
 
-        final JobGraph jobGraph = getJobGraph(pipeline, effectiveConfig, userCodeClassloader);
+        final JobGraph streamingJobGraph = getStreamingJobGraph(pipeline, effectiveConfig, userCodeClassloader);
 
         return PerJobMiniClusterFactory.createWithFactory(effectiveConfig, miniClusterFactory)
-                .submitJob(jobGraph, userCodeClassloader)
+                .submitJob(streamingJobGraph, userCodeClassloader)
                 .whenComplete(
                         (ignored, throwable) -> {
                             if (throwable == null) {
-                                PipelineExecutorUtils.notifyJobStatusListeners(
-                                        pipeline, jobGraph, jobStatusChangedListeners);
+                                PipelineExecutorUtils.notifyStreamingJobStatusListeners(
+                                        pipeline, streamingJobGraph, jobStatusChangedListeners);
                             } else {
                                 LOG.error(
                                         "Failed to submit job graph to local mini cluster.",
@@ -113,14 +113,14 @@ public class LocalExecutor implements PipelineExecutor {
                         });
     }
 
-    private JobGraph getJobGraph(
+    private JobGraph getStreamingJobGraph(
             Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws MalformedURLException {
         // This is a quirk in how LocalEnvironment used to work. It sets the default parallelism
         // to <num taskmanagers> * <num task slots>. Might be questionable but we keep the behaviour
         // for now.
-        if (pipeline instanceof Plan) {
-            Plan plan = (Plan) pipeline;
+        if (pipeline instanceof StreamingExecutionPlan) {
+            StreamingExecutionPlan plan = (StreamingExecutionPlan) pipeline;
             final int slotsPerTaskManager =
                     configuration.get(
                             TaskManagerOptions.NUM_TASK_SLOTS, plan.getMaximumParallelism());
@@ -130,6 +130,6 @@ public class LocalExecutor implements PipelineExecutor {
             plan.setDefaultParallelism(slotsPerTaskManager * numTaskManagers);
         }
 
-        return PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        return PipelineExecutorUtils.getStreamingJobGraph(pipeline, configuration, userCodeClassloader);
     }
 }

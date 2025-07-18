@@ -19,7 +19,7 @@
 package org.apache.flink.table.api.internal;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.table.api.TableException;
 import org.apache.flink.table.data.GenericRowData;
 import org.apache.flink.table.data.RowData;
@@ -39,14 +39,14 @@ class InsertResultProvider implements ResultProvider {
     private final Long[] affectedRowCountsRow;
 
     private @Nullable Boolean hasNext = null;
-    private JobClient jobClient;
+    private StreamingJobClient jobClient;
 
     InsertResultProvider(Long[] affectedRowCountsRow) {
         this.affectedRowCountsRow = affectedRowCountsRow;
     }
 
     @Override
-    public InsertResultProvider setJobClient(JobClient jobClient) {
+    public InsertResultProvider setJobClient(StreamingJobClient jobClient) {
         this.jobClient = jobClient;
         return this;
     }
@@ -73,7 +73,7 @@ class InsertResultProvider implements ResultProvider {
 
     private void close() throws Exception {
         if (jobClient != null) {
-            jobClient.cancel();
+            jobClient.cancelStreamingJob();
         }
     }
 

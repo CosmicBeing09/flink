@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.python.PythonOptions;
 import org.apache.flink.python.chain.PythonOperatorChainingOptimizer;
@@ -84,7 +84,7 @@ public class ChainingOptimizingExecutor implements Executor {
     }
 
     @Override
-    public JobClient executeAsync(Pipeline pipeline) throws Exception {
+    public StreamingJobClient executeAsync(Pipeline pipeline) throws Exception {
         return executor.executeAsync(pipeline);
     }
 

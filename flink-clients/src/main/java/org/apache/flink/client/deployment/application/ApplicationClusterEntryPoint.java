@@ -25,7 +25,7 @@ import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.dispatcher.ExecutionGraphInfoStore;
 import org.apache.flink.runtime.dispatcher.MemoryExecutionGraphInfoStore;
 import org.apache.flink.runtime.dispatcher.SessionDispatcherFactory;
@@ -88,12 +88,12 @@ public class ApplicationClusterEntryPoint extends ClusterEntrypoint {
         configuration.set(DeploymentOptions.TARGET, EmbeddedExecutor.NAME);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.JARS,
+                StreamingPipelineOptions.JARS,
                 program.getJobJarAndDependencies(),
                 URL::toString);
         ConfigUtils.encodeCollectionToConfig(
                 configuration,
-                PipelineOptions.CLASSPATHS,
+                StreamingPipelineOptions.CLASSPATHS,
                 getClasspath(configuration, program),
                 URL::toString);
 
@@ -110,7 +110,7 @@ public class ApplicationClusterEntryPoint extends ClusterEntrypoint {
             throws MalformedURLException {
         final List<URL> classpath =
                 ConfigUtils.decodeListFromConfig(
-                        configuration, PipelineOptions.CLASSPATHS, URL::new);
+                        configuration, StreamingPipelineOptions.CLASSPATHS, URL::new);
         classpath.addAll(program.getClasspaths());
         return Collections.unmodifiableList(
                 classpath.stream().distinct().collect(Collectors.toList()));

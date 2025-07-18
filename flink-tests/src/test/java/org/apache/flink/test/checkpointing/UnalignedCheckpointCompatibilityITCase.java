@@ -20,7 +20,7 @@ package org.apache.flink.test.checkpointing;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.checkpoint.SavepointType;
 import org.apache.flink.runtime.checkpoint.SnapshotType;
@@ -142,7 +142,7 @@ public class UnalignedCheckpointCompatibilityITCase extends TestLogger {
     }
 
     private Tuple2<String, Map<String, Object>> runAndTakeSavepoint() throws Exception {
-        JobClient jobClient = submitJobInitially(env(startAligned, 0));
+        StreamingJobClient jobClient = submitJobInitially(env(startAligned, 0));
         waitForAllTaskRunning(
                 () -> miniCluster.getMiniCluster().getExecutionGraph(jobClient.getJobID()).get(),
                 false);
@@ -159,7 +159,7 @@ public class UnalignedCheckpointCompatibilityITCase extends TestLogger {
     }
 
     private Tuple2<String, Map<String, Object>> runAndTakeExternalCheckpoint() throws Exception {
-        JobClient jobClient = submitJobInitially(env(startAligned, Integer.MAX_VALUE));
+        StreamingJobClient jobClient = submitJobInitially(env(startAligned, Integer.MAX_VALUE));
         waitForAllTaskRunning(
                 () -> miniCluster.getMiniCluster().getExecutionGraph(jobClient.getJobID()).get(),
                 false);
@@ -171,7 +171,7 @@ public class UnalignedCheckpointCompatibilityITCase extends TestLogger {
         return new Tuple2<>(checkpointPath, emptyMap());
     }
 
-    private static JobClient submitJobInitially(StreamExecutionEnvironment env) throws Exception {
+    private static StreamingJobClient submitJobInitially(StreamExecutionEnvironment env) throws Exception {
         return env.executeAsync(dag(FIRST_RUN_EL_COUNT, true, FIRST_RUN_BACKPRESSURE_MS, env));
     }
 
@@ -183,9 +183,9 @@ public class UnalignedCheckpointCompatibilityITCase extends TestLogger {
         return env.execute(streamGraph).getJobExecutionResult().getAllAccumulatorResults();
     }
 
-    private void cancelJob(JobClient jobClient)
+    private void cancelJob(StreamingJobClient jobClient)
             throws InterruptedException, java.util.concurrent.ExecutionException {
-        jobClient.cancel().get();
+        jobClient.cancelStreamingJob().get();
         try {
             jobClient.getJobExecutionResult(); // wait for cancellation
         } catch (Exception e) {

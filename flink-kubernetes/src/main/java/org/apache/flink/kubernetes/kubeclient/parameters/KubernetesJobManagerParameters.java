@@ -19,7 +19,7 @@
 package org.apache.flink.kubernetes.kubeclient.parameters;
 
 import org.apache.flink.client.cli.ArtifactFetchOptions;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.configuration.BlobServerOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ConfigurationUtils;
@@ -48,10 +48,10 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 public class KubernetesJobManagerParameters extends AbstractKubernetesParameters {
 
-    private final ClusterSpecification clusterSpecification;
+    private final StreamingClusterSpecification clusterSpecification;
 
     public KubernetesJobManagerParameters(
-            Configuration flinkConfig, ClusterSpecification clusterSpecification) {
+            Configuration flinkConfig, StreamingClusterSpecification clusterSpecification) {
         super(flinkConfig);
         this.clusterSpecification = checkNotNull(clusterSpecification);
     }

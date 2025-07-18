@@ -19,12 +19,8 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.StateRecoveryOptions;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.PipelineExecutorFactory;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
@@ -81,7 +77,7 @@ class StreamContextEnvironmentTest {
                         ExecutionOptions.RUNTIME_MODE.key(),
                         ExecutionOptions.SORT_INPUTS.key(),
                         CheckpointingOptions.CHECKPOINTING_INTERVAL.key(),
-                        PipelineOptions.MAX_PARALLELISM.key());
+                        StreamingPipelineOptions.MAX_PARALLELISM.key());
     }
 
     @ParameterizedTest
@@ -157,19 +153,19 @@ class StreamContextEnvironmentTest {
         // Changing GLOBAL_JOB_PARAMETERS is always allowed, as it's one of the fields not checked
         // with PROGRAM_CONFIG_ENABLED set to false
         clusterConfig.setString(
-                PipelineOptions.GLOBAL_JOB_PARAMETERS.key() + "." + "my-param", "my-value");
+                StreamingPipelineOptions.GLOBAL_JOB_PARAMETERS.key() + "." + "my-param", "my-value");
 
         final Configuration jobConfig = new Configuration();
         jobConfig.set(
-                PipelineOptions.GLOBAL_JOB_PARAMETERS,
+                StreamingPipelineOptions.GLOBAL_JOB_PARAMETERS,
                 Collections.singletonMap("my-other-param", "my-other-value"));
 
         final StreamContextEnvironment environment =
                 constructStreamContextEnvironment(
                         clusterConfig,
                         Arrays.asList(
-                                PipelineOptions.GLOBAL_JOB_PARAMETERS.key(),
-                                PipelineOptions.MAX_PARALLELISM.key()));
+                                StreamingPipelineOptions.GLOBAL_JOB_PARAMETERS.key(),
+                                StreamingPipelineOptions.MAX_PARALLELISM.key()));
 
         // Change ExecutionConfig
         environment.configure(jobConfig);
@@ -205,7 +201,7 @@ class StreamContextEnvironmentTest {
     private static class MockExecutorServiceLoader implements PipelineExecutorServiceLoader {
 
         @Override
-        public PipelineExecutorFactory getExecutorFactory(Configuration configuration) {
+        public PipelineExecutorFactory getStreamingExecutorFactory(Configuration configuration) {
             throw new ExecutorReachedException();
         }
 

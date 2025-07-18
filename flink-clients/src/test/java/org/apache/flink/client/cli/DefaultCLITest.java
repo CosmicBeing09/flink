@@ -19,7 +19,7 @@
 package org.apache.flink.client.cli;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.SecurityOptions;
 
@@ -81,8 +81,8 @@ class DefaultCLITest {
     @Test
     void testDynamicPropertyMaterialization() throws Exception {
         final String[] args = {
-            "-D" + PipelineOptions.AUTO_WATERMARK_INTERVAL.key() + "=42",
-            "-D" + PipelineOptions.AUTO_GENERATE_UIDS.key() + "=true"
+            "-D" + StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL.key() + "=42",
+            "-D" + StreamingPipelineOptions.AUTO_GENERATE_UIDS.key() + "=true"
         };
 
         final AbstractCustomCommandLine defaultCLI = new DefaultCLI();
@@ -90,8 +90,8 @@ class DefaultCLITest {
 
         Configuration configuration = defaultCLI.toConfiguration(commandLine);
 
-        assertThat(configuration.get(PipelineOptions.AUTO_WATERMARK_INTERVAL))
+        assertThat(configuration.get(StreamingPipelineOptions.AUTO_WATERMARK_INTERVAL))
                 .isEqualTo(Duration.ofMillis(42L));
-        assertThat(configuration.get(PipelineOptions.AUTO_GENERATE_UIDS)).isTrue();
+        assertThat(configuration.get(StreamingPipelineOptions.AUTO_GENERATE_UIDS)).isTrue();
     }
 }

@@ -18,7 +18,7 @@
 
 package org.apache.flink.yarn;
 
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramUtils;
@@ -109,8 +109,8 @@ class YarnConfigurationITCase extends YarnTestBase {
                                     packagedProgram, configuration, 1, false);
 
                     try {
-                        final ClusterSpecification clusterSpecification =
-                                new ClusterSpecification.ClusterSpecificationBuilder()
+                        final StreamingClusterSpecification clusterSpecification =
+                                new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                                         .setMasterMemoryMB(masterMemory)
                                         .setTaskManagerMemoryMB(taskManagerMemory)
                                         .setSlotsPerTaskManager(slotsPerTaskManager)
@@ -118,7 +118,7 @@ class YarnConfigurationITCase extends YarnTestBase {
 
                         final ClusterClient<ApplicationId> clusterClient =
                                 clusterDescriptor
-                                        .deployJobCluster(clusterSpecification, jobGraph, true)
+                                        .deployStreamCluster(clusterSpecification, jobGraph, true)
                                         .getClusterClient();
 
                         final ApplicationId clusterId = clusterClient.getClusterId();

@@ -19,7 +19,7 @@
 package org.apache.flink.table.api;
 
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.table.catalog.ResolvedSchema;
 import org.apache.flink.table.legacy.api.TableSchema;
 import org.apache.flink.types.Row;
@@ -35,10 +35,10 @@ import java.util.concurrent.TimeoutException;
 public interface TableResult {
 
     /**
-     * For DML and DQL statement, return the {@link JobClient} which associates the submitted Flink
+     * For DML and DQL statement, return the {@link StreamingJobClient} which associates the submitted Flink
      * job. For other statements (e.g. DDL, DCL) return empty.
      */
-    Optional<JobClient> getJobClient();
+    Optional<StreamingJobClient> getJobClient();
 
     /**
      * Wait if necessary until the data is ready.

@@ -23,11 +23,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.client.program.ProgramInvocationException;
-import org.apache.flink.configuration.ConfigUtils;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.CoreOptions;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.PipelineOptionsInternal;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.rest.handler.HandlerRequest;
 import org.apache.flink.runtime.rest.handler.RestHandlerException;
@@ -149,12 +146,12 @@ public class JarHandlerUtils {
             final PackagedProgram program = toPackagedProgram(configuration);
             ConfigUtils.encodeCollectionToConfig(
                     configuration,
-                    PipelineOptions.JARS,
+                    StreamingPipelineOptions.JARS,
                     program.getJobJarAndDependencies(),
                     URL::toString);
             ConfigUtils.encodeCollectionToConfig(
                     configuration,
-                    PipelineOptions.CLASSPATHS,
+                    StreamingPipelineOptions.CLASSPATHS,
                     program.getClasspaths(),
                     URL::toString);
         }
@@ -222,14 +219,14 @@ public class JarHandlerUtils {
     private static List<URL> getClasspaths(Configuration configuration) {
         try {
             return ConfigUtils.decodeListFromConfig(
-                    configuration, PipelineOptions.CLASSPATHS, URL::new);
+                    configuration, StreamingPipelineOptions.CLASSPATHS, URL::new);
         } catch (MalformedURLException e) {
             throw new CompletionException(
                     new RestHandlerException(
                             String.format(
                                     "Failed to extract '%s' as URLs. Provided value: %s",
-                                    PipelineOptions.CLASSPATHS.key(),
-                                    configuration.get(PipelineOptions.CLASSPATHS)),
+                                    StreamingPipelineOptions.CLASSPATHS.key(),
+                                    configuration.get(StreamingPipelineOptions.CLASSPATHS)),
                             HttpResponseStatus.BAD_REQUEST));
         }
     }

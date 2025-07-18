@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.client.program.PerJobMiniClusterFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
 import org.apache.flink.runtime.jobgraph.JobGraph;
@@ -56,7 +56,7 @@ class ClientHeartbeatTest {
 
     @Test
     void testJobCancelledIfClientHeartbeatTimeout() throws Exception {
-        JobClient jobClient = submitJob(createConfiguration(true));
+        StreamingJobClient jobClient = submitJob(createConfiguration(true));
 
         // The client doesn't report heartbeat to the dispatcher.
 
@@ -69,7 +69,7 @@ class ClientHeartbeatTest {
 
     @Test
     void testJobRunningIfClientReportHeartbeat() throws Exception {
-        JobClient jobClient = submitJob(createConfiguration(true));
+        StreamingJobClient jobClient = submitJob(createConfiguration(true));
 
         // The client reports heartbeat to the dispatcher.
         ScheduledExecutorService heartbeatService =
@@ -84,7 +84,7 @@ class ClientHeartbeatTest {
 
     @Test
     void testJobRunningIfDisableClientHeartbeat() throws Exception {
-        JobClient jobClient = submitJob(createConfiguration(false));
+        StreamingJobClient jobClient = submitJob(createConfiguration(false));
 
         Thread.sleep(2 * clientHeartbeatTimeout);
         assertThat(jobClient.getJobStatus().get()).isEqualTo(JobStatus.RUNNING);
@@ -103,7 +103,7 @@ class ClientHeartbeatTest {
     }
 
     // The dispatcher deals with client heartbeat only when shutdownOnAttachedExit is true;
-    private JobClient submitJob(Configuration configuration) throws Exception {
+    private StreamingJobClient submitJob(Configuration configuration) throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory =
                 PerJobMiniClusterFactory.createWithFactory(
                         configuration,

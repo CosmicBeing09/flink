@@ -28,7 +28,7 @@ import org.apache.flink.client.program.PackagedProgramRetriever;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.client.program.artifact.ArtifactFetchManager;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.plugin.PluginManager;
 import org.apache.flink.core.plugin.PluginUtils;
@@ -146,7 +146,7 @@ public final class KubernetesApplicationClusterEntrypoint extends ApplicationClu
             String targetDir = generateJarDir(configuration);
             ArtifactFetchManager fetchMgr = new ArtifactFetchManager(configuration, targetDir);
 
-            List<String> uris = configuration.get(PipelineOptions.JARS);
+            List<String> uris = configuration.get(StreamingPipelineOptions.JARS);
             checkArgument(uris.size() == 1, "Should only have one jar");
             List<String> additionalUris =
                     configuration

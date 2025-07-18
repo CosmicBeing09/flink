@@ -18,7 +18,7 @@
 package org.apache.flink.python.util;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -36,7 +36,7 @@ class PythonConfigUtilTest {
     void testJobName() {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
-        config.set(PipelineOptions.NAME, jobName);
+        config.set(StreamingPipelineOptions.NAME, jobName);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(config);
 
         env.fromData(Collections.singletonList("test")).sinkTo(new DiscardingSink<>());

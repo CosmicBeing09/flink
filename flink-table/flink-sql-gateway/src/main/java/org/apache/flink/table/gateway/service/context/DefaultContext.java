@@ -18,12 +18,8 @@
 
 package org.apache.flink.table.gateway.service.context;
 
-import org.apache.flink.client.cli.CliArgsException;
-import org.apache.flink.client.cli.CliFrontend;
-import org.apache.flink.client.cli.CliFrontendParser;
-import org.apache.flink.client.cli.CustomCommandLine;
-import org.apache.flink.client.cli.ExecutionConfigAccessor;
-import org.apache.flink.client.cli.ProgramOptions;
+import org.apache.flink.client.cli.*;
+import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.GlobalConfiguration;
 import org.apache.flink.core.fs.FileSystem;
@@ -103,8 +99,8 @@ public class DefaultContext {
 
         try {
             final ProgramOptions programOptions = ProgramOptions.create(commandLine);
-            final ExecutionConfigAccessor executionConfigAccessor =
-                    ExecutionConfigAccessor.fromProgramOptions(programOptions, dependencies);
+            final StreamingExecutionConfigAccessor executionConfigAccessor =
+                    StreamingExecutionConfigAccessor.fromProgramOptions(programOptions, dependencies);
             executionConfigAccessor.applyToConfiguration(executionConfig);
         } catch (CliArgsException e) {
             throw new SqlGatewayException("Invalid deployment run options.", e);

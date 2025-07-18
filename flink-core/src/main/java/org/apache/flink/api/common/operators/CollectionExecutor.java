@@ -25,7 +25,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobInfo;
 import org.apache.flink.api.common.JobInfoImpl;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamingExecutionPlan;
 import org.apache.flink.api.common.TaskInfo;
 import org.apache.flink.api.common.TaskInfoImpl;
 import org.apache.flink.api.common.accumulators.Accumulator;
@@ -108,7 +108,7 @@ public class CollectionExecutor {
     //  General execution methods
     // --------------------------------------------------------------------------------------------
 
-    public JobExecutionResult execute(Plan program) throws Exception {
+    public JobExecutionResult execute(StreamingExecutionPlan program) throws Exception {
         long startTime = System.currentTimeMillis();
         JobID jobID = program.getJobId() == null ? new JobID() : program.getJobId();
         JobInfo jobInfo = new JobInfoImpl(jobID, program.getJobName());

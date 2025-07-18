@@ -20,7 +20,7 @@ package org.apache.flink.sql.tests;
 
 import org.apache.flink.api.common.BatchShuffleMode;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.formats.csv.CsvFormatOptions;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.table.api.DataTypes;
@@ -126,7 +126,7 @@ class BatchSQLTest {
         TableResult result = tEnv.executeSql(sqlStatement);
 
         // Wait for the job to finish.
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 result.getJobClient()
                         .orElseThrow(() -> new IllegalStateException("Job client is not present"));
         jobClient.getJobExecutionResult().get();

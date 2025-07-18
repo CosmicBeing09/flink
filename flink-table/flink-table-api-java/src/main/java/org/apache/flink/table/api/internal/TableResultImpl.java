@@ -19,7 +19,7 @@
 package org.apache.flink.table.api.internal;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.table.api.ResultKind;
 import org.apache.flink.table.api.TableException;
 import org.apache.flink.table.api.TableResult;
@@ -49,7 +49,7 @@ import java.util.concurrent.TimeoutException;
 @Internal
 public class TableResultImpl implements TableResultInternal {
 
-    private final JobClient jobClient;
+    private final StreamingJobClient jobClient;
     private final ResolvedSchema resolvedSchema;
     private final ResultKind resultKind;
     private final ResultProvider resultProvider;
@@ -58,7 +58,7 @@ public class TableResultImpl implements TableResultInternal {
     private final CachedPlan cachedPlan;
 
     private TableResultImpl(
-            @Nullable JobClient jobClient,
+            @Nullable StreamingJobClient jobClient,
             ResolvedSchema resolvedSchema,
             ResultKind resultKind,
             ResultProvider resultProvider,
@@ -75,7 +75,7 @@ public class TableResultImpl implements TableResultInternal {
     }
 
     @Override
-    public Optional<JobClient> getJobClient() {
+    public Optional<StreamingJobClient> getJobClient() {
         return Optional.ofNullable(jobClient);
     }
 
@@ -170,7 +170,7 @@ public class TableResultImpl implements TableResultInternal {
     /** Builder for creating a {@link TableResultImpl}. */
     @Internal
     public static class Builder {
-        private JobClient jobClient = null;
+        private StreamingJobClient jobClient = null;
         private ResolvedSchema resolvedSchema = null;
         private ResultKind resultKind = null;
         private ResultProvider resultProvider = null;
@@ -182,9 +182,9 @@ public class TableResultImpl implements TableResultInternal {
         /**
          * Specifies job client which associates the submitted Flink job.
          *
-         * @param jobClient a {@link JobClient} for the submitted Flink job.
+         * @param jobClient a {@link StreamingJobClient} for the submitted Flink job.
          */
-        public Builder jobClient(JobClient jobClient) {
+        public Builder jobClient(StreamingJobClient jobClient) {
             this.jobClient = jobClient;
             return this;
         }

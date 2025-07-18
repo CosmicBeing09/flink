@@ -28,7 +28,7 @@ import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.connector.base.source.reader.mocks.MockBaseSource;
 import org.apache.flink.connector.base.source.reader.mocks.MockRecordEmitter;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
@@ -123,7 +123,7 @@ class SourceMetricsITCase {
                                     return i;
                                 });
         stream.sinkTo(new DiscardingSink<>());
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
         final JobID jobId = jobClient.getJobID();
 
         beforeBarrier.get().await();

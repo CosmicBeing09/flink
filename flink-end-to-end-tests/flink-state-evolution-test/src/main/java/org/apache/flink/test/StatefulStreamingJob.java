@@ -26,11 +26,8 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.avro.generated.Address;
-import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.RestartStrategyOptions;
-import org.apache.flink.configuration.StateBackendOptions;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
@@ -149,7 +146,7 @@ public class StatefulStreamingJob {
         final ParameterTool pt = ParameterTool.fromArgs(args);
         final String checkpointDir = pt.getRequired("checkpoint.dir");
         Configuration configuration = new Configuration();
-        configuration.set(PipelineOptions.GENERIC_TYPES, false);
+        configuration.set(StreamingPipelineOptions.GENERIC_TYPES, false);
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "none");
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);

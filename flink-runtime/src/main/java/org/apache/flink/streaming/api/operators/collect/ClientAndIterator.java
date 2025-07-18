@@ -18,7 +18,7 @@
 package org.apache.flink.streaming.api.operators.collect;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.util.CloseableIterator;
 
 import java.util.Iterator;
@@ -27,15 +27,15 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
  * A pair of an {@link Iterator} to receive results from a streaming application and a {@link
- * JobClient} to interact with the program.
+ * StreamingJobClient} to interact with the program.
  */
 @Internal
 public final class ClientAndIterator<E> implements AutoCloseable {
 
-    public final JobClient client;
+    public final StreamingJobClient client;
     public final CloseableIterator<E> iterator;
 
-    public ClientAndIterator(JobClient client, CloseableIterator<E> iterator) {
+    public ClientAndIterator(StreamingJobClient client, CloseableIterator<E> iterator) {
         this.client = checkNotNull(client);
         this.iterator = checkNotNull(iterator);
     }

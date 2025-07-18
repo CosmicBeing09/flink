@@ -22,7 +22,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.connector.sink2.Sink;
 import org.apache.flink.api.connector.sink2.WriterInitContext;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.metrics.Metric;
 import org.apache.flink.metrics.groups.OperatorMetricGroup;
 import org.apache.flink.metrics.groups.SinkWriterMetricGroup;
@@ -104,7 +104,7 @@ public class SinkMetricsITCase extends TestLogger {
                         })
                 .sinkTo(TestSinkV2.<Long>newBuilder().setWriter(new MetricWriter()).build())
                 .name(TEST_SINK_NAME);
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
         final JobID jobId = jobClient.getJobID();
 
         beforeBarrier.get().await();

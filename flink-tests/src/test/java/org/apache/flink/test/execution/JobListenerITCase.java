@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.client.deployment.executors.RemoteExecutor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobListener;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -66,7 +66,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         jobIdReference.set(jobClient.getJobID());
                         submissionLatch.trigger();
                     }
@@ -97,7 +97,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         jobIdReference.set(jobClient.getJobID());
                         submissionLatch.trigger();
                     }
@@ -108,7 +108,7 @@ public class JobListenerITCase extends TestLogger {
                 });
 
         env.fromData(1, 2, 3, 4, 5).sinkTo(new DiscardingSink<>());
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
 
         submissionLatch.await(2000L, TimeUnit.MILLISECONDS);
         // when executing asynchronously we don't get an "executed" callback
@@ -125,7 +125,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         threadReference.set(Thread.currentThread());
                     }
 
@@ -149,7 +149,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         threadReference.set(Thread.currentThread());
                     }
 
@@ -175,7 +175,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         jobIdReference.set(jobClient.getJobID());
                         submissionLatch.trigger();
                     }
@@ -206,7 +206,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         jobIdReference.set(jobClient.getJobID());
                         submissionLatch.trigger();
                     }
@@ -217,7 +217,7 @@ public class JobListenerITCase extends TestLogger {
                 });
 
         env.fromData(1, 2, 3, 4, 5).sinkTo(new DiscardingSink<>());
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
 
         submissionLatch.await(2000L, TimeUnit.MILLISECONDS);
         // when executing asynchronously we don't get an "executed" callback
@@ -234,7 +234,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         threadReference.set(Thread.currentThread());
                     }
 
@@ -258,7 +258,7 @@ public class JobListenerITCase extends TestLogger {
         env.registerJobListener(
                 new JobListener() {
                     @Override
-                    public void onJobSubmitted(JobClient jobClient, Throwable t) {
+                    public void onJobSubmitted(StreamingJobClient jobClient, Throwable t) {
                         threadReference.set(Thread.currentThread());
                     }
 

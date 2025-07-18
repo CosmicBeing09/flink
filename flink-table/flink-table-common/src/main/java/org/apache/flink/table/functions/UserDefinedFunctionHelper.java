@@ -23,7 +23,7 @@ import org.apache.flink.api.common.ExecutionConfig.ClosureCleanerLevel;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.ClosureCleaner;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.api.TableException;
@@ -587,7 +587,7 @@ public final class UserDefinedFunctionHelper {
      * non-static inner function classes.
      */
     private static void cleanFunction(ReadableConfig config, UserDefinedFunction function) {
-        final ClosureCleanerLevel level = config.get(PipelineOptions.CLOSURE_CLEANER_LEVEL);
+        final ClosureCleanerLevel level = config.get(StreamingPipelineOptions.CLOSURE_CLEANER_LEVEL);
         try {
             ClosureCleaner.clean(function, level, true);
         } catch (Throwable t) {

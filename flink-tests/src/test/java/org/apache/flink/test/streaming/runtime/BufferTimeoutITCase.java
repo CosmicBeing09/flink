@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.streaming.runtime;
 
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -76,7 +76,7 @@ public class BufferTimeoutITCase extends AbstractTestBaseJUnit4 {
                         })
                 .slotSharingGroup("sink");
 
-        final JobClient jobClient = env.executeAsync();
+        final StreamingJobClient jobClient = env.executeAsync();
         CommonTestUtils.waitForAllTaskRunning(
                 MINI_CLUSTER_RESOURCE.getMiniCluster(), jobClient.getJobID(), false);
 

@@ -19,7 +19,7 @@ package org.apache.flink.python.util;
 
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ConfigurationUtils;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.python.PythonOptions;
 
 import org.junit.jupiter.api.Test;
@@ -239,7 +239,7 @@ class PythonDependencyUtilsTest {
 
     private void verifyCachedFiles(Map<String, String> expected, Configuration config) {
         Map<String, String> actual =
-                config.getOptional(PipelineOptions.CACHED_FILES).orElse(new ArrayList<>()).stream()
+                config.getOptional(StreamingPipelineOptions.CACHED_FILES).orElse(new ArrayList<>()).stream()
                         .map(ConfigurationUtils::parseStringToMap)
                         .collect(Collectors.toMap(m -> m.get("name"), m -> m.get("path")));
 

@@ -26,7 +26,7 @@ import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.configuration.StateRecoveryOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -208,7 +208,7 @@ public class RestoreUpgradedJobITCase extends TestLogger {
                 .setParallelism(1);
 
         // when: Job is executed.
-        JobClient jobClient = env.executeAsync("Total sum");
+        StreamingJobClient jobClient = env.executeAsync("Total sum");
         waitForAllTaskRunning(CLUSTER.getMiniCluster(), jobClient.getJobID(), false);
 
         allDataEmittedLatch.get().await();
@@ -251,7 +251,7 @@ public class RestoreUpgradedJobITCase extends TestLogger {
                 // one sink for easy calculation.
                 .setParallelism(1);
 
-        JobClient jobClient = env.executeAsync("Total sum");
+        StreamingJobClient jobClient = env.executeAsync("Total sum");
 
         waitForAllTaskRunning(CLUSTER.getMiniCluster(), jobClient.getJobID(), false);
 
@@ -266,12 +266,12 @@ public class RestoreUpgradedJobITCase extends TestLogger {
                 .get();
     }
 
-    private String stopWithSnapshot(JobClient jobClient)
+    private String stopWithSnapshot(StreamingJobClient jobClient)
             throws InterruptedException, ExecutionException {
         String snapshotPath;
         if (checkpointType == ALIGNED_CHECKPOINT) {
             snapshotPath = CLUSTER.getMiniCluster().triggerCheckpoint(jobClient.getJobID()).get();
-            jobClient.cancel().get();
+            jobClient.cancelStreamingJob().get();
         } else if (checkpointType == CANONICAL_SAVEPOINT) {
             snapshotPath =
                     jobClient

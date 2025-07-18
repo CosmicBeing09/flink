@@ -52,7 +52,7 @@ import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.configuration.SlowTaskDetectorOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.io.GenericInputSplit;
 import org.apache.flink.core.io.InputStatus;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
@@ -155,7 +155,7 @@ class SpeculativeExecutionITCase {
     void testBlockSlowNodeInSpeculativeExecution() throws Exception {
         final Configuration configuration = new Configuration();
         configuration.set(BatchExecutionOptions.BLOCK_SLOW_NODE_DURATION, Duration.ofMinutes(1));
-        JobClient client = executeJobAsync(configuration, this::setupJobWithSlowMap);
+        StreamingJobClient client = executeJobAsync(configuration, this::setupJobWithSlowMap);
 
         assertThatThrownBy(
                         () -> client.getJobExecutionResult().get(30, TimeUnit.SECONDS),
@@ -257,11 +257,11 @@ class SpeculativeExecutionITCase {
     }
 
     private void executeJob(Consumer<StreamExecutionEnvironment> jobSetupFunc) throws Exception {
-        JobClient client = executeJobAsync(new Configuration(), jobSetupFunc);
+        StreamingJobClient client = executeJobAsync(new Configuration(), jobSetupFunc);
         client.getJobExecutionResult().get();
     }
 
-    private JobClient executeJobAsync(
+    private StreamingJobClient executeJobAsync(
             Configuration configuration, Consumer<StreamExecutionEnvironment> jobSetupFunc)
             throws Exception {
         final StreamExecutionEnvironment env =

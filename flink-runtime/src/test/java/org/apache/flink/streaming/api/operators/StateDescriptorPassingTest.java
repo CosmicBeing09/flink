@@ -27,7 +27,7 @@ import org.apache.flink.api.common.typeutils.base.ListSerializer;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -64,7 +64,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
@@ -101,7 +101,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
@@ -139,7 +139,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
@@ -177,7 +177,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
@@ -208,7 +208,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 
@@ -239,7 +239,7 @@ class StateDescriptorPassingTest {
         Configuration configuration = new Configuration();
         String serializerConfigStr =
                 "{java.io.File: {type: kryo, kryo-type: registered, class: com.esotericsoftware.kryo.serializers.JavaSerializer}}";
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
+        configuration.setString(StreamingPipelineOptions.SERIALIZATION_CONFIG.key(), serializerConfigStr);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
 

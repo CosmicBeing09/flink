@@ -102,7 +102,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
             // call the test program
             try {
                 testProgram();
-                this.latestExecutionResult = env.getLastJobExecutionResult();
+                this.latestExecutionResult = env.getLastStreamingJobExecutionResult();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();
@@ -146,7 +146,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
             // call the test program
             try {
                 testProgram();
-                this.latestExecutionResult = env.getLastJobExecutionResult();
+                this.latestExecutionResult = env.getLastStreamingJobExecutionResult();
             } catch (Exception e) {
                 System.err.println(e.getMessage());
                 e.printStackTrace();

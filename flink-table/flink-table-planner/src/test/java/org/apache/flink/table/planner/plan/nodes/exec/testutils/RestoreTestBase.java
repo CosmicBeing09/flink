@@ -21,7 +21,7 @@ package org.apache.flink.table.planner.plan.nodes.exec.testutils;
 import org.apache.flink.FlinkVersion;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.configuration.StateBackendOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
@@ -294,7 +294,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
 
         final TableResult tableResult = compiledPlan.execute();
         CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
-        final JobClient jobClient = tableResult.getJobClient().get();
+        final StreamingJobClient jobClient = tableResult.getJobClient().get();
         final String savepoint =
                 jobClient
                         .stopWithSavepoint(false, tmpDir.toString(), SavepointFormatType.DEFAULT)
@@ -368,7 +368,7 @@ public abstract class RestoreTestBase implements TableTestProgramRunner {
         if (afterRestoreSource == AfterRestoreSource.INFINITE) {
             final TableResult tableResult = compiledPlan.execute();
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).get();
-            tableResult.getJobClient().get().cancel().get();
+            tableResult.getJobClient().get().cancelStreamingJob().get();
         } else {
             compiledPlan.execute().await();
             for (SinkTestStep sinkTestStep : program.getSetupSinkTestSteps()) {

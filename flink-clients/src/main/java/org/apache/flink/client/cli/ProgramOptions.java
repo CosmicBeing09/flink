@@ -23,7 +23,7 @@ import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.RecoveryClaimMode;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 
@@ -184,7 +184,7 @@ public class ProgramOptions extends CommandLineOptions {
         configuration.set(DeploymentOptions.ATTACHED, !getDetachedMode());
         configuration.set(DeploymentOptions.SHUTDOWN_IF_ATTACHED, isShutdownOnAttachedExit());
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.CLASSPATHS, getClasspaths(), URL::toString);
+                configuration, StreamingPipelineOptions.CLASSPATHS, getClasspaths(), URL::toString);
         SavepointRestoreSettings.toConfiguration(getSavepointRestoreSettings(), configuration);
     }
 

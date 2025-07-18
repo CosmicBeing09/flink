@@ -20,14 +20,14 @@ package org.apache.flink.client.deployment.executors;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.client.cli.ExecutionConfigAccessor;
+import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
 import org.apache.flink.client.deployment.ClusterDescriptor;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.program.ClusterClientProvider;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutor;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 
@@ -50,43 +50,43 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Internal
 @Deprecated
-public class AbstractJobClusterExecutor<
+public class AbstractStreamingJobClusterExecutor<
                 ClusterID, ClientFactory extends ClusterClientFactory<ClusterID>>
         implements PipelineExecutor {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AbstractJobClusterExecutor.class);
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractStreamingJobClusterExecutor.class);
 
     private final ClientFactory clusterClientFactory;
 
-    public AbstractJobClusterExecutor(@Nonnull final ClientFactory clusterClientFactory) {
+    public AbstractStreamingJobClusterExecutor(@Nonnull final ClientFactory clusterClientFactory) {
         this.clusterClientFactory = checkNotNull(clusterClientFactory);
     }
 
     @Override
-    public CompletableFuture<JobClient> execute(
+    public CompletableFuture<StreamingJobClient> execute(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
-        final JobGraph jobGraph =
-                PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        final JobGraph streamingJobGraph =
+                PipelineExecutorUtils.getStreamingJobGraph(pipeline, configuration, userCodeClassloader);
 
         try (final ClusterDescriptor<ClusterID> clusterDescriptor =
                 clusterClientFactory.createClusterDescriptor(configuration)) {
-            final ExecutionConfigAccessor configAccessor =
-                    ExecutionConfigAccessor.fromConfiguration(configuration);
+            final StreamingExecutionConfigAccessor configAccessor =
+                    StreamingExecutionConfigAccessor.fromConfiguration(configuration);
 
-            final ClusterSpecification clusterSpecification =
+            final StreamingClusterSpecification clusterSpecification =
                     clusterClientFactory.getClusterSpecification(configuration);
 
             final ClusterClientProvider<ClusterID> clusterClientProvider =
-                    clusterDescriptor.deployJobCluster(
-                            clusterSpecification, jobGraph, configAccessor.getDetachedMode());
-            LOG.info("Job has been submitted with JobID " + jobGraph.getJobID());
+                    clusterDescriptor.deployStreamCluster(
+                            clusterSpecification, streamingJobGraph, configAccessor.getDetachedMode());
+            LOG.info("Job has been submitted with JobID " + streamingJobGraph.getJobID());
 
             return CompletableFuture.completedFuture(
                     new ClusterClientJobClientAdapter<>(
-                            clusterClientProvider, jobGraph.getJobID(), userCodeClassloader));
+                            clusterClientProvider, streamingJobGraph.getJobID(), userCodeClassloader));
         }
     }
 }

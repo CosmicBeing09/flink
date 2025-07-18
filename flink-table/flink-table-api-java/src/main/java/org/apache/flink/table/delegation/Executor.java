@@ -22,9 +22,9 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.table.api.TableEnvironment;
 
@@ -54,7 +54,7 @@ public interface Executor {
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
-     * @param defaultJobName default job name if not specified via {@link PipelineOptions#NAME}
+     * @param defaultJobName default job name if not specified via {@link StreamingPipelineOptions#NAME}
      * @return The pipeline representing the transformations.
      */
     Pipeline createPipeline(
@@ -68,7 +68,7 @@ public interface Executor {
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
-     * @param defaultJobName default job name if not specified via {@link PipelineOptions#NAME}
+     * @param defaultJobName default job name if not specified via {@link StreamingPipelineOptions#NAME}
      * @param jobStatusHookList list of {@link JobStatusHook}s
      * @return The pipeline representing the transformations.
      */
@@ -91,11 +91,11 @@ public interface Executor {
      * Executes the given pipeline asynchronously.
      *
      * @param pipeline the pipeline to execute
-     * @return A {@link JobClient} that can be used to communicate with the submitted job, completed
+     * @return A {@link StreamingJobClient} that can be used to communicate with the submitted job, completed
      *     on submission succeeded.
      * @throws Exception which occurs during job execution.
      */
-    JobClient executeAsync(Pipeline pipeline) throws Exception;
+    StreamingJobClient executeAsync(Pipeline pipeline) throws Exception;
 
     /**
      * Checks whether checkpointing is enabled.

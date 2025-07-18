@@ -26,7 +26,7 @@ import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramRetriever;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypoint;
 import org.apache.flink.runtime.entrypoint.ClusterEntrypointUtils;
 import org.apache.flink.runtime.entrypoint.DynamicParametersConfigurationParserFactory;
@@ -149,7 +149,7 @@ public final class YarnApplicationClusterEntryPoint extends ApplicationClusterEn
     private static File getUserApplicationJar(
             final File userLibDir, final Configuration configuration) {
         final List<File> pipelineJars =
-                configuration.get(PipelineOptions.JARS).stream()
+                configuration.get(StreamingPipelineOptions.JARS).stream()
                         .map(uri -> new File(userLibDir, new Path(uri).getName()))
                         .collect(Collectors.toList());
 

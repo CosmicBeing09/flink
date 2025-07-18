@@ -137,7 +137,7 @@ public class RemoteStreamEnvironmentTest extends TestLogger {
         }
 
         @Override
-        public PipelineExecutorFactory getExecutorFactory(@Nonnull Configuration configuration) {
+        public PipelineExecutorFactory getStreamingExecutorFactory(@Nonnull Configuration configuration) {
             return new PipelineExecutorFactory() {
 
                 @Override

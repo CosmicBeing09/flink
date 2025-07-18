@@ -19,7 +19,7 @@
 package org.apache.flink.table.planner.operations;
 
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.DataTypes;
 import org.apache.flink.table.api.ResultKind;
@@ -328,7 +328,7 @@ public class PlannerCallProcedureOperation implements CallProcedureOperation {
         }
 
         @Override
-        public ResultProvider setJobClient(JobClient jobClient) {
+        public ResultProvider setJobClient(StreamingJobClient jobClient) {
             return this;
         }
 

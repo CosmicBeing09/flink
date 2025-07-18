@@ -23,15 +23,8 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.BlobServerOptions;
-import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.configuration.ClusterOptions;
-import org.apache.flink.configuration.ConfigOption;
-import org.apache.flink.configuration.ConfigOptions;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.HighAvailabilityOptions;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.WebOptions;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.CheckpointType;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.failure.FailureEnricher;
@@ -1595,8 +1588,8 @@ public abstract class Dispatcher extends FencedRpcEndpoint<DispatcherId>
 
     private void applyParallelismOverrides(JobGraph jobGraph) {
         Map<String, String> overrides = new HashMap<>();
-        overrides.putAll(configuration.get(PipelineOptions.PARALLELISM_OVERRIDES));
-        overrides.putAll(jobGraph.getJobConfiguration().get(PipelineOptions.PARALLELISM_OVERRIDES));
+        overrides.putAll(configuration.get(StreamingPipelineOptions.PARALLELISM_OVERRIDES));
+        overrides.putAll(jobGraph.getJobConfiguration().get(StreamingPipelineOptions.PARALLELISM_OVERRIDES));
         for (JobVertex vertex : jobGraph.getVertices()) {
             String override = overrides.get(vertex.getID().toHexString());
             if (override != null) {

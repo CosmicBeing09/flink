@@ -28,7 +28,7 @@ import org.apache.flink.client.program.rest.retry.ExponentialWaitStrategy;
 import org.apache.flink.client.program.rest.retry.WaitStrategy;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
 import org.apache.flink.datastream.impl.ExecutionContextEnvironment;
 import org.apache.flink.runtime.client.JobInitializationException;
@@ -162,7 +162,7 @@ public enum ClientUtils {
      * @return The ScheduledExecutorService which reports heartbeat periodically.
      */
     public static ScheduledExecutorService reportHeartbeatPeriodically(
-            JobClient jobClient, long interval, long timeout) {
+            StreamingJobClient jobClient, long interval, long timeout) {
         checkArgument(
                 interval < timeout,
                 "The client's heartbeat interval "

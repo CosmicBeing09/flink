@@ -18,7 +18,7 @@
 
 package org.apache.flink.kubernetes.kubeclient;
 
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.configuration.BlobServerOptions;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.JobManagerOptions;
@@ -124,8 +124,8 @@ public class Fabric8FlinkKubeClientTest extends KubernetesClientTestBase {
         KubernetesTestUtils.createTemporyFile("some data", flinkConfDir, CONFIG_FILE_LOGBACK_NAME);
         KubernetesTestUtils.createTemporyFile("some data", flinkConfDir, CONFIG_FILE_LOG4J_NAME);
 
-        final ClusterSpecification clusterSpecification =
-                new ClusterSpecification.ClusterSpecificationBuilder()
+        final StreamingClusterSpecification clusterSpecification =
+                new StreamingClusterSpecification.StreamingClusterSpecificationBuilder()
                         .setMasterMemoryMB(JOB_MANAGER_MEMORY)
                         .setTaskManagerMemoryMB(1000)
                         .setSlotsPerTaskManager(3)

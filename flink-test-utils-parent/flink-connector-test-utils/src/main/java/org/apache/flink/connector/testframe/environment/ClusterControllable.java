@@ -19,7 +19,7 @@
 package org.apache.flink.connector.testframe.environment;
 
 import org.apache.flink.annotation.Experimental;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 
 /** Interface for triggering failover in a Flink cluster. */
 @Experimental
@@ -31,7 +31,7 @@ public interface ClusterControllable {
      * @param jobClient client of the running job
      * @param afterFailAction action to take before restarting the JobManager
      */
-    void triggerJobManagerFailover(JobClient jobClient, Runnable afterFailAction) throws Exception;
+    void triggerJobManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction) throws Exception;
 
     /**
      * Triggers TaskManager failover.
@@ -39,7 +39,7 @@ public interface ClusterControllable {
      * @param jobClient client of the running job
      * @param afterFailAction action to take before restarting TaskManager(s)
      */
-    void triggerTaskManagerFailover(JobClient jobClient, Runnable afterFailAction) throws Exception;
+    void triggerTaskManagerFailover(StreamingJobClient jobClient, Runnable afterFailAction) throws Exception;
 
     /**
      * Disconnect network between Flink cluster and external system.
@@ -47,5 +47,5 @@ public interface ClusterControllable {
      * @param jobClient client of the running job
      * @param afterFailAction action to take before recovering the network connection
      */
-    void isolateNetwork(JobClient jobClient, Runnable afterFailAction) throws Exception;
+    void isolateNetwork(StreamingJobClient jobClient, Runnable afterFailAction) throws Exception;
 }

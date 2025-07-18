@@ -22,7 +22,7 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.connector.sink2.Sink;
 import org.apache.flink.api.connector.sink2.WriterInitContext;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.metrics.Counter;
 import org.apache.flink.metrics.Gauge;
 import org.apache.flink.metrics.Metric;
@@ -113,7 +113,7 @@ public class SinkV2MetricsITCase extends TestLogger {
                         })
                 .sinkTo(TestSinkV2.<Long>newBuilder().setWriter(new MetricWriter()).build())
                 .name(TEST_SINK_NAME);
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
         final JobID jobId = jobClient.getJobID();
 
         beforeBarrier.get().await();
@@ -145,7 +145,7 @@ public class SinkV2MetricsITCase extends TestLogger {
                                         .setCommitter(new MetricCommitter(beforeLatch, afterLatch)))
                                 .build())
                 .name(TEST_SINK_NAME);
-        JobClient jobClient = env.executeAsync();
+        StreamingJobClient jobClient = env.executeAsync();
         final JobID jobId = jobClient.getJobID();
 
         // Run until every committer finished with 1 commit round - everything should be retried and

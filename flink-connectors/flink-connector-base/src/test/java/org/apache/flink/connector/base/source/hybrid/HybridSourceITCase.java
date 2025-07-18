@@ -23,7 +23,7 @@ import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.api.connector.source.Source;
 import org.apache.flink.connector.base.source.reader.mocks.MockBaseSource;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.highavailability.nonha.embedded.HaLeadershipControl;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.RpcServiceSharing;
@@ -140,7 +140,7 @@ class HybridSourceITCase {
                 RecordCounterToFail.wrapWithFailureAfter(stream, EXPECTED_RESULT.size() / 2);
 
         CloseableIterator<Integer> iterator = streamFailingInTheMiddleOfReading.collectAsync();
-        JobClient client =
+        StreamingJobClient client =
                 env.executeAsync(
                         HybridSourceITCase.class.getSimpleName() + '-' + failoverType.name());
 

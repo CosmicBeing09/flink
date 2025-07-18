@@ -23,7 +23,7 @@ import org.apache.flink.configuration.ConfigUtils;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 
 import java.net.MalformedURLException;
@@ -33,28 +33,28 @@ import java.util.List;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * Accessor that exposes config settings that are relevant for execution from an underlying {@link
+ * Accessor that exposes config settings that are relevant for streaming execution from an underlying {@link
  * Configuration}.
  */
 @Internal
-public class ExecutionConfigAccessor {
+public class StreamingExecutionConfigAccessor {
 
     private final Configuration configuration;
 
-    private ExecutionConfigAccessor(final Configuration configuration) {
+    private StreamingExecutionConfigAccessor(final Configuration configuration) {
         this.configuration = checkNotNull(configuration);
     }
 
-    /** Creates an {@link ExecutionConfigAccessor} based on the provided {@link Configuration}. */
-    public static ExecutionConfigAccessor fromConfiguration(final Configuration configuration) {
-        return new ExecutionConfigAccessor(checkNotNull(configuration));
+    /** Creates an {@link StreamingExecutionConfigAccessor} based on the provided {@link Configuration}. */
+    public static StreamingExecutionConfigAccessor fromConfiguration(final Configuration configuration) {
+        return new StreamingExecutionConfigAccessor(checkNotNull(configuration));
     }
 
     /**
-     * Creates an {@link ExecutionConfigAccessor} based on the provided {@link ProgramOptions} as
+     * Creates an {@link StreamingExecutionConfigAccessor} based on the provided {@link ProgramOptions} as
      * provided by the user through the CLI.
      */
-    public static <T> ExecutionConfigAccessor fromProgramOptions(
+    public static <T> StreamingExecutionConfigAccessor fromProgramOptions(
             final ProgramOptions options, final List<T> jobJars) {
         checkNotNull(options);
         checkNotNull(jobJars);
@@ -63,9 +63,9 @@ public class ExecutionConfigAccessor {
 
         options.applyToConfiguration(configuration);
         ConfigUtils.encodeCollectionToConfig(
-                configuration, PipelineOptions.JARS, jobJars, Object::toString);
+                configuration, StreamingPipelineOptions.JARS, jobJars, Object::toString);
 
-        return new ExecutionConfigAccessor(configuration);
+        return new StreamingExecutionConfigAccessor(configuration);
     }
 
     public Configuration applyToConfiguration(final Configuration baseConfiguration) {
@@ -74,12 +74,12 @@ public class ExecutionConfigAccessor {
     }
 
     public List<URL> getJars() throws MalformedURLException {
-        return ConfigUtils.decodeListFromConfig(configuration, PipelineOptions.JARS, URL::new);
+        return ConfigUtils.decodeListFromConfig(configuration, StreamingPipelineOptions.JARS, URL::new);
     }
 
     public List<URL> getClasspaths() throws MalformedURLException {
         return ConfigUtils.decodeListFromConfig(
-                configuration, PipelineOptions.CLASSPATHS, URL::new);
+                configuration, StreamingPipelineOptions.CLASSPATHS, URL::new);
     }
 
     public int getParallelism() {

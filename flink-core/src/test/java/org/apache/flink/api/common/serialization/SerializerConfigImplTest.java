@@ -37,7 +37,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
-import static org.apache.flink.configuration.PipelineOptions.SERIALIZATION_CONFIG;
+import static org.apache.flink.configuration.StreamingPipelineOptions.SERIALIZATION_CONFIG;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

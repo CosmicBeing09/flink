@@ -32,7 +32,7 @@ import org.apache.flink.api.java.typeutils.EnumTypeInfo;
 import org.apache.flink.api.java.typeutils.GenericTypeInfo;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSource;
@@ -182,7 +182,7 @@ class DataStreamJavaITCase {
             env.getConfig().disableObjectReuse();
         }
         final Configuration defaultConfig = new Configuration();
-        defaultConfig.set(PipelineOptions.JARS, Collections.emptyList());
+        defaultConfig.set(StreamingPipelineOptions.JARS, Collections.emptyList());
         env.configure(defaultConfig);
     }
 
@@ -846,7 +846,7 @@ class DataStreamJavaITCase {
         // This is not recommended, usually this option should be set before
         // but just for testing proper merging.
         final Configuration customConfig = new Configuration();
-        customConfig.set(PipelineOptions.JARS, Collections.singletonList(jarPath2));
+        customConfig.set(StreamingPipelineOptions.JARS, Collections.singletonList(jarPath2));
         env.configure(customConfig);
         assertStreamJarsOf(1);
         assertTableJarsOf(tableEnv, 1);
@@ -881,11 +881,11 @@ class DataStreamJavaITCase {
     // --------------------------------------------------------------------------------------------
 
     private static void assertTableJarsOf(TableEnvironment tableEnv, int size) {
-        assertThat(tableEnv.getConfig().get(PipelineOptions.JARS)).hasSize(size);
+        assertThat(tableEnv.getConfig().get(StreamingPipelineOptions.JARS)).hasSize(size);
     }
 
     private void assertStreamJarsOf(int size) {
-        assertThat(env.getConfiguration().get(PipelineOptions.JARS)).hasSize(size);
+        assertThat(env.getConfiguration().get(StreamingPipelineOptions.JARS)).hasSize(size);
     }
 
     private Table getComplexUnifiedPipeline(StreamExecutionEnvironment env) {

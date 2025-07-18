@@ -20,7 +20,7 @@ package org.apache.flink.datastream.impl.attribute;
 
 import org.apache.flink.api.connector.dsv2.DataStreamV2SourceUtils;
 import org.apache.flink.api.connector.dsv2.WrappedSink;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.datastream.api.ExecutionEnvironment;
 import org.apache.flink.datastream.api.attribute.NoOutputUntilEndOfInput;
 import org.apache.flink.datastream.api.common.Collector;
@@ -166,7 +166,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
     void testWithoutOperatorChain() throws Exception {
         ExecutionEnvironmentImpl env =
                 (ExecutionEnvironmentImpl) ExecutionEnvironment.getInstance();
-        env.getConfiguration().set(PipelineOptions.OPERATOR_CHAINING, false);
+        env.getConfiguration().set(StreamingPipelineOptions.OPERATOR_CHAINING, false);
         NonKeyedPartitionStream<Integer> source =
                 env.fromSource(
                         DataStreamV2SourceUtils.fromData(Arrays.asList(1, 2, 3)), "test-source");

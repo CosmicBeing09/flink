@@ -19,11 +19,8 @@ package org.apache.flink.python.util;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.ConfigurationUtils;
-import org.apache.flink.configuration.PipelineOptions;
-import org.apache.flink.configuration.ReadableConfig;
-import org.apache.flink.configuration.WritableConfig;
+import org.apache.flink.configuration.*;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.python.PythonOptions;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.StringUtils;
@@ -335,7 +332,7 @@ public class PythonDependencyUtils {
 
         private void registerCachedFileIfNotExist(String name, String path) {
             final List<Tuple2<String, String>> cachedFilePairs =
-                    config.getOptional(PipelineOptions.CACHED_FILES).orElse(new ArrayList<>())
+                    config.getOptional(StreamingPipelineOptions.CACHED_FILES).orElse(new ArrayList<>())
                             .stream()
                             .map(
                                     m ->
@@ -362,12 +359,12 @@ public class PythonDependencyUtils {
             map.put("path", path);
             cachedFiles.add(ConfigurationUtils.convertValue(map, String.class));
 
-            ((WritableConfig) config).set(PipelineOptions.CACHED_FILES, cachedFiles);
+            ((WritableConfig) config).set(StreamingPipelineOptions.CACHED_FILES, cachedFiles);
         }
 
         private void removeCachedFilesByPrefix(String prefix) {
             final List<String> cachedFiles =
-                    config.getOptional(PipelineOptions.CACHED_FILES).orElse(new ArrayList<>())
+                    config.getOptional(StreamingPipelineOptions.CACHED_FILES).orElse(new ArrayList<>())
                             .stream()
                             .map(m -> Tuple2.of(ConfigurationUtils.parseStringToMap(m), m))
                             .filter(
@@ -382,7 +379,7 @@ public class PythonDependencyUtils {
                             .collect(Collectors.toList());
 
             ((WritableConfig) config)
-                    .set(PipelineOptions.CACHED_FILES, new ArrayList<>(cachedFiles));
+                    .set(StreamingPipelineOptions.CACHED_FILES, new ArrayList<>(cachedFiles));
         }
     }
 }

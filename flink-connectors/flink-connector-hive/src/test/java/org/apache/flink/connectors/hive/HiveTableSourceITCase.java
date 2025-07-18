@@ -677,7 +677,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
                                             .toString()));
         }
 
-        result.getJobClient().get().cancel();
+        result.getJobClient().get().cancelStreamingJob();
     }
 
     @Test(timeout = 120000)
@@ -732,7 +732,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
                                     Row.of(i, "new_add", 11 + i, "A", "B", i).toString(),
                                     Row.of(i, "new_add_1", 11 + i, "A", "B", i).toString()));
         }
-        result.getJobClient().get().cancel();
+        result.getJobClient().get().cancelStreamingJob();
     }
 
     @Test(timeout = 120000)
@@ -786,7 +786,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
                                             .toString()));
         }
 
-        result.getJobClient().get().cancel();
+        result.getJobClient().get().cancelStreamingJob();
     }
 
     private static List<String> fetchRows(Iterator<Row> iter, int size) {
@@ -847,7 +847,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
                     .isEqualTo(Arrays.asList(Row.of(1, "a").toString(), Row.of(2, "b").toString()));
         }
 
-        result.getJobClient().get().cancel();
+        result.getJobClient().get().cancelStreamingJob();
     }
 
     private void testSourceConfig(boolean fallbackMR, boolean inferParallelism) throws Exception {
@@ -979,7 +979,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
                                     Row.of(i, "new_add_1").toString()));
         }
 
-        result.getJobClient().get().cancel();
+        result.getJobClient().get().cancelStreamingJob();
     }
 
     @Test(timeout = 120000)

@@ -21,9 +21,9 @@ package org.apache.flink.client.deployment.executors;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.client.FlinkPipelineTranslationUtil;
+import org.apache.flink.client.FlinkStreamingPipelineTranslationUtil;
 import org.apache.flink.client.cli.ClientOptions;
-import org.apache.flink.client.cli.ExecutionConfigAccessor;
+import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.ExecutionOptions;
@@ -57,7 +57,7 @@ public class PipelineExecutorUtils {
      * @param userClassloader the classloader which can load user classes.
      * @return the corresponding {@link JobGraph}.
      */
-    public static JobGraph getJobGraph(
+    public static JobGraph getStreamingJobGraph(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull ClassLoader userClassloader)
@@ -65,10 +65,10 @@ public class PipelineExecutorUtils {
         checkNotNull(pipeline);
         checkNotNull(configuration);
 
-        final ExecutionConfigAccessor executionConfigAccessor =
-                ExecutionConfigAccessor.fromConfiguration(configuration);
+        final StreamingExecutionConfigAccessor executionConfigAccessor =
+                StreamingExecutionConfigAccessor.fromConfiguration(configuration);
         final JobGraph jobGraph =
-                FlinkPipelineTranslationUtil.getJobGraph(
+                FlinkStreamingPipelineTranslationUtil.getStreamingJobGraph(
                         userClassloader,
                         pipeline,
                         configuration,
@@ -98,7 +98,7 @@ public class PipelineExecutorUtils {
      * @param jobGraph jobGraph that contains job basic info
      * @param listeners the list of job status changed listeners
      */
-    public static void notifyJobStatusListeners(
+    public static void notifyStreamingJobStatusListeners(
             @Nonnull final Pipeline pipeline,
             @Nonnull final JobGraph jobGraph,
             List<JobStatusChangedListener> listeners) {

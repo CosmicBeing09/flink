@@ -19,7 +19,7 @@
 package org.apache.flink.client.cli.util;
 
 import org.apache.flink.client.deployment.ClusterDescriptor;
-import org.apache.flink.client.deployment.ClusterSpecification;
+import org.apache.flink.client.deployment.StreamingClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
@@ -47,20 +47,20 @@ public class DummyClusterDescriptor<T> implements ClusterDescriptor<T> {
 
     @Override
     public ClusterClientProvider<T> deploySessionCluster(
-            ClusterSpecification clusterSpecification) {
+            StreamingClusterSpecification clusterSpecification) {
         return () -> clusterClient;
     }
 
     @Override
     public ClusterClientProvider<T> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration) {
         return () -> clusterClient;
     }
 
     @Override
-    public ClusterClientProvider<T> deployJobCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
+    public ClusterClientProvider<T> deployStreamCluster(
+            StreamingClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
         return () -> clusterClient;
     }
 

@@ -51,7 +51,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      * @return Client for the cluster
      * @throws ClusterDeploymentException if the cluster could not be deployed
      */
-    ClusterClientProvider<T> deploySessionCluster(ClusterSpecification clusterSpecification)
+    ClusterClientProvider<T> deploySessionCluster(StreamingClusterSpecification clusterSpecification)
             throws ClusterDeploymentException;
 
     /**
@@ -66,7 +66,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      * @throws ClusterDeploymentException if the cluster could not be deployed
      */
     ClusterClientProvider<T> deployApplicationCluster(
-            final ClusterSpecification clusterSpecification,
+            final StreamingClusterSpecification clusterSpecification,
             final ApplicationConfiguration applicationConfiguration)
             throws ClusterDeploymentException;
 
@@ -75,7 +75,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      *
      * @param clusterSpecification Initial cluster specification with which the Flink cluster is
      *     launched
-     * @param jobGraph JobGraph with which the job cluster is started
+     * @param streamGraph JobGraph with which the job cluster is started
      * @param detached true if the cluster should be stopped after the job completion without
      *     serving the result, otherwise false
      * @return Cluster client to talk to the Flink cluster
@@ -84,9 +84,9 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
      * @throws ClusterDeploymentException if the cluster could not be deployed
      */
     @Deprecated
-    ClusterClientProvider<T> deployJobCluster(
-            final ClusterSpecification clusterSpecification,
-            final JobGraph jobGraph,
+    ClusterClientProvider<T> deployStreamCluster(
+            final StreamingClusterSpecification clusterSpecification,
+            final JobGraph streamGraph,
             final boolean detached)
             throws ClusterDeploymentException;
 

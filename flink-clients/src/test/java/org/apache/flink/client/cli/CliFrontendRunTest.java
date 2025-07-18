@@ -93,8 +93,8 @@ public class CliFrontendRunTest extends CliFrontendTestBase {
             CommandLine commandLine =
                     CliFrontendParser.parse(CliFrontendParser.RUN_OPTIONS, parameters, true);
             ProgramOptions programOptions = ProgramOptions.create(commandLine);
-            ExecutionConfigAccessor executionOptions =
-                    ExecutionConfigAccessor.fromProgramOptions(
+            StreamingExecutionConfigAccessor executionOptions =
+                    StreamingExecutionConfigAccessor.fromProgramOptions(
                             programOptions, Collections.emptyList());
 
             SavepointRestoreSettings savepointSettings =
@@ -111,8 +111,8 @@ public class CliFrontendRunTest extends CliFrontendTestBase {
             CommandLine commandLine =
                     CliFrontendParser.parse(CliFrontendParser.RUN_OPTIONS, parameters, true);
             ProgramOptions programOptions = ProgramOptions.create(commandLine);
-            ExecutionConfigAccessor executionOptions =
-                    ExecutionConfigAccessor.fromProgramOptions(
+            StreamingExecutionConfigAccessor executionOptions =
+                    StreamingExecutionConfigAccessor.fromProgramOptions(
                             programOptions, Collections.emptyList());
 
             SavepointRestoreSettings savepointSettings =
@@ -174,8 +174,8 @@ public class CliFrontendRunTest extends CliFrontendTestBase {
         CommandLine commandLine =
                 CliFrontendParser.parse(CliFrontendParser.RUN_OPTIONS, parameters, true);
         ProgramOptions programOptions = ProgramOptions.create(commandLine);
-        ExecutionConfigAccessor executionOptions =
-                ExecutionConfigAccessor.fromProgramOptions(programOptions, Collections.emptyList());
+        StreamingExecutionConfigAccessor executionOptions =
+                StreamingExecutionConfigAccessor.fromProgramOptions(programOptions, Collections.emptyList());
 
         SavepointRestoreSettings savepointSettings = executionOptions.getSavepointRestoreSettings();
         assertThat(savepointSettings.restoreSavepoint()).isTrue();
@@ -348,8 +348,8 @@ public class CliFrontendRunTest extends CliFrontendTestBase {
 
         @Override
         protected void executeProgram(Configuration configuration, PackagedProgram program) {
-            final ExecutionConfigAccessor executionConfigAccessor =
-                    ExecutionConfigAccessor.fromConfiguration(configuration);
+            final StreamingExecutionConfigAccessor executionConfigAccessor =
+                    StreamingExecutionConfigAccessor.fromConfiguration(configuration);
             assertThat(executionConfigAccessor.getDetachedMode()).isEqualTo(isDetached);
             assertThat(executionConfigAccessor.getParallelism()).isEqualTo(expectedParallelism);
         }

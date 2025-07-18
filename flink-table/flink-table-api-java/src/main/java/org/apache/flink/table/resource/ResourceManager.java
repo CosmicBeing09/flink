@@ -20,7 +20,7 @@ package org.apache.flink.table.resource;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.core.fs.Path;
@@ -252,11 +252,11 @@ public class ResourceManager implements Closeable {
         }
         final Set<String> jarFiles =
                 tableConfig
-                        .getOptional(PipelineOptions.JARS)
+                        .getOptional(StreamingPipelineOptions.JARS)
                         .map(LinkedHashSet::new)
                         .orElseGet(LinkedHashSet::new);
         jarFiles.addAll(jars);
-        tableConfig.set(PipelineOptions.JARS, new ArrayList<>(jarFiles));
+        tableConfig.set(StreamingPipelineOptions.JARS, new ArrayList<>(jarFiles));
     }
 
     public ResourceManager copy() {

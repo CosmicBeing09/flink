@@ -21,7 +21,7 @@ package org.apache.flink.client.program;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -84,7 +84,7 @@ public class PackagedProgramUtilsPipelineTest {
                         .build();
 
         Configuration config = new Configuration();
-        config.set(PipelineOptions.OBJECT_REUSE, true);
+        config.set(StreamingPipelineOptions.OBJECT_REUSE, true);
 
         Pipeline pipeline =
                 PackagedProgramUtils.getPipelineFromProgram(
@@ -109,7 +109,7 @@ public class PackagedProgramUtilsPipelineTest {
 
         Configuration config = new Configuration();
         config.set(
-                PipelineOptions.SERIALIZATION_CONFIG,
+                StreamingPipelineOptions.SERIALIZATION_CONFIG,
                 Collections.singletonList(
                         String.format(
                                 "%s: {type: kryo, kryo-type: default, class: %s}",

@@ -33,9 +33,9 @@ import java.util.Collection;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** An {@link PipelineExecutorFactory} for the {@link EmbeddedExecutor}. */
+/** An {@link PipelineExecutorFactory} for the {@link EmbeddedStreamingExecutor}. */
 @Internal
-public class EmbeddedExecutorFactory implements PipelineExecutorFactory {
+public class EmbeddedStreamingExecutorFactory implements PipelineExecutorFactory {
 
     private final Collection<JobID> submittedJobIds;
 
@@ -44,7 +44,7 @@ public class EmbeddedExecutorFactory implements PipelineExecutorFactory {
     private final ScheduledExecutor retryExecutor;
 
     /**
-     * Creates an {@link EmbeddedExecutorFactory}.
+     * Creates an {@link EmbeddedStreamingExecutorFactory}.
      *
      * @param submittedJobIds a list that is going to be filled with the job ids of the new jobs
      *     that will be submitted. This is essentially used to return the submitted job ids to the
@@ -52,7 +52,7 @@ public class EmbeddedExecutorFactory implements PipelineExecutorFactory {
      * @param dispatcherGateway the dispatcher of the cluster which is going to be used to submit
      *     jobs.
      */
-    public EmbeddedExecutorFactory(
+    public EmbeddedStreamingExecutorFactory(
             final Collection<JobID> submittedJobIds,
             final DispatcherGateway dispatcherGateway,
             final ScheduledExecutor retryExecutor) {

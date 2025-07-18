@@ -29,7 +29,7 @@ import org.apache.flink.configuration.RestOptions;
 import org.apache.flink.configuration.SlowTaskDetectorOptions;
 import org.apache.flink.connector.file.sink.utils.IntegerFileSinkTestDataUtils;
 import org.apache.flink.connector.file.sink.utils.PartSizeAndCheckpointRollingPolicy;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -124,7 +124,7 @@ class FileSinkSpeculativeITCase {
             }
         }
 
-        JobClient client = env.executeAsync("FileSinkSpeculativeITCase");
+        StreamingJobClient client = env.executeAsync("FileSinkSpeculativeITCase");
         client.getJobExecutionResult().get();
     }
 

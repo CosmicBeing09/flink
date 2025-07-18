@@ -24,7 +24,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.configuration.RpcOptions;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
@@ -186,7 +186,7 @@ public final class CollectDynamicSink implements DynamicTableSink {
         }
 
         @Override
-        public ResultProvider setJobClient(JobClient jobClient) {
+        public ResultProvider setJobClient(StreamingJobClient jobClient) {
             iterator.setJobClient(jobClient);
             return this;
         }

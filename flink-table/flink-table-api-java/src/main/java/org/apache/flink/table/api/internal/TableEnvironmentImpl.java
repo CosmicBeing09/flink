@@ -23,7 +23,7 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.table.api.CompiledPlan;
@@ -1029,7 +1029,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
                         defaultJobName,
                         jobStatusHookList);
         try {
-            JobClient jobClient = execEnv.executeAsync(pipeline);
+            StreamingJobClient jobClient = execEnv.executeAsync(pipeline);
             final List<Column> columns = new ArrayList<>();
             Long[] affectedRowCounts = new Long[transformations.size()];
             for (int i = 0; i < transformations.size(); ++i) {
@@ -1051,7 +1051,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
                 try {
                     result.await();
                 } catch (InterruptedException | ExecutionException e) {
-                    result.getJobClient().ifPresent(JobClient::cancel);
+                    result.getJobClient().ifPresent(StreamingJobClient::cancelStreamingJob);
                     throw new TableException("Fail to wait execution finish.", e);
                 }
             }
@@ -1069,7 +1069,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
 
         Pipeline pipeline = generatePipelineFromQueryOperation(operation, transformations);
         try {
-            JobClient jobClient = execEnv.executeAsync(pipeline);
+            StreamingJobClient jobClient = execEnv.executeAsync(pipeline);
             ResultProvider resultProvider = sinkOperation.getSelectResultProvider();
             // We must reset resultProvider as we might to reuse it between different jobs.
             resultProvider.reset();

@@ -27,7 +27,7 @@ import org.apache.flink.client.program.ProgramInvocationException;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.DeploymentOptions;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.configuration.StateRecoveryOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.core.execution.RecoveryClaimMode;
@@ -91,7 +91,7 @@ class JarRunHandlerParameterTest
                     .set(StateRecoveryOptions.SAVEPOINT_IGNORE_UNCLAIMED_STATE, false)
                     .set(StateRecoveryOptions.RESTORE_MODE, RESTORE_MODE)
                     .set(
-                            PipelineOptions.PARALLELISM_OVERRIDES,
+                            StreamingPipelineOptions.PARALLELISM_OVERRIDES,
                             new HashMap<String, String>() {
                                 {
                                     put("v1", "10");
@@ -277,7 +277,7 @@ class JarRunHandlerParameterTest
                         getUnresolvedJarMessageParameters(),
                         jarWithManifest));
         ExecutionPlan executionPlan = LAST_SUBMITTED_EXECUTION_PLAN_REFERENCE.get();
-        assertThat(executionPlan.getJobConfiguration().get(PipelineOptions.PARALLELISM_OVERRIDES))
+        assertThat(executionPlan.getJobConfiguration().get(StreamingPipelineOptions.PARALLELISM_OVERRIDES))
                 .containsOnlyKeys("v1")
                 .containsEntry("v1", "10");
     }

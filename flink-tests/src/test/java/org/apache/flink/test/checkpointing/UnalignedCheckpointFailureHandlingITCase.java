@@ -23,7 +23,7 @@ import org.apache.flink.api.connector.source.lib.NumberSequenceSource;
 import org.apache.flink.configuration.IllegalConfigurationException;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.state.CheckpointStateOutputStream;
@@ -109,7 +109,7 @@ public class UnalignedCheckpointFailureHandlingITCase {
         // use non-snapshotting backend to test channel state persistence integration with
         // checkpoint storage
         MockStateBackend stateBackend = new MockStateBackend(MockSnapshotSupplier.EMPTY);
-        JobClient jobClient =
+        StreamingJobClient jobClient =
                 StateBackendUtils.configureStateBackendAndExecuteAsync(env, stateBackend);
 
         JobID jobID = jobClient.getJobID();

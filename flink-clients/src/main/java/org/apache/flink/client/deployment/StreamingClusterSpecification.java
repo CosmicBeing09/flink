@@ -19,12 +19,12 @@
 package org.apache.flink.client.deployment;
 
 /** Description of the cluster to start by the {@link ClusterDescriptor}. */
-public final class ClusterSpecification {
+public final class StreamingClusterSpecification {
     private final int masterMemoryMB;
     private final int taskManagerMemoryMB;
     private final int slotsPerTaskManager;
 
-    private ClusterSpecification(
+    private StreamingClusterSpecification(
             int masterMemoryMB, int taskManagerMemoryMB, int slotsPerTaskManager) {
         this.masterMemoryMB = masterMemoryMB;
         this.taskManagerMemoryMB = taskManagerMemoryMB;
@@ -55,29 +55,29 @@ public final class ClusterSpecification {
                 + '}';
     }
 
-    /** Builder for the {@link ClusterSpecification} instance. */
-    public static class ClusterSpecificationBuilder {
+    /** Builder for the {@link StreamingClusterSpecification} instance. */
+    public static class StreamingClusterSpecificationBuilder {
         private int masterMemoryMB = 768;
         private int taskManagerMemoryMB = 1024;
         private int slotsPerTaskManager = 1;
 
-        public ClusterSpecificationBuilder setMasterMemoryMB(int masterMemoryMB) {
+        public StreamingClusterSpecificationBuilder setMasterMemoryMB(int masterMemoryMB) {
             this.masterMemoryMB = masterMemoryMB;
             return this;
         }
 
-        public ClusterSpecificationBuilder setTaskManagerMemoryMB(int taskManagerMemoryMB) {
+        public StreamingClusterSpecificationBuilder setTaskManagerMemoryMB(int taskManagerMemoryMB) {
             this.taskManagerMemoryMB = taskManagerMemoryMB;
             return this;
         }
 
-        public ClusterSpecificationBuilder setSlotsPerTaskManager(int slotsPerTaskManager) {
+        public StreamingClusterSpecificationBuilder setSlotsPerTaskManager(int slotsPerTaskManager) {
             this.slotsPerTaskManager = slotsPerTaskManager;
             return this;
         }
 
-        public ClusterSpecification createClusterSpecification() {
-            return new ClusterSpecification(
+        public StreamingClusterSpecification createClusterSpecification() {
+            return new StreamingClusterSpecification(
                     masterMemoryMB, taskManagerMemoryMB, slotsPerTaskManager);
         }
     }

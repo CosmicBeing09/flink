@@ -22,7 +22,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.util.FlinkRuntimeException;
 
@@ -34,13 +34,13 @@ import java.util.concurrent.CompletableFuture;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * A {@link JobClient} that only allows asking for the job id of the job it is attached to.
+ * A {@link StreamingJobClient} that only allows asking for the job id of the job it is attached to.
  *
  * <p>This is used in web submission, where we do not want the Web UI to have jobs blocking threads
  * while waiting for their completion.
  */
 @PublicEvolving
-public class WebSubmissionJobClient implements JobClient {
+public class WebSubmissionJobClient implements StreamingJobClient {
 
     private final JobID jobId;
 
@@ -60,7 +60,7 @@ public class WebSubmissionJobClient implements JobClient {
     }
 
     @Override
-    public CompletableFuture<Void> cancel() {
+    public CompletableFuture<Void> cancelStreamingJob() {
         throw new FlinkRuntimeException(
                 "Cancelling the job is not supported by the Job Client when in Web Submission.");
     }

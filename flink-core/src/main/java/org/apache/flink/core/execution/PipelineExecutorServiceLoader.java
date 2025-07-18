@@ -39,7 +39,7 @@ public interface PipelineExecutorServiceLoader {
      * @throws Exception if there is more than one compatible factories, or something went wrong
      *     when loading the registered factories.
      */
-    PipelineExecutorFactory getExecutorFactory(final Configuration configuration) throws Exception;
+    PipelineExecutorFactory getStreamingExecutorFactory(final Configuration configuration) throws Exception;
 
     /** Loads and returns a stream of the names of all available executors. */
     Stream<String> getExecutorNames();

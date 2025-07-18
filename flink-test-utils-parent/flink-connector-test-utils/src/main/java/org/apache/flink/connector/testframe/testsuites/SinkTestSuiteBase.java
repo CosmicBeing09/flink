@@ -39,7 +39,7 @@ import org.apache.flink.connector.testframe.source.FromElementsSource;
 import org.apache.flink.connector.testframe.utils.CollectIteratorAssertions;
 import org.apache.flink.connector.testframe.utils.MetricQuerier;
 import org.apache.flink.core.execution.CheckpointingMode;
-import org.apache.flink.core.execution.JobClient;
+import org.apache.flink.core.execution.StreamingJobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.RestClient;
@@ -147,7 +147,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
         tryCreateSink(dataStream, externalContext, sinkSettings)
                 .setParallelism(1)
                 .name("sinkInSinkTest");
-        final JobClient jobClient = execEnv.executeAsync("DataStream Sink Test");
+        final StreamingJobClient jobClient = execEnv.executeAsync("DataStream Sink Test");
 
         waitForJobStatus(jobClient, Collections.singletonList(JobStatus.FINISHED));
 
@@ -263,7 +263,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
          * the specified number of records have been consumed, a collect sink is need to be watched.
          */
         CollectResultIterator<T> iterator = addCollectSink(source);
-        final JobClient jobClient = execEnv.executeAsync("Restart Test");
+        final StreamingJobClient jobClient = execEnv.executeAsync("Restart Test");
         iterator.setJobClient(jobClient);
 
         // Step 4: Wait for the expected result and stop Flink job with a savepoint
@@ -318,7 +318,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
         DataStream<T> sinkStream = restartSource.returns(externalContext.getProducedType());
         tryCreateSink(sinkStream, externalContext, sinkSettings).setParallelism(afterParallelism);
         addCollectSink(restartSource);
-        final JobClient restartJobClient = restartEnv.executeAsync("Restart Test");
+        final StreamingJobClient restartJobClient = restartEnv.executeAsync("Restart Test");
 
         try {
             // Check the result
@@ -373,7 +373,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
         tryCreateSink(dataStream, externalContext, sinkSettings)
                 .name(sinkName)
                 .setParallelism(parallelism);
-        final JobClient jobClient = env.executeAsync("Metrics Test");
+        final StreamingJobClient jobClient = env.executeAsync("Metrics Test");
         final MetricQuerier queryRestClient = new MetricQuerier(new Configuration());
         final ExecutorService executorService = Executors.newCachedThreadPool();
         try {
@@ -561,7 +561,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
         return TestingSinkSettings.builder().setCheckpointingMode(checkpointingMode).build();
     }
 
-    private void killJob(JobClient jobClient) throws Exception {
+    private void killJob(StreamingJobClient jobClient) throws Exception {
         terminateJob(jobClient);
         waitForJobStatus(jobClient, Collections.singletonList(JobStatus.CANCELED));
     }

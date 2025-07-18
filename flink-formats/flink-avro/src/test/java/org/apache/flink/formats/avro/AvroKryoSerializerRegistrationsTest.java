@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.serialization.SerializerConfigImpl;
 import org.apache.flink.api.java.typeutils.runtime.kryo.KryoSerializer;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.Registration;
@@ -113,7 +113,7 @@ class AvroKryoSerializerRegistrationsTest {
     @Test
     void testDisableForceKryoAvroRegister() {
         Configuration configuration = new Configuration();
-        configuration.set(PipelineOptions.FORCE_KRYO_AVRO, false);
+        configuration.set(StreamingPipelineOptions.FORCE_KRYO_AVRO, false);
         ExecutionConfig executionConfig = new ExecutionConfig(configuration);
         final Kryo kryo =
                 new KryoSerializer<>(Integer.class, executionConfig.getSerializerConfig())

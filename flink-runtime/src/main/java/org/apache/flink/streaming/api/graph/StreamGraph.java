@@ -34,7 +34,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.typeutils.MissingTypeInfo;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
@@ -118,8 +118,8 @@ public class StreamGraph implements Pipeline {
     private LineageGraph lineageGraph;
     private JobType jobType = JobType.STREAMING;
     private Map<String, ResourceProfile> slotSharingGroupResources;
-    private PipelineOptions.VertexDescriptionMode descriptionMode =
-            PipelineOptions.VertexDescriptionMode.TREE;
+    private StreamingPipelineOptions.VertexDescriptionMode descriptionMode =
+            StreamingPipelineOptions.VertexDescriptionMode.TREE;
     private boolean vertexNameIncludeIndexPrefix = false;
 
     private final List<JobStatusHook> jobStatusHooks = new ArrayList<>();
@@ -226,7 +226,7 @@ public class StreamGraph implements Pipeline {
     }
 
     public Collection<Tuple2<String, DistributedCache.DistributedCacheEntry>> getUserArtifacts() {
-        return Optional.ofNullable(jobConfiguration.get(PipelineOptions.CACHED_FILES))
+        return Optional.ofNullable(jobConfiguration.get(StreamingPipelineOptions.CACHED_FILES))
                 .map(DistributedCache::parseCachedFilesFromString)
                 .orElse(new ArrayList<>());
     }
@@ -285,12 +285,12 @@ public class StreamGraph implements Pipeline {
     // Checkpointing
 
     public boolean isChainingEnabled() {
-        return jobConfiguration.get(PipelineOptions.OPERATOR_CHAINING);
+        return jobConfiguration.get(StreamingPipelineOptions.OPERATOR_CHAINING);
     }
 
     public boolean isChainingOfOperatorsWithDifferentMaxParallelismEnabled() {
         return jobConfiguration.get(
-                PipelineOptions.OPERATOR_CHAINING_CHAIN_OPERATORS_WITH_DIFFERENT_MAX_PARALLELISM);
+                StreamingPipelineOptions.OPERATOR_CHAINING_CHAIN_OPERATORS_WITH_DIFFERENT_MAX_PARALLELISM);
     }
 
     public boolean isIterative() {
@@ -970,11 +970,11 @@ public class StreamGraph implements Pipeline {
         this.autoParallelismEnabled = autoParallelismEnabled;
     }
 
-    public PipelineOptions.VertexDescriptionMode getVertexDescriptionMode() {
+    public StreamingPipelineOptions.VertexDescriptionMode getVertexDescriptionMode() {
         return descriptionMode;
     }
 
-    public void setVertexDescriptionMode(PipelineOptions.VertexDescriptionMode mode) {
+    public void setVertexDescriptionMode(StreamingPipelineOptions.VertexDescriptionMode mode) {
         this.descriptionMode = mode;
     }
 

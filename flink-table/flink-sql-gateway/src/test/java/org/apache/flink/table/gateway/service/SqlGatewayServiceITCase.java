@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.client.program.rest.RestClusterClient;
 import org.apache.flink.configuration.CheckpointingOptions;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.configuration.PipelineOptions;
+import org.apache.flink.configuration.StreamingPipelineOptions;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -472,7 +472,7 @@ public class SqlGatewayServiceITCase {
         Configuration configuration = new Configuration(MINI_CLUSTER.getClientConfiguration());
 
         String pipelineName = "test-job";
-        configuration.set(PipelineOptions.NAME, pipelineName);
+        configuration.set(StreamingPipelineOptions.NAME, pipelineName);
 
         // running jobs
         String sourceDdl = "CREATE TABLE source (a STRING) WITH ('connector'='datagen');";
@@ -519,7 +519,7 @@ public class SqlGatewayServiceITCase {
         Configuration configuration = new Configuration(MINI_CLUSTER.getClientConfiguration());
 
         String pipelineName = "test-describe-job";
-        configuration.set(PipelineOptions.NAME, pipelineName);
+        configuration.set(StreamingPipelineOptions.NAME, pipelineName);
 
         // running jobs
         String sourceDdl = "CREATE TABLE source (a STRING) WITH ('connector'='datagen');";

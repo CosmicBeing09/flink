@@ -48,7 +48,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * flow can be reached via backwards traversal.
  */
 @Internal
-public class Plan implements Visitable<Operator<?>>, Pipeline {
+public class StreamingExecutionPlan implements Visitable<Operator<?>>, Pipeline {
 
     /**
      * A collection of all sinks in the plan. Since the plan is traversed from the sinks to the
@@ -57,7 +57,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
     protected final List<GenericDataSinkBase<?>> sinks = new ArrayList<>(4);
 
     /** The name of the job. */
-    protected String jobName;
+    protected String streamName;
 
     /** The default parallelism to use for nodes that have no explicitly specified parallelism. */
     protected int defaultParallelism = ExecutionConfig.PARALLELISM_DEFAULT;
@@ -85,7 +85,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param sinks The collection will the sinks of the job's data flow.
      * @param jobName The name to display for the job.
      */
-    public Plan(Collection<? extends GenericDataSinkBase<?>> sinks, String jobName) {
+    public StreamingExecutionPlan(Collection<? extends GenericDataSinkBase<?>> sinks, String jobName) {
         this(sinks, jobName, ExecutionConfig.PARALLELISM_DEFAULT);
     }
 
@@ -100,12 +100,12 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param jobName The name to display for the job.
      * @param defaultParallelism The default parallelism for the job.
      */
-    public Plan(
+    public StreamingExecutionPlan(
             Collection<? extends GenericDataSinkBase<?>> sinks,
             String jobName,
             int defaultParallelism) {
         this.sinks.addAll(sinks);
-        this.jobName = jobName;
+        this.streamName = jobName;
         this.defaultParallelism = defaultParallelism;
     }
 
@@ -119,7 +119,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param sink The data sink of the data flow.
      * @param jobName The name to display for the job.
      */
-    public Plan(GenericDataSinkBase<?> sink, String jobName) {
+    public StreamingExecutionPlan(GenericDataSinkBase<?> sink, String jobName) {
         this(sink, jobName, ExecutionConfig.PARALLELISM_DEFAULT);
     }
 
@@ -135,7 +135,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param jobName The name to display for the job.
      * @param defaultParallelism The default parallelism for the job.
      */
-    public Plan(GenericDataSinkBase<?> sink, String jobName, int defaultParallelism) {
+    public StreamingExecutionPlan(GenericDataSinkBase<?> sink, String jobName, int defaultParallelism) {
         this(Collections.<GenericDataSinkBase<?>>singletonList(sink), jobName, defaultParallelism);
     }
 
@@ -149,7 +149,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      *
      * @param sinks The collection will the sinks of the data flow.
      */
-    public Plan(Collection<? extends GenericDataSinkBase<?>> sinks) {
+    public StreamingExecutionPlan(Collection<? extends GenericDataSinkBase<?>> sinks) {
         this(sinks, ExecutionConfig.PARALLELISM_DEFAULT);
     }
 
@@ -164,7 +164,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param sinks The collection will the sinks of the data flow.
      * @param defaultParallelism The default parallelism for the job.
      */
-    public Plan(Collection<? extends GenericDataSinkBase<?>> sinks, int defaultParallelism) {
+    public StreamingExecutionPlan(Collection<? extends GenericDataSinkBase<?>> sinks, int defaultParallelism) {
         this(sinks, "Flink Job at " + Calendar.getInstance().getTime(), defaultParallelism);
     }
 
@@ -177,7 +177,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      *
      * @param sink The data sink of the data flow.
      */
-    public Plan(GenericDataSinkBase<?> sink) {
+    public StreamingExecutionPlan(GenericDataSinkBase<?> sink) {
         this(sink, ExecutionConfig.PARALLELISM_DEFAULT);
     }
 
@@ -191,7 +191,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @param sink The data sink of the data flow.
      * @param defaultParallelism The default parallelism for the job.
      */
-    public Plan(GenericDataSinkBase<?> sink, int defaultParallelism) {
+    public StreamingExecutionPlan(GenericDataSinkBase<?> sink, int defaultParallelism) {
         this(sink, "Flink Job at " + Calendar.getInstance().getTime(), defaultParallelism);
     }
 
@@ -225,7 +225,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      * @return The name of the job.
      */
     public String getJobName() {
-        return this.jobName;
+        return this.streamName;
     }
 
     /**
@@ -235,7 +235,7 @@ public class Plan implements Visitable<Operator<?>>, Pipeline {
      */
     public void setJobName(String jobName) {
         checkNotNull(jobName, "The job name must not be null.");
-        this.jobName = jobName;
+        this.streamName = jobName;
     }
 
     /**
