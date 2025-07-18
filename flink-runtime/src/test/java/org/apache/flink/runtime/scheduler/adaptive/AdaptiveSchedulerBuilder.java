@@ -65,8 +65,8 @@ public class AdaptiveSchedulerBuilder {
 
     private final JobGraph jobGraph;
 
-    private final ComponentMainThreadExecutor mainThreadExecutor;
-    private final ScheduledExecutorService executorService;
+    private final ComponentMainThreadExecutor componentMainThreadExecutor;
+    private final ScheduledExecutorService scheduledExecutorService;
 
     @Nullable private JobResourceRequirements jobResourceRequirements;
 
@@ -111,7 +111,7 @@ public class AdaptiveSchedulerBuilder {
             ComponentMainThreadExecutor mainThreadExecutor,
             ScheduledExecutorService executorService) {
         this.jobGraph = jobGraph;
-        this.mainThreadExecutor = mainThreadExecutor;
+        this.componentMainThreadExecutor = mainThreadExecutor;
 
         this.declarativeSlotPool =
                 new DefaultDeclarativeSlotPool(
@@ -122,7 +122,7 @@ public class AdaptiveSchedulerBuilder {
                         rpcTimeout,
                         Duration.ZERO,
                         mainThreadExecutor);
-        this.executorService = executorService;
+        this.scheduledExecutorService = executorService;
     }
 
     public AdaptiveSchedulerBuilder setJobResourceRequirements(
@@ -249,8 +249,8 @@ public class AdaptiveSchedulerBuilder {
                         jobMasterConfiguration,
                         userCodeLoader,
                         new DefaultExecutionDeploymentTracker(),
-                        executorService,
-                        executorService,
+                        scheduledExecutorService,
+                        scheduledExecutorService,
                         rpcTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
@@ -274,14 +274,14 @@ public class AdaptiveSchedulerBuilder {
                                 declarativeSlotPool,
                                 jobMasterConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY))
                         : slotAllocator,
-                executorService,
+                scheduledExecutorService,
                 userCodeLoader,
                 checkpointsCleaner,
                 checkpointRecoveryFactory,
                 jobManagerJobMetricGroup,
                 restartBackoffTimeStrategy,
                 initializationTimestamp,
-                mainThreadExecutor,
+                componentMainThreadExecutor,
                 fatalErrorHandler,
                 jobStatusListener,
                 failureEnrichers,
