@@ -136,34 +136,34 @@ public class CompositeTypeSerializerUtil {
 
     public static class IntermediateCompatibilityResult<T> {
 
-        private final TypeSerializerSchemaCompatibility.Type compatibilityType;
+        private final TypeSerializerSchemaCompatibility.CompatibilityType compatibilityType;
         private final TypeSerializer<?>[] nestedSerializers;
 
         static <T> IntermediateCompatibilityResult<T> definedCompatibleAsIsResult(
                 TypeSerializer<?>[] originalSerializers) {
             return new IntermediateCompatibilityResult<>(
-                    TypeSerializerSchemaCompatibility.Type.COMPATIBLE_AS_IS, originalSerializers);
+                    TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_AS_IS, originalSerializers);
         }
 
         static <T> IntermediateCompatibilityResult<T> definedIncompatibleResult() {
             return new IntermediateCompatibilityResult<>(
-                    TypeSerializerSchemaCompatibility.Type.INCOMPATIBLE, null);
+                    TypeSerializerSchemaCompatibility.CompatibilityType.INCOMPATIBLE, null);
         }
 
         static <T> IntermediateCompatibilityResult<T> definedCompatibleAfterMigrationResult() {
             return new IntermediateCompatibilityResult<>(
-                    TypeSerializerSchemaCompatibility.Type.COMPATIBLE_AFTER_MIGRATION, null);
+                    TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_AFTER_MIGRATION, null);
         }
 
         static <T> IntermediateCompatibilityResult<T> undefinedReconfigureResult(
                 TypeSerializer<?>[] reconfiguredNestedSerializers) {
             return new IntermediateCompatibilityResult<>(
-                    TypeSerializerSchemaCompatibility.Type.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
+                    TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
                     reconfiguredNestedSerializers);
         }
 
         private IntermediateCompatibilityResult(
-                TypeSerializerSchemaCompatibility.Type compatibilityType,
+                TypeSerializerSchemaCompatibility.CompatibilityType compatibilityType,
                 TypeSerializer<?>[] nestedSerializers) {
             this.compatibilityType = checkNotNull(compatibilityType);
             this.nestedSerializers = nestedSerializers;
@@ -171,27 +171,27 @@ public class CompositeTypeSerializerUtil {
 
         public boolean isCompatibleWithReconfiguredSerializer() {
             return compatibilityType
-                    == TypeSerializerSchemaCompatibility.Type
+                    == TypeSerializerSchemaCompatibility.CompatibilityType
                             .COMPATIBLE_WITH_RECONFIGURED_SERIALIZER;
         }
 
         public boolean isCompatibleAsIs() {
-            return compatibilityType == TypeSerializerSchemaCompatibility.Type.COMPATIBLE_AS_IS;
+            return compatibilityType == TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_AS_IS;
         }
 
         public boolean isCompatibleAfterMigration() {
             return compatibilityType
-                    == TypeSerializerSchemaCompatibility.Type.COMPATIBLE_AFTER_MIGRATION;
+                    == TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_AFTER_MIGRATION;
         }
 
         public boolean isIncompatible() {
-            return compatibilityType == TypeSerializerSchemaCompatibility.Type.INCOMPATIBLE;
+            return compatibilityType == TypeSerializerSchemaCompatibility.CompatibilityType.INCOMPATIBLE;
         }
 
         public TypeSerializerSchemaCompatibility<T> getFinalResult() {
             checkState(
                     compatibilityType
-                            != TypeSerializerSchemaCompatibility.Type
+                            != TypeSerializerSchemaCompatibility.CompatibilityType
                                     .COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
                     "unable to build final result if intermediate compatibility type is COMPATIBLE_WITH_RECONFIGURED_SERIALIZER.");
             switch (compatibilityType) {
@@ -208,9 +208,9 @@ public class CompositeTypeSerializerUtil {
 
         public TypeSerializer<?>[] getNestedSerializers() {
             checkState(
-                    compatibilityType == TypeSerializerSchemaCompatibility.Type.COMPATIBLE_AS_IS
+                    compatibilityType == TypeSerializerSchemaCompatibility.CompatibilityType.COMPATIBLE_AS_IS
                             || compatibilityType
-                                    == TypeSerializerSchemaCompatibility.Type
+                                    == TypeSerializerSchemaCompatibility.CompatibilityType
                                             .COMPATIBLE_WITH_RECONFIGURED_SERIALIZER,
                     "only intermediate compatibility types COMPATIBLE_AS_IS and COMPATIBLE_WITH_RECONFIGURED_SERIALIZER have nested serializers.");
             return nestedSerializers;
