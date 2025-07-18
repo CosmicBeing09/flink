@@ -126,7 +126,7 @@ public class SingleInputGateFactory {
         this.partitionRequestListenerTimeout = networkConfig.getPartitionRequestListenerTimeout();
         this.maxRequiredBuffersPerGate = networkConfig.maxRequiredBuffersPerGate();
         this.configuredNetworkBuffersPerChannel =
-                NettyShuffleUtils.getNetworkBuffersPerInputChannel(
+                NettyShuffleUtils.identityNetworkBuffersPerChannel(
                         networkConfig.networkBuffersPerChannel());
         this.floatingNetworkBuffersPerGate = networkConfig.floatingNetworkBuffersPerGate();
         this.batchShuffleCompressionEnabled = networkConfig.isBatchShuffleCompressionEnabled();
