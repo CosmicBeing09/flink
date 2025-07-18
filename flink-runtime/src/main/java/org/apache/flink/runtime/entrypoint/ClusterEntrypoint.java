@@ -564,10 +564,10 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
         final Configuration resultConfiguration =
                 new Configuration(Preconditions.checkNotNull(configuration));
 
-        final String webTmpDir = configuration.get(WebOptions.TMP_DIR);
+        final String webTmpDir = configuration.get(WebOptions.WEB_TEMP_DIRECTORY);
         final File uniqueWebTmpDir = new File(webTmpDir, "flink-web-" + UUID.randomUUID());
 
-        resultConfiguration.set(WebOptions.TMP_DIR, uniqueWebTmpDir.getAbsolutePath());
+        resultConfiguration.set(WebOptions.WEB_TEMP_DIRECTORY, uniqueWebTmpDir.getAbsolutePath());
 
         return resultConfiguration;
     }
@@ -649,7 +649,7 @@ public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErro
     protected void cleanupDirectories(ShutdownBehaviour shutdownBehaviour) throws IOException {
         IOException ioException = null;
 
-        final String webTmpDir = configuration.get(WebOptions.TMP_DIR);
+        final String webTmpDir = configuration.get(WebOptions.WEB_TEMP_DIRECTORY);
 
         try {
             FileUtils.deleteDirectory(new File(webTmpDir));
