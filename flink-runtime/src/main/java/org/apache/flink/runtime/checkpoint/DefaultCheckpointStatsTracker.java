@@ -222,7 +222,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             logCheckpointStatistics(completed);
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onCompletedCheckpoint();
+                checkpointStatsListener.onCheckpointCompleted();
             }
         } finally {
             statsReadWriteLock.unlock();
@@ -240,7 +240,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             logCheckpointStatistics(failed);
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onFailedCheckpoint();
+                checkpointStatsListener.onCheckpointFailed();
             }
         } finally {
             statsReadWriteLock.unlock();
@@ -289,7 +289,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             dirty = true;
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onFailedCheckpoint();
+                checkpointStatsListener.onCheckpointFailed();
             }
         } finally {
             statsReadWriteLock.unlock();

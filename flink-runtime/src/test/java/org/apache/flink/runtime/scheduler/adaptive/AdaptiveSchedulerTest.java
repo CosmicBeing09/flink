@@ -2308,13 +2308,13 @@ public class AdaptiveSchedulerTest {
     @Test
     void testOnCompletedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onCompletedCheckpoint, 1, Integer.MAX_VALUE);
+                CheckpointStatsListener::onCheckpointCompleted, 1, Integer.MAX_VALUE);
     }
 
     @Test
     void testOnFailedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onFailedCheckpoint, 2, 2);
+                CheckpointStatsListener::onCheckpointFailed, 2, 2);
     }
 
     private void testCheckpointStatsEventBeingExecutedInTheMainThread(
