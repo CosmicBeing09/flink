@@ -54,7 +54,7 @@ public interface BufferPool extends BufferProvider, BufferRecycler {
      *
      * @return maximum number of memory segments to use or <tt>-1</tt> if unlimited
      */
-    int getMaxNumberOfMemorySegments();
+    int getMaximumNumberOfMemorySegments();
 
     /**
      * Returns the current size of this buffer pool.

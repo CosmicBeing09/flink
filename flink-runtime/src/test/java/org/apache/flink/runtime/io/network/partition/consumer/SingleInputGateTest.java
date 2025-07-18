@@ -1282,7 +1282,7 @@ class SingleInputGateTest extends InputGateTestBase {
         }
         assertThat(gate.getBufferPool().getNumberOfRequiredMemorySegments())
                 .isEqualTo(minBuffersPerGate);
-        assertThat(gate.getBufferPool().getMaxNumberOfMemorySegments())
+        assertThat(gate.getBufferPool().getMaximumNumberOfMemorySegments())
                 .isEqualTo(maxBuffersPerGate);
     }
 

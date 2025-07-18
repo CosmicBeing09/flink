@@ -353,7 +353,7 @@ public class SortMergeResultPartition extends ResultPartition {
         requestGuaranteedBuffers();
 
         // avoid taking too many buffers in one result partition
-        while (freeSegments.size() < bufferPool.getMaxNumberOfMemorySegments()) {
+        while (freeSegments.size() < bufferPool.getMaximumNumberOfMemorySegments()) {
             MemorySegment segment = bufferPool.requestMemorySegment();
             if (segment == null) {
                 break;

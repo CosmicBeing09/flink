@@ -624,7 +624,7 @@ class LocalBufferPoolTest {
 
         localBufferPool = new LocalBufferPool(networkBufferPool, 1, 2);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
-        assertThat(localBufferPool.getMaxNumberOfMemorySegments()).isEqualTo(2);
+        assertThat(localBufferPool.getMaximumNumberOfMemorySegments()).isEqualTo(2);
 
         Buffer buffer1, buffer2;
 

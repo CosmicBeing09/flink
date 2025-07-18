@@ -310,7 +310,7 @@ public class LocalBufferPool implements BufferPool {
     /**
      * Estimates the number of requested buffers.
      *
-     * @return the same value as {@link #getMaxNumberOfMemorySegments()} for bounded pools. For
+     * @return the same value as {@link #getMaximumNumberOfMemorySegments()} for bounded pools. For
      *     unbounded pools it returns an approximation based upon {@link
      *     #getNumberOfRequiredMemorySegments()}
      */

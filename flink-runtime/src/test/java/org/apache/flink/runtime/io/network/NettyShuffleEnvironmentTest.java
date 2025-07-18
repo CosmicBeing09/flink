@@ -313,10 +313,10 @@ class NettyShuffleEnvironmentTest {
         Task.setupPartitionsAndGates(resultPartitions, inputGates);
 
         // verify buffer pools for the result partitions
-        assertThat(rp1.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
-        assertThat(rp2.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
-        assertThat(rp3.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(expectedBuffers);
-        assertThat(rp4.getBufferPool().getMaxNumberOfMemorySegments())
+        assertThat(rp1.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
+        assertThat(rp2.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
+        assertThat(rp3.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(expectedBuffers);
+        assertThat(rp4.getBufferPool().getMaximumNumberOfMemorySegments())
                 .isEqualTo(expectedRp4Buffers);
 
         for (ResultPartition rp : resultPartitions) {
@@ -333,10 +333,10 @@ class NettyShuffleEnvironmentTest {
         assertThat(ig3.getBufferPool().getNumberOfRequiredMemorySegments()).isOne();
         assertThat(ig4.getBufferPool().getNumberOfRequiredMemorySegments()).isOne();
 
-        assertThat(ig1.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(floatingBuffers);
-        assertThat(ig2.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(floatingBuffers);
-        assertThat(ig3.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(floatingBuffers);
-        assertThat(ig4.getBufferPool().getMaxNumberOfMemorySegments()).isEqualTo(floatingBuffers);
+        assertThat(ig1.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(floatingBuffers);
+        assertThat(ig2.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(floatingBuffers);
+        assertThat(ig3.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(floatingBuffers);
+        assertThat(ig4.getBufferPool().getMaximumNumberOfMemorySegments()).isEqualTo(floatingBuffers);
 
         verify(ig1, times(1)).setupChannels();
         verify(ig2, times(1)).setupChannels();

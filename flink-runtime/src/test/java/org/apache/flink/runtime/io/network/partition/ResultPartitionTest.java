@@ -339,9 +339,9 @@ class ResultPartitionTest {
                 final int maxNumBuffers =
                         networkBuffersPerChannel * partition.getNumberOfSubpartitions()
                                 + floatingNetworkBuffersPerGate;
-                assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(maxNumBuffers);
+                assertThat(bufferPool.getMaximumNumberOfMemorySegments()).isEqualTo(maxNumBuffers);
             } else {
-                assertThat(bufferPool.getMaxNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
+                assertThat(bufferPool.getMaximumNumberOfMemorySegments()).isEqualTo(Integer.MAX_VALUE);
             }
 
         } finally {

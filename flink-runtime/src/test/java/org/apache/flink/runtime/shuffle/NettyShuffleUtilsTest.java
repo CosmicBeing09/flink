@@ -212,14 +212,14 @@ class NettyShuffleUtilsTest {
         }
         inputGate.convertRecoveredInputChannels();
 
-        return inputGate.getBufferPool().getMaxNumberOfMemorySegments();
+        return inputGate.getBufferPool().getMaximumNumberOfMemorySegments();
     }
 
     private int calculateBuffersConsumption(ResultPartition partition) {
         if (!partition.getPartitionType().canBePipelinedConsumed()) {
             return partition.getBufferPool().getNumberOfRequiredMemorySegments();
         } else {
-            return partition.getBufferPool().getMaxNumberOfMemorySegments();
+            return partition.getBufferPool().getMaximumNumberOfMemorySegments();
         }
     }
 }
