@@ -51,19 +51,19 @@ class StateDescriptorTest {
     @Test
     void testInitializeWithSerializer() throws Exception {
         final TypeSerializer<String> serializer = StringSerializer.INSTANCE;
-        final TestStateDescriptor<String> descr = new TestStateDescriptor<>("test", serializer);
+        final TestStateDescriptor<String> stateDescriptor = new TestStateDescriptor<>("test", serializer);
 
-        assertThat(descr.isSerializerInitialized()).isTrue();
-        assertThat(descr.getSerializer()).isNotNull();
-        assertThat(descr.getSerializer()).isInstanceOf(StringSerializer.class);
+        assertThat(stateDescriptor.isSerializerInitialized()).isTrue();
+        assertThat(stateDescriptor.getSerializer()).isNotNull();
+        assertThat(stateDescriptor.getSerializer()).isInstanceOf(StringSerializer.class);
 
         // this should not have any effect
-        descr.initializeSerializerUnlessSet(new ExecutionConfig());
-        assertThat(descr.isSerializerInitialized()).isTrue();
-        assertThat(descr.getSerializer()).isNotNull();
-        assertThat(descr.getSerializer()).isInstanceOf(StringSerializer.class);
+        stateDescriptor.initializeSerializerUnlessSet(new ExecutionConfig());
+        assertThat(stateDescriptor.isSerializerInitialized()).isTrue();
+        assertThat(stateDescriptor.getSerializer()).isNotNull();
+        assertThat(stateDescriptor.getSerializer()).isInstanceOf(StringSerializer.class);
 
-        TestStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(descr);
+        TestStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(stateDescriptor);
         assertThat(clone.isSerializerInitialized()).isTrue();
         assertThat(clone.getSerializer()).isNotNull();
         assertThat(clone.getSerializer()).isInstanceOf(StringSerializer.class);
@@ -71,22 +71,22 @@ class StateDescriptorTest {
 
     @Test
     void testInitializeSerializerBeforeSerialization() throws Exception {
-        final TestStateDescriptor<String> descr = new TestStateDescriptor<>("test", String.class);
+        final TestStateDescriptor<String> stateDescriptor = new TestStateDescriptor<>("test", String.class);
 
-        assertThat(descr.isSerializerInitialized()).isFalse();
+        assertThat(stateDescriptor.isSerializerInitialized()).isFalse();
         try {
-            descr.getSerializer();
+            stateDescriptor.getSerializer();
             fail("should fail with an exception");
         } catch (IllegalStateException ignored) {
         }
 
-        descr.initializeSerializerUnlessSet(new ExecutionConfig());
+        stateDescriptor.initializeSerializerUnlessSet(new ExecutionConfig());
 
-        assertThat(descr.isSerializerInitialized()).isTrue();
-        assertThat(descr.getSerializer()).isNotNull();
-        assertThat(descr.getSerializer()).isInstanceOf(StringSerializer.class);
+        assertThat(stateDescriptor.isSerializerInitialized()).isTrue();
+        assertThat(stateDescriptor.getSerializer()).isNotNull();
+        assertThat(stateDescriptor.getSerializer()).isInstanceOf(StringSerializer.class);
 
-        TestStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(descr);
+        TestStateDescriptor<String> clone = CommonTestUtils.createCopySerializable(stateDescriptor);
 
         assertThat(clone.isSerializerInitialized()).isTrue();
         assertThat(clone.getSerializer()).isNotNull();
