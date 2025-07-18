@@ -85,7 +85,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Stream;
 
 import static org.apache.flink.client.cli.CliFrontendParser.DETACHED_OPTION;
-import static org.apache.flink.client.cli.CliFrontendParser.YARN_DETACHED_OPTION;
+import static org.apache.flink.client.cli.CliFrontendParser.DEPRECATED_YARN_DETACHED_OPTION;
 import static org.apache.flink.configuration.HighAvailabilityOptions.HA_CLUSTER_ID;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
@@ -117,8 +117,8 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
     private final Option queue;
     private final Option shipPath;
     private final Option flinkJar;
-    private final Option jmMemory;
-    private final Option tmMemory;
+    private final Option jobManagerMemoryOption;
+    private final Option taskManagerMemoryOption;
     private final Option slots;
     private final Option zookeeperNamespace;
     private final Option nodeLabel;
@@ -209,13 +209,13 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
                         "Ship files in the specified directory (t for transfer)");
         flinkJar =
                 new Option(shortPrefix + "j", longPrefix + "jar", true, "Path to Flink jar file");
-        jmMemory =
+        jobManagerMemoryOption =
                 new Option(
                         shortPrefix + "jm",
                         longPrefix + "jobManagerMemory",
                         true,
                         "Memory for JobManager Container with optional unit (default: MB)");
-        tmMemory =
+        taskManagerMemoryOption =
                 new Option(
                         shortPrefix + "tm",
                         longPrefix + "taskManagerMemory",
@@ -267,15 +267,15 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
 
         allOptions = new Options();
         allOptions.addOption(flinkJar);
-        allOptions.addOption(jmMemory);
-        allOptions.addOption(tmMemory);
+        allOptions.addOption(jobManagerMemoryOption);
+        allOptions.addOption(taskManagerMemoryOption);
         allOptions.addOption(queue);
         allOptions.addOption(query);
         allOptions.addOption(shipPath);
         allOptions.addOption(slots);
         allOptions.addOption(dynamicproperties);
         allOptions.addOption(DETACHED_OPTION);
-        allOptions.addOption(YARN_DETACHED_OPTION);
+        allOptions.addOption(DEPRECATED_YARN_DETACHED_OPTION);
         allOptions.addOption(name);
         allOptions.addOption(applicationId);
         allOptions.addOption(applicationType);
@@ -411,8 +411,8 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
             effectiveConfiguration.set(DeploymentOptions.TARGET, YarnJobClusterExecutor.NAME);
         }
 
-        if (commandLine.hasOption(jmMemory.getOpt())) {
-            String jmMemoryVal = commandLine.getOptionValue(jmMemory.getOpt());
+        if (commandLine.hasOption(jobManagerMemoryOption.getOpt())) {
+            String jmMemoryVal = commandLine.getOptionValue(jobManagerMemoryOption.getOpt());
             if (!MemorySize.MemoryUnit.hasUnit(jmMemoryVal)) {
                 jmMemoryVal += "m";
             }
@@ -420,8 +420,8 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
                     JobManagerOptions.TOTAL_PROCESS_MEMORY, MemorySize.parse(jmMemoryVal));
         }
 
-        if (commandLine.hasOption(tmMemory.getOpt())) {
-            String tmMemoryVal = commandLine.getOptionValue(tmMemory.getOpt());
+        if (commandLine.hasOption(taskManagerMemoryOption.getOpt())) {
+            String tmMemoryVal = commandLine.getOptionValue(taskManagerMemoryOption.getOpt());
             if (!MemorySize.MemoryUnit.hasUnit(tmMemoryVal)) {
                 tmMemoryVal += "m";
             }
@@ -480,7 +480,7 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
         }
 
         final boolean detached =
-                commandLine.hasOption(YARN_DETACHED_OPTION.getOpt())
+                commandLine.hasOption(DEPRECATED_YARN_DETACHED_OPTION.getOpt())
                         || commandLine.hasOption(DETACHED_OPTION.getOpt());
         configuration.set(DeploymentOptions.ATTACHED, !detached);
 
@@ -531,7 +531,7 @@ public class FlinkYarnSessionCli extends AbstractYarnCli {
     }
 
     private boolean isDetachedOption(Option option) {
-        return option.getOpt().equals(YARN_DETACHED_OPTION.getOpt())
+        return option.getOpt().equals(DEPRECATED_YARN_DETACHED_OPTION.getOpt())
                 || option.getOpt().equals(DETACHED_OPTION.getOpt());
     }
 

@@ -42,7 +42,7 @@ import static org.apache.flink.client.cli.CliFrontendParser.DETACHED_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.JAR_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.PARALLELISM_OPTION;
 import static org.apache.flink.client.cli.CliFrontendParser.SHUTDOWN_IF_ATTACHED_OPTION;
-import static org.apache.flink.client.cli.CliFrontendParser.YARN_DETACHED_OPTION;
+import static org.apache.flink.client.cli.CliFrontendParser.DEPRECATED_YARN_DETACHED_OPTION;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.containsPythonDependencyOptions;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.createPythonProgramOptions;
 import static org.apache.flink.client.cli.ProgramOptionsUtils.isPythonEntryPoint;
@@ -62,9 +62,9 @@ public class ProgramOptions extends CommandLineOptions {
 
     private final int parallelism;
 
-    private final boolean detachedMode;
+    private final boolean detachedExecutionMode;
 
-    private final boolean shutdownOnAttachedExit;
+    private final boolean shutdownIfAttachedClusterExits;
 
     private final SavepointRestoreSettings savepointSettings;
 
@@ -112,10 +112,10 @@ public class ProgramOptions extends CommandLineOptions {
             parallelism = ExecutionConfig.PARALLELISM_DEFAULT;
         }
 
-        detachedMode =
+        detachedExecutionMode =
                 line.hasOption(DETACHED_OPTION.getOpt())
-                        || line.hasOption(YARN_DETACHED_OPTION.getOpt());
-        shutdownOnAttachedExit = line.hasOption(SHUTDOWN_IF_ATTACHED_OPTION.getOpt());
+                        || line.hasOption(DEPRECATED_YARN_DETACHED_OPTION.getOpt());
+        shutdownIfAttachedClusterExits = line.hasOption(SHUTDOWN_IF_ATTACHED_OPTION.getOpt());
 
         this.savepointSettings = CliFrontendParser.createSavepointRestoreSettings(line);
     }
@@ -168,11 +168,11 @@ public class ProgramOptions extends CommandLineOptions {
     }
 
     public boolean getDetachedMode() {
-        return detachedMode;
+        return detachedExecutionMode;
     }
 
     public boolean isShutdownOnAttachedExit() {
-        return shutdownOnAttachedExit;
+        return shutdownIfAttachedClusterExits;
     }
 
     public SavepointRestoreSettings getSavepointRestoreSettings() {

@@ -399,7 +399,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         // Check if we don't exceed YARN's maximum virtual cores.
         final int numYarnMaxVcores = yarnClusterInformationRetriever.getMaxVcores();
 
-        int configuredAmVcores = flinkConfiguration.get(YarnConfigOptions.APP_MASTER_VCORES);
+        int configuredAmVcores = flinkConfiguration.get(YarnConfigOptions.APPLICATION_MASTER_VCORES);
         if (configuredAmVcores > numYarnMaxVcores) {
             throw new IllegalConfigurationException(
                     String.format(
@@ -1250,7 +1250,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
         // Set up resource type requirements for ApplicationMaster
         Resource capability = Records.newRecord(Resource.class);
         capability.setMemorySize(clusterSpecification.getMasterMemoryMB());
-        capability.setVirtualCores(flinkConfiguration.get(YarnConfigOptions.APP_MASTER_VCORES));
+        capability.setVirtualCores(flinkConfiguration.get(YarnConfigOptions.APPLICATION_MASTER_VCORES));
 
         final String customApplicationName = customName != null ? customName : applicationName;
 
