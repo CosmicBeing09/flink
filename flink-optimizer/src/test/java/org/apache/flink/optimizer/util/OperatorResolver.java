@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.util;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichFunction;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.BulkIterationBase;
@@ -38,7 +38,7 @@ public class OperatorResolver implements Visitor<Operator<?>> {
     private final Map<String, List<Operator<?>>> map;
     private Set<Operator<?>> seen;
 
-    public OperatorResolver(Plan p) {
+    public OperatorResolver(StreamGraphPlan p) {
         this.map = new HashMap<String, List<Operator<?>>>();
         this.seen = new HashSet<Operator<?>>();
 

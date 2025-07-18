@@ -21,7 +21,7 @@ package org.apache.flink.table.planner.delegation;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.PipelineOptions;
@@ -29,7 +29,6 @@ import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.JobStatusHook;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.table.api.TableException;
 import org.apache.flink.table.delegation.Executor;
 import org.apache.flink.util.StringUtils;
@@ -61,7 +60,7 @@ public class DefaultExecutor implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @Nullable String defaultJobName) {
@@ -70,7 +69,7 @@ public class DefaultExecutor implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @Nullable String defaultJobName,
@@ -92,7 +91,7 @@ public class DefaultExecutor implements Executor {
                 throw new TableException(String.format("Unsupported runtime mode: %s", mode));
         }
 
-        final StreamGraph streamGraph = executionEnvironment.generateStreamGraph(transformations);
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph = executionEnvironment.generateStreamGraph(transformations);
         setJobName(streamGraph, defaultJobName);
         for (JobStatusHook hook : jobStatusHookList) {
             streamGraph.registerJobStatusHook(hook);
@@ -101,13 +100,13 @@ public class DefaultExecutor implements Executor {
     }
 
     @Override
-    public JobExecutionResult execute(Pipeline pipeline) throws Exception {
-        return executionEnvironment.execute((StreamGraph) pipeline);
+    public JobExecutionResult execute(StreamGraph pipeline) throws Exception {
+        return executionEnvironment.execute((org.apache.flink.streaming.api.graph.StreamGraph) pipeline);
     }
 
     @Override
-    public JobClient executeAsync(Pipeline pipeline) throws Exception {
-        return executionEnvironment.executeAsync((StreamGraph) pipeline);
+    public JobClient executeAsync(StreamGraph pipeline) throws Exception {
+        return executionEnvironment.executeAsync((org.apache.flink.streaming.api.graph.StreamGraph) pipeline);
     }
 
     @Override
@@ -119,7 +118,7 @@ public class DefaultExecutor implements Executor {
         executionEnvironment.getConfig().enableObjectReuse();
     }
 
-    private void setJobName(StreamGraph streamGraph, @Nullable String defaultJobName) {
+    private void setJobName(org.apache.flink.streaming.api.graph.StreamGraph streamGraph, @Nullable String defaultJobName) {
         final String adjustedDefaultJobName =
                 StringUtils.isNullOrWhitespaceOnly(defaultJobName)
                         ? DEFAULT_JOB_NAME

@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.optimizer.iterations;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -33,7 +33,7 @@ import org.apache.flink.examples.java.graph.PageRank.RankAssigner;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.BulkPartialSolutionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.shipping.ShipStrategyType;
@@ -100,8 +100,8 @@ public class PageRankCompilerTest extends CompilerTestBase {
             finalPageRanks.output(new DiscardingOutputFormat<Tuple2<Long, Double>>());
 
             // get the plan and compile it
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sinkPlanNode = (SinkPlanNode) op.getDataSinks().iterator().next();
             BulkIterationPlanNode iterPlanNode =

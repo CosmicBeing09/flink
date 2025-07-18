@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -28,7 +28,7 @@ import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
@@ -52,8 +52,8 @@ public class IterationCompilerTest extends CompilerTestBase {
             IterativeDataSet<Long> iteration = env.generateSequence(-4, 1000).iterate(100);
             iteration.closeWith(iteration).output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             new JobGraphGenerator().compileJobGraph(op);
         } catch (Exception e) {
@@ -83,8 +83,8 @@ public class IterationCompilerTest extends CompilerTestBase {
             iter.closeWith(iter.getWorkset(), iter.getWorkset())
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             new JobGraphGenerator().compileJobGraph(op);
         } catch (Exception e) {
@@ -108,8 +108,8 @@ public class IterationCompilerTest extends CompilerTestBase {
                                     .union(iteration.map(new IdentityMapper<Long>())))
                     .output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             BulkIterationPlanNode iterNode = (BulkIterationPlanNode) sink.getInput().getSource();
@@ -165,8 +165,8 @@ public class IterationCompilerTest extends CompilerTestBase {
                                                     .map(new IdentityMapper<Tuple2<Long, Long>>())))
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             WorksetIterationPlanNode iterNode =

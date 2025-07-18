@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.examples;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
@@ -36,7 +36,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -75,10 +75,10 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
     @Test
     public void testQueryNoStatistics() {
         try {
-            Plan p = getTPCH3Plan();
+            StreamGraphPlan p = getTPCH3Plan();
             p.setExecutionConfig(defaultExecutionConfig);
             // compile
-            final OptimizedPlan plan = compileNoStats(p);
+            final OptimizedStreamGraph plan = compileNoStats(p);
 
             final OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(plan);
 
@@ -164,7 +164,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
      */
     @Test
     public void testQueryWithStatsForRepartitionMerge() throws Exception {
-        Plan p = getTPCH3Plan();
+        StreamGraphPlan p = getTPCH3Plan();
         p.setExecutionConfig(defaultExecutionConfig);
         // set compiler hints
         OperatorResolver cr = getContractResolver(p);
@@ -195,7 +195,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
             boolean hashJoinSecondOkay,
             boolean mergeJoinOkay)
             throws Exception {
-        Plan p = getTPCH3Plan();
+        StreamGraphPlan p = getTPCH3Plan();
         p.setExecutionConfig(defaultExecutionConfig);
         testQueryGeneric(
                 p,
@@ -211,7 +211,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
     }
 
     private void testQueryGeneric(
-            Plan p,
+            StreamGraphPlan p,
             long orderSize,
             long lineitemSize,
             float orderSelectivity,
@@ -235,7 +235,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
             joiner.getCompilerHints().setFilterFactor(joinSelectivity);
 
             // compile
-            final OptimizedPlan plan = compileWithStats(p);
+            final OptimizedStreamGraph plan = compileWithStats(p);
             final OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(plan);
 
             // get the nodes from the final plan
@@ -427,11 +427,11 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
         }
     }
 
-    public static Plan getTPCH3Plan() throws Exception {
+    public static StreamGraphPlan getTPCH3Plan() throws Exception {
         return tpch3(new String[] {DEFAULT_PARALLELISM_STRING, IN_FILE, IN_FILE, OUT_FILE});
     }
 
-    public static Plan tpch3(String[] args) throws Exception {
+    public static StreamGraphPlan tpch3(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 

@@ -31,7 +31,7 @@ import org.apache.flink.optimizer.dataproperties.GlobalProperties;
 import org.apache.flink.optimizer.dataproperties.LocalProperties;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
@@ -56,7 +56,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class PlanJSONDumpGenerator {
+public class StreamGraphJSONDumpGenerator {
 
     private Map<DumpableNode<?>, Integer> nodeIds; // resolves pact nodes to ids
 
@@ -74,7 +74,7 @@ public class PlanJSONDumpGenerator {
         return encodeForHTML;
     }
 
-    public void dumpPactPlanAsJSON(List<DataSinkNode> nodes, PrintWriter writer) {
+    public void dumpPactStreamGraphAsJSON(List<DataSinkNode> nodes, PrintWriter writer) {
         @SuppressWarnings("unchecked")
         List<DumpableNode<?>> n = (List<DumpableNode<?>>) (List<?>) nodes;
         compilePlanToJSON(n, writer);
@@ -83,11 +83,11 @@ public class PlanJSONDumpGenerator {
     public String getPactPlanAsJSON(List<DataSinkNode> nodes) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        dumpPactPlanAsJSON(nodes, pw);
+        dumpPactStreamGraphAsJSON(nodes, pw);
         return sw.toString();
     }
 
-    public void dumpOptimizerPlanAsJSON(OptimizedPlan plan, File toFile) throws IOException {
+    public void dumpOptimizerPlanAsJSON(OptimizedStreamGraph plan, File toFile) throws IOException {
         PrintWriter pw = null;
         try {
             pw = new PrintWriter(new FileOutputStream(toFile), false);
@@ -100,7 +100,7 @@ public class PlanJSONDumpGenerator {
         }
     }
 
-    public String getOptimizerPlanAsJSON(OptimizedPlan plan) {
+    public String getOptimizerPlanAsJSON(OptimizedStreamGraph plan) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         dumpOptimizerPlanAsJSON(plan, pw);
@@ -108,7 +108,7 @@ public class PlanJSONDumpGenerator {
         return sw.toString();
     }
 
-    public void dumpOptimizerPlanAsJSON(OptimizedPlan plan, PrintWriter writer) {
+    public void dumpOptimizerPlanAsJSON(OptimizedStreamGraph plan, PrintWriter writer) {
         Collection<SinkPlanNode> sinks = plan.getDataSinks();
         if (sinks instanceof List) {
             dumpOptimizerPlanAsJSON((List<SinkPlanNode>) sinks, writer);

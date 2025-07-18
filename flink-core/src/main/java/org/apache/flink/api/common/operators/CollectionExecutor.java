@@ -19,15 +19,8 @@
 package org.apache.flink.api.common.operators;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.JobInfo;
-import org.apache.flink.api.common.JobInfoImpl;
-import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.common.TaskInfo;
-import org.apache.flink.api.common.TaskInfoImpl;
+import org.apache.flink.api.common.*;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.accumulators.Accumulator;
 import org.apache.flink.api.common.accumulators.AccumulatorHelper;
 import org.apache.flink.api.common.aggregators.Aggregator;
@@ -108,7 +101,7 @@ public class CollectionExecutor {
     //  General execution methods
     // --------------------------------------------------------------------------------------------
 
-    public JobExecutionResult execute(Plan program) throws Exception {
+    public JobExecutionResult execute(StreamGraphPlan program) throws Exception {
         long startTime = System.currentTimeMillis();
         JobID jobID = program.getJobId() == null ? new JobID() : program.getJobId();
         JobInfo jobInfo = new JobInfoImpl(jobID, program.getJobName());

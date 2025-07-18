@@ -19,7 +19,7 @@
 package org.apache.flink.table.planner.delegation;
 
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
@@ -27,7 +27,6 @@ import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.graph.GlobalStreamExchangeMode;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.table.delegation.Executor;
 
 import org.junit.jupiter.api.Test;
@@ -80,8 +79,8 @@ class DefaultExecutorTest {
         final Configuration configuration = new Configuration();
         configuration.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
 
-        final StreamGraph streamGraph =
-                (StreamGraph)
+        final org.apache.flink.streaming.api.graph.StreamGraph streamGraph =
+                (org.apache.flink.streaming.api.graph.StreamGraph)
                         executor.createPipeline(
                                 dummyTransformations, configuration, "Default Name");
 
@@ -94,7 +93,7 @@ class DefaultExecutorTest {
                 .isEqualTo(GlobalStreamExchangeMode.ALL_EDGES_BLOCKING);
     }
 
-    private void testJobName(Pipeline pipeline, String expectedJobName) {
-        assertThat(((StreamGraph) pipeline).getJobName()).isEqualTo(expectedJobName);
+    private void testJobName(StreamGraph pipeline, String expectedJobName) {
+        assertThat(((org.apache.flink.streaming.api.graph.StreamGraph) pipeline).getJobName()).isEqualTo(expectedJobName);
     }
 }

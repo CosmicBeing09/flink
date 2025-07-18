@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -66,7 +66,7 @@ public class DeltaIterationDependenciesTest extends CompilerTestBase {
 
             result.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
             try {
                 compileNoStats(p);
                 fail(

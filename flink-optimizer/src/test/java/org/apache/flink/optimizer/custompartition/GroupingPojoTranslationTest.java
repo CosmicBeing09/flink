@@ -19,13 +19,13 @@
 package org.apache.flink.optimizer.custompartition;
 
 import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityGroupReducerCombinable;
@@ -52,8 +52,8 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
                     .reduce(new SelectOneReducer<Pojo2>())
                     .output(new DiscardingOutputFormat<Pojo2>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();
@@ -80,8 +80,8 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
                     .reduceGroup(new IdentityGroupReducerCombinable<Pojo2>())
                     .output(new DiscardingOutputFormat<Pojo2>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();
@@ -109,8 +109,8 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
                     .reduceGroup(new IdentityGroupReducerCombinable<Pojo3>())
                     .output(new DiscardingOutputFormat<Pojo3>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();
@@ -139,8 +139,8 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
                     .reduceGroup(new IdentityGroupReducerCombinable<Pojo4>())
                     .output(new DiscardingOutputFormat<Pojo4>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();

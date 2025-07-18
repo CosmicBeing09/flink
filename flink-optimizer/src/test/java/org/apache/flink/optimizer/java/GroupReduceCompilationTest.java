@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
@@ -29,7 +29,7 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.GroupReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
@@ -61,8 +61,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
                     .output(new DiscardingOutputFormat<Double>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -104,8 +104,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             reduced.setCombinable(true);
             reduced.output(new DiscardingOutputFormat<Long>()).name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -162,8 +162,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
                     .output(new DiscardingOutputFormat<Tuple2<String, Double>>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -212,8 +212,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             reduced.setCombinable(true);
             reduced.output(new DiscardingOutputFormat<Tuple2<String, Double>>()).name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -281,8 +281,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
                     .output(new DiscardingOutputFormat<Tuple2<String, Double>>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -347,8 +347,8 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             reduced.setCombinable(true);
             reduced.output(new DiscardingOutputFormat<Tuple2<String, Double>>()).name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 

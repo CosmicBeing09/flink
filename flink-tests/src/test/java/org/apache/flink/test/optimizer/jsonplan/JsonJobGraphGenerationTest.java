@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.jsonplan;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.ExecutionEnvironmentFactory;
 import org.apache.flink.configuration.Configuration;
@@ -28,7 +28,7 @@ import org.apache.flink.examples.java.graph.ConnectedComponents;
 import org.apache.flink.examples.java.relational.WebLogAnalysis;
 import org.apache.flink.examples.java.wordcount.WordCount;
 import org.apache.flink.optimizer.Optimizer;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
@@ -345,10 +345,10 @@ public class JsonJobGraphGenerationTest {
 
         @Override
         public JobExecutionResult execute(String jobName) throws Exception {
-            Plan plan = createProgramPlan(jobName);
+            StreamGraphPlan plan = createProgramPlan(jobName);
 
             Optimizer pc = new Optimizer(new Configuration());
-            OptimizedPlan op = pc.compile(plan);
+            OptimizedStreamGraph op = pc.compile(plan);
 
             JobGraphGenerator jgg = new JobGraphGenerator();
             JobGraph jobGraph = jgg.compileJobGraph(op);

@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.plantranslate;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -26,7 +26,7 @@ import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.Optimizer;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.testfunctions.DummyFlatJoinFunction;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
@@ -64,8 +64,8 @@ public class TempInIterationsTest {
                 .closeWith(update, update)
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = (new Optimizer(new Configuration())).compile(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = (new Optimizer(new Configuration())).compile(plan);
 
         JobGraphGenerator jgg = new JobGraphGenerator();
         JobGraph jg = jgg.compileJobGraph(oPlan);

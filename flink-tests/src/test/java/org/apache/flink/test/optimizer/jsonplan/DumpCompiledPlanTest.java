@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.optimizer.jsonplan;
 
-import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.common.StreamGraphPlan;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.Configuration;
@@ -29,8 +29,8 @@ import org.apache.flink.examples.java.graph.PageRank;
 import org.apache.flink.examples.java.relational.TPCHQuery3;
 import org.apache.flink.examples.java.relational.WebLogAnalysis;
 import org.apache.flink.examples.java.wordcount.WordCount;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonFactory;
@@ -127,15 +127,15 @@ public class DumpCompiledPlanTest extends CompilerTestBase {
                         .setArguments(args)
                         .build();
 
-        final Pipeline pipeline =
-                PackagedProgramUtils.getPipelineFromProgram(program, new Configuration(), 1, true);
+        final StreamGraph pipeline =
+                PackagedProgramUtils.getStreamGraphFromProgram(program, new Configuration(), 1, true);
 
-        assertTrue(pipeline instanceof Plan);
+        assertTrue(pipeline instanceof StreamGraphPlan);
 
-        final Plan plan = (Plan) pipeline;
+        final StreamGraphPlan plan = (StreamGraphPlan) pipeline;
 
-        final OptimizedPlan op = compileNoStats(plan);
-        final PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+        final OptimizedStreamGraph op = compileNoStats(plan);
+        final StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
         final String json = dumper.getOptimizerPlanAsJSON(op);
         try (JsonParser parser = new JsonFactory().createParser(json)) {
             while (parser.nextToken() != null) {}

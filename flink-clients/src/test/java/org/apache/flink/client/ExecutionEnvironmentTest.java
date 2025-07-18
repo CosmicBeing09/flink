@@ -19,7 +19,7 @@
 
 package org.apache.flink.client;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -92,7 +92,7 @@ class ExecutionEnvironmentTest implements Serializable {
 
     private void testJobName(String prefixOfExpectedJobName, ExecutionEnvironment env) {
         env.fromElements(1, 2, 3).writeAsText("/dev/null");
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         assertThat(plan.getJobName()).startsWith(prefixOfExpectedJobName);
     }
 }

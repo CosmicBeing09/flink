@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.operators;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -54,8 +54,8 @@ public class JoinWithDistributionTest extends CompilerTestBase {
                         .with(new JoinFunc());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -84,8 +84,8 @@ public class JoinWithDistributionTest extends CompilerTestBase {
                         .with(new JoinFunc());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();

@@ -18,14 +18,14 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -54,8 +54,8 @@ public class WorksetIterationCornerCasesTest extends CompilerTestBase {
                     .closeWith(iterEnd, iterEnd)
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             WorksetIterationPlanNode wipn =
                     (WorksetIterationPlanNode)

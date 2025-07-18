@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -31,7 +31,7 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.optimizer.dataproperties.GlobalProperties;
 import org.apache.flink.optimizer.dataproperties.PartitioningProperty;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.util.Collector;
@@ -59,8 +59,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -83,8 +83,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -110,8 +110,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -137,8 +137,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -165,8 +165,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -192,8 +192,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -220,8 +220,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -251,8 +251,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -282,8 +282,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -313,8 +313,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -344,8 +344,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -375,8 +375,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -406,8 +406,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -437,8 +437,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockJoin());
 
         joined.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -458,8 +458,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                 set1.coGroup(set2).where(0, 1).equalTo(0, 1).with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -479,8 +479,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                 set1.coGroup(set2).where(0, 1).equalTo(2, 1).with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -506,8 +506,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -533,8 +533,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -560,8 +560,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -587,8 +587,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -611,8 +611,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -641,8 +641,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -671,8 +671,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -701,8 +701,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -731,8 +731,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -761,8 +761,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -791,8 +791,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();
@@ -821,8 +821,8 @@ public class PartitioningReusageTest extends CompilerTestBase {
                         .with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         SinkPlanNode sink = oPlan.getDataSinks().iterator().next();
         DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();

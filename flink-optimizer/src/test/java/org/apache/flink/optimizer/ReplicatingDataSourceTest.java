@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -36,7 +36,7 @@ import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.core.fs.FileInputSplit;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.shipping.ShipStrategyType;
@@ -68,10 +68,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
         DataSink<Tuple2<Tuple1<String>, Tuple1<String>>> out =
                 source1.join(source2).where("*").equalTo("*").writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -111,10 +111,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -154,10 +154,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -197,10 +197,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -240,10 +240,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -286,10 +286,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when join should have forward strategy on both sides
@@ -325,10 +325,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
         DataSink<Tuple2<Tuple1<String>, Tuple1<String>>> out =
                 source1.cross(source2).writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when cross should have forward strategy on both sides
@@ -367,10 +367,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .cross(source2)
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when cross should have forward strategy on both sides
@@ -412,10 +412,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .setParallelism(DEFAULT_PARALLELISM + 2)
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
     }
 
     /**
@@ -446,10 +446,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
     }
 
     /** Tests compiler fail for join program with replicated data source behind reduce. */
@@ -475,10 +475,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
     }
 
     /** Tests compiler fail for join program with replicated data source behind rebalance. */
@@ -504,10 +504,10 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
                         .equalTo("*")
                         .writeAsText("/some/newpath");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
     }
 
     public static class IdMap<T> implements MapFunction<T, T> {

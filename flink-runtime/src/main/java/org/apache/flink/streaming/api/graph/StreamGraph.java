@@ -28,7 +28,6 @@ import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.TypeSerializer;
-import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -88,7 +87,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * jobgraph for the execution.
  */
 @Internal
-public class StreamGraph implements Pipeline {
+public class StreamGraph implements org.apache.flink.api.dag.StreamGraph {
 
     private static final Logger LOG = LoggerFactory.getLogger(StreamGraph.class);
 

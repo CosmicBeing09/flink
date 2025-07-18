@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.iterations;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
@@ -33,11 +33,11 @@ import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.DriverStrategy;
@@ -68,13 +68,13 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
 
     @Test
     public void testWorksetConnectedComponents() throws Exception {
-        Plan plan = getConnectedComponentsCoGroupPlan();
+        StreamGraphPlan plan = getConnectedComponentsCoGroupPlan();
         plan.setExecutionConfig(new ExecutionConfig());
-        OptimizedPlan optPlan = compileNoStats(plan);
+        OptimizedStreamGraph optPlan = compileNoStats(plan);
         OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(optPlan);
 
         if (PRINT_PLAN) {
-            PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+            StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
             String json = dumper.getOptimizerPlanAsJSON(optPlan);
             System.out.println(json);
         }
@@ -153,12 +153,12 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
         jgg.compileJobGraph(optPlan);
     }
 
-    public static Plan getConnectedComponentsCoGroupPlan() throws Exception {
+    public static StreamGraphPlan getConnectedComponentsCoGroupPlan() throws Exception {
         return connectedComponentsWithCoGroup(
                 new String[] {DEFAULT_PARALLELISM_STRING, IN_FILE, IN_FILE, OUT_FILE, "100"});
     }
 
-    public static Plan connectedComponentsWithCoGroup(String[] args) throws Exception {
+    public static StreamGraphPlan connectedComponentsWithCoGroup(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 

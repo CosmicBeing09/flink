@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
@@ -31,7 +31,7 @@ import org.apache.flink.api.java.io.TextOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.DummyCoGroupFunction;
@@ -76,8 +76,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                 mappedC.output(new DiscardingOutputFormat<Long>());
             }
 
-            Plan plan = env.createProgramPlan("Plans With Multiple Data Sinks");
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan("Plans With Multiple Data Sinks");
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             new JobGraphGenerator().compileJobGraph(oPlan);
         } catch (Exception e) {
@@ -116,10 +116,10 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
             mappedC.output(new DiscardingOutputFormat<Long>());
             mappedC.output(new DiscardingOutputFormat<Long>());
 
-            Plan plan = env.createProgramPlan();
+            StreamGraphPlan plan = env.createProgramPlan();
             Set<Operator<?>> sinks = new HashSet<Operator<?>>(plan.getDataSinks());
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             // ---------- check the optimizer plan ----------
 
@@ -250,8 +250,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                             new DiscardingOutputFormat<
                                     Tuple2<Tuple2<Long, Long>, Tuple2<Long, Long>>>());
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
             new JobGraphGenerator().compileJobGraph(oPlan);
         } catch (Exception e) {
             e.printStackTrace();
@@ -334,8 +334,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
             joined2.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
             joined2.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
             new JobGraphGenerator().compileJobGraph(oPlan);
         } catch (Exception e) {
             e.printStackTrace();
@@ -430,8 +430,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                     .union(coGroup1)
                     .output(new DiscardingOutputFormat<Long>());
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             JobGraphGenerator jobGen = new JobGraphGenerator();
 
@@ -487,8 +487,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
             join2.output(new DiscardingOutputFormat<Long>());
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             JobGraphGenerator jobGen = new JobGraphGenerator();
 
@@ -523,8 +523,8 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
             source1.writeAsText(outPath1);
             source1.writeAsText(outPath2);
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             // ---------- check the optimizer plan ----------
 
@@ -589,7 +589,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         sourceA.writeAsText(out3Path);
         sourceB.writeAsText(out4Path);
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         compileNoStats(plan);
     }
 
@@ -606,7 +606,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         loopRes.output(new DiscardingOutputFormat<Long>());
         loopRes.map(new IdentityMapper<Long>()).output(new DiscardingOutputFormat<Long>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -636,7 +636,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                         .name("Post-Loop Mapper");
         map.output(new DiscardingOutputFormat<Long>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -674,7 +674,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
         loopRes.output(new DiscardingOutputFormat<Long>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -729,7 +729,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         DataSet<Tuple2<Long, Long>> result = loop.closeWith(delta, workset);
         result.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -788,7 +788,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         DataSet<Tuple2<Long, Long>> result = loop.closeWith(delta, workset);
         result.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -878,7 +878,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                 .withBroadcastSet(result1, "bc3")
                 .output(new DiscardingOutputFormat<String>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -909,7 +909,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                                 .withBroadcastSet(reduced, "red"))
                 .output(new DiscardingOutputFormat<String>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -952,7 +952,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                                 .withBroadcastSet(reduced, "bc3"))
                 .output(new DiscardingOutputFormat<String>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -983,7 +983,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                 .closeWith(iteration3.reduceGroup(new IdentityGroupReducer<String>()))
                 .output(new DiscardingOutputFormat<String>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
             compileNoStats(plan);
@@ -1008,7 +1008,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                     .withBroadcastSet(bc_input, "name2")
                     .output(new DiscardingOutputFormat<Long>());
 
-            Plan plan = env.createProgramPlan();
+            StreamGraphPlan plan = env.createProgramPlan();
             compileNoStats(plan);
         } catch (Exception e) {
             e.printStackTrace();
@@ -1050,7 +1050,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
                     .union(joinResult)
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan plan = env.createProgramPlan();
+            StreamGraphPlan plan = env.createProgramPlan();
             compileNoStats(plan);
         } catch (Exception e) {
             e.printStackTrace();

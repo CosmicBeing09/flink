@@ -26,7 +26,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -160,7 +160,7 @@ public class DataExchangeModeOpenBranchingTest extends CompilerTestBase {
             // output 3 is direct
             data.output(new DiscardingOutputFormat<Tuple2<Long, Long>>()).name("sink3");
 
-            OptimizedPlan optPlan = compileNoStats(env.createProgramPlan());
+            OptimizedStreamGraph optPlan = compileNoStats(env.createProgramPlan());
 
             SinkPlanNode filterSink = findSink(optPlan.getDataSinks(), "sink1");
             SinkPlanNode joinSink = findSink(optPlan.getDataSinks(), "sink2");

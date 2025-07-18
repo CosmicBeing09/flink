@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.*;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
 import org.apache.flink.api.java.DataSet;
@@ -33,9 +33,9 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.IdentityKeyExtractor;
 import org.apache.flink.optimizer.testfunctions.IdentityMapper;
@@ -81,10 +81,10 @@ public class IterationsCompilerTest extends CompilerTestBase {
             iter.closeWith(result.map(new IdentityMapper<Tuple2<Long, Long>>()), result)
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            OptimizedPlan p = compileNoStats(env.createProgramPlan());
+            OptimizedStreamGraph p = compileNoStats(env.createProgramPlan());
 
             // check that the JSON generator accepts this plan
-            new PlanJSONDumpGenerator().getOptimizerPlanAsJSON(p);
+            new StreamGraphJSONDumpGenerator().getOptimizerPlanAsJSON(p);
 
             // check that the JobGraphGenerator accepts the plan
             new JobGraphGenerator().compileJobGraph(p);
@@ -113,8 +113,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
             depResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(1, op.getDataSinks().size());
             assertTrue(
@@ -157,8 +157,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
             depResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(1, op.getDataSinks().size());
             assertTrue(
@@ -212,8 +212,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
             secondResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(1, op.getDataSinks().size());
             assertTrue(
@@ -257,8 +257,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
             doBulkIteration(input1, input2)
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(1, op.getDataSinks().size());
             assertTrue(
@@ -307,8 +307,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
             doSimpleBulkIteration(input1, input2)
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(1, op.getDataSinks().size());
             assertTrue(
@@ -364,7 +364,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
                             new DiscardingOutputFormat<
                                     Tuple2<Tuple2<Long, Long>, Tuple2<Long, Long>>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
             compileNoStats(p);
         } catch (Exception e) {
             e.printStackTrace();
@@ -414,8 +414,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
             result.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             new JobGraphGenerator().compileJobGraph(op);
         } catch (Exception e) {
@@ -486,8 +486,8 @@ public class IterationsCompilerTest extends CompilerTestBase {
 
         iterationResult.output(new DiscardingOutputFormat<Tuple1<Long>>());
 
-        Plan p = env.createProgramPlan();
-        OptimizedPlan op = compileNoStats(p);
+        StreamGraphPlan p = env.createProgramPlan();
+        OptimizedStreamGraph op = compileNoStats(p);
 
         new JobGraphGenerator().compileJobGraph(op);
     }

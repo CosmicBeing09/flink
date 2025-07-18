@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.util.FieldList;
 import org.apache.flink.api.java.DataSet;
@@ -28,7 +28,7 @@ import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple7;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityCoGrouper;
@@ -65,8 +65,8 @@ public class GroupOrderTest extends CompilerTestBase {
                 .output(new DiscardingOutputFormat<Tuple4<Long, Long, Long, Long>>())
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan;
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan;
 
         try {
             oPlan = compileNoStats(plan);
@@ -136,8 +136,8 @@ public class GroupOrderTest extends CompilerTestBase {
                                 Tuple7<Long, Long, Long, Long, Long, Long, Long>>())
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan;
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan;
 
         try {
             oPlan = compileNoStats(plan);

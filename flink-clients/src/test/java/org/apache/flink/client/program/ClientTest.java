@@ -21,7 +21,7 @@ package org.apache.flink.client.program;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -48,8 +48,8 @@ import org.apache.flink.core.execution.PipelineExecutorServiceLoader;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.costs.DefaultCostEstimator;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -80,7 +80,7 @@ class ClientTest {
             new InternalMiniClusterExtension(
                     new MiniClusterResourceConfiguration.Builder().build());
 
-    private Plan plan;
+    private StreamGraphPlan streamGraph;
 
     private Configuration config;
 
@@ -96,7 +96,7 @@ class ClientTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
         env.generateSequence(1, 1000).output(new DiscardingOutputFormat<>());
-        plan = env.createProgramPlan();
+        streamGraph = env.createProgramPlan();
 
         config = new Configuration();
         config.set(JobManagerOptions.ADDRESS, "localhost");
@@ -135,7 +135,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -157,7 +157,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -179,7 +179,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -202,7 +202,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -250,7 +250,7 @@ class ClientTest {
             final Configuration configuration = fromPackagedProgram(program, 1, false);
 
             ClientUtils.executeProgram(
-                    new TestExecutorServiceLoader(clusterClient, plan),
+                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                     configuration,
                     program,
                     enforceSingleJobExecution,
@@ -266,7 +266,7 @@ class ClientTest {
         JobGraph jobGraph =
                 FlinkPipelineTranslationUtil.getJobGraph(
                         Thread.currentThread().getContextClassLoader(),
-                        plan,
+                        streamGraph,
                         new Configuration(),
                         1);
 
@@ -301,7 +301,7 @@ class ClientTest {
                                 final Configuration configuration =
                                         fromPackagedProgram(packagedProgramMock, 1, true);
                                 ClientUtils.executeProgram(
-                                        new TestExecutorServiceLoader(client, plan),
+                                        new TestExecutorServiceLoader(client, streamGraph),
                                         configuration,
                                         packagedProgramMock,
                                         false,
@@ -324,18 +324,18 @@ class ClientTest {
 
         Optimizer optimizer =
                 new Optimizer(new DataStatistics(), new DefaultCostEstimator(), config);
-        Plan plan =
-                (Plan)
-                        PackagedProgramUtils.getPipelineFromProgram(
+        StreamGraphPlan streamGraph =
+                (StreamGraphPlan)
+                        PackagedProgramUtils.getStreamGraphFromProgram(
                                 prg, new Configuration(), 1, true);
-        OptimizedPlan op = optimizer.compile(plan);
+        OptimizedStreamGraph op = optimizer.compile(streamGraph);
         assertThat(op).isNotNull();
 
-        PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+        StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
         assertThat(dumper.getOptimizerPlanAsJSON(op)).isNotNull();
 
         // test HTML escaping
-        PlanJSONDumpGenerator dumper2 = new PlanJSONDumpGenerator();
+        StreamGraphJSONDumpGenerator dumper2 = new StreamGraphJSONDumpGenerator();
         dumper2.setEncodeForHTML(true);
         String htmlEscaped = dumper2.getOptimizerPlanAsJSON(op);
 
@@ -359,7 +359,8 @@ class ClientTest {
             assertThatThrownBy(
                             () ->
                                     ClientUtils.executeProgram(
-                                            new TestExecutorServiceLoader(clusterClient, plan),
+                                            new TestExecutorServiceLoader(clusterClient,
+                                                    streamGraph),
                                             configuration,
                                             program,
                                             true,
@@ -470,11 +471,11 @@ class ClientTest {
 
         private final ClusterClient<?> clusterClient;
 
-        private final Plan plan;
+        private final StreamGraphPlan streamGraph;
 
-        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final Plan plan) {
+        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final StreamGraphPlan streamGraph) {
             this.clusterClient = checkNotNull(clusterClient);
-            this.plan = checkNotNull(plan);
+            this.streamGraph = checkNotNull(streamGraph);
         }
 
         @Override
@@ -498,7 +499,7 @@ class ClientTest {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
                         final JobGraph jobGraph =
                                 FlinkPipelineTranslationUtil.getJobGraph(
-                                        classLoader, plan, config, parallelism);
+                                        classLoader, streamGraph, config, parallelism);
 
                         final ExecutionConfigAccessor accessor =
                                 ExecutionConfigAccessor.fromConfiguration(config);

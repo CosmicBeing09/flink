@@ -18,13 +18,13 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.util.FieldList;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -52,8 +52,8 @@ public class PartitionPushdownTest extends CompilerTestBase {
                     .sum(1)
                     .output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
 
@@ -91,8 +91,8 @@ public class PartitionPushdownTest extends CompilerTestBase {
                     .sum(2)
                     .output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
 

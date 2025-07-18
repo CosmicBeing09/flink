@@ -43,12 +43,8 @@ import org.apache.flink.optimizer.dag.MapPartitionNode;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.dataproperties.GlobalProperties;
 import org.apache.flink.optimizer.dataproperties.LocalProperties;
-import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.IterationPlanNode;
-import org.apache.flink.optimizer.plan.NamedChannel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plan.PlanNode;
-import org.apache.flink.optimizer.plan.SingleInputPlanNode;
+import org.apache.flink.optimizer.plan.*;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.util.Utils;
 import org.apache.flink.runtime.io.network.DataExchangeMode;
 import org.apache.flink.runtime.operators.DriverStrategy;
@@ -77,10 +73,10 @@ public class RangePartitionRewriter implements Visitor<PlanNode> {
 
     static final IdPartitioner idPartitioner = new IdPartitioner();
 
-    final OptimizedPlan plan;
+    final OptimizedStreamGraph plan;
     final Set<IterationPlanNode> visitedIterationNodes;
 
-    public RangePartitionRewriter(OptimizedPlan plan) {
+    public RangePartitionRewriter(OptimizedStreamGraph plan) {
         this.plan = plan;
         this.visitedIterationNodes = new HashSet<>();
     }

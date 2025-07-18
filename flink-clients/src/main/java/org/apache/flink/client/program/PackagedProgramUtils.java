@@ -19,7 +19,7 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.FlinkPipelineTranslationUtil;
 import org.apache.flink.configuration.ConfigConstants;
 import org.apache.flink.configuration.Configuration;
@@ -78,8 +78,8 @@ public enum PackagedProgramUtils {
             @Nullable JobID jobID,
             boolean suppressOutput)
             throws ProgramInvocationException {
-        final Pipeline pipeline =
-                getPipelineFromProgram(
+        final StreamGraph pipeline =
+                getStreamGraphFromProgram(
                         packagedProgram, configuration, defaultParallelism, suppressOutput);
         final JobGraph jobGraph =
                 FlinkPipelineTranslationUtil.getJobGraphUnderUserClassLoader(
@@ -118,7 +118,7 @@ public enum PackagedProgramUtils {
                 packagedProgram, configuration, defaultParallelism, null, suppressOutput);
     }
 
-    public static Pipeline getPipelineFromProgram(
+    public static StreamGraph getStreamGraphFromProgram(
             PackagedProgram program,
             Configuration configuration,
             int parallelism,

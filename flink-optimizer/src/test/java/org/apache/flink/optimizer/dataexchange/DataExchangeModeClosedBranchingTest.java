@@ -26,7 +26,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.DummyCoGroupFunction;
@@ -219,7 +219,7 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
                                     Tuple2<Tuple2<Long, Long>, Tuple2<Long, Long>>>())
                     .name("cgSink");
 
-            OptimizedPlan optPlan = compileNoStats(env.createProgramPlan());
+            OptimizedStreamGraph optPlan = compileNoStats(env.createProgramPlan());
 
             SinkPlanNode reduceSink = findSink(optPlan.getDataSinks(), "reduceSink");
             SinkPlanNode flatMapSink = findSink(optPlan.getDataSinks(), "flatMapSink");

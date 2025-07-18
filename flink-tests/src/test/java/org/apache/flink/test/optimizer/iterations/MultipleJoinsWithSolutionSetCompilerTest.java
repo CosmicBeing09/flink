@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.optimizer.iterations;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
@@ -30,7 +30,7 @@ import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SolutionSetPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -65,9 +65,9 @@ public class MultipleJoinsWithSolutionSetCompilerTest extends CompilerTestBase {
             result.output(new DiscardingOutputFormat<Tuple2<Long, Double>>());
             result.output(new DiscardingOutputFormat<Tuple2<Long, Double>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
-            OptimizedPlan optPlan = compileNoStats(p);
+            OptimizedStreamGraph optPlan = compileNoStats(p);
 
             OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(optPlan);
 

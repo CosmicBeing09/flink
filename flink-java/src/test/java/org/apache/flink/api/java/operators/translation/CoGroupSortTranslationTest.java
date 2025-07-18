@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.operators.translation;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.Order;
@@ -65,7 +65,7 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
                             })
                     .output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
             CoGroupOperatorBase<?, ?, ?, ?> coGroup =
@@ -114,7 +114,7 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
                             })
                     .output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
             CoGroupOperatorBase<?, ?, ?, ?> coGroup =

@@ -20,7 +20,7 @@ package org.apache.flink.table.api.internal;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.VisibleForTesting;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.JobClient;
@@ -1022,7 +1022,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
         resourceManager.addJarConfiguration(tableConfig);
 
         // We pass only the configuration to avoid reconfiguration with the rootConfiguration
-        Pipeline pipeline =
+        StreamGraph pipeline =
                 execEnv.createPipeline(
                         transformations,
                         tableConfig.getConfiguration(),
@@ -1067,7 +1067,7 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
             List<Transformation<?>> transformations) {
         resourceManager.addJarConfiguration(tableConfig);
 
-        Pipeline pipeline = generatePipelineFromQueryOperation(operation, transformations);
+        StreamGraph pipeline = generatePipelineFromQueryOperation(operation, transformations);
         try {
             JobClient jobClient = execEnv.executeAsync(pipeline);
             ResultProvider resultProvider = sinkOperation.getSelectResultProvider();
@@ -1180,9 +1180,9 @@ public class TableEnvironmentImpl implements TableEnvironmentInternal {
         }
     }
 
-    /** generate execution {@link Pipeline} from {@link QueryOperation}. */
+    /** generate execution {@link StreamGraph} from {@link QueryOperation}. */
     @VisibleForTesting
-    public Pipeline generatePipelineFromQueryOperation(
+    public StreamGraph generatePipelineFromQueryOperation(
             QueryOperation operation, List<Transformation<?>> transformations) {
         String defaultJobName = "collect";
 

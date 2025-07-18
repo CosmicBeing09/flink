@@ -19,14 +19,14 @@
 package org.apache.flink.optimizer.custompartition;
 
 import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityPartitionerMapper;
@@ -56,8 +56,8 @@ public class CustomPartitioningTest extends CompilerTestBase {
                     .mapPartition(new IdentityPartitionerMapper<Tuple2<Integer, Integer>>())
                     .output(new DiscardingOutputFormat<Tuple2<Integer, Integer>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();
@@ -123,8 +123,8 @@ public class CustomPartitioningTest extends CompilerTestBase {
                     .mapPartition(new IdentityPartitionerMapper<Pojo>())
                     .output(new DiscardingOutputFormat<Pojo>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();
@@ -189,8 +189,8 @@ public class CustomPartitioningTest extends CompilerTestBase {
                     .mapPartition(new IdentityPartitionerMapper<Pojo>())
                     .output(new DiscardingOutputFormat<Pojo>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();

@@ -17,7 +17,7 @@
  */
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.operators.util.FieldList;
 import org.apache.flink.api.java.DataSet;
@@ -26,7 +26,7 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DistinctOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
@@ -58,8 +58,8 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
                     .output(new DiscardingOutputFormat<Tuple2<String, Double>>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -115,8 +115,8 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
                     .output(new DiscardingOutputFormat<Tuple2<String, Double>>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -176,8 +176,8 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
                     .output(new DiscardingOutputFormat<Tuple2<String, Double>>())
                     .name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 
@@ -240,8 +240,8 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
 
             reduced.output(new DiscardingOutputFormat<Tuple2<String, Double>>()).name("sink");
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(op);
 

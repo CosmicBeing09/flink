@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.Partitioner;
@@ -29,7 +29,7 @@ import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.PartitionOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
@@ -67,8 +67,8 @@ public class PartitionOperatorTest extends CompilerTestBase {
                     .reduceGroup(new IdentityGroupReducerCombinable<Tuple2<Long, Long>>())
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();
@@ -96,8 +96,8 @@ public class PartitionOperatorTest extends CompilerTestBase {
                     .reduceGroup(new IdentityGroupReducerCombinable<Tuple2<Long, Long>>())
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();
@@ -164,8 +164,8 @@ public class PartitionOperatorTest extends CompilerTestBase {
                             })
                     .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode reducer = (SingleInputPlanNode) sink.getInput().getSource();

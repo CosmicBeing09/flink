@@ -20,7 +20,7 @@
 package org.apache.flink.test.example.client;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.deployment.executors.LocalExecutor;
@@ -80,7 +80,7 @@ public class LocalExecutorITCase extends TestLogger {
             config.set(CoreOptions.FILESYTEM_DEFAULT_OVERRIDE, true);
             config.set(DeploymentOptions.ATTACHED, true);
 
-            Plan wcPlan = getWordCountPlan(inFile, outFile, parallelism);
+            StreamGraphPlan wcPlan = getWordCountPlan(inFile, outFile, parallelism);
             wcPlan.setExecutionConfig(new ExecutionConfig());
             JobClient jobClient =
                     executor.execute(wcPlan, config, ClassLoader.getSystemClassLoader()).get();
@@ -95,7 +95,7 @@ public class LocalExecutorITCase extends TestLogger {
 
     @Test(timeout = 60_000)
     public void testMiniClusterShutdownOnErrors() throws Exception {
-        Plan runtimeExceptionPlan = getRuntimeExceptionPlan();
+        StreamGraphPlan runtimeExceptionPlan = getRuntimeExceptionPlan();
         runtimeExceptionPlan.setExecutionConfig(new ExecutionConfig());
 
         Configuration config = new Configuration();
@@ -113,7 +113,7 @@ public class LocalExecutorITCase extends TestLogger {
         assertThat(miniCluster.isRunning(), is(false));
     }
 
-    private Plan getWordCountPlan(File inFile, File outFile, int parallelism) {
+    private StreamGraphPlan getWordCountPlan(File inFile, File outFile, int parallelism) {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
         env.readTextFile(inFile.getAbsolutePath())
@@ -124,7 +124,7 @@ public class LocalExecutorITCase extends TestLogger {
         return env.createProgramPlan();
     }
 
-    private Plan getRuntimeExceptionPlan() {
+    private StreamGraphPlan getRuntimeExceptionPlan() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.fromElements(1)
                 .map(

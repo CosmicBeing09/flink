@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.util;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.Function;
 import org.apache.flink.api.common.io.FileInputFormat.FileBaseStatistics;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
@@ -28,7 +28,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.costs.DefaultCostEstimator;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.util.OperatingSystem;
@@ -89,15 +89,15 @@ public abstract class CompilerTestBase extends TestLogger implements java.io.Ser
 
     // ------------------------------------------------------------------------
 
-    public OptimizedPlan compileWithStats(Plan p) {
+    public OptimizedStreamGraph compileWithStats(StreamGraphPlan p) {
         return this.withStatsCompiler.compile(p);
     }
 
-    public OptimizedPlan compileNoStats(Plan p) {
+    public OptimizedStreamGraph compileNoStats(StreamGraphPlan p) {
         return this.noStatsCompiler.compile(p);
     }
 
-    public static OperatorResolver getContractResolver(Plan plan) {
+    public static OperatorResolver getContractResolver(StreamGraphPlan plan) {
         return new OperatorResolver(plan);
     }
 
@@ -112,7 +112,7 @@ public abstract class CompilerTestBase extends TestLogger implements java.io.Ser
         source.setStatisticsKey(key);
     }
 
-    public static OptimizerPlanNodeResolver getOptimizerPlanNodeResolver(OptimizedPlan plan) {
+    public static OptimizerPlanNodeResolver getOptimizerPlanNodeResolver(OptimizedStreamGraph plan) {
         return new OptimizerPlanNodeResolver(plan);
     }
 
@@ -122,7 +122,7 @@ public abstract class CompilerTestBase extends TestLogger implements java.io.Ser
 
         private final Map<String, ArrayList<PlanNode>> map;
 
-        public OptimizerPlanNodeResolver(OptimizedPlan p) {
+        public OptimizerPlanNodeResolver(OptimizedStreamGraph p) {
             HashMap<String, ArrayList<PlanNode>> map = new HashMap<String, ArrayList<PlanNode>>();
 
             for (PlanNode n : p.getAllNodes()) {

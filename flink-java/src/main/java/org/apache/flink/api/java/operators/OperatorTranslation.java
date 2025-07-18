@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.AbstractUdfOperator;
 import org.apache.flink.api.common.operators.BinaryOperatorInformation;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
@@ -43,14 +43,14 @@ public class OperatorTranslation {
     /** The already translated operations. */
     private Map<DataSet<?>, Operator<?>> translated = new HashMap<>();
 
-    public Plan translateToPlan(List<DataSink<?>> sinks, String jobName) {
+    public StreamGraphPlan translateToPlan(List<DataSink<?>> sinks, String jobName) {
         List<GenericDataSinkBase<?>> planSinks = new ArrayList<>();
 
         for (DataSink<?> sink : sinks) {
             planSinks.add(translate(sink));
         }
 
-        Plan p = new Plan(planSinks);
+        StreamGraphPlan p = new StreamGraphPlan(planSinks);
         p.setJobName(jobName);
         return p;
     }

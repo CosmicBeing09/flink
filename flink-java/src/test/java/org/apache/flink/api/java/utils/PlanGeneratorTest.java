@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.utils;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -60,7 +60,7 @@ class PlanGeneratorTest {
                 .map((MapFunction<Integer, String>) value -> String.valueOf(value + 1))
                 .writeAsText("/tmp/csv");
 
-        final Plan generatedPlanUnderTest = env.createProgramPlan("test");
+        final StreamGraphPlan generatedPlanUnderTest = env.createProgramPlan("test");
 
         final Map<String, DistributedCache.DistributedCacheEntry> retrievedArtifacts =
                 generatedPlanUnderTest.getCachedFiles().stream()

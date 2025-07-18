@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -27,7 +27,7 @@ import org.apache.flink.optimizer.plan.BinaryUnionPlanNode;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -55,8 +55,8 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
             result.output(new DiscardingOutputFormat<Long>());
             result.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(2, op.getDataSinks().size());
 
@@ -108,8 +108,8 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
             iterResult.output(new DiscardingOutputFormat<Long>());
             iterResult.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             assertEquals(2, op.getDataSinks().size());
 

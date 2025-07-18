@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.accumulators;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.accumulators.IntCounter;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
@@ -34,7 +34,7 @@ import org.apache.flink.core.testutils.CheckedThread;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.minicluster.MiniClusterJobClient;
@@ -263,10 +263,10 @@ public class AccumulatorLiveITCase extends TestLogger {
     }
 
     /** Helpers to generate the JobGraph. */
-    private static JobGraph getJobGraph(Plan plan) {
+    private static JobGraph getJobGraph(StreamGraphPlan plan) {
         Optimizer pc = new Optimizer(new DataStatistics(), new Configuration());
         JobGraphGenerator jgg = new JobGraphGenerator();
-        OptimizedPlan op = pc.compile(plan);
+        OptimizedStreamGraph op = pc.compile(plan);
         return jgg.compileJobGraph(op);
     }
 }

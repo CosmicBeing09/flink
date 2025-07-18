@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.operators;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.operators.Operator;
@@ -62,7 +62,7 @@ class NamesTest implements Serializable {
                             }
                         })
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         testForName("Filter at testDefaultName(NamesTest.java:55)", plan);
     }
 
@@ -82,7 +82,7 @@ class NamesTest implements Serializable {
                         })
                 .name("GivenName")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         testForName("GivenName", plan);
     }
 
@@ -111,7 +111,7 @@ class NamesTest implements Serializable {
                             }
                         })
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         plan.accept(
                 new Visitor<Operator<?>>() {
                     @Override
@@ -128,7 +128,7 @@ class NamesTest implements Serializable {
                 });
     }
 
-    private static void testForName(final String expected, Plan plan) {
+    private static void testForName(final String expected, StreamGraphPlan plan) {
         plan.accept(
                 new Visitor<Operator<?>>() {
                     @Override

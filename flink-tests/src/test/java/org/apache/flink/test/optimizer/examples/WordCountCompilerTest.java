@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.examples;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.util.FieldList;
@@ -28,7 +28,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -82,10 +82,10 @@ public class WordCountCompilerTest extends CompilerTestBase {
                 .name("Word Counts");
 
         // get the plan and compile it
-        Plan p = env.createProgramPlan();
+        StreamGraphPlan p = env.createProgramPlan();
         p.setExecutionConfig(new ExecutionConfig());
 
-        OptimizedPlan plan;
+        OptimizedStreamGraph plan;
         if (estimates) {
             GenericDataSourceBase<?, ?> source = getContractResolver(p).getNode("Input Lines");
             setSourceStatistics(source, 1024 * 1024 * 1024 * 1024L, 24f);

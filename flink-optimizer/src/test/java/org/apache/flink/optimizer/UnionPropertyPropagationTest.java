@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.operators.base.FlatMapOperatorBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
@@ -29,7 +29,7 @@ import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
@@ -63,9 +63,9 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
                 .reduceGroup(new IdentityGroupReducer<Long>())
                 .output(new DiscardingOutputFormat<Long>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         JobGraphGenerator jobGen = new JobGraphGenerator();
 
@@ -118,8 +118,8 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
         result.writeAsText(OUT_FILE);
 
         // return the plan
-        Plan plan = env.createProgramPlan("Test union on new java-api");
-        OptimizedPlan oPlan = compileNoStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan("Test union on new java-api");
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
         JobGraphGenerator jobGen = new JobGraphGenerator();
 
         // Compile plan to verify that no error is thrown

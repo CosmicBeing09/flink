@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.ExecutionMode;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -29,7 +29,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityMapper;
@@ -64,8 +64,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
 
             result.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();
@@ -109,8 +109,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
 
             result.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();
@@ -167,8 +167,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
 
             iteration.closeWith(result).output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             BulkIterationPlanNode iterationPlanNode =
@@ -203,8 +203,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
                         .withParameters(conf)
                         .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-                Plan p = env.createProgramPlan();
-                OptimizedPlan op = compileNoStats(p);
+                StreamGraphPlan p = env.createProgramPlan();
+                OptimizedStreamGraph op = compileNoStats(p);
                 SinkPlanNode sink = op.getDataSinks().iterator().next();
                 DualInputPlanNode cross = (DualInputPlanNode) sink.getInput().getSource();
                 SingleInputPlanNode mapper = (SingleInputPlanNode) cross.getInput1().getSource();
@@ -231,8 +231,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
                         .withParameters(conf)
                         .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-                Plan p = env.createProgramPlan();
-                OptimizedPlan op = compileNoStats(p);
+                StreamGraphPlan p = env.createProgramPlan();
+                OptimizedStreamGraph op = compileNoStats(p);
 
                 SinkPlanNode sink = op.getDataSinks().iterator().next();
                 DualInputPlanNode cross = (DualInputPlanNode) sink.getInput().getSource();
@@ -260,8 +260,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
                         .withParameters(conf)
                         .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-                Plan p = env.createProgramPlan();
-                OptimizedPlan op = compileNoStats(p);
+                StreamGraphPlan p = env.createProgramPlan();
+                OptimizedStreamGraph op = compileNoStats(p);
 
                 SinkPlanNode sink = op.getDataSinks().iterator().next();
                 DualInputPlanNode cross = (DualInputPlanNode) sink.getInput().getSource();
@@ -289,8 +289,8 @@ public class PipelineBreakerTest extends CompilerTestBase {
                         .withParameters(conf)
                         .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-                Plan p = env.createProgramPlan();
-                OptimizedPlan op = compileNoStats(p);
+                StreamGraphPlan p = env.createProgramPlan();
+                OptimizedStreamGraph op = compileNoStats(p);
 
                 SinkPlanNode sink = op.getDataSinks().iterator().next();
                 DualInputPlanNode cross = (DualInputPlanNode) sink.getInput().getSource();

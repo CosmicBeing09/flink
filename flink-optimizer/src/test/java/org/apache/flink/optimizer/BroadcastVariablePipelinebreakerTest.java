@@ -18,12 +18,12 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.dag.TempMode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityMapper;
@@ -49,8 +49,8 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
                     .withBroadcastSet(source2, "some name")
                     .output(new DiscardingOutputFormat<String>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();
@@ -80,8 +80,8 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
                     .withBroadcastSet(source1, "some name")
                     .output(new DiscardingOutputFormat<String>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             SingleInputPlanNode mapper = (SingleInputPlanNode) sink.getInput().getSource();

@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
@@ -31,7 +31,7 @@ import org.apache.flink.optimizer.dataproperties.PartitioningProperty;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
@@ -62,8 +62,8 @@ public class UnionReplacementTest extends CompilerTestBase {
             union.output(new DiscardingOutputFormat<String>());
             union.output(new DiscardingOutputFormat<String>());
 
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
             JobGraphGenerator jobGen = new JobGraphGenerator();
             jobGen.compileJobGraph(oPlan);
         } catch (Exception e) {
@@ -119,7 +119,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -222,7 +222,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -303,7 +303,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -379,7 +379,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -471,7 +471,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -542,7 +542,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 
@@ -599,7 +599,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(optimizedPlan);
 

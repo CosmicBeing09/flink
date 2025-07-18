@@ -19,7 +19,7 @@
 
 package org.apache.flink.api.java.operators.translation;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.base.BulkIterationBase;
 import org.apache.flink.api.java.DataSet;
@@ -73,7 +73,7 @@ class BulkIterationTranslationTest implements java.io.Serializable {
             result.writeAsText("/dev/null");
         }
 
-        Plan p = env.createProgramPlan(jobName);
+        StreamGraphPlan p = env.createProgramPlan(jobName);
 
         // ------------- validate the plan ----------------
 

@@ -37,21 +37,8 @@ import org.apache.flink.configuration.GlobalConfiguration;
 import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.optimizer.CompilerException;
 import org.apache.flink.optimizer.dag.TempMode;
-import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
-import org.apache.flink.optimizer.plan.BulkPartialSolutionPlanNode;
-import org.apache.flink.optimizer.plan.Channel;
-import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.IterationPlanNode;
-import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.NamedChannel;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plan.PlanNode;
-import org.apache.flink.optimizer.plan.SingleInputPlanNode;
-import org.apache.flink.optimizer.plan.SinkPlanNode;
-import org.apache.flink.optimizer.plan.SolutionSetPlanNode;
-import org.apache.flink.optimizer.plan.SourcePlanNode;
-import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
-import org.apache.flink.optimizer.plan.WorksetPlanNode;
+import org.apache.flink.optimizer.plan.*;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.util.Utils;
 import org.apache.flink.runtime.io.network.DataExchangeMode;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
@@ -110,7 +97,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 
 /**
  * This component translates the optimizer's resulting {@link
- * org.apache.flink.optimizer.plan.OptimizedPlan} to a {@link
+ * OptimizedStreamGraph} to a {@link
  * org.apache.flink.runtime.jobgraph.JobGraph}. The translation is not strictly a one-to-one,
  * because some nodes from the OptimizedPlan are collapsed into one job vertex.
  *
@@ -181,17 +168,17 @@ public class JobGraphGenerator implements Visitor<PlanNode> {
     }
 
     /**
-     * Translates a {@link org.apache.flink.optimizer.plan.OptimizedPlan} into a {@link
+     * Translates a {@link OptimizedStreamGraph} into a {@link
      * org.apache.flink.runtime.jobgraph.JobGraph}.
      *
      * @param program Optimized plan that is translated into a JobGraph.
      * @return JobGraph generated from the plan.
      */
-    public JobGraph compileJobGraph(OptimizedPlan program) {
+    public JobGraph compileJobGraph(OptimizedStreamGraph program) {
         return compileJobGraph(program, null);
     }
 
-    public JobGraph compileJobGraph(OptimizedPlan program, JobID jobId) {
+    public JobGraph compileJobGraph(OptimizedStreamGraph program, JobID jobId) {
         if (program == null) {
             throw new NullPointerException(
                     "Program is null, did you called " + "ExecutionEnvironment.execute()");

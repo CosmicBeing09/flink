@@ -19,7 +19,7 @@
 
 package org.apache.flink.optimizer.plandump;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.ExecutionPlanUtil;
@@ -51,7 +51,7 @@ public class ExecutionPlanUtilTest {
                 .writeAsText("file:///will/not/be/executed")
                 .name("sinkThatWillNotRun");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         String executionPlanAsJSON = ExecutionPlanUtil.getExecutionPlanAsJSON(plan);
 
         assertThat(executionPlanAsJSON, containsString("sourceThatWillNotRun"));

@@ -19,7 +19,7 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.deployment.application.EntryClassInformationProvider;
 import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
 import org.apache.flink.client.testjar.ClasspathProviderExtension;
@@ -667,8 +667,8 @@ class DefaultPackagedProgramRetrieverITCase {
                 packagedProgram.getClasspaths(),
                 URL::toString);
 
-        final Pipeline pipeline =
-                PackagedProgramUtils.getPipelineFromProgram(
+        final StreamGraph pipeline =
+                PackagedProgramUtils.getStreamGraphFromProgram(
                         packagedProgram, configuration, defaultParallelism, false);
         return PipelineExecutorUtils.getJobGraph(
                 pipeline, configuration, packagedProgram.getUserCodeClassLoader());

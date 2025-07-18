@@ -23,7 +23,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.ClientUtils;
 import org.apache.flink.client.FlinkPipelineTranslationUtil;
 import org.apache.flink.client.deployment.ClusterClientFactory;
@@ -368,11 +368,11 @@ public class CliFrontend {
                 parallelism = getDefaultParallelism(effectiveConfiguration);
             }
 
-            Pipeline pipeline =
-                    PackagedProgramUtils.getPipelineFromProgram(
+            StreamGraph pipeline =
+                    PackagedProgramUtils.getStreamGraphFromProgram(
                             program, effectiveConfiguration, parallelism, true);
             String jsonPlan =
-                    FlinkPipelineTranslationUtil.translateToJSONExecutionPlan(
+                    FlinkPipelineTranslationUtil.translateToJSONStreamGraph(
                             program.getUserCodeClassLoader(), pipeline);
 
             if (jsonPlan != null) {

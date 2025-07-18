@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.operators.translation;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
@@ -53,7 +53,7 @@ class AggregateTranslationTest {
                     .and(Aggregations.SUM, 2)
                     .output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 

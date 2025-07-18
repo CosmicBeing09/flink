@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 
@@ -43,7 +43,7 @@ class MultipleInvokationsTest {
             data.output(new DiscardingOutputFormat<>()).name("output1");
 
             {
-                Plan p = env.createProgramPlan();
+                StreamGraphPlan p = env.createProgramPlan();
 
                 assertThat(p.getDataSinks()).hasSize(2);
                 for (GenericDataSinkBase<?> sink : p.getDataSinks()) {
@@ -57,7 +57,7 @@ class MultipleInvokationsTest {
             data.writeAsText("/some/file/path").name("textsink");
 
             {
-                Plan p = env.createProgramPlan();
+                StreamGraphPlan p = env.createProgramPlan();
 
                 assertThat(p.getDataSinks()).hasSize(1);
                 GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();

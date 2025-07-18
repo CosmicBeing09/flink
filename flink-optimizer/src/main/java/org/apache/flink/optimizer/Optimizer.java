@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.ExecutionMode;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.optimizer.costs.CostEstimator;
@@ -27,7 +27,7 @@ import org.apache.flink.optimizer.costs.DefaultCostEstimator;
 import org.apache.flink.optimizer.dag.DataSinkNode;
 import org.apache.flink.optimizer.dag.OptimizerNode;
 import org.apache.flink.optimizer.dag.SinkJoiner;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SinkJoinerPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
@@ -391,7 +391,7 @@ public class Optimizer {
      * assigned and all channels have a shipping strategy assigned.
      *
      * <p>For more details on the optimization phase, see the comments for {@link
-     * #compile(org.apache.flink.api.common.Plan,
+     * #compile(StreamGraphPlan,
      * org.apache.flink.optimizer.postpass.OptimizerPostPass)}.
      *
      * @param program The program to be translated.
@@ -399,7 +399,7 @@ public class Optimizer {
      * @throws CompilerException Thrown, if the plan is invalid or the optimizer encountered an
      *     inconsistent situation during the compilation process.
      */
-    public OptimizedPlan compile(Plan program) throws CompilerException {
+    public OptimizedStreamGraph compile(StreamGraphPlan program) throws CompilerException {
         final OptimizerPostPass postPasser = getPostPassFromPlan(program);
         return compile(program, postPasser);
     }
@@ -429,7 +429,7 @@ public class Optimizer {
      * @throws CompilerException Thrown, if the plan is invalid or the optimizer encountered an
      *     inconsistent situation during the compilation process.
      */
-    private OptimizedPlan compile(Plan program, OptimizerPostPass postPasser)
+    private OptimizedStreamGraph compile(StreamGraphPlan program, OptimizerPostPass postPasser)
             throws CompilerException {
         if (program == null || postPasser == null) {
             throw new NullPointerException();
@@ -532,7 +532,7 @@ public class Optimizer {
         }
 
         // finalize the plan
-        OptimizedPlan plan =
+        OptimizedStreamGraph plan =
                 new PlanFinalizer().createFinalPlan(bestPlanSinks, program.getJobName(), program);
 
         plan.accept(new BinaryUnionReplacer());
@@ -554,7 +554,7 @@ public class Optimizer {
      * @return The optimizer representation of the plan, as a collection of all data sinks from the
      *     plan can be traversed.
      */
-    public static List<DataSinkNode> createPreOptimizedPlan(Plan program) {
+    public static List<DataSinkNode> createPreOptimizedPlan(StreamGraphPlan program) {
         GraphCreatingVisitor graphCreator = new GraphCreatingVisitor(1, null);
         program.accept(graphCreator);
         return graphCreator.getSinks();
@@ -564,7 +564,7 @@ public class Optimizer {
     // Miscellaneous
     // ------------------------------------------------------------------------
 
-    private OptimizerPostPass getPostPassFromPlan(Plan program) {
+    private OptimizerPostPass getPostPassFromPlan(StreamGraphPlan program) {
         final String className = program.getPostPassClassName();
         if (className == null) {
             throw new CompilerException("Optimizer Post Pass class description is null");

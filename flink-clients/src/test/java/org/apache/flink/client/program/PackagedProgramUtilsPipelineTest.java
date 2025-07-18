@@ -19,14 +19,13 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.common.StreamGraphPlan;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.runtime.execution.Environment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.testutils.ClassLoaderUtils;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
@@ -64,10 +63,10 @@ public class PackagedProgramUtilsPipelineTest {
         return Arrays.asList(
                 TestParameter.of(
                         DataSetTestProgram.class,
-                        pipeline -> ((Plan) pipeline).getExecutionConfig()),
+                        pipeline -> ((StreamGraphPlan) pipeline).getExecutionConfig()),
                 TestParameter.of(
                         DataStreamTestProgram.class,
-                        pipeline -> ((StreamGraph) pipeline).getExecutionConfig()));
+                        pipeline -> ((org.apache.flink.streaming.api.graph.StreamGraph) pipeline).getExecutionConfig()));
     }
 
     /**
@@ -91,8 +90,8 @@ public class PackagedProgramUtilsPipelineTest {
         Configuration config = new Configuration();
         config.set(PipelineOptions.AUTO_TYPE_REGISTRATION, false);
 
-        Pipeline pipeline =
-                PackagedProgramUtils.getPipelineFromProgram(
+        StreamGraph pipeline =
+                PackagedProgramUtils.getStreamGraphFromProgram(
                         packagedProgram, config, 1 /* parallelism */, false /* suppress output */);
 
         ExecutionConfig executionConfig = testParameter.extractExecutionConfig(pipeline);
@@ -121,8 +120,8 @@ public class PackagedProgramUtilsPipelineTest {
                                 PackagedProgramUtilsPipelineTest.class.getName(),
                                 userSerializerClassName)));
 
-        Pipeline pipeline =
-                PackagedProgramUtils.getPipelineFromProgram(
+        StreamGraph pipeline =
+                PackagedProgramUtils.getStreamGraphFromProgram(
                         packagedProgram, config, 1 /* parallelism */, false /* suppress output */);
 
         ExecutionConfig executionConfig = testParameter.extractExecutionConfig(pipeline);
@@ -166,10 +165,10 @@ public class PackagedProgramUtilsPipelineTest {
     private interface TestParameter {
         Class<?> entryClass();
 
-        ExecutionConfig extractExecutionConfig(Pipeline pipeline);
+        ExecutionConfig extractExecutionConfig(StreamGraph pipeline);
 
         static TestParameter of(
-                Class<?> entryClass, Function<Pipeline, ExecutionConfig> executionConfigExtractor) {
+                Class<?> entryClass, Function<StreamGraph, ExecutionConfig> executionConfigExtractor) {
             return new TestParameter() {
                 @Override
                 public Class<?> entryClass() {
@@ -177,7 +176,7 @@ public class PackagedProgramUtilsPipelineTest {
                 }
 
                 @Override
-                public ExecutionConfig extractExecutionConfig(Pipeline pipeline) {
+                public ExecutionConfig extractExecutionConfig(StreamGraph pipeline) {
                     return executionConfigExtractor.apply(pipeline);
                 }
 

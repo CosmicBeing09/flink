@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
@@ -31,7 +31,7 @@ import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -59,9 +59,9 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
     @Test
     public void testJavaApiWithDeferredSoltionSetUpdateWithMapper() {
         try {
-            Plan plan = getJavaTestPlan(false, true);
+            StreamGraphPlan plan = getJavaTestPlan(false, true);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode joinWithInvariantNode = resolver.getNode(JOIN_WITH_INVARIANT_NAME);
@@ -116,9 +116,9 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
     @Test
     public void testJavaApiWithDeferredSoltionSetUpdateWithNonPreservingJoin() {
         try {
-            Plan plan = getJavaTestPlan(false, false);
+            StreamGraphPlan plan = getJavaTestPlan(false, false);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode joinWithInvariantNode = resolver.getNode(JOIN_WITH_INVARIANT_NAME);
@@ -172,9 +172,9 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
     @Test
     public void testJavaApiWithDirectSoltionSetUpdate() {
         try {
-            Plan plan = getJavaTestPlan(true, false);
+            StreamGraphPlan plan = getJavaTestPlan(true, false);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode joinWithInvariantNode = resolver.getNode(JOIN_WITH_INVARIANT_NAME);
@@ -285,7 +285,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
         }
     }
 
-    private Plan getJavaTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
+    private StreamGraphPlan getJavaTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);

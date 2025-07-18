@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.java.DataSet;
@@ -29,7 +29,7 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.DriverStrategy;
@@ -51,9 +51,9 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
     public void testRightSide() {
         try {
 
-            Plan plan = getTestPlanRightStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_SECOND);
+            StreamGraphPlan plan = getTestPlanRightStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_SECOND);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode innerJoin = resolver.getNode("DummyJoiner");
@@ -80,9 +80,9 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
     public void testRightSideCountercheck() {
         try {
 
-            Plan plan = getTestPlanRightStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_FIRST);
+            StreamGraphPlan plan = getTestPlanRightStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_FIRST);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode innerJoin = resolver.getNode("DummyJoiner");
@@ -108,9 +108,9 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
     public void testLeftSide() {
         try {
 
-            Plan plan = getTestPlanLeftStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_FIRST);
+            StreamGraphPlan plan = getTestPlanLeftStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_FIRST);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode innerJoin = resolver.getNode("DummyJoiner");
@@ -137,9 +137,9 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
     public void testLeftSideCountercheck() {
         try {
 
-            Plan plan = getTestPlanLeftStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_SECOND);
+            StreamGraphPlan plan = getTestPlanLeftStatic(Optimizer.HINT_LOCAL_STRATEGY_HASH_BUILD_SECOND);
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode innerJoin = resolver.getNode("DummyJoiner");
@@ -167,7 +167,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
     public void testCorrectChoosing() {
         try {
 
-            Plan plan = getTestPlanRightStatic("");
+            StreamGraphPlan plan = getTestPlanRightStatic("");
 
             SourceCollectorVisitor sourceCollector = new SourceCollectorVisitor();
             plan.accept(sourceCollector);
@@ -180,7 +180,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
                 }
             }
 
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
 
             OptimizerPlanNodeResolver resolver = getOptimizerPlanNodeResolver(oPlan);
             DualInputPlanNode innerJoin = resolver.getNode("DummyJoiner");
@@ -199,7 +199,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
         }
     }
 
-    private Plan getTestPlanRightStatic(String strategy) {
+    private StreamGraphPlan getTestPlanRightStatic(String strategy) {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
@@ -240,7 +240,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
         return env.createProgramPlan();
     }
 
-    private Plan getTestPlanLeftStatic(String strategy) {
+    private StreamGraphPlan getTestPlanLeftStatic(String strategy) {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);

@@ -18,11 +18,11 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.IdentityGroupReducer;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -50,10 +50,10 @@ public class ReduceAllTest extends CompilerTestBase {
                 .output(new DiscardingOutputFormat<Long>())
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         try {
-            OptimizedPlan oPlan = compileNoStats(plan);
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
             JobGraphGenerator jobGen = new JobGraphGenerator();
             jobGen.compileJobGraph(oPlan);
         } catch (CompilerException ce) {

@@ -17,13 +17,13 @@
  */
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
@@ -89,9 +89,9 @@ public class ParallelismChangeTest extends CompilerTestBase {
                 .setParallelism(p * 2)
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when reducer 1 distributes its data across the instances of map2, it needs to employ a
@@ -150,10 +150,10 @@ public class ParallelismChangeTest extends CompilerTestBase {
                 .setParallelism(p * 2)
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when reducer 1 distributes its data across the instances of map2, it needs to employ a
@@ -214,9 +214,9 @@ public class ParallelismChangeTest extends CompilerTestBase {
                 .setParallelism(p * 2)
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when reducer 1 distributes its data across the instances of map2, it needs to employ a
@@ -271,9 +271,9 @@ public class ParallelismChangeTest extends CompilerTestBase {
                 .setParallelism(p)
                 .name("Sink");
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         // when reducer 1 distributes its data across the instances of map2, it needs to employ a
@@ -340,9 +340,9 @@ public class ParallelismChangeTest extends CompilerTestBase {
                 .output(new DiscardingOutputFormat<Long>())
                 .setParallelism(5);
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         JobGraphGenerator jobGen = new JobGraphGenerator();
 

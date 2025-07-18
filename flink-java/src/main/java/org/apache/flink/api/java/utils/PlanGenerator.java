@@ -20,7 +20,7 @@ package org.apache.flink.api.java.utils;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.OperatorInformation;
@@ -41,7 +41,7 @@ import java.util.Set;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** A generator that generates a {@link Plan} from a graph of {@link Operator}s. */
+/** A generator that generates a {@link StreamGraphPlan} from a graph of {@link Operator}s. */
 @Internal
 public class PlanGenerator {
 
@@ -70,8 +70,8 @@ public class PlanGenerator {
         this.jobConfiguration = checkNotNull(jobConfiguration);
     }
 
-    public Plan generate() {
-        final Plan plan = createPlan();
+    public StreamGraphPlan generate() {
+        final StreamGraphPlan plan = createPlan();
         registerGenericTypeInfoIfConfigured(plan);
         registerCachedFiles(plan);
 
@@ -84,9 +84,9 @@ public class PlanGenerator {
      *
      * @return the generated plan.
      */
-    private Plan createPlan() {
+    private StreamGraphPlan createPlan() {
         final OperatorTranslation translator = new OperatorTranslation();
-        final Plan plan = translator.translateToPlan(sinks, jobName);
+        final StreamGraphPlan plan = translator.translateToPlan(sinks, jobName);
 
         if (defaultParallelism > 0) {
             plan.setDefaultParallelism(defaultParallelism);
@@ -101,7 +101,7 @@ public class PlanGenerator {
      *
      * @param plan the generated plan.
      */
-    private void registerGenericTypeInfoIfConfigured(Plan plan) {
+    private void registerGenericTypeInfoIfConfigured(StreamGraphPlan plan) {
         if (!config.isAutoTypeRegistrationDisabled()) {
             plan.accept(
                     new Visitor<Operator<?>>() {
@@ -131,7 +131,7 @@ public class PlanGenerator {
         }
     }
 
-    private void registerCachedFiles(Plan plan) {
+    private void registerCachedFiles(StreamGraphPlan plan) {
         try {
             registerCachedFilesWithPlan(plan);
         } catch (Exception e) {
@@ -147,7 +147,7 @@ public class PlanGenerator {
      * @param p The plan to register files at.
      * @throws IOException Thrown if checks for existence and sanity fail.
      */
-    private void registerCachedFilesWithPlan(Plan p) throws IOException {
+    private void registerCachedFilesWithPlan(StreamGraphPlan p) throws IOException {
         for (Tuple2<String, DistributedCache.DistributedCacheEntry> entry : cacheFile) {
             p.registerCachedFile(entry.f0, entry.f1);
         }

@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.util.FieldSet;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
@@ -33,7 +33,7 @@ import org.apache.flink.optimizer.dataproperties.GlobalProperties;
 import org.apache.flink.optimizer.dataproperties.LocalProperties;
 import org.apache.flink.optimizer.dataproperties.PartitioningProperty;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -68,10 +68,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -100,10 +100,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -133,10 +133,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -166,10 +166,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -199,10 +199,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -231,10 +231,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -264,10 +264,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -298,10 +298,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -331,10 +331,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -364,10 +364,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -396,10 +396,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -429,10 +429,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -464,10 +464,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -497,10 +497,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -530,10 +530,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -565,10 +565,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -600,10 +600,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -635,10 +635,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -669,10 +669,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -705,10 +705,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -740,10 +740,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -775,10 +775,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data.output(new DiscardingOutputFormat<Tuple3<Long, SomePojo, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -813,10 +813,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data1.union(data2).output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();
@@ -871,10 +871,10 @@ public class PropertyDataSourceTest extends CompilerTestBase {
 
         data1.union(data2).output(new DiscardingOutputFormat<Tuple2<Long, String>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // submit the plan to the compiler
-        OptimizedPlan oPlan = compileNoStats(plan);
+        OptimizedStreamGraph oPlan = compileNoStats(plan);
 
         // check the optimized Plan
         SinkPlanNode sinkNode = oPlan.getDataSinks().iterator().next();

@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.operators;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -58,7 +58,7 @@ public class JoinOnConflictingPartitioningsTest extends CompilerTestBase {
                             new DiscardingOutputFormat<
                                     Tuple2<Tuple2<Long, Long>, Tuple2<Long, Long>>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
             try {
                 compileNoStats(p);
                 fail("This should fail with an exception");

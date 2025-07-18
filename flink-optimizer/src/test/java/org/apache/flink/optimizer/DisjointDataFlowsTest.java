@@ -18,10 +18,10 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 
@@ -41,8 +41,8 @@ public class DisjointDataFlowsTest extends CompilerTestBase {
             env.generateSequence(1, 10).output(new DiscardingOutputFormat<Long>());
             env.generateSequence(1, 10).output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             new JobGraphGenerator().compileJobGraph(op);
         } catch (Exception e) {

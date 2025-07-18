@@ -18,14 +18,14 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.DummyFlatJoinFunction;
 import org.apache.flink.optimizer.testfunctions.IdentityKeyExtractor;
@@ -59,7 +59,7 @@ public class NestedIterationsTest extends CompilerTestBase {
 
             outerResult.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             try {
                 compileNoStats(p);
@@ -101,7 +101,7 @@ public class NestedIterationsTest extends CompilerTestBase {
 
             outerResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             try {
                 compileNoStats(p);
@@ -141,10 +141,10 @@ public class NestedIterationsTest extends CompilerTestBase {
 
             mainResult.output(new DiscardingOutputFormat<Long>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             // optimizer should be able to translate this
-            OptimizedPlan op = compileNoStats(p);
+            OptimizedStreamGraph op = compileNoStats(p);
 
             // job graph generator should be able to translate this
             new JobGraphGenerator().compileJobGraph(op);
@@ -189,10 +189,10 @@ public class NestedIterationsTest extends CompilerTestBase {
 
             mainResult.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             // optimizer should be able to translate this
-            OptimizedPlan op = compileNoStats(p);
+            OptimizedStreamGraph op = compileNoStats(p);
 
             // job graph generator should be able to translate this
             new JobGraphGenerator().compileJobGraph(op);

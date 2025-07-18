@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.programs;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
@@ -29,7 +29,7 @@ import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
@@ -63,9 +63,9 @@ public class ConnectedComponentsTest extends CompilerTestBase {
 
     @Test
     public void testWorksetConnectedComponents() {
-        Plan plan = getConnectedComponentsPlan(DEFAULT_PARALLELISM, 100, false);
+        StreamGraphPlan plan = getConnectedComponentsPlan(DEFAULT_PARALLELISM, 100, false);
 
-        OptimizedPlan optPlan = compileNoStats(plan);
+        OptimizedStreamGraph optPlan = compileNoStats(plan);
         OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(optPlan);
 
         SourcePlanNode vertexSource = or.getNode(VERTEX_SOURCE);
@@ -160,9 +160,9 @@ public class ConnectedComponentsTest extends CompilerTestBase {
     @Test
     public void testWorksetConnectedComponentsWithSolutionSetAsFirstInput() {
 
-        Plan plan = getConnectedComponentsPlan(DEFAULT_PARALLELISM, 100, true);
+        StreamGraphPlan plan = getConnectedComponentsPlan(DEFAULT_PARALLELISM, 100, true);
 
-        OptimizedPlan optPlan = compileNoStats(plan);
+        OptimizedStreamGraph optPlan = compileNoStats(plan);
         OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(optPlan);
 
         SourcePlanNode vertexSource = or.getNode(VERTEX_SOURCE);
@@ -254,7 +254,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
         jgg.compileJobGraph(optPlan);
     }
 
-    private static Plan getConnectedComponentsPlan(
+    private static StreamGraphPlan getConnectedComponentsPlan(
             int parallelism, int iterations, boolean solutionSetFirst) {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();

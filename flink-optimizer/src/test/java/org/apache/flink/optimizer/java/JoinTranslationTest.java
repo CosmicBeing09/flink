@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.java;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
@@ -28,7 +28,7 @@ import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.DriverStrategy;
@@ -133,7 +133,7 @@ public class JoinTranslationTest extends CompilerTestBase {
                 .equalTo(new IdentityKeySelector<Long>())
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         // set statistics to the sources
         plan.accept(
@@ -153,7 +153,7 @@ public class JoinTranslationTest extends CompilerTestBase {
                     public void postVisit(Operator<?> visitable) {}
                 });
 
-        OptimizedPlan op = compileWithStats(plan);
+        OptimizedStreamGraph op = compileWithStats(plan);
 
         return (DualInputPlanNode)
                 ((SinkPlanNode) op.getDataSinks().iterator().next()).getInput().getSource();

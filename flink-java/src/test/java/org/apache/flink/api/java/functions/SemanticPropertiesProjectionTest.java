@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.functions;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.DualInputSemanticProperties;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
@@ -78,7 +78,7 @@ class SemanticPropertiesProjectionTest {
 
         tupleDs.project(1, 3, 2, 0, 3).output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         PlanProjectOperator<?, ?> projectOperator = ((PlanProjectOperator<?, ?>) sink.getInput());
@@ -99,7 +99,7 @@ class SemanticPropertiesProjectionTest {
 
         tupleDs.project(2, 3, 1, 2).output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         PlanProjectOperator<?, ?> projectOperator = ((PlanProjectOperator<?, ?>) sink.getInput());
@@ -128,7 +128,7 @@ class SemanticPropertiesProjectionTest {
                 .projectSecond(1, 4)
                 .output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> projectJoinOperator =
@@ -155,7 +155,7 @@ class SemanticPropertiesProjectionTest {
                 .projectSecond(1, 3)
                 .output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> projectJoinOperator =
@@ -191,7 +191,7 @@ class SemanticPropertiesProjectionTest {
                 .projectSecond(1, 4)
                 .output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         CrossOperatorBase<?, ?, ?, ?> projectCrossOperator =
@@ -216,7 +216,7 @@ class SemanticPropertiesProjectionTest {
                 .projectSecond(1, 3)
                 .output(new DiscardingOutputFormat<>());
 
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         CrossOperatorBase<?, ?, ?, ?> projectCrossOperator =

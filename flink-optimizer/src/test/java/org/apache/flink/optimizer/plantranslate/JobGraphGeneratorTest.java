@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.plantranslate;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.aggregators.LongSumAggregator;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.FilterFunction;
@@ -36,7 +36,7 @@ import org.apache.flink.api.java.operators.Operator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.Optimizer;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.testfunctions.IdentityMapper;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
@@ -349,9 +349,9 @@ public class JobGraphGeneratorTest {
     }
 
     private static JobGraph compileJob(ExecutionEnvironment env) {
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
         Optimizer pc = new Optimizer(new Configuration());
-        OptimizedPlan op = pc.compile(plan);
+        OptimizedStreamGraph op = pc.compile(plan);
 
         JobGraphGenerator jgg = new JobGraphGenerator();
         return jgg.compileJobGraph(op);

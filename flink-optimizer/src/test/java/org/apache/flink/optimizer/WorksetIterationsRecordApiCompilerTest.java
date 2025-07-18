@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.util.FieldList;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
@@ -27,7 +27,7 @@ import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.JoinOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.IdentityGroupReducer;
@@ -60,9 +60,9 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
 
     @Test
     public void testRecordApiWithDeferredSoltionSetUpdateWithMapper() {
-        Plan plan = getTestPlan(false, true);
+        StreamGraphPlan plan = getTestPlan(false, true);
 
-        OptimizedPlan oPlan;
+        OptimizedStreamGraph oPlan;
         try {
             oPlan = compileNoStats(plan);
         } catch (CompilerException ce) {
@@ -113,9 +113,9 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
 
     @Test
     public void testRecordApiWithDeferredSoltionSetUpdateWithNonPreservingJoin() {
-        Plan plan = getTestPlan(false, false);
+        StreamGraphPlan plan = getTestPlan(false, false);
 
-        OptimizedPlan oPlan;
+        OptimizedStreamGraph oPlan;
         try {
             oPlan = compileNoStats(plan);
         } catch (CompilerException ce) {
@@ -165,9 +165,9 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
 
     @Test
     public void testRecordApiWithDirectSoltionSetUpdate() {
-        Plan plan = getTestPlan(true, false);
+        StreamGraphPlan plan = getTestPlan(true, false);
 
-        OptimizedPlan oPlan;
+        OptimizedStreamGraph oPlan;
         try {
             oPlan = compileNoStats(plan);
         } catch (CompilerException ce) {
@@ -212,7 +212,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
         new JobGraphGenerator().compileJobGraph(oPlan);
     }
 
-    private Plan getTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
+    private StreamGraphPlan getTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
 
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();

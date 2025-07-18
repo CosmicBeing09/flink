@@ -24,7 +24,7 @@ import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.cache.DistributedCache.DistributedCacheEntry;
 import org.apache.flink.api.common.io.FileInputFormat;
@@ -910,7 +910,7 @@ public class ExecutionEnvironment {
                 configuration.get(DeploymentOptions.TARGET),
                 "No execution.target specified in your configuration file.");
 
-        final Plan plan = createProgramPlan(jobName);
+        final StreamGraphPlan plan = createProgramPlan(jobName);
         final PipelineExecutorFactory executorFactory =
                 executorServiceLoader.getExecutorFactory(configuration);
 
@@ -945,7 +945,7 @@ public class ExecutionEnvironment {
      * @throws Exception Thrown, if the compiler could not be instantiated.
      */
     public String getExecutionPlan() throws Exception {
-        Plan p = createProgramPlan(getJobName(), false);
+        StreamGraphPlan p = createProgramPlan(getJobName(), false);
         return ExecutionPlanUtil.getExecutionPlanAsJSON(p);
     }
 
@@ -989,7 +989,7 @@ public class ExecutionEnvironment {
     }
 
     /**
-     * Creates the program's {@link Plan}. The plan is a description of all data sources, data
+     * Creates the program's {@link StreamGraphPlan}. The plan is a description of all data sources, data
      * sinks, and operations and how they interact, as an isolated unit that can be executed with an
      * {@link PipelineExecutor}. Obtaining a plan and starting it with an executor is an alternative
      * way to run a program and is only possible if the program consists only of distributed
@@ -998,12 +998,12 @@ public class ExecutionEnvironment {
      * @return The program's plan.
      */
     @Internal
-    public Plan createProgramPlan() {
+    public StreamGraphPlan createProgramPlan() {
         return createProgramPlan(getJobName());
     }
 
     /**
-     * Creates the program's {@link Plan}. The plan is a description of all data sources, data
+     * Creates the program's {@link StreamGraphPlan}. The plan is a description of all data sources, data
      * sinks, and operations and how they interact, as an isolated unit that can be executed with an
      * {@link PipelineExecutor}. Obtaining a plan and starting it with an executor is an alternative
      * way to run a program and is only possible if the program consists only of distributed
@@ -1013,12 +1013,12 @@ public class ExecutionEnvironment {
      * @return The program's plan.
      */
     @Internal
-    public Plan createProgramPlan(String jobName) {
+    public StreamGraphPlan createProgramPlan(String jobName) {
         return createProgramPlan(jobName, true);
     }
 
     /**
-     * Creates the program's {@link Plan}. The plan is a description of all data sources, data
+     * Creates the program's {@link StreamGraphPlan}. The plan is a description of all data sources, data
      * sinks, and operations and how they interact, as an isolated unit that can be executed with an
      * {@link PipelineExecutor}. Obtaining a plan and starting it with an executor is an alternative
      * way to run a program and is only possible if the program consists only of distributed
@@ -1029,7 +1029,7 @@ public class ExecutionEnvironment {
      * @return The program's plan.
      */
     @Internal
-    public Plan createProgramPlan(String jobName, boolean clearSinks) {
+    public StreamGraphPlan createProgramPlan(String jobName, boolean clearSinks) {
         checkNotNull(jobName);
 
         if (this.sinks.isEmpty()) {
@@ -1049,7 +1049,7 @@ public class ExecutionEnvironment {
         final PlanGenerator generator =
                 new PlanGenerator(
                         sinks, config, getParallelism(), cacheFile, jobName, configuration);
-        final Plan plan = generator.generate();
+        final StreamGraphPlan plan = generator.generate();
 
         // clear all the sinks such that the next execution does not redo everything
         if (clearSinks) {

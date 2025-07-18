@@ -18,12 +18,11 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.annotation.PublicEvolving;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironmentFactory;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 
 /**
  * A special {@link StreamExecutionEnvironment} that is used in the web frontend when generating a
@@ -32,9 +31,9 @@ import org.apache.flink.streaming.api.graph.StreamGraph;
 @PublicEvolving
 public class StreamPlanEnvironment extends StreamExecutionEnvironment {
 
-    private Pipeline pipeline;
+    private StreamGraph pipeline;
 
-    public Pipeline getPipeline() {
+    public StreamGraph getPipeline() {
         return pipeline;
     }
 
@@ -47,7 +46,7 @@ public class StreamPlanEnvironment extends StreamExecutionEnvironment {
     }
 
     @Override
-    public JobClient executeAsync(StreamGraph streamGraph) {
+    public JobClient executeAsync(org.apache.flink.streaming.api.graph.StreamGraph streamGraph) {
         pipeline = streamGraph;
 
         // do not go on with anything now!

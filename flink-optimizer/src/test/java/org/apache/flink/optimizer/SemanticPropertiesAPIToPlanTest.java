@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
@@ -35,7 +35,7 @@ import org.apache.flink.optimizer.dataproperties.LocalProperties;
 import org.apache.flink.optimizer.dataproperties.PartitioningProperty;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -66,8 +66,8 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
                         .withForwardedFields("*");
 
         set.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         oPlan.accept(
                 new Visitor<PlanNode>() {
@@ -147,8 +147,8 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
                 in1.join(in2).where(1).equalTo(2).with(new MockJoin());
 
         out.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
-        Plan plan = env.createProgramPlan();
-        OptimizedPlan oPlan = compileWithStats(plan);
+        StreamGraphPlan plan = env.createProgramPlan();
+        OptimizedStreamGraph oPlan = compileWithStats(plan);
 
         oPlan.accept(
                 new Visitor<PlanNode>() {

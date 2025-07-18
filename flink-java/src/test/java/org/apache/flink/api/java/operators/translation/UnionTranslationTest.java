@@ -19,7 +19,7 @@
 package org.apache.flink.api.java.operators.translation;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.Order;
@@ -63,7 +63,7 @@ class UnionTranslationTest {
                     .returns(String.class)
                     .output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             // The plan should look like the following one.
             //
@@ -119,7 +119,7 @@ class UnionTranslationTest {
                     .returns(String.class)
                     .output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             // The plan should look like the following one.
             //

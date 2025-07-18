@@ -19,22 +19,22 @@
 
 package org.apache.flink.client;
 
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 
 /**
- * Utility for transforming {@link Pipeline FlinkPipelines} into a {@link JobGraph}. This uses
+ * Utility for transforming {@link StreamGraph FlinkPipelines} into a {@link JobGraph}. This uses
  * reflection or service discovery to find the right {@link FlinkPipelineTranslator} for a given
- * subclass of {@link Pipeline}.
+ * subclass of {@link StreamGraph}.
  */
 public final class FlinkPipelineTranslationUtil {
 
-    /** Transmogrifies the given {@link Pipeline} to a {@link JobGraph}. */
+    /** Transmogrifies the given {@link StreamGraph} to a {@link JobGraph}. */
     public static JobGraph getJobGraph(
             ClassLoader userClassloader,
-            Pipeline pipeline,
+            StreamGraph pipeline,
             Configuration optimizerConfiguration,
             int defaultParallelism) {
 
@@ -56,11 +56,11 @@ public final class FlinkPipelineTranslationUtil {
     }
 
     /**
-     * Transmogrifies the given {@link Pipeline} under the userClassloader to a {@link JobGraph}.
+     * Transmogrifies the given {@link StreamGraph} under the userClassloader to a {@link JobGraph}.
      */
     public static JobGraph getJobGraphUnderUserClassLoader(
             final ClassLoader userClassloader,
-            final Pipeline pipeline,
+            final StreamGraph pipeline,
             final Configuration configuration,
             final int defaultParallelism) {
         final ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();
@@ -73,16 +73,16 @@ public final class FlinkPipelineTranslationUtil {
         }
     }
 
-    /** Extracts the execution plan (as JSON) from the given {@link Pipeline}. */
-    public static String translateToJSONExecutionPlan(
-            ClassLoader userClassloader, Pipeline pipeline) {
+    /** Extracts the execution plan (as JSON) from the given {@link StreamGraph}. */
+    public static String translateToJSONStreamGraph(
+            ClassLoader userClassloader, StreamGraph pipeline) {
         FlinkPipelineTranslator pipelineTranslator =
                 getPipelineTranslator(userClassloader, pipeline);
-        return pipelineTranslator.translateToJSONExecutionPlan(pipeline);
+        return pipelineTranslator.translateToJSONStreamGraph(pipeline);
     }
 
     private static FlinkPipelineTranslator getPipelineTranslator(
-            ClassLoader userClassloader, Pipeline pipeline) {
+            ClassLoader userClassloader, StreamGraph pipeline) {
         PlanTranslator planTranslator = new PlanTranslator();
 
         if (planTranslator.canTranslate(pipeline)) {

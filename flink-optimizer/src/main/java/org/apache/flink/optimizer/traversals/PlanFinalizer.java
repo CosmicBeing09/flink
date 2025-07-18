@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.traversals;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.optimizer.CompilerException;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.dag.TempMode;
@@ -27,7 +27,7 @@ import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.BulkPartialSolutionPlanNode;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.IterationPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.PlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SolutionSetPlanNode;
@@ -74,8 +74,8 @@ public class PlanFinalizer implements Visitor<PlanNode> {
         this.stackOfIterationNodes = new ArrayDeque<IterationPlanNode>();
     }
 
-    public OptimizedPlan createFinalPlan(
-            List<SinkPlanNode> sinks, String jobName, Plan originalPlan) {
+    public OptimizedStreamGraph createFinalPlan(
+            List<SinkPlanNode> sinks, String jobName, StreamGraphPlan originalPlan) {
         this.memoryConsumerWeights = 0;
 
         // traverse the graph
@@ -132,7 +132,7 @@ public class PlanFinalizer implements Visitor<PlanNode> {
                 }
             }
         }
-        return new OptimizedPlan(this.sources, this.sinks, this.allNodes, jobName, originalPlan);
+        return new OptimizedStreamGraph(this.sources, this.sinks, this.allNodes, jobName, originalPlan);
     }
 
     @Override

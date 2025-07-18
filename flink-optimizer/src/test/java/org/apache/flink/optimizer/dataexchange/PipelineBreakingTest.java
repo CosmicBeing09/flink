@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.dataexchange;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -304,7 +304,7 @@ public class PipelineBreakingTest {
         }
     }
 
-    private static List<DataSinkNode> convertPlan(Plan p) {
+    private static List<DataSinkNode> convertPlan(StreamGraphPlan p) {
         GraphCreatingVisitor dagCreator =
                 new GraphCreatingVisitor(17, p.getExecutionConfig().getExecutionMode());
 

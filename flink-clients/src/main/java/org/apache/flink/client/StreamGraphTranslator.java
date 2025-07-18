@@ -19,10 +19,9 @@
 
 package org.apache.flink.client;
 
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.streaming.api.graph.StreamGraph;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +29,7 @@ import org.slf4j.LoggerFactory;
 import static org.apache.flink.util.Preconditions.checkArgument;
 
 /**
- * {@link FlinkPipelineTranslator} for DataStream API {@link StreamGraph StreamGraphs}.
+ * {@link FlinkPipelineTranslator} for DataStream API {@link org.apache.flink.streaming.api.graph.StreamGraph StreamGraphs}.
  *
  * <p>Note: this is used through reflection in {@link
  * org.apache.flink.client.FlinkPipelineTranslationUtil}.
@@ -48,26 +47,26 @@ public class StreamGraphTranslator implements FlinkPipelineTranslator {
 
     @Override
     public JobGraph translateToJobGraph(
-            Pipeline pipeline, Configuration optimizerConfiguration, int defaultParallelism) {
+            StreamGraph pipeline, Configuration optimizerConfiguration, int defaultParallelism) {
         checkArgument(
-                pipeline instanceof StreamGraph, "Given pipeline is not a DataStream StreamGraph.");
+                pipeline instanceof org.apache.flink.streaming.api.graph.StreamGraph, "Given pipeline is not a DataStream StreamGraph.");
 
-        StreamGraph streamGraph = (StreamGraph) pipeline;
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = (org.apache.flink.streaming.api.graph.StreamGraph) pipeline;
         return streamGraph.getJobGraph(userClassloader, null);
     }
 
     @Override
-    public String translateToJSONExecutionPlan(Pipeline pipeline) {
+    public String translateToJSONExecutionPlan(StreamGraph pipeline) {
         checkArgument(
-                pipeline instanceof StreamGraph, "Given pipeline is not a DataStream StreamGraph.");
+                pipeline instanceof org.apache.flink.streaming.api.graph.StreamGraph, "Given pipeline is not a DataStream StreamGraph.");
 
-        StreamGraph streamGraph = (StreamGraph) pipeline;
+        org.apache.flink.streaming.api.graph.StreamGraph streamGraph = (org.apache.flink.streaming.api.graph.StreamGraph) pipeline;
 
         return streamGraph.getStreamingPlanAsJSON();
     }
 
     @Override
-    public boolean canTranslate(Pipeline pipeline) {
-        return pipeline instanceof StreamGraph;
+    public boolean canTranslate(StreamGraph pipeline) {
+        return pipeline instanceof org.apache.flink.streaming.api.graph.StreamGraph;
     }
 }

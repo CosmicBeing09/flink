@@ -20,7 +20,7 @@ package org.apache.flink.test.cancelling;
 
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.JobStatus;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
@@ -29,7 +29,7 @@ import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -92,7 +92,7 @@ public abstract class CancelingTestBase extends TestLogger {
 
     // --------------------------------------------------------------------------------------------
 
-    protected void runAndCancelJob(Plan plan, final int msecsTillCanceling, int maxTimeTillCanceled)
+    protected void runAndCancelJob(StreamGraphPlan plan, final int msecsTillCanceling, int maxTimeTillCanceled)
             throws Exception {
         // submit job
         final JobGraph jobGraph = getJobGraph(plan);
@@ -130,9 +130,9 @@ public abstract class CancelingTestBase extends TestLogger {
         assertEquals(JobStatus.CANCELED, jobStatusAfterCancel);
     }
 
-    private JobGraph getJobGraph(final Plan plan) {
+    private JobGraph getJobGraph(final StreamGraphPlan plan) {
         final Optimizer pc = new Optimizer(new DataStatistics(), getConfiguration());
-        final OptimizedPlan op = pc.compile(plan);
+        final OptimizedStreamGraph op = pc.compile(plan);
         final JobGraphGenerator jgg = new JobGraphGenerator();
         return jgg.compileJobGraph(op);
     }

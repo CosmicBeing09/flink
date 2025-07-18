@@ -20,19 +20,19 @@
 package org.apache.flink.api.java;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
-/** A utility for extracting an execution plan (as JSON) from a {@link Plan}. */
+/** A utility for extracting an execution plan (as JSON) from a {@link StreamGraphPlan}. */
 @Internal
 public class ExecutionPlanUtil {
 
     private static final String PLAN_GENERATOR_CLASS_NAME =
             "org.apache.flink.optimizer.plandump.ExecutionPlanJSONGenerator";
 
-    /** Extracts the execution plan (as JSON) from the given {@link Plan}. */
-    public static String getExecutionPlanAsJSON(Plan plan) {
+    /** Extracts the execution plan (as JSON) from the given {@link StreamGraphPlan}. */
+    public static String getExecutionPlanAsJSON(StreamGraphPlan plan) {
         checkNotNull(plan);
         ExecutionPlanJSONGenerator jsonGenerator = getJSONGenerator();
         return jsonGenerator.getExecutionPlan(plan);
@@ -77,6 +77,6 @@ public class ExecutionPlanUtil {
     public interface ExecutionPlanJSONGenerator {
 
         /** Returns the execution plan as a JSON string. */
-        String getExecutionPlan(Plan plan);
+        String getExecutionPlan(StreamGraphPlan plan);
     }
 }

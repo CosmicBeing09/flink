@@ -18,14 +18,14 @@
 
 package org.apache.flink.optimizer;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.shipping.ShipStrategyType;
 
@@ -54,8 +54,8 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
         try {
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileWithStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileWithStats(plan);
             OptimizerPlanNodeResolver resolver = new OptimizerPlanNodeResolver(oPlan);
 
             DualInputPlanNode crossPlanNode = resolver.getNode("Cross");
@@ -83,8 +83,8 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
                 .output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
 
         try {
-            Plan plan = env.createProgramPlan();
-            OptimizedPlan oPlan = compileNoStats(plan);
+            StreamGraphPlan plan = env.createProgramPlan();
+            OptimizedStreamGraph oPlan = compileNoStats(plan);
             OptimizerPlanNodeResolver resolver = new OptimizerPlanNodeResolver(oPlan);
 
             DualInputPlanNode crossPlanNode = resolver.getNode("Cross");

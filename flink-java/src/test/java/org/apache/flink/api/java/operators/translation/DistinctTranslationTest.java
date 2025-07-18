@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.operators.translation;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
@@ -58,7 +58,7 @@ class DistinctTranslationTest {
 
             initialData.distinct().output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -93,7 +93,7 @@ class DistinctTranslationTest {
 
             initialData.distinct().output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -128,7 +128,7 @@ class DistinctTranslationTest {
 
             initialData.distinct(1, 2).output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -168,7 +168,7 @@ class DistinctTranslationTest {
                     .setParallelism(4)
                     .output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -219,7 +219,7 @@ class DistinctTranslationTest {
 
             initialData.distinct("myInt").output(new DiscardingOutputFormat<>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 

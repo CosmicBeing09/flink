@@ -19,7 +19,7 @@
 package org.apache.flink.api.java.operators.translation;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
@@ -65,7 +65,7 @@ class ReduceTranslationTests implements java.io.Serializable {
                             })
                     .output(new DiscardingOutputFormat<Tuple3<Double, StringValue, LongValue>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -114,7 +114,7 @@ class ReduceTranslationTests implements java.io.Serializable {
                             })
                     .output(new DiscardingOutputFormat<Tuple3<Double, StringValue, LongValue>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 
@@ -166,7 +166,7 @@ class ReduceTranslationTests implements java.io.Serializable {
                     .setParallelism(4)
                     .output(new DiscardingOutputFormat<Tuple3<Double, StringValue, LongValue>>());
 
-            Plan p = env.createProgramPlan();
+            StreamGraphPlan p = env.createProgramPlan();
 
             GenericDataSinkBase<?> sink = p.getDataSinks().iterator().next();
 

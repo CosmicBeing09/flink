@@ -18,7 +18,7 @@
 
 package org.apache.flink.client.program;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
@@ -29,8 +29,8 @@ import org.apache.flink.configuration.JobManagerOptions;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.costs.DefaultCostEstimator;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 
 import org.junit.jupiter.api.Test;
 
@@ -62,15 +62,15 @@ class ExecutionPlanCreationTest {
 
             Optimizer optimizer =
                     new Optimizer(new DataStatistics(), new DefaultCostEstimator(), config);
-            Plan plan = (Plan) PackagedProgramUtils.getPipelineFromProgram(prg, config, -1, true);
-            OptimizedPlan op = optimizer.compile(plan);
+            StreamGraphPlan plan = (StreamGraphPlan) PackagedProgramUtils.getStreamGraphFromProgram(prg, config, -1, true);
+            OptimizedStreamGraph op = optimizer.compile(plan);
             assertThat(op).isNotNull();
 
-            PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+            StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
             assertThat(dumper.getOptimizerPlanAsJSON(op)).isNotNull();
 
             // test HTML escaping
-            PlanJSONDumpGenerator dumper2 = new PlanJSONDumpGenerator();
+            StreamGraphJSONDumpGenerator dumper2 = new StreamGraphJSONDumpGenerator();
             dumper2.setEncodeForHTML(true);
             String htmlEscaped = dumper2.getOptimizerPlanAsJSON(op);
 

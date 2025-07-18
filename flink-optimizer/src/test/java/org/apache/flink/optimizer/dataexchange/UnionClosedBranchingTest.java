@@ -26,7 +26,7 @@ import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
 import org.apache.flink.optimizer.plan.NAryUnionPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
@@ -139,7 +139,7 @@ public class UnionClosedBranchingTest extends CompilerTestBase {
         // Verify optimized plan
         // -----------------------------------------------------------------------------------------
 
-        OptimizedPlan optimizedPlan = compileNoStats(env.createProgramPlan());
+        OptimizedStreamGraph optimizedPlan = compileNoStats(env.createProgramPlan());
 
         SinkPlanNode sinkNode = optimizedPlan.getDataSinks().iterator().next();
 

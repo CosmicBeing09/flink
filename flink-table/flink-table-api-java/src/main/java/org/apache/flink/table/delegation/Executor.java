@@ -20,7 +20,7 @@ package org.apache.flink.table.delegation;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.configuration.ReadableConfig;
@@ -38,7 +38,7 @@ import java.util.List;
  * <p>This uncouples the {@link TableEnvironment} from any given runtime.
  *
  * <p>Note that not every table program calls {@link #createPipeline(List, ReadableConfig, String)}
- * or {@link #execute(Pipeline)}. When bridging to DataStream API, this interface serves as a
+ * or {@link #execute(StreamGraph)}. When bridging to DataStream API, this interface serves as a
  * communication layer to the final pipeline executor via {@code StreamExecutionEnvironment}.
  *
  * @see ExecutorFactory
@@ -50,21 +50,21 @@ public interface Executor {
     ReadableConfig getConfiguration();
 
     /**
-     * Translates the given transformations to a {@link Pipeline}.
+     * Translates the given transformations to a {@link StreamGraph}.
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
      * @param defaultJobName default job name if not specified via {@link PipelineOptions#NAME}
      * @return The pipeline representing the transformations.
      */
-    Pipeline createPipeline(
+    StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @Nullable String defaultJobName);
 
     /**
      * Translates the given transformations with a list of {@link JobStatusHook}s to a {@link
-     * Pipeline}.
+     * StreamGraph}.
      *
      * @param transformations list of transformations
      * @param tableConfiguration table-specific configuration options
@@ -72,7 +72,7 @@ public interface Executor {
      * @param jobStatusHookList list of {@link JobStatusHook}s
      * @return The pipeline representing the transformations.
      */
-    Pipeline createPipeline(
+    StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @Nullable String defaultJobName,
@@ -85,7 +85,7 @@ public interface Executor {
      * @return The result of the job execution, containing elapsed time and accumulators.
      * @throws Exception which occurs during job execution.
      */
-    JobExecutionResult execute(Pipeline pipeline) throws Exception;
+    JobExecutionResult execute(StreamGraph pipeline) throws Exception;
 
     /**
      * Executes the given pipeline asynchronously.
@@ -95,7 +95,7 @@ public interface Executor {
      *     on submission succeeded.
      * @throws Exception which occurs during job execution.
      */
-    JobClient executeAsync(Pipeline pipeline) throws Exception;
+    JobClient executeAsync(StreamGraph pipeline) throws Exception;
 
     /**
      * Checks whether checkpointing is enabled.

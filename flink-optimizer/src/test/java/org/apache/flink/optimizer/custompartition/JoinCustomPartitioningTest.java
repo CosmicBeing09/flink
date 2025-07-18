@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.custompartition;
 
 import org.apache.flink.api.common.InvalidProgramException;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
@@ -30,7 +30,7 @@ import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.DummyFlatJoinFunction;
 import org.apache.flink.optimizer.testfunctions.IdentityGroupReducerCombinable;
@@ -64,8 +64,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
                             new DiscardingOutputFormat<
                                     Tuple2<Tuple2<Long, Long>, Tuple3<Long, Long, Long>>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -123,8 +123,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
                     .withPartitioner(partitioner)
                     .output(new DiscardingOutputFormat<Tuple2<Pojo2, Pojo3>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -181,8 +181,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
                     .withPartitioner(partitioner)
                     .output(new DiscardingOutputFormat<Tuple2<Pojo2, Pojo3>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             DualInputPlanNode join = (DualInputPlanNode) sink.getInput().getSource();
@@ -258,8 +258,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
                     .with(new DummyFlatJoinFunction<Tuple3<Long, Long, Long>>())
                     .output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
 
-            Plan p = env.createProgramPlan();
-            OptimizedPlan op = compileNoStats(p);
+            StreamGraphPlan p = env.createProgramPlan();
+            OptimizedStreamGraph op = compileNoStats(p);
 
             SinkPlanNode sink = op.getDataSinks().iterator().next();
             DualInputPlanNode coGroup = (DualInputPlanNode) sink.getInput().getSource();

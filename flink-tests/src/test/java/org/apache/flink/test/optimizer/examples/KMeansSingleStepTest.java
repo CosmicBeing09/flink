@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.examples;
 
 import org.apache.flink.api.common.ExecutionConfig;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
@@ -31,7 +31,7 @@ import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.util.CompilerTestBase;
@@ -68,7 +68,7 @@ public class KMeansSingleStepTest extends CompilerTestBase {
     @Test
     public void testCompileKMeansSingleStepWithStats() throws Exception {
 
-        Plan p = getKMeansPlan();
+        StreamGraphPlan p = getKMeansPlan();
         p.setExecutionConfig(new ExecutionConfig());
         // set the statistics
         OperatorResolver cr = getContractResolver(p);
@@ -77,19 +77,19 @@ public class KMeansSingleStepTest extends CompilerTestBase {
         setSourceStatistics(pointsSource, 100L * 1024 * 1024 * 1024, 32f);
         setSourceStatistics(centersSource, 1024 * 1024, 32f);
 
-        OptimizedPlan plan = compileWithStats(p);
+        OptimizedStreamGraph plan = compileWithStats(p);
         checkPlan(plan);
     }
 
     @Test
     public void testCompileKMeansSingleStepWithOutStats() throws Exception {
-        Plan p = getKMeansPlan();
+        StreamGraphPlan p = getKMeansPlan();
         p.setExecutionConfig(new ExecutionConfig());
-        OptimizedPlan plan = compileNoStats(p);
+        OptimizedStreamGraph plan = compileNoStats(p);
         checkPlan(plan);
     }
 
-    private void checkPlan(OptimizedPlan plan) {
+    private void checkPlan(OptimizedStreamGraph plan) {
 
         OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(plan);
 
@@ -139,11 +139,11 @@ public class KMeansSingleStepTest extends CompilerTestBase {
         assertEquals(LocalStrategy.NONE, sink.getInput().getLocalStrategy());
     }
 
-    public static Plan getKMeansPlan() throws Exception {
+    public static StreamGraphPlan getKMeansPlan() throws Exception {
         return kmeans(new String[] {IN_FILE, IN_FILE, OUT_FILE, "20"});
     }
 
-    public static Plan kmeans(String[] args) throws Exception {
+    public static StreamGraphPlan kmeans(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         DataSet<Point> points =

@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.functions;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
@@ -44,7 +44,7 @@ class SemanticPropertiesPrecedenceTest {
         DataSet<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
         input.map(new WildcardForwardedMapperWithForwardAnnotation<>())
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -68,7 +68,7 @@ class SemanticPropertiesPrecedenceTest {
         input.map(new WildcardForwardedMapper<>())
                 .withForwardedFields("f0")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();

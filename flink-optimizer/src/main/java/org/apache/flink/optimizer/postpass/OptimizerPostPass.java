@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.postpass;
 
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 
 /**
  * Interface for visitors that process the optimizer's plan. Typical post processing applications
@@ -33,5 +33,5 @@ public interface OptimizerPostPass {
      *
      * @param plan The plan to be post processed.
      */
-    void postPass(OptimizedPlan plan);
+    void postPass(OptimizedStreamGraph plan);
 }

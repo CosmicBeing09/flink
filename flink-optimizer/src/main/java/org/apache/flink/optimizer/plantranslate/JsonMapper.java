@@ -33,7 +33,7 @@ import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.core.JsonGenerator
 import java.io.IOException;
 import java.io.StringWriter;
 
-import static org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator.formatNumber;
+import static org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator.formatNumber;
 
 public class JsonMapper {
 

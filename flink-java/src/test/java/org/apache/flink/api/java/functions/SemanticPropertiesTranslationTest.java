@@ -18,7 +18,7 @@
 
 package org.apache.flink.api.java.functions;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.DualInputSemanticProperties;
@@ -57,7 +57,7 @@ class SemanticPropertiesTranslationTest {
         DataSet<Tuple3<Long, String, Integer>> input =
                 env.fromElements(new Tuple3<>(3L, "test", 42));
         input.map(new WildcardForwardedMapper<>()).output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -80,7 +80,7 @@ class SemanticPropertiesTranslationTest {
         DataSet<Tuple3<Long, String, Integer>> input =
                 env.fromElements(new Tuple3<>(3L, "test", 42));
         input.map(new IndividualForwardedMapper<>()).output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -100,7 +100,7 @@ class SemanticPropertiesTranslationTest {
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ShufflingMapper<>()).output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -124,7 +124,7 @@ class SemanticPropertiesTranslationTest {
         input.map(new NoAnnotationMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -146,7 +146,7 @@ class SemanticPropertiesTranslationTest {
         input.map(new ReadSetMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -168,7 +168,7 @@ class SemanticPropertiesTranslationTest {
         input.map(new ReadSetMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -188,7 +188,7 @@ class SemanticPropertiesTranslationTest {
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new AllForwardedExceptMapper<>()).output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -208,7 +208,7 @@ class SemanticPropertiesTranslationTest {
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ReadSetMapper<>()).output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         MapOperatorBase<?, ?, ?> mapper = (MapOperatorBase<?, ?, ?>) sink.getInput();
@@ -258,7 +258,7 @@ class SemanticPropertiesTranslationTest {
                 .equalTo(0)
                 .with(new ForwardedBothAnnotationJoin<>())
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -286,7 +286,7 @@ class SemanticPropertiesTranslationTest {
                 .withForwardedFieldsFirst("0->1; 1->2")
                 .withForwardedFieldsSecond("1->0")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -314,7 +314,7 @@ class SemanticPropertiesTranslationTest {
                 .withForwardedFieldsFirst("0->1; 1->2")
                 .withForwardedFieldsSecond("1->0")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -343,7 +343,7 @@ class SemanticPropertiesTranslationTest {
                 .with(new ForwardedFirstAnnotationJoin<>())
                 .withForwardedFieldsSecond("1")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -370,7 +370,7 @@ class SemanticPropertiesTranslationTest {
                 .with(new ForwardedSecondAnnotationJoin<>())
                 .withForwardedFieldsFirst("0->1")
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -396,7 +396,7 @@ class SemanticPropertiesTranslationTest {
                 .equalTo(0)
                 .with(new AllForwardedExceptJoin<>())
                 .output(new DiscardingOutputFormat<>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =
@@ -424,7 +424,7 @@ class SemanticPropertiesTranslationTest {
                 .equalTo(0)
                 .with(new ReadSetJoin<>())
                 .output(new DiscardingOutputFormat<Tuple3<Long, Long, Long>>());
-        Plan plan = env.createProgramPlan();
+        StreamGraphPlan plan = env.createProgramPlan();
 
         GenericDataSinkBase<?> sink = plan.getDataSinks().iterator().next();
         InnerJoinOperatorBase<?, ?, ?, ?> join =

@@ -18,7 +18,7 @@
 
 package org.apache.flink.optimizer.plan;
 
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamGraphPlan;
 import org.apache.flink.util.Visitable;
 import org.apache.flink.util.Visitor;
 
@@ -32,7 +32,7 @@ import java.util.Collection;
  * all operator strategies (sorting-merge join, hash join, sorted grouping, ...), and the data
  * exchange modes (batched, pipelined).
  */
-public class OptimizedPlan implements Visitable<PlanNode> {
+public class OptimizedStreamGraph implements Visitable<PlanNode> {
 
     /** The data sources in the plan. */
     private final Collection<SourcePlanNode> dataSources;
@@ -44,7 +44,7 @@ public class OptimizedPlan implements Visitable<PlanNode> {
     private final Collection<PlanNode> allNodes;
 
     /** The original program (as a dataflow plan). */
-    private final Plan originalProgram;
+    private final StreamGraphPlan originalStreamGraph;
 
     /** Name of the job */
     private final String jobName;
@@ -58,17 +58,17 @@ public class OptimizedPlan implements Visitable<PlanNode> {
      * @param allNodes A collection containing all nodes in the plan.
      * @param jobName The name of the program
      */
-    public OptimizedPlan(
+    public OptimizedStreamGraph(
             Collection<SourcePlanNode> sources,
             Collection<SinkPlanNode> sinks,
             Collection<PlanNode> allNodes,
             String jobName,
-            Plan programPlan) {
+            StreamGraphPlan programPlan) {
         this.dataSources = sources;
         this.dataSinks = sinks;
         this.allNodes = allNodes;
         this.jobName = jobName;
-        this.originalProgram = programPlan;
+        this.originalStreamGraph = programPlan;
     }
 
     /**
@@ -112,8 +112,8 @@ public class OptimizedPlan implements Visitable<PlanNode> {
      *
      * @return The original program's dataflow plan.
      */
-    public Plan getOriginalPlan() {
-        return this.originalProgram;
+    public StreamGraphPlan getOriginalPlan() {
+        return this.originalStreamGraph;
     }
 
     // ------------------------------------------------------------------------

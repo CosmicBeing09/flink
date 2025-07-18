@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
-import org.apache.flink.optimizer.plan.OptimizedPlan;
+import org.apache.flink.optimizer.plan.OptimizedStreamGraph;
 import org.apache.flink.optimizer.plan.SingleInputPlanNode;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.testfunctions.IdentityKeyExtractor;
@@ -131,7 +131,7 @@ public class DataExchangeModeForwardTest extends CompilerTestBase {
                     .reduceGroup(new Top1GroupReducer<Integer>())
                     .output(new DiscardingOutputFormat<Integer>());
 
-            OptimizedPlan optPlan = compileNoStats(env.createProgramPlan());
+            OptimizedStreamGraph optPlan = compileNoStats(env.createProgramPlan());
             SinkPlanNode sinkNode = optPlan.getDataSinks().iterator().next();
 
             SingleInputPlanNode reduceNode = (SingleInputPlanNode) sinkNode.getPredecessor();

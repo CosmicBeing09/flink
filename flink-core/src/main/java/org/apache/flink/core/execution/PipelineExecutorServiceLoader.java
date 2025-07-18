@@ -19,13 +19,14 @@
 package org.apache.flink.core.execution;
 
 import org.apache.flink.annotation.Internal;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.configuration.Configuration;
 
 import java.util.stream.Stream;
 
 /**
  * An interface to be implemented by the entity responsible for finding the correct {@link
- * PipelineExecutor} to execute a given {@link org.apache.flink.api.dag.Pipeline}.
+ * PipelineExecutor} to execute a given {@link StreamGraph}.
  */
 @Internal
 public interface PipelineExecutorServiceLoader {
