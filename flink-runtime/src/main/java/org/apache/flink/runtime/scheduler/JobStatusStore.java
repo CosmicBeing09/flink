@@ -33,7 +33,7 @@ public class JobStatusStore implements JobStatusListener, JobStatusProvider {
     }
 
     @Override
-    public void jobStatusChanges(JobID jobId, JobStatus newJobStatus, long timestamp) {
+    public void onJobStatusChanged(JobID jobId, JobStatus newJobStatus, long timestamp) {
         jobStatus = newJobStatus;
         stateTimestamps[jobStatus.ordinal()] = timestamp;
     }

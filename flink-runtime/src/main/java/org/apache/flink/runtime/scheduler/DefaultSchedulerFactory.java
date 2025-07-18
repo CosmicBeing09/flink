@@ -164,7 +164,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                     } else {
                         slotPool.setIsJobRestarting(false);
                     }
-                    jobStatusListener.jobStatusChanges(jobId, jobStatus, timestamp);
+                    jobStatusListener.onJobStatusChanged(jobId, jobStatus, timestamp);
                 },
                 failureEnrichers,
                 executionGraphFactory,

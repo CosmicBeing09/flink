@@ -1657,7 +1657,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
             for (JobStatusListener listener : jobStatusListeners) {
                 try {
-                    listener.jobStatusChanges(getJobID(), newState, timestamp);
+                    listener.onJobStatusChanged(getJobID(), newState, timestamp);
                 } catch (Throwable t) {
                     LOG.warn("Error while notifying JobStatusListener", t);
                 }
