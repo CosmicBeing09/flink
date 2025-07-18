@@ -142,7 +142,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0L, 0L);
 
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-session-with-stateful-trigger-flink"
                         + flinkGenerateSavepointVersion
@@ -264,7 +264,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-session-with-stateful-trigger-mint-flink"
                         + flinkGenerateSavepointVersion
@@ -433,7 +433,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-reduce-event-time-flink"
                         + flinkGenerateSavepointVersion
@@ -583,7 +583,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-apply-event-time-flink"
                         + flinkGenerateSavepointVersion
@@ -722,7 +722,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-reduce-processing-time-flink"
                         + flinkGenerateSavepointVersion
@@ -856,7 +856,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-apply-processing-time-flink"
                         + flinkGenerateSavepointVersion
@@ -1016,7 +1016,7 @@ public class WindowOperatorMigrationTest implements MigrationTest {
 
         // do snapshot and save to file
         OperatorSubtaskState snapshot = testHarness.snapshot(0, 0);
-        OperatorSnapshotUtil.writeStateHandle(
+        OperatorSnapshotUtil.writeOperatorSubtaskState(
                 snapshot,
                 "src/test/resources/win-op-migration-test-kryo-serialized-key-flink"
                         + flinkGenerateSavepointVersion

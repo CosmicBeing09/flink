@@ -116,7 +116,7 @@ public class CEPMigrationTest implements MigrationTest {
 
             // do snapshot and save to file
             OperatorSubtaskState snapshot = harness.snapshot(0L, 0L);
-            OperatorSnapshotUtil.writeStateHandle(
+            OperatorSnapshotUtil.writeOperatorSubtaskState(
                     snapshot,
                     "src/test/resources/cep-migration-after-branching-flink"
                             + flinkGenerateSavepointVersion
@@ -279,7 +279,7 @@ public class CEPMigrationTest implements MigrationTest {
 
             // do snapshot and save to file
             OperatorSubtaskState snapshot = harness.snapshot(0L, 0L);
-            OperatorSnapshotUtil.writeStateHandle(
+            OperatorSnapshotUtil.writeOperatorSubtaskState(
                     snapshot,
                     "src/test/resources/cep-migration-starting-new-pattern-flink"
                             + flinkGenerateSavepointVersion
@@ -454,7 +454,7 @@ public class CEPMigrationTest implements MigrationTest {
 
             // do snapshot and save to file
             OperatorSubtaskState snapshot = harness.snapshot(0L, 0L);
-            OperatorSnapshotUtil.writeStateHandle(
+            OperatorSnapshotUtil.writeOperatorSubtaskState(
                     snapshot,
                     "src/test/resources/cep-migration-single-pattern-afterwards-flink"
                             + flinkGenerateSavepointVersion
@@ -552,7 +552,7 @@ public class CEPMigrationTest implements MigrationTest {
 
             // do snapshot and save to file
             OperatorSubtaskState snapshot = harness.snapshot(0L, 0L);
-            OperatorSnapshotUtil.writeStateHandle(
+            OperatorSnapshotUtil.writeOperatorSubtaskState(
                     snapshot,
                     "src/test/resources/cep-migration-conditions-flink"
                             + flinkGenerateSavepointVersion

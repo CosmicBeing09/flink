@@ -710,8 +710,8 @@ public abstract class MetadataV2V3SerializerBase {
             OutputStateHandle resultSubpartitionStateHandle, DataOutputStream dos)
             throws IOException {}
 
-    protected void serializeInputChannelStateHandle(
-            InputStateHandle inputChannelStateHandle, DataOutputStream dos) throws IOException {}
+    protected void serializeInputStateHandle(
+            InputStateHandle inputStateHandle, DataOutputStream dos) throws IOException {}
 
     // ------------------------------------------------------------------------
     //  low-level state handles
