@@ -39,14 +39,15 @@ public class FileMappingManagerTest {
         FileSystem localFS = FileSystem.getLocalFileSystem();
         FileMappingManager fileMappingManager =
                 new FileMappingManager(localFS, localFS, tempDir.toString(), tempDir.toString());
-        String src = tempDir + "/source";
-        FSDataOutputStream os = localFS.create(new Path(src), FileSystem.WriteMode.OVERWRITE);
+        String sourceFilePath = tempDir + "/source";
+        FSDataOutputStream os = localFS.create(new Path(sourceFilePath), FileSystem.WriteMode.OVERWRITE);
         os.write(233);
         os.close();
-        fileMappingManager.createFile(new Path(src));
-        String dst = tempDir.toString() + "/dst";
-        fileMappingManager.link(src, dst);
-        assertThat(fileMappingManager.realPath(new Path(dst)).path.toString()).isEqualTo(src);
+        fileMappingManager.createFile(new Path(sourceFilePath));
+        String destinationFilePath = tempDir.toString() + "/dst";
+        fileMappingManager.link(sourceFilePath, destinationFilePath);
+        assertThat(fileMappingManager.realPath(new Path(destinationFilePath)).path.toString()).isEqualTo(
+                sourceFilePath);
     }
 
     @Test
