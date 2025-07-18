@@ -158,8 +158,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
     public static DefaultSlotPoolServiceSchedulerFactory fromConfiguration(
             Configuration configuration, JobType jobType, boolean isDynamicGraph) {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
-        final Duration slotIdleTimeout = configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT);
+        final Duration jobSubmissionRpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
+        final Duration schedulerSlotIdleTimeout = configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT);
         final Duration batchSlotTimeout = configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT);
 
         final SlotPoolServiceFactory slotPoolServiceFactory;
@@ -190,8 +190,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolBridgeServiceFactory(
                                 SystemClock.getInstance(),
-                                rpcTimeout,
-                                slotIdleTimeout,
+                                jobSubmissionRpcTimeout,
+                                schedulerSlotIdleTimeout,
                                 batchSlotTimeout,
                                 slotRequestMaxInterval,
                                 slotBatchAllocatable,
@@ -202,8 +202,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolServiceFactory(
                                 SystemClock.getInstance(),
-                                slotIdleTimeout,
-                                rpcTimeout,
+                                schedulerSlotIdleTimeout,
+                                jobSubmissionRpcTimeout,
                                 slotRequestMaxInterval);
                 break;
             case AdaptiveBatch:
@@ -211,8 +211,8 @@ public final class DefaultSlotPoolServiceSchedulerFactory
                 slotPoolServiceFactory =
                         new DeclarativeSlotPoolBridgeServiceFactory(
                                 SystemClock.getInstance(),
-                                rpcTimeout,
-                                slotIdleTimeout,
+                                jobSubmissionRpcTimeout,
+                                schedulerSlotIdleTimeout,
                                 batchSlotTimeout,
                                 slotRequestMaxInterval,
                                 slotBatchAllocatable,
