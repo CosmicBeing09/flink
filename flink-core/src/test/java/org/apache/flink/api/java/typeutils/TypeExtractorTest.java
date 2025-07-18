@@ -86,16 +86,16 @@ public class TypeExtractorTest {
                     }
                 };
 
-        TypeInformation<?> ti =
+        TypeInformation<?> returnTypeInfo =
                 TypeExtractor.getGroupReduceReturnTypes(function, (TypeInformation) Types.BOOLEAN);
 
-        Assert.assertTrue(ti.isBasicType());
-        Assert.assertEquals(BasicTypeInfo.BOOLEAN_TYPE_INFO, ti);
-        Assert.assertEquals(Boolean.class, ti.getTypeClass());
+        Assert.assertTrue(returnTypeInfo.isBasicType());
+        Assert.assertEquals(BasicTypeInfo.BOOLEAN_TYPE_INFO, returnTypeInfo);
+        Assert.assertEquals(Boolean.class, returnTypeInfo.getTypeClass());
 
         // use getForClass()
         Assert.assertTrue(TypeExtractor.getForClass(Boolean.class).isBasicType());
-        Assert.assertEquals(ti, TypeExtractor.getForClass(Boolean.class));
+        Assert.assertEquals(returnTypeInfo, TypeExtractor.getForClass(Boolean.class));
 
         // use getForObject()
         Assert.assertEquals(BasicTypeInfo.BOOLEAN_TYPE_INFO, TypeExtractor.getForObject(true));
@@ -157,7 +157,7 @@ public class TypeExtractorTest {
                     }
                 };
 
-        TypeInformation<?> ti =
+        TypeInformation<?> returnTypeInfo =
                 TypeExtractor.getMapReturnTypes(
                         function,
                         (TypeInformation)
@@ -174,15 +174,15 @@ public class TypeExtractorTest {
                                                         Short,
                                                         Byte>>() {}));
 
-        Assert.assertTrue(ti.isTupleType());
-        Assert.assertEquals(9, ti.getArity());
-        Assert.assertTrue(ti instanceof TupleTypeInfo);
+        Assert.assertTrue(returnTypeInfo.isTupleType());
+        Assert.assertEquals(9, returnTypeInfo.getArity());
+        Assert.assertTrue(returnTypeInfo instanceof TupleTypeInfo);
         List<FlatFieldDescriptor> ffd = new ArrayList<FlatFieldDescriptor>();
-        ((TupleTypeInfo) ti).getFlatFields("f3", 0, ffd);
+        ((TupleTypeInfo) returnTypeInfo).getFlatFields("f3", 0, ffd);
         Assert.assertTrue(ffd.size() == 1);
         Assert.assertEquals(3, ffd.get(0).getPosition());
 
-        TupleTypeInfo<?> tti = (TupleTypeInfo<?>) ti;
+        TupleTypeInfo<?> tti = (TupleTypeInfo<?>) returnTypeInfo;
         Assert.assertEquals(Tuple9.class, tti.getTypeClass());
 
         for (int i = 0; i < 9; i++) {
