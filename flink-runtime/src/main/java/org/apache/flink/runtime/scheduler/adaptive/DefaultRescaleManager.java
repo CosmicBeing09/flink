@@ -45,7 +45,7 @@ import java.util.function.Supplier;
  *   <li>Soft-rescaling phase: Rescaling is triggered if the desired amount of resources is
  *       available.
  *   <li>Hard-rescaling phase: Rescaling is triggered if a sufficient amount of resources is
- *       available (its lower threshold is defined by (@code scalingIntervalMax}).
+ *       available (its lower threshold is defined by (@code resourceStabilizationTimeout}).
  * </ol>
  *
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
@@ -102,7 +102,7 @@ public class DefaultRescaleManager implements RescaleManager {
             Supplier<Temporal> clock,
             RescaleManager.Context rescaleContext,
             Duration scalingIntervalMin,
-            @Nullable Duration scalingIntervalMax,
+            @Nullable Duration resourceStabilizationTimeout,
             Duration maxTriggerDelay) {
         this.initializationTime = initializationTime;
         this.clock = clock;
@@ -111,10 +111,11 @@ public class DefaultRescaleManager implements RescaleManager {
         this.triggerFuture = FutureUtils.completedVoidFuture();
 
         Preconditions.checkArgument(
-                scalingIntervalMax == null || scalingIntervalMin.compareTo(scalingIntervalMax) <= 0,
+                resourceStabilizationTimeout == null || scalingIntervalMin.compareTo(
+                        resourceStabilizationTimeout) <= 0,
                 "scalingIntervalMax should at least match or be longer than scalingIntervalMin.");
         this.scalingIntervalMin = scalingIntervalMin;
-        this.resourceStabilizationTimeout = scalingIntervalMax;
+        this.resourceStabilizationTimeout = resourceStabilizationTimeout;
 
         this.rescaleContext = rescaleContext;
     }
