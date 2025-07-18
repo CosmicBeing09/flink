@@ -21,7 +21,7 @@ package org.apache.flink.table.planner.plan.nodes.exec.processor;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.api.connector.source.mocks.MockSource;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.functions.source.legacy.SourceFunction;
 import org.apache.flink.table.api.TableConfig;
 import org.apache.flink.table.api.TableEnvironment;
@@ -109,7 +109,7 @@ class MultipleInputNodeCreationProcessorTest extends TableTestBase {
     }
 
     private void createChainableStream(TableTestUtil util) {
-        DataStreamSource<Integer> dataStream =
+        SourceRepresentation<Integer> dataStream =
                 util.getStreamEnv()
                         .fromSource(
                                 new MockSource(Boundedness.BOUNDED, 1),
@@ -125,7 +125,7 @@ class MultipleInputNodeCreationProcessorTest extends TableTestBase {
     }
 
     private void createNonChainableStream(TableTestUtil util) {
-        DataStreamSource<Integer> dataStream = util.getStreamEnv().addSource(new LegacySource());
+        SourceRepresentation<Integer> dataStream = util.getStreamEnv().addSource(new LegacySource());
         TableTestUtil.createTemporaryView(
                 util.tableEnv(),
                 "nonChainableStream",

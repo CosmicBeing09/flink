@@ -26,7 +26,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -56,8 +56,8 @@ class BatchExecutionFileSinkITCase extends FileSinkITBase {
         // Create a testing job with a bounded legacy source in a bit hacky way.
         StreamSource<Integer, ?> sourceOperator =
                 new StreamSource<>(new BatchExecutionTestSource(NUM_RECORDS));
-        DataStreamSource<Integer> source =
-                new DataStreamSource<>(
+        SourceRepresentation<Integer> source =
+                new SourceRepresentation<>(
                         env,
                         BasicTypeInfo.INT_TYPE_INFO,
                         sourceOperator,

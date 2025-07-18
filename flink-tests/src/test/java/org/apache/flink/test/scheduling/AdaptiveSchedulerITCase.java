@@ -49,7 +49,7 @@ import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
@@ -137,7 +137,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
         env.setParallelism(PARALLELISM);
 
         env.enableCheckpointing(20L, CheckpointingMode.EXACTLY_ONCE);
-        final DataStreamSource<Integer> input = env.addSource(new SimpleSource());
+        final SourceRepresentation<Integer> input = env.addSource(new SimpleSource());
 
         // TODO replace this by sink v2 after source is ported to FLIP-27.
         input.addSink(new DiscardingSink<>());

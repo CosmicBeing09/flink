@@ -30,7 +30,7 @@ import org.apache.flink.contrib.streaming.state.RocksDBOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.util.RestartStrategyUtils;
@@ -129,7 +129,7 @@ public class TaskManagerWideRocksDbMemorySharingITCase extends TestLogger {
         env.enableCheckpointing(24 * 60 * 60 * 1000, CheckpointingMode.EXACTLY_ONCE);
         RestartStrategyUtils.configureNoRestartStrategy(env);
 
-        DataStreamSource<Long> src = env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE);
+        SourceRepresentation<Long> src = env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE);
         src.keyBy(number -> number)
                 .map(
                         new RichMapFunction<Long, Long>() {

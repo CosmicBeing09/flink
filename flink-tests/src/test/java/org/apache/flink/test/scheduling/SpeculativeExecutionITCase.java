@@ -57,7 +57,7 @@ import org.apache.flink.core.io.GenericInputSplit;
 import org.apache.flink.core.io.InputStatus;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.source.legacy.InputFormatSourceFunction;
@@ -335,7 +335,7 @@ class SpeculativeExecutionITCase {
 
     private void setupJobWithSlowSourceFunction(StreamExecutionEnvironment env) {
         final DataStream<Long> source =
-                new DataStreamSource<>(
+                new SourceRepresentation<>(
                                 env,
                                 BasicTypeInfo.LONG_TYPE_INFO,
                                 new StreamSource<>(new TestingSourceFunc()),
@@ -349,7 +349,7 @@ class SpeculativeExecutionITCase {
 
     private void setupJobWithSlowInputFormatSource(StreamExecutionEnvironment env) {
         final DataStream<Long> source =
-                new DataStreamSource<>(
+                new SourceRepresentation<>(
                                 env,
                                 BasicTypeInfo.LONG_TYPE_INFO,
                                 new StreamSource<>(

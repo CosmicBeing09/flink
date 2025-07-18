@@ -20,7 +20,7 @@ package org.apache.flink.test.operators.util;
 
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 import java.io.Serializable;
@@ -41,7 +41,7 @@ import scala.math.BigInt;
  */
 public class CollectionDataStreams {
 
-    public static DataStreamSource<Tuple3<Integer, Long, String>> get3TupleDataSet(
+    public static SourceRepresentation<Tuple3<Integer, Long, String>> get3TupleDataSet(
             StreamExecutionEnvironment env) {
 
         List<Tuple3<Integer, Long, String>> data = new ArrayList<>();
@@ -72,7 +72,7 @@ public class CollectionDataStreams {
         return env.fromData(data);
     }
 
-    public static DataStreamSource<Tuple3<Integer, Long, String>> getSmall3TupleDataSet(
+    public static SourceRepresentation<Tuple3<Integer, Long, String>> getSmall3TupleDataSet(
             StreamExecutionEnvironment env) {
 
         List<Tuple3<Integer, Long, String>> data = new ArrayList<>();

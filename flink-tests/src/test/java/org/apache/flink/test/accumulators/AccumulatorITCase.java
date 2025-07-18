@@ -32,7 +32,7 @@ import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.OutputFormatSinkFunction;
 import org.apache.flink.streaming.api.legacy.io.TextInputFormat;
@@ -108,7 +108,7 @@ public class AccumulatorITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<String> input =
+        SourceRepresentation<String> input =
                 env.createInput(new TextInputFormat(new Path(dataPath)))
                         .setParallelism(getParallelism());
 

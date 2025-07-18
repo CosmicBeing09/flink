@@ -31,7 +31,7 @@ import org.apache.flink.configuration.NettyShuffleEnvironmentOptions;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.source.legacy.ParallelSourceFunction;
@@ -106,7 +106,7 @@ class BatchShuffleITCaseBase {
         env.setParallelism(NUM_SLOTS_PER_TASK_MANAGER);
 
         DataStream<String> source =
-                new DataStreamSource<>(
+                new SourceRepresentation<>(
                                 env,
                                 BasicTypeInfo.STRING_TYPE_INFO,
                                 new StreamSource<>(new StringSource(numRecordsToSend)),

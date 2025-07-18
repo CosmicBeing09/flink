@@ -36,11 +36,11 @@ import org.apache.flink.streaming.api.transformations.SourceTransformation;
  * @param <T> Type of the elements in the DataStream created from the this source.
  */
 @Public
-public class DataStreamSource<T> extends SingleOutputStreamOperator<T> {
+public class SourceRepresentation<T> extends SingleOutputStreamOperator<T> {
 
     private boolean isParallel;
 
-    public DataStreamSource(
+    public SourceRepresentation(
             StreamExecutionEnvironment environment,
             TypeInformation<T> outTypeInfo,
             StreamSource<T, ?> operator,
@@ -56,7 +56,7 @@ public class DataStreamSource<T> extends SingleOutputStreamOperator<T> {
     }
 
     /** The constructor used to create legacy sources. */
-    public DataStreamSource(
+    public SourceRepresentation(
             StreamExecutionEnvironment environment,
             TypeInformation<T> outTypeInfo,
             StreamSource<T, ?> operator,
@@ -97,13 +97,13 @@ public class DataStreamSource<T> extends SingleOutputStreamOperator<T> {
      * Constructor for "deep" sources that manually set up (one or more) custom configured complex
      * operators.
      */
-    public DataStreamSource(SingleOutputStreamOperator<T> operator) {
+    public SourceRepresentation(SingleOutputStreamOperator<T> operator) {
         super(operator.environment, operator.getTransformation());
         this.isParallel = true;
     }
 
     /** Constructor for new Sources (FLIP-27). */
-    public DataStreamSource(
+    public SourceRepresentation(
             StreamExecutionEnvironment environment,
             Source<T, ?, ?> source,
             WatermarkStrategy<T> watermarkStrategy,
@@ -127,7 +127,7 @@ public class DataStreamSource<T> extends SingleOutputStreamOperator<T> {
     }
 
     @Override
-    public DataStreamSource<T> setParallelism(int parallelism) {
+    public SourceRepresentation<T> setParallelism(int parallelism) {
         OperatorValidationUtils.validateParallelism(parallelism, isParallel);
         super.setParallelism(parallelism);
         return this;

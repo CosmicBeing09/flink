@@ -35,7 +35,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
@@ -663,7 +663,7 @@ class DataStreamJavaITCase {
     void testTableStreamConversionBatch() throws Exception {
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
-        DataStreamSource<Row> streamSource =
+        SourceRepresentation<Row> streamSource =
                 env.fromData(
                         Row.of("Alice"),
                         Row.of("alice"),

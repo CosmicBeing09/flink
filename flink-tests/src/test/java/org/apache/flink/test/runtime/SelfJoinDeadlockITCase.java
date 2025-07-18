@@ -26,7 +26,7 @@ import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -58,7 +58,7 @@ public class SelfJoinDeadlockITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Tuple3<Integer, Integer, String>> ds =
+        SourceRepresentation<Tuple3<Integer, Integer, String>> ds =
                 env.createInput(new LargeJoinDataGeneratorInputFormat(1000000));
 
         ds.join(ds)

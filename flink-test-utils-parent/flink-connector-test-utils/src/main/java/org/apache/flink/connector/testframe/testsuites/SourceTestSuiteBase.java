@@ -43,7 +43,7 @@ import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.RestClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -141,7 +141,7 @@ public abstract class SourceTestSuiteBase<T> {
 
         // Step 3: Build and execute Flink job
         StreamExecutionEnvironment execEnv = testEnv.createExecutionEnvironment(envSettings);
-        DataStreamSource<T> stream =
+        SourceRepresentation<T> stream =
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
@@ -198,7 +198,7 @@ public abstract class SourceTestSuiteBase<T> {
 
         // Step 3: Build and execute Flink job
         StreamExecutionEnvironment execEnv = testEnv.createExecutionEnvironment(envOptions);
-        DataStreamSource<T> stream =
+        SourceRepresentation<T> stream =
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(splitNumber);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
@@ -312,7 +312,7 @@ public abstract class SourceTestSuiteBase<T> {
                 .setCheckpointingConsistencyMode(CheckpointingMode.EXACTLY_ONCE);
         execEnv.enableCheckpointing(50);
         RestartStrategyUtils.configureNoRestartStrategy(execEnv);
-        DataStreamSource<T> source =
+        SourceRepresentation<T> source =
                 execEnv.fromSource(
                                 tryCreateSource(externalContext, sourceSettings),
                                 WatermarkStrategy.noWatermarks(),
@@ -362,7 +362,7 @@ public abstract class SourceTestSuiteBase<T> {
                 .getCheckpointConfig()
                 .setCheckpointingConsistencyMode(CheckpointingMode.EXACTLY_ONCE);
 
-        DataStreamSource<T> restartSource =
+        SourceRepresentation<T> restartSource =
                 restartEnv
                         .fromSource(
                                 tryCreateSource(externalContext, sourceSettings),
@@ -431,7 +431,7 @@ public abstract class SourceTestSuiteBase<T> {
         // make sure use different names when executes multi times
         String sourceName = "metricTestSource" + testRecordCollections.hashCode();
         final StreamExecutionEnvironment env = testEnv.createExecutionEnvironment(envOptions);
-        final DataStreamSource<T> dataStreamSource =
+        final SourceRepresentation<T> dataStreamSource =
                 env.fromSource(
                                 tryCreateSource(externalContext, sourceSettings),
                                 WatermarkStrategy.noWatermarks(),
@@ -514,7 +514,7 @@ public abstract class SourceTestSuiteBase<T> {
 
         // Step 3: Build and execute Flink job
         StreamExecutionEnvironment execEnv = testEnv.createExecutionEnvironment(envOptions);
-        DataStreamSource<T> stream =
+        SourceRepresentation<T> stream =
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(splitNumber + 1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);
@@ -579,7 +579,7 @@ public abstract class SourceTestSuiteBase<T> {
         // Step 3: Build and execute Flink job
         StreamExecutionEnvironment execEnv = testEnv.createExecutionEnvironment(envOptions);
         execEnv.enableCheckpointing(50);
-        DataStreamSource<T> stream =
+        SourceRepresentation<T> stream =
                 execEnv.fromSource(source, WatermarkStrategy.noWatermarks(), "Tested Source")
                         .setParallelism(1);
         CollectIteratorBuilder<T> iteratorBuilder = addCollectSink(stream);

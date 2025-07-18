@@ -31,7 +31,7 @@ import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.test.operators.util.CollectionDataStreams;
@@ -52,7 +52,7 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testIdentityMapWithMissingTypesAndStringTypeHint() throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Tuple3<Integer, Long, String>> identityMapDs =
                 ds.map(new Mapper<Tuple3<Integer, Long, String>, Tuple3<Integer, Long, String>>())
@@ -69,7 +69,7 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testIdentityMapWithMissingTypesAndTypeInformationTypeHint() throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Tuple3<Integer, Long, String>> identityMapDs =
                 ds
@@ -95,7 +95,7 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testFlatMapWithClassTypeHint() throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Integer> identityMapDs =
                 ds.flatMap(new FlatMapper<Tuple3<Integer, Long, String>, Integer>())
@@ -112,9 +112,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds1 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds1 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
-        DataStreamSource<Tuple3<Integer, Long, String>> ds2 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds2 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Integer> resultDs =
                 ds1.join(ds2)
@@ -138,9 +138,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds1 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds1 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
-        DataStreamSource<Tuple3<Integer, Long, String>> ds2 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds2 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Integer> resultDs =
                 ds1.join(ds2)
@@ -164,9 +164,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
-        DataStreamSource<Tuple3<Integer, Long, String>> ds1 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds1 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
-        DataStreamSource<Tuple3<Integer, Long, String>> ds2 =
+        SourceRepresentation<Tuple3<Integer, Long, String>> ds2 =
                 CollectionDataStreams.getSmall3TupleDataSet(env);
         DataStream<Integer> resultDs =
                 ds1.coGroup(ds2)

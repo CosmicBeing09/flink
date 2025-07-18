@@ -38,7 +38,7 @@ import org.apache.flink.cep.pattern.conditions.RichIterativeCondition;
 import org.apache.flink.cep.pattern.conditions.SimpleCondition;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.watermark.Watermark;
@@ -1021,7 +1021,7 @@ public class CEPITCase extends AbstractTestBaseJUnit4 {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(envConfiguration);
 
-        DataStreamSource<Integer> elements = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> elements = env.fromData(1, 2, 3);
         OutputTag<Integer> outputTag = new OutputTag<Integer>("AAA") {};
         CEP.pattern(elements, Pattern.begin("A"))
                 .inProcessingTime()

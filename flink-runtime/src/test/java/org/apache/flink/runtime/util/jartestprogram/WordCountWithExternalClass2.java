@@ -21,7 +21,7 @@ package org.apache.flink.runtime.util.jartestprogram;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class WordCountWithExternalClass2 {
@@ -31,7 +31,7 @@ public class WordCountWithExternalClass2 {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
         // get input data
-        DataStreamSource<String> text = StaticData.getDefaultTextLineDataSet(env);
+        SourceRepresentation<String> text = StaticData.getDefaultTextLineDataSet(env);
 
         DataStream<Tuple2<String, Integer>> counts =
                 // split up the lines in pairs (2-tuples) containing: (word,1)

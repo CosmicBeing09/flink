@@ -25,7 +25,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
 import org.apache.flink.configuration.ConfigOption;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.legacy.io.CollectionInputFormat;
@@ -182,7 +182,7 @@ public class TestCollectionTableFactory
                 @Override
                 public DataStream<RowData> produceDataStream(
                         ProviderContext providerContext, StreamExecutionEnvironment execEnv) {
-                    DataStreamSource<RowData> dataStream =
+                    SourceRepresentation<RowData> dataStream =
                             execEnv.createInput(
                                     new TestCollectionInputFormat<>(
                                             emitIntervalMS, rowData, serializer),

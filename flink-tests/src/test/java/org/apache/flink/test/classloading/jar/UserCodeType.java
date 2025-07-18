@@ -20,7 +20,7 @@ package org.apache.flink.test.classloading.jar;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 
@@ -46,7 +46,7 @@ public class UserCodeType {
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> input = env.fromData(1, 2, 3, 4, 5);
+        SourceRepresentation<Integer> input = env.fromData(1, 2, 3, 4, 5);
 
         DataStream<CustomType> customTypes =
                 input.map(

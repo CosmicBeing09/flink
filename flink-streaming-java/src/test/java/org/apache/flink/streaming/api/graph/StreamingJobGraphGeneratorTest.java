@@ -77,11 +77,8 @@ import org.apache.flink.streaming.api.connector.sink2.CommittableWithLineage;
 import org.apache.flink.streaming.api.connector.sink2.SupportsPostCommitTopology;
 import org.apache.flink.streaming.api.connector.sink2.SupportsPreCommitTopology;
 import org.apache.flink.streaming.api.connector.sink2.SupportsPreWriteTopology;
-import org.apache.flink.streaming.api.datastream.CachedDataStream;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.datastream.*;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.PrintSink;
@@ -297,7 +294,7 @@ class StreamingJobGraphGeneratorTest {
         // and the parallelism of the map operator needs to be different for this test
         env.setMaxParallelism(4);
 
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSequence(1L, 3L); // no explicit max parallelism set, grab from environment.
         SingleOutputStreamOperator<Long> map = source.map(i -> i).setMaxParallelism(10);
         DataStreamSink<Long> sink = map.print().setMaxParallelism(20);
@@ -343,12 +340,12 @@ class StreamingJobGraphGeneratorTest {
                         Types.LONG,
                         env.getParallelism(),
                         false);
-        DataStreamSource<Long> source1 =
+        SourceRepresentation<Long> source1 =
                 env.fromSource(
                         new NumberSequenceSource(1, 2),
                         WatermarkStrategy.noWatermarks(),
                         "source1");
-        DataStreamSource<Long> source2 =
+        SourceRepresentation<Long> source2 =
                 env.fromSource(
                         new NumberSequenceSource(1, 2),
                         WatermarkStrategy.noWatermarks(),
@@ -1190,8 +1187,8 @@ class StreamingJobGraphGeneratorTest {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.enableCheckpointing(60_000L);
 
-        DataStreamSource<String> source1 = env.fromData("1");
-        DataStreamSource<Integer> source2 = env.fromData(1);
+        SourceRepresentation<String> source1 = env.fromData("1");
+        SourceRepresentation<Integer> source2 = env.fromData(1);
         source1.connect(source2)
                 .transform(
                         "test",
@@ -1393,7 +1390,7 @@ class StreamingJobGraphGeneratorTest {
         StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(configuration);
         env.disableOperatorChaining();
-        DataStreamSource<Integer> source = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> source = env.fromData(1, 2, 3);
         final DataStream<Integer> partitioned =
                 new DataStream<>(
                         env,
@@ -1992,7 +1989,7 @@ class StreamingJobGraphGeneratorTest {
     @Test
     void testStreamConfigSerializationException() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> source = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> source = env.fromData(1, 2, 3);
         env.addOperator(
                 new OneInputTransformation<>(
                         source.getTransformation(),
@@ -2011,7 +2008,7 @@ class StreamingJobGraphGeneratorTest {
     @Test
     void testCoordinatedSerializationException() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> source = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> source = env.fromData(1, 2, 3);
         env.addOperator(
                 new OneInputTransformation<>(
                         source.getTransformation(),

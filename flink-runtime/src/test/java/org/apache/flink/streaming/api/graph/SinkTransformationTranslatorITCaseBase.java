@@ -25,7 +25,7 @@ import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.core.io.SimpleVersionedSerializerTypeSerializerProxy;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.operators.ChainingStrategy;
 import org.apache.flink.streaming.api.operators.StreamOperatorFactory;
@@ -170,7 +170,7 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
     void disableOperatorChain() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        final DataStreamSource<Integer> src = env.fromElements(1, 2);
+        final SourceRepresentation<Integer> src = env.fromElements(1, 2);
         final DataStreamSink<Integer> dataStreamSink = sinkTo(src, sinkWithCommitter()).name(NAME);
         dataStreamSink.disableChaining();
 
@@ -229,7 +229,7 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
         final Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, runtimeExecutionMode);
         env.configure(config, getClass().getClassLoader());
-        final DataStreamSource<Integer> src = env.fromElements(1, 2);
+        final SourceRepresentation<Integer> src = env.fromElements(1, 2);
         final DataStreamSink<Integer> dataStreamSink = sinkTo(src.rebalance(), sink);
         setSinkProperty(dataStreamSink, setSinkParallelism);
         // Trigger the plan generation but do not clear the transformations

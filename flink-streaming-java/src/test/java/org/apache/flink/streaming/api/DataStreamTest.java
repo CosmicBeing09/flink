@@ -40,14 +40,8 @@ import org.apache.flink.api.java.typeutils.GenericTypeInfo;
 import org.apache.flink.api.java.typeutils.ObjectArrayTypeInfo;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.api.java.typeutils.TypeExtractor;
-import org.apache.flink.streaming.api.datastream.BroadcastConnectedStream;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
-import org.apache.flink.streaming.api.datastream.ConnectedStreams;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.datastream.*;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.KeyedProcessFunction;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
@@ -620,7 +614,7 @@ class DataStreamTest {
     void testParallelism() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Tuple2<Long, Long>> src = env.fromData(new Tuple2<>(0L, 0L));
+        SourceRepresentation<Tuple2<Long, Long>> src = env.fromData(new Tuple2<>(0L, 0L));
         env.setParallelism(10);
 
         SingleOutputStreamOperator<Long> map =
@@ -678,7 +672,7 @@ class DataStreamTest {
                                 .getParallelism())
                 .isEqualTo(10);
 
-        DataStreamSource<Long> parallelSource = env.fromSequence(0, 0);
+        SourceRepresentation<Long> parallelSource = env.fromSequence(0, 0);
         parallelSource.sinkTo(new DiscardingSink<Long>());
         assertThat(getStreamGraph(env).getStreamNode(parallelSource.getId()).getParallelism())
                 .isEqualTo(7);
@@ -906,7 +900,7 @@ class DataStreamTest {
     @Test
     void testKeyedStreamKeyedProcessTranslation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> src = env.fromSequence(0, 0);
+        SourceRepresentation<Long> src = env.fromSequence(0, 0);
 
         KeyedProcessFunction<Long, Long, Integer> keyedProcessFunction =
                 new KeyedProcessFunction<Long, Long, Integer>() {
@@ -941,7 +935,7 @@ class DataStreamTest {
     @Test
     void testProcessTranslation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> src = env.fromSequence(0, 0);
+        SourceRepresentation<Long> src = env.fromSequence(0, 0);
 
         ProcessFunction<Long, Integer> processFunction =
                 new ProcessFunction<Long, Integer>() {
@@ -1232,7 +1226,7 @@ class DataStreamTest {
     void operatorTest() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Long> src = env.fromSequence(0, 0);
+        SourceRepresentation<Long> src = env.fromSequence(0, 0);
 
         MapFunction<Long, Integer> mapFunction =
                 new MapFunction<Long, Integer>() {
@@ -1300,8 +1294,8 @@ class DataStreamTest {
     void testKeyedConnectedStreamsType() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> stream1 = env.fromData(1, 2);
-        DataStreamSource<Integer> stream2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> stream1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> stream2 = env.fromData(1, 2);
 
         ConnectedStreams<Integer, Integer> connectedStreams =
                 stream1.connect(stream2).keyBy(v -> v, v -> v);
@@ -1410,7 +1404,7 @@ class DataStreamTest {
     void testChannelSelectors() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Long> src = env.fromSequence(0, 0);
+        SourceRepresentation<Long> src = env.fromSequence(0, 0);
 
         DataStream<Long> broadcast = src.broadcast();
         DataStreamSink<Long> broadcastSink = broadcast.print();

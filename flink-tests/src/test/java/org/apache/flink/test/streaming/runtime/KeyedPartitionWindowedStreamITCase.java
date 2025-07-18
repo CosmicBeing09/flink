@@ -27,7 +27,7 @@ import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.KeyedPartitionWindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -57,7 +57,7 @@ class KeyedPartitionWindowedStreamITCase {
     @Test
     void testMapPartition() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, String>> source = env.fromData(createSource());
+        SourceRepresentation<Tuple2<String, String>> source = env.fromData(createSource());
         CloseableIterator<String> resultIterator =
                 source.map(
                                 new MapFunction<Tuple2<String, String>, Tuple2<String, String>>() {
@@ -103,7 +103,7 @@ class KeyedPartitionWindowedStreamITCase {
     @Test
     void testRichMapPartitionFunctionHasOpen() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, String>> source = env.fromData(createSource());
+        SourceRepresentation<Tuple2<String, String>> source = env.fromData(createSource());
         source.keyBy(
                         new KeySelector<Tuple2<String, String>, String>() {
                             @Override
@@ -138,7 +138,7 @@ class KeyedPartitionWindowedStreamITCase {
     @Test
     void testReduce() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, Integer>> source =
+        SourceRepresentation<Tuple2<String, Integer>> source =
                 env.fromData(
                         Tuple2.of("key1", 1),
                         Tuple2.of("key1", 999),
@@ -191,7 +191,7 @@ class KeyedPartitionWindowedStreamITCase {
     @Test
     void testAggregate() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, Integer>> source =
+        SourceRepresentation<Tuple2<String, Integer>> source =
                 env.fromData(
                         Tuple2.of("Key1", 1),
                         Tuple2.of("Key1", 2),
@@ -308,7 +308,7 @@ class KeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionOfTupleElementsInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, Integer>> source =
+        SourceRepresentation<Tuple2<String, Integer>> source =
                 env.fromData(
                         Tuple2.of("key1", 0),
                         Tuple2.of("key1", 7),
@@ -367,7 +367,7 @@ class KeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionOfPojoElementsInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<TestPojo> source =
+        SourceRepresentation<TestPojo> source =
                 env.fromData(
                         new TestPojo("key1", 0),
                         new TestPojo("key1", 7),
@@ -424,7 +424,7 @@ class KeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionByKeySelectorInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<TestPojo> source =
+        SourceRepresentation<TestPojo> source =
                 env.fromData(
                         new TestPojo("key1", 0),
                         new TestPojo("key1", 7),

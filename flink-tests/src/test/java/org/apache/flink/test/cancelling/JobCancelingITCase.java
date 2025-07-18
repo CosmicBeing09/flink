@@ -26,7 +26,7 @@ import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.CoFlatMapFunction;
 import org.apache.flink.streaming.api.functions.sink.legacy.SinkFunction;
@@ -71,7 +71,7 @@ public class JobCancelingITCase extends TestLogger {
         env.getConfig().setTaskCancellationInterval(Duration.ofDays(1).toMillis());
 
         // Check both FLIP-27 and normal sources
-        final DataStreamSource<Long> source1 =
+        final SourceRepresentation<Long> source1 =
                 env.fromSource(
                         new NumberSequenceSource(1L, Long.MAX_VALUE),
                         WatermarkStrategy.noWatermarks(),

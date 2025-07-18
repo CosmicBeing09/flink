@@ -22,7 +22,7 @@ import org.apache.flink.api.common.RuntimeExecutionMode;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
@@ -75,7 +75,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataStreamSource<Tuple2<String, Integer>> input = env.fromData(REDUCE_DATA);
+        SourceRepresentation<Tuple2<String, Integer>> input = env.fromData(REDUCE_DATA);
 
         DataStream<Tuple2<String, Integer>> result =
                 input.keyBy(x -> x.f0)
@@ -106,7 +106,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataStreamSource<Tuple2<String, Integer>> input = env.fromData(REDUCE_DATA);
+        SourceRepresentation<Tuple2<String, Integer>> input = env.fromData(REDUCE_DATA);
 
         DataStream<Tuple2<String, Integer>> result =
                 input.windowAll(GlobalWindows.createWithEndOfStreamTrigger())

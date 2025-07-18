@@ -33,7 +33,7 @@ import org.apache.flink.runtime.scheduler.ClusterDatasetCorruptedException;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.CachedDataStream;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
@@ -173,7 +173,7 @@ public class CacheITCase extends AbstractTestBaseJUnit4 {
     void testCacheProduceAndConsumeWithDifferentPartitioner(@TempDir java.nio.file.Path tmpDir)
             throws Exception {
 
-        final DataStreamSource<Tuple2<Integer, Integer>> ds =
+        final SourceRepresentation<Tuple2<Integer, Integer>> ds =
                 env.fromData(new Tuple2<>(1, 1), new Tuple2<>(2, 1), new Tuple2<>(2, 1));
 
         final CachedDataStream<Tuple2<Integer, Integer>> cacheSource = ds.cache();
@@ -191,7 +191,7 @@ public class CacheITCase extends AbstractTestBaseJUnit4 {
     @Test
     void testCacheSideOutput(@TempDir java.nio.file.Path tmpDir) throws Exception {
         OutputTag<Integer> tag = new OutputTag<Integer>("2") {};
-        final DataStreamSource<Tuple2<Integer, Integer>> ds =
+        final SourceRepresentation<Tuple2<Integer, Integer>> ds =
                 env.fromData(new Tuple2<>(1, 1), new Tuple2<>(2, 1), new Tuple2<>(2, 2));
 
         final SingleOutputStreamOperator<Integer> processed =

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Unit test for {@link DataStreamSource}. */
+/** Unit test for {@link SourceRepresentation}. */
 class DataStreamSourceTest {
 
     /** Test constructor for new Sources (FLIP-27). */
@@ -35,7 +35,7 @@ class DataStreamSourceTest {
         int expectParallelism = 100;
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         MockSource mockSource = new MockSource(Boundedness.BOUNDED, 10);
-        DataStreamSource<Integer> stream =
+        SourceRepresentation<Integer> stream =
                 env.fromSource(mockSource, WatermarkStrategy.noWatermarks(), "TestingSource");
         stream.setParallelism(expectParallelism);
 
