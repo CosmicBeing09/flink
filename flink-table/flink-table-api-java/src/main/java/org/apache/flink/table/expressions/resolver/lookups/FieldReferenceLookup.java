@@ -73,15 +73,15 @@ public class FieldReferenceLookup {
      * @throws org.apache.flink.table.api.ValidationException if the name is ambiguous.
      */
     public Optional<FieldReferenceExpression> lookupField(String name) {
-        List<FieldReference> matchingFields =
+        List<FieldReference> matchedFieldReferences =
                 fieldReferences.stream()
-                        .map(input -> input.get(name))
+                        .map(fieldReferenceMap -> fieldReferenceMap.get(name))
                         .filter(Objects::nonNull)
                         .collect(toList());
 
-        if (matchingFields.size() == 1) {
-            return Optional.of(matchingFields.get(0).toExpr());
-        } else if (matchingFields.size() == 0) {
+        if (matchedFieldReferences.size() == 1) {
+            return Optional.of(matchedFieldReferences.get(0).toExpr());
+        } else if (matchedFieldReferences.size() == 0) {
             return Optional.empty();
         } else {
             throw failAmbiguousColumn(name);

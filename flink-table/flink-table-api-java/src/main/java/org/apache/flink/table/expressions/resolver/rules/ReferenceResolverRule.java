@@ -44,7 +44,7 @@ final class ReferenceResolverRule implements ResolverRule {
     @Override
     public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         return inputExpressions.stream()
-                .map(expr -> expr.accept(new ExpressionResolverVisitor(context)))
+                .map(expression -> expression.accept(new ExpressionResolverVisitor(context)))
                 .collect(Collectors.toList());
     }
 
@@ -58,7 +58,7 @@ final class ReferenceResolverRule implements ResolverRule {
         public Expression visit(UnresolvedCallExpression unresolvedCall) {
             final List<Expression> resolvedArgs =
                     unresolvedCall.getChildren().stream()
-                            .map(expr -> expr.accept(this))
+                            .map(childExpression -> childExpression.accept(this))
                             .collect(Collectors.toList());
 
             return unresolvedCall.replaceArgs(resolvedArgs);
