@@ -97,9 +97,9 @@ public class RescalingITCase extends TestLogger {
     public static final TestExecutorResource<ScheduledExecutorService> EXECUTOR_RESOURCE =
             TestingUtils.defaultExecutorResource();
 
-    private static final int numTaskManagers = 2;
-    private static final int slotsPerTaskManager = 2;
-    private static final int numSlots = numTaskManagers * slotsPerTaskManager;
+    private static final int TASK_MANAGER_COUNT = 2;
+    private static final int SLOTS_PER_TASK_MANAGER = 2;
+    private static final int numSlots = TASK_MANAGER_COUNT * SLOTS_PER_TASK_MANAGER;
 
     @Parameterized.Parameters(name = "backend = {0}")
     public static Collection<Object[]> data() {
@@ -147,7 +147,7 @@ public class RescalingITCase extends TestLogger {
                     new MiniClusterWithClientResource(
                             new MiniClusterResourceConfiguration.Builder()
                                     .setConfiguration(config)
-                                    .setNumberTaskManagers(numTaskManagers)
+                                    .setNumberTaskManagers(TASK_MANAGER_COUNT)
                                     .setNumberSlotsPerTaskManager(numSlots)
                                     .build());
             cluster.before();
