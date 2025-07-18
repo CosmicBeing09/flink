@@ -100,7 +100,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
     private final boolean isStoppable;
     private final Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators;
 
-    @Nullable private final CheckpointCoordinatorConfiguration jobCheckpointingConfiguration;
+    @Nullable private final CheckpointCoordinatorConfiguration jobCheckpointCoordinatorConfiguration;
 
     @Nullable private final CheckpointStatsSnapshot checkpointStatsSnapshot;
 
@@ -126,7 +126,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
             Map<String, SerializedValue<OptionalFailure<Object>>> serializedUserAccumulators,
             ArchivedExecutionConfig executionConfig,
             boolean isStoppable,
-            @Nullable CheckpointCoordinatorConfiguration jobCheckpointingConfiguration,
+            @Nullable CheckpointCoordinatorConfiguration jobCheckpointCoordinatorConfiguration,
             @Nullable CheckpointStatsSnapshot checkpointStatsSnapshot,
             @Nullable String stateBackendName,
             @Nullable String checkpointStorageName,
@@ -146,7 +146,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
         this.serializedUserAccumulators = Preconditions.checkNotNull(serializedUserAccumulators);
         this.archivedExecutionConfig = Preconditions.checkNotNull(executionConfig);
         this.isStoppable = isStoppable;
-        this.jobCheckpointingConfiguration = jobCheckpointingConfiguration;
+        this.jobCheckpointCoordinatorConfiguration = jobCheckpointCoordinatorConfiguration;
         this.checkpointStatsSnapshot = checkpointStatsSnapshot;
         this.stateBackendName = stateBackendName;
         this.checkpointStorageName = checkpointStorageName;
@@ -249,7 +249,7 @@ public class ArchivedExecutionGraph implements AccessExecutionGraph, Serializabl
 
     @Override
     public CheckpointCoordinatorConfiguration getCheckpointCoordinatorConfiguration() {
-        return jobCheckpointingConfiguration;
+        return jobCheckpointCoordinatorConfiguration;
     }
 
     @Override
