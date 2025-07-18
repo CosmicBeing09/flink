@@ -30,7 +30,7 @@ import java.util.Collections;
  * <ol>
  *   <li>{@link #vertexParallelism} is necessary to create {@link
  *       org.apache.flink.runtime.executiongraph.ExecutionGraph ExecutionGraph}
- *   <li>{@link #slotAssignments} are used to schedule it onto the cluster
+ *   <li>{@link #slotAssignmentList} are used to schedule it onto the cluster
  * </ol>
  *
  * {@link AdaptiveScheduler} passes this structure from {@link WaitingForResources} to {@link
@@ -39,12 +39,12 @@ import java.util.Collections;
 @Internal
 public class JobSchedulingPlan {
     private final VertexParallelism vertexParallelism;
-    private final Collection<SlotAssignment> slotAssignments;
+    private final Collection<SlotAssignment> slotAssignmentList;
 
     public JobSchedulingPlan(
-            VertexParallelism vertexParallelism, Collection<SlotAssignment> slotAssignments) {
+            VertexParallelism vertexParallelism, Collection<SlotAssignment> slotAssignmentList) {
         this.vertexParallelism = vertexParallelism;
-        this.slotAssignments = slotAssignments;
+        this.slotAssignmentList = slotAssignmentList;
     }
 
     public VertexParallelism getVertexParallelism() {
@@ -52,7 +52,7 @@ public class JobSchedulingPlan {
     }
 
     public Collection<SlotAssignment> getSlotAssignments() {
-        return slotAssignments;
+        return slotAssignmentList;
     }
 
     /**
@@ -101,6 +101,6 @@ public class JobSchedulingPlan {
     public String toString() {
         return String.format(
                 "JobSchedulingPlan: parallelism: %s, assignments: %s",
-                vertexParallelism, slotAssignments);
+                vertexParallelism, slotAssignmentList);
     }
 }
