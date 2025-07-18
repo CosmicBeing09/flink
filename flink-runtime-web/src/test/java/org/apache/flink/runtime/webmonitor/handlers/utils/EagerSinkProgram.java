@@ -23,7 +23,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 /** Javadoc. */
 public class EagerSinkProgram {
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("hello", "world").print();
     }
 }

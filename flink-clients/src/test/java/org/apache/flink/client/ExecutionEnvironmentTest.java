@@ -50,7 +50,7 @@ class ExecutionEnvironmentTest implements Serializable {
      */
     @Test
     void testExecuteAfterGetExecutionPlanContextEnvironment() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> baseSet = env.fromElements(1, 2);
 
@@ -67,7 +67,7 @@ class ExecutionEnvironmentTest implements Serializable {
 
     @Test
     void testDefaultJobName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         testJobName("Flink Java Job at", env);
     }
 
@@ -85,7 +85,7 @@ class ExecutionEnvironmentTest implements Serializable {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
         config.set(PipelineOptions.NAME, jobName);
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         testJobName(jobName, env);
     }

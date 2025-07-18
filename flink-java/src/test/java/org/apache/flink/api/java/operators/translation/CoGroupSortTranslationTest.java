@@ -42,7 +42,7 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
     @Test
     void testGroupSortTuples() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(0L, 0L));
             DataSet<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(0L, 0L, 0L));
@@ -92,7 +92,7 @@ class CoGroupSortTranslationTest implements java.io.Serializable {
     @Test
     void testSortTuplesAndPojos() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
             DataSet<TestPoJo> input2 = env.fromElements(new TestPoJo());

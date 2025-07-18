@@ -51,7 +51,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test all-rejecting filter.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter1());
@@ -78,7 +78,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test all-passing filter.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter2());
@@ -125,7 +125,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter on String tuple field.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter3());
@@ -151,7 +151,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter on Integer tuple field.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> filterDs = ds.filter(new Filter4());
@@ -187,7 +187,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter on basic type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         DataSet<String> filterDs = ds.filter(new Filter5());
@@ -213,7 +213,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter on custom type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> filterDs = ds.filter(new Filter6());
@@ -240,7 +240,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter on String tuple field.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 
@@ -283,7 +283,7 @@ public class FilterITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test filter with broadcast variables
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 

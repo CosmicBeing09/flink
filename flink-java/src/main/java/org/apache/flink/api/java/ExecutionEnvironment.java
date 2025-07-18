@@ -1095,7 +1095,7 @@ public class ExecutionEnvironment {
      *
      * @return The execution environment of the context in which the program is executed.
      */
-    public static ExecutionEnvironment getExecutionEnvironment() {
+    public static ExecutionEnvironment getBatchExecutionEnvironment() {
         return Utils.resolveFactory(threadLocalContextEnvironmentFactory, contextEnvironmentFactory)
                 .map(BatchExecutionEnvironmentFactory::createBatchExecutionEnvironment)
                 .orElseGet(ExecutionEnvironment::createLocalEnvironment);
@@ -1300,7 +1300,7 @@ public class ExecutionEnvironment {
 
     /**
      * Un-sets the context environment factory. After this method is called, the call to {@link
-     * #getExecutionEnvironment()} will again return a default local execution environment, and it
+     * #getBatchExecutionEnvironment()} will again return a default local execution environment, and it
      * is possible to explicitly instantiate the LocalEnvironment and the RemoteEnvironment.
      */
     protected static void resetContextEnvironment() {

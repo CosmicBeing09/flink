@@ -115,7 +115,7 @@ public class TPCHQuery3 {
             return;
         }
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.getConfig().setGlobalJobParameters(params);
 

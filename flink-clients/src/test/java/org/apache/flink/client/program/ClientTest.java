@@ -380,7 +380,7 @@ class ClientTest {
                 return;
             }
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input =
                     env.readCsvFile(args[0]).fieldDelimiter("\t").types(Long.class, Long.class);
@@ -406,7 +406,7 @@ class ClientTest {
     public static final class TestEager {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).collect();
         }
     }
@@ -415,7 +415,7 @@ class ClientTest {
     public static final class TestMultiExecute {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             for (int i = 0; i < 2; i++) {
                 env.fromElements(1, 2).output(new DiscardingOutputFormat<>());
@@ -430,7 +430,7 @@ class ClientTest {
     public static final class TestGetRuntime {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getNetRuntime();
         }
@@ -440,7 +440,7 @@ class ClientTest {
     public static final class TestGetJobID {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getJobID();
         }
@@ -450,7 +450,7 @@ class ClientTest {
     public static final class TestGetAccumulator {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getAccumulatorResult(ACCUMULATOR_NAME);
         }
@@ -460,7 +460,7 @@ class ClientTest {
     public static final class TestGetAllAccumulator {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getAllAccumulatorResults();
         }

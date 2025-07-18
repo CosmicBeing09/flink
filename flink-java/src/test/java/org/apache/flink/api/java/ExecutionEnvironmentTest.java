@@ -49,7 +49,7 @@ class ExecutionEnvironmentTest {
                             try {
                                 waitingThreadCount.countDown();
                                 latch.awaitQuietly();
-                                assertThat(ExecutionEnvironment.getExecutionEnvironment())
+                                assertThat(ExecutionEnvironment.getBatchExecutionEnvironment())
                                         .isSameAs(preparedEnvironment);
                             } finally {
                                 ExecutionEnvironment.resetContextEnvironment();

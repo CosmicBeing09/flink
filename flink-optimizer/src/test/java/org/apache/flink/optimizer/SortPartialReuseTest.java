@@ -43,7 +43,7 @@ public class SortPartialReuseTest extends CompilerTestBase {
     @Test
     public void testPartialPartitioningReuse() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Long, Long, Long>> input =
@@ -83,7 +83,7 @@ public class SortPartialReuseTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningNotReused() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Long, Long, Long>> input =

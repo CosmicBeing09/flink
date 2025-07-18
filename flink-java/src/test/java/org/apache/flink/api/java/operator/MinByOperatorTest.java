@@ -59,7 +59,7 @@ class MinByOperatorTest {
     @Test
     void testMinByKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -80,7 +80,7 @@ class MinByOperatorTest {
     @Test
     void testCustomKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -95,7 +95,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -109,7 +109,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -123,7 +123,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -138,7 +138,7 @@ class MinByOperatorTest {
     @Test
     void testMinByKeyFieldsGrouping() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -157,7 +157,7 @@ class MinByOperatorTest {
     @Test
     void testCustomKeyFieldsGrouping() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -177,7 +177,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -191,7 +191,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -205,7 +205,7 @@ class MinByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -218,7 +218,7 @@ class MinByOperatorTest {
     @Test
     void testMinByRowTypeInfoKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         TypeInformation<?>[] types = new TypeInformation[] {Types.INT, Types.INT};
 
         String[] fieldNames = new String[] {"id", "value"};
@@ -231,7 +231,7 @@ class MinByOperatorTest {
     /** Validates that no ClassCastException happens should not fail e.g. like in FLINK-8255. */
     @Test
     void testMinByRowTypeInfoKeyFieldsForUnsortedGrouping() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         TypeInformation<?>[] types = new TypeInformation[] {Types.INT, Types.INT};
 

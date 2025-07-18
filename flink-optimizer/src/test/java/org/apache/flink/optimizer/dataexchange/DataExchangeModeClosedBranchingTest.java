@@ -168,7 +168,7 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
             DataExchangeMode toCoGroup2,
             DataExchangeMode toCoGroupSink) {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
             // set parallelism to 2 to avoid chaining with source in case when available processors

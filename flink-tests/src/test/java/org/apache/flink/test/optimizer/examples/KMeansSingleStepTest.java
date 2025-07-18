@@ -144,7 +144,7 @@ public class KMeansSingleStepTest extends CompilerTestBase {
     }
 
     public static Plan kmeans(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Point> points =
                 env.readCsvFile(args[0])

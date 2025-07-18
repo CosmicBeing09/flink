@@ -43,7 +43,7 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSimple() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         Integer[] input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
@@ -60,7 +60,7 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testAdvanced() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().disableObjectReuse();
 
         DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);

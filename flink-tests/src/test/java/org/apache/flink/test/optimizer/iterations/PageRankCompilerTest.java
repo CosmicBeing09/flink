@@ -51,7 +51,7 @@ public class PageRankCompilerTest extends CompilerTestBase {
     @Test
     public void testPageRank() {
         try {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             // get input data
             DataSet<Long> pagesInput = env.fromElements(1L);

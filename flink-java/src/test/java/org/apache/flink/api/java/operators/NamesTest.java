@@ -46,7 +46,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testDefaultName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
 
@@ -68,7 +68,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testGivenName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
         strs.filter(
@@ -88,7 +88,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testJoinWith() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         List<Tuple1<String>> strLi = new ArrayList<>();
         strLi.add(new Tuple1<>("a"));

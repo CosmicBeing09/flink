@@ -159,7 +159,7 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
     }
 
     public static Plan connectedComponentsWithCoGroup(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 
         DataSet<Tuple1<Long>> initialVertices =

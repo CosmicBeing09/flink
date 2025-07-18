@@ -61,7 +61,7 @@ public class PipelineBreakingTest {
     @Test
     public void testSimpleForwardPlan() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> dataSet = env.readTextFile("/never/accessed");
             dataSet.map(
@@ -120,7 +120,7 @@ public class PipelineBreakingTest {
     @Test
     public void testBranchingPlanNotReJoined() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Integer> data =
                     env.readTextFile("/never/accessed")
@@ -211,7 +211,7 @@ public class PipelineBreakingTest {
         try {
             // build a test program
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromElements(33L, 44L)

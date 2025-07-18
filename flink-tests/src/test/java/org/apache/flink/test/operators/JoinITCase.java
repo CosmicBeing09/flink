@@ -69,7 +69,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * UDF Join on tuples with key field positions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -90,7 +90,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * UDF Join on tuples with multiple key field positions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -117,7 +117,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Default Join on tuples
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -142,7 +142,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join with Huge
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -163,7 +163,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join with Tiny
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -184,7 +184,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join that returns the left input object
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -205,7 +205,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join that returns the right input object
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -226,7 +226,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
@@ -258,7 +258,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join on a tuple input with key field selector and a custom type input with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds1 = CollectionDataSets.getSmallCustomTypeDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
@@ -285,7 +285,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Project join on a tuple input 1
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -315,7 +315,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Project join on a tuple input 2
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -346,7 +346,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Join on a tuple input with key field selector and a custom type input with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
@@ -373,7 +373,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * (Default) Join on two custom type inputs with key extractors
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
@@ -401,7 +401,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * cleaning
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
@@ -444,7 +444,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * (Default) Join on two custom type inputs with key extractors, check if disabling closure cleaning works
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
         DataSet<CustomType> ds1 = CollectionDataSets.getCustomTypeDataSet(env);
@@ -494,7 +494,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * UDF Join on tuples with tuple-returning key selectors
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -544,7 +544,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Join nested pojo against tuple (selected using a string)
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -568,7 +568,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Join nested pojo against tuple (selected as an integer)
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -593,7 +593,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * selecting multiple fields using expression language
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -621,7 +621,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * nested into tuple
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -652,7 +652,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * nested into tuple into pojo
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -683,7 +683,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Non-POJO test to verify that full-tuple keys are working.
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
@@ -718,7 +718,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Non-POJO test to verify "nested" tuple-element selection.
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds1 =
                 CollectionDataSets.getSmallNestedTupleDataSet(env);
@@ -754,7 +754,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * full pojo with full tuple
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds1 = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Long, Integer, Integer, Long, String, Integer, String>> ds2 =
@@ -780,7 +780,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Non-POJO test to verify "nested" tuple-element selection with the first key field greater than 0.
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple2<Tuple3<Integer, Long, String>, Tuple3<Integer, Long, String>>> ds2 =
@@ -816,7 +816,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testJoinWithAtomicType1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Integer> ds2 = env.fromElements(1, 2);
@@ -833,7 +833,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testJoinWithAtomicType2() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ds1 = env.fromElements(1, 2);
         DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
@@ -854,7 +854,7 @@ public class JoinITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test Join on tuples with multiple key field positions and same customized distribution
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =

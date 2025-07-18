@@ -124,7 +124,7 @@ public interface PythonFunctionFactory {
 
         Configuration mergedConfig =
                 new Configuration(
-                        ExecutionEnvironment.getExecutionEnvironment().getConfiguration());
+                        ExecutionEnvironment.getBatchExecutionEnvironment().getConfiguration());
         if (config instanceof TableConfig) {
             PythonDependencyUtils.merge(mergedConfig, ((TableConfig) config).getConfiguration());
         } else {

@@ -102,7 +102,7 @@ public class ReducePerformance {
             boolean print)
             throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().enableObjectReuse();
 
         @SuppressWarnings("unchecked")

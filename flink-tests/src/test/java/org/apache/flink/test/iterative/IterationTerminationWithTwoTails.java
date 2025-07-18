@@ -36,7 +36,7 @@ public class IterationTerminationWithTwoTails extends JavaProgramTestBaseJUnit4 
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<String> initialInput = env.fromElements("1", "2", "3", "4", "5").name("input");

@@ -65,7 +65,7 @@ public class DataSetAllroundTestProgram {
         String outputPath = params.getRequired("outputPath");
         boolean infinite = params.getBoolean("infinite", false);
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         int numKeys = loadFactor * 128 * 1024;
         DataSet<Tuple2<String, Integer>> x1Keys;

@@ -51,7 +51,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testPartitionCustomOperatorPreservesFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
@@ -86,7 +86,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testRangePartitionOperatorPreservesFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
@@ -131,7 +131,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testRangePartitionOperatorPreservesFields2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));

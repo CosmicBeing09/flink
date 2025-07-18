@@ -63,7 +63,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         final int p = DEFAULT_PARALLELISM;
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(p);
         DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
@@ -124,7 +124,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         final int p = DEFAULT_PARALLELISM;
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(p);
         DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
@@ -188,7 +188,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         final int p = DEFAULT_PARALLELISM * 2;
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(p);
         DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(p);
 
@@ -244,7 +244,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
         final int p = DEFAULT_PARALLELISM;
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(p);
 
         env.generateSequence(0, 1)
@@ -315,7 +315,7 @@ public class ParallelismChangeTest extends CompilerTestBase {
     public void checkPropertyHandlingWithTwoInputs() {
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Long> set1 = env.generateSequence(0, 1).setParallelism(5);

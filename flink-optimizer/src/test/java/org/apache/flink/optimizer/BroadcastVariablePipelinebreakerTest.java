@@ -40,7 +40,7 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
     @Test
     public void testNoBreakerForIndependentVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> source1 = env.fromElements("test");
             DataSet<String> source2 = env.fromElements("test");
@@ -71,7 +71,7 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
     @Test
     public void testBreakerForDependentVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> source1 = env.fromElements("test");
 

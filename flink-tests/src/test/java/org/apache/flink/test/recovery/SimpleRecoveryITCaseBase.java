@@ -57,7 +57,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
         try {
             // attempt 1
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
                 env.setParallelism(4);
                 Configuration configuration = new Configuration();
@@ -78,7 +78,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
 
             // attempt 2
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
                 env.setParallelism(4);
                 Configuration configuration = new Configuration();
@@ -107,7 +107,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
     @Test
     public void testRestart() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             env.setParallelism(4);
             // the default restart strategy should be taken
@@ -132,7 +132,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
     @Test
     public void testRestartMultipleTimes() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             env.setParallelism(4);
 

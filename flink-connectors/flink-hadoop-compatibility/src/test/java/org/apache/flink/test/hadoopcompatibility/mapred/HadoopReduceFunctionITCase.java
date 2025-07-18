@@ -48,7 +48,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testStandardGrouping(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper1());
@@ -72,7 +72,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testUngroupedHadoopReducer(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
 
@@ -93,7 +93,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testConfigurationViaJobConf(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         JobConf conf = new JobConf();
         conf.set("my.cntPrefix", "Hello");

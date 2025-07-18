@@ -199,7 +199,7 @@ public class AvroExternalJarProgram {
     public static void main(String[] args) throws Exception {
         String inputPath = args[0];
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<MyUser> input =
                 env.createInput(new AvroInputFormat<MyUser>(new Path(inputPath), MyUser.class));

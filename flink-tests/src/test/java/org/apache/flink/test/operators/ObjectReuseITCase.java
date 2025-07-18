@@ -70,7 +70,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testKeyedReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -100,7 +100,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testGlobalReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -135,7 +135,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testKeyedGroupReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -189,7 +189,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testGlobalGroupReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {

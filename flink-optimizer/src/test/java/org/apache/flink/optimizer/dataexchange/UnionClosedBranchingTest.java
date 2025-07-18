@@ -120,7 +120,7 @@ public class UnionClosedBranchingTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().setExecutionMode(executionMode);
         env.setParallelism(4);
 

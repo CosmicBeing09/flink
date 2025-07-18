@@ -33,7 +33,7 @@ public class CustomPartitioningITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         if (!isCollectionExecution()) {
             Assert.assertTrue(env.getParallelism() > 1);

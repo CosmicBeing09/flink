@@ -55,7 +55,7 @@ public class WordCount {
         final String inputPath = args[0];
         final String outputPath = args[1];
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Set up the Hadoop Input Format
         Job job = Job.getInstance();

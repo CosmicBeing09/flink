@@ -63,7 +63,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
             final int defaultParallelism = 133;
             final int iterationParallelism = 77;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             // ------------ construct the test program ------------------
             {
@@ -179,7 +179,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
     @Test
     void testRejectWhenSolutionSetKeysDontMatchJoin() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Double, Long, String>> initialSolutionSet =
@@ -215,7 +215,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
     @Test
     void testRejectWhenSolutionSetKeysDontMatchCoGroup() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Double, Long, String>> initialSolutionSet =

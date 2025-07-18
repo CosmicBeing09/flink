@@ -50,7 +50,7 @@ public class HardPlansCompilationTest extends CompilerTestBase {
     @Test
     public void testTicket158() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
 

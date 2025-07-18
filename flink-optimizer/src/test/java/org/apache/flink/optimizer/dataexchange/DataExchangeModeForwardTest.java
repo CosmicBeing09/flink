@@ -109,7 +109,7 @@ public class DataExchangeModeForwardTest extends CompilerTestBase {
             DataExchangeMode toReduce,
             DataExchangeMode toSink) {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
             DataSet<String> dataSet = env.readTextFile("/never/accessed");

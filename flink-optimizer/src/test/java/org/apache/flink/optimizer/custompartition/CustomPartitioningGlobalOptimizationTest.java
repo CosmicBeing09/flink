@@ -47,7 +47,7 @@ public class CustomPartitioningGlobalOptimizationTest extends CompilerTestBase {
         try {
             final Partitioner<Long> partitioner = new TestPartitionerLong();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
             DataSet<Tuple3<Long, Long, Long>> input2 =

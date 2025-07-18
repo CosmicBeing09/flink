@@ -50,7 +50,7 @@ public class BroadcastBranchingITCase extends JavaProgramTestBaseJUnit4 {
     //    Sc3(id,y) --------
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         // Sc1 generates M parameters a,b,c for second degree polynomials P(x) = ax^2 + bx + c

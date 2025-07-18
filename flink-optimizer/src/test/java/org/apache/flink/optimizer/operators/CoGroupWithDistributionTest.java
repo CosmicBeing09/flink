@@ -38,7 +38,7 @@ public class CoGroupWithDistributionTest extends CompilerTestBase {
 
     @Test
     public void CoGroupWithSameDistributionTest() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> set2 =
@@ -68,7 +68,7 @@ public class CoGroupWithDistributionTest extends CompilerTestBase {
 
     @Test
     public void CoGroupWithDifferentDistributionTest() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> set2 =

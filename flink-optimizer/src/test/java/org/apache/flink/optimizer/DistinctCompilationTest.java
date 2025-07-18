@@ -44,7 +44,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctPlain() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -100,7 +100,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithCombineHint() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -157,7 +157,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithSelectorFunctionKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -227,7 +227,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithFieldPositionKeyCombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =

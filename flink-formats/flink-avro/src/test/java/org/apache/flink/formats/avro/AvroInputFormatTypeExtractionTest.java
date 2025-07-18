@@ -43,7 +43,7 @@ class AvroInputFormatTypeExtractionTest {
 
             TypeInformation<?> typeInfoDirect = TypeExtractor.getInputFormatTypes(format);
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             DataSet<MyAvroType> input = env.createInput(format);
             TypeInformation<?> typeInfoDataSet = input.getType();
 

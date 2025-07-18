@@ -40,7 +40,7 @@ public class PartitionPushdownTest extends CompilerTestBase {
     @Test
     public void testPartitioningNotPushedDown() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Long, Long, Long>> input =
@@ -79,7 +79,7 @@ public class PartitionPushdownTest extends CompilerTestBase {
     @Test
     public void testPartitioningReused() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Long, Long, Long>> input =

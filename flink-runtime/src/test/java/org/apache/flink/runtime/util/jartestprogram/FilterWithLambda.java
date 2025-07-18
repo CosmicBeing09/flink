@@ -27,7 +27,7 @@ public class FilterWithLambda {
 
     @SuppressWarnings("Convert2MethodRef")
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<String> input = env.fromElements("Please filter", "the words", "but not this");
 
         DataSet<String> output = input.filter((v) -> WordFilter.filter(v));

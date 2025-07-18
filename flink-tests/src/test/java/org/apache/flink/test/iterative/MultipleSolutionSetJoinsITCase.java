@@ -40,7 +40,7 @@ public class MultipleSolutionSetJoinsITCase extends JavaProgramTestBaseJUnit4 {
         final double expectedFactor = (int) Math.pow(7, numIters);
 
         // this is an artificial program, it does not compute anything sensical
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Double>> initialData =

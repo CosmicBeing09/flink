@@ -46,7 +46,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Integer, Integer>> data =
@@ -90,7 +90,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
         try {
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Integer, Integer>> data =
@@ -114,7 +114,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -157,7 +157,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
         try {
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -180,7 +180,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -236,7 +236,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
                     (Partitioner<Integer>) (Partitioner<?>) new TestPartitionerLong();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();

@@ -201,7 +201,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
 
     private Plan getTestPlanRightStatic(String strategy) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple3<Long, Long, Long>> bigInput =
@@ -242,7 +242,7 @@ public class CachedMatchStrategyCompilerTest extends CompilerTestBase {
 
     private Plan getTestPlanLeftStatic(String strategy) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         @SuppressWarnings("unchecked")

@@ -56,7 +56,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test identity map with basic type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         DataSet<String> identityMapDs = ds.map(new Mapper1());
@@ -82,7 +82,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test identity map with basic type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().enableObjectReuse();
         String key = "key";
         String value = "value";
@@ -133,7 +133,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test identity map with a tuple
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> identityMapDs = ds.map(new Mapper2());
@@ -183,7 +183,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test type conversion mapper (Custom -> Tuple)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> typeConversionMapDs = ds.map(new Mapper3());
@@ -235,7 +235,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test type conversion mapper (Tuple -> Basic)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<String> typeConversionMapDs = ds.map(new Mapper4());
@@ -284,7 +284,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test mapper on tuple - Increment Integer field, reorder second and third fields
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, String, Long>> tupleMapDs = ds.map(new Mapper5());
@@ -337,7 +337,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test mapper on Custom - lowercase myString
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> customMapDs = ds.map(new Mapper6());
@@ -389,7 +389,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test mapper if UDF returns input object - increment first field of a tuple
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> inputObjMapDs = ds.map(new Mapper7());
@@ -441,7 +441,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test map with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 
@@ -509,7 +509,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test passing configuration object.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         Configuration conf = new Configuration();
@@ -535,7 +535,7 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testMapWithLambdas() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> stringDs = env.fromElements(11, 12, 13, 14);
         DataSet<String> mappedDs =

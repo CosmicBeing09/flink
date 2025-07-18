@@ -186,7 +186,7 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                     {
                         /** Test sequence file, including a key access. */
                         final ExecutionEnvironment env =
-                                ExecutionEnvironment.getExecutionEnvironment();
+                                ExecutionEnvironment.getBatchExecutionEnvironment();
 
                         SequenceFileInputFormat<LongWritable, Text> sfif =
                                 new SequenceFileInputFormat<LongWritable, Text>();
@@ -238,7 +238,7 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                 case 2:
                     {
                         final ExecutionEnvironment env =
-                                ExecutionEnvironment.getExecutionEnvironment();
+                                ExecutionEnvironment.getBatchExecutionEnvironment();
 
                         SequenceFileInputFormat<NullWritable, LongWritable> sfif =
                                 new SequenceFileInputFormat<NullWritable, LongWritable>();

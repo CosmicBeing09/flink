@@ -50,7 +50,7 @@ public class WordCountSimplePOJOITCase extends JavaProgramTestBaseJUnit4 impleme
 
     @Override
     protected void testProgram() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> text = env.readTextFile(textPath);
 

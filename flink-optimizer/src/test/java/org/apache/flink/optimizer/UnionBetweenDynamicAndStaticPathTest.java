@@ -42,7 +42,7 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
     @Test
     public void testUnionStaticFirst() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input1 = env.generateSequence(1, 10);
             DataSet<Long> input2 = env.generateSequence(1, 10);
@@ -95,7 +95,7 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
     @Test
     public void testUnionStaticSecond() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input1 = env.generateSequence(1, 10);
             DataSet<Long> input2 = env.generateSequence(1, 10);

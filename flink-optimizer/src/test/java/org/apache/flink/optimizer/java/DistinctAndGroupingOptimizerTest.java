@@ -40,7 +40,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
     @Test
     public void testDistinctPreservesPartitioningOfDistinctFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
     @Test
     public void testDistinctDestroysPartitioningOfNonDistinctFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")

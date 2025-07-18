@@ -35,7 +35,7 @@ public class IterationIncompleteDynamicPathConsumptionITCase extends JavaProgram
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // the test data is constructed such that the merge join zig zag
         // has an early out, leaving elements on the dynamic path input unconsumed

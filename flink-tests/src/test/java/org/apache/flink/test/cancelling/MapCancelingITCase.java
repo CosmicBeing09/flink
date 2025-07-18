@@ -51,7 +51,7 @@ public class MapCancelingITCase extends CancelingTestBase {
     }
 
     public void executeTask(MapFunction<Integer, Integer> mapper) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.createInput(new InfiniteIntegerInputFormat(false))
                 .map(mapper)

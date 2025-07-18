@@ -63,7 +63,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         final int SINKS = 5;
 
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             DataSet<Long> source = env.generateSequence(1, 10000);
@@ -103,7 +103,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testBranchingWithMultipleDataSinks2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             DataSet<Long> source = env.generateSequence(1, 10000);
@@ -167,7 +167,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testBranchingSourceMultipleTimes() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             DataSet<Tuple2<Long, Long>> source =
@@ -282,7 +282,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testBranchingWithMultipleDataSinks() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             DataSet<Tuple2<Long, Long>> sourceA =
@@ -348,7 +348,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     public void testBranchEachContractType() {
         try {
             // construct the plan
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
             DataSet<Long> sourceA = env.generateSequence(0, 1);
             DataSet<Long> sourceB = env.generateSequence(0, 1);
@@ -447,7 +447,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     public void testBranchingUnion() {
         try {
             // construct the plan
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
             DataSet<Long> source1 = env.generateSequence(0, 1);
             DataSet<Long> source2 = env.generateSequence(0, 1);
@@ -516,7 +516,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
             String outPath2 = "/tmp/out2";
 
             // construct the plan
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
             DataSet<Long> source1 = env.generateSequence(0, 1);
 
@@ -579,7 +579,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
         final String out4Path = "file:///test/4";
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> sourceA = env.generateSequence(0, 1);
         DataSet<Long> sourceB = env.generateSequence(0, 1);
@@ -595,7 +595,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testBranchAfterIteration() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> sourceA = env.generateSequence(0, 1);
 
@@ -618,7 +618,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testBranchBeforeIteration() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> source1 = env.generateSequence(0, 1);
         DataSet<Long> source2 = env.generateSequence(0, 1);
@@ -659,7 +659,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
      */
     @Test
     public void testClosure() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> sourceA = env.generateSequence(0, 1);
         DataSet<Long> sourceB = env.generateSequence(0, 1);
@@ -699,7 +699,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
      */
     @Test
     public void testClosureDeltaIteration() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Tuple2<Long, Long>> sourceA =
                 env.generateSequence(0, 1).map(new Duplicator<Long>());
@@ -759,7 +759,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
      */
     @Test
     public void testDeltaIterationWithStaticInput() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Tuple2<Long, Long>> source = env.generateSequence(0, 1).map(new Duplicator<Long>());
 
@@ -816,7 +816,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testIterationWithStaticInput() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(100);
 
             DataSet<Long> source = env.generateSequence(1, 1000000);
@@ -846,7 +846,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testBranchingBroadcastVariable() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(100);
 
         DataSet<String> input1 = env.readTextFile(IN_FILE).name("source1");
@@ -890,7 +890,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testBCVariableClosure() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> input = env.readTextFile(IN_FILE).name("source1");
 
@@ -921,7 +921,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testMultipleIterations() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(100);
 
         DataSet<String> input = env.readTextFile(IN_FILE).name("source1");
@@ -964,7 +964,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
 
     @Test
     public void testMultipleIterationsWithClosueBCVars() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(100);
 
         DataSet<String> input = env.readTextFile(IN_FILE).name("source1");
@@ -996,7 +996,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testBranchesOnlyInBCVariables1() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(100);
 
             DataSet<Long> input = env.generateSequence(1, 10);
@@ -1019,7 +1019,7 @@ public class BranchingPlansCompilerTest extends CompilerTestBase {
     @Test
     public void testBranchesOnlyInBCVariables2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(100);
 
             DataSet<Tuple2<Long, Long>> input =

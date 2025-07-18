@@ -63,7 +63,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
     @Test
     public void testNullValues() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(1);
 
             DataSet<String> data =
@@ -92,7 +92,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
     @Test
     public void testDisjointDataflows() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(5);
 
             // generate two different flows
@@ -111,7 +111,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
         final String accName = "test_accumulator";
 
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(6);
 
             env.generateSequence(1, 1000000)

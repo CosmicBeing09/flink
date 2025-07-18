@@ -29,7 +29,7 @@ public class ParameterProgram {
     public static void main(String[] args) throws Exception {
         actualArguments = args;
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("hello", "world").output(new DiscardingOutputFormat<>());
         env.execute();
     }

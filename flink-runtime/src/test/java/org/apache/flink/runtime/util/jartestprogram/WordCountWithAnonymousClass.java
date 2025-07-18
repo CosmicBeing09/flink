@@ -28,7 +28,7 @@ public class WordCountWithAnonymousClass {
 
     public static void main(String[] args) throws Exception {
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // get input data
         DataSet<String> text = StaticData.getDefaultTextLineDataSet(env);

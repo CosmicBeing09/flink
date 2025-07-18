@@ -38,7 +38,7 @@ public class EmptyWorksetIterationITCase extends JavaProgramTestBaseJUnit4 {
     @Override
     protected void testProgram() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input = env.generateSequence(1, 20).map(new Dupl());
 

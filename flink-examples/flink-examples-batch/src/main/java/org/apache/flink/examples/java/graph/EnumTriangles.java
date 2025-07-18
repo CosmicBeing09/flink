@@ -96,7 +96,7 @@ public class EnumTriangles {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

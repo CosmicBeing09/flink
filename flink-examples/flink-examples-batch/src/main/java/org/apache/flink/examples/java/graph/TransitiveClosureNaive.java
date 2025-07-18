@@ -62,7 +62,7 @@ public class TransitiveClosureNaive {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

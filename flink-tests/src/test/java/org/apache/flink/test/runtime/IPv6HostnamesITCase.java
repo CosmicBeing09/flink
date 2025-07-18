@@ -83,7 +83,7 @@ public class IPv6HostnamesITCase extends TestLogger {
     public void testClusterWithIPv6host() {
         try {
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(4);
 
             // get input data

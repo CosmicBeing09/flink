@@ -46,7 +46,7 @@ public class IterationCompilerTest extends CompilerTestBase {
     @Test
     public void testIdentityIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(43);
 
             IterativeDataSet<Long> iteration = env.generateSequence(-4, 1000).iterate(100);
@@ -65,7 +65,7 @@ public class IterationCompilerTest extends CompilerTestBase {
     @Test
     public void testEmptyWorksetIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(43);
 
             DataSet<Tuple2<Long, Long>> input =
@@ -96,7 +96,7 @@ public class IterationCompilerTest extends CompilerTestBase {
     @Test
     public void testIterationWithUnionRoot() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(43);
 
             IterativeDataSet<Long> iteration = env.generateSequence(-4, 1000).iterate(100);
@@ -137,7 +137,7 @@ public class IterationCompilerTest extends CompilerTestBase {
     @Test
     public void testWorksetIterationWithUnionRoot() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(43);
 
             DataSet<Tuple2<Long, Long>> input =

@@ -70,7 +70,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer1() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -98,7 +98,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -126,7 +126,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer3() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -154,7 +154,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer4() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)

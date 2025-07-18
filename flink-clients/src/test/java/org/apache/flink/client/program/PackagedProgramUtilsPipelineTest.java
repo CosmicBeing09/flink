@@ -78,7 +78,7 @@ public class PackagedProgramUtilsPipelineTest {
     void testConfigurationForwarding() throws Exception {
         // we want to test forwarding with this config, ensure that the default is what we expect.
         assertThat(
-                        ExecutionEnvironment.getExecutionEnvironment()
+                        ExecutionEnvironment.getBatchExecutionEnvironment()
                                 .getConfig()
                                 .isAutoTypeRegistrationDisabled())
                 .isFalse();
@@ -192,7 +192,7 @@ public class PackagedProgramUtilsPipelineTest {
     /** Test Program for the DataSet API. */
     public static class DataSetTestProgram {
         public static void main(String[] args) throws Exception {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements("hello").print();
             env.execute();
         }

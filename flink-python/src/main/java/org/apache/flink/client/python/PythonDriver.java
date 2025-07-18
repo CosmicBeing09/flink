@@ -69,7 +69,7 @@ public final class PythonDriver {
         // streaming and batch environments are always set at the same time, for streaming jobs we
         // can
         // also get its configuration from batch environments.
-        Configuration config = ExecutionEnvironment.getExecutionEnvironment().getConfiguration();
+        Configuration config = ExecutionEnvironment.getBatchExecutionEnvironment().getConfiguration();
 
         // start gateway server
         GatewayServer gatewayServer = PythonEnvUtils.startGatewayServer();

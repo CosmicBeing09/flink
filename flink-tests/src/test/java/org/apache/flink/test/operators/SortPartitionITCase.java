@@ -57,7 +57,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on key field
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -80,7 +80,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on two key fields
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(2);
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
@@ -106,7 +106,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on field expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -129,7 +129,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on two field expressions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(2);
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
@@ -154,7 +154,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on nested field expressions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
@@ -179,7 +179,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on field expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
@@ -203,7 +203,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition with parallelism change
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -225,7 +225,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on an extracted key
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -256,7 +256,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test sort partition on an extracted key
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);

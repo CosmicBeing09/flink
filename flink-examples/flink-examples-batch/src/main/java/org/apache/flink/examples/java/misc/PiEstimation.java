@@ -61,7 +61,7 @@ public class PiEstimation implements java.io.Serializable {
 
         final long numSamples = args.length > 0 ? Long.parseLong(args[0]) : 1000000;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // count how many of the samples would randomly fall into
         // the unit circle

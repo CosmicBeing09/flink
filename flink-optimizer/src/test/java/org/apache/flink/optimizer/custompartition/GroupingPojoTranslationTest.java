@@ -43,7 +43,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
@@ -71,7 +71,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleGroupReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
@@ -99,7 +99,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleGroupReduceSorted() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
 
@@ -128,7 +128,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleGroupReduceSorted2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo4> data = env.fromElements(new Pojo4()).rebalance().setParallelism(4);
 
@@ -158,7 +158,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleInvalidType() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
@@ -176,7 +176,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleInvalidTypeSorted() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
 
@@ -196,7 +196,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleRejectCompositeKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 

@@ -114,7 +114,7 @@ public class LocalExecutorITCase extends TestLogger {
     }
 
     private Plan getWordCountPlan(File inFile, File outFile, int parallelism) {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
         env.readTextFile(inFile.getAbsolutePath())
                 .flatMap(new Tokenizer())
@@ -125,7 +125,7 @@ public class LocalExecutorITCase extends TestLogger {
     }
 
     private Plan getRuntimeExceptionPlan() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements(1)
                 .map(
                         element -> {

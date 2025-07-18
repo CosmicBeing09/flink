@@ -109,7 +109,7 @@ public class TPCHQuery10 {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         if (!params.has("customer")
                 && !params.has("orders")

@@ -57,7 +57,7 @@ public class MultiExecuteJob {
         int noOfExecutes = Integer.parseInt(args[0]);
         boolean attached = args.length > 1 && Boolean.parseBoolean(args[1]);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         for (int i = 0; i < noOfExecutes; i++) {
             final List<Integer> input = new ArrayList<>();

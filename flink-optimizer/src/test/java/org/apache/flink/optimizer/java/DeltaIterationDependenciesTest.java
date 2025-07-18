@@ -37,7 +37,7 @@ public class DeltaIterationDependenciesTest extends CompilerTestBase {
     @Test
     public void testExceptionWhenNewWorksetNotDependentOnWorkset() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 

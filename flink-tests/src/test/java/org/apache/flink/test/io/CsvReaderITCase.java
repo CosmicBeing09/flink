@@ -67,7 +67,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPOJOType() throws Exception {
         final String inputData = "ABC,2.20,3\nDEF,5.1,5\nDEF,3.30,1\nGHI,3.30,10";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJOItem> data =
                 env.readCsvFile(dataPath).pojoType(POJOItem.class, new String[] {"f1", "f3", "f2"});
@@ -81,7 +81,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPOJOTypeWithFieldsOrder() throws Exception {
         final String inputData = "2.20,ABC,3\n5.1,DEF,5\n3.30,DEF,1\n3.30,GHI,10";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJOItem> data =
                 env.readCsvFile(dataPath).pojoType(POJOItem.class, new String[] {"f3", "f1", "f2"});
@@ -95,7 +95,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPOJOTypeWithoutFieldsOrder() throws Exception {
         final String inputData = "";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.readCsvFile(dataPath).pojoType(POJOItem.class);
     }
@@ -104,7 +104,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPOJOTypeWitNullFieldsOrder() throws Exception {
         final String inputData = "";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.readCsvFile(dataPath).pojoType(POJOItem.class, null);
     }
@@ -113,7 +113,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testPOJOTypeWithFieldsOrderAndFieldsSelection() throws Exception {
         final String inputData = "3,2.20,ABC\n5,5.1,DEF\n1,3.30,DEF\n10,3.30,GHI";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJOItem> data =
                 env.readCsvFile(dataPath)
@@ -129,7 +129,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testValueTypes() throws Exception {
         final String inputData = "ABC,true,1,2,3,4,5.0,6.0\nBCD,false,1,2,3,4,5.0,6.0";
         final String dataPath = createInputData(inputData);
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<
                         Tuple8<

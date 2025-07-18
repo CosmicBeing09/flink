@@ -53,7 +53,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Before
     public void initiate() {
-        ExecutionEnvironment.getExecutionEnvironment().setParallelism(5);
+        ExecutionEnvironment.getBatchExecutionEnvironment().setParallelism(5);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     private void verifySamplerWithFraction(boolean withReplacement, double fraction, long seed)
             throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         FlatMapOperator<Tuple3<Integer, Long, String>, String> ds = getSourceDataSet(env);
         MapPartitionOperator<String, String> sampled =
                 DataSetUtils.sample(ds, withReplacement, fraction, seed);
@@ -133,7 +133,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     private void verifySamplerWithFixedSize(boolean withReplacement, int numSamples, long seed)
             throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         FlatMapOperator<Tuple3<Integer, Long, String>, String> ds = getSourceDataSet(env);
         DataSet<String> sampled =
                 DataSetUtils.sampleWithSize(ds, withReplacement, numSamples, seed);

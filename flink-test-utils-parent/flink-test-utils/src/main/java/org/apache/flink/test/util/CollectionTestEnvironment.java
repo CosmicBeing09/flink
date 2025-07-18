@@ -26,7 +26,7 @@ import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 /**
  * A {@link CollectionEnvironment} to be used in tests. The predominant feature of this class is
  * that it allows setting it as a context environment, causing it to be returned by {@link
- * ExecutionEnvironment#getExecutionEnvironment()}. This also allows retrieving the {@link
+ * ExecutionEnvironment#getBatchExecutionEnvironment()}. This also allows retrieving the {@link
  * JobExecutionResult} outside the actual program.
  */
 public class CollectionTestEnvironment extends CollectionEnvironment {

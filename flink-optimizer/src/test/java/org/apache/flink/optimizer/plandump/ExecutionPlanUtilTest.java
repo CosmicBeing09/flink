@@ -39,7 +39,7 @@ public class ExecutionPlanUtilTest {
 
     @Test
     public void executionPlanCanBeRetrieved() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(8);
 
         env.readCsvFile("file:///will/never/be/executed")

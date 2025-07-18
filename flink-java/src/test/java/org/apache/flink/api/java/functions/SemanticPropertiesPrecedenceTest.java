@@ -38,7 +38,7 @@ class SemanticPropertiesPrecedenceTest {
 
     @Test
     void testFunctionForwardedAnnotationPrecedence() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
@@ -61,7 +61,7 @@ class SemanticPropertiesPrecedenceTest {
 
     @Test
     void testFunctionApiPrecedence() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));

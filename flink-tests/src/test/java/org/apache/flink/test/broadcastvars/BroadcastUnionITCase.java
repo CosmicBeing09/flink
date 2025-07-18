@@ -35,7 +35,7 @@ public class BroadcastUnionITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Long> input = env.generateSequence(1, 10);

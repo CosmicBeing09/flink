@@ -32,7 +32,7 @@ public class StaticlyNestedIterationsITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> data1 = env.generateSequence(1, 100);
         DataSet<Long> data2 = env.generateSequence(1, 100);

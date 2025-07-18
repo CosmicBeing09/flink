@@ -51,7 +51,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerWithBroadcastVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -88,7 +88,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerBroadcastedAllReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -144,7 +144,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerBroadcastedPartialSolution() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -188,7 +188,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     public void testPipelineBreakerWithCross() {
         try {
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -216,7 +216,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -245,7 +245,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -274,7 +274,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);

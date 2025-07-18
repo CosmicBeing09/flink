@@ -106,7 +106,7 @@ public class JobGraphGeneratorTest {
                     }
                 };
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> input = env.fromElements(1L, 2L, 3L);
         opMethod.invoke(input, resource1);
@@ -190,7 +190,7 @@ public class JobGraphGeneratorTest {
                     }
                 };
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<>(1L, 2L));
         opMethod.invoke(input, resource1);
@@ -288,7 +288,7 @@ public class JobGraphGeneratorTest {
 
     @Test
     public void testGeneratedJobsAreBatchJobType() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("test").output(new DiscardingOutputFormat<>());
 
         JobGraph graph = compileJob(env);
@@ -298,7 +298,7 @@ public class JobGraphGeneratorTest {
     @Test
     public void testGeneratingJobGraphWithUnconsumedResultPartition() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input =
                 env.fromElements(new Tuple2<>(1L, 2L)).setParallelism(1);

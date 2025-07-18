@@ -51,7 +51,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testReduceOnNonKeyedDataset() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -67,7 +67,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testForkingReduceOnNonKeyedDataset() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -85,7 +85,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testReduceOnKeyedDataset() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -101,7 +101,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testReduceOnKeyedDatasetWithSelector() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -117,7 +117,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testForkingReduceOnKeyedDataset() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -137,7 +137,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testForkingReduceOnKeyedDatasetWithSelection() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks

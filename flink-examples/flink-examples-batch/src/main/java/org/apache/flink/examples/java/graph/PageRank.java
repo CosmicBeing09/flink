@@ -105,7 +105,7 @@ public class PageRank {
         final int maxIterations = params.getInt("iterations", 10);
 
         // set up execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make the parameters available to the web ui
         env.getConfig().setGlobalJobParameters(params);

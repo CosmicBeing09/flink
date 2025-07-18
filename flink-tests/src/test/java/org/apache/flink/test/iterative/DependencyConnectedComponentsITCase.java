@@ -107,7 +107,7 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
 
         public static String runProgram(String resultPath) throws Exception {
 
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);

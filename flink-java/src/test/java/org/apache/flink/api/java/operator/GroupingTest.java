@@ -75,7 +75,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyFields1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -90,7 +90,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyFields2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: groups on basic type
@@ -100,7 +100,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyFields3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -112,7 +112,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyFields4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -123,7 +123,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyFields5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -135,7 +135,7 @@ class GroupingTest {
     void testGroupByKeyFieldsOnPrimitiveArray() {
         this.byteArrayData.add(new Tuple2<>(new byte[] {0}, new byte[] {1}));
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<byte[], byte[]>> tupleDs = env.fromCollection(byteArrayData);
         tupleDs.groupBy(0);
     }
@@ -143,7 +143,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -160,7 +160,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: groups on basic type
@@ -171,7 +171,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -183,7 +183,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(
@@ -197,7 +197,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions1Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -214,7 +214,7 @@ class GroupingTest {
     @Test
     void testGroupByKeyExpressions2Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(
@@ -229,7 +229,7 @@ class GroupingTest {
     @SuppressWarnings("serial")
     void testGroupByKeySelector1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         try {
@@ -245,7 +245,7 @@ class GroupingTest {
     @SuppressWarnings("serial")
     void testGroupByKeySelector2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         try {
@@ -267,7 +267,7 @@ class GroupingTest {
     @SuppressWarnings("serial")
     void testGroupByKeySelector3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         try {
@@ -289,7 +289,7 @@ class GroupingTest {
     @SuppressWarnings("serial")
     void testGroupByKeySelector4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         try {
@@ -312,7 +312,7 @@ class GroupingTest {
     @SuppressWarnings("serial")
     void testGroupByKeySelector5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         DataSet<CustomType> customDs = env.fromCollection(customTypeData);
@@ -328,7 +328,7 @@ class GroupingTest {
     @Test
     void testGroupSortKeyFields1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -343,7 +343,7 @@ class GroupingTest {
     @Test
     void testGroupSortKeyFields2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -355,7 +355,7 @@ class GroupingTest {
     @Test
     void testGroupSortKeyFields3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
 
         // should not work: sorted groups on groupings by key selectors
@@ -377,7 +377,7 @@ class GroupingTest {
     @Test
     void testGroupSortKeyFields4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -389,7 +389,7 @@ class GroupingTest {
     @Test
     void testGroupSortKeyFields5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -401,7 +401,7 @@ class GroupingTest {
     @Test
     void testChainedGroupSortKeyFields() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -416,7 +416,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -431,7 +431,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -446,7 +446,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -463,7 +463,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -475,7 +475,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -491,7 +491,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeyExpression6() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -504,7 +504,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeySelector1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -532,7 +532,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeySelector2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -565,7 +565,7 @@ class GroupingTest {
     @Test
     void testGroupSortByKeySelector3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
@@ -596,7 +596,7 @@ class GroupingTest {
 
     @Test
     void testGroupingAtomicType() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> dataSet = env.fromElements(0, 1, 1, 2, 0, 0);
 
         dataSet.groupBy("*");
@@ -604,7 +604,7 @@ class GroupingTest {
 
     @Test
     void testGroupAtomicTypeWithInvalid1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> dataSet = env.fromElements(0, 1, 2, 3);
 
         assertThatThrownBy(() -> dataSet.groupBy("*", "invalidField"))
@@ -613,7 +613,7 @@ class GroupingTest {
 
     @Test
     void testGroupAtomicTypeWithInvalid2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> dataSet = env.fromElements(0, 1, 2, 3);
 
         assertThatThrownBy(() -> dataSet.groupBy("invalidField"))
@@ -622,7 +622,7 @@ class GroupingTest {
 
     @Test
     void testGroupAtomicTypeWithInvalid3() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<ArrayList<Integer>> dataSet = env.fromElements(new ArrayList<Integer>());
 
         assertThatThrownBy(() -> dataSet.groupBy("*")).isInstanceOf(InvalidProgramException.class);

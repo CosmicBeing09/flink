@@ -52,7 +52,7 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
     protected void testProgram() throws Exception {
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // read vertex and edge data
         DataSet<Long> vertices =

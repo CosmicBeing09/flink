@@ -61,7 +61,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testDanglingPageRank() {
         try {
             final int numIterations = 25;
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Boolean>> vertices =
                     env.fromElements(

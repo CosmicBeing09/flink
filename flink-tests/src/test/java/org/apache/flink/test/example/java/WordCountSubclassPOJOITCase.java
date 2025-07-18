@@ -52,7 +52,7 @@ public class WordCountSubclassPOJOITCase extends JavaProgramTestBaseJUnit4 imple
 
     @Override
     protected void testProgram() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<String> text = env.readTextFile(textPath);
 
         DataSet<WCBase> counts =

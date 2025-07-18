@@ -56,7 +56,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testSolutionSetDeltaDependsOnBroadcastVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> source =
                     env.generateSequence(1, 1000).map(new DuplicateValueScalar<Long>());
@@ -97,7 +97,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testTwoIterationsWithMapperInbetween() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<Long, Long>> verticesWithInitialId =
@@ -143,7 +143,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testTwoIterationsDirectlyChained() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<Long, Long>> verticesWithInitialId =
@@ -197,7 +197,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testTwoWorksetIterationsDirectlyChained() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<Long, Long>> verticesWithInitialId =
@@ -242,7 +242,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testIterationPushingWorkOut() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<Long, Long>> input1 =
@@ -291,7 +291,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testIterationNotPushingWorkOut() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<Long, Long>> input1 =
@@ -336,7 +336,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testWorksetIterationPipelineBreakerPlacement() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             // the workset (input two of the delta iteration) is the same as what is consumed be the
@@ -375,7 +375,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
     @Test
     public void testResetPartialSolution() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> width = env.generateSequence(1, 10);
             DataSet<Long> update = env.generateSequence(1, 10);
@@ -435,7 +435,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
      */
     @Test
     public void testBulkIterationWithPartialSolutionProperties() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple1<Long>> input1 =
                 env.generateSequence(1, 10)

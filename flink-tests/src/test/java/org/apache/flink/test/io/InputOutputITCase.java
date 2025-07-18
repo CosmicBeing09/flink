@@ -33,7 +33,7 @@ public class InputOutputITCase extends JavaProgramTestBaseJUnit4 {
     @Override
     protected void testProgram() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         TestNonRichOutputFormat output = new TestNonRichOutputFormat();
         env.createInput(new TestNonRichInputFormat()).output(output);
         try {

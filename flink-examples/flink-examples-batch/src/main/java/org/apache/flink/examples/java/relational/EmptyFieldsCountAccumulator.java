@@ -79,7 +79,7 @@ public class EmptyFieldsCountAccumulator {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

@@ -60,7 +60,7 @@ public class KMeansForTest {
         final String centersData = args[1];
         final int numIterations = Integer.parseInt(args[2]);
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // get input data
         DataSet<Point> points =

@@ -100,7 +100,7 @@ public class KMeans {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig()
                 .setGlobalJobParameters(params); // make parameters available in the web interface
 

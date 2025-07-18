@@ -54,7 +54,7 @@ public class RichInputOutputITCase extends JavaProgramTestBaseJUnit4 {
 
         readCalls = new ConcurrentLinkedQueue<Integer>();
         writeCalls = new ConcurrentLinkedQueue<Integer>();
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.createInput(new TestInputFormat(new Path(inputPath))).output(new TestOutputFormat());
 
         JobExecutionResult result = env.execute();

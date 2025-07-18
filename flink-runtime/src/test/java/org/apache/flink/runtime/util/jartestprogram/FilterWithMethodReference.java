@@ -26,7 +26,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
 public class FilterWithMethodReference {
 
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<String> input = env.fromElements("Please filter", "the words", "but not this");
 
         FilterFunction<String> filter = WordFilter::filter;

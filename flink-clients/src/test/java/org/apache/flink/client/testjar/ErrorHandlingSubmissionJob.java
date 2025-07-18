@@ -56,7 +56,7 @@ public class ErrorHandlingSubmissionJob {
     }
 
     public static void main(String[] args) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromCollection(Arrays.asList(1, 2, 3))
                 .map(element -> element + 1)
                 .output(new DiscardingOutputFormat<>());

@@ -56,12 +56,12 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
     public static final MiniClusterWithClientResource MINI_CLUSTER_RESOURCE =
             new MiniClusterWithClientResource(
                     new MiniClusterResourceConfiguration.Builder()
-                            .setConfiguration(getConfiguration())
+                            .setConfiguration(getBatchConfiguration())
                             .setNumberTaskManagers(2)
                             .setNumberSlotsPerTaskManager(2)
                             .build());
 
-    private static Configuration getConfiguration() {
+    private static Configuration getBatchConfiguration() {
         Configuration config = new Configuration();
         config.set(TaskManagerOptions.MANAGED_MEMORY_SIZE, MemorySize.parse("20m"));
         config.set(TaskManagerOptions.NETWORK_MEMORY_MIN, MemorySize.ofMebiBytes(3L));
@@ -71,7 +71,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
 
     @Test
     public void testSuccessfulProgramAfterFailure() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         runConnectedComponents(env);
 

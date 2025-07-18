@@ -74,7 +74,7 @@ public class TaskFailureITCase extends JavaProgramTestBaseJUnit4 {
         configuration.set(
                 RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_DELAY, Duration.ofMillis(0));
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
         env.configure(configuration, Thread.currentThread().getContextClassLoader());
 

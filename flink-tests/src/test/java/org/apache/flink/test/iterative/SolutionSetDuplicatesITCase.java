@@ -50,7 +50,7 @@ public class SolutionSetDuplicatesITCase extends MultipleProgramsTestBaseJUnit4 
     @Test
     public void testProgram() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.generateSequence(0, 10)

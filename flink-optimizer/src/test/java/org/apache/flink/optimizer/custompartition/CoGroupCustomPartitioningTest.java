@@ -49,7 +49,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Long> partitioner = new TestPartitionerLong();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
             DataSet<Tuple3<Long, Long, Long>> input2 =
@@ -85,7 +85,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Integer> partitioner = new TestPartitionerInt();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
             DataSet<Tuple3<Long, Long, Long>> input2 =
@@ -108,7 +108,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Integer> partitioner = new TestPartitionerInt();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
             DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
@@ -141,7 +141,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Long> partitioner = new TestPartitionerLong();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
             DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
@@ -164,7 +164,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Integer> partitioner = new TestPartitionerInt();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
             DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
@@ -197,7 +197,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
         try {
             final Partitioner<Long> partitioner = new TestPartitionerLong();
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
             DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
@@ -221,7 +221,7 @@ public class CoGroupCustomPartitioningTest extends CompilerTestBase {
     @Test
     public void testIncompatibleHashAndCustomPartitioning() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple3<Long, Long, Long>> input =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));

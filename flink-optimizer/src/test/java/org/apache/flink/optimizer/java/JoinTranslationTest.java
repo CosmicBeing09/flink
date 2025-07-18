@@ -123,7 +123,7 @@ public class JoinTranslationTest extends CompilerTestBase {
     }
 
     private DualInputPlanNode createPlanAndGetJoinNode(JoinHint hint) {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> i1 = env.generateSequence(1, 1000);
         DataSet<Long> i2 = env.generateSequence(1, 1000);

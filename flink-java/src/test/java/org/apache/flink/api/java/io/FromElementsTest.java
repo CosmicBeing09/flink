@@ -28,14 +28,14 @@ class FromElementsTest {
 
     @Test
     void fromElementsWithBaseTypeTest1() {
-        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getBatchExecutionEnvironment();
         executionEnvironment.fromElements(
                 ParentType.class, new SubType(1, "Java"), new ParentType(1, "hello"));
     }
 
     @Test
     void fromElementsWithBaseTypeTest2() {
-        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getBatchExecutionEnvironment();
         assertThatThrownBy(
                         () ->
                                 executionEnvironment.fromElements(

@@ -44,7 +44,7 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
     @Test
     public void testCrossWithSmall() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
         DataSet<Long> set2 = env.generateSequence(0, 1);
@@ -73,7 +73,7 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
     @Test
     public void testCrossWithLarge() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
         DataSet<Long> set2 = env.generateSequence(0, 1);

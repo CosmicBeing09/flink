@@ -39,7 +39,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkInOpenBulkIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input = env.generateSequence(1, 10);
 
@@ -64,7 +64,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkInClosedBulkIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input = env.generateSequence(1, 10);
 
@@ -93,7 +93,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkOnSolutionSetDeltaIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
@@ -121,7 +121,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkOnWorksetDeltaIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
@@ -149,7 +149,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testOperationOnSolutionSet() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));

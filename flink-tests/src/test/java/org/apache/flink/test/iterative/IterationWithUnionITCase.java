@@ -57,7 +57,7 @@ public class IterationWithUnionITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Integer, CoordVector>> initialInput =
                 env.readFile(new PointInFormat(), this.dataPath).setParallelism(1);

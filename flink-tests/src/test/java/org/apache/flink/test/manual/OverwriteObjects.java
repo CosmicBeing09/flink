@@ -70,7 +70,7 @@ public class OverwriteObjects {
     public void run() throws Exception {
         LOG.info("Random seed = {}", RANDOM_SEED);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         for (int parallelism = MAX_PARALLELISM; parallelism > 0; parallelism--) {
             LOG.info("Parallelism = {}", parallelism);

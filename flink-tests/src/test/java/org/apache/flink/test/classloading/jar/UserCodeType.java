@@ -43,7 +43,7 @@ public class UserCodeType {
     }
 
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> input = env.fromElements(1, 2, 3, 4, 5);
 

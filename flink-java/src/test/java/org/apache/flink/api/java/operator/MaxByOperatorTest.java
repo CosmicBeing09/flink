@@ -58,7 +58,7 @@ class MaxByOperatorTest {
     @Test
     void testMaxByKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -75,7 +75,7 @@ class MaxByOperatorTest {
     @Test
     void testCustomKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -90,7 +90,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -104,7 +104,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -118,7 +118,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsDataset3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -133,7 +133,7 @@ class MaxByOperatorTest {
     @Test
     void testMaxByKeyFieldsGrouping() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -148,7 +148,7 @@ class MaxByOperatorTest {
     @Test
     void testCustomKeyFieldsGrouping() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -168,7 +168,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -182,7 +182,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -196,7 +196,7 @@ class MaxByOperatorTest {
     @Test
     void testOutOfTupleBoundsGrouping3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
 
@@ -209,7 +209,7 @@ class MaxByOperatorTest {
     @Test
     void testMaxByRowTypeInfoKeyFieldsDataset() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         TypeInformation[] types = new TypeInformation[] {Types.INT, Types.INT};
 
         String[] fieldNames = new String[] {"id", "value"};
@@ -222,7 +222,7 @@ class MaxByOperatorTest {
     /** Validates that no ClassCastException happens should not fail e.g. like in FLINK-8255. */
     @Test
     void testMaxByRowTypeInfoKeyFieldsForUnsortedGrouping() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         TypeInformation<?>[] types = new TypeInformation[] {Types.INT, Types.INT};
 

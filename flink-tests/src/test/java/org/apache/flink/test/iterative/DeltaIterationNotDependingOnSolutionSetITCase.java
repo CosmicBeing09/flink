@@ -41,7 +41,7 @@ public class DeltaIterationNotDependingOnSolutionSetITCase extends JavaProgramTe
     @Override
     protected void testProgram() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(1);
 
             DataSet<Tuple2<Long, Long>> input =

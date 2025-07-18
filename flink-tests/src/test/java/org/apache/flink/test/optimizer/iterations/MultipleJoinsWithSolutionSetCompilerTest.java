@@ -54,7 +54,7 @@ public class MultipleJoinsWithSolutionSetCompilerTest extends CompilerTestBase {
     public void testMultiSolutionSetJoinPlan() {
         try {
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Double>> inputData =

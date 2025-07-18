@@ -106,7 +106,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         // the iteration stops if less than this number of elements change value
         final long convergenceThreshold = 3;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
@@ -150,7 +150,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         // the iteration stops if less than this number of elements change value
         final long convergenceThreshold = 3;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
@@ -195,7 +195,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         final String aggregatorName = "elements.in.component.aggregator";
         final long componentId = 1L;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);

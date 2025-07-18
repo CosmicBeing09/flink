@@ -66,7 +66,7 @@ public class AccumulatorErrorITCase extends TestLogger {
 
     @Test
     public void testFaultyAccumulator() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Test Exception forwarding with faulty Accumulator implementation
         env.generateSequence(0, 10000)
@@ -78,7 +78,7 @@ public class AccumulatorErrorITCase extends TestLogger {
 
     @Test
     public void testInvalidTypeAccumulator() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Test Exception forwarding with faulty Accumulator implementation
         env.generateSequence(0, 10000)
@@ -96,7 +96,7 @@ public class AccumulatorErrorITCase extends TestLogger {
 
     @Test
     public void testFaultyMergeAccumulator() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Test Exception forwarding with faulty Accumulator implementation
         env.generateSequence(0, 10000)

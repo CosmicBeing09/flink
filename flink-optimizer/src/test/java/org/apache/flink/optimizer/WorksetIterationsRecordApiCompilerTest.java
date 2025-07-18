@@ -215,7 +215,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
     private Plan getTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
 
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Tuple2<Long, Long>> solSetInput =
                 env.readCsvFile("/tmp/sol.csv").types(Long.class, Long.class).name("Solution Set");

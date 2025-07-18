@@ -49,7 +49,7 @@ public class IterationWithChainingITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple2<Integer, CoordVector>> initialInput =

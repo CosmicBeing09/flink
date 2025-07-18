@@ -32,7 +32,7 @@ public class DataSetFineGrainedRecoveryTestProgram {
         final String latchFilePath = params.getRequired("latchFilePath");
         final String outputPath = params.getRequired("outputPath");
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().setExecutionMode(ExecutionMode.BATCH_FORCED);
         env.setParallelism(4);
 

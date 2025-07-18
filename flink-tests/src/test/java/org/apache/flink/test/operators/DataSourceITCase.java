@@ -47,7 +47,7 @@ public class DataSourceITCase extends JavaProgramTestBaseJUnit4 {
          * Test passing a configuration object to an input format
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         Configuration ifConf = new Configuration();
         ifConf.setString("prepend", "test");
 

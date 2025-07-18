@@ -60,7 +60,7 @@ public class WordCountWithCollectionITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> text = env.fromElements(WordCountData.TEXT);
         DataSet<Tuple2<String, Integer>> words = text.flatMap(new WordCount.Tokenizer());

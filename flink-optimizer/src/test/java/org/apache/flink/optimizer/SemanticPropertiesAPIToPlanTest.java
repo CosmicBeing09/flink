@@ -50,7 +50,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
 
     @Test
     public void forwardFieldsTestMapReduce() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         set =
@@ -126,7 +126,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
 
     @Test
     public void forwardFieldsTestJoin() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> in1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> in2 =

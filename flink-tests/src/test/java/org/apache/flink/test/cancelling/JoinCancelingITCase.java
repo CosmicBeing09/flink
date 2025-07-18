@@ -61,7 +61,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
             boolean slow,
             int parallelism)
             throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
         DataSet<Tuple2<Integer, Integer>> input2 =
@@ -104,7 +104,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int msecsTillCanceling,
             int maxTimeTillCanceled)
             throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
         DataSet<Tuple2<Integer, Integer>> input2 =
@@ -123,7 +123,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
 
     @Test
     public void testCancelSortMatchWhileDoingHeavySorting() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         HeavyCompareGeneratorInputFormat input = new HeavyCompareGeneratorInputFormat(100);
         DataSet<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
         DataSet<Tuple2<HeavyCompare, Integer>> input2 = env.createInput(input);

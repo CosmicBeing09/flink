@@ -41,7 +41,7 @@ public class ReduceAllTest extends CompilerTestBase {
     @Test
     public void testReduce() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
 

@@ -40,7 +40,7 @@ public class WorksetIterationCornerCasesTest extends CompilerTestBase {
     @Test
     public void testWorksetIterationNotDependingOnSolutionSet() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input =
                     env.generateSequence(1, 100).map(new Duplicator<Long>());

@@ -124,7 +124,7 @@ public class DataExchangeModeOpenBranchingTest extends CompilerTestBase {
             DataExchangeMode toJoinSink,
             DataExchangeMode toDirectSink) {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
             DataSet<Tuple2<Long, Long>> data =

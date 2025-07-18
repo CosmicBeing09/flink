@@ -31,7 +31,7 @@ public class ConsumePipelinedAndBlockingResultITCase extends JavaProgramTestBase
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple1<Long>> pipelinedSource = env.fromElements(new Tuple1<Long>(1L));

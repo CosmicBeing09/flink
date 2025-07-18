@@ -100,7 +100,7 @@ public class ConnectedComponents {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         final int maxIterations = params.getInt("iterations", 10);
 

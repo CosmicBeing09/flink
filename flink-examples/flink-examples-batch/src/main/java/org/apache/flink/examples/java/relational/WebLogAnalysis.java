@@ -115,7 +115,7 @@ public class WebLogAnalysis {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.getConfig().setGlobalJobParameters(params);
 

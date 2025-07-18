@@ -54,7 +54,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testCountElementsPerPartition() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
@@ -66,7 +66,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testZipWithIndex() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
@@ -91,7 +91,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testZipWithUniqueId() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(1L, expectedSize);
 
@@ -112,7 +112,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testIntegerDataSetChecksumHashCode() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
 
@@ -123,7 +123,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSummarize() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         List<Tuple8<Short, Integer, Long, Float, Double, String, Boolean, DoubleValue>> data =
                 new ArrayList<>();

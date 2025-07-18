@@ -36,7 +36,7 @@ public class LargePlanTest {
     }
 
     private static void runProgram(int depth, int width) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> input = env.fromElements("a", "b", "c");
         DataSet<String> stats = null;

@@ -91,7 +91,7 @@ class ExecutionPlanCreationTest {
                 return;
             }
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input =
                     env.readCsvFile(args[0]).fieldDelimiter("\t").types(Long.class, Long.class);

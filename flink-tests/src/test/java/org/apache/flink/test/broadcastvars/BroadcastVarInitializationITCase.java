@@ -41,7 +41,7 @@ public class BroadcastVarInitializationITCase extends JavaProgramTestBaseJUnit4 
     @Override
     protected void testProgram() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8);

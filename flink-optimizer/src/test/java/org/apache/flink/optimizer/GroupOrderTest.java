@@ -52,7 +52,7 @@ public class GroupOrderTest extends CompilerTestBase {
     @Test
     public void testReduceWithGroupOrder() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Tuple4<Long, Long, Long, Long>> set1 =
                 env.readCsvFile("/tmp/fake.csv")
@@ -100,7 +100,7 @@ public class GroupOrderTest extends CompilerTestBase {
     @Test
     public void testCoGroupWithGroupOrder() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Tuple7<Long, Long, Long, Long, Long, Long, Long>> set1 =
                 env.readCsvFile("/tmp/fake1.csv")

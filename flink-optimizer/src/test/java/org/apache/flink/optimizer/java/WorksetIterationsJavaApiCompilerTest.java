@@ -224,7 +224,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
     @Test
     public void testRejectPlanIfSolutionSetKeysAndJoinKeysDontMatch() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             @SuppressWarnings("unchecked")
@@ -287,7 +287,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
 
     private Plan getJavaTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         @SuppressWarnings("unchecked")

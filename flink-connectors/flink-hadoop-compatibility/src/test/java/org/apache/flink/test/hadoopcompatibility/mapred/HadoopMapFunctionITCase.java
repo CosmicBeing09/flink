@@ -47,7 +47,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testNonPassingMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
         DataSet<Tuple2<IntWritable, Text>> nonPassingFlatMapDs =
@@ -65,7 +65,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testDataDuplicatingMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
         DataSet<Tuple2<IntWritable, Text>> duplicatingFlatMapDs =
@@ -127,7 +127,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testConfigurableMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         JobConf conf = new JobConf();
         conf.set("my.filterPrefix", "Hello");

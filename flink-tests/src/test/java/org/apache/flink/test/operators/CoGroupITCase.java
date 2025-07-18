@@ -69,7 +69,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testCoGroupTuplesWithKeyFieldSelector() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -91,7 +91,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup on two custom type inputs with key extractors
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
@@ -138,7 +138,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cogroup if UDF returns left input objects
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
@@ -163,7 +163,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cogroup if UDF returns right input objects
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -191,7 +191,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
@@ -220,7 +220,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup on a tuple input with key field selector and a custom type input with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -266,7 +266,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup on a tuple input with key field selector and a custom type input with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -311,7 +311,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup with multiple key fields
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -339,7 +339,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup with multiple key fields
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -371,7 +371,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup with multiple key fields, test working closure cleaner for inner classes
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -449,7 +449,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * classes.
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
@@ -547,7 +547,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup on two custom type inputs using expression keys
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
@@ -574,7 +574,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * CoGroup on two custom type inputs using expression keys
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -618,7 +618,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * The key selector is unnecessary complicated (Tuple1) ;)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -671,7 +671,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * The key selector is simple here
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
         DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
@@ -688,7 +688,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testCoGroupWithAtomicType1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Integer> ds2 = env.fromElements(0, 1, 2);
 
@@ -704,7 +704,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testCoGroupWithAtomicType2() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 1, 2);
         DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
 
@@ -724,7 +724,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test coGroup on tuples with multiple key field positions and same customized distribution
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -754,7 +754,7 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testCoGroupLambda() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Integer, String>> left =
                 env.fromElements(

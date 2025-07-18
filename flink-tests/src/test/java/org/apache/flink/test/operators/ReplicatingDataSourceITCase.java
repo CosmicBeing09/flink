@@ -54,7 +54,7 @@ public class ReplicatingDataSourceITCase extends MultipleProgramsTestBaseJUnit4 
          * Test replicated source going into join
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple1<Long>> source1 =
                 env.createInput(
@@ -80,7 +80,7 @@ public class ReplicatingDataSourceITCase extends MultipleProgramsTestBaseJUnit4 
          * Test replicated source going into cross
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple1<Long>> source1 =
                 env.createInput(

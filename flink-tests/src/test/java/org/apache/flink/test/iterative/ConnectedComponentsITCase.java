@@ -63,7 +63,7 @@ public class ConnectedComponentsITCase extends JavaProgramTestBaseJUnit4 {
     @Override
     protected void testProgram() throws Exception {
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // read vertex and edge data
         DataSet<Tuple1<Long>> vertices = env.readCsvFile(verticesPath).types(Long.class);

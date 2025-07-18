@@ -73,7 +73,7 @@ class WordCountMapreduceITCase extends JavaProgramTestBase {
     }
 
     private void internalRun() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<LongWritable, Text>> input;
         input =

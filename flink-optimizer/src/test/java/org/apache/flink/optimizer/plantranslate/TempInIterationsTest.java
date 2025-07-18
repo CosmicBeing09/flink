@@ -44,7 +44,7 @@ public class TempInIterationsTest {
     @Test
     public void testTempInIterationTest() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input =
                 env.readCsvFile("file:///does/not/exist").types(Long.class, Long.class);

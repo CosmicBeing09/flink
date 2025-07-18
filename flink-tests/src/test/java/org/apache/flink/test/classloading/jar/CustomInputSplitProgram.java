@@ -42,7 +42,7 @@ public class CustomInputSplitProgram {
 
     public static void main(String[] args) throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> data = env.createInput(new CustomInputFormat());
 

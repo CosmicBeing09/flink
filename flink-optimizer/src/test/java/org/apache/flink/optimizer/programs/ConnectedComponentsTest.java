@@ -257,7 +257,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
     private static Plan getConnectedComponentsPlan(
             int parallelism, int iterations, boolean solutionSetFirst) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Tuple2<Long, Long>> verticesWithId =

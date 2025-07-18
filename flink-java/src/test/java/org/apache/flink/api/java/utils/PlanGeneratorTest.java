@@ -51,7 +51,7 @@ class PlanGeneratorTest {
                                         new DistributedCache.DistributedCacheEntry("test2", false)))
                         .collect(Collectors.toMap(x -> x.f0, x -> x.f1));
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(10);
         env.registerCachedFile("test1", fileA, true);
         env.registerCachedFile("test2", fileB, false);

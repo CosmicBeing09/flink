@@ -58,7 +58,7 @@ class AggregateOperatorTest {
     @Test
     void testFieldsAggregate() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -79,7 +79,7 @@ class AggregateOperatorTest {
     @Test
     void testAggregationTypes() {
         try {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
             DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                     env.fromCollection(emptyTupleData, tupleTypeInfo);
 

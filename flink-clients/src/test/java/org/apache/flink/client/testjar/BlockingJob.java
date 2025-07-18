@@ -73,7 +73,7 @@ public class BlockingJob {
 
     public static void main(String[] args) throws Exception {
         final String blockId = args[0];
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromCollection(Arrays.asList(1, 2, 3))
                 .map(element -> element + 1)
                 .map(

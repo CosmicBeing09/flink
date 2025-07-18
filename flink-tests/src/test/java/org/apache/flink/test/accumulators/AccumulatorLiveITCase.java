@@ -115,7 +115,7 @@ public class AccumulatorLiveITCase extends TestLogger {
 
     @Test
     public void testBatch() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Integer> input = env.fromCollection(inputData);

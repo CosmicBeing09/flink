@@ -55,7 +55,7 @@ public class WordCountCompilerTest extends CompilerTestBase {
 
     private void checkWordCount(boolean estimates) {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         // get input data

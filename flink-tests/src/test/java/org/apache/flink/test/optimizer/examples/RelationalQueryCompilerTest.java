@@ -432,7 +432,7 @@ public class RelationalQueryCompilerTest extends CompilerTestBase {
     }
 
     public static Plan tpch3(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(Integer.parseInt(args[0]));
 
         // order id, order status, order data, order prio, ship prio

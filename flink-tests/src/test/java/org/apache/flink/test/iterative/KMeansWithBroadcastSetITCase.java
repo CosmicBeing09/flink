@@ -42,7 +42,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
         String[] centers = KMeansData.INITIAL_CENTERS_2D.split("\n");
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // get input data
         DataSet<Point> pointsSet =

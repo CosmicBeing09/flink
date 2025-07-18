@@ -72,7 +72,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testProjectionSemProps1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -93,7 +93,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testProjectionSemProps2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Tuple3<String, Integer, Long>, Tuple2<Long, Long>, String>>
                 tupleDs = env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
 
@@ -117,7 +117,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testJoinProjectionSemProps1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -144,7 +144,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testJoinProjectionSemProps2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Tuple3<String, Integer, Long>, Tuple2<Long, Long>, String>>
                 tupleDs = env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
 
@@ -182,7 +182,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testCrossProjectionSemProps1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -207,7 +207,7 @@ class SemanticPropertiesProjectionTest {
 
     @Test
     void testCrossProjectionSemProps2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple4<Integer, Tuple3<String, Integer, Long>, Tuple2<Long, Long>, String>>
                 tupleDs = env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
 

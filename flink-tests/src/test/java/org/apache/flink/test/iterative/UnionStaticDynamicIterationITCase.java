@@ -35,7 +35,7 @@ public class UnionStaticDynamicIterationITCase extends JavaProgramTestBaseJUnit4
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> inputStatic = env.generateSequence(1, 4);
         DataSet<Long> inputIteration = env.generateSequence(1, 4);

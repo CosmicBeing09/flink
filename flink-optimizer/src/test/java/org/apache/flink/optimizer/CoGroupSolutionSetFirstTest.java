@@ -60,7 +60,7 @@ public class CoGroupSolutionSetFirstTest extends CompilerTestBase {
 
     @Test
     public void testCoGroupSolutionSet() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple1<Integer>> raw = env.readCsvFile(IN_FILE).types(Integer.class);
 
         DeltaIteration<Tuple1<Integer>, Tuple1<Integer>> iteration = raw.iterateDelta(raw, 1000, 0);

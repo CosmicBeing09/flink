@@ -42,7 +42,7 @@ public class NestedIterationsTest extends CompilerTestBase {
     @Test
     public void testRejectNestedBulkIterations() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> data = env.generateSequence(1, 100);
 
@@ -75,7 +75,7 @@ public class NestedIterationsTest extends CompilerTestBase {
     @Test
     public void testRejectNestedWorksetIterations() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
@@ -117,7 +117,7 @@ public class NestedIterationsTest extends CompilerTestBase {
     @Test
     public void testBulkIterationInClosure() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> data1 = env.generateSequence(1, 100);
             DataSet<Long> data2 = env.generateSequence(1, 100);
@@ -157,7 +157,7 @@ public class NestedIterationsTest extends CompilerTestBase {
     @Test
     public void testDeltaIterationInClosure() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
             DataSet<Tuple2<Long, Long>> data2 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));

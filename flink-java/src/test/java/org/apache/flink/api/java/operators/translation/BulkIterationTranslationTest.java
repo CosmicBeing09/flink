@@ -48,7 +48,7 @@ class BulkIterationTranslationTest implements java.io.Serializable {
         final int defaultParallelism = 133;
         final int iterationParallelism = 77;
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // ------------ construct the test program ------------------
 

@@ -35,7 +35,7 @@ public class IdentityIterationITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         IterativeDataSet<Long> iteration = env.generateSequence(1, 10).iterate(100);
         iteration.closeWith(iteration).output(new LocalCollectionOutputFormat<Long>(result));

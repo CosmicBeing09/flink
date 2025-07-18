@@ -35,7 +35,7 @@ public class DisjointDataFlowsTest extends CompilerTestBase {
     @Test
     public void testDisjointFlows() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
             // generate two different flows
             env.generateSequence(1, 10).output(new DiscardingOutputFormat<Long>());

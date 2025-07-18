@@ -68,7 +68,7 @@ public class WordCount {
         final MultipleParameterTool params = MultipleParameterTool.fromArgs(args);
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

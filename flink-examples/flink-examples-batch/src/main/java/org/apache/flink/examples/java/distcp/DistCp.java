@@ -71,7 +71,7 @@ public class DistCp {
         LOGGER.warn(DATASET_DEPRECATION_INFO);
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         ParameterTool params = ParameterTool.fromArgs(args);
         if (!params.has("input") || !params.has("output")) {

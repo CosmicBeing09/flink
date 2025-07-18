@@ -82,7 +82,7 @@ public class CoGroupConnectedComponentsITCase extends JavaProgramTestBaseJUnit4 
     @Override
     protected void testProgram() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple1<Long>> initialVertices =
                 env.readCsvFile(verticesPath)
