@@ -35,39 +35,39 @@ import java.util.concurrent.CompletableFuture;
  */
 abstract class StateWithoutExecutionGraph implements State {
 
-    private final Context context;
+    private final Context schedulerContext;
 
     private final Logger logger;
 
-    StateWithoutExecutionGraph(Context context, Logger logger) {
-        this.context = context;
+    StateWithoutExecutionGraph(Context schedulerContext, Logger logger) {
+        this.schedulerContext = schedulerContext;
         this.logger = logger;
     }
 
     @Override
     public void cancel() {
-        context.goToFinished(context.getArchivedExecutionGraph(JobStatus.CANCELED, null));
+        schedulerContext.goToFinished(schedulerContext.getArchivedExecutionGraph(JobStatus.CANCELED, null));
     }
 
     @Override
     public void suspend(Throwable cause) {
-        context.goToFinished(context.getArchivedExecutionGraph(JobStatus.SUSPENDED, cause));
+        schedulerContext.goToFinished(schedulerContext.getArchivedExecutionGraph(JobStatus.SUSPENDED, cause));
     }
 
     @Override
     public JobID getJobId() {
-        return context.getJobId();
+        return schedulerContext.getJobId();
     }
 
     @Override
     public ArchivedExecutionGraph getJob() {
-        return context.getArchivedExecutionGraph(getJobStatus(), null);
+        return schedulerContext.getArchivedExecutionGraph(getJobStatus(), null);
     }
 
     @Override
     public void handleGlobalFailure(
             Throwable cause, CompletableFuture<Map<String, String>> failureLabels) {
-        context.goToFinished(context.getArchivedExecutionGraph(JobStatus.FAILED, cause));
+        schedulerContext.goToFinished(schedulerContext.getArchivedExecutionGraph(JobStatus.FAILED, cause));
     }
 
     @Override
