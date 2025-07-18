@@ -57,10 +57,10 @@ import java.util.concurrent.CompletableFuture;
 /** A builder for the {@link JobMaster}. */
 public class JobMasterBuilder {
 
-    private static final long heartbeatInterval = 1000L;
-    private static final long heartbeatTimeout = 5_000_000L;
+    private static final long jobMasterHeartbeatInterval = 1000L;
+    private static final long jobMasterHeartbeatTimeout = 5_000_000L;
     private static final HeartbeatServices DEFAULT_HEARTBEAT_SERVICES =
-            new HeartbeatServicesImpl(heartbeatInterval, heartbeatTimeout);
+            new HeartbeatServicesImpl(jobMasterHeartbeatInterval, jobMasterHeartbeatTimeout);
 
     private Configuration configuration = new Configuration();
 
