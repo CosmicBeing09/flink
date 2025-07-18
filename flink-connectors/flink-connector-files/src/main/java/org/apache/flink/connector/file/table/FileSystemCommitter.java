@@ -57,7 +57,7 @@ public class FileSystemCommitter {
     private final TableMetaStoreFactory metaStoreFactory;
     private final boolean overwrite;
     private final boolean isToLocal;
-    private final Path tmpPath;
+    private final Path stagingPath;
     private final int partitionColumnSize;
     private final ObjectIdentifier identifier;
     private final LinkedHashMap<String, String> staticPartitions;
@@ -67,7 +67,7 @@ public class FileSystemCommitter {
             FileSystemFactory factory,
             TableMetaStoreFactory metaStoreFactory,
             boolean overwrite,
-            Path tmpPath,
+            Path stagingPath,
             int partitionColumnSize,
             boolean isToLocal,
             ObjectIdentifier identifier,
@@ -76,7 +76,7 @@ public class FileSystemCommitter {
         this.factory = factory;
         this.metaStoreFactory = metaStoreFactory;
         this.overwrite = overwrite;
-        this.tmpPath = tmpPath;
+        this.stagingPath = stagingPath;
         this.partitionColumnSize = partitionColumnSize;
         this.isToLocal = isToLocal;
         this.identifier = identifier;
@@ -97,8 +97,8 @@ public class FileSystemCommitter {
      * @throws Exception if partition commitment fails
      */
     public void commitPartitions(BiPredicate<Integer, Integer> taskAttemptFilter) throws Exception {
-        FileSystem fs = factory.create(tmpPath.toUri());
-        List<Path> taskPaths = listTaskTemporaryPaths(fs, tmpPath, taskAttemptFilter);
+        FileSystem fs = factory.create(stagingPath.toUri());
+        List<Path> taskPaths = listTaskTemporaryPaths(fs, stagingPath, taskAttemptFilter);
 
         try (PartitionLoader loader =
                 new PartitionLoader(
@@ -131,7 +131,7 @@ public class FileSystemCommitter {
      */
     public void commitPartitionsWithFiles(Map<String, List<Path>> partitionsFiles)
             throws Exception {
-        FileSystem fs = factory.create(tmpPath.toUri());
+        FileSystem fs = factory.create(stagingPath.toUri());
         try (PartitionLoader loader =
                 new PartitionLoader(
                         overwrite, fs, metaStoreFactory, isToLocal, identifier, policies)) {

@@ -45,18 +45,18 @@ public interface PartitionWriter<T> {
     /** Context for partition writer, provide some information and generation utils. */
     class Context<T> {
 
-        private final Configuration conf;
-        private final OutputFormatFactory<T> factory;
+        private final Configuration configuration;
+        private final OutputFormatFactory<T> outputFormatFactory;
 
         public Context(Configuration conf, OutputFormatFactory<T> factory) {
-            this.conf = conf;
-            this.factory = factory;
+            this.configuration = conf;
+            this.outputFormatFactory = factory;
         }
 
         /** Create a new output format with path, configure it and open it. */
         OutputFormat<T> createNewOutputFormat(Path path) throws IOException {
-            OutputFormat<T> format = factory.createOutputFormat(path);
-            format.configure(conf);
+            OutputFormat<T> format = outputFormatFactory.createOutputFormat(path);
+            format.configure(configuration);
             // Here we just think of it as a single file format, so there can only be a single task.
             format.open(0, 1);
             return format;

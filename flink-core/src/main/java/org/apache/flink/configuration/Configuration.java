@@ -700,16 +700,16 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @param prefix The prefix to prepend.
      */
     public void addAll(Configuration other, String prefix) {
-        final StringBuilder bld = new StringBuilder();
-        bld.append(prefix);
-        final int pl = bld.length();
+        final StringBuilder prefixBuilder = new StringBuilder();
+        prefixBuilder.append(prefix);
+        final int prefixLength = prefixBuilder.length();
 
         synchronized (this.confData) {
             synchronized (other.confData) {
                 for (Map.Entry<String, Object> entry : other.confData.entrySet()) {
-                    bld.setLength(pl);
-                    bld.append(entry.getKey());
-                    this.confData.put(bld.toString(), entry.getValue());
+                    prefixBuilder.setLength(prefixLength);
+                    prefixBuilder.append(entry.getKey());
+                    this.confData.put(prefixBuilder.toString(), entry.getValue());
                 }
             }
         }

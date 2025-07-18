@@ -36,9 +36,9 @@ public class PartitionCommitPolicyFactory implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private final String policyKind;
-    private final String customClass;
+    private final String customPolicyClassName;
     private final String successFileName;
-    private final List<String> parameters;
+    private final List<String> policyParameters;
 
     public PartitionCommitPolicyFactory(
             String policyKind,
@@ -46,9 +46,9 @@ public class PartitionCommitPolicyFactory implements Serializable {
             String successFileName,
             List<String> parameters) {
         this.policyKind = policyKind;
-        this.customClass = customClass;
+        this.customPolicyClassName = customClass;
         this.successFileName = successFileName;
-        this.parameters = parameters;
+        this.policyParameters = parameters;
     }
 
     /** Create a policy chain. */
@@ -69,20 +69,20 @@ public class PartitionCommitPolicyFactory implements Serializable {
                                             successFileName, fsSupplier.get());
                                 case PartitionCommitPolicy.CUSTOM:
                                     try {
-                                        if (parameters != null && !parameters.isEmpty()) {
+                                        if (policyParameters != null && !policyParameters.isEmpty()) {
                                             String[] paramStrings =
-                                                    parameters.toArray(new String[0]);
-                                            Class<?>[] classes = new Class<?>[parameters.size()];
-                                            for (int i = 0; i < parameters.size(); i++) {
+                                                    policyParameters.toArray(new String[0]);
+                                            Class<?>[] classes = new Class<?>[policyParameters.size()];
+                                            for (int i = 0; i < policyParameters.size(); i++) {
                                                 classes[i] = String.class;
                                             }
                                             return (PartitionCommitPolicy)
-                                                    cl.loadClass(customClass)
+                                                    cl.loadClass(customPolicyClassName)
                                                             .getConstructor(classes)
                                                             .newInstance((Object[]) paramStrings);
                                         } else {
                                             return (PartitionCommitPolicy)
-                                                    cl.loadClass(customClass).newInstance();
+                                                    cl.loadClass(customPolicyClassName).newInstance();
                                         }
                                     } catch (ClassNotFoundException
                                             | IllegalAccessException
@@ -91,7 +91,7 @@ public class PartitionCommitPolicyFactory implements Serializable {
                                             | InvocationTargetException e) {
                                         throw new RuntimeException(
                                                 "Can not create new instance for custom class from "
-                                                        + customClass,
+                                                        + customPolicyClassName,
                                                 e);
                                     }
                                 default:
