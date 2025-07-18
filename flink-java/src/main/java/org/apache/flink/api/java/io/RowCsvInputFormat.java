@@ -44,9 +44,9 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
 
     private static final long serialVersionUID = 1L;
 
-    private int arity;
+    private int fieldCount;
     private TypeInformation[] fieldTypeInfos;
-    private int[] fieldPosMap;
+    private int[] fieldPositionMap;
     private boolean emptyColumnAsNull;
 
     public RowCsvInputFormat(
@@ -58,14 +58,14 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
             boolean emptyColumnAsNull) {
 
         super(filePath);
-        this.arity = fieldTypeInfos.length;
-        if (arity != selectedFields.length) {
+        this.fieldCount = fieldTypeInfos.length;
+        if (fieldCount != selectedFields.length) {
             throw new IllegalArgumentException(
                     "Number of field types and selected fields must be the same");
         }
 
         this.fieldTypeInfos = fieldTypeInfos;
-        this.fieldPosMap = toFieldPosMap(selectedFields);
+        this.fieldPositionMap = toFieldPosMap(selectedFields);
         this.emptyColumnAsNull = emptyColumnAsNull;
 
         boolean[] fieldsMask = toFieldMask(selectedFields);
@@ -163,7 +163,7 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
     protected Row fillRecord(Row reuse, Object[] parsedValues) {
         Row reuseRow;
         if (reuse == null) {
-            reuseRow = new Row(arity);
+            reuseRow = new Row(fieldCount);
         } else {
             reuseRow = reuse;
         }
@@ -199,7 +199,7 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
             if (fieldIncluded[field]) {
                 // parse field
                 FieldParser<Object> parser =
-                        (FieldParser<Object>) this.getFieldParsers()[fieldPosMap[output]];
+                        (FieldParser<Object>) this.getFieldParsers()[fieldPositionMap[output]];
                 int latestValidPos = startPos;
                 startPos =
                         parser.resetErrorStateAndParse(
@@ -207,7 +207,7 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
                                 startPos,
                                 limit,
                                 fieldDelimiter,
-                                holders[fieldPosMap[output]]);
+                                holders[fieldPositionMap[output]]);
 
                 if (!isLenient() && (parser.getErrorState() != FieldParser.ParseErrorState.NONE)) {
                     // the error state EMPTY_COLUMN is ignored
@@ -221,7 +221,7 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
                                         parser.getErrorState()));
                     }
                 }
-                holders[fieldPosMap[output]] = parser.getLastResult();
+                holders[fieldPositionMap[output]] = parser.getLastResult();
 
                 // check parse result:
                 // the result is null if it is invalid
@@ -230,7 +230,7 @@ public class RowCsvInputFormat extends CsvInputFormat<Row> implements ResultType
                         || (emptyColumnAsNull
                                 && (parser.getErrorState()
                                         .equals(FieldParser.ParseErrorState.EMPTY_COLUMN)))) {
-                    holders[fieldPosMap[output]] = null;
+                    holders[fieldPositionMap[output]] = null;
                     startPos = skipFields(bytes, latestValidPos, limit, fieldDelimiter);
                 }
                 output++;

@@ -84,7 +84,7 @@ import static org.apache.flink.table.runtime.types.PlannerTypeUtils.isPrimitive;
  */
 @Deprecated
 public class TypeInfoDataTypeConverter {
-    private static final Map<String, TypeInformation<?>> primitiveDataTypeTypeInfoMap =
+    private static final Map<String, TypeInformation<?>> primitiveTypeNameToTypeInfoMap =
             new HashMap<>();
 
     static {
@@ -99,14 +99,14 @@ public class TypeInfoDataTypeConverter {
 
     private static void addDefaultTypeInfo(Class<?> clazz, TypeInformation<?> typeInformation) {
         Preconditions.checkArgument(clazz.isPrimitive());
-        primitiveDataTypeTypeInfoMap.put(clazz.getName(), typeInformation);
+        primitiveTypeNameToTypeInfoMap.put(clazz.getName(), typeInformation);
     }
 
     public static TypeInformation<?> fromDataTypeToTypeInfo(DataType dataType) {
-        Class<?> clazz = dataType.getConversionClass();
-        if (clazz.isPrimitive()) {
+        Class<?> conversionClass = dataType.getConversionClass();
+        if (conversionClass.isPrimitive()) {
             final TypeInformation<?> foundTypeInfo =
-                    primitiveDataTypeTypeInfoMap.get(clazz.getName());
+                    primitiveTypeNameToTypeInfoMap.get(conversionClass.getName());
             if (foundTypeInfo != null) {
                 return foundTypeInfo;
             }
@@ -117,9 +117,9 @@ public class TypeInfoDataTypeConverter {
                 TimestampType timestampType = (TimestampType) logicalType;
                 int precision = timestampType.getPrecision();
                 if (timestampType.getKind() == TimestampKind.REGULAR) {
-                    return clazz == TimestampData.class
+                    return conversionClass == TimestampData.class
                             ? new TimestampDataTypeInfo(precision)
-                            : (clazz == LocalDateTime.class
+                            : (conversionClass == LocalDateTime.class
                                     ? ((3 == precision)
                                             ? Types.LOCAL_DATE_TIME
                                             : new LegacyLocalDateTimeTypeInfo(precision))
@@ -133,9 +133,9 @@ public class TypeInfoDataTypeConverter {
                 LocalZonedTimestampType lzTs = (LocalZonedTimestampType) logicalType;
                 int precisionLzTs = lzTs.getPrecision();
                 if (lzTs.getKind() == TimestampKind.REGULAR) {
-                    return clazz == TimestampData.class
+                    return conversionClass == TimestampData.class
                             ? new TimestampDataTypeInfo(precisionLzTs)
-                            : (clazz == Instant.class
+                            : (conversionClass == Instant.class
                                     ? ((3 == precisionLzTs)
                                             ? Types.INSTANT
                                             : new LegacyInstantTypeInfo(precisionLzTs))
@@ -145,14 +145,14 @@ public class TypeInfoDataTypeConverter {
                 }
             case DECIMAL:
                 DecimalType decimalType = (DecimalType) logicalType;
-                return clazz == DecimalData.class
+                return conversionClass == DecimalData.class
                         ? new DecimalDataTypeInfo(
                                 decimalType.getPrecision(), decimalType.getScale())
                         : new BigDecimalTypeInfo(
                                 decimalType.getPrecision(), decimalType.getScale());
             case CHAR:
             case VARCHAR: // ignore precision
-                return clazz == StringData.class
+                return conversionClass == StringData.class
                         ? StringDataTypeInfo.INSTANCE
                         : BasicTypeInfo.STRING_TYPE_INFO;
             case BINARY:

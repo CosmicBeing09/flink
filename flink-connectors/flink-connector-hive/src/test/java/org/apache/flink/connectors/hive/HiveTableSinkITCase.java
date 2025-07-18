@@ -609,7 +609,7 @@ class HiveTableSinkITCase {
         TableEnvironment tEnv = HiveTestUtils.createTableEnvInBatchMode(SqlDialect.HIVE);
         tEnv.registerCatalog(hiveCatalog.getName(), hiveCatalog);
         tEnv.useCatalog(hiveCatalog.getName());
-        String wareHouse = hiveCatalog.getHiveConf().getVar(HiveConf.ConfVars.METASTOREWAREHOUSE);
+        String warehouse = hiveCatalog.getHiveConf().getVar(HiveConf.ConfVars.METASTOREWAREHOUSE);
         // disable auto statistic first
         tEnv.getConfig().set(HiveOptions.TABLE_EXEC_HIVE_SINK_STATISTIC_AUTO_GATHER_ENABLE, false);
         // test non-partition table
@@ -638,17 +638,17 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                -1, 2, getPathSize(Paths.get(wareHouse, "t1")), -1));
+                                -1, 2, getPathSize(Paths.get(warehouse, "t1")), -1));
         statistics = hiveCatalog.getTableStatistics(new ObjectPath("default", "t2"));
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                2, 2, getPathSize(Paths.get(wareHouse, "t2")), 8));
+                                2, 2, getPathSize(Paths.get(warehouse, "t2")), 8));
         statistics = hiveCatalog.getTableStatistics(new ObjectPath("default", "t3"));
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                2, 2, getPathSize(Paths.get(wareHouse, "t3")), 66));
+                                2, 2, getPathSize(Paths.get(warehouse, "t3")), 66));
 
         // test partition table
         tEnv.executeSql("create table pt1(x int) partitioned by (y int)");
@@ -666,7 +666,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                -1, 1, getPathSize(Paths.get(wareHouse, "pt1", "y=1")), -1));
+                                -1, 1, getPathSize(Paths.get(warehouse, "pt1", "y=1")), -1));
         statistics =
                 hiveCatalog.getPartitionStatistics(
                         new ObjectPath("default", "pt2"),
@@ -674,7 +674,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                1, 1, getPathSize(Paths.get(wareHouse, "pt2", "y=2")), 4));
+                                1, 1, getPathSize(Paths.get(warehouse, "pt2", "y=2")), 4));
         statistics =
                 hiveCatalog.getPartitionStatistics(
                         new ObjectPath("default", "pt3"),
@@ -682,7 +682,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                1, 1, getPathSize(Paths.get(wareHouse, "pt3", "y=3")), 33));
+                                1, 1, getPathSize(Paths.get(warehouse, "pt3", "y=3")), 33));
 
         // insert data into partition again
         tEnv.executeSql("insert into pt1 partition(y=1) values (1)").await();
@@ -697,7 +697,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                -1, 2, getPathSize(Paths.get(wareHouse, "pt1", "y=1")), -1));
+                                -1, 2, getPathSize(Paths.get(warehouse, "pt1", "y=1")), -1));
 
         statistics =
                 hiveCatalog.getPartitionStatistics(
@@ -707,7 +707,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                2, 2, getPathSize(Paths.get(wareHouse, "pt2", "y=2")), 8));
+                                2, 2, getPathSize(Paths.get(warehouse, "pt2", "y=2")), 8));
 
         statistics =
                 hiveCatalog.getPartitionStatistics(
@@ -716,7 +716,7 @@ class HiveTableSinkITCase {
         assertThat(statistics)
                 .isEqualTo(
                         new CatalogTableStatistics(
-                                2, 2, getPathSize(Paths.get(wareHouse, "pt3", "y=3")), 66));
+                                2, 2, getPathSize(Paths.get(warehouse, "pt3", "y=3")), 66));
 
         // test overwrite table/partition
         tEnv.executeSql("create table src(x int)");
@@ -858,7 +858,7 @@ class HiveTableSinkITCase {
     }
 
     private void testStreamingWrite(
-            boolean part, boolean useMr, String format, Consumer<String> pathConsumer)
+            boolean isPartitioned, boolean useMr, String format, Consumer<String> pathConsumer)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
@@ -910,9 +910,9 @@ class HiveTableSinkITCase {
                     // DDL
                     tEnv.executeSql(
                             "create external table sink_table (a int,b string,c string"
-                                    + (part ? "" : ",d string,e string")
+                                    + (isPartitioned ? "" : ",d string,e string")
                                     + ") "
-                                    + (part ? "partitioned by (d string,e string) " : "")
+                                    + (isPartitioned ? "partitioned by (d string,e string) " : "")
                                     + " stored as "
                                     + format
                                     + " TBLPROPERTIES ("

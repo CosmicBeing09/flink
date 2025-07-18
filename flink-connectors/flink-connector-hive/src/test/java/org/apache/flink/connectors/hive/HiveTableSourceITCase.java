@@ -122,10 +122,10 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
     @Test
     public void testReadNonPartitionedTable() throws Exception {
         final String dbName = "source_db";
-        final String tblName = "test";
+        final String tableName = "test";
         batchTableEnv.executeSql(
                 "CREATE TABLE source_db.test ( a INT, b INT, c STRING, d BIGINT, e DOUBLE)");
-        HiveTestUtils.createTextTableInserter(hiveCatalog, dbName, tblName)
+        HiveTestUtils.createTextTableInserter(hiveCatalog, dbName, tableName)
                 .addRow(new Object[] {1, 1, "a", 1000L, 1.11})
                 .addRow(new Object[] {2, 2, "b", 2000L, 2.22})
                 .addRow(new Object[] {3, 3, "c", 3000L, 3.33})
@@ -145,7 +145,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
     @Test
     public void testReadComplexDataType() throws Exception {
         final String dbName = "source_db";
-        final String tblName = "complex_test";
+        final String tableName = "complex_test";
         batchTableEnv.executeSql(
                 "create table source_db.complex_test("
                         + "a array<int>, m map<int,string>, s struct<f1:int,f2:bigint>)");
@@ -154,7 +154,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         map.put(1, "a");
         map.put(2, "b");
         Object[] struct = new Object[] {3, 3L};
-        HiveTestUtils.createTextTableInserter(hiveCatalog, dbName, tblName)
+        HiveTestUtils.createTextTableInserter(hiveCatalog, dbName, tableName)
                 .addRow(new Object[] {array, map, struct})
                 .commit();
         Table src = batchTableEnv.sqlQuery("select * from hive.source_db.complex_test");

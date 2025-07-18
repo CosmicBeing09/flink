@@ -44,10 +44,10 @@ import static org.assertj.core.api.Assertions.fail;
 class MinByOperatorTest {
 
     // TUPLE DATA
-    private final List<Tuple5<Integer, Long, String, Long, Integer>> emptyTupleData =
+    private final List<Tuple5<Integer, Long, String, Long, Integer>> emptyTuple5List =
             new ArrayList<>();
 
-    private final TupleTypeInfo<Tuple5<Integer, Long, String, Long, Integer>> tupleTypeInfo =
+    private final TupleTypeInfo<Tuple5<Integer, Long, String, Long, Integer>> tuple5TypeInfo =
             new TupleTypeInfo<>(
                     BasicTypeInfo.INT_TYPE_INFO,
                     BasicTypeInfo.LONG_TYPE_INFO,
@@ -61,7 +61,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo);
 
         // should work
         try {
@@ -97,7 +97,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> tupleDs.minBy(5)).isInstanceOf(IndexOutOfBoundsException.class);
@@ -111,7 +111,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> tupleDs.minBy(-1)).isInstanceOf(IndexOutOfBoundsException.class);
@@ -125,7 +125,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> tupleDs.minBy(1, 2, 3, 4, -1))
@@ -140,7 +140,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo).groupBy(0);
 
         // should work
         try {
@@ -179,7 +179,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo).groupBy(0);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> groupDs.minBy(5)).isInstanceOf(IndexOutOfBoundsException.class);
@@ -193,7 +193,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo).groupBy(0);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> groupDs.minBy(-1)).isInstanceOf(IndexOutOfBoundsException.class);
@@ -207,7 +207,7 @@ class MinByOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         UnsortedGrouping<Tuple5<Integer, Long, String, Long, Integer>> groupDs =
-                env.fromCollection(emptyTupleData, tupleTypeInfo).groupBy(0);
+                env.fromCollection(emptyTuple5List, tuple5TypeInfo).groupBy(0);
 
         // should not work, key out of tuple bounds
         assertThatThrownBy(() -> groupDs.minBy(1, 2, 3, 4, -1))
