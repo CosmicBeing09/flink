@@ -31,17 +31,17 @@ import org.apache.flink.util.Preconditions;
 @Internal
 public class StateBootstrapTransformationWithID<T> {
 
-    private final OperatorID operatorID;
+    private final OperatorID operatorIdentifier;
     private final StateBootstrapTransformation<T> bootstrapTransformation;
 
     public StateBootstrapTransformationWithID(
-            OperatorID operatorID, StateBootstrapTransformation<T> bootstrapTransformation) {
-        this.operatorID = Preconditions.checkNotNull(operatorID);
+            OperatorID operatorIdentifier, StateBootstrapTransformation<T> bootstrapTransformation) {
+        this.operatorIdentifier = Preconditions.checkNotNull(operatorIdentifier);
         this.bootstrapTransformation = Preconditions.checkNotNull(bootstrapTransformation);
     }
 
-    public OperatorID getOperatorID() {
-        return operatorID;
+    public OperatorID getOperatorIdentifier() {
+        return operatorIdentifier;
     }
 
     public StateBootstrapTransformation<T> getBootstrapTransformation() {
