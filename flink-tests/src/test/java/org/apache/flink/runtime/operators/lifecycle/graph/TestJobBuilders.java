@@ -245,14 +245,14 @@ public class TestJobBuilders {
                     operatorsNumberOfInputs.put(mapTwoInput, 2);
                     operatorsNumberOfInputs.put(multipleInput, 2);
 
-                    ExecutionPlan jobGraph =
+                    ExecutionPlan executionPlan =
                             stateBackend != null
                                     ? StateBackendUtils.configureStateBackendAndGetJobGraph(
                                             env, stateBackend)
                                     : env.getStreamGraph().getJobGraph();
 
                     return new TestJobWithDescription(
-                            jobGraph,
+                            executionPlan,
                             new HashSet<>(
                                     asList(unitedSourceLeft, unitedSourceRight, connectedSource)),
                             new HashSet<>(asList(mapForward, mapKeyed, mapTwoInput, multipleInput)),
