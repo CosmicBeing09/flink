@@ -48,20 +48,20 @@ public abstract class AtomicCtasITCaseBase {
     @RegisterExtension
     private static final MiniClusterExtension MINI_CLUSTER_EXTENSION = new MiniClusterExtension();
 
-    protected TableEnvironment tEnv;
+    protected TableEnvironment tableEnvironment;
 
     protected abstract TableEnvironment getTableEnvironment();
 
     @BeforeEach
     void setup() {
-        tEnv = getTableEnvironment();
+        tableEnvironment = getTableEnvironment();
         List<Row> sourceData = Collections.singletonList(Row.of(1, "ZM"));
 
         TestCollectionTableFactory.reset();
         TestCollectionTableFactory.initData(sourceData);
 
         String sourceDDL = "create table t1(a int, b varchar) with ('connector' = 'COLLECTION')";
-        tEnv.executeSql(sourceDDL);
+        tableEnvironment.executeSql(sourceDDL);
     }
 
     @AfterEach
@@ -83,17 +83,17 @@ public abstract class AtomicCtasITCaseBase {
 
     private void commonTestForAtomicCtas(String tableName, boolean ifNotExists, File tmpDataFolder)
             throws Exception {
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
         String dataDir = tmpDataFolder.getAbsolutePath();
         String sqlFragment = ifNotExists ? " if not exists " + tableName : tableName;
-        tEnv.executeSql(
+        tableEnvironment.executeSql(
                         "create table "
                                 + sqlFragment
                                 + " with ('connector' = 'test-staging', 'data-dir' = '"
                                 + dataDir
                                 + "') as select * from t1")
                 .await();
-        assertThat(tEnv.listTables()).doesNotContain(tableName);
+        assertThat(tableEnvironment.listTables()).doesNotContain(tableName);
         verifyDataFile(dataDir, "data");
         assertThat(TestSupportsStagingTableFactory.JOB_STATUS_CHANGE_PROCESS).hasSize(2);
         assertThat(TestSupportsStagingTableFactory.JOB_STATUS_CHANGE_PROCESS)
@@ -110,11 +110,11 @@ public abstract class AtomicCtasITCaseBase {
 
     @Test
     void testAtomicCtasWithException(@TempDir Path temporaryFolder) throws Exception {
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, true);
         String dataDir = temporaryFolder.toFile().getAbsolutePath();
         assertThatCode(
                         () ->
-                                tEnv.executeSql(
+                                tableEnvironment.executeSql(
                                                 "create table atomic_ctas_table_fail with ('connector' = 'test-staging', 'data-dir' = '"
                                                         + dataDir
                                                         + "', 'sink-fail' = '"
@@ -130,14 +130,14 @@ public abstract class AtomicCtasITCaseBase {
 
     @Test
     void testWithoutAtomicCtas(@TempDir Path temporaryFolder) throws Exception {
-        tEnv.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, false);
+        tableEnvironment.getConfig().set(TableConfigOptions.TABLE_RTAS_CTAS_ATOMICITY_ENABLED, false);
         String dataDir = temporaryFolder.toFile().getAbsolutePath();
-        tEnv.executeSql(
+        tableEnvironment.executeSql(
                         "create table atomic_ctas_table with ('connector' = 'test-staging', 'data-dir' = '"
                                 + dataDir
                                 + "') as select * from t1")
                 .await();
-        assertThat(tEnv.listTables()).contains("atomic_ctas_table");
+        assertThat(tableEnvironment.listTables()).contains("atomic_ctas_table");
         // Not using StagedTable, so need to read the hidden file
         verifyDataFile(dataDir, "_data");
         assertThat(TestSupportsStagingTableFactory.JOB_STATUS_CHANGE_PROCESS).hasSize(0);

@@ -90,15 +90,15 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testSimpleAvroRead(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final ExecutionEnvironment dataSetExecutionEnvironment = getExecutionEnvironment(useMiniCluster, miniCluster);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users).map((value) -> value);
+        DataSet<User> usersDS = dataSetExecutionEnvironment.createInput(users).map((value) -> value);
 
         usersDS.writeAsText(resultPath);
 
-        env.execute("Simple Avro read job");
+        dataSetExecutionEnvironment.execute("Simple Avro read job");
 
         expected =
                 "{\"name\": \"Alyssa\", \"favorite_number\": 256, \"favorite_color\": null, "
@@ -132,13 +132,13 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testSerializeWithAvro(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
-        env.getConfig().getSerializerConfig().setForceAvro(true);
+        final ExecutionEnvironment dataSetExecutionEnvironment = getExecutionEnvironment(useMiniCluster, miniCluster);
+        dataSetExecutionEnvironment.getConfig().getSerializerConfig().setForceAvro(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
         DataSet<User> usersDS =
-                env.createInput(users)
+                dataSetExecutionEnvironment.createInput(users)
                         .map(
                                 (MapFunction<User, User>)
                                         value -> {
@@ -150,7 +150,7 @@ class AvroTypeExtractionTest {
 
         usersDS.writeAsText(resultPath);
 
-        env.execute("Simple Avro read job");
+        dataSetExecutionEnvironment.execute("Simple Avro read job");
 
         expected =
                 "{\"name\": \"Alyssa\", \"favorite_number\": 256, \"favorite_color\": null,"

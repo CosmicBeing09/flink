@@ -108,12 +108,12 @@ class RescaleOnCheckpointITCase {
             throws Exception {
         final Configuration config = new Configuration();
 
-        final StreamExecutionEnvironment env =
+        final StreamExecutionEnvironment streamExecutionEnvironment =
                 StreamExecutionEnvironment.getExecutionEnvironment(config);
-        env.setParallelism(BEFORE_RESCALE_PARALLELISM);
-        env.fromSequence(0, Integer.MAX_VALUE).sinkTo(new DiscardingSink<>());
+        streamExecutionEnvironment.setParallelism(BEFORE_RESCALE_PARALLELISM);
+        streamExecutionEnvironment.fromSequence(0, Integer.MAX_VALUE).sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = streamExecutionEnvironment.getStreamGraph().getJobGraph();
         final Iterator<JobVertex> jobVertexIterator = jobGraph.getVertices().iterator();
         assertThat(jobVertexIterator.hasNext())
                 .as("There needs to be at least one JobVertex.")

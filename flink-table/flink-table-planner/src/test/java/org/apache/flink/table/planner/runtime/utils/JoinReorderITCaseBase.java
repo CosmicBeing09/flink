@@ -63,7 +63,7 @@ public abstract class JoinReorderITCaseBase {
                             .setNumberSlotsPerTaskManager(DEFAULT_PARALLELISM)
                             .build());
 
-    protected TableEnvironment tEnv;
+    protected TableEnvironment tableExecutionEnvironment;
     private Catalog catalog;
 
     protected abstract TableEnvironment getTableEnvironment();
@@ -72,13 +72,14 @@ public abstract class JoinReorderITCaseBase {
 
     @BeforeEach
     public void before() throws Exception {
-        tEnv = getTableEnvironment();
-        catalog = tEnv.getCatalog(tEnv.getCurrentCatalog()).get();
+        tableExecutionEnvironment = getTableEnvironment();
+        catalog = tableExecutionEnvironment
+                .getCatalog(tableExecutionEnvironment.getCurrentCatalog()).get();
 
-        tEnv.getConfig()
+        tableExecutionEnvironment.getConfig()
                 .getConfiguration()
                 .set(OptimizerConfigOptions.TABLE_OPTIMIZER_JOIN_REORDER_ENABLED, true);
-        tEnv.getConfig()
+        tableExecutionEnvironment.getConfig()
                 .getConfiguration()
                 .set(
                         ExecutionConfigOptions.TABLE_EXEC_RESOURCE_DEFAULT_PARALLELISM,
@@ -86,7 +87,7 @@ public abstract class JoinReorderITCaseBase {
 
         // Test data
         String dataId2 = TestValuesTableFactory.registerData(TestData.data2());
-        tEnv.executeSql(
+        tableExecutionEnvironment.executeSql(
                 String.format(
                         "CREATE TABLE T1 (\n"
                                 + "  a1 INT,\n"
@@ -101,11 +102,11 @@ public abstract class JoinReorderITCaseBase {
                                 + ")",
                         dataId2));
         catalog.alterTableStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T1"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T1"),
                 new CatalogTableStatistics(100000, 1, 1, 1),
                 false);
 
-        tEnv.executeSql(
+        tableExecutionEnvironment.executeSql(
                 String.format(
                         "CREATE TABLE T2 (\n"
                                 + "  a2 INT,\n"
@@ -120,12 +121,12 @@ public abstract class JoinReorderITCaseBase {
                                 + ")",
                         dataId2));
         catalog.alterTableStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T2"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T2"),
                 new CatalogTableStatistics(10000, 1, 1, 1),
                 false);
 
         String dataId3 = TestValuesTableFactory.registerData(TestData.smallData3());
-        tEnv.executeSql(
+        tableExecutionEnvironment.executeSql(
                 String.format(
                         "CREATE TABLE T3 (\n"
                                 + "  a3 INT,\n"
@@ -138,12 +139,12 @@ public abstract class JoinReorderITCaseBase {
                                 + ")",
                         dataId3));
         catalog.alterTableStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T3"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T3"),
                 new CatalogTableStatistics(1000, 1, 1, 1),
                 false);
 
         String dataId5 = TestValuesTableFactory.registerData(TestData.data5());
-        tEnv.executeSql(
+        tableExecutionEnvironment.executeSql(
                 String.format(
                         "CREATE TABLE T4 (\n"
                                 + "  a4 INT,\n"
@@ -158,7 +159,7 @@ public abstract class JoinReorderITCaseBase {
                                 + ")",
                         dataId5));
         catalog.alterTableStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T4"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T4"),
                 new CatalogTableStatistics(100, 1, 1, 1),
                 false);
     }
@@ -335,7 +336,7 @@ public abstract class JoinReorderITCaseBase {
         Map<String, CatalogColumnStatisticsDataBase> colStatsMap = new HashMap<>(1);
         colStatsMap.put("b1", longColStats);
         catalog.alterTableColumnStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T1"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T1"),
                 new CatalogColumnStatistics(colStatsMap),
                 false);
 
@@ -343,7 +344,7 @@ public abstract class JoinReorderITCaseBase {
         colStatsMap = new HashMap<>(1);
         colStatsMap.put("b2", longColStats);
         catalog.alterTableColumnStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T2"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T2"),
                 new CatalogColumnStatistics(colStatsMap),
                 false);
 
@@ -351,7 +352,7 @@ public abstract class JoinReorderITCaseBase {
         colStatsMap = new HashMap<>(1);
         colStatsMap.put("b3", longColStats);
         catalog.alterTableColumnStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T3"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T3"),
                 new CatalogColumnStatistics(colStatsMap),
                 false);
 
@@ -359,7 +360,7 @@ public abstract class JoinReorderITCaseBase {
         colStatsMap = new HashMap<>(1);
         colStatsMap.put("b4", longColStats);
         catalog.alterTableColumnStatistics(
-                new ObjectPath(tEnv.getCurrentDatabase(), "T4"),
+                new ObjectPath(tableExecutionEnvironment.getCurrentDatabase(), "T4"),
                 new CatalogColumnStatistics(colStatsMap),
                 false);
 
@@ -379,11 +380,11 @@ public abstract class JoinReorderITCaseBase {
 
     private void setIsBushyJoinReorder(boolean isBushyJoinReorder) {
         if (!isBushyJoinReorder) {
-            tEnv.getConfig()
+            tableExecutionEnvironment.getConfig()
                     .getConfiguration()
                     .set(OptimizerConfigOptions.TABLE_OPTIMIZER_BUSHY_JOIN_REORDER_THRESHOLD, 3);
         } else {
-            tEnv.getConfig()
+            tableExecutionEnvironment.getConfig()
                     .getConfiguration()
                     .set(OptimizerConfigOptions.TABLE_OPTIMIZER_BUSHY_JOIN_REORDER_THRESHOLD, 1000);
         }

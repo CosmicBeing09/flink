@@ -214,25 +214,26 @@ public class FileSinkCompactionSwitchITCase {
             FileSink<Integer> fileSink,
             boolean isFinite,
             SharedReference<ConcurrentHashMap<Integer, Integer>> sendCountMap) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.STREAMING);
         // disable changelog state in case it's randomly enabled, since it will fail the savepoint
         config.set(StateChangelogOptions.ENABLE_STATE_CHANGE_LOG, false);
-        env.configure(config, getClass().getClassLoader());
+        streamExecutionEnvironment.configure(config, getClass().getClassLoader());
 
-        env.enableCheckpointing(100, CheckpointingMode.EXACTLY_ONCE);
-        RestartStrategyUtils.configureNoRestartStrategy(env);
-        CheckpointStorageUtils.configureFileSystemCheckpointStorage(env, cpPath);
-        configureHashMapStateBackend(env);
+        streamExecutionEnvironment.enableCheckpointing(100, CheckpointingMode.EXACTLY_ONCE);
+        RestartStrategyUtils.configureNoRestartStrategy(streamExecutionEnvironment);
+        CheckpointStorageUtils.configureFileSystemCheckpointStorage(streamExecutionEnvironment, cpPath);
+        configureHashMapStateBackend(streamExecutionEnvironment);
 
-        env.addSource(new CountingTestSource(latchId, NUM_RECORDS, isFinite, sendCountMap))
+        streamExecutionEnvironment
+                .addSource(new CountingTestSource(latchId, NUM_RECORDS, isFinite, sendCountMap))
                 .setParallelism(NUM_SOURCES)
                 .sinkTo(fileSink)
                 .uid("sink")
                 .setParallelism(NUM_SINKS);
 
-        StreamGraph streamGraph = env.getStreamGraph();
+        StreamGraph streamGraph = streamExecutionEnvironment.getStreamGraph();
         return streamGraph.getJobGraph();
     }
 

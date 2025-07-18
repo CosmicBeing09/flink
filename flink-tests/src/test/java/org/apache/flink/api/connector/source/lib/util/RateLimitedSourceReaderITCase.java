@@ -60,8 +60,8 @@ public class RateLimitedSourceReaderITCase extends TestLogger {
     @Test
     @DisplayName("Rate limiter is used correctly.")
     public void testRateLimitingParallelExecution() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
 
         final int count = 10;
 
@@ -71,7 +71,7 @@ public class RateLimitedSourceReaderITCase extends TestLogger {
                 new DataGeneratorSource<>(index -> index, 10, rateLimiterStrategy, Types.LONG);
 
         final DataStream<Long> stream =
-                env.fromSource(
+                streamExecutionEnvironment.fromSource(
                         dataGeneratorSource, WatermarkStrategy.noWatermarks(), "generator source");
 
         final List<Long> result = stream.executeAndCollect(10000);

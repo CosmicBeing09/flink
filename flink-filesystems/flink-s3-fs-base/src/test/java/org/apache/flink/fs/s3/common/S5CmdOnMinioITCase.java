@@ -209,17 +209,17 @@ public abstract class S5CmdOnMinioITCase {
 
     @Test
     void testRecoveryWithS5Cmd(@InjectMiniCluster MiniCluster flinkCluster) throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(2);
-        env.enableCheckpointing(CHECKPOINT_INTERVAL);
-        RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
-        StateBackendUtils.configureRocksDBStateBackend(env);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(2);
+        streamExecutionEnvironment.enableCheckpointing(CHECKPOINT_INTERVAL);
+        RestartStrategyUtils.configureFixedDelayRestartStrategy(streamExecutionEnvironment, 1, 0L);
+        StateBackendUtils.configureRocksDBStateBackend(streamExecutionEnvironment);
         // Disable changelog, to make sure state is stored in the RocksDB, not in changelog, as
         // currently only RocksDB is using s5cmd.
-        env.enableChangelogStateBackend(false);
+        streamExecutionEnvironment.enableChangelogStateBackend(false);
 
         try (CloseableIterator<Record> results =
-                env.addSource(new FailingSource())
+                streamExecutionEnvironment.addSource(new FailingSource())
                         .keyBy(x -> x.key)
                         .reduce(
                                 (ReduceFunction<Record>)
@@ -230,7 +230,7 @@ public abstract class S5CmdOnMinioITCase {
                                         })
                         .collectAsync()) {
 
-            env.execute();
+            streamExecutionEnvironment.execute();
 
             // verify that the max emitted values are exactly the sum of all emitted records
             long maxValue1 = 0;

@@ -192,13 +192,13 @@ class DataStreamCsvITCase {
     @Test
     void testCustomBulkWriter() throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
 
         // fromCollection is not bounded, using fromSequence instead
         final List<CityPojo> pojosList = Arrays.asList(POJOS); // needs to be Serializable
         final DataStream<Integer> sequence =
-                env.fromSequence(0, POJOS.length - 1).map(Long::intValue);
+                streamExecutionEnvironment.fromSequence(0, POJOS.length - 1).map(Long::intValue);
         final DataStream<CityPojo> stream = sequence.map(pojosList::get).returns(CityPojo.class);
 
         FileSink<CityPojo> sink =
@@ -207,7 +207,7 @@ class DataStreamCsvITCase {
                         .build();
 
         stream.sinkTo(sink);
-        env.execute();
+        streamExecutionEnvironment.execute();
 
         String[] result = getResultsFromSinkFiles(outDir);
 
@@ -342,12 +342,12 @@ class DataStreamCsvITCase {
         final FileSource<T> source =
                 FileSource.forRecordStreamFormat(csvFormat, Path.fromLocalFile(testDir)).build();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setParallelism(PARALLELISM);
-        RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setParallelism(PARALLELISM);
+        RestartStrategyUtils.configureFixedDelayRestartStrategy(streamExecutionEnvironment, 1, 0L);
 
         final DataStream<T> stream =
-                env.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
+                streamExecutionEnvironment.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
 
         return getResultsFromStream(stream);
     }

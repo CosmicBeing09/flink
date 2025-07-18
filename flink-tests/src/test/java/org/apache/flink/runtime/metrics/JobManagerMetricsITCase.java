@@ -82,9 +82,9 @@ class JobManagerMetricsITCase {
 
                     @Override
                     public void go() throws Exception {
-                        StreamExecutionEnvironment env =
+                        StreamExecutionEnvironment streamExecutionEnvironment =
                                 StreamExecutionEnvironment.getExecutionEnvironment();
-                        env.addSource(
+                        streamExecutionEnvironment.addSource(
                                         new SourceFunction<String>() {
 
                                             @Override
@@ -100,7 +100,7 @@ class JobManagerMetricsITCase {
                                         })
                                 .addSink(new PrintSinkFunction());
 
-                        env.execute();
+                        streamExecutionEnvironment.execute();
                     }
                 };
 

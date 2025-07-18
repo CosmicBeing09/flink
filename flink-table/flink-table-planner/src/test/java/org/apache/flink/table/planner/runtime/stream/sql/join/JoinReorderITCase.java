@@ -60,7 +60,7 @@ public class JoinReorderITCase extends JoinReorderITCaseBase {
 
     @Override
     protected void assertEquals(String query, List<String> expectedList) {
-        StreamTableEnvironment streamTableEnvironment = (StreamTableEnvironment) tEnv;
+        StreamTableEnvironment streamTableEnvironment = (StreamTableEnvironment) tableExecutionEnvironment;
         Table table = streamTableEnvironment.sqlQuery(query);
         TestingRetractSink sink = new TestingRetractSink();
         streamTableEnvironment

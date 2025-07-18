@@ -44,7 +44,7 @@ public class JoinReorderITCase extends JoinReorderITCaseBase {
 
     @Override
     protected void assertEquals(String query, List<String> expectedList) {
-        List<Row> rows = CollectionUtil.iteratorToList(tEnv.executeSql(query).collect());
+        List<Row> rows = CollectionUtil.iteratorToList(tableExecutionEnvironment.executeSql(query).collect());
         List<String> results;
         try {
             // As Setting RowUtils.USE_LEGACY_TO_STRING equals true, we only compare the content in
