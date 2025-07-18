@@ -85,7 +85,7 @@ public final class SchedulerUtils {
             JobID jobId,
             RecoveryClaimMode recoveryClaimMode)
             throws Exception {
-        return recoveryFactory.createRecoveredCompletedCheckpointStore(
+        return recoveryFactory.createRestoredCompletedCheckpointStore(
                 jobId,
                 DefaultCompletedCheckpointStoreUtils.getMaximumNumberOfRetainedCheckpoints(
                         jobManagerConfig, log),

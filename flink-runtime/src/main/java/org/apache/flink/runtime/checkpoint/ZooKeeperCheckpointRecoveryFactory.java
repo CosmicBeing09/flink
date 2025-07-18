@@ -48,7 +48,7 @@ public class ZooKeeperCheckpointRecoveryFactory implements CheckpointRecoveryFac
     }
 
     @Override
-    public CompletedCheckpointStore createRecoveredCompletedCheckpointStore(
+    public CompletedCheckpointStore createRestoredCompletedCheckpointStore(
             JobID jobId,
             int maxNumberOfCheckpointsToRetain,
             SharedStateRegistryFactory sharedStateRegistryFactory,

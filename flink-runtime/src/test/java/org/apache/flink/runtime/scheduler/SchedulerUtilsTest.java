@@ -130,7 +130,7 @@ class SchedulerUtilsTest {
     private CheckpointRecoveryFactory buildRecoveryFactory(CompletedCheckpoint checkpoint) {
         return new CheckpointRecoveryFactory() {
             @Override
-            public CompletedCheckpointStore createRecoveredCompletedCheckpointStore(
+            public CompletedCheckpointStore createRestoredCompletedCheckpointStore(
                     JobID jobId,
                     int maxNumberOfCheckpointsToRetain,
                     SharedStateRegistryFactory sharedStateRegistryFactory,

@@ -144,7 +144,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
     }
 
     private CompletedCheckpointStore createCompletedCheckpointStore() throws Exception {
-        return checkpointRecoveryFactory.createRecoveredCompletedCheckpointStore(
+        return checkpointRecoveryFactory.createRestoredCompletedCheckpointStore(
                 getJobID(),
                 DefaultCompletedCheckpointStoreUtils.getMaximumNumberOfRetainedCheckpoints(
                         jobManagerConfiguration, LOG),

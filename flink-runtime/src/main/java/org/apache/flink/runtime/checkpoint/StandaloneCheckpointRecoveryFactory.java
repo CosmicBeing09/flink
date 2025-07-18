@@ -29,7 +29,7 @@ import java.util.concurrent.Executor;
 public class StandaloneCheckpointRecoveryFactory implements CheckpointRecoveryFactory {
 
     @Override
-    public CompletedCheckpointStore createRecoveredCompletedCheckpointStore(
+    public CompletedCheckpointStore createRestoredCompletedCheckpointStore(
             JobID jobId,
             int maxNumberOfCheckpointsToRetain,
             SharedStateRegistryFactory sharedStateRegistryFactory,
