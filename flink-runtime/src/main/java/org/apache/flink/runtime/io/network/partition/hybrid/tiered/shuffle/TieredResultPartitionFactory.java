@@ -105,7 +105,7 @@ public class TieredResultPartitionFactory {
         // Create memory manager.
         TieredStorageMemoryManager memoryManager =
                 new TieredStorageMemoryManagerImpl(
-                        TieredStorageUtils.getNumBuffersTriggerFlushRatio(), true);
+                        TieredStorageUtils.getBufferFlushTriggerRatio(), true);
 
         // Create buffer accumulator.
         int numAccumulatorExclusiveBuffers = TieredStorageUtils.getAccumulatorExclusiveBuffers();

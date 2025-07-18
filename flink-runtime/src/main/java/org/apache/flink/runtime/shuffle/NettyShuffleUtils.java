@@ -57,9 +57,9 @@ public class NettyShuffleUtils {
      * left/right value of the returned pair represent the min/max buffers require by the pool.
      */
     public static Pair<Integer, Integer> getMinMaxFloatingBuffersPerInputGate(
-            final int numFloatingBuffersPerGate) {
+            final int totalFloatingBuffersPerInputGate) {
         // We should guarantee at-least one floating buffer for local channel state recovery.
-        return Pair.of(1, numFloatingBuffersPerGate);
+        return Pair.of(1, totalFloatingBuffersPerInputGate);
     }
 
     /**
@@ -68,7 +68,7 @@ public class NettyShuffleUtils {
      */
     public static Tuple3<Integer, Integer, Integer> getMinMaxNetworkBuffersPerResultPartition(
             final int configuredNetworkBuffersPerChannel,
-            final int numFloatingBuffersPerGate,
+            final int totalFloatingBuffersPerResultPartition,
             final int sortShuffleMinParallelism,
             final int sortShuffleMinBuffers,
             final int numSubpartitions,
@@ -96,7 +96,7 @@ public class NettyShuffleUtils {
         int max =
                 type.isBounded()
                         ? numSubpartitions * configuredNetworkBuffersPerChannel
-                                + numFloatingBuffersPerGate
+                                + totalFloatingBuffersPerResultPartition
                         : (isSortShuffle
                                 ? 4 * numSubpartitions
                                 : NetworkBufferPool.UNBOUNDED_POOL_SIZE);
@@ -171,7 +171,7 @@ public class NettyShuffleUtils {
                         type,
                         numInputChannels,
                         false);
-        return gateBuffersSpec.getMaxBuffersPerGate();
+        return gateBuffersSpec.getTotalFloatingBuffers();
     }
 
     private static int getNumBuffersToAnnounceForResultPartition(

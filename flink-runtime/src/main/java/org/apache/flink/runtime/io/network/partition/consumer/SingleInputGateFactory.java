@@ -92,11 +92,11 @@ public class SingleInputGateFactory {
 
     @Nonnull protected final NetworkBufferPool networkBufferPool;
 
-    private final Optional<Integer> maxRequiredBuffersPerGate;
+    private final Optional<Integer> optionalMaxExclusiveBuffersPerGate;
 
     protected final int configuredNetworkBuffersPerChannel;
 
-    private final int floatingNetworkBuffersPerGate;
+    private final int totalFloatingBuffers;
 
     private final boolean batchShuffleCompressionEnabled;
 
@@ -124,11 +124,11 @@ public class SingleInputGateFactory {
         this.partitionRequestInitialBackoff = networkConfig.partitionRequestInitialBackoff();
         this.partitionRequestMaxBackoff = networkConfig.partitionRequestMaxBackoff();
         this.partitionRequestListenerTimeout = networkConfig.getPartitionRequestListenerTimeout();
-        this.maxRequiredBuffersPerGate = networkConfig.maxRequiredBuffersPerGate();
+        this.optionalMaxExclusiveBuffersPerGate = networkConfig.maxRequiredBuffersPerGate();
         this.configuredNetworkBuffersPerChannel =
                 NettyShuffleUtils.getNetworkBuffersPerInputChannel(
                         networkConfig.networkBuffersPerChannel());
-        this.floatingNetworkBuffersPerGate = networkConfig.floatingNetworkBuffersPerGate();
+        this.totalFloatingBuffers = networkConfig.floatingNetworkBuffersPerGate();
         this.batchShuffleCompressionEnabled = networkConfig.isBatchShuffleCompressionEnabled();
         this.compressionCodec = networkConfig.getCompressionCodec();
         this.networkBufferSize = networkConfig.networkBufferSize();
@@ -159,9 +159,9 @@ public class SingleInputGateFactory {
 
         GateBuffersSpec gateBuffersSpec =
                 createGateBuffersSpec(
-                        maxRequiredBuffersPerGate,
+                        optionalMaxExclusiveBuffersPerGate,
                         configuredNetworkBuffersPerChannel,
-                        floatingNetworkBuffersPerGate,
+                        totalFloatingBuffers,
                         igdd.getConsumedPartitionType(),
                         calculateNumChannels(
                                 igdd.getShuffleDescriptors().length,
@@ -173,7 +173,7 @@ public class SingleInputGateFactory {
                         networkBufferPool,
                         gateBuffersSpec.getExpectedBuffersPerGate(),
                         gateBuffersSpec.getMinBuffersPerGate(),
-                        gateBuffersSpec.getMaxBuffersPerGate());
+                        gateBuffersSpec.getTotalFloatingBuffers());
 
         BufferDecompressor bufferDecompressor = null;
         if (igdd.getConsumedPartitionType().supportCompression()

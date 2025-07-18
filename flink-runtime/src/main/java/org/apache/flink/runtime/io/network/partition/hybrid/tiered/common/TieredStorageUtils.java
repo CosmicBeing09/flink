@@ -35,7 +35,7 @@ import java.util.List;
 /** Utils for reading from or writing to tiered storage. */
 public class TieredStorageUtils {
 
-    private static final float DEFAULT_NUM_BUFFERS_TRIGGER_FLUSH_RATIO = 0.6f;
+    private static final float DEFAULT_BUFFER_FLUSH_TRIGGER_RATIO = 0.6f;
 
     private static final int DEFAULT_NUM_BUFFERS_USE_SORT_ACCUMULATOR_THRESHOLD = 512;
 
@@ -51,8 +51,8 @@ public class TieredStorageUtils {
      *
      * @return flush ratio.
      */
-    public static float getNumBuffersTriggerFlushRatio() {
-        return DEFAULT_NUM_BUFFERS_TRIGGER_FLUSH_RATIO;
+    public static float getBufferFlushTriggerRatio() {
+        return DEFAULT_BUFFER_FLUSH_TRIGGER_RATIO;
     }
 
     /**
