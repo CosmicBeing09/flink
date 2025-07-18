@@ -32,8 +32,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** A test class for {@link ClearQueryBlockAliasResolver}. */
-class ClearQueryBlockAliasResolverTest extends JoinHintTestBase {
+/** A test class for {@link ClearQueryHintResolver}. */
+class ClearQueryHintResolverTest extends JoinHintTestBase {
 
     // use any join hint for test
     @Override
@@ -80,7 +80,7 @@ class ClearQueryBlockAliasResolverTest extends JoinHintTestBase {
      * <p>Currently, mainly copy from {@link TableTestBase} and customize it.
      */
     private void verifyRelPlanAfterResolverWithSql(String sql, List<RelNode> relNodes) {
-        relNodes = clearQueryBlockAlias(relNodes);
+        relNodes = clearQueryHint(relNodes);
         String astPlan = buildAstPlanWithQueryBlockAlias(relNodes);
 
         util.assertEqualsOrExpand("sql", sql, true);
@@ -88,17 +88,17 @@ class ClearQueryBlockAliasResolverTest extends JoinHintTestBase {
     }
 
     private void verifyRelPlanAfterResolverWithStatementSet(List<RelNode> relNodes) {
-        relNodes = clearQueryBlockAlias(relNodes);
+        relNodes = clearQueryHint(relNodes);
         String astPlan = buildAstPlanWithQueryBlockAlias(relNodes);
 
         util.assertEqualsOrExpand("ast", astPlan, false);
     }
 
-    private List<RelNode> clearQueryBlockAlias(List<RelNode> relNodes) {
-        JoinHintsResolver joinHintResolver = new JoinHintsResolver();
+    private List<RelNode> clearQueryHint(List<RelNode> relNodes) {
+        QueryHintsResolver joinHintResolver = new QueryHintsResolver();
         relNodes = joinHintResolver.resolve(relNodes);
-        ClearQueryBlockAliasResolver clearQueryBlockAliasResolver =
-                new ClearQueryBlockAliasResolver();
+        ClearQueryHintResolver clearQueryBlockAliasResolver =
+                new ClearQueryHintResolver();
         return clearQueryBlockAliasResolver.resolve(relNodes);
     }
 }
