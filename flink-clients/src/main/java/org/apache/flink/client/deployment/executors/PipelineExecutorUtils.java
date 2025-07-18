@@ -57,7 +57,7 @@ public class PipelineExecutorUtils {
      * @param userClassloader the classloader which can load user classes.
      * @return the corresponding {@link JobGraph}.
      */
-    public static JobGraph getJobGraph(
+    public static JobGraph getStreamingJobGraph(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull ClassLoader userClassloader)
