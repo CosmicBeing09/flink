@@ -51,7 +51,7 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
         extends AbstractStreamOperatorTestHarness<OUT> {
 
     /** Empty if the {@link #operator} is not {@link MultipleInputStreamOperator}. */
-    private final List<Input> inputs = new ArrayList<>();
+    private final List<Input> registeredInputs = new ArrayList<>();
 
     private long currentWatermark;
 
@@ -198,8 +198,8 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
     public void setup(TypeSerializer<OUT> outputSerializer) {
         super.setup(outputSerializer);
         if (operator instanceof MultipleInputStreamOperator) {
-            checkState(inputs.isEmpty());
-            inputs.addAll(((MultipleInputStreamOperator) operator).getInputs());
+            checkState(registeredInputs.isEmpty());
+            registeredInputs.addAll(((MultipleInputStreamOperator) operator).getInputs());
         }
     }
 
@@ -212,14 +212,14 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
     }
 
     public void processElement(StreamRecord<IN> element) throws Exception {
-        if (inputs.isEmpty()) {
+        if (registeredInputs.isEmpty()) {
             operator.setKeyContextElement1(element);
             getOneInputOperator().processElement(element);
         } else {
-            checkState(inputs.size() == 1);
-            Input input = inputs.get(0);
-            input.setKeyContextElement(element);
-            input.processElement(element);
+            checkState(registeredInputs.size() == 1);
+            Input singleInputChannel = registeredInputs.get(0);
+            singleInputChannel.setKeyContextElement(element);
+            singleInputChannel.processElement(element);
         }
     }
 
@@ -234,22 +234,22 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
     }
 
     public void processWatermarkStatus(WatermarkStatus status) throws Exception {
-        if (inputs.isEmpty()) {
+        if (registeredInputs.isEmpty()) {
             getOneInputOperator().processWatermarkStatus(status);
         } else {
-            checkState(inputs.size() == 1);
-            Input input = inputs.get(0);
+            checkState(registeredInputs.size() == 1);
+            Input input = registeredInputs.get(0);
             input.processWatermarkStatus(status);
         }
     }
 
     public void processWatermark(Watermark mark) throws Exception {
         currentWatermark = mark.getTimestamp();
-        if (inputs.isEmpty()) {
+        if (registeredInputs.isEmpty()) {
             getOneInputOperator().processWatermark(mark);
         } else {
-            checkState(inputs.size() == 1);
-            Input input = inputs.get(0);
+            checkState(registeredInputs.size() == 1);
+            Input input = registeredInputs.get(0);
             input.processWatermark(mark);
         }
     }
@@ -261,11 +261,11 @@ public class OneInputStreamOperatorTestHarness<IN, OUT>
     }
 
     public void processRecordAttributes(RecordAttributes recordAttributes) throws Exception {
-        if (inputs.isEmpty()) {
+        if (registeredInputs.isEmpty()) {
             getOneInputOperator().processRecordAttributes(recordAttributes);
         } else {
-            checkState(inputs.size() == 1);
-            Input input = inputs.get(0);
+            checkState(registeredInputs.size() == 1);
+            Input input = registeredInputs.get(0);
             input.processRecordAttributes(recordAttributes);
         }
     }
