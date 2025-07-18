@@ -115,7 +115,7 @@ public class IgnoreInFlightDataITCase extends TestLogger {
     private boolean executeIgnoreInFlightDataDuringRecovery() {
         // given: Stream which will fail after first checkpoint.
         setupSharedObjects();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         // Increase interval twice on each attempt in order to give more time for the Source to send
         // all required data before the first checkpoint.

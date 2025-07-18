@@ -89,7 +89,7 @@ class CommonExecSinkITCase {
 
     @BeforeEach
     void before() {
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
     }
 

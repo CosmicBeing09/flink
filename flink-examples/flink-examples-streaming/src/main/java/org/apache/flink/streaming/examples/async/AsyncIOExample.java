@@ -77,7 +77,7 @@ public class AsyncIOExample {
         }
 
         // obtain execution environment
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataGeneratorSource<Integer> generatorSource =
                 new DataGeneratorSource<>(

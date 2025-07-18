@@ -73,7 +73,7 @@ public class CoStreamCheckpointingITCase extends AbstractTestBaseJUnit4 {
     public void testCoStreamCheckpointingProgram() throws Exception {
         assertTrue("Broken test setup", NUM_STRINGS % 40 == 0);
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.enableCheckpointing(50);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 0L);

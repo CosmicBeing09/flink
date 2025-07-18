@@ -64,7 +64,7 @@ class StreamOperatorChainingTest {
 
     @Test
     void testMultiChainingWithObjectReuse() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().enableObjectReuse();
 
         testMultiChaining(env);
@@ -72,7 +72,7 @@ class StreamOperatorChainingTest {
 
     @Test
     void testMultiChainingWithoutObjectReuse() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().disableObjectReuse();
 
         testMultiChaining(env);
@@ -157,7 +157,7 @@ class StreamOperatorChainingTest {
 
     @Test
     void testMultiChainingWithSplitWithObjectReuse() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().enableObjectReuse();
 
         testMultiChainingWithSplit(env);
@@ -165,7 +165,7 @@ class StreamOperatorChainingTest {
 
     @Test
     void testMultiChainingWithSplitWithoutObjectReuse() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().disableObjectReuse();
 
         testMultiChainingWithSplit(env);

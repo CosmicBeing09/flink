@@ -120,7 +120,7 @@ public class HybridSourceITCase extends TestLogger {
 
     private void testHybridSource(FailoverType failoverType, Source source) throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         if (FailoverType.NONE == failoverType) {
             RestartStrategyUtils.configureNoRestartStrategy(env);

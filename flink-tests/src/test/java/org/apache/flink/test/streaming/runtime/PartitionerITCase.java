@@ -56,7 +56,7 @@ public class PartitionerITCase extends AbstractTestBaseJUnit4 {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testForwardFailsLowToHighParallelism() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> src = env.fromData(1, 2, 3);
 
@@ -68,7 +68,7 @@ public class PartitionerITCase extends AbstractTestBaseJUnit4 {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testForwardFailsHightToLowParallelism() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         // this does a rebalance that works
         DataStream<Integer> src = env.fromData(1, 2, 3).map(new NoOpIntMap());
@@ -95,7 +95,7 @@ public class PartitionerITCase extends AbstractTestBaseJUnit4 {
         TestListResultSink<Tuple2<Integer, String>> globalPartitionResultSink =
                 new TestListResultSink<Tuple2<Integer, String>>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         DataStream<Tuple1<String>> src =

@@ -47,7 +47,7 @@ class EnvironmentTest {
 
     @Test
     void testPassingExecutionParameters() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         tEnv.getConfig()
@@ -86,7 +86,7 @@ class EnvironmentTest {
 
         StreamTableEnvironment stEnv =
                 StreamTableEnvironment.create(
-                        StreamExecutionEnvironment.getExecutionEnvironment(), settings);
+                        StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(), settings);
         assertThat(stEnv.getConfig().get(TableConfigOptions.TABLE_CATALOG_NAME))
                 .isEqualTo("myCatalog");
 
@@ -131,7 +131,7 @@ class EnvironmentTest {
         StreamTableEnvironmentImpl env1 =
                 (StreamTableEnvironmentImpl)
                         StreamTableEnvironment.create(
-                                StreamExecutionEnvironment.getExecutionEnvironment(),
+                                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                                 EnvironmentSettings.newInstance()
                                         .withConfiguration(configuration)
                                         .build());
@@ -142,7 +142,7 @@ class EnvironmentTest {
         StreamTableEnvironmentImpl env2 =
                 (StreamTableEnvironmentImpl)
                         StreamTableEnvironment.create(
-                                StreamExecutionEnvironment.getExecutionEnvironment(),
+                                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                                 EnvironmentSettings.newInstance()
                                         .withConfiguration(configuration)
                                         .build());

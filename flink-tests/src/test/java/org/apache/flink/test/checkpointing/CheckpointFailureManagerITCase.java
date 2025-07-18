@@ -90,7 +90,7 @@ public class CheckpointFailureManagerITCase extends TestLogger {
      */
     @Test
     public void testFinalizationFailureCounted() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(10);
         CheckpointStorageUtils.configureCheckpointStorageWithFactory(
                 env,
@@ -117,7 +117,7 @@ public class CheckpointFailureManagerITCase extends TestLogger {
 
     @Test(timeout = 20_000)
     public void testAsyncCheckpointFailureTriggerJobFailed() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(500);
         RestartStrategyUtils.configureNoRestartStrategy(env);
         StateBackendUtils.configureStateBackendWithFactory(

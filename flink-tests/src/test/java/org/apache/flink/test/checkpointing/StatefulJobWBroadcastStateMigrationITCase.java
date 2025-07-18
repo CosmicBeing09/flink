@@ -151,7 +151,7 @@ public class StatefulJobWBroadcastStateMigrationITCase extends SnapshotMigration
             throws Exception {
         final int parallelism = 4;
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureNoRestartStrategy(env);
 
         switch (snapshotSpec.getStateBackendType()) {

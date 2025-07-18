@@ -40,7 +40,7 @@ public class ClassLoaderTestProgram {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.fromData("Hello")
                 .map(

@@ -256,7 +256,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
     }
 
     private JobGraph createJobGraph(ExecutionMode mode) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
         RestartStrategyUtils.configureNoRestartStrategy(env);
         StateBackendUtils.configureHashMapStateBackend(env);

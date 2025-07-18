@@ -67,7 +67,7 @@ public class NonHAQueryableStateRocksDBBackendITCase extends AbstractQueryableSt
 
     @Override
     protected StreamExecutionEnvironment createEnv() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureRocksDBStateBackend(env);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 env, tmpStateBackendDir.toUri().toString());

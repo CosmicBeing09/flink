@@ -48,7 +48,7 @@ class MiniClusterExtensionDefaultParallelismITCase {
 
     @Test
     void testDefaultParallelismSettingHonored() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final int actualParallelism =
                 env.fromData(1)
                         .map(

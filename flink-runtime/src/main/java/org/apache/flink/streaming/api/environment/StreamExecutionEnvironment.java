@@ -2306,7 +2306,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *
      * @return The execution environment of the context in which the program is executed.
      */
-    public static StreamExecutionEnvironment getExecutionEnvironment() {
+    public static StreamExecutionEnvironment getBatchStreamExecutionEnvironment() {
         return getExecutionEnvironment(new Configuration());
     }
 

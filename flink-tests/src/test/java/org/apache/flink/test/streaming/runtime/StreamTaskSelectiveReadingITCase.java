@@ -41,7 +41,7 @@ public class StreamTaskSelectiveReadingITCase {
     @Test
     public void testSequentialReading() throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<String> source0 =

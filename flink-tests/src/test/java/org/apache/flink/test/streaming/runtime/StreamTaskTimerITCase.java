@@ -69,7 +69,7 @@ public class StreamTaskTimerITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testOperatorChainedToSource() throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setStreamTimeCharacteristic(timeCharacteristic);
         env.setParallelism(1);
 
@@ -109,7 +109,7 @@ public class StreamTaskTimerITCase extends AbstractTestBaseJUnit4 {
      */
     @Test
     public void testOneInputOperatorWithoutChaining() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setStreamTimeCharacteristic(timeCharacteristic);
         env.setParallelism(1);
 
@@ -129,7 +129,7 @@ public class StreamTaskTimerITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testTwoInputOperatorWithoutChaining() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setStreamTimeCharacteristic(timeCharacteristic);
         env.setParallelism(1);
 

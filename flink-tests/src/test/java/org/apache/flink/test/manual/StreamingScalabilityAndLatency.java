@@ -76,7 +76,7 @@ public class StreamingScalabilityAndLatency {
     }
 
     private static void runPartitioningProgram(int parallelism) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.getConfig().enableObjectReuse();
 

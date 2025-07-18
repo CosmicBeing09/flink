@@ -86,7 +86,7 @@ public class ReinterpretDataStreamAsKeyedStreamITCase {
         final int numTotalEvents = numEventsPerInstance * parallelism;
         final int numUniqueKeys = 100;
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setMaxParallelism(maxParallelism);
         env.setParallelism(parallelism);
         env.enableCheckpointing(100);

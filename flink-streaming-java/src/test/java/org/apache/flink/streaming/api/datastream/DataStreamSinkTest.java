@@ -32,7 +32,7 @@ class DataStreamSinkTest {
 
     @Test
     void testGettingTransformationWithNewSinkAPI() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final Transformation<?> transformation =
                 env.fromData(1, 2)
                         .sinkTo(TestSinkV2.<Integer>newBuilder().build())
@@ -42,7 +42,7 @@ class DataStreamSinkTest {
 
     @Test
     void throwExceptionWhenSetUidWithNewSinkAPI() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         assertThatThrownBy(
                         () ->

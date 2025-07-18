@@ -49,7 +49,7 @@ class LineageGraphUtilsTest {
 
     @Test
     void testExtractLineageGraphFromLegacyTransformations() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<Long> source = env.addSource(new LineageSourceFunction());
         DataStreamSink<Long> sink = source.addSink(new LineageSinkFunction());
 
@@ -77,7 +77,7 @@ class LineageGraphUtilsTest {
 
     @Test
     void testExtractLineageGraphFromTransformations() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<Long> source =
                 env.fromSource(new LineageSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         DataStreamSink<Long> sink = source.sinkTo(new LineageSink());

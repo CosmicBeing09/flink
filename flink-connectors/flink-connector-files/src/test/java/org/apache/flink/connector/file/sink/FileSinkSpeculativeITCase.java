@@ -89,7 +89,7 @@ class FileSinkSpeculativeITCase {
     }
 
     private void executeJobWithSlowSink(String path) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         // Create a testing job with a bounded source.

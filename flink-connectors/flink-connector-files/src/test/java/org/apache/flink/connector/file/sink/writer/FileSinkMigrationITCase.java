@@ -93,7 +93,7 @@ class FileSinkMigrationITCase {
 
     @Test
     void test() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         SharedReference<Collection<Long>> list = sharedObjects.add(new ArrayList<>());
         int n = 10000;
         env.setParallelism(100);
@@ -130,7 +130,7 @@ class FileSinkMigrationITCase {
     }
 
     private JobGraph createStreamingFileSinkJobGraph(String outputPath) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 
         StreamingFileSink<Integer> sink =
@@ -151,7 +151,7 @@ class FileSinkMigrationITCase {
     }
 
     private JobGraph createFileSinkJobGraph(String outputPath) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 
         FileSink<Integer> sink =

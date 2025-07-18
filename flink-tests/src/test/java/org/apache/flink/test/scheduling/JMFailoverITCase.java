@@ -367,7 +367,7 @@ class JMFailoverITCase {
                         .build();
         flinkCluster.start();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(-1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 

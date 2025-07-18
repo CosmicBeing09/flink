@@ -108,7 +108,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testBatchJobType() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSink<Integer> sink = addDummyPipeline(env);
 
@@ -119,7 +119,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testManagedMemoryWeights() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
@@ -140,7 +140,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testCustomManagedMemoryWeights() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
         DataStreamSink<Integer> sink = process.sinkTo(new DiscardingSink<>());
@@ -161,7 +161,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testOneInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
@@ -181,7 +181,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingStateBackendOneInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
@@ -203,7 +203,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingSortingInputsOneInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
@@ -223,7 +223,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingSortingInputsWithoutBatchStateBackendOneInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         SingleOutputStreamOperator<Integer> process =
                 env.fromData(1, 2).keyBy(Integer::intValue).process(DUMMY_PROCESS_FUNCTION);
@@ -240,7 +240,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -267,7 +267,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingStateBackendTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -296,7 +296,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingSortingInputsTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -322,7 +322,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testDisablingSortingInputsWithoutBatchStateBackendTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -344,7 +344,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testInputSelectableTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -372,7 +372,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testMultiInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -412,7 +412,7 @@ class StreamGraphGeneratorBatchExecutionTest {
 
     @Test
     void testInputSelectableMultiInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStreamSource<Integer> elements1 = env.fromData(1, 2);
         DataStreamSource<Integer> elements2 = env.fromData(1, 2);
@@ -488,7 +488,7 @@ class StreamGraphGeneratorBatchExecutionTest {
             RuntimeExecutionMode runtimeExecutionMode,
             BatchShuffleMode shuffleMode,
             GlobalStreamExchangeMode expectedStreamExchangeMode) {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         final DataStreamSink<Integer> sink = addDummyPipeline(env);
 

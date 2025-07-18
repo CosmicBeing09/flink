@@ -38,7 +38,7 @@ import static org.apache.flink.util.Preconditions.checkState;
 public class YarnTestJob {
 
     public static JobGraph stoppableJob(final StopJobSignal stopJobSignal) {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.addSource(new InfiniteSourceFunction(stopJobSignal))
                 .setParallelism(2)

@@ -58,7 +58,7 @@ public class RecordAttributesPropagationITCase {
 
     @Test
     void testRecordAttributesPropagation() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
 
         final SourceWithBacklog source1 = new SourceWithBacklog();

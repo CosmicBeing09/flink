@@ -100,7 +100,7 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
 
     @Test
     public void testWithMemoryBackendAsync() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(env);
         CheckpointStorageUtils.configureJobManagerCheckpointStorage(env);
         testProgramWithBackend(env);
@@ -108,7 +108,7 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
 
     @Test
     public void testWithFsBackendAsync() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(env);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 env, tmpFolder.newFolder().toURI().toString());
@@ -117,7 +117,7 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
 
     @Test
     public void testWithRocksDbBackendFull() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureRocksDBStateBackend(env, false);
         env.configure(
                 new Configuration()
@@ -131,7 +131,7 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
 
     @Test
     public void testWithRocksDbBackendIncremental() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureRocksDBStateBackend(env, true);
         env.configure(
                 new Configuration()

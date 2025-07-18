@@ -32,7 +32,7 @@ import java.util.StringTokenizer;
 public class StreamingProgram {
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<String> text = env.fromData(WordCountData.TEXT).rebalance();
 

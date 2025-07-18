@@ -39,7 +39,7 @@ public class GlobalAggregateITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testSuccessfulUpdateToGlobalAggregate() throws Exception {
         StreamExecutionEnvironment streamExecutionEnvironment =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         streamExecutionEnvironment
                 .addSource(new TestSourceFunction(new IntegerAggregateFunction(), false))
@@ -51,7 +51,7 @@ public class GlobalAggregateITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testExceptionThrowingAggregateFunction() throws Exception {
         StreamExecutionEnvironment streamExecutionEnvironment =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         streamExecutionEnvironment
                 .addSource(new TestSourceFunction(new ExceptionThrowingAggregateFunction(), true))

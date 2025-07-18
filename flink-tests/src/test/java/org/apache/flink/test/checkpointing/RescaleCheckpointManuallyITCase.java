@@ -233,7 +233,7 @@ public class RescaleCheckpointManuallyITCase extends TestLogger {
             int checkpointingInterval,
             MiniCluster miniCluster)
             throws IOException {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         if (0 < maxParallelism) {
             env.getConfig().setMaxParallelism(maxParallelism);

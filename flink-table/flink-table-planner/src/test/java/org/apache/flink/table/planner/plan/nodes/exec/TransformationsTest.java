@@ -70,7 +70,7 @@ class TransformationsTest {
     public void testLegacyBatchSource() {
         final StreamTableEnvironment env =
                 StreamTableEnvironment.create(
-                        StreamExecutionEnvironment.getExecutionEnvironment(),
+                        StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                         EnvironmentSettings.newInstance().inBatchMode().build());
 
         final Table table =
@@ -100,7 +100,7 @@ class TransformationsTest {
     public void testLegacyStreamSource() {
         final StreamTableEnvironment env =
                 StreamTableEnvironment.create(
-                        StreamExecutionEnvironment.getExecutionEnvironment(),
+                        StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                         EnvironmentSettings.newInstance().inStreamingMode().build());
 
         final Table table =
@@ -130,7 +130,7 @@ class TransformationsTest {
     public void testLegacyBatchValues() {
         final StreamTableEnvironment env =
                 StreamTableEnvironment.create(
-                        StreamExecutionEnvironment.getExecutionEnvironment(),
+                        StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                         EnvironmentSettings.newInstance().inBatchMode().build());
 
         final Table table = env.fromValues(1, 2, 3);
@@ -154,7 +154,7 @@ class TransformationsTest {
             boolean expectUidWithoutCompilation) {
         final StreamTableEnvironment env =
                 StreamTableEnvironment.create(
-                        StreamExecutionEnvironment.getExecutionEnvironment(),
+                        StreamExecutionEnvironment.getBatchStreamExecutionEnvironment(),
                         EnvironmentSettings.newInstance().inStreamingMode().build());
         config.accept(env.getConfig());
 

@@ -124,7 +124,7 @@ public class TimestampITCase extends TestLogger {
 
         long initialTime = 0L;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(PARALLELISM);
 
@@ -168,7 +168,7 @@ public class TimestampITCase extends TestLogger {
 
     @Test
     public void testSelfUnionWatermarkPropagation() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         DataStream<Integer> dataStream1 = env.fromData(1, 2, 3);
 
@@ -198,7 +198,7 @@ public class TimestampITCase extends TestLogger {
 
         long initialTime = 0L;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(PARALLELISM);
 
@@ -301,7 +301,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampHandling() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(PARALLELISM);
 
@@ -327,7 +327,7 @@ public class TimestampITCase extends TestLogger {
     public void testDisabledTimestamps() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(PARALLELISM);
 
@@ -354,7 +354,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampExtractorWithAutoInterval() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.getConfig().setAutoWatermarkInterval(10);
         env.setParallelism(1);
@@ -423,7 +423,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampExtractorWithCustomWatermarkEmit() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.getConfig().setAutoWatermarkInterval(10);
         env.setParallelism(1);
@@ -499,7 +499,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampExtractorWithDecreasingCustomWatermarkEmit() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.getConfig().setAutoWatermarkInterval(1);
         env.setParallelism(1);
@@ -576,7 +576,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampExtractorWithLongMaxWatermarkFromSource() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.getConfig().setAutoWatermarkInterval(1);
         env.setParallelism(2);
@@ -626,7 +626,7 @@ public class TimestampITCase extends TestLogger {
     public void testTimestampExtractorWithLongMaxWatermarkFromSource2() throws Exception {
         final int numElements = 10;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.getConfig().setAutoWatermarkInterval(10);
         env.setParallelism(2);
@@ -674,7 +674,7 @@ public class TimestampITCase extends TestLogger {
      */
     @Test
     public void testEventTimeSourceWithProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(2);
         env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
@@ -695,7 +695,7 @@ public class TimestampITCase extends TestLogger {
 
     @Test
     public void testErrorOnEventTimeOverProcessingTime() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(2);
         env.setStreamTimeCharacteristic(TimeCharacteristic.ProcessingTime);
@@ -726,7 +726,7 @@ public class TimestampITCase extends TestLogger {
 
     @Test
     public void testErrorOnEventTimeWithoutTimestamps() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(2);
 

@@ -66,7 +66,7 @@ public class BroadcastStateITCase extends AbstractTestBaseJUnit4 {
         expected.put(4L, "test:4");
         expected.put(5L, "test:5");
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         final DataStream<Long> srcOne =
                 env.fromSequence(0L, 5L)
@@ -127,7 +127,7 @@ public class BroadcastStateITCase extends AbstractTestBaseJUnit4 {
         expected.put(4L, "test:4");
         expected.put(5L, "test:5");
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         final DataStream<Long> srcOne =
                 env.fromSequence(0L, 5L)

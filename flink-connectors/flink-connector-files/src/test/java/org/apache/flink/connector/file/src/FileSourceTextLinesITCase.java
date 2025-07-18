@@ -147,7 +147,7 @@ class FileSourceTextLinesITCase {
                                 new TextLineInputFormat(), Path.fromLocalFile(testDir))
                         .build();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
         env.setParallelism(PARALLELISM);
 
@@ -229,7 +229,7 @@ class FileSourceTextLinesITCase {
                         .monitorContinuously(Duration.ofMillis(5))
                         .build();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.enableCheckpointing(10L);
 

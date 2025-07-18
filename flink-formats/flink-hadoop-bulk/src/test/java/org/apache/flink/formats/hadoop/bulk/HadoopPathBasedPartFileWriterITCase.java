@@ -76,7 +76,7 @@ public class HadoopPathBasedPartFileWriterITCase extends AbstractTestBaseJUnit4 
 
         List<String> data = Arrays.asList("first line", "second line", "third line");
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

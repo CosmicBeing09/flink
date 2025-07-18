@@ -92,7 +92,7 @@ public class CheckpointRestoreWithUidHashITCase {
     public void testRestoreFromSavepointBySetUidHash() throws Exception {
         final int maxNumber = 100;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         JobGraph firstJob =
                 createJobGraph(
                         env,
@@ -139,7 +139,7 @@ public class CheckpointRestoreWithUidHashITCase {
     public void testRestoreCheckpointAfterFailoverWithUidHashSet() throws Exception {
         final int maxNumber = 100;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 2, 500L);
         env.enableCheckpointing(500, CheckpointingMode.EXACTLY_ONCE);
 

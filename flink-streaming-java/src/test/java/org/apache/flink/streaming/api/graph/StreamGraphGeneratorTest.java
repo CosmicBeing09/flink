@@ -120,7 +120,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testBufferTimeout() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setBufferTimeout(77); // set timeout to some recognizable number
 
@@ -167,7 +167,7 @@ class StreamGraphGeneratorTest {
     @Test
     void testVirtualTransformations() {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> source = env.fromData(1, 10);
         DataStream<Integer> rebalanceMap = source.rebalance().map(new NoOpIntMap());
@@ -236,7 +236,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testOutputTypeConfigurationWithUdfStreamOperator() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         OutputTypeConfigurableFunction<Integer> function = new OutputTypeConfigurableFunction<>();
 
@@ -259,7 +259,7 @@ class StreamGraphGeneratorTest {
      */
     @Test
     void testOutputTypeConfigurationWithOneInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> source = env.fromData(1, 10);
 
@@ -282,7 +282,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testOutputTypeConfigurationWithTwoInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> source1 = env.fromData(1, 10);
         DataStream<Integer> source2 = env.fromData(2, 11);
@@ -308,7 +308,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testMultipleInputTransformation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> source1 = env.fromData(1, 10);
         DataStream<Long> source2 = env.fromData(2L, 11L);
@@ -341,7 +341,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testUnalignedCheckpointDisabledOnPointwise() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(42);
 
         DataStream<Long> source1 = env.fromSequence(1L, 10L);
@@ -393,7 +393,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testUnalignedCheckpointDisabledOnBroadcast() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(42);
 
         DataStream<Long> source1 = env.fromSequence(1L, 10L);
@@ -458,7 +458,7 @@ class StreamGraphGeneratorTest {
     @Test
     void testSetupOfKeyGroupPartitioner() {
         int maxParallelism = 42;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().setMaxParallelism(maxParallelism);
 
         DataStream<Integer> source = env.fromData(1, 2, 3);
@@ -481,7 +481,7 @@ class StreamGraphGeneratorTest {
         int globalMaxParallelism = 42;
         int keyedResult2MaxParallelism = 17;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().setMaxParallelism(globalMaxParallelism);
 
         DataStream<Integer> source = env.fromData(1, 2, 3);
@@ -514,7 +514,7 @@ class StreamGraphGeneratorTest {
         int globalParallelism = 42;
         int mapParallelism = 17;
         int maxParallelism = 21;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(globalParallelism);
 
         DataStream<Integer> source = env.fromData(1, 2, 3);
@@ -556,7 +556,7 @@ class StreamGraphGeneratorTest {
     void testMaxParallelismWithConnectedKeyedStream() {
         int maxParallelism = 42;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStream<Long> input1 = env.fromSequence(1, 4).setMaxParallelism(128);
         DataStream<Long> input2 = env.fromSequence(1, 4).setMaxParallelism(129);
 
@@ -586,7 +586,7 @@ class StreamGraphGeneratorTest {
      */
     @Test
     void testSinkIdComparison() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStream<Integer> source = env.fromData(1, 2, 3);
         for (int i = 0; i < 32; i++) {
             if (i % 2 == 0) {
@@ -606,7 +606,7 @@ class StreamGraphGeneratorTest {
     /** Test slot sharing is enabled. */
     @Test
     void testEnableSlotSharing() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStream<Integer> sourceDataStream = env.fromData(1, 2, 3);
         DataStream<Integer> mapDataStream = sourceDataStream.map(x -> x + 1);
 
@@ -630,7 +630,7 @@ class StreamGraphGeneratorTest {
     @Test
     void testSetManagedMemoryWeight() {
         final int weight = 123;
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final DataStream<Integer> source = env.fromData(1, 2, 3).name("source");
         source.getTransformation()
                 .declareManagedMemoryUseCaseAtOperatorScope(ManagedMemoryUseCase.OPERATOR, weight);
@@ -662,7 +662,7 @@ class StreamGraphGeneratorTest {
         slotSharingGroupResource.put(slotSharingGroup2, resourceProfile2);
         slotSharingGroupResource.put(
                 StreamGraphGenerator.DEFAULT_SLOT_SHARING_GROUP, resourceProfile3);
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final DataStream<Integer> sourceDataStream =
                 env.fromData(1, 2, 3).slotSharingGroup(slotSharingGroup1);
         final DataStream<Integer> mapDataStream1 =
@@ -741,7 +741,7 @@ class StreamGraphGeneratorTest {
                         .setCpuCores(3)
                         .setTaskHeapMemoryMB(300)
                         .build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         final DataStream<Integer> source = env.fromData(1).slotSharingGroup("ssg1");
         source.map(value -> value)
@@ -771,7 +771,7 @@ class StreamGraphGeneratorTest {
                 SlotSharingGroup.newBuilder("ssg").setCpuCores(1).setTaskHeapMemoryMB(100).build();
         final SlotSharingGroup ssgConflict =
                 SlotSharingGroup.newBuilder("ssg").setCpuCores(2).setTaskHeapMemoryMB(200).build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         final DataStream<Integer> source = env.fromData(1).slotSharingGroup(ssg);
         source.map(value -> value)
@@ -784,7 +784,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testTrackTransformationsByIdentity() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final Transformation<?> noopTransformation = env.fromSequence(1, 2).getTransformation();
 
         final StreamGraphGenerator generator =
@@ -801,7 +801,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testResetBatchExchangeModeInStreamingExecution() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Integer> sourceDataStream = env.fromData(1, 2, 3);
         PartitionTransformation<Integer> transformation =
@@ -829,7 +829,7 @@ class StreamGraphGeneratorTest {
 
     @Test
     void testAutoParallelismForExpandedTransformations() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         env.setParallelism(2);
 

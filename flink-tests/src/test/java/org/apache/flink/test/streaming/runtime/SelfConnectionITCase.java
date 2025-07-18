@@ -43,7 +43,7 @@ public class SelfConnectionITCase extends AbstractTestBaseJUnit4 {
 
         TestListResultSink<String> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Integer> src = env.fromData(1, 3, 5);
@@ -88,7 +88,7 @@ public class SelfConnectionITCase extends AbstractTestBaseJUnit4 {
 
         TestListResultSink<String> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(3);
 
         DataStream<Integer> src = env.fromData(1, 3, 5).disableChaining();

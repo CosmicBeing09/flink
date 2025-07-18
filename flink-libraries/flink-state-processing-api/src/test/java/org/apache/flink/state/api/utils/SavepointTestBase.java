@@ -49,7 +49,7 @@ import static org.apache.flink.runtime.execution.ExecutionState.RUNNING;
 public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
 
     public String takeSavepoint(StreamExecutionEnvironment executionEnvironment) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
         JobGraph jobGraph = executionEnvironment.getStreamGraph().getJobGraph();

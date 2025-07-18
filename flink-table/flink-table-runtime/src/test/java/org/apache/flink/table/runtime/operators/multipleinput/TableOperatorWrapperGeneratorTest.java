@@ -62,7 +62,7 @@ class TableOperatorWrapperGeneratorTest extends MultipleInputTestBase {
      */
     @Test
     void testSimple() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
         OneInputTransformation<RowData, RowData> agg1 =
@@ -130,7 +130,7 @@ class TableOperatorWrapperGeneratorTest extends MultipleInputTestBase {
      */
     @Test
     void testComplex() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
         Transformation<RowData> source3 = createSource(env, "source3");
@@ -255,7 +255,7 @@ class TableOperatorWrapperGeneratorTest extends MultipleInputTestBase {
      */
     @Test
     void testWithUnion() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
         Transformation<RowData> source3 = createSource(env, "source3");
@@ -334,7 +334,7 @@ class TableOperatorWrapperGeneratorTest extends MultipleInputTestBase {
      */
     @Test
     void testDifferentParallelisms() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
         Transformation<RowData> source3 = createSource(env, "source3");
@@ -403,7 +403,7 @@ class TableOperatorWrapperGeneratorTest extends MultipleInputTestBase {
 
     @Test
     void testUnsupportedTransformation() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
 

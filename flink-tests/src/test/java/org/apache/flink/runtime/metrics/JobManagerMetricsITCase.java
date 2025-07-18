@@ -83,7 +83,7 @@ class JobManagerMetricsITCase {
                     @Override
                     public void go() throws Exception {
                         StreamExecutionEnvironment env =
-                                StreamExecutionEnvironment.getExecutionEnvironment();
+                                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
                         env.addSource(
                                         new SourceFunction<String>() {
 

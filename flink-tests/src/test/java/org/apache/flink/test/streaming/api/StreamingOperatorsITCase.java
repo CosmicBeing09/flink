@@ -58,7 +58,7 @@ public class StreamingOperatorsITCase extends AbstractTestBaseJUnit4 {
         final int numElements = 5;
         final long timeout = 1000L;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         DataStream<Tuple2<Integer, NonSerializable>> input =
                 env.addSource(new NonSerializableTupleSource(numElements));
@@ -221,7 +221,7 @@ public class StreamingOperatorsITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testOperatorChainWithObjectReuseAndNoOutputOperators() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().enableObjectReuse();
         DataStream<Integer> input = env.fromData(1, 2, 3);
         input.flatMap(

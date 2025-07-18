@@ -77,7 +77,7 @@ public class ApproximateLocalRecoveryDownstreamITCase extends TestLogger {
     @Test
     public void localTaskFailureRecoveryThreeTasks() throws Exception {
         final int failAfterElements = 150;
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1).setBufferTimeout(0).setMaxParallelism(128).disableOperatorChaining();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
         env.getCheckpointConfig().enableApproximateLocalRecovery(true);
@@ -108,7 +108,7 @@ public class ApproximateLocalRecoveryDownstreamITCase extends TestLogger {
     public void localTaskFailureRecoveryTwoMapTasks() throws Exception {
         final int failAfterElements = 20;
         final int keyByChannelNumber = 2;
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1).setBufferTimeout(0).disableOperatorChaining().setMaxParallelism(128);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
         env.getCheckpointConfig().enableApproximateLocalRecovery(true);

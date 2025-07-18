@@ -65,7 +65,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StreamExecutionEnvironmentComplexConfigurationTest {
     @Test
     void testJobConfigFromEnvToExecutionGraph() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         Configuration configuration = new Configuration();
         configuration.set(StateBackendOptions.STATE_BACKEND, "hashmap");
@@ -98,7 +98,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     @Test
     void testLoadingCachedFilesFromConfiguration() {
         StreamExecutionEnvironment envFromConfiguration =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         envFromConfiguration.registerCachedFile("/tmp4", "file4", true);
 
         Configuration configuration = new Configuration();
@@ -153,7 +153,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     @Test
     void testOverridingChangelogStateBackendWithFromConfigurationWhenSet() {
         StreamExecutionEnvironment envFromConfiguration =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         assertThat(TernaryBoolean.UNDEFINED)
                 .isEqualTo(envFromConfiguration.isChangelogStateBackendEnabled());
 
@@ -179,7 +179,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     @Test
     void testNotOverridingCachedFilesFromConfiguration() {
         StreamExecutionEnvironment envFromConfiguration =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         envFromConfiguration.registerCachedFile("/tmp3", "file3", true);
 
         Configuration configuration = new Configuration();
@@ -200,7 +200,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
     @Test
     void testLoadingListenersFromConfiguration() {
         StreamExecutionEnvironment envFromConfiguration =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         List<Class> listenersClass =
                 Arrays.asList(BasicJobSubmittedCounter.class, BasicJobExecutedCounter.class);
 

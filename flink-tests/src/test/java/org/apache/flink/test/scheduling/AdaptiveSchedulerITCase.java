@@ -136,7 +136,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
     @Test
     public void testGlobalFailoverCanRecoverState() throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         env.enableCheckpointing(20L, CheckpointingMode.EXACTLY_ONCE);
@@ -233,7 +233,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
     @Test
     public void testStopWithSavepointFailOnFirstSavepointSucceedOnSecond() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
 
         env.setParallelism(PARALLELISM);
@@ -278,7 +278,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
     @Test
     public void testExceptionHistoryIsRetrievableFromTheRestAPI() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.enableCheckpointing(20L, CheckpointingMode.EXACTLY_ONCE);
         env.addSource(new FailOnCompletedCheckpointSource())
@@ -371,7 +371,7 @@ public class AdaptiveSchedulerITCase extends TestLogger {
 
     private static StreamExecutionEnvironment getEnvWithSource(
             StopWithSavepointTestBehavior behavior) {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.addSource(new DummySource(behavior))
                 // TODO replace this by sink v2 after source is ported to FLIP-27.

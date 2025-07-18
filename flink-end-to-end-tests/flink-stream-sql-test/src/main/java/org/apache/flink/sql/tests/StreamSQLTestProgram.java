@@ -81,7 +81,7 @@ public class StreamSQLTestProgram {
         String outputPath = params.getRequired("outputPath");
 
         final StreamExecutionEnvironment sEnv =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Configuration configuration = new Configuration();
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY_FIXED_DELAY_ATTEMPTS, 3);

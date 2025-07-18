@@ -77,7 +77,7 @@ public class StreamExecutionEnvironmentITCase {
     @Test
     @SuppressWarnings("unchecked")
     void testAvroGenericRecordsInFromElementsDoesNotFailDueToKryoFallback() throws Exception {
-        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Schema schema = getSchemaFromResources("/avro/user.avsc");
         GenericRecord user1 =
                 new GenericRecordBuilder(schema).set("name", "Foo").set("age", 40).build();
@@ -96,7 +96,7 @@ public class StreamExecutionEnvironmentITCase {
     @SuppressWarnings("unchecked")
     void testAvroGenericRecordsInFromElementsDoesNotFailDueToKryoFallbackUsingReturns()
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Schema schema = getSchemaFromResources("/avro/user.avsc");
         GenericRecord user1 =
                 new GenericRecordBuilder(schema).set("name", "Foo").set("age", 40).build();

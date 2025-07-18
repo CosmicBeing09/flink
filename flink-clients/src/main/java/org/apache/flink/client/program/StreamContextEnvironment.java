@@ -56,7 +56,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 /**
  * Special {@link StreamExecutionEnvironment} that will be used in cases where the CLI client or
  * testing utilities create a {@link StreamExecutionEnvironment} that should be used when {@link
- * StreamExecutionEnvironment#getExecutionEnvironment()} is called.
+ * StreamExecutionEnvironment#getBatchStreamExecutionEnvironment()} is called.
  */
 @PublicEvolving
 public class StreamContextEnvironment extends StreamExecutionEnvironment {

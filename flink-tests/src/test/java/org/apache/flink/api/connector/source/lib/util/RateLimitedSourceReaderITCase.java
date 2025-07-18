@@ -60,7 +60,7 @@ public class RateLimitedSourceReaderITCase extends TestLogger {
     @Test
     @DisplayName("Rate limiter is used correctly.")
     public void testRateLimitingParallelExecution() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         final int count = 10;

@@ -43,7 +43,7 @@ public class CoStreamITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void test() throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
 
         TestListResultSink<String> resultSink = new TestListResultSink<String>();

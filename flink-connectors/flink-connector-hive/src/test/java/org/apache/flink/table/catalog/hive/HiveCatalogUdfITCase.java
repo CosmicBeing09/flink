@@ -153,7 +153,7 @@ public class HiveCatalogUdfITCase extends AbstractTestBaseJUnit4 {
         if (batch) {
             tEnv = TableEnvironment.create(settingsBuilder.build());
         } else {
-            env = StreamExecutionEnvironment.getExecutionEnvironment();
+            env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
             tEnv = StreamTableEnvironment.create(env, settingsBuilder.build());
         }
 

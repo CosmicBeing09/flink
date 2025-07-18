@@ -37,7 +37,7 @@ class StreamGraphCoLocationConstraintTest {
 
     @Test
     void testSettingCoLocationConstraint() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(7);
 
         // set up the test program
@@ -70,7 +70,7 @@ class StreamGraphCoLocationConstraintTest {
 
     @Test
     void testCoLocateDifferenSharingGroups() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(7);
 
         // set up the test program

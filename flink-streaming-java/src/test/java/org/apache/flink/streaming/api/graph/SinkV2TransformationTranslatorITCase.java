@@ -58,7 +58,7 @@ class SinkV2TransformationTranslatorITCase
 
     @TestTemplate
     void testSettingOperatorUidHash() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final DataStreamSource<Integer> src = env.fromElements(1, 2);
         final String writerHash = "f6b178ce445dc3ffaa06bad27a51fead";
         final String committerHash = "68ac8ae79eae4e3135a54f9689c4aa10";
@@ -82,7 +82,7 @@ class SinkV2TransformationTranslatorITCase
     @TestTemplate
     void testSettingOperatorUids() {
         final String sinkUid = "f6b178ce445dc3ffaa06bad27a51fead";
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         final DataStreamSource<Integer> src = env.fromElements(1, 2);
         src.sinkTo(sinkWithCommitter()).name(NAME).uid(sinkUid);
 

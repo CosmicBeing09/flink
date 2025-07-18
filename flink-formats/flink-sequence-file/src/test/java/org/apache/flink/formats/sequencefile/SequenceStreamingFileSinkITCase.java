@@ -63,7 +63,7 @@ class SequenceStreamingFileSinkITCase {
     void testWriteSequenceFile(@TempDir final File folder) throws Exception {
         final Path testPath = Path.fromLocalFile(folder);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

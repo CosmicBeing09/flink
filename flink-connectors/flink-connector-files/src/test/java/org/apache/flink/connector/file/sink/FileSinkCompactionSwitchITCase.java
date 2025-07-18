@@ -214,7 +214,7 @@ public class FileSinkCompactionSwitchITCase {
             FileSink<Integer> fileSink,
             boolean isFinite,
             SharedReference<ConcurrentHashMap<Integer, Integer>> sendCountMap) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.STREAMING);
         // disable changelog state in case it's randomly enabled, since it will fail the savepoint

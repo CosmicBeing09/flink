@@ -84,7 +84,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<String> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(3);
 
         DataStream<Integer> dataStream =
@@ -228,7 +228,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(3);
 
         DataStream<Integer> dataStream = env.fromData(elements);
@@ -269,7 +269,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().enableObjectReuse();
         env.setParallelism(3);
 
@@ -312,7 +312,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<Integer> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.getConfig().enableObjectReuse();
         env.setParallelism(3);
 
@@ -353,7 +353,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink1 = new TestListResultSink<>();
         TestListResultSink<Integer> sideOutputResultSink2 = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -387,7 +387,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -424,7 +424,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -479,7 +479,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -535,7 +535,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -583,7 +583,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -637,7 +637,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -704,7 +704,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -763,7 +763,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> sideOutputResultSink2 = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> ds1 = see.fromData(elements);
@@ -827,7 +827,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
 
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -883,7 +883,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
     public void testAllWindowLateArrivingEvents() throws Exception {
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(1);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -936,7 +936,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<String> resultSink = new TestListResultSink<>();
         TestListResultSink<Integer> lateResultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -986,7 +986,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(3);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -1033,7 +1033,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
         TestListResultSink<String> sideOutputResultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         see.setParallelism(1);
 
         DataStream<Integer> dataStream = see.fromData(elements);
@@ -1085,7 +1085,7 @@ public class SideOutputITCase extends AbstractTestBaseJUnit4 implements Serializ
         TestListResultSink<Integer> oddsUEvensExternalResultSink = new TestListResultSink<>();
         TestListResultSink<Integer> resultSink = new TestListResultSink<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(3);
 
         DataStream<Integer> input = env.fromData(1, 2, 3, 4);

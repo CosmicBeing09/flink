@@ -50,7 +50,7 @@ public class CoordinatedSourceITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testEnumeratorReaderCommunication() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         MockBaseSource source = new MockBaseSource(2, 10, Boundedness.BOUNDED);
         DataStream<Integer> stream =
                 env.fromSource(source, WatermarkStrategy.noWatermarks(), "TestingSource");
@@ -59,7 +59,7 @@ public class CoordinatedSourceITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testMultipleSources() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         MockBaseSource source1 = new MockBaseSource(2, 10, Boundedness.BOUNDED);
         MockBaseSource source2 = new MockBaseSource(2, 10, 20, Boundedness.BOUNDED);
         DataStream<Integer> stream1 =
@@ -73,7 +73,7 @@ public class CoordinatedSourceITCase extends AbstractTestBaseJUnit4 {
     public void testEnumeratorCreationFails() throws Exception {
         OnceFailingToCreateEnumeratorSource.reset();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 0L);
         final Source<Integer, ?, ?> source =
                 new OnceFailingToCreateEnumeratorSource(2, 10, Boundedness.BOUNDED);
@@ -86,7 +86,7 @@ public class CoordinatedSourceITCase extends AbstractTestBaseJUnit4 {
     public void testEnumeratorRestoreFails() throws Exception {
         OnceFailingToRestoreEnumeratorSource.reset();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 0L);
         env.enableCheckpointing(10);
 

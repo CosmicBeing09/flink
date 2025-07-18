@@ -53,7 +53,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     @Test
     void testMapPartition() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<String> source = env.fromData(createSource());
         int parallelism = 2;
         CloseableIterator<String> resultIterator =
@@ -79,7 +79,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     @Test
     void testReduce() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<Integer> source = env.fromData(1, 1, 1, 1, 998, 998);
         CloseableIterator<String> resultIterator =
                 source.map(v -> v)
@@ -106,7 +106,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     @Test
     void testAggregate() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<Integer> source = env.fromData(1, 1, 2, 2, 3, 3);
         CloseableIterator<String> resultIterator =
                 source.map(v -> v)
@@ -173,7 +173,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     private CloseableIterator<String> sortPartitionOfTupleElementsInOrder(Order order)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<Tuple2<String, Integer>> source =
                 env.fromData(
                         Tuple2.of("Test", 0),
@@ -213,7 +213,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     private CloseableIterator<String> sortPartitionOfPojoElementsInOrder(Order order)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<TestPojo> source =
                 env.fromData(
                         new TestPojo(0),
@@ -251,7 +251,7 @@ class NonKeyedPartitionWindowedStreamITCase {
 
     private CloseableIterator<String> sortPartitionByKeySelectorInOrder(Order order)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         DataStreamSource<TestPojo> source =
                 env.fromData(
                         new TestPojo("KEY", 0),

@@ -49,7 +49,7 @@ public final class StreamSQLExample {
     public static void main(String[] args) throws Exception {
 
         // set up the Java DataStream API
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         // set up the Java Table API
         final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);

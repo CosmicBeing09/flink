@@ -53,7 +53,7 @@ import java.util.Random;
 public class QsStateProducer {
 
     public static void main(final String[] args) throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         ParameterTool tool = ParameterTool.fromArgs(args);
         String tmpPath = tool.getRequired("tmp-dir");

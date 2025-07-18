@@ -130,7 +130,7 @@ public class AccumulatorLiveITCase extends TestLogger {
     @Test
     public void testStreaming() throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Integer> input = env.fromData(inputData);

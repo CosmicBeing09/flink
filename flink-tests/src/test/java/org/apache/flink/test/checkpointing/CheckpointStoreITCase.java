@@ -76,7 +76,7 @@ public class CheckpointStoreITCase extends TestLogger {
     @Test
     public void testJobClientRemainsResponsiveDuringCompletedCheckpointStoreRecovery()
             throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.enableCheckpointing(10);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 env, 2 /* failure on processing + on recovery */, 0L);

@@ -168,7 +168,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
 
     private JobGraph createStreamJobGraph(File stateBackendFolder) throws Exception {
         final StreamExecutionEnvironment streamEnv =
-                StreamExecutionEnvironment.getExecutionEnvironment();
+                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(streamEnv);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 streamEnv, stateBackendFolder.toURI().toString(), 1);

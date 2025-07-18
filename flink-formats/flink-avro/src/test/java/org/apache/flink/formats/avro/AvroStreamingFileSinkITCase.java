@@ -72,7 +72,7 @@ public class AvroStreamingFileSinkITCase extends AbstractTestBaseJUnit4 {
                         new Address(2, "p", "q", "r", "12345"),
                         new Address(3, "x", "y", "z", "12345"));
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 
@@ -100,7 +100,7 @@ public class AvroStreamingFileSinkITCase extends AbstractTestBaseJUnit4 {
         Schema schema = Address.getClassSchema();
         Collection<GenericRecord> data = new GenericTestDataCollection();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 
@@ -127,7 +127,7 @@ public class AvroStreamingFileSinkITCase extends AbstractTestBaseJUnit4 {
 
         List<Datum> data = Arrays.asList(new Datum("a", 1), new Datum("b", 2), new Datum("c", 3));
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

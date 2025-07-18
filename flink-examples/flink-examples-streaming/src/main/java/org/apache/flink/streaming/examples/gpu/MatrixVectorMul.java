@@ -89,7 +89,7 @@ public class MatrixVectorMul {
                 "Usage: MatrixVectorMul [--output <path>] [--dimension <dimension> --data-size <data_size>] [--resource-name <resource_name>]");
 
         // Set up the execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
 
         // Make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

@@ -41,7 +41,7 @@ class CoGroupedStreamsTest {
 
     @BeforeEach
     void setUp() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
         dataStream1 = env.fromData("a1", "a2", "a3");
         dataStream2 = env.fromData("a1", "a2");
         keySelector = element -> element;
