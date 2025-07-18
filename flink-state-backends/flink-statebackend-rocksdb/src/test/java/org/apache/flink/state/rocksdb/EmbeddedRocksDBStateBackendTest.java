@@ -115,8 +115,8 @@ public class EmbeddedRocksDBStateBackendTest
         extends StateBackendTestBase<EmbeddedRocksDBStateBackend> {
 
     @TempDir private static java.nio.file.Path tempFolder;
-    private OneShotLatch blocker;
-    private OneShotLatch waiter;
+    private OneShotLatch snapshotStartLatch;
+    private OneShotLatch snapshotFinishLatch;
     private BlockerCheckpointStreamFactory testStreamFactory;
     private RocksDBKeyedStateBackend<Integer> keyedStateBackend;
     private List<RocksObject> allCreatedCloseables;
@@ -258,11 +258,11 @@ public class EmbeddedRocksDBStateBackendTest
 
     public void setupRocksKeyedStateBackend() throws Exception {
 
-        blocker = new OneShotLatch();
-        waiter = new OneShotLatch();
+        snapshotStartLatch = new OneShotLatch();
+        snapshotFinishLatch = new OneShotLatch();
         testStreamFactory = new BlockerCheckpointStreamFactory(1024 * 1024);
-        testStreamFactory.setBlockerLatch(blocker);
-        testStreamFactory.setWaiterLatch(waiter);
+        testStreamFactory.setBlockerLatch(snapshotStartLatch);
+        testStreamFactory.setWaiterLatch(snapshotFinishLatch);
         testStreamFactory.setAfterNumberInvocations(10);
         prepareRocksDB();
 
@@ -475,11 +475,11 @@ public class EmbeddedRocksDBStateBackendTest
                             CheckpointOptions.forCheckpointWithDefaultLocation());
             Thread asyncSnapshotThread = new Thread(snapshot);
             asyncSnapshotThread.start();
-            waiter.await(); // wait for snapshot to run
-            waiter.reset();
+            snapshotFinishLatch.await(); // wait for snapshot to run
+            snapshotFinishLatch.reset();
             runStateUpdates();
-            blocker.trigger(); // allow checkpointing to start writing
-            waiter.await(); // wait for snapshot stream writing to run
+            snapshotStartLatch.trigger(); // allow checkpointing to start writing
+            snapshotFinishLatch.await(); // wait for snapshot stream writing to run
 
             SnapshotResult<KeyedStateHandle> snapshotResult = snapshot.get();
             KeyedStateHandle keyedStateHandle = snapshotResult.getJobManagerOwnedSnapshot();
@@ -512,17 +512,17 @@ public class EmbeddedRocksDBStateBackendTest
                             CheckpointOptions.forCheckpointWithDefaultLocation());
             Thread asyncSnapshotThread = new Thread(snapshot);
             asyncSnapshotThread.start();
-            waiter.await(); // wait for snapshot to run
-            waiter.reset();
+            snapshotFinishLatch.await(); // wait for snapshot to run
+            snapshotFinishLatch.reset();
             runStateUpdates();
             snapshot.cancel(true);
-            blocker.trigger(); // allow checkpointing to start writing
+            snapshotStartLatch.trigger(); // allow checkpointing to start writing
 
             for (BlockingCheckpointOutputStream stream : testStreamFactory.getAllCreatedStreams()) {
                 assertThat(stream.isClosed()).isTrue();
             }
 
-            waiter.await(); // wait for snapshot stream writing to run
+            snapshotFinishLatch.await(); // wait for snapshot stream writing to run
             assertThatThrownBy(snapshot::get);
 
             asyncSnapshotThread.join();
