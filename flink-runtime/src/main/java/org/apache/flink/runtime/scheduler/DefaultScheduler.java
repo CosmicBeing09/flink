@@ -540,25 +540,25 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
         @Override
         public Collection<ConsumedPartitionGroup> getConsumedPartitionGroups(
                 ExecutionVertexID executionVertexId) {
-            return inputsLocationsRetriever.getConsumedPartitionGroups(executionVertexId);
+            return inputLocationsRetriever.getConsumedPartitionGroups(executionVertexId);
         }
 
         @Override
         public Collection<ExecutionVertexID> getProducersOfConsumedPartitionGroup(
                 ConsumedPartitionGroup consumedPartitionGroup) {
-            return inputsLocationsRetriever.getProducersOfConsumedPartitionGroup(
+            return inputLocationsRetriever.getProducersOfConsumedPartitionGroup(
                     consumedPartitionGroup);
         }
 
         @Override
         public Optional<CompletableFuture<TaskManagerLocation>> getTaskManagerLocation(
                 ExecutionVertexID executionVertexId) {
-            return inputsLocationsRetriever.getTaskManagerLocation(executionVertexId);
+            return inputLocationsRetriever.getTaskManagerLocation(executionVertexId);
         }
 
         @Override
         public Optional<TaskManagerLocation> getStateLocation(ExecutionVertexID executionVertexId) {
-            return stateLocationRetriever.getStateLocation(executionVertexId);
+            return preferredStateLocationRetriever.getStateLocation(executionVertexId);
         }
 
         @Override
