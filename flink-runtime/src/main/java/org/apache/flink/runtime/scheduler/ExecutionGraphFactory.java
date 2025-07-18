@@ -44,12 +44,12 @@ public interface ExecutionGraphFactory {
      * @param checkpointStatsTracker The {@link CheckpointStatsTracker} that's used for collecting
      *     the checkpoint-related statistics.
      * @param partitionLocationConstraint partitionLocationConstraint for this job
-     * @param initializationTimestamp initializationTimestamp when the ExecutionGraph was created
+     * @param executionGraphInitializationTimestampMs initializationTimestamp when the ExecutionGraph was created
      * @param vertexAttemptNumberStore vertexAttemptNumberStore keeping information about the vertex
      *     attempts of previous runs
      * @param vertexParallelismStore vertexMaxParallelismStore keeping information about the vertex
      *     max parallelism settings
-     * @param executionStateUpdateListener listener for state transitions of the individual
+     * @param executionGraphStateUpdateListener listener for state transitions of the individual
      *     executions
      * @param log log to use for logging
      * @return restored {@link ExecutionGraph}
@@ -62,10 +62,10 @@ public interface ExecutionGraphFactory {
             CheckpointIDCounter checkpointIdCounter,
             CheckpointStatsTracker checkpointStatsTracker,
             TaskDeploymentDescriptorFactory.PartitionLocationConstraint partitionLocationConstraint,
-            long initializationTimestamp,
+            long executionGraphInitializationTimestampMs,
             VertexAttemptNumberStore vertexAttemptNumberStore,
             VertexParallelismStore vertexParallelismStore,
-            ExecutionStateUpdateListener executionStateUpdateListener,
+            ExecutionStateUpdateListener executionGraphStateUpdateListener,
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             Logger log)
             throws Exception;
