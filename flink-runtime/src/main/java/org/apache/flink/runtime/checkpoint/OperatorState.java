@@ -51,7 +51,7 @@ public class OperatorState implements CompositeStateHandle {
     private final OperatorID operatorID;
 
     /** The handles to states created by the parallel tasks: subtaskIndex -> subtaskstate. */
-    private final Map<Integer, OperatorSubtaskState> operatorSubtaskStates;
+    private final Map<Integer, OperatorSubtaskState> subtaskStateByIndex;
 
     /** The state of the operator coordinator. Null, if no such state exists. */
     @Nullable private ByteStreamStateHandle coordinatorState;
@@ -75,7 +75,7 @@ public class OperatorState implements CompositeStateHandle {
 
         this.operatorID = operatorID;
 
-        this.operatorSubtaskStates = CollectionUtil.newHashMapWithExpectedSize(parallelism);
+        this.subtaskStateByIndex = CollectionUtil.newHashMapWithExpectedSize(parallelism);
 
         this.parallelism = parallelism;
         this.maxParallelism = maxParallelism;
@@ -97,9 +97,9 @@ public class OperatorState implements CompositeStateHandle {
                     "The given sub task index "
                             + subtaskIndex
                             + " exceeds the maximum number of sub tasks "
-                            + operatorSubtaskStates.size());
+                            + subtaskStateByIndex.size());
         } else {
-            operatorSubtaskStates.put(subtaskIndex, subtaskState);
+            subtaskStateByIndex.put(subtaskIndex, subtaskState);
         }
     }
 
@@ -109,9 +109,9 @@ public class OperatorState implements CompositeStateHandle {
                     "The given sub task index "
                             + subtaskIndex
                             + " exceeds the maximum number of sub tasks "
-                            + operatorSubtaskStates.size());
+                            + subtaskStateByIndex.size());
         } else {
-            return operatorSubtaskStates.get(subtaskIndex);
+            return subtaskStateByIndex.get(subtaskIndex);
         }
     }
 
@@ -125,16 +125,16 @@ public class OperatorState implements CompositeStateHandle {
         return coordinatorState;
     }
 
-    public Map<Integer, OperatorSubtaskState> getSubtaskStates() {
-        return Collections.unmodifiableMap(operatorSubtaskStates);
+    public Map<Integer, OperatorSubtaskState> getSubtaskStateByIndex() {
+        return Collections.unmodifiableMap(subtaskStateByIndex);
     }
 
     public Collection<OperatorSubtaskState> getStates() {
-        return operatorSubtaskStates.values();
+        return subtaskStateByIndex.values();
     }
 
     public int getNumberCollectedStates() {
-        return operatorSubtaskStates.size();
+        return subtaskStateByIndex.size();
     }
 
     public int getParallelism() {
@@ -147,7 +147,7 @@ public class OperatorState implements CompositeStateHandle {
 
     public OperatorState copyWithNewOperatorID(OperatorID newOperatorId) {
         OperatorState newState = new OperatorState(newOperatorId, parallelism, maxParallelism);
-        operatorSubtaskStates.forEach(newState::putState);
+        subtaskStateByIndex.forEach(newState::putState);
         return newState;
     }
 
@@ -155,7 +155,7 @@ public class OperatorState implements CompositeStateHandle {
         OperatorState newState = new OperatorState(operatorID, parallelism, maxParallelism);
 
         for (Map.Entry<Integer, OperatorSubtaskState> originalSubtaskStateEntry :
-                operatorSubtaskStates.entrySet()) {
+                subtaskStateByIndex.entrySet()) {
             newState.putState(
                     originalSubtaskStateEntry.getKey(),
                     originalSubtaskStateEntry
@@ -171,7 +171,7 @@ public class OperatorState implements CompositeStateHandle {
 
     public List<StateObject> getDiscardables() {
         List<StateObject> toDispose =
-                operatorSubtaskStates.values().stream()
+                subtaskStateByIndex.values().stream()
                         .flatMap(op -> op.getDiscardables().stream())
                         .collect(Collectors.toList());
 
@@ -183,7 +183,7 @@ public class OperatorState implements CompositeStateHandle {
 
     @Override
     public void discardState() throws Exception {
-        for (OperatorSubtaskState operatorSubtaskState : operatorSubtaskStates.values()) {
+        for (OperatorSubtaskState operatorSubtaskState : subtaskStateByIndex.values()) {
             operatorSubtaskState.discardState();
         }
 
@@ -194,13 +194,13 @@ public class OperatorState implements CompositeStateHandle {
 
     @Override
     public void registerSharedStates(SharedStateRegistry sharedStateRegistry, long checkpointID) {
-        for (OperatorSubtaskState operatorSubtaskState : operatorSubtaskStates.values()) {
+        for (OperatorSubtaskState operatorSubtaskState : subtaskStateByIndex.values()) {
             operatorSubtaskState.registerSharedStates(sharedStateRegistry, checkpointID);
         }
     }
 
     public boolean hasSubtaskStates() {
-        return operatorSubtaskStates.size() > 0;
+        return subtaskStateByIndex.size() > 0;
     }
 
     @Override
@@ -214,7 +214,7 @@ public class OperatorState implements CompositeStateHandle {
     }
 
     private Stream<StateObject> streamAllSubHandles() {
-        return Stream.concat(Stream.of(coordinatorState), operatorSubtaskStates.values().stream())
+        return Stream.concat(Stream.of(coordinatorState), subtaskStateByIndex.values().stream())
                 .filter(Objects::nonNull);
     }
 
@@ -223,7 +223,7 @@ public class OperatorState implements CompositeStateHandle {
         long result = coordinatorState == null ? 0L : coordinatorState.getStateSize();
 
         for (int i = 0; i < parallelism; i++) {
-            OperatorSubtaskState operatorSubtaskState = operatorSubtaskStates.get(i);
+            OperatorSubtaskState operatorSubtaskState = subtaskStateByIndex.get(i);
             if (operatorSubtaskState != null) {
                 result += operatorSubtaskState.getCheckpointedSize();
             }
@@ -240,7 +240,7 @@ public class OperatorState implements CompositeStateHandle {
             return operatorID.equals(other.operatorID)
                     && parallelism == other.parallelism
                     && Objects.equals(coordinatorState, other.coordinatorState)
-                    && operatorSubtaskStates.equals(other.operatorSubtaskStates);
+                    && subtaskStateByIndex.equals(other.subtaskStateByIndex);
         } else {
             return false;
         }
@@ -248,7 +248,7 @@ public class OperatorState implements CompositeStateHandle {
 
     @Override
     public int hashCode() {
-        return parallelism + 31 * Objects.hash(operatorID, operatorSubtaskStates);
+        return parallelism + 31 * Objects.hash(operatorID, subtaskStateByIndex);
     }
 
     @Override
@@ -265,7 +265,7 @@ public class OperatorState implements CompositeStateHandle {
                 + ", coordinatorState: "
                 + (coordinatorState == null ? "(none)" : coordinatorState.getStateSize() + " bytes")
                 + ", sub task states: "
-                + operatorSubtaskStates.size()
+                + subtaskStateByIndex.size()
                 + ", total size (bytes): "
                 + getStateSize()
                 + ')';

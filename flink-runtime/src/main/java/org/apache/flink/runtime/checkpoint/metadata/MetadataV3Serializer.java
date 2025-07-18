@@ -113,7 +113,7 @@ public class MetadataV3Serializer extends MetadataV2V3SerializerBase implements 
             dos.writeInt(-1);
         } else {
             final Map<Integer, OperatorSubtaskState> subtaskStateMap =
-                    operatorState.getSubtaskStates();
+                    operatorState.getSubtaskStateByIndex();
             dos.writeInt(subtaskStateMap.size());
             for (Map.Entry<Integer, OperatorSubtaskState> entry : subtaskStateMap.entrySet()) {
                 boolean isFinished = entry.getValue().isFinished();

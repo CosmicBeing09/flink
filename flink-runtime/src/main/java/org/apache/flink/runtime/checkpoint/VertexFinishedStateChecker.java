@@ -207,7 +207,7 @@ public class VertexFinishedStateChecker {
                                 }
 
                                 boolean hasFinishedSubtasks =
-                                        operatorState.getSubtaskStates().values().stream()
+                                        operatorState.getSubtaskStateByIndex().values().stream()
                                                 .anyMatch(OperatorSubtaskState::isFinished);
                                 return hasFinishedSubtasks
                                         ? VertexFinishedState.PARTIALLY_FINISHED
