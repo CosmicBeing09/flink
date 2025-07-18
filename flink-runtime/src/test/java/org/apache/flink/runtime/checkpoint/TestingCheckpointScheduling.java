@@ -33,12 +33,12 @@ public class TestingCheckpointScheduling implements CheckpointScheduling {
     }
 
     @Override
-    public void startCheckpointScheduler() {
+    public void startPeriodicCheckpointScheduler() {
         checkpointSchedulingEnabled.set(true);
     }
 
     @Override
-    public void stopCheckpointScheduler() {
+    public void stopPeriodicCheckpointScheduler() {
         checkpointSchedulingEnabled.set(false);
     }
 

@@ -370,7 +370,7 @@ public class CheckpointCoordinator {
         try {
             // Make sure the checkpoint ID enumerator is running. Possibly
             // issues a blocking call to ZooKeeper.
-            checkpointIDCounter.start();
+            checkpointIDCounter.startCheckpointIDCounter();
         } catch (Throwable t) {
             throw new RuntimeException(
                     "Failed to start checkpoint ID counter: " + t.getMessage(), t);

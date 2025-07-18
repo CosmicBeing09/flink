@@ -188,7 +188,7 @@ public class StopWithSavepointTerminationHandlerImpl
      * @param throwable the error that caused the exceptional termination.
      */
     private void terminateExceptionally(Throwable throwable) {
-        checkpointScheduling.startCheckpointScheduler();
+        checkpointScheduling.startPeriodicCheckpointScheduler();
         result.completeExceptionally(throwable);
     }
 

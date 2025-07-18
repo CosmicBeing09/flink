@@ -112,7 +112,7 @@ class VertexThreadInfoTrackerTest {
 
     @Parameters(name = "executionState={0}")
     private static Collection<ExecutionState> parameters() {
-        return Arrays.asList(ExecutionState.RUNNING, ExecutionState.INITIALIZING);
+        return Arrays.asList(ExecutionState.RUNNING, ExecutionState.RESTORING_STATE);
     }
 
     @BeforeEach
@@ -593,7 +593,7 @@ class VertexThreadInfoTrackerTest {
                 case RUNNING:
                     ExecutionGraphTestUtils.switchAllVerticesToRunning(eg);
                     break;
-                case INITIALIZING:
+                case RESTORING_STATE:
                     ExecutionGraphTestUtils.switchAllVerticesToInitializing(eg);
                     break;
                 default:

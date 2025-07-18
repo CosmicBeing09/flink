@@ -67,8 +67,8 @@ public class SpeculativeExecutionVertex extends ExecutionVertex {
                 initialAttemptCount);
 
         this.currentExecutions = new LinkedHashMap<>();
-        this.currentExecutions.put(currentExecution.getAttemptNumber(), currentExecution);
-        this.originalAttemptNumber = currentExecution.getAttemptNumber();
+        this.currentExecutions.put(latestExecutionAttempt.getAttemptNumber(), latestExecutionAttempt);
+        this.originalAttemptNumber = latestExecutionAttempt.getAttemptNumber();
         this.nextInputSplitIndexToConsumeByAttempts = new HashMap<>();
     }
 
@@ -149,8 +149,8 @@ public class SpeculativeExecutionVertex extends ExecutionVertex {
         super.resetForNewExecution();
 
         currentExecutions.clear();
-        currentExecutions.put(currentExecution.getAttemptNumber(), currentExecution);
-        originalAttemptNumber = currentExecution.getAttemptNumber();
+        currentExecutions.put(latestExecutionAttempt.getAttemptNumber(), latestExecutionAttempt);
+        originalAttemptNumber = latestExecutionAttempt.getAttemptNumber();
         nextInputSplitIndexToConsumeByAttempts.clear();
     }
 
@@ -188,15 +188,15 @@ public class SpeculativeExecutionVertex extends ExecutionVertex {
                 executionAttemptId);
 
         executionHistory.add(removedExecution.archive());
-        if (removedExecution == this.currentExecution) {
-            this.currentExecution = this.currentExecutions.values().iterator().next();
+        if (removedExecution == this.latestExecutionAttempt) {
+            this.latestExecutionAttempt = this.currentExecutions.values().iterator().next();
         }
     }
 
     @Override
     public Execution getCurrentExecutionAttempt() {
         // returns the execution which is most likely to reach FINISHED state
-        Execution currentExecution = this.currentExecution;
+        Execution currentExecution = this.latestExecutionAttempt;
         for (Execution execution : currentExecutions.values()) {
             if (getStatePriority(execution.getState())
                     < getStatePriority(currentExecution.getState())) {
@@ -215,7 +215,7 @@ public class SpeculativeExecutionVertex extends ExecutionVertex {
                 return 0;
             case RUNNING:
                 return 1;
-            case INITIALIZING:
+            case RESTORING_STATE:
                 return 2;
             case DEPLOYING:
                 return 3;

@@ -87,12 +87,12 @@ class DefaultVertexParallelismStoreTest {
 
     private static final class MockVertexParallelismInfo implements VertexParallelismInformation {
         @Override
-        public int getMinParallelism() {
+        public int getMinimumParallelism() {
             return 0;
         }
 
         @Override
-        public int getParallelism() {
+        public int getCurrentParallelism() {
             return 0;
         }
 

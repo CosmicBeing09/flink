@@ -133,7 +133,7 @@ public class CheckpointResourcesCleanupRunner implements JobManagerRunner {
         }
 
         try {
-            checkpointIDCounter.shutdown(getJobStatus()).get();
+            checkpointIDCounter.shutdownCheckpointIDCounter(getJobStatus()).get();
         } catch (Exception e) {
             exception = ExceptionUtils.firstOrSuppressed(e, exception);
         }

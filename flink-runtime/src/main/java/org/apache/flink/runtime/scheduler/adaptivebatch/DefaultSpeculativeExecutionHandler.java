@@ -194,7 +194,7 @@ public class DefaultSpeculativeExecutionHandler
             if (execution.getState() == ExecutionState.CREATED
                     || execution.getState() == ExecutionState.SCHEDULED
                     || execution.getState() == ExecutionState.DEPLOYING
-                    || execution.getState() == ExecutionState.INITIALIZING
+                    || execution.getState() == ExecutionState.RESTORING_STATE
                     || execution.getState() == ExecutionState.RUNNING) {
                 anyExecutionPossibleToFinish = true;
             }

@@ -54,7 +54,7 @@ interface State extends LabeledGlobalFailureHandler {
 
     /**
      * Gets the {@link JobID} of the job. The implementation should avoid to use the {@link
-     * State#getJob()} method as it may create the {@link ArchivedExecutionGraph} which is
+     * State#getArchivedExecutionGraph()} method as it may create the {@link ArchivedExecutionGraph} which is
      * expensive.
      *
      * @return the {@link JobID} of the job
@@ -74,7 +74,7 @@ interface State extends LabeledGlobalFailureHandler {
      *
      * @return the current {@link ArchivedExecutionGraph}
      */
-    ArchivedExecutionGraph getJob();
+    ArchivedExecutionGraph getArchivedExecutionGraph();
 
     /**
      * Gets the logger.
@@ -91,7 +91,7 @@ interface State extends LabeledGlobalFailureHandler {
      * @return {@link Optional#of} target type if the underlying type can be cast into clazz;
      *     otherwise {@link Optional#empty()}
      */
-    default <T> Optional<T> as(Class<? extends T> clazz) {
+    default <T> Optional<T> castTo(Class<? extends T> clazz) {
         if (clazz.isAssignableFrom(this.getClass())) {
             return Optional.of(clazz.cast(this));
         } else {
@@ -144,7 +144,7 @@ interface State extends LabeledGlobalFailureHandler {
             ThrowingConsumer<T, E> action,
             Consumer<Logger> invalidStateCallback)
             throws E {
-        final Optional<? extends T> asOptional = as(clazz);
+        final Optional<? extends T> asOptional = castTo(clazz);
 
         if (asOptional.isPresent()) {
             action.accept(asOptional.get());
@@ -169,7 +169,7 @@ interface State extends LabeledGlobalFailureHandler {
     default <T, V, E extends Exception> Optional<V> tryCall(
             Class<? extends T> clazz, FunctionWithException<T, V, E> action, String debugMessage)
             throws E {
-        final Optional<? extends T> asOptional = as(clazz);
+        final Optional<? extends T> asOptional = castTo(clazz);
 
         if (asOptional.isPresent()) {
             return Optional.of(action.apply(asOptional.get()));

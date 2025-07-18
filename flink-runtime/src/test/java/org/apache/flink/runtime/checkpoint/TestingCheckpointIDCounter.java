@@ -60,12 +60,12 @@ public final class TestingCheckpointIDCounter implements CheckpointIDCounter {
     }
 
     @Override
-    public void start() {
+    public void startCheckpointIDCounter() {
         startRunnable.run();
     }
 
     @Override
-    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
         return shutdownFunction.apply(jobStatus);
     }
 

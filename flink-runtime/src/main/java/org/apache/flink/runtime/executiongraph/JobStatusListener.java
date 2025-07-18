@@ -28,8 +28,8 @@ public interface JobStatusListener {
      * This method is called whenever the status of the job changes.
      *
      * @param jobId The ID of the job.
-     * @param newJobStatus The status the job switched to.
+     * @param newStatus The status the job switched to.
      * @param timestamp The timestamp when the status transition occurred.
      */
-    void jobStatusChanges(JobID jobId, JobStatus newJobStatus, long timestamp);
+    void onJobStatusChanged(JobID jobId, JobStatus newStatus, long timestamp);
 }

@@ -32,13 +32,13 @@ public interface StateTransitionManager {
     /**
      * Is called if the environment changed in a way that a state transition could be considered.
      */
-    void onChange();
+    void onEnvironmentChanged();
 
     /**
      * Is called when any previous observed environment changes shall be verified possibly
      * triggering a state transition operation.
      */
-    void onTrigger();
+    void triggerStateTransitionCheck();
 
     /** Is called when the state transition manager should be closed. */
     default void close() {}

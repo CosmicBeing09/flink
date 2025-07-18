@@ -510,7 +510,7 @@ public class Task
     public boolean isBackPressured() {
         if (invokable == null
                 || partitionWriters.length == 0
-                || (executionState != ExecutionState.INITIALIZING
+                || (executionState != ExecutionState.RESTORING_STATE
                         && executionState != ExecutionState.RUNNING)) {
             return false;
         }
@@ -794,7 +794,7 @@ public class Task
                     ExecutionState current = this.executionState;
 
                     if (current == ExecutionState.RUNNING
-                            || current == ExecutionState.INITIALIZING
+                            || current == ExecutionState.RESTORING_STATE
                             || current == ExecutionState.DEPLOYING) {
                         if (ExceptionUtils.findThrowable(t, CancelTaskException.class)
                                 .isPresent()) {
@@ -919,19 +919,19 @@ public class Task
         try {
             // switch to the INITIALIZING state, if that fails, we have been canceled/failed in the
             // meantime
-            if (!transitionState(ExecutionState.DEPLOYING, ExecutionState.INITIALIZING)) {
+            if (!transitionState(ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE)) {
                 throw new CancelTaskException();
             }
 
             taskManagerActions.updateTaskExecutionState(
-                    new TaskExecutionState(executionId, ExecutionState.INITIALIZING));
+                    new TaskExecutionState(executionId, ExecutionState.RESTORING_STATE));
 
             // make sure the user code classloader is accessible thread-locally
             executingThread.setContextClassLoader(userCodeClassLoader.asClassLoader());
 
             runWithSystemExitMonitoring(finalInvokable::restore);
 
-            if (!transitionState(ExecutionState.INITIALIZING, ExecutionState.RUNNING)) {
+            if (!transitionState(ExecutionState.RESTORING_STATE, ExecutionState.RUNNING)) {
                 throw new CancelTaskException();
             }
 
@@ -1216,7 +1216,7 @@ public class Task
                     startTaskCancellationWatchDog();
                     return;
                 }
-            } else if (current == ExecutionState.INITIALIZING
+            } else if (current == ExecutionState.RESTORING_STATE
                     || current == ExecutionState.RUNNING) {
                 if (transitionState(current, targetState, cause)) {
                     // we are canceling / failing out of the running state
@@ -1528,7 +1528,7 @@ public class Task
 
         if (invokable == null
                 || (currentState != ExecutionState.RUNNING
-                        && currentState != ExecutionState.INITIALIZING)) {
+                        && currentState != ExecutionState.RESTORING_STATE)) {
             throw new TaskNotRunningException("Task is not running, but in state " + currentState);
         }
 
@@ -1539,7 +1539,7 @@ public class Task
                 ExceptionUtils.rethrowIfFatalErrorOrOOM(t);
 
                 if (getExecutionState() == ExecutionState.RUNNING
-                        || getExecutionState() == ExecutionState.INITIALIZING) {
+                        || getExecutionState() == ExecutionState.RESTORING_STATE) {
                     FlinkException e = new FlinkException("Error while handling operator event", t);
                     failExternally(e);
                     throw e;

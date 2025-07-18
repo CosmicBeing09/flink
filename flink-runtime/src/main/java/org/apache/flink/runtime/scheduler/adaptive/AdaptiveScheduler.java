@@ -62,7 +62,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.JobStatusListener;
-import org.apache.flink.runtime.executiongraph.MutableVertexAttemptNumberStore;
+import org.apache.flink.runtime.executiongraph.MutableSubtaskAttemptStore;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.executiongraph.failover.ExecutionFailureHandler;
 import org.apache.flink.runtime.executiongraph.failover.RestartBackoffTimeStrategy;
@@ -210,13 +210,13 @@ public class AdaptiveScheduler
      * Consolidated settings for the adaptive scheduler. This class is used to avoid passing around
      * multiple config options.
      */
-    public static class Settings {
+    public static class AdaptiveSchedulerSettings {
 
-        public static Settings of(Configuration configuration) throws ConfigurationException {
+        public static AdaptiveSchedulerSettings of(Configuration configuration) throws ConfigurationException {
             return of(configuration, null);
         }
 
-        public static Settings of(
+        public static AdaptiveSchedulerSettings of(
                 Configuration configuration,
                 @Nullable JobCheckpointingSettings checkpointingConfiguration)
                 throws ConfigurationException {
@@ -281,7 +281,7 @@ public class AdaptiveScheduler
                         JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT.key());
             }
 
-            return new Settings(
+            return new AdaptiveSchedulerSettings(
                     executionMode,
                     configuration
                             .getOptional(
@@ -311,7 +311,7 @@ public class AdaptiveScheduler
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
 
-        private Settings(
+        private AdaptiveSchedulerSettings(
                 SchedulerExecutionMode executionMode,
                 Duration submissionResourceWaitTimeout,
                 Duration submissionResourceStabilizationTimeout,
@@ -363,12 +363,12 @@ public class AdaptiveScheduler
         }
     }
 
-    private final Settings settings;
+    private final AdaptiveSchedulerSettings adaptiveSchedulerSettings;
     private final StateTransitionManagerFactory stateTransitionManagerFactory;
 
     private final JobGraph jobGraph;
 
-    private final JobInfo jobInfo;
+    private final JobInfo jobMetadata;
 
     private final VertexParallelismStore initialParallelismStore;
 
@@ -376,13 +376,13 @@ public class AdaptiveScheduler
 
     private final long initializationTimestamp;
 
-    private final Executor ioExecutor;
-    private final ClassLoader userCodeClassLoader;
+    private final Executor ioExecutorService;
+    private final ClassLoader applicationClassLoader;
 
-    private final CheckpointsCleaner checkpointsCleaner;
-    private final CompletedCheckpointStore completedCheckpointStore;
+    private final CheckpointsCleaner checkpointCleanerService;
+    private final CompletedCheckpointStore checkpointStore;
     private final CheckpointIDCounter checkpointIdCounter;
-    private final CheckpointStatsTracker checkpointStatsTracker;
+    private final CheckpointStatsTracker checkpointStatisticsTracker;
 
     private final CompletableFuture<JobStatus> jobTerminationFuture = new CompletableFuture<>();
 
@@ -402,11 +402,11 @@ public class AdaptiveScheduler
 
     private boolean isTransitioningState = false;
 
-    private int numRestarts = 0;
+    private int restartCount = 0;
 
     private int numRescales = 0;
 
-    private final MutableVertexAttemptNumberStore vertexAttemptNumberStore =
+    private final MutableSubtaskAttemptStore vertexAttemptNumberStore =
             new DefaultVertexAttemptNumberStore();
 
     private BackgroundTask<ExecutionGraph> backgroundTask = BackgroundTask.finishedBackgroundTask();
@@ -425,7 +425,7 @@ public class AdaptiveScheduler
     private final Supplier<Temporal> clock = Instant::now;
 
     public AdaptiveScheduler(
-            Settings settings,
+            AdaptiveSchedulerSettings settings,
             JobGraph jobGraph,
             @Nullable JobResourceRequirements jobResourceRequirements,
             Configuration configuration,
@@ -473,7 +473,7 @@ public class AdaptiveScheduler
 
     @VisibleForTesting
     AdaptiveScheduler(
-            Settings settings,
+            AdaptiveSchedulerSettings settings,
             StateTransitionManagerFactory stateTransitionManagerFactory,
             BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory,
@@ -498,11 +498,11 @@ public class AdaptiveScheduler
 
         assertPreconditions(jobGraph);
 
-        this.settings = settings;
+        this.adaptiveSchedulerSettings = settings;
         this.stateTransitionManagerFactory = stateTransitionManagerFactory;
 
         this.jobGraph = jobGraph;
-        this.jobInfo = new JobInfoImpl(jobGraph.getJobID(), jobGraph.getName());
+        this.jobMetadata = new JobInfoImpl(jobGraph.getJobID(), jobGraph.getName());
 
         VertexParallelismStore vertexParallelismStore =
                 computeVertexParallelismStore(jobGraph, settings.getExecutionMode());
@@ -518,18 +518,18 @@ public class AdaptiveScheduler
 
         this.declarativeSlotPool = declarativeSlotPool;
         this.initializationTimestamp = initializationTimestamp;
-        this.ioExecutor = ioExecutor;
-        this.userCodeClassLoader = userCodeClassLoader;
+        this.ioExecutorService = ioExecutor;
+        this.applicationClassLoader = userCodeClassLoader;
         this.restartBackoffTimeStrategy = restartBackoffTimeStrategy;
         this.fatalErrorHandler = fatalErrorHandler;
-        this.checkpointsCleaner = checkpointsCleaner;
-        this.completedCheckpointStore =
-                SchedulerUtils.createCompletedCheckpointStoreIfCheckpointingIsEnabled(
+        this.checkpointCleanerService = checkpointsCleaner;
+        this.checkpointStore =
+                SchedulerUtils.createCheckpointStoreIfEnabled(
                         jobGraph, configuration, checkpointRecoveryFactory, ioExecutor, LOG);
         this.checkpointIdCounter =
-                SchedulerUtils.createCheckpointIDCounterIfCheckpointingIsEnabled(
+                SchedulerUtils.createCheckpointIdCounterIfEnabled(
                         jobGraph, checkpointRecoveryFactory);
-        this.checkpointStatsTracker =
+        this.checkpointStatisticsTracker =
                 SchedulerUtils.createCheckpointStatsTrackerIfCheckpointingIsEnabled(
                         jobGraph,
                         () ->
@@ -558,7 +558,7 @@ public class AdaptiveScheduler
         SchedulerBase.registerJobMetrics(
                 jobManagerJobMetricGroup,
                 jobStatusStore,
-                () -> (long) numRestarts,
+                () -> (long) restartCount,
                 () -> (long) numRescales,
                 deploymentTimeMetrics,
                 tmpJobStatusListeners::add,
@@ -697,14 +697,14 @@ public class AdaptiveScheduler
     private void newResourcesAvailable(Collection<? extends PhysicalSlot> physicalSlots) {
         state.tryRun(
                 ResourceListener.class,
-                ResourceListener::onNewResourcesAvailable,
+                ResourceListener::onResourcesAvailable,
                 "newResourcesAvailable");
     }
 
     @Override
     public void startScheduling() {
         checkIdleSlotTimeout();
-        state.as(Created.class)
+        state.castTo(Created.class)
                 .orElseThrow(
                         () ->
                                 new IllegalStateException(
@@ -729,7 +729,7 @@ public class AdaptiveScheduler
                         backgroundTask.getTerminationFuture(),
                         () -> stopCheckpointServicesSafely(jobTerminationFuture.get()),
                         getMainThreadExecutor()),
-                checkpointsCleaner::closeAsync);
+                checkpointCleanerService::closeAsync);
     }
 
     private void stopCheckpointServicesSafely(JobStatus terminalState) {
@@ -738,13 +738,13 @@ public class AdaptiveScheduler
         Exception exception = null;
 
         try {
-            completedCheckpointStore.shutdown(terminalState, checkpointsCleaner);
+            checkpointStore.shutdown(terminalState, checkpointCleanerService);
         } catch (Exception e) {
             exception = e;
         }
 
         try {
-            checkpointIdCounter.shutdown(terminalState).get();
+            checkpointIdCounter.shutdownCheckpointIDCounter(terminalState).get();
         } catch (Exception e) {
             exception = ExceptionUtils.firstOrSuppressed(e, exception);
         }
@@ -768,7 +768,8 @@ public class AdaptiveScheduler
     public void handleGlobalFailure(Throwable cause) {
         final FailureEnricher.Context ctx =
                 DefaultFailureEnricherContext.forGlobalFailure(
-                        jobInfo, jobManagerJobMetricGroup, ioExecutor, userCodeClassLoader);
+                        jobMetadata, jobManagerJobMetricGroup,
+                        ioExecutorService, applicationClassLoader);
         final CompletableFuture<Map<String, String>> failureLabels =
                 FailureEnricherUtils.labelFailure(
                         cause, ctx, getMainThreadExecutor(), failureEnrichers);
@@ -779,10 +780,11 @@ public class AdaptiveScheduler
             final TaskExecutionStateTransition taskExecutionStateTransition) {
         if (taskExecutionStateTransition.getExecutionState() == ExecutionState.FAILED
                 && !failureEnrichers.isEmpty()) {
-            final Throwable cause = taskExecutionStateTransition.getError(userCodeClassLoader);
+            final Throwable cause = taskExecutionStateTransition.getError(applicationClassLoader);
             final Context ctx =
                     DefaultFailureEnricherContext.forTaskFailure(
-                            jobInfo, jobManagerJobMetricGroup, ioExecutor, userCodeClassLoader);
+                            jobMetadata, jobManagerJobMetricGroup,
+                            ioExecutorService, applicationClassLoader);
             return FailureEnricherUtils.labelFailure(
                     cause, ctx, getMainThreadExecutor(), failureEnrichers);
         }
@@ -828,12 +830,12 @@ public class AdaptiveScheduler
 
     @Override
     public ExecutionGraphInfo requestJob() {
-        return new ExecutionGraphInfo(state.getJob(), exceptionHistory.toArrayList());
+        return new ExecutionGraphInfo(state.getArchivedExecutionGraph(), exceptionHistory.toArrayList());
     }
 
     @Override
     public CheckpointStatsSnapshot requestCheckpointStats() {
-        return state.getJob().getCheckpointStatsSnapshot();
+        return state.getArchivedExecutionGraph().getCheckpointStatsSnapshot();
     }
 
     @Override
@@ -850,7 +852,7 @@ public class AdaptiveScheduler
     public KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
             throws UnknownKvStateLocation, FlinkJobNotFoundException {
         final Optional<StateWithExecutionGraph> asOptional =
-                state.as(StateWithExecutionGraph.class);
+                state.castTo(StateWithExecutionGraph.class);
 
         if (asOptional.isPresent()) {
             return asOptional.get().requestKvStateLocation(jobId, registrationName);
@@ -1031,7 +1033,7 @@ public class AdaptiveScheduler
             ExecutionAttemptID taskExecution, OperatorID operator, OperatorEvent evt)
             throws FlinkException {
         final StateWithExecutionGraph stateWithExecutionGraph =
-                state.as(StateWithExecutionGraph.class)
+                state.castTo(StateWithExecutionGraph.class)
                         .orElseThrow(
                                 () ->
                                         new TaskNotRunningException(
@@ -1070,7 +1072,7 @@ public class AdaptiveScheduler
 
     @Override
     public void updateJobResourceRequirements(JobResourceRequirements jobResourceRequirements) {
-        if (settings.getExecutionMode() == SchedulerExecutionMode.REACTIVE) {
+        if (adaptiveSchedulerSettings.getExecutionMode() == SchedulerExecutionMode.REACTIVE) {
             throw new UnsupportedOperationException(
                     "Cannot change the parallelism of a job running in reactive mode.");
         }
@@ -1083,7 +1085,7 @@ public class AdaptiveScheduler
             declareDesiredResources();
             state.tryRun(
                     ResourceListener.class,
-                    ResourceListener::onNewResourceRequirements,
+                    ResourceListener::onResourceRequirementsChanged,
                     "Current state does not react to desired parallelism changes.");
         }
     }
@@ -1139,7 +1141,7 @@ public class AdaptiveScheduler
 
     @Override
     public JobID getJobId() {
-        return jobInfo.getJobId();
+        return jobMetadata.getJobId();
     }
 
     @Override
@@ -1147,7 +1149,7 @@ public class AdaptiveScheduler
             JobStatus jobStatus, @Nullable Throwable cause) {
         return ArchivedExecutionGraph.createSparseArchivedExecutionGraphWithJobVertices(
                 jobInformation.getJobID(),
-                jobInformation.getName(),
+                jobInformation.getJobName(),
                 jobStatus,
                 jobGraph.getJobType(),
                 cause,
@@ -1165,7 +1167,7 @@ public class AdaptiveScheduler
                 new WaitingForResources.Factory(
                         this,
                         LOG,
-                        settings.getSubmissionResourceWaitTimeout(),
+                        adaptiveSchedulerSettings.getSubmissionResourceWaitTimeout(),
                         this::createWaitingForResourceStateTransitionManager,
                         previousExecutionGraph));
     }
@@ -1176,7 +1178,7 @@ public class AdaptiveScheduler
                 ctx,
                 clock,
                 Duration.ZERO, // skip cooldown phase
-                settings.getSubmissionResourceStabilizationTimeout(),
+                adaptiveSchedulerSettings.getSubmissionResourceStabilizationTimeout(),
                 Duration.ZERO); // trigger immediately once the stabilization phase is over
     }
 
@@ -1206,10 +1208,10 @@ public class AdaptiveScheduler
                         operatorCoordinatorHandler,
                         LOG,
                         this,
-                        userCodeClassLoader,
+                        applicationClassLoader,
                         failureCollection,
                         this::createExecutingStateTransitionManager,
-                        settings.getRescaleOnFailedCheckpointCount()));
+                        adaptiveSchedulerSettings.getRescaleOnFailedCheckpointCount()));
     }
 
     private StateTransitionManager createExecutingStateTransitionManager(
@@ -1217,9 +1219,9 @@ public class AdaptiveScheduler
         return stateTransitionManagerFactory.create(
                 ctx,
                 clock,
-                settings.getExecutingCooldownTimeout(),
-                settings.getExecutingResourceStabilizationTimeout(),
-                settings.getMaximumDelayForTriggeringRescale());
+                adaptiveSchedulerSettings.getExecutingCooldownTimeout(),
+                adaptiveSchedulerSettings.getExecutingResourceStabilizationTimeout(),
+                adaptiveSchedulerSettings.getMaximumDelayForTriggeringRescale());
     }
 
     @Override
@@ -1236,7 +1238,7 @@ public class AdaptiveScheduler
                         executionGraphHandler,
                         operatorCoordinatorHandler,
                         LOG,
-                        userCodeClassLoader,
+                        applicationClassLoader,
                         failureCollection));
     }
 
@@ -1246,14 +1248,14 @@ public class AdaptiveScheduler
             ExecutionGraphHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Duration backoffTime,
-            boolean forcedRestart,
+            boolean restartWithParallelism,
             List<ExceptionHistoryEntry> failureCollection) {
 
         for (ExecutionVertex executionVertex : executionGraph.getAllExecutionVertices()) {
             final int attemptNumber =
                     executionVertex.getCurrentExecutionAttempt().getAttemptNumber();
 
-            this.vertexAttemptNumberStore.setAttemptCount(
+            this.vertexAttemptNumberStore.setSubtaskAttemptNumber(
                     executionVertex.getJobvertexId(),
                     executionVertex.getParallelSubtaskIndex(),
                     attemptNumber + 1);
@@ -1267,11 +1269,11 @@ public class AdaptiveScheduler
                         operatorCoordinatorHandler,
                         LOG,
                         backoffTime,
-                        forcedRestart,
-                        userCodeClassLoader,
+                        restartWithParallelism,
+                        applicationClassLoader,
                         failureCollection));
 
-        numRestarts++;
+        restartCount++;
         if (failureCollection.isEmpty()) {
             numRescales++;
         }
@@ -1292,7 +1294,7 @@ public class AdaptiveScheduler
                         operatorCoordinatorHandler,
                         LOG,
                         failureCause,
-                        userCodeClassLoader,
+                        applicationClassLoader,
                         failureCollection));
     }
 
@@ -1314,7 +1316,7 @@ public class AdaptiveScheduler
                                 operatorCoordinatorHandler,
                                 checkpointScheduling,
                                 LOG,
-                                userCodeClassLoader,
+                                applicationClassLoader,
                                 savepointFuture,
                                 failureCollection));
         return stopWithSavepoint.getOperationFuture();
@@ -1361,7 +1363,7 @@ public class AdaptiveScheduler
             adjustedParallelismStore =
                     computeVertexParallelismStoreForExecution(
                             adjustedJobGraph,
-                            settings.getExecutionMode(),
+                            adaptiveSchedulerSettings.getExecutionMode(),
                             (vertex) -> {
                                 VertexParallelismInformation vertexParallelismInfo =
                                         initialParallelismStore.getParallelismInfo(vertex.getID());
@@ -1425,7 +1427,7 @@ public class AdaptiveScheduler
         backgroundTask =
                 backgroundTask.runAfter(
                         () -> createExecutionGraphAndRestoreState(adjustedParallelismStore),
-                        ioExecutor);
+                        ioExecutorService);
 
         return FutureUtils.switchExecutor(
                 backgroundTask.getResultFuture(), getMainThreadExecutor());
@@ -1436,10 +1438,10 @@ public class AdaptiveScheduler
             VertexParallelismStore adjustedParallelismStore) throws Exception {
         return executionGraphFactory.createAndRestoreExecutionGraph(
                 jobInformation.copyJobGraph(),
-                completedCheckpointStore,
-                checkpointsCleaner,
+                checkpointStore,
+                checkpointCleanerService,
                 checkpointIdCounter,
-                checkpointStatsTracker,
+                checkpointStatisticsTracker,
                 TaskDeploymentDescriptorFactory.PartitionLocationConstraint.MUST_BE_KNOWN,
                 initializationTimestamp,
                 vertexAttemptNumberStore,
@@ -1509,7 +1511,7 @@ public class AdaptiveScheduler
 
     @Override
     public Executor getIOExecutor() {
-        return ioExecutor;
+        return ioExecutorService;
     }
 
     @Override
@@ -1589,7 +1591,7 @@ public class AdaptiveScheduler
                 final long timestamp = System.currentTimeMillis();
                 jobStatusListeners.forEach(
                         listener ->
-                                listener.jobStatusChanges(
+                                listener.onJobStatusChanged(
                                         jobInformation.getJobID(), newJobStatus, timestamp));
             }
 
@@ -1631,7 +1633,7 @@ public class AdaptiveScheduler
         getMainThreadExecutor()
                 .schedule(
                         this::checkIdleSlotTimeout,
-                        settings.getSlotIdleTimeout().toMillis(),
+                        adaptiveSchedulerSettings.getSlotIdleTimeout().toMillis(),
                         TimeUnit.MILLISECONDS);
     }
 
@@ -1644,14 +1646,14 @@ public class AdaptiveScheduler
         return new CheckpointStatsListener() {
 
             @Override
-            public void onFailedCheckpoint() {
-                runIfSupported(CheckpointStatsListener::onFailedCheckpoint, "onFailedCheckpoint");
+            public void onCheckpointFailed() {
+                runIfSupported(CheckpointStatsListener::onCheckpointFailed, "onFailedCheckpoint");
             }
 
             @Override
-            public void onCompletedCheckpoint() {
+            public void onCheckpointCompleted() {
                 runIfSupported(
-                        CheckpointStatsListener::onCompletedCheckpoint, "onCompletedCheckpoint");
+                        CheckpointStatsListener::onCheckpointCompleted, "onCompletedCheckpoint");
             }
 
             private void runIfSupported(

@@ -169,7 +169,7 @@ class DefaultSchedulerBatchSchedulingTest {
                         () -> {
                             scheduler.updateTaskExecutionState(
                                     new TaskExecutionState(
-                                            executionAttemptId, ExecutionState.INITIALIZING));
+                                            executionAttemptId, ExecutionState.RESTORING_STATE));
                             scheduler.updateTaskExecutionState(
                                     new TaskExecutionState(
                                             executionAttemptId, ExecutionState.RUNNING));

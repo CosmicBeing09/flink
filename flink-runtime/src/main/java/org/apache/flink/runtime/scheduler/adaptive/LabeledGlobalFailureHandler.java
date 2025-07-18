@@ -36,8 +36,8 @@ public interface LabeledGlobalFailureHandler {
      * An adapted version of {@link GlobalFailureHandler} that handles and associates global
      * failures with enricher labels.
      *
-     * @param cause A cause that describes the global failure.
-     * @param failureLabels Labels providing an additional context about the failure.
+     * @param failureCause A cause that describes the global failure.
+     * @param failureLabelsFuture Labels providing an additional context about the failure.
      */
-    void handleGlobalFailure(Throwable cause, CompletableFuture<Map<String, String>> failureLabels);
+    void handleGlobalFailure(Throwable failureCause, CompletableFuture<Map<String, String>> failureLabelsFuture);
 }

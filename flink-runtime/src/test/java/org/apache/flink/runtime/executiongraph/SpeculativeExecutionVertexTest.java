@@ -170,7 +170,7 @@ class SpeculativeExecutionVertexTest {
 
         ev.archiveFailedExecution(e2.getAttemptId());
         assertThat(ev.getCurrentExecutions()).hasSize(1);
-        assertThat(ev.currentExecution).isSameAs(e1);
+        assertThat(ev.latestExecutionAttempt).isSameAs(e1);
 
         final Execution e3 = ev.createNewSpeculativeExecution(0);
         e3.transitionState(ExecutionState.RUNNING);
@@ -178,7 +178,7 @@ class SpeculativeExecutionVertexTest {
 
         ev.archiveFailedExecution(e1.getAttemptId());
         assertThat(ev.getCurrentExecutions()).hasSize(1);
-        assertThat(ev.currentExecution).isSameAs(e3);
+        assertThat(ev.latestExecutionAttempt).isSameAs(e3);
     }
 
     @Test
@@ -191,7 +191,7 @@ class SpeculativeExecutionVertexTest {
         ev.archiveFailedExecution(e1.getAttemptId());
 
         assertThat(ev.getCurrentExecutions()).hasSize(1);
-        assertThat(ev.currentExecution).isSameAs(e1);
+        assertThat(ev.latestExecutionAttempt).isSameAs(e1);
     }
 
     @Test
@@ -226,7 +226,7 @@ class SpeculativeExecutionVertexTest {
         statesSortedByPriority.add(ExecutionState.CREATED);
         statesSortedByPriority.add(ExecutionState.SCHEDULED);
         statesSortedByPriority.add(ExecutionState.DEPLOYING);
-        statesSortedByPriority.add(ExecutionState.INITIALIZING);
+        statesSortedByPriority.add(ExecutionState.RESTORING_STATE);
         statesSortedByPriority.add(ExecutionState.RUNNING);
         statesSortedByPriority.add(ExecutionState.FINISHED);
 

@@ -185,7 +185,7 @@ class ArchivedExecutionVertexWithSpeculativeExecutionTest {
         statesSortedByPriority.add(ExecutionState.CREATED);
         statesSortedByPriority.add(ExecutionState.SCHEDULED);
         statesSortedByPriority.add(ExecutionState.DEPLOYING);
-        statesSortedByPriority.add(ExecutionState.INITIALIZING);
+        statesSortedByPriority.add(ExecutionState.RESTORING_STATE);
         statesSortedByPriority.add(ExecutionState.RUNNING);
         statesSortedByPriority.add(ExecutionState.FINISHED);
 

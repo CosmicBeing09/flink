@@ -182,7 +182,7 @@ class SubtaskExecutionAttemptDetailsHandlerTest {
         statusDuration.put(ExecutionState.CREATED, -1L);
         statusDuration.put(ExecutionState.SCHEDULED, -1L);
         statusDuration.put(ExecutionState.DEPLOYING, -1L);
-        statusDuration.put(ExecutionState.INITIALIZING, -1L);
+        statusDuration.put(ExecutionState.RESTORING_STATE, -1L);
         statusDuration.put(ExecutionState.RUNNING, -1L);
 
         final SubtaskExecutionAttemptDetailsInfo expectedDetailsInfo =

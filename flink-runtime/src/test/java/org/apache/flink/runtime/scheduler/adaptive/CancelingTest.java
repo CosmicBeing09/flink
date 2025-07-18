@@ -136,8 +136,8 @@ class CancelingTest {
             assertThat(meg.getState()).isEqualTo(JobStatus.CANCELED);
 
             assertThat(canceling.getJobStatus()).isEqualTo(JobStatus.CANCELLING);
-            assertThat(canceling.getJob().getState()).isEqualTo(JobStatus.CANCELLING);
-            assertThat(canceling.getJob().getStatusTimestamp(JobStatus.CANCELED)).isZero();
+            assertThat(canceling.getArchivedExecutionGraph().getState()).isEqualTo(JobStatus.CANCELLING);
+            assertThat(canceling.getArchivedExecutionGraph().getStatusTimestamp(JobStatus.CANCELED)).isZero();
         }
     }
 

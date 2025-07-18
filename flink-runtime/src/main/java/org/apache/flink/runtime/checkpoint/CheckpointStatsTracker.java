@@ -46,9 +46,9 @@ import java.util.Set;
 public interface CheckpointStatsTracker {
 
     void reportRestoredCheckpoint(
-            long checkpointID,
+            long checkpointId,
             CheckpointProperties properties,
-            String externalPath,
+            String restoredCheckpointPath,
             long stateSize);
 
     /**

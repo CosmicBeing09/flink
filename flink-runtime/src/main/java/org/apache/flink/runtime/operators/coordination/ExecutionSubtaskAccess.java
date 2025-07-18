@@ -95,7 +95,7 @@ final class ExecutionSubtaskAccess implements SubtaskAccess {
     @Override
     public boolean isStillRunning() {
         return taskExecution.getState() == ExecutionState.RUNNING
-                || taskExecution.getState() == ExecutionState.INITIALIZING;
+                || taskExecution.getState() == ExecutionState.RESTORING_STATE;
     }
 
     @Override

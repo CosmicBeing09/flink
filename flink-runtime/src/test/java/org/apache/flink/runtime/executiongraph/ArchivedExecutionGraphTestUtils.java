@@ -50,8 +50,8 @@ class ArchivedExecutionGraphTestUtils {
                 .isEqualTo(archivedVertex.getStateTimestamp(ExecutionState.SCHEDULED));
         assertThat(runtimeVertex.getStateTimestamp(ExecutionState.DEPLOYING))
                 .isEqualTo(archivedVertex.getStateTimestamp(ExecutionState.DEPLOYING));
-        assertThat(runtimeVertex.getStateTimestamp(ExecutionState.INITIALIZING))
-                .isEqualTo(archivedVertex.getStateTimestamp(ExecutionState.INITIALIZING));
+        assertThat(runtimeVertex.getStateTimestamp(ExecutionState.RESTORING_STATE))
+                .isEqualTo(archivedVertex.getStateTimestamp(ExecutionState.RESTORING_STATE));
         assertThat(runtimeVertex.getStateTimestamp(ExecutionState.RUNNING))
                 .isEqualTo(archivedVertex.getStateTimestamp(ExecutionState.RUNNING));
         assertThat(runtimeVertex.getStateTimestamp(ExecutionState.FINISHED))
@@ -113,8 +113,8 @@ class ArchivedExecutionGraphTestUtils {
                 .isEqualTo(archivedExecution.getStateTimestamp(ExecutionState.SCHEDULED));
         assertThat(runtimeExecution.getStateTimestamp(ExecutionState.DEPLOYING))
                 .isEqualTo(archivedExecution.getStateTimestamp(ExecutionState.DEPLOYING));
-        assertThat(runtimeExecution.getStateTimestamp(ExecutionState.INITIALIZING))
-                .isEqualTo(archivedExecution.getStateTimestamp(ExecutionState.INITIALIZING));
+        assertThat(runtimeExecution.getStateTimestamp(ExecutionState.RESTORING_STATE))
+                .isEqualTo(archivedExecution.getStateTimestamp(ExecutionState.RESTORING_STATE));
         assertThat(runtimeExecution.getStateTimestamp(ExecutionState.RUNNING))
                 .isEqualTo(archivedExecution.getStateTimestamp(ExecutionState.RUNNING));
         assertThat(runtimeExecution.getStateTimestamp(ExecutionState.FINISHED))
@@ -131,8 +131,8 @@ class ArchivedExecutionGraphTestUtils {
                 .isEqualTo(archivedExecution.getStateEndTimestamp(ExecutionState.SCHEDULED));
         assertThat(runtimeExecution.getStateEndTimestamp(ExecutionState.DEPLOYING))
                 .isEqualTo(archivedExecution.getStateEndTimestamp(ExecutionState.DEPLOYING));
-        assertThat(runtimeExecution.getStateEndTimestamp(ExecutionState.INITIALIZING))
-                .isEqualTo(archivedExecution.getStateEndTimestamp(ExecutionState.INITIALIZING));
+        assertThat(runtimeExecution.getStateEndTimestamp(ExecutionState.RESTORING_STATE))
+                .isEqualTo(archivedExecution.getStateEndTimestamp(ExecutionState.RESTORING_STATE));
         assertThat(runtimeExecution.getStateEndTimestamp(ExecutionState.RUNNING))
                 .isEqualTo(archivedExecution.getStateEndTimestamp(ExecutionState.RUNNING));
         assertThat(runtimeExecution.getStateEndTimestamp(ExecutionState.FINISHED))

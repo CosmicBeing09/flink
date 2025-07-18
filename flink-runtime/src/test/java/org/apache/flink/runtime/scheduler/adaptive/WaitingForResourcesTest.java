@@ -145,7 +145,7 @@ class WaitingForResourcesTest {
         ctx.setHasDesiredResources(() -> true);
         ctx.setHasSufficientResources(() -> true);
         ctx.setExpectCreatingExecutionGraph();
-        wfr.onNewResourcesAvailable(); // .. and notify
+        wfr.onResourcesAvailable(); // .. and notify
     }
 
     @Test
@@ -170,7 +170,7 @@ class WaitingForResourcesTest {
         ctx.setHasDesiredResources(() -> false);
         ctx.setHasSufficientResources(() -> true);
         ctx.setExpectCreatingExecutionGraph();
-        wfr.onNewResourcesAvailable();
+        wfr.onResourcesAvailable();
     }
 
     @Test

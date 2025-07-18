@@ -88,7 +88,7 @@ class SchedulerBaseComputeVertexParallelismTest {
 
         VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
 
-        assertThat(info.getParallelism()).as("constant parallelism").isEqualTo(parallelism);
+        assertThat(info.getCurrentParallelism()).as("constant parallelism").isEqualTo(parallelism);
         assertThat(info.getMaxParallelism()).as("expected max").isEqualTo(expectedMaxParallelism);
 
         assertThat(info.canRescaleMaxParallelism(maxToScaleTo))

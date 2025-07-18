@@ -105,8 +105,8 @@ class JobMasterSchedulerTest {
         public SchedulerNG createInstance(
                 Logger log,
                 ExecutionPlan executionPlan,
-                Executor ioExecutor,
-                Configuration jobMasterConfiguration,
+                Executor ioThreadPoolExecutor,
+                Configuration jobMasterConfig,
                 SlotPoolService slotPoolService,
                 ScheduledExecutorService futureExecutor,
                 ClassLoader userCodeLoader,

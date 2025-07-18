@@ -65,7 +65,7 @@ interface SubtaskAccess {
     /**
      * The future returned here completes once the target subtask is in a running state. As running
      * state classify the states {@link ExecutionState#RUNNING} and {@link
-     * ExecutionState#INITIALIZING}.
+     * ExecutionState#RESTORING_STATE}.
      */
     CompletableFuture<?> hasSwitchedToRunning();
 

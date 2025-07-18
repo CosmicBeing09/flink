@@ -25,8 +25,8 @@ package org.apache.flink.runtime.checkpoint;
 public interface CheckpointScheduling {
 
     /** Starts the periodic scheduling if possible. */
-    void startCheckpointScheduler();
+    void startPeriodicCheckpointScheduler();
 
     /** Stops the periodic scheduling if possible. */
-    void stopCheckpointScheduler();
+    void stopPeriodicCheckpointScheduler();
 }

@@ -66,14 +66,14 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                             final KubernetesCheckpointIDCounter checkpointIDCounter =
                                     new KubernetesCheckpointIDCounter(
                                             flinkKubeClient, LEADER_CONFIGMAP_NAME, LOCK_IDENTITY);
-                            checkpointIDCounter.start();
+                            checkpointIDCounter.startCheckpointIDCounter();
 
                             checkpointIDCounter.setCount(100L);
 
                             assertThat(getLeaderConfigMap().getData())
                                     .containsEntry(Constants.CHECKPOINT_COUNTER_KEY, "100");
 
-                            checkpointIDCounter.shutdown(JobStatus.FINISHED).join();
+                            checkpointIDCounter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
 
                             assertThat(getLeaderConfigMap().getData())
                                     .doesNotContainKey(Constants.CHECKPOINT_COUNTER_KEY);
@@ -93,14 +93,14 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                             final KubernetesCheckpointIDCounter checkpointIDCounter =
                                     new KubernetesCheckpointIDCounter(
                                             flinkKubeClient, LEADER_CONFIGMAP_NAME, LOCK_IDENTITY);
-                            checkpointIDCounter.start();
+                            checkpointIDCounter.startCheckpointIDCounter();
 
                             checkpointIDCounter.setCount(100L);
 
                             assertThat(getLeaderConfigMap().getData())
                                     .containsEntry(Constants.CHECKPOINT_COUNTER_KEY, "100");
 
-                            checkpointIDCounter.shutdown(JobStatus.SUSPENDED).join();
+                            checkpointIDCounter.shutdownCheckpointIDCounter(JobStatus.SUSPENDED).join();
 
                             assertThat(getLeaderConfigMap().getData())
                                     .containsKey(Constants.CHECKPOINT_COUNTER_KEY);
@@ -120,18 +120,18 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                             final KubernetesCheckpointIDCounter checkpointIDCounter =
                                     new KubernetesCheckpointIDCounter(
                                             flinkKubeClient, LEADER_CONFIGMAP_NAME, LOCK_IDENTITY);
-                            checkpointIDCounter.start();
+                            checkpointIDCounter.startCheckpointIDCounter();
 
                             assertThat(getLeaderConfigMap().getData())
                                     .doesNotContainKey(Constants.CHECKPOINT_COUNTER_KEY);
 
-                            checkpointIDCounter.shutdown(JobStatus.FINISHED).join();
+                            checkpointIDCounter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
 
                             assertThat(getLeaderConfigMap().getData())
                                     .doesNotContainKey(Constants.CHECKPOINT_COUNTER_KEY);
 
                             // a second shutdown should work without causing any errors
-                            checkpointIDCounter.shutdown(JobStatus.FINISHED).join();
+                            checkpointIDCounter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
                         });
             }
         };
@@ -148,7 +148,7 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                             final KubernetesCheckpointIDCounter checkpointIDCounter =
                                     new KubernetesCheckpointIDCounter(
                                             flinkKubeClient, LEADER_CONFIGMAP_NAME, LOCK_IDENTITY);
-                            checkpointIDCounter.start();
+                            checkpointIDCounter.startCheckpointIDCounter();
 
                             // deleting the ConfigMap from outside of the CheckpointIDCounter while
                             // still using the counter (which is stored as an entry in the
@@ -158,14 +158,14 @@ class KubernetesCheckpointIDCounterTest extends KubernetesHighAvailabilityTestBa
                             assertThatThrownBy(
                                             () ->
                                                     checkpointIDCounter
-                                                            .shutdown(JobStatus.FINISHED)
+                                                            .shutdownCheckpointIDCounter(JobStatus.FINISHED)
                                                             .get())
                                     .satisfies(anyCauseMatches(ExecutionException.class));
 
                             // fixing the internal issue should make the shutdown succeed again
                             KubernetesUtils.createConfigMapIfItDoesNotExist(
                                     flinkKubeClient, LEADER_CONFIGMAP_NAME, getClusterId());
-                            checkpointIDCounter.shutdown(JobStatus.FINISHED).get();
+                            checkpointIDCounter.shutdownCheckpointIDCounter(JobStatus.FINISHED).get();
                         });
             }
         };

@@ -96,12 +96,12 @@ public class DefaultVertexParallelismInfo implements VertexParallelismInformatio
     }
 
     @Override
-    public int getMinParallelism() {
+    public int getMinimumParallelism() {
         return minParallelism;
     }
 
     @Override
-    public int getParallelism() {
+    public int getCurrentParallelism() {
         return this.parallelism;
     }
 

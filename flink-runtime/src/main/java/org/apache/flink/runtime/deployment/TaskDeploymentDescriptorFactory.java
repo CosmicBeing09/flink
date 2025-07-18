@@ -73,7 +73,7 @@ public class TaskDeploymentDescriptorFactory {
      * value is good enough for almost all cases
      */
     @Experimental
-    public static final ConfigOption<Integer> OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD =
+    public static final ConfigOption<Integer> SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD =
             key("jobmanager.task-deployment.offload-shuffle-descriptors-to-blob-server.threshold-num")
                     .intType()
                     .defaultValue(2048 * 2048)
@@ -86,7 +86,7 @@ public class TaskDeploymentDescriptorFactory {
     private final MaybeOffloaded<JobInformation> serializedJobInformation;
     private final JobID jobID;
     private final PartitionLocationConstraint partitionDeploymentConstraint;
-    private final boolean nonFinishedHybridPartitionShouldBeUnknown;
+    private final boolean allowUnknownForNonFinishedHybridPartitions;
     private final ShuffleDescriptorSerializer shuffleDescriptorSerializer;
 
     public TaskDeploymentDescriptorFactory(
@@ -99,7 +99,7 @@ public class TaskDeploymentDescriptorFactory {
         this.serializedJobInformation = getSerializedJobInformation(jobInformationOrBlobKey);
         this.jobID = jobID;
         this.partitionDeploymentConstraint = partitionDeploymentConstraint;
-        this.nonFinishedHybridPartitionShouldBeUnknown = nonFinishedHybridPartitionShouldBeUnknown;
+        this.allowUnknownForNonFinishedHybridPartitions = nonFinishedHybridPartitionShouldBeUnknown;
         this.shuffleDescriptorSerializer =
                 new DefaultShuffleDescriptorSerializer(
                         jobID, blobWriter, offloadShuffleDescriptorsThreshold);
@@ -234,7 +234,7 @@ public class TaskDeploymentDescriptorFactory {
                                     internalExecutionGraphAccessor.getResultPartitionOrThrow(
                                             partitionId),
                                     partitionDeploymentConstraint,
-                                    nonFinishedHybridPartitionShouldBeUnknown),
+                                    allowUnknownForNonFinishedHybridPartitions),
                             i);
             i++;
         }
@@ -387,7 +387,7 @@ public class TaskDeploymentDescriptorFactory {
 
     private static boolean isProducerAvailable(ExecutionState producerState) {
         return producerState == ExecutionState.RUNNING
-                || producerState == ExecutionState.INITIALIZING
+                || producerState == ExecutionState.RESTORING_STATE
                 || producerState == ExecutionState.FINISHED
                 || producerState == ExecutionState.SCHEDULED
                 || producerState == ExecutionState.DEPLOYING;

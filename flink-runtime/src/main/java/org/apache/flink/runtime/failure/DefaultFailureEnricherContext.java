@@ -31,7 +31,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class DefaultFailureEnricherContext implements FailureEnricher.Context {
     private final JobInfo jobInfo;
     private final MetricGroup metricGroup;
-    private final Executor ioExecutor;
+    private final Executor ioOperationExecutor;
     private final ClassLoader userClassLoader;
     private final FailureType failureType;
 
@@ -44,7 +44,7 @@ public class DefaultFailureEnricherContext implements FailureEnricher.Context {
         this.jobInfo = jobInfo;
         this.metricGroup = metricGroup;
         this.failureType = failureType;
-        this.ioExecutor = checkNotNull(ioExecutor);
+        this.ioOperationExecutor = checkNotNull(ioExecutor);
         this.userClassLoader = classLoader;
     }
 
@@ -65,7 +65,7 @@ public class DefaultFailureEnricherContext implements FailureEnricher.Context {
 
     @Override
     public Executor getIOExecutor() {
-        return ioExecutor;
+        return ioOperationExecutor;
     }
 
     @Override

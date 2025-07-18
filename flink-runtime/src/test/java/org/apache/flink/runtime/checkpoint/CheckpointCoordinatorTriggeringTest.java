@@ -1064,10 +1064,10 @@ class CheckpointCoordinatorTriggeringTest {
         }
 
         @Override
-        public void start() {}
+        public void startCheckpointIDCounter() {}
 
         @Override
-        public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+        public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
             return FutureUtils.completedVoidFuture();
         }
 

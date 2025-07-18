@@ -2077,7 +2077,7 @@ public class AdaptiveSchedulerTest {
         for (JobVertex vertex : graph.getVertices()) {
             VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
 
-            assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
+            assertThat(info.getCurrentParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
         }
     }
@@ -2095,7 +2095,7 @@ public class AdaptiveSchedulerTest {
         for (JobVertex vertex : graph.getVertices()) {
             VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
 
-            assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
+            assertThat(info.getCurrentParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
         }
     }
@@ -2299,7 +2299,7 @@ public class AdaptiveSchedulerTest {
                 JobManagerOptions.SCHEDULER_EXECUTING_RESOURCE_STABILIZATION_TIMEOUT,
                 scalingStabilizationTimeout);
 
-        final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
+        final AdaptiveScheduler.AdaptiveSchedulerSettings settings = AdaptiveScheduler.AdaptiveSchedulerSettings.of(configuration);
         assertThat(settings.getExecutingCooldownTimeout()).isEqualTo(executingCooldownTimeout);
         assertThat(settings.getExecutingResourceStabilizationTimeout())
                 .isEqualTo(scalingStabilizationTimeout);
@@ -2308,13 +2308,13 @@ public class AdaptiveSchedulerTest {
     @Test
     void testOnCompletedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onCompletedCheckpoint, 1, Integer.MAX_VALUE);
+                CheckpointStatsListener::onCheckpointCompleted, 1, Integer.MAX_VALUE);
     }
 
     @Test
     void testOnFailedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onFailedCheckpoint, 2, 2);
+                CheckpointStatsListener::onCheckpointFailed, 2, 2);
     }
 
     private void testCheckpointStatsEventBeingExecutedInTheMainThread(

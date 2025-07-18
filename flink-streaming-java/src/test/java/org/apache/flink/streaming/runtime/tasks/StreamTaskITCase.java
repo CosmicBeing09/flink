@@ -66,7 +66,7 @@ public class StreamTaskITCase {
 
     @Test
     void testRecordWriterClosedOnTransitInitializingStateError() throws Exception {
-        testRecordWriterClosedOnTransitStateError(ExecutionState.INITIALIZING);
+        testRecordWriterClosedOnTransitStateError(ExecutionState.RESTORING_STATE);
     }
 
     @Test

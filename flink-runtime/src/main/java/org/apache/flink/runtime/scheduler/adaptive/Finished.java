@@ -32,11 +32,11 @@ class Finished implements State {
 
     private final ArchivedExecutionGraph archivedExecutionGraph;
 
-    private final Logger logger;
+    private final Logger stateLogger;
 
-    Finished(Context context, ArchivedExecutionGraph archivedExecutionGraph, Logger logger) {
+    Finished(Context context, ArchivedExecutionGraph archivedExecutionGraph, Logger stateLogger) {
         this.archivedExecutionGraph = archivedExecutionGraph;
-        this.logger = logger;
+        this.stateLogger = stateLogger;
 
         context.onFinished(archivedExecutionGraph);
     }
@@ -53,7 +53,7 @@ class Finished implements State {
     }
 
     @Override
-    public ArchivedExecutionGraph getJob() {
+    public ArchivedExecutionGraph getArchivedExecutionGraph() {
         return archivedExecutionGraph;
     }
 
@@ -65,13 +65,13 @@ class Finished implements State {
     @Override
     public void handleGlobalFailure(
             Throwable cause, CompletableFuture<Map<String, String>> failureLabels) {
-        logger.debug(
+        stateLogger.debug(
                 "Ignore global failure because we already finished the job {}.", getJobId(), cause);
     }
 
     @Override
     public Logger getLogger() {
-        return logger;
+        return stateLogger;
     }
 
     /** Context of the {@link Finished} state. */

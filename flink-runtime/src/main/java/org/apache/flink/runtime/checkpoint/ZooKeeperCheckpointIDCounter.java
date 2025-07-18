@@ -97,7 +97,7 @@ public class ZooKeeperCheckpointIDCounter implements CheckpointIDCounter {
     }
 
     @Override
-    public void start() throws Exception {
+    public void startCheckpointIDCounter() throws Exception {
         synchronized (startStopLock) {
             if (!isStarted) {
                 sharedCount.start();
@@ -110,7 +110,7 @@ public class ZooKeeperCheckpointIDCounter implements CheckpointIDCounter {
     }
 
     @Override
-    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
         synchronized (startStopLock) {
             if (isStarted) {
                 LOG.info("Shutting down.");

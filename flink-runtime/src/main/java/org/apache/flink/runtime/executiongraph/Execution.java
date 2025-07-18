@@ -84,7 +84,7 @@ import static org.apache.flink.runtime.execution.ExecutionState.CREATED;
 import static org.apache.flink.runtime.execution.ExecutionState.DEPLOYING;
 import static org.apache.flink.runtime.execution.ExecutionState.FAILED;
 import static org.apache.flink.runtime.execution.ExecutionState.FINISHED;
-import static org.apache.flink.runtime.execution.ExecutionState.INITIALIZING;
+import static org.apache.flink.runtime.execution.ExecutionState.RESTORING_STATE;
 import static org.apache.flink.runtime.execution.ExecutionState.RUNNING;
 import static org.apache.flink.runtime.execution.ExecutionState.SCHEDULED;
 import static org.apache.flink.util.Preconditions.checkNotNull;
@@ -152,7 +152,7 @@ public class Execution
     private final CompletableFuture<TaskManagerLocation> taskManagerLocationFuture;
 
     /**
-     * Gets completed successfully when the task switched to {@link ExecutionState#INITIALIZING} or
+     * Gets completed successfully when the task switched to {@link ExecutionState#RESTORING_STATE} or
      * {@link ExecutionState#RUNNING}. If the task never switches to those state, but fails
      * immediately, then this future never completes.
      */
@@ -276,30 +276,30 @@ public class Execution
      * Tries to assign the given slot to the execution. The assignment works only if the Execution
      * is in state SCHEDULED. Returns true, if the resource could be assigned.
      *
-     * @param logicalSlot to assign to this execution
+     * @param assignedLogicalSlot to assign to this execution
      * @return true if the slot could be assigned to the execution, otherwise false
      */
-    public boolean tryAssignResource(final LogicalSlot logicalSlot) {
+    public boolean tryAssignResource(final LogicalSlot assignedLogicalSlot) {
 
         assertRunningInJobMasterMainThread();
 
-        checkNotNull(logicalSlot);
+        checkNotNull(assignedLogicalSlot);
 
         // only allow to set the assigned resource in state SCHEDULED or CREATED
         // note: we also accept resource assignment when being in state CREATED for testing purposes
         if (state == SCHEDULED || state == CREATED) {
             if (assignedResource == null) {
-                assignedResource = logicalSlot;
-                if (logicalSlot.tryAssignPayload(this)) {
+                assignedResource = assignedLogicalSlot;
+                if (assignedLogicalSlot.tryAssignPayload(this)) {
                     // check for concurrent modification (e.g. cancelling call)
                     if ((state == SCHEDULED || state == CREATED)
                             && !taskManagerLocationFuture.isDone()) {
-                        taskManagerLocationFuture.complete(logicalSlot.getTaskManagerLocation());
-                        assignedAllocationID = logicalSlot.getAllocationId();
+                        taskManagerLocationFuture.complete(assignedLogicalSlot.getTaskManagerLocation());
+                        assignedAllocationID = assignedLogicalSlot.getAllocationId();
                         getVertex()
                                 .setLatestPriorSlotAllocation(
                                         assignedResource.getTaskManagerLocation(),
-                                        logicalSlot.getAllocationId());
+                                        assignedLogicalSlot.getAllocationId());
                         return true;
                     } else {
                         // free assigned resource and return false
@@ -321,8 +321,9 @@ public class Execution
     }
 
     public Optional<InputSplit> getNextInputSplit() {
-        final LogicalSlot slot = this.getAssignedResource();
-        final String host = slot != null ? slot.getTaskManagerLocation().getHostname() : null;
+        final LogicalSlot assignedLogicalSlot = this.getAssignedResource();
+        final String host = assignedLogicalSlot != null ? assignedLogicalSlot
+                .getTaskManagerLocation().getHostname() : null;
         return this.vertex.getNextInputSplit(host, getAttemptNumber());
     }
 
@@ -381,11 +382,11 @@ public class Execution
 
     /**
      * Gets a future that completes once the task execution reaches one of the states {@link
-     * ExecutionState#INITIALIZING} or {@link ExecutionState#RUNNING}. If this task never reaches
+     * ExecutionState#RESTORING_STATE} or {@link ExecutionState#RUNNING}. If this task never reaches
      * these states (for example because the task is cancelled before it was properly deployed and
      * restored), then this future will never complete.
      *
-     * <p>The future is completed already in the {@link ExecutionState#INITIALIZING} state, because
+     * <p>The future is completed already in the {@link ExecutionState#RESTORING_STATE} state, because
      * various running actions are already possible in that state (the task already accepts and
      * sends events and network data for task recovery). (Note that in earlier versions, the
      * INITIALIZING state was not separate but part of the RUNNING state).
@@ -692,7 +693,7 @@ public class Execution
             }
 
             // these two are the common cases where we need to send a cancel call
-            else if (current == INITIALIZING || current == RUNNING || current == DEPLOYING) {
+            else if (current == RESTORING_STATE || current == RUNNING || current == DEPLOYING) {
                 // try to transition to canceling, if successful, send the cancel call
                 if (startCancelling(NUM_CANCEL_CALL_TRIES)) {
                     return;
@@ -732,7 +733,7 @@ public class Execution
     public CompletableFuture<?> suspend() {
         switch (state) {
             case RUNNING:
-            case INITIALIZING:
+            case RESTORING_STATE:
             case DEPLOYING:
             case CREATED:
             case SCHEDULED:
@@ -790,7 +791,7 @@ public class Execution
                     // ----------------------------------------------------------------
                     if (consumerState == DEPLOYING
                             || consumerState == RUNNING
-                            || consumerState == INITIALIZING) {
+                            || consumerState == RESTORING_STATE) {
                         final PartitionInfo partitionInfo = createFinishedPartitionInfo(partition);
                         updatedVertices.add(consumerVertexId);
 
@@ -941,7 +942,7 @@ public class Execution
         assertRunningInJobMasterMainThread();
         final LogicalSlot slot = assignedResource;
 
-        if (slot != null && (getState() == RUNNING || getState() == INITIALIZING)) {
+        if (slot != null && (getState() == RUNNING || getState() == RESTORING_STATE)) {
             final TaskExecutorOperatorEventGateway eventGateway = slot.getTaskManagerGateway();
             return eventGateway.sendOperatorEventToTask(getAttemptId(), operatorId, event);
         } else {
@@ -993,7 +994,7 @@ public class Execution
         while (true) {
             ExecutionState current = this.state;
 
-            if (current == INITIALIZING || current == RUNNING || current == DEPLOYING) {
+            if (current == RESTORING_STATE || current == RUNNING || current == DEPLOYING) {
 
                 if (transitionState(current, FINISHED)) {
                     try {
@@ -1077,7 +1078,7 @@ public class Execution
                 return;
             } else if (current == CANCELING
                     || current == RUNNING
-                    || current == INITIALIZING
+                    || current == RESTORING_STATE
                     || current == DEPLOYING) {
 
                 updateAccumulatorsAndMetrics(userAccumulators, metrics);
@@ -1216,7 +1217,7 @@ public class Execution
 
         if (cancelTask
                 && (stateBeforeFailed == RUNNING
-                        || stateBeforeFailed == INITIALIZING
+                        || stateBeforeFailed == RESTORING_STATE
                         || stateBeforeFailed == DEPLOYING)) {
             if (LOG.isDebugEnabled()) {
                 LOG.debug("Sending out cancel request, to remove task execution from TaskManager.");
@@ -1237,7 +1238,7 @@ public class Execution
     }
 
     boolean switchToInitializing() {
-        if (switchTo(DEPLOYING, INITIALIZING)) {
+        if (switchTo(DEPLOYING, RESTORING_STATE)) {
             sendPartitionInfos();
             return true;
         }
@@ -1246,7 +1247,7 @@ public class Execution
     }
 
     boolean switchToRunning() {
-        return switchTo(INITIALIZING, RUNNING);
+        return switchTo(RESTORING_STATE, RUNNING);
     }
 
     private boolean switchTo(ExecutionState from, ExecutionState to) {
@@ -1502,7 +1503,7 @@ public class Execution
                         ExceptionUtils.stripCompletionException(error));
             }
 
-            if (targetState == INITIALIZING || targetState == RUNNING) {
+            if (targetState == RESTORING_STATE || targetState == RUNNING) {
                 initializingOrRunningFuture.complete(null);
             } else if (targetState.isTerminal()) {
                 // complete the terminal state future

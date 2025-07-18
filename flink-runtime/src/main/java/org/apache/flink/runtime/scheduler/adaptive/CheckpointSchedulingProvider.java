@@ -37,7 +37,7 @@ class CheckpointSchedulingProvider implements CheckpointScheduling {
     }
 
     @Override
-    public void startCheckpointScheduler() {
+    public void startPeriodicCheckpointScheduler() {
         final CheckpointCoordinator coordinator = executionGraph.getCheckpointCoordinator();
         if (coordinator == null) {
             // for a streaming job, the checkpoint coordinator is always set (even if
@@ -55,7 +55,7 @@ class CheckpointSchedulingProvider implements CheckpointScheduling {
     }
 
     @Override
-    public void stopCheckpointScheduler() {
+    public void stopPeriodicCheckpointScheduler() {
         final CheckpointCoordinator coordinator = executionGraph.getCheckpointCoordinator();
         if (coordinator != null) {
             coordinator.stopCheckpointScheduler();

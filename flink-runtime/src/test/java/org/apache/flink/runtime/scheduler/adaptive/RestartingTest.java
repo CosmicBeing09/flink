@@ -136,8 +136,8 @@ class RestartingTest {
             assertThat(restarting.getExecutionGraph().getState()).isEqualTo(JobStatus.CANCELED);
 
             assertThat(restarting.getJobStatus()).isEqualTo(JobStatus.RESTARTING);
-            assertThat(restarting.getJob().getState()).isEqualTo(JobStatus.RESTARTING);
-            assertThat(restarting.getJob().getStatusTimestamp(JobStatus.CANCELED)).isZero();
+            assertThat(restarting.getArchivedExecutionGraph().getState()).isEqualTo(JobStatus.RESTARTING);
+            assertThat(restarting.getArchivedExecutionGraph().getStatusTimestamp(JobStatus.CANCELED)).isZero();
         }
     }
 

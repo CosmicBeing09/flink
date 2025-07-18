@@ -1125,7 +1125,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         final Execution failedExecution = currentExecutions.get(failingAttempt);
         if (failedExecution != null
                 && (failedExecution.getState() == ExecutionState.RUNNING
-                        || failedExecution.getState() == ExecutionState.INITIALIZING)) {
+                        || failedExecution.getState() == ExecutionState.RESTORING_STATE)) {
             failGlobal(cause);
         } else {
             LOG.debug(
@@ -1443,7 +1443,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         Map<String, Accumulator<?, ?>> accumulators;
 
         switch (state.getExecutionState()) {
-            case INITIALIZING:
+            case RESTORING_STATE:
                 return attempt.switchToInitializing();
 
             case RUNNING:
@@ -1473,10 +1473,10 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
                 accumulators = deserializeAccumulators(state);
                 attempt.markFailed(
                         state.getError(userClassLoader),
-                        state.getCancelTask(),
+                        state.shouldCancelTask(),
                         accumulators,
                         state.getIOMetrics(),
-                        state.getReleasePartitions(),
+                        state.shouldReleasePartitions(),
                         true);
                 return true;
 
@@ -1657,7 +1657,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
             for (JobStatusListener listener : jobStatusListeners) {
                 try {
-                    listener.jobStatusChanges(getJobID(), newState, timestamp);
+                    listener.onJobStatusChanged(getJobID(), newState, timestamp);
                 } catch (Throwable t) {
                     LOG.warn("Error while notifying JobStatusListener", t);
                 }

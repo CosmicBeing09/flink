@@ -211,7 +211,7 @@ public class SchedulerTestingUtils {
                 .forEach(
                         (attemptId) -> {
                             scheduler.updateTaskExecutionState(
-                                    new TaskExecutionState(attemptId, ExecutionState.INITIALIZING));
+                                    new TaskExecutionState(attemptId, ExecutionState.RESTORING_STATE));
                             scheduler.updateTaskExecutionState(
                                     new TaskExecutionState(attemptId, ExecutionState.RUNNING));
                         });

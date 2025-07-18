@@ -126,7 +126,7 @@ public class DefaultExecutionGraphBuilder {
 
         final int offloadShuffleDescriptorsThreshold =
                 jobManagerConfig.get(
-                        TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD);
+                        TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD);
 
         final TaskDeploymentDescriptorFactory taskDeploymentDescriptorFactory;
         try {
@@ -354,7 +354,7 @@ public class DefaultExecutionGraphBuilder {
                                 classLoader,
                                 vertexParallelismStore
                                         .getParallelismInfo(vertex.getID())
-                                        .getParallelism()));
+                                        .getCurrentParallelism()));
             } catch (Throwable t) {
                 throw new JobExecutionException(
                         jobId,

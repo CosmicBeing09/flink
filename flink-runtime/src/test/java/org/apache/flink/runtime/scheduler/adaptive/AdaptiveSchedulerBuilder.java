@@ -70,7 +70,7 @@ public class AdaptiveSchedulerBuilder {
 
     @Nullable private JobResourceRequirements jobResourceRequirements;
 
-    private Configuration jobMasterConfiguration = new Configuration();
+    private Configuration schedulerConfiguration = new Configuration();
     private ClassLoader userCodeLoader = ClassLoader.getSystemClassLoader();
     private CheckpointsCleaner checkpointsCleaner = new CheckpointsCleaner();
     private CheckpointRecoveryFactory checkpointRecoveryFactory =
@@ -132,14 +132,14 @@ public class AdaptiveSchedulerBuilder {
     }
 
     public AdaptiveSchedulerBuilder setJobMasterConfiguration(
-            final Configuration jobMasterConfiguration) {
-        this.jobMasterConfiguration = jobMasterConfiguration;
+            final Configuration schedulerConfiguration) {
+        this.schedulerConfiguration = schedulerConfiguration;
         return this;
     }
 
     public AdaptiveSchedulerBuilder withConfigurationOverride(
             Function<Configuration, Configuration> modifyFn) {
-        this.jobMasterConfiguration = modifyFn.apply(jobMasterConfiguration);
+        this.schedulerConfiguration = modifyFn.apply(schedulerConfiguration);
         return this;
     }
 
@@ -246,7 +246,7 @@ public class AdaptiveSchedulerBuilder {
     public AdaptiveScheduler build() throws Exception {
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(
-                        jobMasterConfiguration,
+                        schedulerConfiguration,
                         userCodeLoader,
                         new DefaultExecutionDeploymentTracker(),
                         executorService,
@@ -257,8 +257,8 @@ public class AdaptiveSchedulerBuilder {
                         shuffleMaster,
                         partitionTracker);
 
-        final AdaptiveScheduler.Settings settings =
-                AdaptiveScheduler.Settings.of(jobMasterConfiguration);
+        final AdaptiveScheduler.AdaptiveSchedulerSettings settings =
+                AdaptiveScheduler.AdaptiveSchedulerSettings.of(schedulerConfiguration);
         return new AdaptiveScheduler(
                 settings,
                 stateTransitionManagerFactory == null
@@ -267,12 +267,12 @@ public class AdaptiveSchedulerBuilder {
                 checkpointStatsTrackerFactory,
                 jobGraph,
                 jobResourceRequirements,
-                jobMasterConfiguration,
+                schedulerConfiguration,
                 declarativeSlotPool,
                 slotAllocator == null
                         ? AdaptiveSchedulerFactory.createSlotSharingSlotAllocator(
                                 declarativeSlotPool,
-                                jobMasterConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY))
+                                schedulerConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY))
                         : slotAllocator,
                 executorService,
                 userCodeLoader,

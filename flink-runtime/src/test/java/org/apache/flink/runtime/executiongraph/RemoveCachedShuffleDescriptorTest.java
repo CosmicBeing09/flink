@@ -120,7 +120,7 @@ class RemoveCachedShuffleDescriptorTest {
         final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD,
                 offloadShuffleDescriptorsThreshold);
 
         final SchedulerBase scheduler =
@@ -188,7 +188,7 @@ class RemoveCachedShuffleDescriptorTest {
         final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD,
                 offloadShuffleDescriptorsThreshold);
 
         final SchedulerBase scheduler =
@@ -253,7 +253,7 @@ class RemoveCachedShuffleDescriptorTest {
         final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD,
                 offloadShuffleDescriptorsThreshold);
 
         final SchedulerBase scheduler =
@@ -335,7 +335,7 @@ class RemoveCachedShuffleDescriptorTest {
         final JobVertex v2 = ExecutionGraphTestUtils.createNoOpVertex("v2", PARALLELISM);
         final Configuration jobMasterConfiguration = new Configuration();
         jobMasterConfiguration.set(
-                TaskDeploymentDescriptorFactory.OFFLOAD_SHUFFLE_DESCRIPTORS_THRESHOLD,
+                TaskDeploymentDescriptorFactory.SHUFFLE_DESCRIPTOR_OFFLOAD_THRESHOLD,
                 offloadShuffleDescriptorsThreshold);
 
         final SchedulerBase scheduler =

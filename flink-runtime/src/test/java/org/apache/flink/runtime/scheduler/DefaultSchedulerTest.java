@@ -732,13 +732,13 @@ public class DefaultSchedulerTest {
     @Test
     void testStartingCheckpointSchedulerAfterExecutionGraphFinished() {
         assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
-                SchedulerBase::startCheckpointScheduler);
+                SchedulerBase::startPeriodicCheckpointScheduler);
     }
 
     @Test
     void testStoppingCheckpointSchedulerAfterExecutionGraphFinished() {
         assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
-                SchedulerBase::stopCheckpointScheduler);
+                SchedulerBase::stopPeriodicCheckpointScheduler);
     }
 
     private void assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
@@ -1946,7 +1946,7 @@ public class DefaultSchedulerTest {
                 new StandaloneCheckpointIDCounter() {
 
                     @Override
-                    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+                    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
                         try {
                             checkpointServicesShutdownBlocked.await();
                         } catch (InterruptedException e) {
@@ -1956,7 +1956,7 @@ public class DefaultSchedulerTest {
                             Thread.currentThread().interrupt();
                         }
 
-                        return super.shutdown(jobStatus);
+                        return super.shutdownCheckpointIDCounter(jobStatus);
                     }
                 };
         final CheckpointsCleaner checkpointsCleaner =
@@ -2291,7 +2291,7 @@ public class DefaultSchedulerTest {
     private void transitionToRunning(DefaultScheduler scheduler, ExecutionAttemptID attemptId) {
         Preconditions.checkState(
                 scheduler.updateTaskExecutionState(
-                        new TaskExecutionState(attemptId, ExecutionState.INITIALIZING)));
+                        new TaskExecutionState(attemptId, ExecutionState.RESTORING_STATE)));
         Preconditions.checkState(
                 scheduler.updateTaskExecutionState(
                         new TaskExecutionState(attemptId, ExecutionState.RUNNING)));

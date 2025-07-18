@@ -64,8 +64,8 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
     public SchedulerNG createInstance(
             Logger log,
             ExecutionPlan executionPlan,
-            Executor ioExecutor,
-            Configuration jobMasterConfiguration,
+            Executor ioThreadPoolExecutor,
+            Configuration jobMasterConfig,
             SlotPoolService slotPoolService,
             ScheduledExecutorService futureExecutor,
             ClassLoader userCodeLoader,
@@ -105,7 +105,7 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
         final RestartBackoffTimeStrategy restartBackoffTimeStrategy =
                 RestartBackoffTimeStrategyFactoryLoader.createRestartBackoffTimeStrategyFactory(
                                 jobGraph.getJobConfiguration(),
-                                jobMasterConfiguration,
+                                jobMasterConfig,
                                 jobGraph.isCheckpointingEnabled())
                         .create();
         log.info(
@@ -117,15 +117,15 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
         final SlotSharingSlotAllocator slotAllocator =
                 createSlotSharingSlotAllocator(
                         declarativeSlotPool,
-                        jobMasterConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY));
+                        jobMasterConfig.get(StateRecoveryOptions.LOCAL_RECOVERY));
 
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(
-                        jobMasterConfiguration,
+                        jobMasterConfig,
                         userCodeLoader,
                         executionDeploymentTracker,
                         futureExecutor,
-                        ioExecutor,
+                        ioThreadPoolExecutor,
                         rpcTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
@@ -133,14 +133,14 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
                         partitionTracker);
 
         return new AdaptiveScheduler(
-                AdaptiveScheduler.Settings.of(
-                        jobMasterConfiguration, jobGraph.getCheckpointingSettings()),
+                AdaptiveScheduler.AdaptiveSchedulerSettings.of(
+                        jobMasterConfig, jobGraph.getCheckpointingSettings()),
                 jobGraph,
                 JobResourceRequirements.readFromExecutionPlan(jobGraph).orElse(null),
-                jobMasterConfiguration,
+                jobMasterConfig,
                 declarativeSlotPool,
                 slotAllocator,
-                ioExecutor,
+                ioThreadPoolExecutor,
                 userCodeLoader,
                 new CheckpointsCleaner(),
                 checkpointRecoveryFactory,

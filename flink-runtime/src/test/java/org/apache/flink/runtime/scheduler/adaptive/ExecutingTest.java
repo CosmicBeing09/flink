@@ -206,7 +206,7 @@ class ExecutingTest {
                             .build(ctx);
 
             assertThat(rescaleTriggered).isFalse();
-            testInstance.onCompletedCheckpoint();
+            testInstance.onCheckpointCompleted();
             assertThat(rescaleTriggered).isTrue();
         }
     }
@@ -234,10 +234,10 @@ class ExecutingTest {
 
                 // trigger an initial failed checkpoint event to show that the counting only starts
                 // with the subsequent change event
-                testInstance.onFailedCheckpoint();
+                testInstance.onCheckpointFailed();
 
                 // trigger change
-                testInstance.onNewResourceRequirements();
+                testInstance.onResourceRequirementsChanged();
 
                 for (int i = 0; i < rescaleOnFailedCheckpointsCount; i++) {
                     assertThat(rescaleTriggerCount)
@@ -245,7 +245,7 @@ class ExecutingTest {
                                     "No rescale operation should have been triggered for iteration #%d, yet.",
                                     rescaleIteration)
                             .hasValue(rescaleIteration - 1);
-                    testInstance.onFailedCheckpoint();
+                    testInstance.onCheckpointFailed();
                 }
 
                 assertThat(rescaleTriggerCount)
@@ -276,36 +276,36 @@ class ExecutingTest {
 
             // trigger an initial failed checkpoint event to show that the counting only starts with
             // the subsequent change event
-            testInstance.onFailedCheckpoint();
+            testInstance.onCheckpointFailed();
 
             // trigger change
-            testInstance.onNewResourcesAvailable();
+            testInstance.onResourcesAvailable();
 
             IntStream.range(0, rescaleOnFailedCheckpointsCount - 1)
-                    .forEach(ignored -> testInstance.onFailedCheckpoint());
+                    .forEach(ignored -> testInstance.onCheckpointFailed());
 
             assertThat(rescaleTriggeredCount)
                     .as("No rescaling should have been trigger, yet.")
                     .hasValue(0);
 
-            testInstance.onCompletedCheckpoint();
+            testInstance.onCheckpointCompleted();
 
             // trigger change
-            testInstance.onNewResourceRequirements();
+            testInstance.onResourceRequirementsChanged();
 
             assertThat(rescaleTriggeredCount)
                     .as("The completed checkpoint should have triggered a rescale.")
                     .hasValue(1);
 
             IntStream.range(0, rescaleOnFailedCheckpointsCount - 1)
-                    .forEach(ignored -> testInstance.onFailedCheckpoint());
+                    .forEach(ignored -> testInstance.onCheckpointFailed());
 
             assertThat(rescaleTriggeredCount)
                     .as(
                             "No additional rescaling should have been trigger by any subsequent failed checkpoint, yet.")
                     .hasValue(1);
 
-            testInstance.onFailedCheckpoint();
+            testInstance.onCheckpointFailed();
 
             assertThat(rescaleTriggeredCount)
                     .as("The previous failed checkpoint should have triggered the rescale.")
@@ -559,8 +559,8 @@ class ExecutingTest {
         try (MockExecutingContext ctx = new MockExecutingContext()) {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             final JobID jobId = exec.getExecutionGraph().getJobID();
-            assertThat(exec.getJob()).isInstanceOf(ArchivedExecutionGraph.class);
-            assertThat(exec.getJob().getJobID()).isEqualTo(jobId);
+            assertThat(exec.getArchivedExecutionGraph()).isInstanceOf(ArchivedExecutionGraph.class);
+            assertThat(exec.getArchivedExecutionGraph().getJobID()).isEqualTo(jobId);
             assertThat(exec.getJobStatus()).isEqualTo(JobStatus.RUNNING);
         }
     }
@@ -585,8 +585,8 @@ class ExecutingTest {
             assertThat(executing.getExecutionGraph().getState()).isEqualTo(JobStatus.FINISHED);
 
             assertThat(executing.getJobStatus()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getState()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getStatusTimestamp(JobStatus.FINISHED)).isZero();
+            assertThat(executing.getArchivedExecutionGraph().getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executing.getArchivedExecutionGraph().getStatusTimestamp(JobStatus.FINISHED)).isZero();
         }
     }
 
@@ -665,7 +665,7 @@ class ExecutingTest {
                             .setExecutionGraph(executionGraph)
                             .build(adaptiveSchedulerCtx);
 
-            exec.onNewResourcesAvailable();
+            exec.onResourcesAvailable();
             assertThat(onChangeCalled.get()).isTrue();
         }
     }
@@ -824,7 +824,7 @@ class ExecutingTest {
                 ExecutionGraphHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                boolean forcedRestart,
+                boolean restartWithParallelism,
                 List<ExceptionHistoryEntry> failureCollection) {
             restartingStateValidator.validateInput(
                     new RestartingArguments(
@@ -832,7 +832,7 @@ class ExecutingTest {
                             executionGraphHandler,
                             operatorCoordinatorHandler,
                             backoffTime,
-                            forcedRestart));
+                            restartWithParallelism));
             hadStateTransition = true;
         }
 
@@ -1049,7 +1049,7 @@ class ExecutingTest {
         }
 
         @Override
-        public ArchivedExecutionGraph getJob() {
+        public ArchivedExecutionGraph getArchivedExecutionGraph() {
             return null;
         }
 

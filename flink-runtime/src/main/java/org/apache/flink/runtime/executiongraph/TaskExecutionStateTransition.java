@@ -71,11 +71,11 @@ public class TaskExecutionStateTransition {
         return taskExecutionState.getIOMetrics();
     }
 
-    public boolean getCancelTask() {
+    public boolean shouldCancelTask() {
         return cancelTask;
     }
 
-    public boolean getReleasePartitions() {
+    public boolean shouldReleasePartitions() {
         return releasePartitions;
     }
 }

@@ -76,10 +76,10 @@ public class JobVertex implements java.io.Serializable {
     private final List<OperatorIDPair> operatorIDs;
 
     /** Produced data sets, one per writer. */
-    private final Map<IntermediateDataSetID, IntermediateDataSet> results = new LinkedHashMap<>();
+    private final Map<IntermediateDataSetID, IntermediateDataSet> producedDataSetMap = new LinkedHashMap<>();
 
     /** List of edges with incoming data. One per Reader. */
-    private final List<JobEdge> inputs = new ArrayList<>();
+    private final List<JobEdge> incomingJobEdges = new ArrayList<>();
 
     /** The list of factories for operator coordinators. */
     private final List<SerializedValue<OperatorCoordinator.Provider>> operatorCoordinators =
@@ -236,7 +236,7 @@ public class JobVertex implements java.io.Serializable {
      * @return The number of produced intermediate data sets.
      */
     public int getNumberOfProducedIntermediateDataSets() {
-        return this.results.size();
+        return this.producedDataSetMap.size();
     }
 
     /**
@@ -245,7 +245,7 @@ public class JobVertex implements java.io.Serializable {
      * @return The number of inputs.
      */
     public int getNumberOfInputs() {
-        return this.inputs.size();
+        return this.incomingJobEdges.size();
     }
 
     public List<OperatorIDPair> getOperatorIDs() {
@@ -402,11 +402,11 @@ public class JobVertex implements java.io.Serializable {
     }
 
     public List<IntermediateDataSet> getProducedDataSets() {
-        return new ArrayList<>(results.values());
+        return new ArrayList<>(producedDataSetMap.values());
     }
 
     public List<JobEdge> getInputs() {
-        return this.inputs;
+        return this.incomingJobEdges;
     }
 
     public List<SerializedValue<OperatorCoordinator.Provider>> getOperatorCoordinators() {
@@ -512,7 +512,7 @@ public class JobVertex implements java.io.Serializable {
     public IntermediateDataSet getOrCreateResultDataSet(
             IntermediateDataSetID id, ResultPartitionType partitionType) {
         anyOutputBlocking |= partitionType.isBlockingOrBlockingPersistentResultPartition();
-        return this.results.computeIfAbsent(
+        return this.producedDataSetMap.computeIfAbsent(
                 id, key -> new IntermediateDataSet(id, partitionType, this));
     }
 
@@ -560,7 +560,7 @@ public class JobVertex implements java.io.Serializable {
                         typeNumber,
                         interInputsKeysCorrelated,
                         intraInputKeyCorrelated);
-        this.inputs.add(edge);
+        this.incomingJobEdges.add(edge);
         dataSet.addConsumer(edge);
         return edge;
     }
@@ -568,7 +568,7 @@ public class JobVertex implements java.io.Serializable {
     // --------------------------------------------------------------------------------------------
 
     public boolean isInputVertex() {
-        return this.inputs.isEmpty();
+        return this.incomingJobEdges.isEmpty();
     }
 
     public boolean isStoppable() {
@@ -576,11 +576,11 @@ public class JobVertex implements java.io.Serializable {
     }
 
     public boolean isOutputVertex() {
-        return this.results.isEmpty();
+        return this.producedDataSetMap.isEmpty();
     }
 
     public boolean hasNoConnectedInputs() {
-        return inputs.isEmpty();
+        return incomingJobEdges.isEmpty();
     }
 
     public void setSupportsConcurrentExecutionAttempts(

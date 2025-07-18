@@ -161,7 +161,7 @@ class JobResourceRequirementsTest {
                         .setParallelismForJobVertex(secondVertexId, 10, 10)
                         .build();
 
-        JobResourceRequirements.writeToExecutionPlan(jobGraph, jobResourceRequirements);
+        JobResourceRequirements.writeRequirementsToPlan(jobGraph, jobResourceRequirements);
         assertThat(JobResourceRequirements.readFromExecutionPlan(jobGraph))
                 .get()
                 .isEqualTo(jobResourceRequirements);

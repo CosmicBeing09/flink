@@ -37,14 +37,14 @@ public class JobGraphJobInformation implements JobInformation {
 
     private final JobGraph jobGraph;
     private final JobID jobID;
-    private final String name;
+    private final String jobName;
     private final VertexParallelismStore vertexParallelismStore;
 
     public JobGraphJobInformation(
             JobGraph jobGraph, VertexParallelismStore vertexParallelismStore) {
         this.jobGraph = jobGraph;
         this.jobID = jobGraph.getJobID();
-        this.name = jobGraph.getName();
+        this.jobName = jobGraph.getName();
         this.vertexParallelismStore = vertexParallelismStore;
     }
 
@@ -64,8 +64,8 @@ public class JobGraphJobInformation implements JobInformation {
         return jobID;
     }
 
-    public String getName() {
-        return name;
+    public String getJobName() {
+        return jobName;
     }
 
     public JobCheckpointingSettings getCheckpointingSettings() {
@@ -106,12 +106,12 @@ public class JobGraphJobInformation implements JobInformation {
 
         @Override
         public int getMinParallelism() {
-            return parallelismInfo.getMinParallelism();
+            return parallelismInfo.getMinimumParallelism();
         }
 
         @Override
         public int getParallelism() {
-            return parallelismInfo.getParallelism();
+            return parallelismInfo.getCurrentParallelism();
         }
 
         @Override

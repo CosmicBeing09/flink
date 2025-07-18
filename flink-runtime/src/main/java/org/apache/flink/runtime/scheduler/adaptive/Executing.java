@@ -101,8 +101,8 @@ class Executing extends StateWithExecutionGraph
         context.runIfState(
                 this,
                 () -> {
-                    stateTransitionManager.onChange();
-                    stateTransitionManager.onTrigger();
+                    stateTransitionManager.onEnvironmentChanged();
+                    stateTransitionManager.triggerStateTransitionCheck();
                 },
                 Duration.ZERO);
     }
@@ -214,24 +214,24 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void onNewResourcesAvailable() {
-        stateTransitionManager.onChange();
+    public void onResourcesAvailable() {
+        stateTransitionManager.onEnvironmentChanged();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
-    public void onNewResourceRequirements() {
-        stateTransitionManager.onChange();
+    public void onResourceRequirementsChanged() {
+        stateTransitionManager.onEnvironmentChanged();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
-    public void onCompletedCheckpoint() {
+    public void onCheckpointCompleted() {
         triggerPotentialRescale();
     }
 
     @Override
-    public void onFailedCheckpoint() {
+    public void onCheckpointFailed() {
         if (this.failedCheckpointCountdown != null
                 && this.failedCheckpointCountdown.decrementAndGet() <= 0) {
             triggerPotentialRescale();
@@ -239,7 +239,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     private void triggerPotentialRescale() {
-        stateTransitionManager.onTrigger();
+        stateTransitionManager.triggerStateTransitionCheck();
         this.failedCheckpointCountdown = null;
     }
 
@@ -265,7 +265,7 @@ class Executing extends StateWithExecutionGraph
 
         CheckpointScheduling schedulingProvider = new CheckpointSchedulingProvider(executionGraph);
 
-        schedulingProvider.stopCheckpointScheduler();
+        schedulingProvider.stopPeriodicCheckpointScheduler();
 
         final CompletableFuture<String> savepointFuture =
                 Objects.requireNonNull(executionGraph.getCheckpointCoordinator())

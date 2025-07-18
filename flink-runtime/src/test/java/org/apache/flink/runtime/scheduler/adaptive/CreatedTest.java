@@ -51,7 +51,7 @@ class CreatedTest {
     @Test
     void testJobInformation() {
         Created created = new Created(ctx, LOG);
-        ArchivedExecutionGraph job = created.getJob();
+        ArchivedExecutionGraph job = created.getArchivedExecutionGraph();
         assertThat(job.getState()).isEqualTo(JobStatus.INITIALIZING);
     }
 
