@@ -26,7 +26,7 @@ import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.configuration.Configuration;
@@ -62,7 +62,7 @@ public abstract class SingleInputUdfOperator<IN, OUT, O extends SingleInputUdfOp
         extends SingleInputOperator<IN, OUT, O> implements UdfOperator<O> {
     private Configuration parameters;
 
-    private Map<String, DataSet<?>> broadcastVariables;
+    private Map<String, DataStream<?>> broadcastVariables;
 
     // NOTE: only set this variable via setSemanticProperties()
     private SingleInputSemanticProperties udfSemantics;
@@ -78,7 +78,7 @@ public abstract class SingleInputUdfOperator<IN, OUT, O extends SingleInputUdfOp
      * @param input The data set that is the input to the operator.
      * @param resultType The type of the elements in the resulting data set.
      */
-    protected SingleInputUdfOperator(DataSet<IN> input, TypeInformation<OUT> resultType) {
+    protected SingleInputUdfOperator(DataStream<IN> input, TypeInformation<OUT> resultType) {
         super(input, resultType);
     }
 
@@ -98,7 +98,7 @@ public abstract class SingleInputUdfOperator<IN, OUT, O extends SingleInputUdfOp
     }
 
     @Override
-    public O withBroadcastSet(DataSet<?> data, String name) {
+    public O withBroadcastSet(DataStream<?> data, String name) {
         if (data == null) {
             throw new IllegalArgumentException("Broadcast variable data must not be null.");
         }
@@ -107,7 +107,7 @@ public abstract class SingleInputUdfOperator<IN, OUT, O extends SingleInputUdfOp
         }
 
         if (this.broadcastVariables == null) {
-            this.broadcastVariables = new HashMap<String, DataSet<?>>();
+            this.broadcastVariables = new HashMap<String, DataStream<?>>();
         }
 
         this.broadcastVariables.put(name, data);
@@ -290,9 +290,9 @@ public abstract class SingleInputUdfOperator<IN, OUT, O extends SingleInputUdfOp
 
     @Override
     @Internal
-    public Map<String, DataSet<?>> getBroadcastSets() {
+    public Map<String, DataStream<?>> getBroadcastSets() {
         return this.broadcastVariables == null
-                ? Collections.<String, DataSet<?>>emptyMap()
+                ? Collections.<String, DataStream<?>>emptyMap()
                 : Collections.unmodifiableMap(this.broadcastVariables);
     }
 

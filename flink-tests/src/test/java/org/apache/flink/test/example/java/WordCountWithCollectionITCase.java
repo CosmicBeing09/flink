@@ -19,7 +19,7 @@
 
 package org.apache.flink.test.example.java;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
@@ -62,9 +62,9 @@ public class WordCountWithCollectionITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> text = env.fromElements(WordCountData.TEXT);
-        DataSet<Tuple2<String, Integer>> words = text.flatMap(new WordCount.Tokenizer());
-        DataSet<Tuple2<String, Integer>> result = words.groupBy(0).aggregate(Aggregations.SUM, 1);
+        DataStream<String> text = env.fromElements(WordCountData.TEXT);
+        DataStream<Tuple2<String, Integer>> words = text.flatMap(new WordCount.Tokenizer());
+        DataStream<Tuple2<String, Integer>> result = words.groupBy(0).aggregate(Aggregations.SUM, 1);
 
         result.output(new LocalCollectionOutputFormat<Tuple2<String, Integer>>(resultsCollected));
         env.execute("Word Count Collection");

@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.summarize.BooleanColumnSummary;
@@ -56,9 +56,9 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testCountElementsPerPartition() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         long expectedSize = 100L;
-        DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
+        DataStream<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
-        DataSet<Tuple2<Integer, Long>> ds = DataSetUtils.countElementsPerPartition(numbers);
+        DataStream<Tuple2<Integer, Long>> ds = DataSetUtils.countElementsPerPartition(numbers);
 
         Assert.assertEquals(env.getParallelism(), ds.count());
         Assert.assertEquals(expectedSize, ds.sum(1).collect().get(0).f1.longValue());
@@ -68,7 +68,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testZipWithIndex() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         long expectedSize = 100L;
-        DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
+        DataStream<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
         List<Tuple2<Long, Long>> result =
                 new ArrayList<>(DataSetUtils.zipWithIndex(numbers).collect());
@@ -93,9 +93,9 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testZipWithUniqueId() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         long expectedSize = 100L;
-        DataSet<Long> numbers = env.generateSequence(1L, expectedSize);
+        DataStream<Long> numbers = env.generateSequence(1L, expectedSize);
 
-        DataSet<Long> ids =
+        DataStream<Long> ids =
                 DataSetUtils.zipWithUniqueId(numbers)
                         .map(
                                 new MapFunction<Tuple2<Long, Long>, Long>() {
@@ -114,7 +114,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testIntegerDataSetChecksumHashCode() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
 
         Utils.ChecksumHashCode checksum = DataSetUtils.checksumHashCode(ds);
         Assert.assertEquals(checksum.getCount(), 15);
@@ -180,7 +180,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
         Collections.shuffle(data);
 
-        DataSet<Tuple8<Short, Integer, Long, Float, Double, String, Boolean, DoubleValue>> ds =
+        DataStream<Tuple8<Short, Integer, Long, Float, Double, String, Boolean, DoubleValue>> ds =
                 env.fromCollection(data);
 
         // call method under test

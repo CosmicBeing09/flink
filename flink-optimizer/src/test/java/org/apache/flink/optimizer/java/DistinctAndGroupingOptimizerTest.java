@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -44,7 +44,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromElements(new Tuple2<Long, Long>(0L, 0L), new Tuple2<Long, Long>(1L, 1L))
                             .map(new IdentityMapper<Tuple2<Long, Long>>())
                             .setParallelism(4);
@@ -83,7 +83,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromElements(new Tuple2<Long, Long>(0L, 0L), new Tuple2<Long, Long>(1L, 1L))
                             .map(new IdentityMapper<Tuple2<Long, Long>>())
                             .setParallelism(4);

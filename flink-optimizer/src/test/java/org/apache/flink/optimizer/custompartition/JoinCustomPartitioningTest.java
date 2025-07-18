@@ -23,7 +23,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -52,8 +52,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
-            DataSet<Tuple3<Long, Long, Long>> input2 =
+            DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple3<Long, Long, Long>> input2 =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));
 
             input1.join(input2, JoinHint.REPARTITION_HASH_FIRST)
@@ -87,8 +87,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
-            DataSet<Tuple3<Long, Long, Long>> input2 =
+            DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple3<Long, Long, Long>> input2 =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));
 
             try {
@@ -114,8 +114,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
-            DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
+            DataStream<Pojo2> input1 = env.fromElements(new Pojo2());
+            DataStream<Pojo3> input2 = env.fromElements(new Pojo3());
 
             input1.join(input2, JoinHint.REPARTITION_HASH_FIRST)
                     .where("b")
@@ -146,8 +146,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
-            DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
+            DataStream<Pojo2> input1 = env.fromElements(new Pojo2());
+            DataStream<Pojo3> input2 = env.fromElements(new Pojo3());
 
             try {
                 input1.join(input2, JoinHint.REPARTITION_HASH_FIRST)
@@ -172,8 +172,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
-            DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
+            DataStream<Pojo2> input1 = env.fromElements(new Pojo2());
+            DataStream<Pojo3> input2 = env.fromElements(new Pojo3());
 
             input1.join(input2, JoinHint.REPARTITION_HASH_FIRST)
                     .where(new Pojo2KeySelector())
@@ -204,8 +204,8 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> input1 = env.fromElements(new Pojo2());
-            DataSet<Pojo3> input2 = env.fromElements(new Pojo3());
+            DataStream<Pojo2> input1 = env.fromElements(new Pojo2());
+            DataStream<Pojo3> input2 = env.fromElements(new Pojo3());
 
             try {
                 input1.join(input2, JoinHint.REPARTITION_HASH_FIRST)
@@ -228,10 +228,10 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Long, Long, Long>> input =
+            DataStream<Tuple3<Long, Long, Long>> input =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));
 
-            DataSet<Tuple3<Long, Long, Long>> partitioned =
+            DataStream<Tuple3<Long, Long, Long>> partitioned =
                     input.partitionCustom(
                                     new Partitioner<Long>() {
                                         @Override
@@ -243,7 +243,7 @@ public class JoinCustomPartitioningTest extends CompilerTestBase {
                             .map(new IdentityMapper<Tuple3<Long, Long, Long>>())
                             .withForwardedFields("0", "1", "2");
 
-            DataSet<Tuple3<Long, Long, Long>> grouped =
+            DataStream<Tuple3<Long, Long, Long>> grouped =
                     partitioned
                             .distinct(0, 1)
                             .groupBy(1)

@@ -21,7 +21,7 @@ package org.apache.flink.examples.java.graph;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -69,7 +69,7 @@ public class TransitiveClosureNaive {
 
         final int maxIterations = params.getInt("iterations", 10);
 
-        DataSet<Tuple2<Long, Long>> edges;
+        DataStream<Tuple2<Long, Long>> edges;
         if (params.has("edges")) {
             edges =
                     env.readCsvFile(params.get("edges"))
@@ -84,7 +84,7 @@ public class TransitiveClosureNaive {
 
         IterativeDataSet<Tuple2<Long, Long>> paths = edges.iterate(maxIterations);
 
-        DataSet<Tuple2<Long, Long>> nextPaths =
+        DataStream<Tuple2<Long, Long>> nextPaths =
                 paths.join(edges)
                         .where(1)
                         .equalTo(0)
@@ -120,7 +120,7 @@ public class TransitiveClosureNaive {
                                 })
                         .withForwardedFields("0;1");
 
-        DataSet<Tuple2<Long, Long>> newPaths =
+        DataStream<Tuple2<Long, Long>> newPaths =
                 paths.coGroup(nextPaths)
                         .where(0)
                         .equalTo(0)
@@ -151,7 +151,7 @@ public class TransitiveClosureNaive {
                         .withForwardedFieldsFirst("0")
                         .withForwardedFieldsSecond("0");
 
-        DataSet<Tuple2<Long, Long>> transitiveClosure = paths.closeWith(nextPaths, newPaths);
+        DataStream<Tuple2<Long, Long>> transitiveClosure = paths.closeWith(nextPaths, newPaths);
 
         // emit result
         if (params.has("output")) {

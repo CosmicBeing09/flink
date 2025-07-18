@@ -24,7 +24,7 @@ import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldSet;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -41,7 +41,7 @@ class SemanticPropertiesPrecedenceTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
+        DataStream<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
         input.map(new WildcardForwardedMapperWithForwardAnnotation<>())
                 .output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
@@ -64,7 +64,7 @@ class SemanticPropertiesPrecedenceTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
+        DataStream<Tuple3<Long, String, Integer>> input = env.fromElements(Tuple3.of(3L, "test", 42));
         input.map(new WildcardForwardedMapper<>())
                 .withForwardedFields("f0")
                 .output(new DiscardingOutputFormat<>());

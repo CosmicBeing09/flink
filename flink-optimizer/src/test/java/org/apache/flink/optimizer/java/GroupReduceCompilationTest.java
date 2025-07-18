@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -50,7 +50,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
+            DataStream<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
 
             data.reduceGroup(
                             new RichGroupReduceFunction<Double, Double>() {
@@ -96,7 +96,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Long> data = env.generateSequence(1, 8000000).name("source");
+            DataStream<Long> data = env.generateSequence(1, 8000000).name("source");
 
             GroupReduceOperator<Long, Long> reduced =
                     data.reduceGroup(new CombineReducer2()).name("reducer");
@@ -144,7 +144,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -200,7 +200,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -258,7 +258,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")
@@ -328,7 +328,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(8);
 
-            DataSet<Tuple2<String, Double>> data =
+            DataStream<Tuple2<String, Double>> data =
                     env.readCsvFile("file:///will/never/be/read")
                             .types(String.class, Double.class)
                             .name("source")

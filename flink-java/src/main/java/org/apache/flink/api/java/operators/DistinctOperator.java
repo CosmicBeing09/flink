@@ -30,7 +30,7 @@ import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.operators.translation.PlanUnwrappingReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -55,7 +55,7 @@ public class DistinctOperator<T> extends SingleInputOperator<T, T, DistinctOpera
 
     private CombineHint hint = CombineHint.OPTIMIZER_CHOOSES;
 
-    public DistinctOperator(DataSet<T> input, Keys<T> keys, String distinctLocationName) {
+    public DistinctOperator(DataStream<T> input, Keys<T> keys, String distinctLocationName) {
         super(input, input.getType());
 
         this.distinctLocationName = distinctLocationName;

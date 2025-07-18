@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -35,7 +35,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#distinct()}. */
+/** Tests for {@link DataStream#distinct()}. */
 class DistinctOperatorTest {
 
     // TUPLE DATA
@@ -59,7 +59,7 @@ class DistinctOperatorTest {
     void testDistinctByKeyFields1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -75,7 +75,7 @@ class DistinctOperatorTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: distinct on basic type
         assertThatThrownBy(() -> longDs.distinct(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -87,7 +87,7 @@ class DistinctOperatorTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
         // should not work: distinct on custom type
         assertThatThrownBy(() -> customDs.distinct(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -96,7 +96,7 @@ class DistinctOperatorTest {
     void testDistinctByKeyFields4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -110,7 +110,7 @@ class DistinctOperatorTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
 
         // should work
         customDs.distinct();
@@ -120,7 +120,7 @@ class DistinctOperatorTest {
     void testDistinctByKeyFields6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, negative field position
@@ -131,7 +131,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields7() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
 
         // should work
         try {
@@ -149,7 +149,7 @@ class DistinctOperatorTest {
         this.customTypeData.add(new CustomType());
 
         try {
-            DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+            DataStream<CustomType> customDs = env.fromCollection(customTypeData);
             // should work
             customDs.distinct(
                     new KeySelector<CustomType, Long>() {
@@ -168,7 +168,7 @@ class DistinctOperatorTest {
     void testDistinctByKeyIndices1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         try {
-            DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+            DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
             // should work
             longDs.distinct();
         } catch (Exception e) {
@@ -187,10 +187,10 @@ class DistinctOperatorTest {
         List<NotComparable> l = new ArrayList<>();
         l.add(a);
 
-        DataSet<NotComparable> ds = env.fromCollection(l);
+        DataStream<NotComparable> ds = env.fromCollection(l);
         assertThatThrownBy(
                         () -> {
-                            DataSet<NotComparable> reduceDs = ds.distinct();
+                            DataStream<NotComparable> reduceDs = ds.distinct();
                         })
                 .isInstanceOf(InvalidProgramException.class);
     }
@@ -206,10 +206,10 @@ class DistinctOperatorTest {
         List<NotComparable> l = new ArrayList<>();
         l.add(a);
 
-        DataSet<NotComparable> ds = env.fromCollection(l);
+        DataStream<NotComparable> ds = env.fromCollection(l);
         assertThatThrownBy(
                         () -> {
-                            DataSet<NotComparable> reduceDs = ds.distinct("*");
+                            DataStream<NotComparable> reduceDs = ds.distinct("*");
                         })
                 .isInstanceOf(InvalidProgramException.class);
     }

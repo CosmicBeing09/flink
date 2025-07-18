@@ -28,7 +28,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -49,8 +49,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testIdentityMapWithMissingTypesAndStringTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> identityMapDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> identityMapDs =
                 ds.map(new Mapper<Tuple3<Integer, Long, String>, Tuple3<Integer, Long, String>>())
                         .returns(new TypeHint<Tuple3<Integer, Long, String>>() {});
         List<Tuple3<Integer, Long, String>> result = identityMapDs.collect();
@@ -64,8 +64,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testIdentityMapWithMissingTypesAndTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> identityMapDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> identityMapDs =
                 ds
                         // all following generics get erased during compilation
                         .map(
@@ -88,8 +88,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testFlatMapWithClassTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> identityMapDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> identityMapDs =
                 ds.flatMap(new FlatMapper<Tuple3<Integer, Long, String>, Integer>())
                         .returns(Integer.class);
         List<Integer> result = identityMapDs.collect();
@@ -103,9 +103,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testJoinWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds1.join(ds2)
                         .where(0)
                         .equalTo(0)
@@ -126,9 +126,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testFlatJoinWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds1.join(ds2)
                         .where(0)
                         .equalTo(0)
@@ -149,8 +149,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testUnsortedGroupReduceWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds.groupBy(0)
                         .reduceGroup(new GroupReducer<Tuple3<Integer, Long, String>, Integer>())
                         .returns(BasicTypeInfo.INT_TYPE_INFO);
@@ -165,8 +165,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testSortedGroupReduceWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds.groupBy(0)
                         .sortGroup(0, Order.ASCENDING)
                         .reduceGroup(new GroupReducer<Tuple3<Integer, Long, String>, Integer>())
@@ -182,8 +182,8 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testCombineGroupWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds.groupBy(0)
                         .combineGroup(new GroupCombiner<Tuple3<Integer, Long, String>, Integer>())
                         .returns(BasicTypeInfo.INT_TYPE_INFO);
@@ -198,9 +198,9 @@ public class TypeHintITCase extends AbstractTestBaseJUnit4 {
     public void testCoGroupWithTypeInformationTypeHint() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> resultDs =
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> resultDs =
                 ds1.coGroup(ds2)
                         .where(0)
                         .equalTo(0)

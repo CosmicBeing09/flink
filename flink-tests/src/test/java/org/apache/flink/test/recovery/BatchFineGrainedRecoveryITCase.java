@@ -21,7 +21,7 @@ package org.apache.flink.test.recovery;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.functions.RichMapPartitionFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
@@ -217,7 +217,7 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
     public void testProgram() throws Exception {
         ExecutionEnvironment env = createExecutionEnvironment();
 
-        DataSet<Long> input = env.generateSequence(0, EMITTED_RECORD_NUMBER - 1);
+        DataStream<Long> input = env.generateSequence(0, EMITTED_RECORD_NUMBER - 1);
         for (int trackingIndex = 0; trackingIndex < MAP_NUMBER; trackingIndex++) {
             input =
                     input.mapPartition(

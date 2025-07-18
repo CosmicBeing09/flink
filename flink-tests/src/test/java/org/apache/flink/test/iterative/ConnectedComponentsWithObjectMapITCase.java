@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.iterative;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -75,16 +75,16 @@ public class ConnectedComponentsWithObjectMapITCase extends JavaProgramTestBaseJ
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // read vertex and edge data
-        DataSet<Tuple1<Long>> vertices = env.readCsvFile(verticesPath).types(Long.class);
+        DataStream<Tuple1<Long>> vertices = env.readCsvFile(verticesPath).types(Long.class);
 
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 env.readCsvFile(edgesPath)
                         .fieldDelimiter(" ")
                         .types(Long.class, Long.class)
                         .flatMap(new UndirectEdge());
 
         // assign the initial components (equal to the vertex id)
-        DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+        DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new ConnectedComponentsITCase.DuplicateValue<Long>());
 
         // open a delta iteration
@@ -94,7 +94,7 @@ public class ConnectedComponentsWithObjectMapITCase extends JavaProgramTestBaseJ
 
         // apply the step logic: join with the edges, select the minimum neighbor, update if the
         // component of the candidate is smaller
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -109,7 +109,7 @@ public class ConnectedComponentsWithObjectMapITCase extends JavaProgramTestBaseJ
                         .with(new ComponentIdFilter());
 
         // close the delta iteration (delta and new workset are identical)
-        DataSet<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
+        DataStream<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
 
         result.writeAsCsv(resultPath, "\n", " ");
 

@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -65,8 +65,8 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1).reduce(new Tuple3Reduce("B-)"));
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
@@ -90,9 +90,9 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy(4, 0)
                         .reduce(
                                 (in1, in2) -> {
@@ -127,8 +127,8 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(new KeySelector1()).reduce(new Tuple3Reduce("B-)"));
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
@@ -161,8 +161,8 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs =
                 ds.groupBy(new KeySelector2()).reduce(new CustomTypeReduce());
 
         List<CustomType> result = reduceDs.collect();
@@ -195,8 +195,8 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs = ds.reduce(new AllAddingTuple3Reduce());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs = ds.reduce(new AllAddingTuple3Reduce());
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
 
@@ -213,8 +213,8 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs = ds.reduce(new AllAddingCustomTypeReduce());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs = ds.reduce(new AllAddingCustomTypeReduce());
 
         List<CustomType> result = reduceDs.collect();
 
@@ -231,10 +231,10 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1).reduce(new BCTuple3Reduce()).withBroadcastSet(intDs, "ints");
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
@@ -253,9 +253,9 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy(new KeySelector3()).reduce(new Tuple5Reduce());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = reduceDs.collect();
@@ -294,9 +294,9 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy("f4", "f0").reduce(new Tuple5Reduce());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = reduceDs.collect();
@@ -324,9 +324,9 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy("f4", "f0").reduce(new Tuple5Reduce()).setCombineHint(CombineHint.HASH);
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = reduceDs.collect();
@@ -350,10 +350,10 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testSupportForDataAndEnumSerialization() throws Exception {
         /** Test support for Date and enum serialization */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<PojoWithDateAndEnum> ds = env.generateSequence(0, 2).map(new Mapper1());
+        DataStream<PojoWithDateAndEnum> ds = env.generateSequence(0, 2).map(new Mapper1());
         ds = ds.union(CollectionDataSets.getPojoWithDateAndEnum(env));
 
-        DataSet<String> res = ds.groupBy("group").reduceGroup(new GroupReducer1());
+        DataStream<String> res = ds.groupBy("group").reduceGroup(new GroupReducer1());
 
         List<String> result = res.collect();
 

@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
@@ -52,7 +52,7 @@ public class HardPlansCompilationTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Long> set1 = env.generateSequence(0, 1);
+        DataStream<Long> set1 = env.generateSequence(0, 1);
 
         set1.map(new IdentityMapper<Long>())
                 .name("Map1")

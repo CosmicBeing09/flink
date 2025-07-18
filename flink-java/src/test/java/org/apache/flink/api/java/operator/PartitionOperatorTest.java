@@ -21,7 +21,7 @@ package org.apache.flink.api.java.operator;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.DataSource;
@@ -99,7 +99,7 @@ class PartitionOperatorTest {
         }
     }
 
-    private DataSet<Tuple2<Integer, String>> getTupleDataSet(ExecutionEnvironment env) {
+    private DataStream<Tuple2<Integer, String>> getTupleDataSet(ExecutionEnvironment env) {
         return env.fromElements(
                 new Tuple2<>(1, "first"),
                 new Tuple2<>(2, "second"),
@@ -109,7 +109,7 @@ class PartitionOperatorTest {
                 new Tuple2<>(6, "sixth"));
     }
 
-    private DataSet<CustomPojo> getPojoDataSet(ExecutionEnvironment env) {
+    private DataStream<CustomPojo> getPojoDataSet(ExecutionEnvironment env) {
         return env.fromElements(
                 new CustomPojo(1, "first"),
                 new CustomPojo(2, "second"),
@@ -119,7 +119,7 @@ class PartitionOperatorTest {
                 new CustomPojo(6, "sixth"));
     }
 
-    private DataSet<NestedPojo> getNestedPojoDataSet(ExecutionEnvironment env) {
+    private DataStream<NestedPojo> getNestedPojoDataSet(ExecutionEnvironment env) {
         return env.fromElements(
                 new NestedPojo(new CustomPojo(1, "first"), 1L),
                 new NestedPojo(new CustomPojo(2, "second"), 2L),
@@ -133,7 +133,7 @@ class PartitionOperatorTest {
     void testRebalance() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.rebalance();
     }
 
@@ -141,7 +141,7 @@ class PartitionOperatorTest {
     void testHashPartitionByField1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionByHash(0);
     }
 
@@ -149,7 +149,7 @@ class PartitionOperatorTest {
     void testHashPartitionByField2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionByHash(0, 1);
     }
 
@@ -157,7 +157,7 @@ class PartitionOperatorTest {
     void testHashPartitionByFieldOutOfRange() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(() -> ds.partitionByHash(0, 1, 2))
                 .isInstanceOf(IndexOutOfBoundsException.class);
     }
@@ -166,7 +166,7 @@ class PartitionOperatorTest {
     void testHashPartitionByFieldName1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionByHash("number");
     }
 
@@ -174,7 +174,7 @@ class PartitionOperatorTest {
     void testHashPartitionByFieldName2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionByHash("number", "name");
     }
 
@@ -182,7 +182,7 @@ class PartitionOperatorTest {
     void testHashPartitionByInvalidFieldName() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         assertThatThrownBy(() -> ds.partitionByHash("number", "name", "invalidField"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -191,7 +191,7 @@ class PartitionOperatorTest {
     void testRangePartitionByFieldName1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionByRange("number");
     }
 
@@ -199,7 +199,7 @@ class PartitionOperatorTest {
     void testRangePartitionByFieldName2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionByRange("number", "name");
     }
 
@@ -207,7 +207,7 @@ class PartitionOperatorTest {
     void testRangePartitionByInvalidFieldName() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         assertThatThrownBy(() -> ds.partitionByRange("number", "name", "invalidField"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -216,7 +216,7 @@ class PartitionOperatorTest {
     void testRangePartitionByField1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionByRange(0);
     }
 
@@ -224,7 +224,7 @@ class PartitionOperatorTest {
     void testRangePartitionByField2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionByRange(0, 1);
     }
 
@@ -245,7 +245,7 @@ class PartitionOperatorTest {
     void testRangePartitionByFieldOutOfRange() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(() -> ds.partitionByRange(0, 1, 2))
                 .isInstanceOf(IndexOutOfBoundsException.class);
     }
@@ -254,7 +254,7 @@ class PartitionOperatorTest {
     void testHashPartitionWithOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(() -> ds.partitionByHash(1).withOrders(Order.ASCENDING))
                 .isInstanceOf(IllegalStateException.class);
     }
@@ -263,7 +263,7 @@ class PartitionOperatorTest {
     void testRebalanceWithOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(() -> ds.rebalance().withOrders(Order.ASCENDING))
                 .isInstanceOf(IllegalStateException.class);
     }
@@ -272,7 +272,7 @@ class PartitionOperatorTest {
     void testRangePartitionWithOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionByRange(0).withOrders(Order.ASCENDING);
     }
 
@@ -280,7 +280,7 @@ class PartitionOperatorTest {
     void testRangePartitionWithTooManyOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(
                         () -> ds.partitionByRange(0).withOrders(Order.ASCENDING, Order.DESCENDING))
                 .isInstanceOf(IllegalArgumentException.class);
@@ -316,7 +316,7 @@ class PartitionOperatorTest {
     void testRangePartitionBySelectorComplexKeyWithOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<NestedPojo> ds = getNestedPojoDataSet(env);
+        final DataStream<NestedPojo> ds = getNestedPojoDataSet(env);
         ds.partitionByRange((KeySelector<NestedPojo, CustomPojo>) NestedPojo::getNested)
                 .withOrders(Order.ASCENDING);
     }
@@ -325,7 +325,7 @@ class PartitionOperatorTest {
     void testRangePartitionBySelectorComplexKeyWithTooManyOrders() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<NestedPojo> ds = getNestedPojoDataSet(env);
+        final DataStream<NestedPojo> ds = getNestedPojoDataSet(env);
         assertThatThrownBy(
                         () ->
                                 ds.partitionByRange(
@@ -339,7 +339,7 @@ class PartitionOperatorTest {
     void testRangePartitionCustomPartitionerByFieldId() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         ds.partitionCustom((Partitioner<Integer>) (key, numPartitions) -> 1, 0);
     }
 
@@ -347,7 +347,7 @@ class PartitionOperatorTest {
     void testRangePartitionInvalidCustomPartitionerByFieldId() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<Tuple2<Integer, String>> ds = getTupleDataSet(env);
+        final DataStream<Tuple2<Integer, String>> ds = getTupleDataSet(env);
         assertThatThrownBy(
                         () ->
                                 ds.partitionCustom(
@@ -359,7 +359,7 @@ class PartitionOperatorTest {
     void testRangePartitionCustomPartitionerByFieldName() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionCustom((Partitioner<Integer>) (key, numPartitions) -> 1, "number");
     }
 
@@ -367,7 +367,7 @@ class PartitionOperatorTest {
     void testRangePartitionInvalidCustomPartitionerByFieldName() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         assertThatThrownBy(
                         () ->
                                 ds.partitionCustom(
@@ -379,7 +379,7 @@ class PartitionOperatorTest {
     void testRangePartitionCustomPartitionerByKeySelector() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        final DataSet<CustomPojo> ds = getPojoDataSet(env);
+        final DataStream<CustomPojo> ds = getPojoDataSet(env);
         ds.partitionCustom(
                 (Partitioner<Integer>) (key, numPartitions) -> 1,
                 (KeySelector<CustomPojo, Integer>) CustomPojo::getNumber);

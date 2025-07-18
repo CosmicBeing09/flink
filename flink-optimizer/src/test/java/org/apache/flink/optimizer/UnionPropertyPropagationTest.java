@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.operators.base.FlatMapOperatorBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -52,11 +52,11 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Long> sourceA = env.generateSequence(0, 1);
-        DataSet<Long> sourceB = env.generateSequence(0, 1);
+        DataStream<Long> sourceA = env.generateSequence(0, 1);
+        DataStream<Long> sourceB = env.generateSequence(0, 1);
 
-        DataSet<Long> redA = sourceA.groupBy("*").reduceGroup(new IdentityGroupReducer<Long>());
-        DataSet<Long> redB = sourceB.groupBy("*").reduceGroup(new IdentityGroupReducer<Long>());
+        DataStream<Long> redA = sourceA.groupBy("*").reduceGroup(new IdentityGroupReducer<Long>());
+        DataStream<Long> redB = sourceB.groupBy("*").reduceGroup(new IdentityGroupReducer<Long>());
 
         redA.union(redB)
                 .groupBy("*")
@@ -106,14 +106,14 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
         // and the "unioned" inputDataSet will be grouped
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> source = env.readTextFile(IN_FILE);
-        DataSet<Tuple2<String, Integer>> lastUnion = source.flatMap(new DummyFlatMap());
+        DataStream<String> source = env.readTextFile(IN_FILE);
+        DataStream<Tuple2<String, Integer>> lastUnion = source.flatMap(new DummyFlatMap());
 
         for (int i = 1; i < NUM_INPUTS; i++) {
             lastUnion = lastUnion.union(source.flatMap(new DummyFlatMap()));
         }
 
-        DataSet<Tuple2<String, Integer>> result =
+        DataStream<Tuple2<String, Integer>> result =
                 lastUnion.groupBy(0).aggregate(Aggregations.SUM, 1);
         result.writeAsText(OUT_FILE);
 

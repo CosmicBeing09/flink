@@ -19,7 +19,7 @@
 package org.apache.flink.test.classloading.jar;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 
@@ -45,9 +45,9 @@ public class UserCodeType {
     public static void main(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> input = env.fromElements(1, 2, 3, 4, 5);
+        DataStream<Integer> input = env.fromElements(1, 2, 3, 4, 5);
 
-        DataSet<CustomType> customTypes =
+        DataStream<CustomType> customTypes =
                 input.map(
                                 new MapFunction<Integer, CustomType>() {
                                     private static final long serialVersionUID =
@@ -60,7 +60,7 @@ public class UserCodeType {
                                 })
                         .rebalance();
 
-        DataSet<Integer> result =
+        DataStream<Integer> result =
                 customTypes.map(
                         new MapFunction<CustomType, Integer>() {
                             private static final long serialVersionUID = -7950126399899584991L;

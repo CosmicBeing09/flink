@@ -26,7 +26,7 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.SingleInputOperator;
 import org.apache.flink.api.common.operators.Union;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -49,9 +49,9 @@ class UnionTranslationTest {
             final int parallelism = 4;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 3);
+            DataStream<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 3);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> dataset2 = getSourceDataSet(env, 2);
+            DataStream<Tuple3<Double, StringValue, LongValue>> dataset2 = getSourceDataSet(env, 2);
 
             dataset1.union(dataset2)
                     .groupBy(
@@ -98,11 +98,11 @@ class UnionTranslationTest {
             final int parallelism = 4;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 2);
+            DataStream<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 2);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> dataset2 = getSourceDataSet(env, 3);
+            DataStream<Tuple3<Double, StringValue, LongValue>> dataset2 = getSourceDataSet(env, 3);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> dataset3 = getSourceDataSet(env, -1);
+            DataStream<Tuple3<Double, StringValue, LongValue>> dataset3 = getSourceDataSet(env, -1);
 
             dataset1.union(dataset2)
                     .union(dataset3)
@@ -160,7 +160,7 @@ class UnionTranslationTest {
     }
 
     @SuppressWarnings("unchecked")
-    private static DataSet<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
+    private static DataStream<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
             ExecutionEnvironment env, int parallelism) {
         return env.fromElements(new Tuple3<>(0.0, new StringValue(""), new LongValue(1L)))
                 .setParallelism(parallelism);

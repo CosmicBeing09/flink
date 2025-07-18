@@ -22,11 +22,11 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
- * Resulting {@link DataSet} of a delta iteration operation.
+ * Resulting {@link DataStream} of a delta iteration operation.
  *
  * @param <ST>
  * @param <WT>
@@ -38,13 +38,13 @@ import org.apache.flink.api.java.ExecutionEnvironment;
  */
 @Deprecated
 @Public
-public class DeltaIterationResultSet<ST, WT> extends DataSet<ST> {
+public class DeltaIterationResultSet<ST, WT> extends DataStream<ST> {
 
     private DeltaIteration<ST, WT> iterationHead;
 
-    private DataSet<ST> nextSolutionSet;
+    private DataStream<ST> nextSolutionSet;
 
-    private DataSet<WT> nextWorkset;
+    private DataStream<WT> nextWorkset;
 
     private Keys<ST> keys;
 
@@ -57,8 +57,8 @@ public class DeltaIterationResultSet<ST, WT> extends DataSet<ST> {
             TypeInformation<ST> typeSS,
             TypeInformation<WT> typeWS,
             DeltaIteration<ST, WT> iterationHead,
-            DataSet<ST> nextSolutionSet,
-            DataSet<WT> nextWorkset,
+            DataStream<ST> nextSolutionSet,
+            DataStream<WT> nextWorkset,
             Keys<ST> keys,
             int maxIterations) {
         super(context, typeSS);
@@ -74,11 +74,11 @@ public class DeltaIterationResultSet<ST, WT> extends DataSet<ST> {
         return iterationHead;
     }
 
-    public DataSet<ST> getNextSolutionSet() {
+    public DataStream<ST> getNextSolutionSet() {
         return nextSolutionSet;
     }
 
-    public DataSet<WT> getNextWorkset() {
+    public DataStream<WT> getNextWorkset() {
         return nextWorkset;
     }
 

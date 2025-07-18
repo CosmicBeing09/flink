@@ -19,7 +19,7 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.examples.java.clustering.KMeans;
@@ -45,7 +45,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // get input data
-        DataSet<Point> pointsSet =
+        DataStream<Point> pointsSet =
                 env.fromElements(points)
                         .map(
                                 new MapFunction<String, Point>() {
@@ -57,7 +57,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
                                     }
                                 });
 
-        DataSet<Centroid> centroidsSet =
+        DataStream<Centroid> centroidsSet =
                 env.fromElements(centers)
                         .map(
                                 new MapFunction<String, Centroid>() {
@@ -73,7 +73,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
         // set number of bulk iterations for KMeans algorithm
         IterativeDataSet<Centroid> loop = centroidsSet.iterate(20);
 
-        DataSet<Centroid> newCentroids =
+        DataStream<Centroid> newCentroids =
                 pointsSet
                         // compute closest centroid for each point
                         .map(new KMeans.SelectNearestCenter())
@@ -86,9 +86,9 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
                         .map(new KMeans.CentroidAverager());
 
         // feed new centroids back into next iteration
-        DataSet<Centroid> finalCentroids = loop.closeWith(newCentroids);
+        DataStream<Centroid> finalCentroids = loop.closeWith(newCentroids);
 
-        DataSet<String> stringCentroids =
+        DataStream<String> stringCentroids =
                 finalCentroids.map(
                         new MapFunction<Centroid, String>() {
                             @Override

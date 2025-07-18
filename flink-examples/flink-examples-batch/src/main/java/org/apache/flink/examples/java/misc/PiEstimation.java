@@ -20,7 +20,7 @@ package org.apache.flink.examples.java.misc;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 import org.slf4j.Logger;
@@ -65,7 +65,7 @@ public class PiEstimation implements java.io.Serializable {
 
         // count how many of the samples would randomly fall into
         // the unit circle
-        DataSet<Long> count =
+        DataStream<Long> count =
                 env.generateSequence(1, numSamples).map(new Sampler()).reduce(new SumReducer());
 
         long theCount = count.collect().get(0);

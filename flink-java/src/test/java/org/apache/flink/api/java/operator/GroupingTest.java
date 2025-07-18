@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.BasicArrayTypeInfo;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -40,7 +40,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#groupBy(int...)}. */
+/** Tests for {@link DataStream#groupBy(int...)}. */
 class GroupingTest {
 
     // TUPLE DATA
@@ -76,7 +76,7 @@ class GroupingTest {
     void testGroupByKeyFields1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -92,7 +92,7 @@ class GroupingTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: groups on basic type
         assertThatThrownBy(() -> longDs.groupBy(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -104,7 +104,7 @@ class GroupingTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
         // should not work: groups on custom type
         assertThatThrownBy(() -> customDs.groupBy(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -113,7 +113,7 @@ class GroupingTest {
     void testGroupByKeyFields4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, key out of tuple bounds
@@ -124,7 +124,7 @@ class GroupingTest {
     void testGroupByKeyFields5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, negative field position
@@ -136,7 +136,7 @@ class GroupingTest {
         this.byteArrayData.add(new Tuple2<>(new byte[] {0}, new byte[] {1}));
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<byte[], byte[]>> tupleDs = env.fromCollection(byteArrayData);
+        DataStream<Tuple2<byte[], byte[]>> tupleDs = env.fromCollection(byteArrayData);
         tupleDs.groupBy(0);
     }
 
@@ -147,7 +147,7 @@ class GroupingTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> ds = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -162,7 +162,7 @@ class GroupingTest {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: groups on basic type
         assertThatThrownBy(() -> longDs.groupBy("myInt"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -175,7 +175,7 @@ class GroupingTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
         // should not work: tuple selector on custom type
         assertThatThrownBy(() -> customDs.groupBy(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -188,7 +188,7 @@ class GroupingTest {
         // should not work, key out of tuple bounds
         assertThatThrownBy(
                         () -> {
-                            DataSet<CustomType> ds = env.fromCollection(customTypeData);
+                            DataStream<CustomType> ds = env.fromCollection(customTypeData);
                             ds.groupBy("myNonExistent");
                         })
                 .isInstanceOf(IllegalArgumentException.class);
@@ -201,7 +201,7 @@ class GroupingTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> ds = env.fromCollection(customTypeData);
+        DataStream<CustomType> ds = env.fromCollection(customTypeData);
 
         // should work
         try {
@@ -219,7 +219,7 @@ class GroupingTest {
         // should not work, key out of tuple bounds
         assertThatThrownBy(
                         () -> {
-                            DataSet<CustomType> ds = env.fromCollection(customTypeData);
+                            DataStream<CustomType> ds = env.fromCollection(customTypeData);
                             ds.groupBy("nested.myNonExistent");
                         })
                 .isInstanceOf(IllegalArgumentException.class);
@@ -233,7 +233,7 @@ class GroupingTest {
         this.customTypeData.add(new CustomType());
 
         try {
-            DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+            DataStream<CustomType> customDs = env.fromCollection(customTypeData);
             // should work
             customDs.groupBy((KeySelector<CustomType, Long>) value -> value.myLong);
         } catch (Exception e) {
@@ -249,7 +249,7 @@ class GroupingTest {
         this.customTypeData.add(new CustomType());
 
         try {
-            DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+            DataStream<CustomType> customDs = env.fromCollection(customTypeData);
             // should work
             customDs.groupBy(
                     new KeySelector<GroupingTest.CustomType, Tuple2<Integer, Long>>() {
@@ -271,7 +271,7 @@ class GroupingTest {
         this.customTypeData.add(new CustomType());
 
         try {
-            DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+            DataStream<CustomType> customDs = env.fromCollection(customTypeData);
             // should not work
             customDs.groupBy(
                     new KeySelector<GroupingTest.CustomType, CustomType>() {
@@ -293,7 +293,7 @@ class GroupingTest {
         this.customTypeData.add(new CustomType());
 
         try {
-            DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+            DataStream<CustomType> customDs = env.fromCollection(customTypeData);
             // should not work
             customDs.groupBy(
                     new KeySelector<
@@ -315,7 +315,7 @@ class GroupingTest {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
         // should not work
         assertThatThrownBy(
                         () ->
@@ -329,7 +329,7 @@ class GroupingTest {
     void testGroupSortKeyFields1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -344,7 +344,7 @@ class GroupingTest {
     void testGroupSortKeyFields2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, field index out of bounds
@@ -356,7 +356,7 @@ class GroupingTest {
     void testGroupSortKeyFields3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
 
         // should not work: sorted groups on groupings by key selectors
         assertThatThrownBy(
@@ -378,7 +378,7 @@ class GroupingTest {
     void testGroupSortKeyFields4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -390,7 +390,7 @@ class GroupingTest {
     void testGroupSortKeyFields5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -402,7 +402,7 @@ class GroupingTest {
     void testChainedGroupSortKeyFields() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -417,7 +417,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -432,7 +432,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -447,7 +447,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -464,7 +464,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -476,7 +476,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -492,7 +492,7 @@ class GroupingTest {
     void testGroupSortByKeyExpression6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -505,7 +505,7 @@ class GroupingTest {
     void testGroupSortByKeySelector1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -533,7 +533,7 @@ class GroupingTest {
     void testGroupSortByKeySelector2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -566,7 +566,7 @@ class GroupingTest {
     void testGroupSortByKeySelector3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should not work
@@ -597,7 +597,7 @@ class GroupingTest {
     @Test
     void testGroupingAtomicType() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> dataSet = env.fromElements(0, 1, 1, 2, 0, 0);
+        DataStream<Integer> dataSet = env.fromElements(0, 1, 1, 2, 0, 0);
 
         dataSet.groupBy("*");
     }
@@ -605,7 +605,7 @@ class GroupingTest {
     @Test
     void testGroupAtomicTypeWithInvalid1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> dataSet = env.fromElements(0, 1, 2, 3);
+        DataStream<Integer> dataSet = env.fromElements(0, 1, 2, 3);
 
         assertThatThrownBy(() -> dataSet.groupBy("*", "invalidField"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -614,7 +614,7 @@ class GroupingTest {
     @Test
     void testGroupAtomicTypeWithInvalid2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> dataSet = env.fromElements(0, 1, 2, 3);
+        DataStream<Integer> dataSet = env.fromElements(0, 1, 2, 3);
 
         assertThatThrownBy(() -> dataSet.groupBy("invalidField"))
                 .isInstanceOf(InvalidProgramException.class);
@@ -623,7 +623,7 @@ class GroupingTest {
     @Test
     void testGroupAtomicTypeWithInvalid3() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<ArrayList<Integer>> dataSet = env.fromElements(new ArrayList<Integer>());
+        DataStream<ArrayList<Integer>> dataSet = env.fromElements(new ArrayList<Integer>());
 
         assertThatThrownBy(() -> dataSet.groupBy("*")).isInstanceOf(InvalidProgramException.class);
     }

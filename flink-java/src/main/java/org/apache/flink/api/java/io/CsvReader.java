@@ -21,6 +21,7 @@ package org.apache.flink.api.java.io;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.operators.DataSource;
@@ -437,7 +438,7 @@ public class CsvReader {
      * tuples to support type safe creation of data sets through CSV parsing.
      *
      * @param type0 The type of CSV field 0 and the type of field 0 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0> DataSource<Tuple1<T0>> types(Class<T0> type0) {
         TupleTypeInfo<Tuple1<T0>> types = TupleTypeInfo.getBasicAndBasicValueTupleTypeInfo(type0);
@@ -455,7 +456,7 @@ public class CsvReader {
      *
      * @param type0 The type of CSV field 0 and the type of field 0 in the returned tuple type.
      * @param type1 The type of CSV field 1 and the type of field 1 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1> DataSource<Tuple2<T0, T1>> types(Class<T0> type0, Class<T1> type1) {
         TupleTypeInfo<Tuple2<T0, T1>> types =
@@ -475,7 +476,7 @@ public class CsvReader {
      * @param type0 The type of CSV field 0 and the type of field 0 in the returned tuple type.
      * @param type1 The type of CSV field 1 and the type of field 1 in the returned tuple type.
      * @param type2 The type of CSV field 2 and the type of field 2 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2> DataSource<Tuple3<T0, T1, T2>> types(
             Class<T0> type0, Class<T1> type1, Class<T2> type2) {
@@ -497,7 +498,7 @@ public class CsvReader {
      * @param type1 The type of CSV field 1 and the type of field 1 in the returned tuple type.
      * @param type2 The type of CSV field 2 and the type of field 2 in the returned tuple type.
      * @param type3 The type of CSV field 3 and the type of field 3 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3> DataSource<Tuple4<T0, T1, T2, T3>> types(
             Class<T0> type0, Class<T1> type1, Class<T2> type2, Class<T3> type3) {
@@ -520,7 +521,7 @@ public class CsvReader {
      * @param type2 The type of CSV field 2 and the type of field 2 in the returned tuple type.
      * @param type3 The type of CSV field 3 and the type of field 3 in the returned tuple type.
      * @param type4 The type of CSV field 4 and the type of field 4 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4> DataSource<Tuple5<T0, T1, T2, T3, T4>> types(
             Class<T0> type0, Class<T1> type1, Class<T2> type2, Class<T3> type3, Class<T4> type4) {
@@ -544,7 +545,7 @@ public class CsvReader {
      * @param type3 The type of CSV field 3 and the type of field 3 in the returned tuple type.
      * @param type4 The type of CSV field 4 and the type of field 4 in the returned tuple type.
      * @param type5 The type of CSV field 5 and the type of field 5 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5> DataSource<Tuple6<T0, T1, T2, T3, T4, T5>> types(
             Class<T0> type0,
@@ -576,7 +577,7 @@ public class CsvReader {
      * @param type4 The type of CSV field 4 and the type of field 4 in the returned tuple type.
      * @param type5 The type of CSV field 5 and the type of field 5 in the returned tuple type.
      * @param type6 The type of CSV field 6 and the type of field 6 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6> DataSource<Tuple7<T0, T1, T2, T3, T4, T5, T6>> types(
             Class<T0> type0,
@@ -610,7 +611,7 @@ public class CsvReader {
      * @param type5 The type of CSV field 5 and the type of field 5 in the returned tuple type.
      * @param type6 The type of CSV field 6 and the type of field 6 in the returned tuple type.
      * @param type7 The type of CSV field 7 and the type of field 7 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7>
             DataSource<Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>> types(
@@ -647,7 +648,7 @@ public class CsvReader {
      * @param type6 The type of CSV field 6 and the type of field 6 in the returned tuple type.
      * @param type7 The type of CSV field 7 and the type of field 7 in the returned tuple type.
      * @param type8 The type of CSV field 8 and the type of field 8 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8>
             DataSource<Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>> types(
@@ -686,7 +687,7 @@ public class CsvReader {
      * @param type7 The type of CSV field 7 and the type of field 7 in the returned tuple type.
      * @param type8 The type of CSV field 8 and the type of field 8 in the returned tuple type.
      * @param type9 The type of CSV field 9 and the type of field 9 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
             DataSource<Tuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>> types(
@@ -727,7 +728,7 @@ public class CsvReader {
      * @param type8 The type of CSV field 8 and the type of field 8 in the returned tuple type.
      * @param type9 The type of CSV field 9 and the type of field 9 in the returned tuple type.
      * @param type10 The type of CSV field 10 and the type of field 10 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
             DataSource<Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>> types(
@@ -771,7 +772,7 @@ public class CsvReader {
      * @param type9 The type of CSV field 9 and the type of field 9 in the returned tuple type.
      * @param type10 The type of CSV field 10 and the type of field 10 in the returned tuple type.
      * @param type11 The type of CSV field 11 and the type of field 11 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
             DataSource<Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>> types(
@@ -817,7 +818,7 @@ public class CsvReader {
      * @param type10 The type of CSV field 10 and the type of field 10 in the returned tuple type.
      * @param type11 The type of CSV field 11 and the type of field 11 in the returned tuple type.
      * @param type12 The type of CSV field 12 and the type of field 12 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
             DataSource<Tuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>> types(
@@ -866,7 +867,7 @@ public class CsvReader {
      * @param type11 The type of CSV field 11 and the type of field 11 in the returned tuple type.
      * @param type12 The type of CSV field 12 and the type of field 12 in the returned tuple type.
      * @param type13 The type of CSV field 13 and the type of field 13 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
             DataSource<Tuple14<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>> types(
@@ -931,7 +932,7 @@ public class CsvReader {
      * @param type12 The type of CSV field 12 and the type of field 12 in the returned tuple type.
      * @param type13 The type of CSV field 13 and the type of field 13 in the returned tuple type.
      * @param type14 The type of CSV field 14 and the type of field 14 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
             DataSource<Tuple15<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>>
@@ -1002,7 +1003,7 @@ public class CsvReader {
      * @param type13 The type of CSV field 13 and the type of field 13 in the returned tuple type.
      * @param type14 The type of CSV field 14 and the type of field 14 in the returned tuple type.
      * @param type15 The type of CSV field 15 and the type of field 15 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
             DataSource<
@@ -1110,7 +1111,7 @@ public class CsvReader {
      * @param type14 The type of CSV field 14 and the type of field 14 in the returned tuple type.
      * @param type15 The type of CSV field 15 and the type of field 15 in the returned tuple type.
      * @param type16 The type of CSV field 16 and the type of field 16 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
             DataSource<
@@ -1241,7 +1242,7 @@ public class CsvReader {
      * @param type15 The type of CSV field 15 and the type of field 15 in the returned tuple type.
      * @param type16 The type of CSV field 16 and the type of field 16 in the returned tuple type.
      * @param type17 The type of CSV field 17 and the type of field 17 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
             DataSource<
@@ -1396,7 +1397,7 @@ public class CsvReader {
      * @param type16 The type of CSV field 16 and the type of field 16 in the returned tuple type.
      * @param type17 The type of CSV field 17 and the type of field 17 in the returned tuple type.
      * @param type18 The type of CSV field 18 and the type of field 18 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>
             DataSource<
@@ -1558,7 +1559,7 @@ public class CsvReader {
      * @param type17 The type of CSV field 17 and the type of field 17 in the returned tuple type.
      * @param type18 The type of CSV field 18 and the type of field 18 in the returned tuple type.
      * @param type19 The type of CSV field 19 and the type of field 19 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,
@@ -1747,7 +1748,7 @@ public class CsvReader {
      * @param type18 The type of CSV field 18 and the type of field 18 in the returned tuple type.
      * @param type19 The type of CSV field 19 and the type of field 19 in the returned tuple type.
      * @param type20 The type of CSV field 20 and the type of field 20 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,
@@ -1944,7 +1945,7 @@ public class CsvReader {
      * @param type19 The type of CSV field 19 and the type of field 19 in the returned tuple type.
      * @param type20 The type of CSV field 20 and the type of field 20 in the returned tuple type.
      * @param type21 The type of CSV field 21 and the type of field 21 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,
@@ -2149,7 +2150,7 @@ public class CsvReader {
      * @param type20 The type of CSV field 20 and the type of field 20 in the returned tuple type.
      * @param type21 The type of CSV field 21 and the type of field 21 in the returned tuple type.
      * @param type22 The type of CSV field 22 and the type of field 22 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,
@@ -2362,7 +2363,7 @@ public class CsvReader {
      * @param type21 The type of CSV field 21 and the type of field 21 in the returned tuple type.
      * @param type22 The type of CSV field 22 and the type of field 22 in the returned tuple type.
      * @param type23 The type of CSV field 23 and the type of field 23 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,
@@ -2583,7 +2584,7 @@ public class CsvReader {
      * @param type22 The type of CSV field 22 and the type of field 22 in the returned tuple type.
      * @param type23 The type of CSV field 23 and the type of field 23 in the returned tuple type.
      * @param type24 The type of CSV field 24 and the type of field 24 in the returned tuple type.
-     * @return The {@link org.apache.flink.api.java.DataSet} representing the parsed CSV data.
+     * @return The {@link DataStream} representing the parsed CSV data.
      */
     public <
                     T0,

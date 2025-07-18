@@ -22,7 +22,7 @@ import org.apache.flink.api.common.distributions.DataDistribution;
 import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -67,9 +67,9 @@ public class CustomDistributionITCase extends TestLogger {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
-        DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Boolean> result =
+        DataStream<Boolean> result =
                 DataSetUtils.partitionByRange(input, dist, 0)
                         .mapPartition(
                                 new RichMapPartitionFunction<
@@ -131,7 +131,7 @@ public class CustomDistributionITCase extends TestLogger {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
-        DataSet<Tuple3<Integer, Integer, String>> input =
+        DataStream<Tuple3<Integer, Integer, String>> input =
                 env.fromElements(
                         new Tuple3<>(1, 5, "Hi"),
                         new Tuple3<>(1, 6, "Hi"),
@@ -149,7 +149,7 @@ public class CustomDistributionITCase extends TestLogger {
                         new Tuple3<>(5, 2, "Hi Java?"),
                         new Tuple3<>(5, 3, "Hi Java again"));
 
-        DataSet<Boolean> result =
+        DataStream<Boolean> result =
                 DataSetUtils.partitionByRange(input, dist, 0, 1)
                         .mapPartition(
                                 new RichMapPartitionFunction<
@@ -220,9 +220,9 @@ public class CustomDistributionITCase extends TestLogger {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
-        DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Boolean> result =
+        DataStream<Boolean> result =
                 DataSetUtils.partitionByRange(input, dist, 0)
                         .mapPartition(
                                 new RichMapPartitionFunction<
@@ -282,7 +282,7 @@ public class CustomDistributionITCase extends TestLogger {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
         DataSetUtils.partitionByRange(input, dist, 0, 1, 2);
     }
 

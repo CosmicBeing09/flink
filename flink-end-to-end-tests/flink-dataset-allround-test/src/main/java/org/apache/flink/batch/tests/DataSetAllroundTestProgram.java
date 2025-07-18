@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -68,10 +68,10 @@ public class DataSetAllroundTestProgram {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         int numKeys = loadFactor * 128 * 1024;
-        DataSet<Tuple2<String, Integer>> x1Keys;
-        DataSet<Tuple2<String, Integer>> x2Keys =
+        DataStream<Tuple2<String, Integer>> x1Keys;
+        DataStream<Tuple2<String, Integer>> x2Keys =
                 env.createInput(Generator.generate(numKeys * 32, 2)).setParallelism(4);
-        DataSet<Tuple2<String, Integer>> x8Keys =
+        DataStream<Tuple2<String, Integer>> x8Keys =
                 env.createInput(Generator.generate(numKeys, 8)).setParallelism(4);
 
         if (infinite) {
@@ -80,7 +80,7 @@ public class DataSetAllroundTestProgram {
             x1Keys = env.createInput(Generator.generate(numKeys, 1)).setParallelism(4);
         }
 
-        DataSet<Tuple2<String, Integer>> joined =
+        DataStream<Tuple2<String, Integer>> joined =
                 x2Keys
                         // shift keys (check for correct handling of key positions)
                         .map(x -> Tuple4.of("0-0", 0L, 1, x.f0))
@@ -107,7 +107,7 @@ public class DataSetAllroundTestProgram {
         // co-group two datasets on their primary keys.
         // we filter both inputs such that only 6.25% of the keys overlap.
         // result: (key, cnt), #keys records with unique keys, cnt = (6.25%: 2, 93.75%: 1)
-        DataSet<Tuple2<String, Integer>> coGrouped =
+        DataStream<Tuple2<String, Integer>> coGrouped =
                 x1Keys.filter(x -> x.f1 > 59)
                         .coGroup(x1Keys.filter(x -> x.f1 < 68))
                         .where("f0")
@@ -134,7 +134,7 @@ public class DataSetAllroundTestProgram {
 
         // join datasets on keys (1-1 join) and replicate by 16 (previously computed count)
         // result: (key, cnt), 16 * #keys records, all keys preserved, cnt = (6.25%: 2, 93.75%: 1)
-        DataSet<Tuple2<String, Integer>> joined2 =
+        DataStream<Tuple2<String, Integer>> joined2 =
                 joined.join(coGrouped, JoinOperatorBase.JoinHint.REPARTITION_SORT_MERGE)
                         .where(0)
                         .equalTo("f0")
@@ -154,10 +154,10 @@ public class DataSetAllroundTestProgram {
         // iteration. double the count field until all counts are at 32 or more
         // result: (key, cnt), 16 * #keys records, all keys preserved, cnt = (6.25%: 64, 93.75%: 32)
         IterativeDataSet<Tuple2<String, Integer>> initial = joined2.iterate(16);
-        DataSet<Tuple2<String, Integer>> iteration =
+        DataStream<Tuple2<String, Integer>> iteration =
                 initial.map(x -> Tuple2.of(x.f0, x.f1 * 2))
                         .returns(Types.TUPLE(Types.STRING, Types.INT));
-        DataSet<Boolean> termination =
+        DataStream<Boolean> termination =
                 iteration
                         // stop iteration if all values are larger/equal 32
                         .flatMap(
@@ -168,7 +168,7 @@ public class DataSetAllroundTestProgram {
                                             }
                                         })
                         .returns(Types.BOOLEAN);
-        DataSet<Tuple2<Integer, Integer>> result =
+        DataStream<Tuple2<Integer, Integer>> result =
                 initial.closeWith(iteration, termination)
                         // group on the count field and count records
                         // result: two records: (32, cnt1) and (64, cnt2) where cnt1 = x * 15/16,

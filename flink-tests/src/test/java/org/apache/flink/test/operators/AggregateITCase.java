@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.operators;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -55,8 +55,8 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> aggregateDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, Long>> aggregateDs =
                 ds.aggregate(Aggregations.SUM, 0).and(Aggregations.MAX, 1).project(0, 1);
 
         List<Tuple2<Integer, Long>> result = aggregateDs.collect();
@@ -74,9 +74,9 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
+        DataStream<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<IntValue, LongValue>> aggregateDs =
+        DataStream<Tuple2<IntValue, LongValue>> aggregateDs =
                 ds.aggregate(Aggregations.SUM, 0).and(Aggregations.MAX, 1).project(0, 1);
 
         List<Tuple2<IntValue, LongValue>> result = aggregateDs.collect();
@@ -94,8 +94,8 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Long, Integer>> aggregateDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Long, Integer>> aggregateDs =
                 ds.groupBy(1).aggregate(Aggregations.SUM, 0).project(1, 0);
 
         List<Tuple2<Long, Integer>> result = aggregateDs.collect();
@@ -113,9 +113,9 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
+        DataStream<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<IntValue, LongValue>> aggregateDs =
+        DataStream<Tuple2<IntValue, LongValue>> aggregateDs =
                 ds.groupBy(1).aggregate(Aggregations.SUM, 0).project(1, 0);
 
         List<Tuple2<IntValue, LongValue>> result = aggregateDs.collect();
@@ -133,8 +133,8 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple1<Integer>> aggregateDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple1<Integer>> aggregateDs =
                 ds.groupBy(1)
                         .aggregate(Aggregations.MIN, 0)
                         .aggregate(Aggregations.MIN, 0)
@@ -155,9 +155,9 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
+        DataStream<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple1<IntValue>> aggregateDs =
+        DataStream<Tuple1<IntValue>> aggregateDs =
                 ds.groupBy(1)
                         .aggregate(Aggregations.MIN, 0)
                         .aggregate(Aggregations.MIN, 0)

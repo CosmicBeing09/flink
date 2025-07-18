@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.UnsortedGrouping;
@@ -86,9 +86,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds
                         // combine
                         .combineGroup(new IdentityFunction())
@@ -105,9 +105,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds
                         // combine
                         .combineGroup(new IdentityFunction())
@@ -124,9 +124,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         // combine
                         .combineGroup(new IdentityFunction())
@@ -143,9 +143,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .sortGroup(1, Order.DESCENDING)
                         // reduce partially
@@ -166,9 +166,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // data
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple2<Long, Tuple3<Integer, Long, String>>> dsWrapped =
+        DataStream<Tuple2<Long, Tuple3<Integer, Long, String>>> dsWrapped =
                 ds
                         // wrap values as Kv pairs with the grouping key as key
                         .map(new Tuple3KvWrapper());
@@ -212,9 +212,9 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // data
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple2<Long, Tuple3<Integer, Long, String>>> dsWrapped =
+        DataStream<Tuple2<Long, Tuple3<Integer, Long, String>>> dsWrapped =
                 ds
                         // wrap values as Kv pairs with the grouping key as key
                         .map(new Tuple3KvWrapper());
@@ -255,7 +255,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // data
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
         // partition and group data
         UnsortedGrouping<Tuple3<Integer, Long, String>> partitionedDS =
@@ -306,7 +306,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
         env.setParallelism(1);
 
         // data
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
         // partition and group data
         UnsortedGrouping<Tuple3<Integer, Long, String>> partitionedDS =
@@ -344,7 +344,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple1<String>> ds =
+        DataStream<Tuple1<String>> ds =
                 CollectionDataSets.getStringDataSet(env)
                         .map(
                                 new MapFunction<String, Tuple1<String>>() {

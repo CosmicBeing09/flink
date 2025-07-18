@@ -18,7 +18,7 @@
 package org.apache.flink.optimizer.dataexchange;
 
 import org.apache.flink.api.common.ExecutionMode;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -124,13 +124,13 @@ public class UnionClosedBranchingTest extends CompilerTestBase {
         env.getConfig().setExecutionMode(executionMode);
         env.setParallelism(4);
 
-        DataSet<Tuple1<Integer>> src1 = env.fromElements(new Tuple1<>(0), new Tuple1<>(1));
+        DataStream<Tuple1<Integer>> src1 = env.fromElements(new Tuple1<>(0), new Tuple1<>(1));
 
-        DataSet<Tuple1<Integer>> src2 = env.fromElements(new Tuple1<>(0), new Tuple1<>(1));
+        DataStream<Tuple1<Integer>> src2 = env.fromElements(new Tuple1<>(0), new Tuple1<>(1));
 
-        DataSet<Tuple1<Integer>> union = src1.union(src2);
+        DataStream<Tuple1<Integer>> union = src1.union(src2);
 
-        DataSet<Tuple2<Integer, Integer>> join =
+        DataStream<Tuple2<Integer, Integer>> join =
                 union.join(union).where(0).equalTo(0).projectFirst(0).projectSecond(0);
 
         join.output(new DiscardingOutputFormat<Tuple2<Integer, Integer>>());

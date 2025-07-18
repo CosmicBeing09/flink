@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.io.ReplicatingInputFormat;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.ParallelIteratorInputFormat;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -56,16 +56,16 @@ public class ReplicatingDataSourceITCase extends MultipleProgramsTestBaseJUnit4 
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple1<Long>> source1 =
+        DataStream<Tuple1<Long>> source1 =
                 env.createInput(
                                 new ReplicatingInputFormat<Long, GenericInputSplit>(
                                         new ParallelIteratorInputFormat<Long>(
                                                 new NumberSequenceIterator(0L, 1000L))),
                                 BasicTypeInfo.LONG_TYPE_INFO)
                         .map(new ToTuple());
-        DataSet<Tuple1<Long>> source2 = env.generateSequence(0L, 1000L).map(new ToTuple());
+        DataStream<Tuple1<Long>> source2 = env.generateSequence(0L, 1000L).map(new ToTuple());
 
-        DataSet<Tuple> pairs = source1.join(source2).where(0).equalTo(0).projectFirst(0).sum(0);
+        DataStream<Tuple> pairs = source1.join(source2).where(0).equalTo(0).projectFirst(0).sum(0);
 
         List<Tuple> result = pairs.collect();
 
@@ -82,16 +82,16 @@ public class ReplicatingDataSourceITCase extends MultipleProgramsTestBaseJUnit4 
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple1<Long>> source1 =
+        DataStream<Tuple1<Long>> source1 =
                 env.createInput(
                                 new ReplicatingInputFormat<Long, GenericInputSplit>(
                                         new ParallelIteratorInputFormat<Long>(
                                                 new NumberSequenceIterator(0L, 1000L))),
                                 BasicTypeInfo.LONG_TYPE_INFO)
                         .map(new ToTuple());
-        DataSet<Tuple1<Long>> source2 = env.generateSequence(0L, 1000L).map(new ToTuple());
+        DataStream<Tuple1<Long>> source2 = env.generateSequence(0L, 1000L).map(new ToTuple());
 
-        DataSet<Tuple1<Long>> pairs =
+        DataStream<Tuple1<Long>> pairs =
                 source1.cross(source2)
                         .filter(
                                 new FilterFunction<Tuple2<Tuple1<Long>, Tuple1<Long>>>() {

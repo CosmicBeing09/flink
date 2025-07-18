@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -106,13 +106,13 @@ public class KMeans {
 
         // get input data:
         // read the points and centroids from the provided paths or fall back to default data
-        DataSet<Point> points = getPointDataSet(params, env);
-        DataSet<Centroid> centroids = getCentroidDataSet(params, env);
+        DataStream<Point> points = getPointDataSet(params, env);
+        DataStream<Centroid> centroids = getCentroidDataSet(params, env);
 
         // set number of bulk iterations for KMeans algorithm
         IterativeDataSet<Centroid> loop = centroids.iterate(params.getInt("iterations", 10));
 
-        DataSet<Centroid> newCentroids =
+        DataStream<Centroid> newCentroids =
                 points
                         // compute closest centroid for each point
                         .map(new SelectNearestCenter())
@@ -125,9 +125,9 @@ public class KMeans {
                         .map(new CentroidAverager());
 
         // feed new centroids back into next iteration
-        DataSet<Centroid> finalCentroids = loop.closeWith(newCentroids);
+        DataStream<Centroid> finalCentroids = loop.closeWith(newCentroids);
 
-        DataSet<Tuple2<Integer, Point>> clusteredPoints =
+        DataStream<Tuple2<Integer, Point>> clusteredPoints =
                 points
                         // assign points to final clusters
                         .map(new SelectNearestCenter())
@@ -149,9 +149,9 @@ public class KMeans {
     //     DATA SOURCE READING (POINTS AND CENTROIDS)
     // *************************************************************************
 
-    private static DataSet<Centroid> getCentroidDataSet(
+    private static DataStream<Centroid> getCentroidDataSet(
             ParameterTool params, ExecutionEnvironment env) {
-        DataSet<Centroid> centroids;
+        DataStream<Centroid> centroids;
         if (params.has("centroids")) {
             centroids =
                     env.readCsvFile(params.get("centroids"))
@@ -165,8 +165,8 @@ public class KMeans {
         return centroids;
     }
 
-    private static DataSet<Point> getPointDataSet(ParameterTool params, ExecutionEnvironment env) {
-        DataSet<Point> points;
+    private static DataStream<Point> getPointDataSet(ParameterTool params, ExecutionEnvironment env) {
+        DataStream<Point> points;
         if (params.has("points")) {
             // read points from CSV file
             points =

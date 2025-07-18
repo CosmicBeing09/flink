@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.aggregation.UnsupportedAggregationTypeException;
@@ -35,7 +35,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#aggregate(Aggregations, int)}. */
+/** Tests for {@link DataStream#aggregate(Aggregations, int)}. */
 class AggregateOperatorTest {
 
     // TUPLE DATA
@@ -59,7 +59,7 @@ class AggregateOperatorTest {
     void testFieldsAggregate() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -70,7 +70,7 @@ class AggregateOperatorTest {
                 .isInstanceOf(IllegalArgumentException.class);
 
         // should not work: not applied to tuple dataset
-        DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
+        DataStream<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
 
         assertThatThrownBy(() -> longDs.aggregate(Aggregations.MIN, 1))
                 .isInstanceOf(InvalidProgramException.class);
@@ -80,7 +80,7 @@ class AggregateOperatorTest {
     void testAggregationTypes() {
         try {
             final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-            DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+            DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                     env.fromCollection(emptyTupleData, tupleTypeInfo);
 
             // should work: multiple aggregates

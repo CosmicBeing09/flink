@@ -98,10 +98,10 @@ import java.util.List;
  * <p>A DataSet can be transformed into another DataSet by applying a transformation as for example
  *
  * <ul>
- *   <li>{@link DataSet#map(org.apache.flink.api.common.functions.MapFunction)},
- *   <li>{@link DataSet#reduce(org.apache.flink.api.common.functions.ReduceFunction)},
- *   <li>{@link DataSet#join(DataSet)}, or
- *   <li>{@link DataSet#coGroup(DataSet)}.
+ *   <li>{@link DataStream#map(org.apache.flink.api.common.functions.MapFunction)},
+ *   <li>{@link DataStream#reduce(org.apache.flink.api.common.functions.ReduceFunction)},
+ *   <li>{@link DataStream#join(DataStream)}, or
+ *   <li>{@link DataStream#coGroup(DataStream)}.
  * </ul>
  *
  * @param <T> The type of the DataSet, i.e., the type of the elements of the DataSet.
@@ -113,7 +113,7 @@ import java.util.List;
  */
 @Deprecated
 @Public
-public abstract class DataSet<T> {
+public abstract class DataStream<T> {
 
     protected final ExecutionEnvironment context;
 
@@ -122,7 +122,7 @@ public abstract class DataSet<T> {
 
     private boolean typeUsed = false;
 
-    protected DataSet(ExecutionEnvironment context, TypeInformation<T> typeInfo) {
+    protected DataStream(ExecutionEnvironment context, TypeInformation<T> typeInfo) {
         if (context == null) {
             throw new NullPointerException("context is null");
         }
@@ -255,7 +255,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Applies a FlatMap transformation on a {@link DataSet}.
+     * Applies a FlatMap transformation on a {@link DataStream}.
      *
      * <p>The transformation calls a {@link
      * org.apache.flink.api.common.functions.RichFlatMapFunction} for each element of the DataSet.
@@ -265,7 +265,7 @@ public abstract class DataSet<T> {
      * @return A FlatMapOperator that represents the transformed DataSet.
      * @see org.apache.flink.api.common.functions.RichFlatMapFunction
      * @see FlatMapOperator
-     * @see DataSet
+     * @see DataStream
      */
     public <R> FlatMapOperator<T, R> flatMap(FlatMapFunction<T, R> flatMapper) {
         if (flatMapper == null) {
@@ -279,7 +279,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Applies a Filter transformation on a {@link DataSet}.
+     * Applies a Filter transformation on a {@link DataStream}.
      *
      * <p>The transformation calls a {@link
      * org.apache.flink.api.common.functions.RichFilterFunction} for each element of the DataSet and
@@ -290,7 +290,7 @@ public abstract class DataSet<T> {
      * @return A FilterOperator that represents the filtered DataSet.
      * @see org.apache.flink.api.common.functions.RichFilterFunction
      * @see FilterOperator
-     * @see DataSet
+     * @see DataStream
      */
     public FilterOperator<T> filter(FilterFunction<T> filter) {
         if (filter == null) {
@@ -304,7 +304,7 @@ public abstract class DataSet<T> {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * Applies a Project transformation on a {@link Tuple} {@link DataSet}.
+     * Applies a Project transformation on a {@link Tuple} {@link DataStream}.
      *
      * <p><b>Note: Only Tuple DataSets can be projected using field indexes.</b>
      *
@@ -320,7 +320,7 @@ public abstract class DataSet<T> {
      *     fields in the output tuple corresponds to the order of field indexes.
      * @return A ProjectOperator that represents the projected DataSet.
      * @see Tuple
-     * @see DataSet
+     * @see DataStream
      * @see ProjectOperator
      */
     public <OUT extends Tuple> ProjectOperator<?, OUT> project(int... fieldIndexes) {
@@ -332,7 +332,7 @@ public abstract class DataSet<T> {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * Applies an Aggregate transformation on a non-grouped {@link Tuple} {@link DataSet}.
+     * Applies an Aggregate transformation on a non-grouped {@link Tuple} {@link DataStream}.
      *
      * <p><b>Note: Only Tuple DataSets can be aggregated.</b> The transformation applies a built-in
      * {@link Aggregations Aggregation} on a specified field of a Tuple DataSet. Additional
@@ -345,7 +345,7 @@ public abstract class DataSet<T> {
      * @see Tuple
      * @see Aggregations
      * @see AggregateOperator
-     * @see DataSet
+     * @see DataStream
      */
     public AggregateOperator<T> aggregate(Aggregations agg, int field) {
         return new AggregateOperator<>(this, agg, field, Utils.getCallLocationName());
@@ -440,7 +440,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Applies a Reduce transformation on a non-grouped {@link DataSet}.
+     * Applies a Reduce transformation on a non-grouped {@link DataStream}.
      *
      * <p>The transformation consecutively calls a {@link
      * org.apache.flink.api.common.functions.RichReduceFunction} until only a single element remains
@@ -451,7 +451,7 @@ public abstract class DataSet<T> {
      * @return A ReduceOperator that represents the reduced DataSet.
      * @see org.apache.flink.api.common.functions.RichReduceFunction
      * @see ReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public ReduceOperator<T> reduce(ReduceFunction<T> reducer) {
         if (reducer == null) {
@@ -461,7 +461,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Applies a GroupReduce transformation on a non-grouped {@link DataSet}.
+     * Applies a GroupReduce transformation on a non-grouped {@link DataStream}.
      *
      * <p>The transformation calls a {@link
      * org.apache.flink.api.common.functions.RichGroupReduceFunction} once with the full DataSet.
@@ -472,7 +472,7 @@ public abstract class DataSet<T> {
      * @return A GroupReduceOperator that represents the reduced DataSet.
      * @see org.apache.flink.api.common.functions.RichGroupReduceFunction
      * @see org.apache.flink.api.java.operators.GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public <R> GroupReduceOperator<T, R> reduceGroup(GroupReduceFunction<T, R> reducer) {
         if (reducer == null) {
@@ -486,7 +486,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Applies a GroupCombineFunction on a non-grouped {@link DataSet}. A CombineFunction is similar
+     * Applies a GroupCombineFunction on a non-grouped {@link DataStream}. A CombineFunction is similar
      * to a GroupReduceFunction but does not perform a full data exchange. Instead, the
      * CombineFunction calls the combine method once per partition for combining a group of results.
      * This operator is suitable for combining values into an intermediate format before doing a
@@ -590,7 +590,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Returns a new set containing the first n elements in this {@link DataSet}.
+     * Returns a new set containing the first n elements in this {@link DataStream}.
      *
      * @param n The desired number of elements.
      * @return A ReduceGroupOperator that represents the DataSet containing the elements.
@@ -608,7 +608,7 @@ public abstract class DataSet<T> {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * Returns a distinct set of a {@link DataSet} using a {@link KeySelector} function.
+     * Returns a distinct set of a {@link DataStream} using a {@link KeySelector} function.
      *
      * <p>The KeySelector function is called for each element of the DataSet and extracts a single
      * key value on which the decision is made if two items are distinct or not.
@@ -626,7 +626,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Returns a distinct set of a {@link Tuple} {@link DataSet} using field position keys.
+     * Returns a distinct set of a {@link Tuple} {@link DataStream} using field position keys.
      *
      * <p>The field position keys specify the fields of Tuples on which the decision is made if two
      * Tuples are distinct or not.
@@ -642,7 +642,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Returns a distinct set of a {@link DataSet} using expression keys.
+     * Returns a distinct set of a {@link DataStream} using expression keys.
      *
      * <p>The field expression keys specify the fields of a {@link
      * org.apache.flink.api.common.typeutils.CompositeType} (e.g., Tuple or Pojo type) on which the
@@ -660,7 +660,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Returns a distinct set of a {@link DataSet}.
+     * Returns a distinct set of a {@link DataStream}.
      *
      * <p>If the input is a {@link org.apache.flink.api.common.typeutils.CompositeType} (Tuple or
      * Pojo type), distinct is performed on all fields and each field must be a key type
@@ -676,7 +676,7 @@ public abstract class DataSet<T> {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * Groups a {@link DataSet} using a {@link KeySelector} function. The KeySelector function is
+     * Groups a {@link DataStream} using a {@link KeySelector} function. The KeySelector function is
      * called for each element of the DataSet and extracts a single key value on which the DataSet
      * is grouped.
      *
@@ -704,7 +704,7 @@ public abstract class DataSet<T> {
      * @see AggregateOperator
      * @see ReduceOperator
      * @see org.apache.flink.api.java.operators.GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public <K> UnsortedGrouping<T> groupBy(KeySelector<T, K> keyExtractor) {
         TypeInformation<K> keyType = TypeExtractor.getKeySelectorTypes(keyExtractor, getType());
@@ -713,7 +713,7 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Groups a {@link Tuple} {@link DataSet} using field position keys.
+     * Groups a {@link Tuple} {@link DataStream} using field position keys.
      *
      * <p><b>Note: Field position keys only be specified for Tuple DataSets.</b>
      *
@@ -741,15 +741,15 @@ public abstract class DataSet<T> {
      * @see AggregateOperator
      * @see ReduceOperator
      * @see org.apache.flink.api.java.operators.GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public UnsortedGrouping<T> groupBy(int... fields) {
         return new UnsortedGrouping<>(this, new Keys.ExpressionKeys<>(fields, getType()));
     }
 
     /**
-     * Groups a {@link DataSet} using field expressions. A field expression is either the name of a
-     * public field or a getter method with parentheses of the {@link DataSet}S underlying type. A
+     * Groups a {@link DataStream} using field expressions. A field expression is either the name of a
+     * public field or a getter method with parentheses of the {@link DataStream}S underlying type. A
      * dot can be used to drill down into objects, as in {@code "field1.getInnerField2()" }. This
      * method returns an {@link UnsortedGrouping} on which one of the following grouping
      * transformation can be applied.
@@ -774,7 +774,7 @@ public abstract class DataSet<T> {
      * @see AggregateOperator
      * @see ReduceOperator
      * @see org.apache.flink.api.java.operators.GroupReduceOperator
-     * @see DataSet
+     * @see DataStream
      */
     public UnsortedGrouping<T> groupBy(String... fields) {
         return new UnsortedGrouping<>(this, new Keys.ExpressionKeys<>(fields, getType()));
@@ -787,7 +787,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Join transformation.
      *
-     * <p>A Join transformation joins the elements of two {@link DataSet DataSets} on key equality
+     * <p>A Join transformation joins the elements of two {@link DataStream DataSets} on key equality
      * and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>This method returns a {@link JoinOperatorSets} on which one of the {@code where} methods
@@ -796,16 +796,16 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSets to continue the definition of the Join transformation.
      * @see JoinOperatorSets
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSets<T, R> join(DataSet<R> other) {
+    public <R> JoinOperatorSets<T, R> join(DataStream<R> other) {
         return new JoinOperatorSets<>(this, other);
     }
 
     /**
      * Initiates a Join transformation.
      *
-     * <p>A Join transformation joins the elements of two {@link DataSet DataSets} on key equality
+     * <p>A Join transformation joins the elements of two {@link DataStream DataSets} on key equality
      * and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>This method returns a {@link JoinOperatorSets} on which one of the {@code where} methods
@@ -816,16 +816,16 @@ public abstract class DataSet<T> {
      *     then the optimizer will pick the join strategy.
      * @return A JoinOperatorSets to continue the definition of the Join transformation.
      * @see JoinOperatorSets
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSets<T, R> join(DataSet<R> other, JoinHint strategy) {
+    public <R> JoinOperatorSets<T, R> join(DataStream<R> other, JoinHint strategy) {
         return new JoinOperatorSets<>(this, other, strategy);
     }
 
     /**
      * Initiates a Join transformation.
      *
-     * <p>A Join transformation joins the elements of two {@link DataSet DataSets} on key equality
+     * <p>A Join transformation joins the elements of two {@link DataStream DataSets} on key equality
      * and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>This method also gives the hint to the optimizer that the second DataSet to join is much
@@ -838,16 +838,16 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSets to continue the definition of the Join transformation.
      * @see JoinOperatorSets
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSets<T, R> joinWithTiny(DataSet<R> other) {
+    public <R> JoinOperatorSets<T, R> joinWithTiny(DataStream<R> other) {
         return new JoinOperatorSets<>(this, other, JoinHint.BROADCAST_HASH_SECOND);
     }
 
     /**
      * Initiates a Join transformation.
      *
-     * <p>A Join transformation joins the elements of two {@link DataSet DataSets} on key equality
+     * <p>A Join transformation joins the elements of two {@link DataStream DataSets} on key equality
      * and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>This method also gives the hint to the optimizer that the second DataSet to join is much
@@ -859,16 +859,16 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see JoinOperatorSets
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSets<T, R> joinWithHuge(DataSet<R> other) {
+    public <R> JoinOperatorSets<T, R> joinWithHuge(DataStream<R> other) {
         return new JoinOperatorSets<>(this, other, JoinHint.BROADCAST_HASH_FIRST);
     }
 
     /**
      * Initiates a Left Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of the <b>left</b> DataSet (i.e. {@code this}) that do not have a matching
@@ -877,9 +877,9 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> leftOuterJoin(DataSet<R> other) {
+    public <R> JoinOperatorSetsBase<T, R> leftOuterJoin(DataStream<R> other) {
         return new JoinOperatorSetsBase<>(
                 this, other, JoinHint.OPTIMIZER_CHOOSES, JoinType.LEFT_OUTER);
     }
@@ -887,7 +887,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Left Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of the <b>left</b> DataSet (i.e. {@code this}) that do not have a matching
@@ -898,9 +898,9 @@ public abstract class DataSet<T> {
      *     then the optimizer will pick the join strategy.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> leftOuterJoin(DataSet<R> other, JoinHint strategy) {
+    public <R> JoinOperatorSetsBase<T, R> leftOuterJoin(DataStream<R> other, JoinHint strategy) {
         switch (strategy) {
             case OPTIMIZER_CHOOSES:
             case REPARTITION_SORT_MERGE:
@@ -917,7 +917,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Right Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of the <b>right</b> DataSet (i.e. {@code other}) that do not have a matching
@@ -927,9 +927,9 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> rightOuterJoin(DataSet<R> other) {
+    public <R> JoinOperatorSetsBase<T, R> rightOuterJoin(DataStream<R> other) {
         return new JoinOperatorSetsBase<>(
                 this, other, JoinHint.OPTIMIZER_CHOOSES, JoinType.RIGHT_OUTER);
     }
@@ -937,7 +937,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Right Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of the <b>right</b> DataSet (i.e. {@code other}) that do not have a matching
@@ -949,9 +949,9 @@ public abstract class DataSet<T> {
      *     then the optimizer will pick the join strategy.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> rightOuterJoin(DataSet<R> other, JoinHint strategy) {
+    public <R> JoinOperatorSetsBase<T, R> rightOuterJoin(DataStream<R> other, JoinHint strategy) {
         switch (strategy) {
             case OPTIMIZER_CHOOSES:
             case REPARTITION_SORT_MERGE:
@@ -968,7 +968,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Full Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of <b>both</b> DataSets that do not have a matching element on the opposing side
@@ -977,9 +977,9 @@ public abstract class DataSet<T> {
      * @param other The other DataSet with which this DataSet is joined.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> fullOuterJoin(DataSet<R> other) {
+    public <R> JoinOperatorSetsBase<T, R> fullOuterJoin(DataStream<R> other) {
         return new JoinOperatorSetsBase<>(
                 this, other, JoinHint.OPTIMIZER_CHOOSES, JoinType.FULL_OUTER);
     }
@@ -987,7 +987,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Full Outer Join transformation.
      *
-     * <p>An Outer Join transformation joins two elements of two {@link DataSet DataSets} on key
+     * <p>An Outer Join transformation joins two elements of two {@link DataStream DataSets} on key
      * equality and provides multiple ways to combine joining elements into one DataSet.
      *
      * <p>Elements of <b>both</b> DataSets that do not have a matching element on the opposing side
@@ -998,9 +998,9 @@ public abstract class DataSet<T> {
      *     then the optimizer will pick the join strategy.
      * @return A JoinOperatorSet to continue the definition of the Join transformation.
      * @see org.apache.flink.api.java.operators.join.JoinOperatorSetsBase
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> JoinOperatorSetsBase<T, R> fullOuterJoin(DataSet<R> other, JoinHint strategy) {
+    public <R> JoinOperatorSetsBase<T, R> fullOuterJoin(DataStream<R> other, JoinHint strategy) {
         switch (strategy) {
             case OPTIMIZER_CHOOSES:
             case REPARTITION_SORT_MERGE:
@@ -1020,7 +1020,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a CoGroup transformation.
      *
-     * <p>A CoGroup transformation combines the elements of two {@link DataSet DataSets} into one
+     * <p>A CoGroup transformation combines the elements of two {@link DataStream DataSets} into one
      * DataSet. It groups each DataSet individually on a key and gives groups of both DataSets with
      * equal keys together into a {@link org.apache.flink.api.common.functions.RichCoGroupFunction}.
      * If a DataSet has a group with no matching key in the other DataSet, the CoGroupFunction is
@@ -1036,9 +1036,9 @@ public abstract class DataSet<T> {
      * @return A CoGroupOperatorSets to continue the definition of the CoGroup transformation.
      * @see CoGroupOperatorSets
      * @see CoGroupOperator
-     * @see DataSet
+     * @see DataStream
      */
-    public <R> CoGroupOperator.CoGroupOperatorSets<T, R> coGroup(DataSet<R> other) {
+    public <R> CoGroupOperator.CoGroupOperatorSets<T, R> coGroup(DataStream<R> other) {
         return new CoGroupOperator.CoGroupOperatorSets<>(this, other);
     }
 
@@ -1048,7 +1048,7 @@ public abstract class DataSet<T> {
 
     /**
      * Continues a Join transformation and defines the {@link Tuple} fields of the second join
-     * {@link DataSet} that should be used as join keys.
+     * {@link DataStream} that should be used as join keys.
      *
      * <p><b>Note: Fields can only be selected as join keys on Tuple DataSets.</b>
      *
@@ -1064,7 +1064,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Cross transformation.
      *
-     * <p>A Cross transformation combines the elements of two {@link DataSet DataSets} into one
+     * <p>A Cross transformation combines the elements of two {@link DataStream DataSets} into one
      * DataSet. It builds all pair combinations of elements of both DataSets, i.e., it builds a
      * Cartesian product.
      *
@@ -1083,10 +1083,10 @@ public abstract class DataSet<T> {
      * @return A DefaultCross that returns a Tuple2 for each pair of crossed elements.
      * @see org.apache.flink.api.java.operators.CrossOperator.DefaultCross
      * @see org.apache.flink.api.common.functions.CrossFunction
-     * @see DataSet
+     * @see DataStream
      * @see Tuple2
      */
-    public <R> CrossOperator.DefaultCross<T, R> cross(DataSet<R> other) {
+    public <R> CrossOperator.DefaultCross<T, R> cross(DataStream<R> other) {
         return new CrossOperator.DefaultCross<>(
                 this, other, CrossHint.OPTIMIZER_CHOOSES, Utils.getCallLocationName());
     }
@@ -1094,7 +1094,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Cross transformation.
      *
-     * <p>A Cross transformation combines the elements of two {@link DataSet DataSets} into one
+     * <p>A Cross transformation combines the elements of two {@link DataStream DataSets} into one
      * DataSet. It builds all pair combinations of elements of both DataSets, i.e., it builds a
      * Cartesian product. This method also gives the hint to the optimizer that the second DataSet
      * to cross is much smaller than the first one.
@@ -1114,10 +1114,10 @@ public abstract class DataSet<T> {
      * @return A DefaultCross that returns a Tuple2 for each pair of crossed elements.
      * @see org.apache.flink.api.java.operators.CrossOperator.DefaultCross
      * @see org.apache.flink.api.common.functions.CrossFunction
-     * @see DataSet
+     * @see DataStream
      * @see Tuple2
      */
-    public <R> CrossOperator.DefaultCross<T, R> crossWithTiny(DataSet<R> other) {
+    public <R> CrossOperator.DefaultCross<T, R> crossWithTiny(DataStream<R> other) {
         return new CrossOperator.DefaultCross<>(
                 this, other, CrossHint.SECOND_IS_SMALL, Utils.getCallLocationName());
     }
@@ -1125,7 +1125,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates a Cross transformation.
      *
-     * <p>A Cross transformation combines the elements of two {@link DataSet DataSets} into one
+     * <p>A Cross transformation combines the elements of two {@link DataStream DataSets} into one
      * DataSet. It builds all pair combinations of elements of both DataSets, i.e., it builds a
      * Cartesian product. This method also gives the hint to the optimizer that the second DataSet
      * to cross is much larger than the first one.
@@ -1145,10 +1145,10 @@ public abstract class DataSet<T> {
      * @return A DefaultCross that returns a Tuple2 for each pair of crossed elements.
      * @see org.apache.flink.api.java.operators.CrossOperator.DefaultCross
      * @see org.apache.flink.api.common.functions.CrossFunction
-     * @see DataSet
+     * @see DataStream
      * @see Tuple2
      */
-    public <R> CrossOperator.DefaultCross<T, R> crossWithHuge(DataSet<R> other) {
+    public <R> CrossOperator.DefaultCross<T, R> crossWithHuge(DataStream<R> other) {
         return new CrossOperator.DefaultCross<>(
                 this, other, CrossHint.FIRST_IS_SMALL, Utils.getCallLocationName());
     }
@@ -1160,7 +1160,7 @@ public abstract class DataSet<T> {
     /**
      * Initiates an iterative part of the program that executes multiple times and feeds back data
      * sets. The iterative part needs to be closed by calling {@link
-     * org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataSet)}. The data set given
+     * org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataStream)}. The data set given
      * to the {@code closeWith(DataSet)} method is the data set that will be fed back and used as
      * the input to the next iteration. The return value of the {@code closeWith(DataSet)} method is
      * the resulting data set after the iteration has terminated.
@@ -1179,11 +1179,11 @@ public abstract class DataSet<T> {
      *
      * <p>The iteration has a maximum number of times that it executes. A dynamic termination can be
      * realized by using a termination criterion (see {@link
-     * org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataSet, DataSet)}).
+     * org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataStream, DataStream)}).
      *
      * @param maxIterations The maximum number of times that the iteration is executed.
      * @return An IterativeDataSet that marks the start of the iterative part and needs to be closed
-     *     by {@link org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataSet)}.
+     *     by {@link org.apache.flink.api.java.operators.IterativeDataSet#closeWith(DataStream)}.
      * @see org.apache.flink.api.java.operators.IterativeDataSet
      */
     public IterativeDataSet<T> iterate(int maxIterations) {
@@ -1202,7 +1202,7 @@ public abstract class DataSet<T> {
      * iteration step.
      *
      * <p>The delta iteration must be closed by calling {@link
-     * org.apache.flink.api.java.operators.DeltaIteration#closeWith(DataSet, DataSet)}. The two
+     * org.apache.flink.api.java.operators.DeltaIteration#closeWith(DataStream, DataStream)}. The two
      * parameters are the delta for the solution set and the new workset (the data set that will be
      * fed back). The return value of the {@code closeWith(DataSet, DataSet)} method is the
      * resulting data set after the iteration has terminated. Delta iterations terminate when the
@@ -1240,7 +1240,7 @@ public abstract class DataSet<T> {
      * @see org.apache.flink.api.java.operators.DeltaIteration
      */
     public <R> DeltaIteration<T, R> iterateDelta(
-            DataSet<R> workset, int maxIterations, int... keyPositions) {
+            DataStream<R> workset, int maxIterations, int... keyPositions) {
         Preconditions.checkNotNull(workset);
         Preconditions.checkNotNull(keyPositions);
 
@@ -1260,7 +1260,7 @@ public abstract class DataSet<T> {
      * @param operation The operation to run.
      * @return The data set produced by the operation.
      */
-    public <X> DataSet<X> runOperation(CustomUnaryOperation<T, X> operation) {
+    public <X> DataStream<X> runOperation(CustomUnaryOperation<T, X> operation) {
         Preconditions.checkNotNull(operation, "The custom operator must not be null.");
         operation.setInput(this);
         return operation.createResult();
@@ -1277,7 +1277,7 @@ public abstract class DataSet<T> {
      * @param other The other DataSet which is unioned with the current DataSet.
      * @return The resulting DataSet.
      */
-    public UnionOperator<T> union(DataSet<T> other) {
+    public UnionOperator<T> union(DataStream<T> other) {
         return new UnionOperator<>(this, other, Utils.getCallLocationName());
     }
 
@@ -1594,7 +1594,7 @@ public abstract class DataSet<T> {
      *     OVERWRITE.
      * @return The DataSink that writes the DataSet.
      * @see TextOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<T> writeAsText(String filePath, WriteMode writeMode) {
         TextOutputFormat<T> tof = new TextOutputFormat<>(new Path(filePath));
@@ -1612,7 +1612,7 @@ public abstract class DataSet<T> {
      * @param formatter formatter that is applied on every element of the DataSet.
      * @return The DataSink that writes the DataSet.
      * @see TextOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<String> writeAsFormattedText(String filePath, TextFormatter<T> formatter) {
         return map(new FormattingMapper<>(clean(formatter))).writeAsText(filePath);
@@ -1630,7 +1630,7 @@ public abstract class DataSet<T> {
      * @param formatter formatter that is applied on every element of the DataSet.
      * @return The DataSink that writes the DataSet.
      * @see TextOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<String> writeAsFormattedText(
             String filePath, WriteMode writeMode, TextFormatter<T> formatter) {
@@ -1651,7 +1651,7 @@ public abstract class DataSet<T> {
      * @return The DataSink that writes the DataSet.
      * @see Tuple
      * @see CsvOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<T> writeAsCsv(String filePath) {
         return writeAsCsv(
@@ -1676,7 +1676,7 @@ public abstract class DataSet<T> {
      * @return The DataSink that writes the DataSet.
      * @see Tuple
      * @see CsvOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<T> writeAsCsv(String filePath, WriteMode writeMode) {
         return internalWriteAsCsv(
@@ -1699,7 +1699,7 @@ public abstract class DataSet<T> {
      * @param fieldDelimiter The field delimiter to separate Tuple fields.
      * @see Tuple
      * @see CsvOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<T> writeAsCsv(String filePath, String rowDelimiter, String fieldDelimiter) {
         return internalWriteAsCsv(new Path(filePath), rowDelimiter, fieldDelimiter, null);
@@ -1719,7 +1719,7 @@ public abstract class DataSet<T> {
      *     OVERWRITE.
      * @see Tuple
      * @see CsvOutputFormat
-     * @see DataSet#writeAsText(String) Output files and directories
+     * @see DataStream#writeAsText(String) Output files and directories
      */
     public DataSink<T> writeAsCsv(
             String filePath, String rowDelimiter, String fieldDelimiter, WriteMode writeMode) {
@@ -1894,7 +1894,7 @@ public abstract class DataSet<T> {
     //  Utilities
     // --------------------------------------------------------------------------------------------
 
-    protected static void checkSameExecutionContext(DataSet<?> set1, DataSet<?> set2) {
+    protected static void checkSameExecutionContext(DataStream<?> set1, DataStream<?> set2) {
         if (set1.getExecutionEnvironment() != set2.getExecutionEnvironment()) {
             throw new IllegalArgumentException("The two inputs have different execution contexts.");
         }

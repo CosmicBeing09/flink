@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -34,23 +34,23 @@ public class StaticlyNestedIterationsITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> data1 = env.generateSequence(1, 100);
-        DataSet<Long> data2 = env.generateSequence(1, 100);
+        DataStream<Long> data1 = env.generateSequence(1, 100);
+        DataStream<Long> data2 = env.generateSequence(1, 100);
 
         IterativeDataSet<Long> firstIteration = data1.iterate(100);
 
-        DataSet<Long> firstResult = firstIteration.closeWith(firstIteration.map(new IdMapper()));
+        DataStream<Long> firstResult = firstIteration.closeWith(firstIteration.map(new IdMapper()));
 
         IterativeDataSet<Long> mainIteration = data2.map(new IdMapper()).iterate(100);
 
-        DataSet<Long> joined =
+        DataStream<Long> joined =
                 mainIteration
                         .join(firstResult)
                         .where(new IdKeyExtractor())
                         .equalTo(new IdKeyExtractor())
                         .with(new Joiner());
 
-        DataSet<Long> mainResult = mainIteration.closeWith(joined);
+        DataStream<Long> mainResult = mainIteration.closeWith(joined);
 
         mainResult.output(new DiscardingOutputFormat<Long>());
 

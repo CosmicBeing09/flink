@@ -19,7 +19,7 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.RichFilterFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
@@ -33,7 +33,7 @@ import java.util.List;
 
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsTuples;
 
-/** Integration tests for {@link DataSet#union}. */
+/** Integration tests for {@link DataStream#union}. */
 @RunWith(Parameterized.class)
 public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
 
@@ -71,8 +71,8 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> unionDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> unionDs =
                 ds.union(CollectionDataSets.get3TupleDataSet(env));
 
         List<Tuple3<Integer, Long, String>> result = unionDs.collect();
@@ -90,8 +90,8 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> unionDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> unionDs =
                 ds.union(CollectionDataSets.get3TupleDataSet(env))
                         .union(CollectionDataSets.get3TupleDataSet(env))
                         .union(CollectionDataSets.get3TupleDataSet(env))
@@ -117,10 +117,10 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // Don't know how to make an empty result in an other way than filtering it
-        DataSet<Tuple3<Integer, Long, String>> empty =
+        DataStream<Tuple3<Integer, Long, String>> empty =
                 CollectionDataSets.get3TupleDataSet(env).filter(new RichFilter1());
 
-        DataSet<Tuple3<Integer, Long, String>> unionDs =
+        DataStream<Tuple3<Integer, Long, String>> unionDs =
                 CollectionDataSets.get3TupleDataSet(env).union(empty);
 
         List<Tuple3<Integer, Long, String>> result = unionDs.collect();

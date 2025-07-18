@@ -21,7 +21,7 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
@@ -84,19 +84,19 @@ public class CoGroupConnectedComponentsITCase extends JavaProgramTestBaseJUnit4 
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple1<Long>> initialVertices =
+        DataStream<Tuple1<Long>> initialVertices =
                 env.readCsvFile(verticesPath)
                         .fieldDelimiter(" ")
                         .types(Long.class)
                         .name("Vertices");
 
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 env.readCsvFile(edgesPath)
                         .fieldDelimiter(" ")
                         .types(Long.class, Long.class)
                         .name("Edges");
 
-        DataSet<Tuple2<Long, Long>> verticesWithId =
+        DataStream<Tuple2<Long, Long>> verticesWithId =
                 initialVertices
                         .map(
                                 new MapFunction<Tuple1<Long>, Tuple2<Long, Long>>() {

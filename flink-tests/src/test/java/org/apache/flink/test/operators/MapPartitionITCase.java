@@ -19,7 +19,7 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapPartitionFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -76,7 +76,7 @@ public class MapPartitionITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<String, String>> data = env.fromCollection(input);
+        DataStream<Tuple2<String, String>> data = env.fromCollection(input);
 
         data.mapPartition(new TestMapPartition())
                 .output(new LocalCollectionOutputFormat<Tuple2<String, Integer>>(result));

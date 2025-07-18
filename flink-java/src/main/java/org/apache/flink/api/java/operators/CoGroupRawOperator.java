@@ -28,15 +28,15 @@ import org.apache.flink.api.common.operators.Keys.IncompatibleKeysException;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.CoGroupRawOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
- * A {@link DataSet} that is the result of a CoGroup transformation.
+ * A {@link DataStream} that is the result of a CoGroup transformation.
  *
  * @param <I1> The type of the first input DataSet of the CoGroup transformation.
  * @param <I2> The type of the second input DataSet of the CoGroup transformation.
  * @param <OUT> The type of the result of the CoGroup transformation.
- * @see DataSet
+ * @see DataStream
  */
 @Internal
 public class CoGroupRawOperator<I1, I2, OUT>
@@ -50,8 +50,8 @@ public class CoGroupRawOperator<I1, I2, OUT>
     private final String defaultName;
 
     public CoGroupRawOperator(
-            DataSet<I1> input1,
-            DataSet<I2> input2,
+            DataStream<I1> input1,
+            DataStream<I2> input2,
             Keys<I1> keys1,
             Keys<I2> keys2,
             CoGroupFunction<I1, I2, OUT> function,

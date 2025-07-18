@@ -32,7 +32,7 @@ import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.PartitionOperatorBase;
 import org.apache.flink.api.common.operators.base.PartitionOperatorBase.PartitionMethod;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.util.Preconditions;
 
@@ -60,7 +60,7 @@ public class PartitionOperator<T> extends SingleInputOperator<T, T, PartitionOpe
     private Order[] orders;
 
     public PartitionOperator(
-            DataSet<T> input,
+            DataStream<T> input,
             PartitionMethod pMethod,
             Keys<T> pKeys,
             String partitionLocationName) {
@@ -68,7 +68,7 @@ public class PartitionOperator<T> extends SingleInputOperator<T, T, PartitionOpe
     }
 
     public PartitionOperator(
-            DataSet<T> input,
+            DataStream<T> input,
             PartitionMethod pMethod,
             Keys<T> pKeys,
             DataDistribution distribution,
@@ -77,12 +77,12 @@ public class PartitionOperator<T> extends SingleInputOperator<T, T, PartitionOpe
     }
 
     public PartitionOperator(
-            DataSet<T> input, PartitionMethod pMethod, String partitionLocationName) {
+            DataStream<T> input, PartitionMethod pMethod, String partitionLocationName) {
         this(input, pMethod, null, null, null, null, partitionLocationName);
     }
 
     public PartitionOperator(
-            DataSet<T> input,
+            DataStream<T> input,
             Keys<T> pKeys,
             Partitioner<?> customPartitioner,
             String partitionLocationName) {
@@ -97,7 +97,7 @@ public class PartitionOperator<T> extends SingleInputOperator<T, T, PartitionOpe
     }
 
     public <P> PartitionOperator(
-            DataSet<T> input,
+            DataStream<T> input,
             Keys<T> pKeys,
             Partitioner<P> customPartitioner,
             TypeInformation<P> partitionerTypeInfo,
@@ -113,7 +113,7 @@ public class PartitionOperator<T> extends SingleInputOperator<T, T, PartitionOpe
     }
 
     private <P> PartitionOperator(
-            DataSet<T> input,
+            DataStream<T> input,
             PartitionMethod pMethod,
             Keys<T> pKeys,
             Partitioner<P> customPartitioner,

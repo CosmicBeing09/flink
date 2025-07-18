@@ -29,7 +29,7 @@ import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.operators.base.PartitionOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.functions.SampleInCoordinator;
@@ -73,7 +73,7 @@ public final class DataSetUtils {
      * @param input the DataSet received as input
      * @return a data set containing tuples of subtask index, number of elements mappings.
      */
-    public static <T> DataSet<Tuple2<Integer, Long>> countElementsPerPartition(DataSet<T> input) {
+    public static <T> DataStream<Tuple2<Integer, Long>> countElementsPerPartition(DataStream<T> input) {
         return input.mapPartition(
                 new RichMapPartitionFunction<T, Tuple2<Integer, Long>>() {
                     @Override
@@ -99,9 +99,9 @@ public final class DataSetUtils {
      * @param input the input data set
      * @return a data set of tuple 2 consisting of consecutive ids and initial values.
      */
-    public static <T> DataSet<Tuple2<Long, T>> zipWithIndex(DataSet<T> input) {
+    public static <T> DataStream<Tuple2<Long, T>> zipWithIndex(DataStream<T> input) {
 
-        DataSet<Tuple2<Integer, Long>> elementCount = countElementsPerPartition(input);
+        DataStream<Tuple2<Integer, Long>> elementCount = countElementsPerPartition(input);
 
         return input.mapPartition(
                         new RichMapPartitionFunction<T, Tuple2<Long, T>>() {
@@ -199,7 +199,7 @@ public final class DataSetUtils {
      * @param input the input data set
      * @return a data set of tuple 2 consisting of ids and initial values.
      */
-    public static <T> DataSet<Tuple2<Long, T>> zipWithUniqueId(DataSet<T> input) {
+    public static <T> DataStream<Tuple2<Long, T>> zipWithUniqueId(DataStream<T> input) {
 
         return input.mapPartition(
                 new RichMapPartitionFunction<T, Tuple2<Long, T>>() {
@@ -254,7 +254,7 @@ public final class DataSetUtils {
      * @return The sampled DataSet
      */
     public static <T> MapPartitionOperator<T, T> sample(
-            DataSet<T> input, final boolean withReplacement, final double fraction) {
+            DataStream<T> input, final boolean withReplacement, final double fraction) {
 
         return sample(input, withReplacement, fraction, Utils.RNG.nextLong());
     }
@@ -270,7 +270,7 @@ public final class DataSetUtils {
      * @return The sampled DataSet
      */
     public static <T> MapPartitionOperator<T, T> sample(
-            DataSet<T> input,
+            DataStream<T> input,
             final boolean withReplacement,
             final double fraction,
             final long seed) {
@@ -288,8 +288,8 @@ public final class DataSetUtils {
      * @param numSamples The expected sample size.
      * @return The sampled DataSet
      */
-    public static <T> DataSet<T> sampleWithSize(
-            DataSet<T> input, final boolean withReplacement, final int numSamples) {
+    public static <T> DataStream<T> sampleWithSize(
+            DataStream<T> input, final boolean withReplacement, final int numSamples) {
 
         return sampleWithSize(input, withReplacement, numSamples, Utils.RNG.nextLong());
     }
@@ -305,8 +305,8 @@ public final class DataSetUtils {
      * @param seed Random number generator seed.
      * @return The sampled DataSet
      */
-    public static <T> DataSet<T> sampleWithSize(
-            DataSet<T> input,
+    public static <T> DataStream<T> sampleWithSize(
+            DataStream<T> input,
             final boolean withReplacement,
             final int numSamples,
             final long seed) {
@@ -329,7 +329,7 @@ public final class DataSetUtils {
 
     /** Range-partitions a DataSet on the specified tuple field positions. */
     public static <T> PartitionOperator<T> partitionByRange(
-            DataSet<T> input, DataDistribution distribution, int... fields) {
+            DataStream<T> input, DataDistribution distribution, int... fields) {
         return new PartitionOperator<>(
                 input,
                 PartitionOperatorBase.PartitionMethod.RANGE,
@@ -340,7 +340,7 @@ public final class DataSetUtils {
 
     /** Range-partitions a DataSet on the specified fields. */
     public static <T> PartitionOperator<T> partitionByRange(
-            DataSet<T> input, DataDistribution distribution, String... fields) {
+            DataStream<T> input, DataDistribution distribution, String... fields) {
         return new PartitionOperator<>(
                 input,
                 PartitionOperatorBase.PartitionMethod.RANGE,
@@ -351,7 +351,7 @@ public final class DataSetUtils {
 
     /** Range-partitions a DataSet using the specified key selector function. */
     public static <T, K extends Comparable<K>> PartitionOperator<T> partitionByRange(
-            DataSet<T> input, DataDistribution distribution, KeySelector<T, K> keyExtractor) {
+            DataStream<T> input, DataDistribution distribution, KeySelector<T, K> keyExtractor) {
         final TypeInformation<K> keyType =
                 TypeExtractor.getKeySelectorTypes(keyExtractor, input.getType());
         return new PartitionOperator<>(
@@ -382,14 +382,14 @@ public final class DataSetUtils {
      *
      * @return the summary as a Tuple the same width as input rows
      */
-    public static <R extends Tuple, T extends Tuple> R summarize(DataSet<T> input)
+    public static <R extends Tuple, T extends Tuple> R summarize(DataStream<T> input)
             throws Exception {
         if (!input.getType().isTupleType()) {
             throw new IllegalArgumentException(
                     "summarize() is only implemented for DataSet's of Tuples");
         }
         final TupleTypeInfoBase<?> inType = (TupleTypeInfoBase<?>) input.getType();
-        DataSet<TupleSummaryAggregator<R>> result =
+        DataStream<TupleSummaryAggregator<R>> result =
                 input.mapPartition(
                                 new MapPartitionFunction<T, TupleSummaryAggregator<R>>() {
                                     @Override
@@ -432,7 +432,7 @@ public final class DataSetUtils {
      * @deprecated This method will be removed at some point.
      */
     @Deprecated
-    public static <T> Utils.ChecksumHashCode checksumHashCode(DataSet<T> input) throws Exception {
+    public static <T> Utils.ChecksumHashCode checksumHashCode(DataStream<T> input) throws Exception {
         final String id = new AbstractID().toString();
 
         input.output(new Utils.ChecksumHashCodeHelper<T>(id)).name("ChecksumHashCode");

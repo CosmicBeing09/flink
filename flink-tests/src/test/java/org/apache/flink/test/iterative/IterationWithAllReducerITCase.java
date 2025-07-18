@@ -19,7 +19,7 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -37,11 +37,11 @@ public class IterationWithAllReducerITCase extends JavaProgramTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<String> initialInput = env.fromElements("1", "1", "1", "1", "1", "1", "1", "1");
+        DataStream<String> initialInput = env.fromElements("1", "1", "1", "1", "1", "1", "1", "1");
 
         IterativeDataSet<String> iteration = initialInput.iterate(5).name("Loop");
 
-        DataSet<String> sumReduce =
+        DataStream<String> sumReduce =
                 iteration
                         .reduce(
                                 new ReduceFunction<String>() {

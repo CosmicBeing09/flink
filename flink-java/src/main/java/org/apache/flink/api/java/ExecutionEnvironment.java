@@ -243,7 +243,7 @@ public class ExecutionEnvironment {
      * individually override this value to use a specific parallelism via {@link
      * Operator#setParallelism(int)}. Other operations may need to run with a different parallelism
      * - for example calling {@link
-     * DataSet#reduce(org.apache.flink.api.common.functions.ReduceFunction)} over the entire set
+     * DataStream#reduce(org.apache.flink.api.common.functions.ReduceFunction)} over the entire set
      * will insert eventually an operation that runs non-parallel (parallelism of one).
      *
      * @return The parallelism used by operations, unless they override that value. This method
@@ -328,12 +328,12 @@ public class ExecutionEnvironment {
     // ---------------------------------- Text Input Format ---------------------------------------
 
     /**
-     * Creates a {@link DataSet} that represents the Strings produced by reading the given file line
+     * Creates a {@link DataStream} that represents the Strings produced by reading the given file line
      * wise. The file will be read with the UTF-8 character set.
      *
      * @param filePath The path of the file, as a URI (e.g., "file:///some/local/file" or
      *     "hdfs://host:port/file/path").
-     * @return A {@link DataSet} that represents the data read from the given file as text lines.
+     * @return A {@link DataStream} that represents the data read from the given file as text lines.
      */
     public DataSource<String> readTextFile(String filePath) {
         Preconditions.checkNotNull(filePath, "The file path may not be null.");
@@ -346,14 +346,14 @@ public class ExecutionEnvironment {
     }
 
     /**
-     * Creates a {@link DataSet} that represents the Strings produced by reading the given file line
+     * Creates a {@link DataStream} that represents the Strings produced by reading the given file line
      * wise. The {@link java.nio.charset.Charset} with the given name will be used to read the
      * files.
      *
      * @param filePath The path of the file, as a URI (e.g., "file:///some/local/file" or
      *     "hdfs://host:port/file/path").
      * @param charsetName The name of the character set used to read the file.
-     * @return A {@link DataSet} that represents the data read from the given file as text lines.
+     * @return A {@link DataStream} that represents the data read from the given file as text lines.
      */
     public DataSource<String> readTextFile(String filePath, String charsetName) {
         Preconditions.checkNotNull(filePath, "The file path may not be null.");
@@ -367,7 +367,7 @@ public class ExecutionEnvironment {
     // -------------------------- Text Input Format With String Value------------------------------
 
     /**
-     * Creates a {@link DataSet} that represents the Strings produced by reading the given file line
+     * Creates a {@link DataStream} that represents the Strings produced by reading the given file line
      * wise. This method is similar to {@link #readTextFile(String)}, but it produces a DataSet with
      * mutable {@link StringValue} objects, rather than Java Strings. StringValues can be used to
      * tune implementations to be less object and garbage collection heavy.
@@ -376,7 +376,7 @@ public class ExecutionEnvironment {
      *
      * @param filePath The path of the file, as a URI (e.g., "file:///some/local/file" or
      *     "hdfs://host:port/file/path").
-     * @return A {@link DataSet} that represents the data read from the given file as text lines.
+     * @return A {@link DataStream} that represents the data read from the given file as text lines.
      */
     public DataSource<StringValue> readTextFileWithValue(String filePath) {
         Preconditions.checkNotNull(filePath, "The file path may not be null.");
@@ -389,7 +389,7 @@ public class ExecutionEnvironment {
     }
 
     /**
-     * Creates a {@link DataSet} that represents the Strings produced by reading the given file line
+     * Creates a {@link DataStream} that represents the Strings produced by reading the given file line
      * wise. This method is similar to {@link #readTextFile(String, String)}, but it produces a
      * DataSet with mutable {@link StringValue} objects, rather than Java Strings. StringValues can
      * be used to tune implementations to be less object and garbage collection heavy.
@@ -418,14 +418,14 @@ public class ExecutionEnvironment {
     // ---------------------------------------
 
     /**
-     * Creates a {@link DataSet} that represents the primitive type produced by reading the given
+     * Creates a {@link DataStream} that represents the primitive type produced by reading the given
      * file line wise. This method is similar to {@link #readCsvFile(String)} with single field, but
      * it produces a DataSet not through {@link org.apache.flink.api.java.tuple.Tuple1}.
      *
      * @param filePath The path of the file, as a URI (e.g., "file:///some/local/file" or
      *     "hdfs://host:port/file/path").
      * @param typeClass The primitive type class to be read.
-     * @return A {@link DataSet} that represents the data read from the given file as primitive
+     * @return A {@link DataStream} that represents the data read from the given file as primitive
      *     type.
      */
     public <X> DataSource<X> readFileOfPrimitives(String filePath, Class<X> typeClass) {
@@ -439,7 +439,7 @@ public class ExecutionEnvironment {
     }
 
     /**
-     * Creates a {@link DataSet} that represents the primitive type produced by reading the given
+     * Creates a {@link DataStream} that represents the primitive type produced by reading the given
      * file in delimited way. This method is similar to {@link #readCsvFile(String)} with single
      * field, but it produces a DataSet not through {@link org.apache.flink.api.java.tuple.Tuple1}.
      *
@@ -447,7 +447,7 @@ public class ExecutionEnvironment {
      *     "hdfs://host:port/file/path").
      * @param delimiter The delimiter of the given file.
      * @param typeClass The primitive type class to be read.
-     * @return A {@link DataSet} that represents the data read from the given file as primitive
+     * @return A {@link DataStream} that represents the data read from the given file as primitive
      *     type.
      */
     public <X> DataSource<X> readFileOfPrimitives(
@@ -501,7 +501,7 @@ public class ExecutionEnvironment {
     // ---------------------------------------
 
     /**
-     * Generic method to create an input {@link DataSet} with in {@link InputFormat}. The DataSet
+     * Generic method to create an input {@link DataStream} with in {@link InputFormat}. The DataSet
      * will not be immediately created - instead, this method returns a DataSet that will be lazily
      * created from the input format once the program is executed.
      *
@@ -513,7 +513,7 @@ public class ExecutionEnvironment {
      * format.
      *
      * @param inputFormat The input format used to create the data set.
-     * @return A {@link DataSet} that represents the data created by the input format.
+     * @return A {@link DataStream} that represents the data created by the input format.
      * @see #createInput(InputFormat, TypeInformation)
      */
     public <X> DataSource<X> createInput(InputFormat<X, ?> inputFormat) {
@@ -533,16 +533,16 @@ public class ExecutionEnvironment {
     }
 
     /**
-     * Generic method to create an input DataSet with in {@link InputFormat}. The {@link DataSet}
-     * will not be immediately created - instead, this method returns a {@link DataSet} that will be
+     * Generic method to create an input DataSet with in {@link InputFormat}. The {@link DataStream}
+     * will not be immediately created - instead, this method returns a {@link DataStream} that will be
      * lazily created from the input format once the program is executed.
      *
-     * <p>The {@link DataSet} is typed to the given TypeInformation. This method is intended for
+     * <p>The {@link DataStream} is typed to the given TypeInformation. This method is intended for
      * input formats that where the return type cannot be determined by reflection analysis, and
      * that do not implement the {@link ResultTypeQueryable} interface.
      *
      * @param inputFormat The input format used to create the data set.
-     * @return A {@link DataSet} that represents the data created by the input format.
+     * @return A {@link DataStream} that represents the data created by the input format.
      * @see #createInput(InputFormat)
      */
     public <X> DataSource<X> createInput(
@@ -801,9 +801,9 @@ public class ExecutionEnvironment {
     /**
      * Triggers the program execution. The environment will execute all parts of the program that
      * have resulted in a "sink" operation. Sink operations are for example printing results ({@link
-     * DataSet#print()}, writing results (e.g. {@link DataSet#writeAsText(String)}, {@link
-     * DataSet#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other generic
-     * data sinks created with {@link DataSet#output(org.apache.flink.api.common.io.OutputFormat)}.
+     * DataStream#print()}, writing results (e.g. {@link DataStream#writeAsText(String)}, {@link
+     * DataStream#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other generic
+     * data sinks created with {@link DataStream#output(org.apache.flink.api.common.io.OutputFormat)}.
      *
      * <p>The program execution will be logged and displayed with a generated default name.
      *
@@ -817,9 +817,9 @@ public class ExecutionEnvironment {
     /**
      * Triggers the program execution. The environment will execute all parts of the program that
      * have resulted in a "sink" operation. Sink operations are for example printing results ({@link
-     * DataSet#print()}, writing results (e.g. {@link DataSet#writeAsText(String)}, {@link
-     * DataSet#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other generic
-     * data sinks created with {@link DataSet#output(org.apache.flink.api.common.io.OutputFormat)}.
+     * DataStream#print()}, writing results (e.g. {@link DataStream#writeAsText(String)}, {@link
+     * DataStream#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other generic
+     * data sinks created with {@link DataStream#output(org.apache.flink.api.common.io.OutputFormat)}.
      *
      * <p>The program execution will be logged and displayed with the given job name.
      *
@@ -874,10 +874,10 @@ public class ExecutionEnvironment {
     /**
      * Triggers the program execution asynchronously. The environment will execute all parts of the
      * program that have resulted in a "sink" operation. Sink operations are for example printing
-     * results ({@link DataSet#print()}, writing results (e.g. {@link DataSet#writeAsText(String)},
-     * {@link DataSet#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other
+     * results ({@link DataStream#print()}, writing results (e.g. {@link DataStream#writeAsText(String)},
+     * {@link DataStream#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other
      * generic data sinks created with {@link
-     * DataSet#output(org.apache.flink.api.common.io.OutputFormat)}.
+     * DataStream#output(org.apache.flink.api.common.io.OutputFormat)}.
      *
      * <p>The program execution will be logged and displayed with a generated default name.
      *
@@ -893,10 +893,10 @@ public class ExecutionEnvironment {
     /**
      * Triggers the program execution asynchronously. The environment will execute all parts of the
      * program that have resulted in a "sink" operation. Sink operations are for example printing
-     * results ({@link DataSet#print()}, writing results (e.g. {@link DataSet#writeAsText(String)},
-     * {@link DataSet#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other
+     * results ({@link DataStream#print()}, writing results (e.g. {@link DataStream#writeAsText(String)},
+     * {@link DataStream#write(org.apache.flink.api.common.io.FileOutputFormat, String)}, or other
      * generic data sinks created with {@link
-     * DataSet#output(org.apache.flink.api.common.io.OutputFormat)}.
+     * DataStream#output(org.apache.flink.api.common.io.OutputFormat)}.
      *
      * <p>The program execution will be logged and displayed with the given job name.
      *

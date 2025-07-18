@@ -19,7 +19,7 @@
 package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Public;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * @param <IN> The type of the data set consumed by this operator.
@@ -34,7 +34,7 @@ import org.apache.flink.api.java.DataSet;
 @Public
 public interface CustomUnaryOperation<IN, OUT> {
 
-    void setInput(DataSet<IN> inputData);
+    void setInput(DataStream<IN> inputData);
 
-    DataSet<OUT> createResult();
+    DataStream<OUT> createResult();
 }

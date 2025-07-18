@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -52,13 +52,13 @@ public class IterationWithChainingITCase extends JavaProgramTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple2<Integer, CoordVector>> initialInput =
+        DataStream<Tuple2<Integer, CoordVector>> initialInput =
                 env.readFile(new PointInFormat(), dataPath).setParallelism(1).name("Input");
 
         IterativeDataSet<Tuple2<Integer, CoordVector>> iteration =
                 initialInput.iterate(2).name("Loop");
 
-        DataSet<Tuple2<Integer, CoordVector>> identity =
+        DataStream<Tuple2<Integer, CoordVector>> identity =
                 iteration
                         .groupBy(0)
                         .reduceGroup(

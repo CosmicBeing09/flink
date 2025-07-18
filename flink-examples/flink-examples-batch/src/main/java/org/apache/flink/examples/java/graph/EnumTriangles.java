@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -102,7 +102,7 @@ public class EnumTriangles {
         env.getConfig().setGlobalJobParameters(params);
 
         // read input data
-        DataSet<Edge> edges;
+        DataStream<Edge> edges;
         if (params.has("edges")) {
             edges =
                     env.readCsvFile(params.get("edges"))
@@ -117,9 +117,9 @@ public class EnumTriangles {
         }
 
         // project edges by vertex id
-        DataSet<Edge> edgesById = edges.map(new EdgeByIdProjector());
+        DataStream<Edge> edgesById = edges.map(new EdgeByIdProjector());
 
-        DataSet<Triad> triangles =
+        DataStream<Triad> triangles =
                 edgesById
                         // build triads
                         .groupBy(Edge.V1)

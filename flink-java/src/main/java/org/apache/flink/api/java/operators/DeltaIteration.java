@@ -29,7 +29,7 @@ import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.api.common.operators.util.OperatorValidationUtils;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.types.Value;
 
@@ -37,13 +37,13 @@ import java.util.Arrays;
 
 /**
  * The DeltaIteration represents the start of a delta iteration. It is created from the DataSet that
- * represents the initial solution set via the {@link DataSet#iterateDelta(DataSet, int, int...)}
+ * represents the initial solution set via the {@link DataStream#iterateDelta(DataStream, int, int...)}
  * method.
  *
  * @param <ST> The data type of the solution set.
  * @param <WT> The data type of the workset (the feedback data set).
- * @see DataSet#iterateDelta(DataSet, int, int...)
- * @see DataSet#iterateDelta(DataSet, int, int[])
+ * @see DataStream#iterateDelta(DataStream, int, int...)
+ * @see DataStream#iterateDelta(DataStream, int, int[])
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -56,8 +56,8 @@ public class DeltaIteration<ST, WT> {
 
     private final AggregatorRegistry aggregators = new AggregatorRegistry();
 
-    private final DataSet<ST> initialSolutionSet;
-    private final DataSet<WT> initialWorkset;
+    private final DataStream<ST> initialSolutionSet;
+    private final DataStream<WT> initialWorkset;
 
     private final SolutionSetPlaceHolder<ST> solutionSetPlaceholder;
     private final WorksetPlaceHolder<WT> worksetPlaceholder;
@@ -79,8 +79,8 @@ public class DeltaIteration<ST, WT> {
     public DeltaIteration(
             ExecutionEnvironment context,
             TypeInformation<ST> type,
-            DataSet<ST> solutionSet,
-            DataSet<WT> workset,
+            DataStream<ST> solutionSet,
+            DataStream<WT> workset,
             Keys<ST> keys,
             int maxIterations) {
         initialSolutionSet = solutionSet;
@@ -102,9 +102,9 @@ public class DeltaIteration<ST, WT> {
      *     iteration.
      * @return The DataSet that represents the result of the iteration, after the computation has
      *     terminated.
-     * @see DataSet#iterateDelta(DataSet, int, int...)
+     * @see DataStream#iterateDelta(DataStream, int, int...)
      */
-    public DataSet<ST> closeWith(DataSet<ST> solutionSetDelta, DataSet<WT> newWorkset) {
+    public DataStream<ST> closeWith(DataStream<ST> solutionSetDelta, DataStream<WT> newWorkset) {
         return new DeltaIterationResultSet<ST, WT>(
                 initialSolutionSet.getExecutionEnvironment(),
                 initialSolutionSet.getType(),
@@ -133,7 +133,7 @@ public class DeltaIteration<ST, WT> {
      *
      * @return The data set that forms the initial solution set.
      */
-    public DataSet<ST> getInitialSolutionSet() {
+    public DataStream<ST> getInitialSolutionSet() {
         return initialSolutionSet;
     }
 
@@ -155,7 +155,7 @@ public class DeltaIteration<ST, WT> {
      *
      * @return The data set that forms the initial workset.
      */
-    public DataSet<WT> getInitialWorkset() {
+    public DataStream<WT> getInitialWorkset() {
         return initialWorkset;
     }
 
@@ -364,12 +364,12 @@ public class DeltaIteration<ST, WT> {
     // --------------------------------------------------------------------------------------------
 
     /**
-     * A {@link DataSet} that acts as a placeholder for the solution set during the iteration.
+     * A {@link DataStream} that acts as a placeholder for the solution set during the iteration.
      *
      * @param <ST> The type of the elements in the solution set.
      */
     @Public
-    public static class SolutionSetPlaceHolder<ST> extends DataSet<ST> {
+    public static class SolutionSetPlaceHolder<ST> extends DataStream<ST> {
 
         private final DeltaIteration<ST, ?> deltaIteration;
 
@@ -393,12 +393,12 @@ public class DeltaIteration<ST, WT> {
     }
 
     /**
-     * A {@link DataSet} that acts as a placeholder for the workset during the iteration.
+     * A {@link DataStream} that acts as a placeholder for the workset during the iteration.
      *
      * @param <WT> The data type of the elements in the workset.
      */
     @Public
-    public static class WorksetPlaceHolder<WT> extends DataSet<WT> {
+    public static class WorksetPlaceHolder<WT> extends DataStream<WT> {
         private WorksetPlaceHolder(ExecutionEnvironment context, TypeInformation<WT> type) {
             super(context, type);
         }

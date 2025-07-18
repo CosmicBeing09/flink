@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.MapPartitionFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -43,7 +43,7 @@ import java.util.List;
 
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsText;
 
-/** Tests for {@link DataSet#sortPartition}. */
+/** Tests for {@link DataStream#sortPartition}. */
 @RunWith(Parameterized.class)
 public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
@@ -60,7 +60,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple3<Integer, Long, String>>())
                         .setParallelism(4) // parallelize input
@@ -83,7 +83,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple5<Integer, Long, Integer, String, Long>>())
@@ -109,7 +109,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper())
                         .setParallelism(4) // parallelize input
@@ -132,7 +132,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple5<Integer, Long, Integer, String, Long>>())
@@ -157,7 +157,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple2<Tuple2<Integer, Integer>, String>>())
@@ -182,7 +182,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
+        DataStream<POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<POJO>())
                         .setParallelism(1) // parallelize input
@@ -206,7 +206,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(3);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.sortPartition(1, Order.DESCENDING)
                         .setParallelism(3) // change parallelism
@@ -228,7 +228,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple3<Integer, Long, String>>())
                         .setParallelism(4) // parallelize input
@@ -259,7 +259,7 @@ public class SortPartitionITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         List<Tuple1<Boolean>> result =
                 ds.map(new IdMapper<Tuple3<Integer, Long, String>>())
                         .setParallelism(4) // parallelize input

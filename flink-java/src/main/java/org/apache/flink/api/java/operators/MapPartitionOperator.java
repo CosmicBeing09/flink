@@ -24,7 +24,7 @@ import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.MapPartitionOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * This operator represents the application of a "mapPartition" function on a data set, and the
@@ -49,7 +49,7 @@ public class MapPartitionOperator<IN, OUT>
     protected final String defaultName;
 
     public MapPartitionOperator(
-            DataSet<IN> input,
+            DataStream<IN> input,
             TypeInformation<OUT> resultType,
             MapPartitionFunction<IN, OUT> function,
             String defaultName) {

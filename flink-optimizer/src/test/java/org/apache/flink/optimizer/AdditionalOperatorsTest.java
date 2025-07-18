@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -46,8 +46,8 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Long> set1 = env.generateSequence(0, 1);
-        DataSet<Long> set2 = env.generateSequence(0, 1);
+        DataStream<Long> set1 = env.generateSequence(0, 1);
+        DataStream<Long> set2 = env.generateSequence(0, 1);
 
         set1.crossWithTiny(set2)
                 .name("Cross")
@@ -75,8 +75,8 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Long> set1 = env.generateSequence(0, 1);
-        DataSet<Long> set2 = env.generateSequence(0, 1);
+        DataStream<Long> set1 = env.generateSequence(0, 1);
+        DataStream<Long> set2 = env.generateSequence(0, 1);
 
         set1.crossWithHuge(set2)
                 .name("Cross")

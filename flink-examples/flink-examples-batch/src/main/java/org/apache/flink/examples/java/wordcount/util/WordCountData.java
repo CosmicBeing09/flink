@@ -18,7 +18,7 @@
 
 package org.apache.flink.examples.java.wordcount.util;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
@@ -66,7 +66,7 @@ public class WordCountData {
                 "Be all my sins remember'd."
             };
 
-    public static DataSet<String> getDefaultTextLineDataSet(ExecutionEnvironment env) {
+    public static DataStream<String> getDefaultTextLineDataSet(ExecutionEnvironment env) {
         return env.fromElements(WORDS);
     }
 }

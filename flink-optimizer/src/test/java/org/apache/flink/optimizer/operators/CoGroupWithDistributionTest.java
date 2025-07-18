@@ -20,7 +20,7 @@ package org.apache.flink.optimizer.operators;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.CoGroupFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -39,15 +39,15 @@ public class CoGroupWithDistributionTest extends CompilerTestBase {
     @Test
     public void CoGroupWithSameDistributionTest() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
         TestDistribution testDistribution1 = new TestDistribution(3);
         TestDistribution testDistribution2 = new TestDistribution(3);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 DataSetUtils.partitionByRange(set1, testDistribution1, 0)
                         .coGroup(DataSetUtils.partitionByRange(set2, testDistribution2, 0))
                         .where(0)
@@ -69,15 +69,15 @@ public class CoGroupWithDistributionTest extends CompilerTestBase {
     @Test
     public void CoGroupWithDifferentDistributionTest() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
         TestDistribution testDistribution1 = new TestDistribution(3);
         TestDistribution testDistribution2 = new TestDistribution(2);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 DataSetUtils.partitionByRange(set1, testDistribution1, 0)
                         .coGroup(DataSetUtils.partitionByRange(set2, testDistribution2, 0))
                         .where(0)

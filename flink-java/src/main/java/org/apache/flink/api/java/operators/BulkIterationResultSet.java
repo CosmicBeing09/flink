@@ -20,28 +20,28 @@ package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
- * Resulting {@link DataSet} of bulk iterations.
+ * Resulting {@link DataStream} of bulk iterations.
  *
  * @param <T>
  */
 @Internal
-public class BulkIterationResultSet<T> extends DataSet<T> {
+public class BulkIterationResultSet<T> extends DataStream<T> {
 
     private final IterativeDataSet<T> iterationHead;
 
-    private final DataSet<T> nextPartialSolution;
+    private final DataStream<T> nextPartialSolution;
 
-    private final DataSet<?> terminationCriterion;
+    private final DataStream<?> terminationCriterion;
 
     BulkIterationResultSet(
             ExecutionEnvironment context,
             TypeInformation<T> type,
             IterativeDataSet<T> iterationHead,
-            DataSet<T> nextPartialSolution) {
+            DataStream<T> nextPartialSolution) {
         this(context, type, iterationHead, nextPartialSolution, null);
     }
 
@@ -49,8 +49,8 @@ public class BulkIterationResultSet<T> extends DataSet<T> {
             ExecutionEnvironment context,
             TypeInformation<T> type,
             IterativeDataSet<T> iterationHead,
-            DataSet<T> nextPartialSolution,
-            DataSet<?> terminationCriterion) {
+            DataStream<T> nextPartialSolution,
+            DataStream<?> terminationCriterion) {
         super(context, type);
         this.iterationHead = iterationHead;
         this.nextPartialSolution = nextPartialSolution;
@@ -61,11 +61,11 @@ public class BulkIterationResultSet<T> extends DataSet<T> {
         return iterationHead;
     }
 
-    public DataSet<T> getNextPartialSolution() {
+    public DataStream<T> getNextPartialSolution() {
         return nextPartialSolution;
     }
 
-    public DataSet<?> getTerminationCriterion() {
+    public DataStream<?> getTerminationCriterion() {
         return terminationCriterion;
     }
 }

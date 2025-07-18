@@ -22,7 +22,7 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.accumulators.Accumulator;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -85,10 +85,10 @@ public class EmptyFieldsCountAccumulator {
         env.getConfig().setGlobalJobParameters(params);
 
         // get the data set
-        final DataSet<StringTriple> file = getDataSet(env, params);
+        final DataStream<StringTriple> file = getDataSet(env, params);
 
         // filter lines with empty fields
-        final DataSet<StringTriple> filteredLines = file.filter(new EmptyFieldFilter());
+        final DataStream<StringTriple> filteredLines = file.filter(new EmptyFieldFilter());
 
         // Here, we could do further processing with the filtered lines...
         JobExecutionResult result;
@@ -113,7 +113,7 @@ public class EmptyFieldsCountAccumulator {
     // *************************************************************************
 
     @SuppressWarnings("unchecked")
-    private static DataSet<StringTriple> getDataSet(
+    private static DataStream<StringTriple> getDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         if (params.has("input")) {
             return env.readCsvFile(params.get("input"))

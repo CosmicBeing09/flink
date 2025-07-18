@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -49,7 +49,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -84,7 +84,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -115,7 +115,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -150,7 +150,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -172,7 +172,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -195,7 +195,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);

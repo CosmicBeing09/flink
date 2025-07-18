@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.operators;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -49,8 +49,8 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testSumMaxAndProject() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> sumDs = ds.sum(0).andMax(1).project(0, 1);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, Long>> sumDs = ds.sum(0).andMax(1).project(0, 1);
 
         List<Tuple2<Integer, Long>> result = sumDs.collect();
 
@@ -67,8 +67,8 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Long, Integer>> aggregateDs = ds.groupBy(1).sum(0).project(1, 0);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Long, Integer>> aggregateDs = ds.groupBy(1).sum(0).project(1, 0);
 
         List<Tuple2<Long, Integer>> result = aggregateDs.collect();
 
@@ -85,8 +85,8 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple1<Integer>> aggregateDs = ds.groupBy(1).min(0).min(0).project(0);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple1<Integer>> aggregateDs = ds.groupBy(1).min(0).min(0).project(0);
 
         List<Tuple1<Integer>> result = aggregateDs.collect();
 

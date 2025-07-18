@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -42,13 +42,13 @@ public class WorksetIterationCornerCasesTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input =
+            DataStream<Tuple2<Long, Long>> input =
                     env.generateSequence(1, 100).map(new Duplicator<Long>());
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     input.iterateDelta(input, 100, 1);
 
-            DataSet<Tuple2<Long, Long>> iterEnd =
+            DataStream<Tuple2<Long, Long>> iterEnd =
                     iteration.getWorkset().map(new TestMapper<Tuple2<Long, Long>>());
             iteration
                     .closeWith(iterEnd, iterEnd)

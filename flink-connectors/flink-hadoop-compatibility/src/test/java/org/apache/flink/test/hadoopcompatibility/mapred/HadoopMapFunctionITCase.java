@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.FileSystem;
@@ -49,8 +49,8 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
     void testNonPassingMapper(@TempDir Path tempFolder) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
-        DataSet<Tuple2<IntWritable, Text>> nonPassingFlatMapDs =
+        DataStream<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
+        DataStream<Tuple2<IntWritable, Text>> nonPassingFlatMapDs =
                 ds.flatMap(
                         new HadoopMapFunction<IntWritable, Text, IntWritable, Text>(
                                 new NonPassingMapper()));
@@ -67,8 +67,8 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
     void testDataDuplicatingMapper(@TempDir Path tempFolder) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
-        DataSet<Tuple2<IntWritable, Text>> duplicatingFlatMapDs =
+        DataStream<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
+        DataStream<Tuple2<IntWritable, Text>> duplicatingFlatMapDs =
                 ds.flatMap(
                         new HadoopMapFunction<IntWritable, Text, IntWritable, Text>(
                                 new DuplicatingMapper()));
@@ -132,8 +132,8 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
         JobConf conf = new JobConf();
         conf.set("my.filterPrefix", "Hello");
 
-        DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
-        DataSet<Tuple2<IntWritable, Text>> hellos =
+        DataStream<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
+        DataStream<Tuple2<IntWritable, Text>> hellos =
                 ds.flatMap(
                         new HadoopMapFunction<IntWritable, Text, IntWritable, Text>(
                                 new ConfigurableMapper(), conf));

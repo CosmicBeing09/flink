@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.io.OutputFormat;
 import org.apache.flink.api.common.time.Deadline;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.configuration.Configuration;
@@ -39,7 +39,6 @@ import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.minicluster.MiniClusterJobClient;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.test.util.MiniClusterWithClientResource;
 import org.apache.flink.testutils.TestingUtils;
@@ -118,7 +117,7 @@ public class AccumulatorLiveITCase extends TestLogger {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Integer> input = env.fromCollection(inputData);
+        DataStream<Integer> input = env.fromCollection(inputData);
         input.flatMap(new NotifyingMapper()).output(new DummyOutputFormat());
 
         // Extract job graph and set job id for the task to notify of accumulator changes.
@@ -133,7 +132,7 @@ public class AccumulatorLiveITCase extends TestLogger {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataStream<Integer> input = env.fromData(inputData);
+        org.apache.flink.streaming.api.datastream.DataStream<Integer> input = env.fromData(inputData);
         input.flatMap(new NotifyingMapper())
                 .writeUsingOutputFormat(new DummyOutputFormat())
                 .disableChaining();

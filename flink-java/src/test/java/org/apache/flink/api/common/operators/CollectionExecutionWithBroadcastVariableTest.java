@@ -21,7 +21,7 @@ package org.apache.flink.api.common.operators;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCrossFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 
@@ -47,7 +47,7 @@ class CollectionExecutionWithBroadcastVariableTest {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
 
-            DataSet<String> bcData = env.fromElements(SUFFIX);
+            DataStream<String> bcData = env.fromElements(SUFFIX);
 
             List<String> result = new ArrayList<>();
 
@@ -73,8 +73,8 @@ class CollectionExecutionWithBroadcastVariableTest {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
 
-            DataSet<String> bcData = env.fromElements(SUFFIX);
-            DataSet<String> inData = env.fromElements(TEST_DATA);
+            DataStream<String> bcData = env.fromElements(SUFFIX);
+            DataStream<String> inData = env.fromElements(TEST_DATA);
 
             List<String> result = new ArrayList<>();
 

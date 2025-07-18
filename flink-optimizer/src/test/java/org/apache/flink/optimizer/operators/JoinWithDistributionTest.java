@@ -20,7 +20,7 @@ package org.apache.flink.optimizer.operators;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.JoinFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -38,15 +38,15 @@ public class JoinWithDistributionTest extends CompilerTestBase {
     @Test
     public void JoinWithSameDistributionTest() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
         TestDistribution dist1 = new TestDistribution(3);
         TestDistribution dist2 = new TestDistribution(3);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 DataSetUtils.partitionByRange(set1, dist1, 0)
                         .join(DataSetUtils.partitionByRange(set2, dist2, 0))
                         .where(0)
@@ -68,15 +68,15 @@ public class JoinWithDistributionTest extends CompilerTestBase {
     @Test
     public void JoinWithDifferentDistributionTest() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
         TestDistribution dist1 = new TestDistribution(3);
         TestDistribution dist2 = new TestDistribution(4);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 DataSetUtils.partitionByRange(set1, dist1, 0)
                         .join(DataSetUtils.partitionByRange(set2, dist2, 0))
                         .where(0)

@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -47,12 +47,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void noPreviousPartitioningJoin1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.join(set2, JoinOperatorBase.JoinHint.REPARTITION_HASH_FIRST)
                         .where(0, 1)
                         .equalTo(0, 1)
@@ -71,12 +71,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void noPreviousPartitioningJoin2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.join(set2, JoinOperatorBase.JoinHint.REPARTITION_HASH_FIRST)
                         .where(0, 1)
                         .equalTo(2, 1)
@@ -95,12 +95,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningJoin1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -122,12 +122,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningJoin2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -149,12 +149,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningJoin3() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.join(
                                 set2.partitionByHash(2, 1)
                                         .map(new MockMapper())
@@ -177,12 +177,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningJoin4() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0)
                         .map(new MockMapper())
                         .withForwardedFields("0")
@@ -204,12 +204,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningJoin5() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.join(
                                 set2.partitionByHash(2)
                                         .map(new MockMapper())
@@ -232,12 +232,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -263,12 +263,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -294,12 +294,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin3() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0)
                         .map(new MockMapper())
                         .withForwardedFields("0")
@@ -325,12 +325,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin4() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0, 2)
                         .map(new MockMapper())
                         .withForwardedFields("0;2")
@@ -356,12 +356,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin5() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(2)
                         .map(new MockMapper())
                         .withForwardedFields("2")
@@ -387,12 +387,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin6() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(0)
                         .map(new MockMapper())
                         .withForwardedFields("0")
@@ -418,12 +418,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningJoin7() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> joined =
+        DataStream<Tuple3<Integer, Integer, Integer>> joined =
                 set1.partitionByHash(2)
                         .map(new MockMapper())
                         .withForwardedFields("2")
@@ -449,12 +449,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void noPreviousPartitioningCoGroup1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.coGroup(set2).where(0, 1).equalTo(0, 1).with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
@@ -470,12 +470,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void noPreviousPartitioningCoGroup2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.coGroup(set2).where(0, 1).equalTo(2, 1).with(new MockCoGroup());
 
         coGrouped.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());
@@ -491,12 +491,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningCoGroup1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -518,12 +518,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningCoGroup2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -545,12 +545,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningCoGroup3() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.coGroup(
                                 set2.partitionByHash(2, 1)
                                         .map(new MockMapper())
@@ -572,12 +572,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningCoGroup4() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0)
                         .map(new MockMapper())
                         .withForwardedFields("0")
@@ -599,12 +599,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseSinglePartitioningCoGroup5() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.coGroup(set2.partitionByHash(2).map(new MockMapper()).withForwardedFields("2"))
                         .where(0, 1)
                         .equalTo(2, 1)
@@ -623,12 +623,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup1() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -653,12 +653,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup2() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0, 1)
                         .map(new MockMapper())
                         .withForwardedFields("0;1")
@@ -683,12 +683,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup3() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0)
                         .map(new MockMapper())
                         .withForwardedFields("0")
@@ -713,12 +713,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup4() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(0, 2)
                         .map(new MockMapper())
                         .withForwardedFields("0;2")
@@ -743,12 +743,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup5() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(2)
                         .map(new MockMapper())
                         .withForwardedFields("2")
@@ -773,12 +773,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup6() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(2)
                         .map(new MockMapper())
                         .withForwardedFields("2")
@@ -803,12 +803,12 @@ public class PartitioningReusageTest extends CompilerTestBase {
     @Test
     public void reuseBothPartitioningCoGroup7() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> set2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> set2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
 
-        DataSet<Tuple3<Integer, Integer, Integer>> coGrouped =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGrouped =
                 set1.partitionByHash(2)
                         .map(new MockMapper())
                         .withForwardedFields("2")

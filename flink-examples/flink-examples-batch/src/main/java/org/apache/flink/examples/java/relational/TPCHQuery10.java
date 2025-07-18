@@ -19,7 +19,7 @@
 package org.apache.flink.examples.java.relational;
 
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -126,26 +126,26 @@ public class TPCHQuery10 {
         }
 
         // get customer data set: (custkey, name, address, nationkey, acctbal)
-        DataSet<Tuple5<Integer, String, String, Integer, Double>> customers =
+        DataStream<Tuple5<Integer, String, String, Integer, Double>> customers =
                 getCustomerDataSet(env, params.get("customer"));
         // get orders data set: (orderkey, custkey, orderdate)
-        DataSet<Tuple3<Integer, Integer, String>> orders =
+        DataStream<Tuple3<Integer, Integer, String>> orders =
                 getOrdersDataSet(env, params.get("orders"));
         // get lineitem data set: (orderkey, extendedprice, discount, returnflag)
-        DataSet<Tuple4<Integer, Double, Double, String>> lineitems =
+        DataStream<Tuple4<Integer, Double, Double, String>> lineitems =
                 getLineitemDataSet(env, params.get("lineitem"));
         // get nation data set: (nationkey, name)
-        DataSet<Tuple2<Integer, String>> nations = getNationsDataSet(env, params.get("nation"));
+        DataStream<Tuple2<Integer, String>> nations = getNationsDataSet(env, params.get("nation"));
 
         // orders filtered by year: (orderkey, custkey)
-        DataSet<Tuple2<Integer, Integer>> ordersFilteredByYear =
+        DataStream<Tuple2<Integer, Integer>> ordersFilteredByYear =
                 // filter by year
                 orders.filter(order -> Integer.parseInt(order.f2.substring(0, 4)) > 1990)
                         // project fields out that are no longer required
                         .project(0, 1);
 
         // lineitems filtered by flag: (orderkey, revenue)
-        DataSet<Tuple2<Integer, Double>> lineitemsFilteredByFlag =
+        DataStream<Tuple2<Integer, Double>> lineitemsFilteredByFlag =
                 // filter by flag
                 lineitems
                         .filter(lineitem -> lineitem.f3.equals("R"))
@@ -155,7 +155,7 @@ public class TPCHQuery10 {
                         .returns(Types.TUPLE(Types.INT, Types.DOUBLE)); // for lambda with generics
 
         // join orders with lineitems: (custkey, revenue)
-        DataSet<Tuple2<Integer, Double>> revenueByCustomer =
+        DataStream<Tuple2<Integer, Double>> revenueByCustomer =
                 ordersFilteredByYear
                         .joinWithHuge(lineitemsFilteredByFlag)
                         .where(0)
@@ -166,7 +166,7 @@ public class TPCHQuery10 {
         revenueByCustomer = revenueByCustomer.groupBy(0).aggregate(Aggregations.SUM, 1);
 
         // join customer with nation (custkey, name, address, nationname, acctbal)
-        DataSet<Tuple5<Integer, String, String, String, Double>> customerWithNation =
+        DataStream<Tuple5<Integer, String, String, String, Double>> customerWithNation =
                 customers
                         .joinWithTiny(nations)
                         .where(3)
@@ -177,7 +177,7 @@ public class TPCHQuery10 {
 
         // join customer (with nation) with revenue (custkey, name, address, nationname, acctbal,
         // revenue)
-        DataSet<Tuple6<Integer, String, String, String, Double, Double>> result =
+        DataStream<Tuple6<Integer, String, String, String, Double, Double>> result =
                 customerWithNation
                         .join(revenueByCustomer)
                         .where(0)
@@ -200,7 +200,7 @@ public class TPCHQuery10 {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Tuple5<Integer, String, String, Integer, Double>> getCustomerDataSet(
+    private static DataStream<Tuple5<Integer, String, String, Integer, Double>> getCustomerDataSet(
             ExecutionEnvironment env, String customerPath) {
         return env.readCsvFile(customerPath)
                 .fieldDelimiter("|")
@@ -208,7 +208,7 @@ public class TPCHQuery10 {
                 .types(Integer.class, String.class, String.class, Integer.class, Double.class);
     }
 
-    private static DataSet<Tuple3<Integer, Integer, String>> getOrdersDataSet(
+    private static DataStream<Tuple3<Integer, Integer, String>> getOrdersDataSet(
             ExecutionEnvironment env, String ordersPath) {
         return env.readCsvFile(ordersPath)
                 .fieldDelimiter("|")
@@ -216,7 +216,7 @@ public class TPCHQuery10 {
                 .types(Integer.class, Integer.class, String.class);
     }
 
-    private static DataSet<Tuple4<Integer, Double, Double, String>> getLineitemDataSet(
+    private static DataStream<Tuple4<Integer, Double, Double, String>> getLineitemDataSet(
             ExecutionEnvironment env, String lineitemPath) {
         return env.readCsvFile(lineitemPath)
                 .fieldDelimiter("|")
@@ -224,7 +224,7 @@ public class TPCHQuery10 {
                 .types(Integer.class, Double.class, Double.class, String.class);
     }
 
-    private static DataSet<Tuple2<Integer, String>> getNationsDataSet(
+    private static DataStream<Tuple2<Integer, String>> getNationsDataSet(
             ExecutionEnvironment env, String nationPath) {
         return env.readCsvFile(nationPath)
                 .fieldDelimiter("|")

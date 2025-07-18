@@ -23,7 +23,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.api.common.operators.util.OperatorValidationUtils;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
@@ -39,7 +39,7 @@ import org.apache.flink.api.java.ExecutionEnvironment;
  */
 @Deprecated
 @Public
-public abstract class Operator<OUT, O extends Operator<OUT, O>> extends DataSet<OUT> {
+public abstract class Operator<OUT, O extends Operator<OUT, O>> extends DataStream<OUT> {
 
     protected String name;
 

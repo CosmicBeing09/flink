@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.operators.Operator;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
 
 /**
@@ -44,7 +44,7 @@ public class FilterOperator<T> extends SingleInputUdfOperator<T, T, FilterOperat
 
     protected final String defaultName;
 
-    public FilterOperator(DataSet<T> input, FilterFunction<T> function, String defaultName) {
+    public FilterOperator(DataStream<T> input, FilterFunction<T> function, String defaultName) {
         super(input, input.getType());
 
         this.function = function;

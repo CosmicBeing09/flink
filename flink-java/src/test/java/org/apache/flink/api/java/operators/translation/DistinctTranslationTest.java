@@ -24,7 +24,7 @@ import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -54,7 +54,7 @@ class DistinctTranslationTest {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData.distinct().output(new DiscardingOutputFormat<>());
 
@@ -89,7 +89,7 @@ class DistinctTranslationTest {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<CustomType> initialData = getSourcePojoDataSet(env);
+            DataStream<CustomType> initialData = getSourcePojoDataSet(env);
 
             initialData.distinct().output(new DiscardingOutputFormat<>());
 
@@ -124,7 +124,7 @@ class DistinctTranslationTest {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData.distinct(1, 2).output(new DiscardingOutputFormat<>());
 
@@ -159,7 +159,7 @@ class DistinctTranslationTest {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData
                     .distinct(
@@ -215,7 +215,7 @@ class DistinctTranslationTest {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<CustomType> initialData = getSourcePojoDataSet(env);
+            DataStream<CustomType> initialData = getSourcePojoDataSet(env);
 
             initialData.distinct("myInt").output(new DiscardingOutputFormat<>());
 
@@ -245,14 +245,14 @@ class DistinctTranslationTest {
     }
 
     @SuppressWarnings("unchecked")
-    private static DataSet<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
+    private static DataStream<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
             ExecutionEnvironment env) {
         return env.fromElements(
                         new Tuple3<>(3.141592, new StringValue("foobar"), new LongValue(77)))
                 .setParallelism(1);
     }
 
-    private static DataSet<CustomType> getSourcePojoDataSet(ExecutionEnvironment env) {
+    private static DataStream<CustomType> getSourcePojoDataSet(ExecutionEnvironment env) {
         List<CustomType> data = new ArrayList<>();
         data.add(new CustomType(1));
         return env.fromCollection(data);

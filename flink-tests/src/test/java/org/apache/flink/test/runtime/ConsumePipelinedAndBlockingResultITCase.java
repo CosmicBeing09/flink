@@ -19,7 +19,7 @@
 package org.apache.flink.test.runtime;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -34,9 +34,9 @@ public class ConsumePipelinedAndBlockingResultITCase extends JavaProgramTestBase
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple1<Long>> pipelinedSource = env.fromElements(new Tuple1<Long>(1L));
+        DataStream<Tuple1<Long>> pipelinedSource = env.fromElements(new Tuple1<Long>(1L));
 
-        DataSet<Tuple1<Long>> slowBlockingSource =
+        DataStream<Tuple1<Long>> slowBlockingSource =
                 env.generateSequence(0, 10)
                         .map(
                                 new MapFunction<Long, Tuple1<Long>>() {

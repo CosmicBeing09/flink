@@ -23,7 +23,7 @@ import org.apache.flink.api.common.io.InputFormat;
 import org.apache.flink.api.common.io.statistics.BaseStatistics;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -44,7 +44,7 @@ public class CustomInputSplitProgram {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> data = env.createInput(new CustomInputFormat());
+        DataStream<Integer> data = env.createInput(new CustomInputFormat());
 
         data.map(
                         new MapFunction<Integer, Tuple2<Integer, Double>>() {
