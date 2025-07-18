@@ -456,9 +456,9 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
         long totalLength = 0;
         long latestModTime = 0;
 
-        for (Path path : filePaths) {
-            final FileSystem fs = FileSystem.get(path.toUri());
-            final FileBaseStatistics stats = getFileStats(cachedStats, path, fs, files);
+        for (Path inputFilePath : filePaths) {
+            final FileSystem fs = FileSystem.get(inputFilePath.toUri());
+            final FileBaseStatistics stats = getFileStats(cachedStats, inputFilePath, fs, files);
 
             if (stats.getTotalInputSize() == BaseStatistics.SIZE_UNKNOWN) {
                 totalLength = BaseStatistics.SIZE_UNKNOWN;
@@ -545,12 +545,12 @@ public abstract class FileInputFormat<OT> extends RichInputFormat<OT, FileInputS
         List<FileStatus> files = new ArrayList<>();
         long totalLength = 0;
 
-        for (Path path : getFilePaths()) {
-            final FileSystem fs = path.getFileSystem();
-            final FileStatus pathFile = fs.getFileStatus(path);
+        for (Path inputFilePath : getFilePaths()) {
+            final FileSystem fs = inputFilePath.getFileSystem();
+            final FileStatus pathFile = fs.getFileStatus(inputFilePath);
 
             if (pathFile.isDir()) {
-                totalLength += addFilesInDir(path, files, true);
+                totalLength += addFilesInDir(inputFilePath, files, true);
             } else {
                 testForUnsplittable(pathFile);
 

@@ -183,7 +183,7 @@ class DynamicFileSplitEnumeratorTest {
         }
 
         @Override
-        public Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits) {
+        public Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits) {
             return enumeratingSplits.stream().map(TestSplit::new).collect(Collectors.toList());
         }
     }

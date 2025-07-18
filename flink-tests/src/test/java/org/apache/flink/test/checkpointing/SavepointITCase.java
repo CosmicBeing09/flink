@@ -1726,16 +1726,16 @@ public class SavepointITCase extends TestLogger {
         }
 
         @Override
-        public FSDataInputStream open(org.apache.flink.core.fs.Path f, int bufferSize)
+        public FSDataInputStream open(org.apache.flink.core.fs.Path sourcePath, int bufferSize)
                 throws IOException {
-            failPath(f);
-            return super.open(f, bufferSize);
+            failPath(sourcePath);
+            return super.open(sourcePath, bufferSize);
         }
 
         @Override
-        public FSDataInputStream open(org.apache.flink.core.fs.Path f) throws IOException {
-            failPath(f);
-            return super.open(f);
+        public FSDataInputStream open(org.apache.flink.core.fs.Path filePath) throws IOException {
+            failPath(filePath);
+            return super.open(filePath);
         }
 
         @Override

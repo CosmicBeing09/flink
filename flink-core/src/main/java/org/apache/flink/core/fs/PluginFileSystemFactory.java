@@ -101,31 +101,31 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public FileStatus getFileStatus(final Path f) throws IOException {
+        public FileStatus getFileStatus(final Path flinkPath) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.getFileStatus(f);
+                return inner.getFileStatus(flinkPath);
             }
         }
 
         @Override
         public BlockLocation[] getFileBlockLocations(
-                final FileStatus file, final long start, final long len) throws IOException {
+                final FileStatus fileStatus, final long start, final long len) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.getFileBlockLocations(file, start, len);
+                return inner.getFileBlockLocations(fileStatus, start, len);
             }
         }
 
         @Override
-        public FSDataInputStream open(final Path f, final int bufferSize) throws IOException {
+        public FSDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.open(f, bufferSize);
+                return inner.open(sourcePath, bufferSize);
             }
         }
 
         @Override
-        public FSDataInputStream open(final Path f) throws IOException {
+        public FSDataInputStream open(final Path filePath) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.open(f);
+                return inner.open(filePath);
             }
         }
 
@@ -144,9 +144,9 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public boolean exists(final Path f) throws IOException {
+        public boolean exists(final Path filePath) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.exists(f);
+                return inner.exists(filePath);
             }
         }
 
@@ -180,10 +180,10 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public FSDataOutputStream create(final Path f, final WriteMode overwriteMode)
+        public FSDataOutputStream create(final Path targetPath, final WriteMode overwriteMode)
                 throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.create(f, overwriteMode);
+                return inner.create(targetPath, overwriteMode);
             }
         }
 
@@ -195,9 +195,9 @@ public class PluginFileSystemFactory implements FileSystemFactory {
         }
 
         @Override
-        public boolean rename(final Path src, final Path dst) throws IOException {
+        public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
             try (TemporaryClassLoaderContext ignored = TemporaryClassLoaderContext.of(loader)) {
-                return inner.rename(src, dst);
+                return inner.rename(sourcePath, destinationPath);
             }
         }
 

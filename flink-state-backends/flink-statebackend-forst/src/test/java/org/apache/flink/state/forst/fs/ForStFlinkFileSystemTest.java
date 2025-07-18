@@ -318,8 +318,8 @@ public class ForStFlinkFileSystemTest {
     private static class ByteBufferReadableLocalFileSystem extends LocalFileSystem {
 
         @Override
-        public FSDataInputStream open(org.apache.flink.core.fs.Path path) throws IOException {
-            final File file = pathToFile(path);
+        public FSDataInputStream open(org.apache.flink.core.fs.Path sourcePath) throws IOException {
+            final File file = pathToFile(sourcePath);
             return new ByteBufferReadableLocalDataInputStream(file);
         }
     }

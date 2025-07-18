@@ -269,8 +269,8 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     // ------------------------------------------------------------------------
 
     @Override
-    public FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException {
-        return createOutputStream(() -> originalFs.create(f, overwriteMode));
+    public FSDataOutputStream create(Path targetPath, WriteMode overwriteMode) throws IOException {
+        return createOutputStream(() -> originalFs.create(targetPath, overwriteMode));
     }
 
     @Override
@@ -285,13 +285,13 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        return createInputStream(() -> originalFs.open(f, bufferSize));
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
+        return createInputStream(() -> originalFs.open(sourcePath, bufferSize));
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        return createInputStream(() -> originalFs.open(f));
+    public FSDataInputStream open(Path filePath) throws IOException {
+        return createInputStream(() -> originalFs.open(filePath));
     }
 
     private FSDataOutputStream createOutputStream(
@@ -339,14 +339,14 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        return originalFs.getFileStatus(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        return originalFs.getFileStatus(flinkPath);
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return originalFs.getFileBlockLocations(file, start, len);
+        return originalFs.getFileBlockLocations(fileStatus, start, len);
     }
 
     @Override
@@ -365,13 +365,13 @@ public class LimitedConnectionsFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
-        return originalFs.rename(src, dst);
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
+        return originalFs.rename(sourcePath, destinationPath);
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return originalFs.exists(f);
+    public boolean exists(Path filePath) throws IOException {
+        return originalFs.exists(filePath);
     }
 
     @Override

@@ -74,8 +74,8 @@ class DummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return getDataByPath(f) != null;
+    public boolean exists(Path filePath) throws IOException {
+        return getDataByPath(filePath) != null;
     }
 
     @Override
@@ -88,28 +88,28 @@ class DummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return new BlockLocation[] {new LocalBlockLocation(file.getLen())};
+        return new BlockLocation[] {new LocalBlockLocation(fileStatus.getLen())};
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        byte[] data = getDataByPath(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        byte[] data = getDataByPath(flinkPath);
         if (data == null) {
-            throw new FileNotFoundException("File " + f + " does not exist.");
+            throw new FileNotFoundException("File " + flinkPath + " does not exist.");
         }
-        return new DummyFSFileStatus(f, data.length);
+        return new DummyFSFileStatus(flinkPath, data.length);
     }
 
     @Override
-    public FSDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
+        return open(sourcePath);
     }
 
     @Override
-    public FSDataInputStream open(final Path f) throws IOException {
-        return DummyFSInputStream.create(getDataByPath(f));
+    public FSDataInputStream open(final Path filePath) throws IOException {
+        return DummyFSInputStream.create(getDataByPath(filePath));
     }
 
     @Override
@@ -123,13 +123,13 @@ class DummyFSFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataOutputStream create(final Path path, final WriteMode overwrite)
+    public FSDataOutputStream create(final Path targetPath, final WriteMode overwrite)
             throws IOException {
         throw new UnsupportedOperationException("Dummy FS doesn't support create operation");
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
         throw new UnsupportedOperationException("Dummy FS doesn't support rename operation");
     }
 

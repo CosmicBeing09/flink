@@ -75,25 +75,25 @@ class ShuffleMasterSnapshotUtilTest {
     @Test
     void testRestoreOrSnapshotShuffleMaster() throws IOException {
         String clusterId = configuration.get(HighAvailabilityOptions.HA_CLUSTER_ID);
-        Path path =
+        Path snapshotBasePath =
                 new Path(
                         HighAvailabilityServicesUtils.getClusterHighAvailableStoragePath(
                                 configuration),
                         "shuffleMaster-snapshot");
-        FileSystem fileSystem = path.getFileSystem();
-        assertThat(fileSystem.exists(new Path(path, clusterId))).isFalse();
-        assertThat(ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(path, clusterId))
+        FileSystem fileSystem = snapshotBasePath.getFileSystem();
+        assertThat(fileSystem.exists(new Path(snapshotBasePath, clusterId))).isFalse();
+        assertThat(ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(snapshotBasePath, clusterId))
                 .isFalse();
 
         // Take a snapshot
         ShuffleMasterSnapshotUtil.restoreOrSnapshotShuffleMaster(
                 shuffleMaster, configuration, Executors.directExecutor());
 
-        assertThat(fileSystem.exists(new Path(path, clusterId))).isTrue();
-        assertThat(ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(path, clusterId))
+        assertThat(fileSystem.exists(new Path(snapshotBasePath, clusterId))).isTrue();
+        assertThat(ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(snapshotBasePath, clusterId))
                 .isTrue();
 
-        ShuffleMasterSnapshot snapshot = ShuffleMasterSnapshotUtil.readSnapshot(path, clusterId);
+        ShuffleMasterSnapshot snapshot = ShuffleMasterSnapshotUtil.readSnapshot(snapshotBasePath, clusterId);
         assertThat(snapshot).isInstanceOf(TestingShuffleMasterSnapshot.class);
 
         assertThat(restoredSnapshot).isNull();

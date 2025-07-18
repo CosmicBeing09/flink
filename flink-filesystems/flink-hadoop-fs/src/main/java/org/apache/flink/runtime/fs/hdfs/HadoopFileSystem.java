@@ -84,25 +84,25 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(final Path f) throws IOException {
-        org.apache.hadoop.fs.FileStatus status = this.fs.getFileStatus(toHadoopPath(f));
+    public FileStatus getFileStatus(final Path flinkPath) throws IOException {
+        org.apache.hadoop.fs.FileStatus status = this.fs.getFileStatus(toHadoopPath(flinkPath));
         return HadoopFileStatus.fromHadoopStatus(status);
     }
 
     @Override
     public BlockLocation[] getFileBlockLocations(
-            final FileStatus file, final long start, final long len) throws IOException {
-        if (!(file instanceof HadoopFileStatus)) {
+            final FileStatus fileStatus, final long start, final long len) throws IOException {
+        if (!(fileStatus instanceof HadoopFileStatus)) {
             throw new IOException("file is not an instance of DistributedFileStatus");
         }
 
         // shortcut - if the status already has the information, return it.
-        if (file instanceof LocatedHadoopFileStatus) {
-            return ((LocatedHadoopFileStatus) file).getBlockLocations();
+        if (fileStatus instanceof LocatedHadoopFileStatus) {
+            return ((LocatedHadoopFileStatus) fileStatus).getBlockLocations();
         }
 
         final org.apache.hadoop.fs.FileStatus hadoopStatus =
-                ((HadoopFileStatus) file).getInternalFileStatus();
+                ((HadoopFileStatus) fileStatus).getInternalFileStatus();
 
         // second shortcut - if the internal status already has the information, return it.
         // only if that is not the case, to the actual HDFS call (RPC to Name Node)
@@ -122,15 +122,15 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public HadoopDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        final org.apache.hadoop.fs.Path path = toHadoopPath(f);
+    public HadoopDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
+        final org.apache.hadoop.fs.Path path = toHadoopPath(sourcePath);
         final org.apache.hadoop.fs.FSDataInputStream fdis = this.fs.open(path, bufferSize);
         return new HadoopDataInputStream(fdis);
     }
 
     @Override
-    public HadoopDataInputStream open(final Path f) throws IOException {
-        final org.apache.hadoop.fs.Path path = toHadoopPath(f);
+    public HadoopDataInputStream open(final Path filePath) throws IOException {
+        final org.apache.hadoop.fs.Path path = toHadoopPath(filePath);
         final org.apache.hadoop.fs.FSDataInputStream fdis = fs.open(path);
         return new HadoopDataInputStream(fdis);
     }
@@ -151,10 +151,10 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public HadoopDataOutputStream create(final Path f, final WriteMode overwrite)
+    public HadoopDataOutputStream create(final Path targetPath, final WriteMode overwrite)
             throws IOException {
         final org.apache.hadoop.fs.FSDataOutputStream fsDataOutputStream =
-                this.fs.create(toHadoopPath(f), overwrite == WriteMode.OVERWRITE);
+                this.fs.create(toHadoopPath(targetPath), overwrite == WriteMode.OVERWRITE);
         return new HadoopDataOutputStream(fsDataOutputStream);
     }
 
@@ -164,8 +164,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return this.fs.exists(toHadoopPath(f));
+    public boolean exists(Path filePath) throws IOException {
+        return this.fs.exists(toHadoopPath(filePath));
     }
 
     @Override
@@ -187,8 +187,8 @@ public class HadoopFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
-        return this.fs.rename(toHadoopPath(src), toHadoopPath(dst));
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
+        return this.fs.rename(toHadoopPath(sourcePath), toHadoopPath(destinationPath));
     }
 
     @SuppressWarnings("deprecation")

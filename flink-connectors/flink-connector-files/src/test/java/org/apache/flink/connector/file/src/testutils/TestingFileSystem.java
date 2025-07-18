@@ -82,7 +82,7 @@ public class TestingFileSystem extends FileSystem {
 
         final Collection<TestFileStatus> status =
                 files.stream()
-                        .map((path) -> TestFileStatus.forFileWithDefaultBlock(path, 10L << 20))
+                        .map((filePath) -> TestFileStatus.forFileWithDefaultBlock(filePath, 10L << 20))
                         .collect(Collectors.toList());
 
         return createForFileStatus(scheme, status);
@@ -182,36 +182,37 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        final FileStatus status = files.get(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        final FileStatus status = files.get(flinkPath);
         if (status != null) {
             return status;
         } else {
-            throw new FileNotFoundException("File not found: " + f);
+            throw new FileNotFoundException("File not found: " + flinkPath);
         }
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
         final TestFileStatus status =
-                file instanceof TestFileStatus ? (TestFileStatus) file : files.get(file.getPath());
+                fileStatus instanceof TestFileStatus ? (TestFileStatus) fileStatus : files.get(
+                        fileStatus.getPath());
 
         if (status == null) {
-            throw new FileNotFoundException(file.getPath().toString());
+            throw new FileNotFoundException(fileStatus.getPath().toString());
         }
 
         return status.getBlocks();
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
+        return open(sourcePath);
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        final TestFileStatus status = (TestFileStatus) getFileStatus(f);
+    public FSDataInputStream open(Path filePath) throws IOException {
+        final TestFileStatus status = (TestFileStatus) getFileStatus(filePath);
         if (status.stream != null) {
             return status.stream;
         } else {
@@ -240,12 +241,12 @@ public class TestingFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataOutputStream create(Path f, WriteMode overwriteMode) throws IOException {
+    public FSDataOutputStream create(Path targetPath, WriteMode overwriteMode) throws IOException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
         throw new UnsupportedOperationException();
     }
 

@@ -38,7 +38,7 @@ public class LocalFileStatus implements LocatedFileStatus {
     private final File file;
 
     /** The path of this file this file status belongs to. */
-    private final Path path;
+    private final Path filePath;
 
     /** Cached length field, to avoid repeated native/syscalls. */
     private final long len;
@@ -51,7 +51,7 @@ public class LocalFileStatus implements LocatedFileStatus {
      */
     public LocalFileStatus(final File f, final FileSystem fs) {
         this.file = f;
-        this.path = new Path(fs.getUri().getScheme() + ":" + f.toURI().getPath());
+        this.filePath = new Path(fs.getUri().getScheme() + ":" + f.toURI().getPath());
         this.len = f.length();
     }
 
@@ -87,7 +87,7 @@ public class LocalFileStatus implements LocatedFileStatus {
 
     @Override
     public Path getPath() {
-        return this.path;
+        return this.filePath;
     }
 
     @Override
@@ -102,6 +102,6 @@ public class LocalFileStatus implements LocatedFileStatus {
 
     @Override
     public String toString() {
-        return "LocalFileStatus{" + "file=" + file + ", path=" + path + '}';
+        return "LocalFileStatus{" + "file=" + file + ", path=" + filePath + '}';
     }
 }

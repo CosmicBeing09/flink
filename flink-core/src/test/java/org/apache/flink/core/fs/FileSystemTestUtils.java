@@ -26,15 +26,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class FileSystemTestUtils {
 
     /**
-     * Verifies that the given path eventually appears on / disappears from <tt>fs</tt> within
+     * Verifies that the given targetPath eventually appears on / disappears from <tt>fs</tt> within
      * <tt>consistencyToleranceNS</tt> nanoseconds.
      */
     public static void checkPathEventualExistence(
-            FileSystem fs, Path path, boolean expectedExists, long consistencyToleranceNS)
+            FileSystem fs, Path targetPath, boolean expectedExists, long consistencyToleranceNS)
             throws IOException, InterruptedException {
         boolean dirExists;
         long deadline = System.nanoTime() + consistencyToleranceNS;
-        while ((dirExists = fs.exists(path)) != expectedExists
+        while ((dirExists = fs.exists(targetPath)) != expectedExists
                 && System.nanoTime() - deadline < 0) {
             Thread.sleep(10);
         }

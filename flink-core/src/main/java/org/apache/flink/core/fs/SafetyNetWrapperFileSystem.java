@@ -74,8 +74,8 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        return unsafeFileSystem.getFileStatus(f);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        return unsafeFileSystem.getFileStatus(flinkPath);
     }
 
     @Override
@@ -84,21 +84,21 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        return unsafeFileSystem.getFileBlockLocations(file, start, len);
+        return unsafeFileSystem.getFileBlockLocations(fileStatus, start, len);
     }
 
     @Override
-    public FSDataInputStream open(Path f, int bufferSize) throws IOException {
-        FSDataInputStream innerStream = unsafeFileSystem.open(f, bufferSize);
-        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(f));
+    public FSDataInputStream open(Path sourcePath, int bufferSize) throws IOException {
+        FSDataInputStream innerStream = unsafeFileSystem.open(sourcePath, bufferSize);
+        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(sourcePath));
     }
 
     @Override
-    public FSDataInputStream open(Path f) throws IOException {
-        FSDataInputStream innerStream = unsafeFileSystem.open(f);
-        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(f));
+    public FSDataInputStream open(Path filePath) throws IOException {
+        FSDataInputStream innerStream = unsafeFileSystem.open(filePath);
+        return ClosingFSDataInputStream.wrapSafe(innerStream, registry, String.valueOf(filePath));
     }
 
     @Override
@@ -113,8 +113,8 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        return unsafeFileSystem.exists(f);
+    public boolean exists(Path filePath) throws IOException {
+        return unsafeFileSystem.exists(filePath);
     }
 
     @Override
@@ -139,14 +139,14 @@ public class SafetyNetWrapperFileSystem extends FileSystem
     }
 
     @Override
-    public FSDataOutputStream create(Path f, WriteMode overwrite) throws IOException {
-        FSDataOutputStream innerStream = unsafeFileSystem.create(f, overwrite);
-        return ClosingFSDataOutputStream.wrapSafe(innerStream, registry, String.valueOf(f));
+    public FSDataOutputStream create(Path targetPath, WriteMode overwrite) throws IOException {
+        FSDataOutputStream innerStream = unsafeFileSystem.create(targetPath, overwrite);
+        return ClosingFSDataOutputStream.wrapSafe(innerStream, registry, String.valueOf(targetPath));
     }
 
     @Override
-    public boolean rename(Path src, Path dst) throws IOException {
-        return unsafeFileSystem.rename(src, dst);
+    public boolean rename(Path sourcePath, Path destinationPath) throws IOException {
+        return unsafeFileSystem.rename(sourcePath, destinationPath);
     }
 
     @Override

@@ -163,15 +163,15 @@ public final class FileUtils {
      * java.nio.file.Files#readAllBytes(java.nio.file.Path)} or other interfaces in java API can do
      * this in the future, we should remove it.
      *
-     * @param path the path to the file
+     * @param inputFilePath the path to the file
      * @return a byte array containing the bytes read from the file
      * @throws IOException if an I/O error occurs reading from the stream
      * @throws OutOfMemoryError if an array of the required size cannot be allocated, for example
      *     the file is larger that {@code 2GB}
      */
-    public static byte[] readAllBytes(java.nio.file.Path path) throws IOException {
-        try (SeekableByteChannel channel = Files.newByteChannel(path);
-                InputStream in = Channels.newInputStream(channel)) {
+    public static byte[] readAllBytes(java.nio.file.Path inputFilePath) throws IOException {
+        try (SeekableByteChannel channel = Files.newByteChannel(inputFilePath);
+             InputStream in = Channels.newInputStream(channel)) {
 
             long size = channel.size();
             if (size > (long) MAX_BUFFER_SIZE) {
@@ -591,19 +591,19 @@ public final class FileUtils {
     /**
      * Computes the sum of sizes of all files in the directory and it's subdirectories.
      *
-     * @param path the root path from which to start the calculation.
+     * @param rootDirectoryPath the root path from which to start the calculation.
      * @param options visitation options for the directory traversal.
      * @return sum of sizes of all files in the directory and it's subdirectories.
      * @throws IOException if the size cannot be determined.
      */
-    public static long getDirectoryFilesSize(java.nio.file.Path path, FileVisitOption... options)
+    public static long getDirectoryFilesSize(java.nio.file.Path rootDirectoryPath, FileVisitOption... options)
             throws IOException {
 
-        if (path == null) {
+        if (rootDirectoryPath == null) {
             return 0L;
         }
 
-        try (Stream<java.nio.file.Path> pathStream = Files.walk(path, options)) {
+        try (Stream<java.nio.file.Path> pathStream = Files.walk(rootDirectoryPath, options)) {
             return pathStream
                     .map(java.nio.file.Path::toFile)
                     .filter(File::isFile)

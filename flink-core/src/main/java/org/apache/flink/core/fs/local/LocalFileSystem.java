@@ -83,23 +83,23 @@ public class LocalFileSystem extends FileSystem {
     // ------------------------------------------------------------------------
 
     @Override
-    public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        if (file instanceof LocalFileStatus) {
-            return ((LocalFileStatus) file).getBlockLocations();
+        if (fileStatus instanceof LocalFileStatus) {
+            return ((LocalFileStatus) fileStatus).getBlockLocations();
         }
-        throw new IOException("File status does not belong to the LocalFileSystem: " + file);
+        throw new IOException("File status does not belong to the LocalFileSystem: " + fileStatus);
     }
 
     @Override
-    public FileStatus getFileStatus(Path f) throws IOException {
-        final File path = pathToFile(f);
-        if (path.exists()) {
-            return new LocalFileStatus(path, this);
+    public FileStatus getFileStatus(Path flinkPath) throws IOException {
+        final File localFile = pathToFile(flinkPath);
+        if (localFile.exists()) {
+            return new LocalFileStatus(localFile, this);
         } else {
             throw new FileNotFoundException(
                     "File "
-                            + f
+                            + flinkPath
                             + " does not exist or the user running "
                             + "Flink ('"
                             + System.getProperty("user.name")
@@ -123,13 +123,13 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public FSDataInputStream open(final Path f, final int bufferSize) throws IOException {
-        return open(f);
+    public FSDataInputStream open(final Path sourcePath, final int bufferSize) throws IOException {
+        return open(sourcePath);
     }
 
     @Override
-    public FSDataInputStream open(final Path f) throws IOException {
-        final File file = pathToFile(f);
+    public FSDataInputStream open(final Path filePath) throws IOException {
+        final File file = pathToFile(filePath);
         return new LocalDataInputStream(file);
     }
 
@@ -139,9 +139,9 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
-        final File path = pathToFile(f);
-        return path.exists();
+    public boolean exists(Path filePath) throws IOException {
+        final File localFile = pathToFile(filePath);
+        return localFile.exists();
     }
 
     @Override
@@ -266,9 +266,9 @@ public class LocalFileSystem extends FileSystem {
     }
 
     @Override
-    public boolean rename(final Path src, final Path dst) throws IOException {
-        final File srcFile = pathToFile(src);
-        final File dstFile = pathToFile(dst);
+    public boolean rename(final Path sourcePath, final Path destinationPath) throws IOException {
+        final File srcFile = pathToFile(sourcePath);
+        final File dstFile = pathToFile(destinationPath);
 
         final File dstParent = dstFile.getParentFile();
 

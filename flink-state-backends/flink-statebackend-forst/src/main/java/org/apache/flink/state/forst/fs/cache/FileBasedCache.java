@@ -86,16 +86,16 @@ public class FileBasedCache extends LruCache<String, FileCacheEntry> {
                 cacheLimitPolicy);
     }
 
-    Path getCachePath(Path fromOriginal) {
-        return new Path(basePath, fromOriginal.getName());
+    Path getCachePath(Path originalPath) {
+        return new Path(basePath, originalPath.getName());
     }
 
-    public CachedDataInputStream open(Path path, FSDataInputStream originalStream)
+    public CachedDataInputStream open(Path originalPath, FSDataInputStream originalStream)
             throws IOException {
         if (closed) {
             return null;
         }
-        FileCacheEntry entry = get(getCachePath(path).toString());
+        FileCacheEntry entry = get(getCachePath(originalPath).toString());
         if (entry != null) {
             return entry.open(originalStream);
         } else {

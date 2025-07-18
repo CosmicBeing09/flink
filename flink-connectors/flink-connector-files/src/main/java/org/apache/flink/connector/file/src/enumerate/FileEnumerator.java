@@ -41,7 +41,7 @@ public interface FileEnumerator {
      * minDesiredSplits} is an optional hint indicating how many splits would be necessary to
      * exploit parallelism properly.
      */
-    Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits)
+    Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits)
             throws IOException;
 
     // ------------------------------------------------------------------------

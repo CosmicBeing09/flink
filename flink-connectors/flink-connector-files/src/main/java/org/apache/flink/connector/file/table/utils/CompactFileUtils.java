@@ -52,38 +52,38 @@ public class CompactFileUtils {
     public static @Nullable <T> Path doCompact(
             FileSystem fileSystem,
             String partition,
-            List<Path> paths,
+            List<Path> inputPaths,
             Path target,
             Configuration config,
             CompactReader.Factory<T> readerFactory,
             CompactWriter.Factory<T> writerFactory)
             throws IOException {
-        if (paths.size() == 0) {
+        if (inputPaths.size() == 0) {
             return null;
         }
 
-        Map<Path, Long> inputMap = new HashMap<>();
-        for (Path path : paths) {
-            inputMap.put(path, fileSystem.getFileStatus(path).getLen());
+        Map<Path, Long> inputFileSizes = new HashMap<>();
+        for (Path path : inputPaths) {
+            inputFileSizes.put(path, fileSystem.getFileStatus(path).getLen());
         }
 
         if (fileSystem.exists(target)) {
             return target;
         }
 
-        checkExist(fileSystem, paths);
+        checkExist(fileSystem, inputPaths);
 
         long startMillis = System.currentTimeMillis();
 
         boolean success = false;
-        if (paths.size() == 1) {
+        if (inputPaths.size() == 1) {
             // optimizer for single file
-            success = doSingleFileMove(fileSystem, paths.get(0), target);
+            success = doSingleFileMove(fileSystem, inputPaths.get(0), target);
         }
 
         if (!success) {
             doMultiFilesCompact(
-                    partition, paths, target, config, fileSystem, readerFactory, writerFactory);
+                    partition, inputPaths, target, config, fileSystem, readerFactory, writerFactory);
         }
 
         Map<Path, Long> targetMap = new HashMap<>();
@@ -94,7 +94,7 @@ public class CompactFileUtils {
                 "Compaction time cost is '{}S', output per file as following format: name=size(byte), target file is '{}', input files are '{}'",
                 costSeconds,
                 targetMap,
-                inputMap);
+                inputFileSizes);
         return target;
     }
 

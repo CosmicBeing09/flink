@@ -221,9 +221,9 @@ public class ChangelogRecoveryCachingITCase extends TestLogger {
         private final Set<Path> openedPaths = new HashSet<>();
 
         @Override
-        public FSDataInputStream open(Path f) throws IOException {
-            Assert.assertTrue(f + " was already opened", openedPaths.add(f));
-            return super.open(f);
+        public FSDataInputStream open(Path filePath) throws IOException {
+            Assert.assertTrue(filePath + " was already opened", openedPaths.add(filePath));
+            return super.open(filePath);
         }
 
         @Override

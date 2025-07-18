@@ -132,35 +132,36 @@ public class ForStFlinkFileSystem extends FileSystem {
      * Create ByteBufferWritableFSDataOutputStream from specific path which supports to write data
      * to ByteBuffer with {@link org.apache.flink.core.fs.FileSystem.WriteMode#OVERWRITE} mode.
      *
-     * @param path The file path to write to.
+     * @param targetPath The file path to write to.
      * @return The stream to the new file at the target path.
      * @throws IOException Thrown, if the stream could not be opened because of an I/O, or because a
      *     file already exists at that path and the write mode indicates to not overwrite the file.
      */
-    public ByteBufferWritableFSDataOutputStream create(Path path) throws IOException {
-        return create(path, WriteMode.OVERWRITE);
+    public ByteBufferWritableFSDataOutputStream create(Path targetPath) throws IOException {
+        return create(targetPath, WriteMode.OVERWRITE);
     }
 
     @Override
     public synchronized ByteBufferWritableFSDataOutputStream create(
-            Path path, WriteMode overwriteMode) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.createFile(path);
+            Path targetPath, WriteMode overwriteMode) throws IOException {
+        FileMappingManager.RealPath realPath = fileMappingManager.createFile(targetPath);
         if (realPath.isLocal) {
             return new ByteBufferWritableFSDataOutputStream(
                     localFS.create(realPath.path, overwriteMode));
         }
 
-        FSDataOutputStream originalOutputStream = delegateFS.create(path, overwriteMode);
+        FSDataOutputStream originalOutputStream = delegateFS.create(targetPath, overwriteMode);
         CachedDataOutputStream cachedDataOutputStream =
-                fileBasedCache == null ? null : fileBasedCache.create(originalOutputStream, path);
+                fileBasedCache == null ? null : fileBasedCache.create(originalOutputStream,
+                        targetPath);
         return new ByteBufferWritableFSDataOutputStream(
                 cachedDataOutputStream == null ? originalOutputStream : cachedDataOutputStream);
     }
 
     @Override
-    public synchronized ByteBufferReadableFSDataInputStream open(Path path, int bufferSize)
+    public synchronized ByteBufferReadableFSDataInputStream open(Path dbFilePath, int bufferSize)
             throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.realPath(dbFilePath);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
@@ -183,8 +184,8 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized ByteBufferReadableFSDataInputStream open(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+    public synchronized ByteBufferReadableFSDataInputStream open(Path sourcePath) throws IOException {
+        FileMappingManager.RealPath realPath = fileMappingManager.realPath(sourcePath);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
@@ -207,8 +208,8 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized boolean rename(Path src, Path dst) throws IOException {
-        return fileMappingManager.renameFile(src.toString(), dst.toString());
+    public synchronized boolean rename(Path sourcePath, Path destinationPath) throws IOException {
+        return fileMappingManager.renameFile(sourcePath.toString(), destinationPath.toString());
     }
 
     @Override
@@ -227,17 +228,17 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized boolean exists(final Path f) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(f);
+    public synchronized boolean exists(final Path filePath) throws IOException {
+        FileMappingManager.RealPath realPath = fileMappingManager.realPath(filePath);
         if (realPath == null) {
-            return delegateFS.exists(f) && delegateFS.getFileStatus(f).isDir();
+            return delegateFS.exists(filePath) && delegateFS.getFileStatus(filePath).isDir();
         }
 
         boolean status = false;
         if (realPath.isLocal) {
             status |= localFS.exists(realPath.path);
             if (!status) {
-                status = delegateFS.exists(f);
+                status = delegateFS.exists(filePath);
             }
         } else {
             status = delegateFS.exists(realPath.path);
@@ -256,16 +257,16 @@ public class ForStFlinkFileSystem extends FileSystem {
     }
 
     @Override
-    public synchronized BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
+    public synchronized BlockLocation[] getFileBlockLocations(FileStatus fileStatus, long start, long len)
             throws IOException {
-        Path path = file.getPath();
+        Path path = fileStatus.getPath();
         FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             FileStatus localFile = localFS.getFileStatus(realPath.path);
             return localFS.getFileBlockLocations(localFile, start, len);
         }
-        return delegateFS.getFileBlockLocations(file, start, len);
+        return delegateFS.getFileBlockLocations(fileStatus, start, len);
     }
 
     @Override

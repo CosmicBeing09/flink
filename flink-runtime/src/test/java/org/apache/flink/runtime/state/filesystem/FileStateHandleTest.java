@@ -238,8 +238,8 @@ class FileStateHandleTest {
         }
 
         @Override
-        public boolean exists(Path f) throws IOException {
-            return existsFunction.apply(f);
+        public boolean exists(Path filePath) throws IOException {
+            return existsFunction.apply(filePath);
         }
 
         public static Builder newBuilder() {

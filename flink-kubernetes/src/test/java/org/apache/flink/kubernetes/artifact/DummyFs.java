@@ -40,9 +40,9 @@ public class DummyFs extends LocalFileSystem {
     }
 
     @Override
-    public boolean exists(Path f) throws IOException {
+    public boolean exists(Path filePath) throws IOException {
         ++existsCallCounter;
-        return super.exists(f);
+        return super.exists(filePath);
     }
 
     @Override

@@ -190,12 +190,12 @@ public interface IFileSystem {
     /**
      * Return a file status object that represents the path.
      *
-     * @param f The path we want information from
+     * @param pathToInspect The path we want information from
      * @return a FileStatus object
      * @throws FileNotFoundException when the path does not exist; IOException see specific
      *     implementation
      */
-    FileStatus getFileStatus(Path f) throws IOException;
+    FileStatus getFileStatus(Path pathToInspect) throws IOException;
 
     /**
      * Return an array containing hostnames, offset and size of portions of the given file. For a
@@ -208,10 +208,10 @@ public interface IFileSystem {
     /**
      * Opens an FSDataInputStream at the indicated Path.
      *
-     * @param f the file name to open
+     * @param inputPath the file name to open
      * @param bufferSize the size of the buffer to be used.
      */
-    FSDataInputStream open(Path f, int bufferSize) throws IOException;
+    FSDataInputStream open(Path inputPath, int bufferSize) throws IOException;
 
     /**
      * Opens an FSDataInputStream at the indicated Path.

@@ -349,13 +349,13 @@ public class TestFileSystemCatalog extends AbstractCatalog {
 
         Tuple4<Path, Path, Path, String> tableSchemaTuple =
                 getTableJsonInfo(tablePath, catalogTable);
-        Path path = tableSchemaTuple.f0;
+        Path tableRootPath = tableSchemaTuple.f0;
         Path tableSchemaPath = tableSchemaTuple.f1;
         Path tableDataPath = tableSchemaTuple.f2;
         String jsonSchema = tableSchemaTuple.f3;
         try {
-            if (!fs.exists(path)) {
-                fs.mkdirs(path);
+            if (!fs.exists(tableRootPath)) {
+                fs.mkdirs(tableRootPath);
             }
             if (!fs.exists(tableSchemaPath)) {
                 fs.mkdirs(tableSchemaPath);
@@ -588,7 +588,7 @@ public class TestFileSystemCatalog extends AbstractCatalog {
 
     private Tuple4<Path, Path, Path, String> getTableJsonInfo(
             ObjectPath tablePath, CatalogBaseTable catalogTable) {
-        final Path path = inferTablePath(catalogPathStr, tablePath);
+        final Path tableRootPath = inferTablePath(catalogPathStr, tablePath);
         final Path tableSchemaPath = inferTableSchemaPath(catalogPathStr, tablePath);
         final Path tableDataPathStr = inferTableDataPath(catalogPathStr, tablePath);
 
@@ -599,7 +599,7 @@ public class TestFileSystemCatalog extends AbstractCatalog {
         FileSystemTableInfo tableInfo = new FileSystemTableInfo(tableKind, catalogTableInfo);
 
         String jsonSchema = JsonSerdeUtil.toJson(tableInfo);
-        return Tuple4.of(path, tableSchemaPath, tableDataPathStr, jsonSchema);
+        return Tuple4.of(tableRootPath, tableSchemaPath, tableDataPathStr, jsonSchema);
     }
 
     /** Read file to UTF_8 decoding. */

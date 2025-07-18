@@ -386,7 +386,7 @@ public class TaskLocalStateStoreImpl implements OwnedTaskLocalStateStore {
     /**
      * Helper method that discards state objects with an executor and reports exceptions to the log.
      */
-    private void discardLocalStateForCheckpoint(long checkpointID, Optional<TaskStateSnapshot> o) {
+    private void discardLocalStateForCheckpoint(long checkpointID, Optional<TaskStateSnapshot> optionalSnapshot) {
 
         if (LOG.isTraceEnabled()) {
             LOG.trace(
@@ -398,14 +398,14 @@ public class TaskLocalStateStoreImpl implements OwnedTaskLocalStateStore {
         } else {
             LOG.debug(
                     "Discarding local task state snapshot {} of checkpoint {} for subtask ({} - {} - {}).",
-                    o,
+                    optionalSnapshot,
                     checkpointID,
                     jobID,
                     jobVertexID,
                     subtaskIndex);
         }
 
-        o.ifPresent(
+        optionalSnapshot.ifPresent(
                 taskStateSnapshot -> {
                     try {
                         taskStateSnapshot.discardState();
@@ -445,10 +445,10 @@ public class TaskLocalStateStoreImpl implements OwnedTaskLocalStateStore {
 
     /** Helper method to delete a directory. */
     protected void deleteDirectory(File directory) throws IOException {
-        Path path = new Path(directory.toURI());
-        FileSystem fileSystem = path.getFileSystem();
-        if (fileSystem.exists(path)) {
-            fileSystem.delete(path, true);
+        Path directoryPath = new Path(directory.toURI());
+        FileSystem fileSystem = directoryPath.getFileSystem();
+        if (fileSystem.exists(directoryPath)) {
+            fileSystem.delete(directoryPath, true);
         }
     }
 

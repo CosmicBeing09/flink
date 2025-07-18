@@ -67,18 +67,18 @@ public class FileMappingManager {
     }
 
     /** Create a mapping entry for a file. */
-    public RealPath createFile(Path file) {
-        String fileName = file.toString();
+    public RealPath createFile(Path inputPath) {
+        String fileName = inputPath.toString();
         Preconditions.checkState(!mappingTable.containsKey(fileName));
         if (!fileName.endsWith(SST_SUFFIX) && isParentDir(fileName, remoteBase)) {
-            Path localFile = new Path(localBase, file.getName());
+            Path localFile = new Path(localBase, inputPath.getName());
             mappingTable.put(
                     fileName,
                     new MappingEntry(1, localFileSystem, localFile.toString(), true, false));
             return new RealPath(localFile, true);
         } else {
             mappingTable.put(fileName, new MappingEntry(1, fileSystem, fileName, false, false));
-            return new RealPath(file, false);
+            return new RealPath(inputPath, false);
         }
     }
 
@@ -103,8 +103,8 @@ public class FileMappingManager {
      * Get the real path of a file, the real path maybe a local file or a remote file/dir. Due to
      * the lazy deletion, if the path is a directory, the exists check may have false positives.
      */
-    public RealPath realPath(Path path) {
-        String fileName = path.toString();
+    public RealPath realPath(Path logicalPath) {
+        String fileName = logicalPath.toString();
         MappingEntry entry = mappingTable.getOrDefault(fileName, null);
         if (entry != null) {
             return new RealPath(new Path(entry.sourcePath), entry.isLocal);

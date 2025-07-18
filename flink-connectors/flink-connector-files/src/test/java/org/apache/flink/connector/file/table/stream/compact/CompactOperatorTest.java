@@ -214,11 +214,11 @@ class CompactOperatorTest extends AbstractCompactTestBase {
                         () -> folder.getFileSystem(),
                         CompactBulkReader.factory(TestByteFormat.bulkFormat()),
                         context -> {
-                            Path path = context.getPath();
-                            Path tempPath = new Path(path.getParent(), "." + path.getName());
+                            Path targetFilePath = context.getPath();
+                            Path tempFilePath = new Path(targetFilePath.getParent(), "." + targetFilePath.getName());
                             FSDataOutputStream out =
                                     context.getFileSystem()
-                                            .create(tempPath, FileSystem.WriteMode.OVERWRITE);
+                                            .create(tempFilePath, FileSystem.WriteMode.OVERWRITE);
                             return new CompactWriter<Byte>() {
                                 @Override
                                 public void write(Byte record) throws IOException {
@@ -228,7 +228,7 @@ class CompactOperatorTest extends AbstractCompactTestBase {
                                 @Override
                                 public void commit() throws IOException {
                                     out.close();
-                                    context.getFileSystem().rename(tempPath, path);
+                                    context.getFileSystem().rename(tempFilePath, targetFilePath);
                                 }
                             };
                         });

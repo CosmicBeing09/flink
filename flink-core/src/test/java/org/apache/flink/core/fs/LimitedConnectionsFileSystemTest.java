@@ -762,7 +762,7 @@ class LimitedConnectionsFileSystemTest {
         }
 
         @Override
-        public FSDataInputStream open(Path f) throws IOException {
+        public FSDataInputStream open(Path filePath) throws IOException {
             throw new IOException("test exception");
         }
     }

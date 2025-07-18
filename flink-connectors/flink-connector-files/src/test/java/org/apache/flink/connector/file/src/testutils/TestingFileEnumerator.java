@@ -38,7 +38,7 @@ public class TestingFileEnumerator implements FileEnumerator {
     }
 
     @Override
-    public Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits)
+    public Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits)
             throws IOException {
         synchronized (splits) {
             final ArrayList<FileSourceSplit> currentSplits = new ArrayList<>(splits);
