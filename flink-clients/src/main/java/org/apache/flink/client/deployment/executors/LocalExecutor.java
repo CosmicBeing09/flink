@@ -19,7 +19,7 @@
 package org.apache.flink.client.deployment.executors;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.common.StreamingExecutionPlan;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.program.PerJobMiniClusterFactory;
 import org.apache.flink.configuration.Configuration;
@@ -119,8 +119,8 @@ public class LocalExecutor implements PipelineExecutor {
         // This is a quirk in how LocalEnvironment used to work. It sets the default parallelism
         // to <num taskmanagers> * <num task slots>. Might be questionable but we keep the behaviour
         // for now.
-        if (pipeline instanceof Plan) {
-            Plan plan = (Plan) pipeline;
+        if (pipeline instanceof StreamingExecutionPlan) {
+            StreamingExecutionPlan plan = (StreamingExecutionPlan) pipeline;
             final int slotsPerTaskManager =
                     configuration.get(
                             TaskManagerOptions.NUM_TASK_SLOTS, plan.getMaximumParallelism());
