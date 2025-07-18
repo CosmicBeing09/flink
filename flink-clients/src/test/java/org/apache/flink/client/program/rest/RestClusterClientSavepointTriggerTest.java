@@ -93,7 +93,7 @@ class RestClusterClientSavepointTriggerTest {
     static {
         final Configuration config = new Configuration();
         config.set(JobManagerOptions.ADDRESS, "localhost");
-        config.set(RestOptions.RETRY_MAX_ATTEMPTS, 10);
+        config.set(RestOptions.CLIENT_RETRY_MAX_ATTEMPTS, 10);
         config.set(RestOptions.RETRY_DELAY, Duration.ofMillis(0L));
         config.set(RestOptions.PORT, 0);
 

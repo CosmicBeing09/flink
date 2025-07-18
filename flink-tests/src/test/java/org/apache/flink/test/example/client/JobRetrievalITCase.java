@@ -65,7 +65,7 @@ public class JobRetrievalITCase extends TestLogger {
     @Before
     public void setUp() throws Exception {
         final Configuration clientConfig = new Configuration();
-        clientConfig.set(RestOptions.RETRY_MAX_ATTEMPTS, 0);
+        clientConfig.set(RestOptions.CLIENT_RETRY_MAX_ATTEMPTS, 0);
         clientConfig.set(RestOptions.RETRY_DELAY, Duration.ofMillis(0L));
         clientConfig.addAll(CLUSTER.getClientConfiguration());
 

@@ -111,7 +111,7 @@ public final class RestClientConfiguration {
             sslHandlerFactory = null;
         }
 
-        final long connectionTimeout = config.get(RestOptions.CONNECTION_TIMEOUT).toMillis();
+        final long connectionTimeout = config.get(RestOptions.CLIENT_CONNECTION_TIMEOUT).toMillis();
 
         final long idlenessTimeout = config.get(RestOptions.IDLENESS_TIMEOUT).toMillis();
 

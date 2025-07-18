@@ -97,7 +97,7 @@ class RestClientTest {
     @Test
     void testConnectionTimeout() throws Exception {
         final Configuration config = new Configuration();
-        config.set(RestOptions.CONNECTION_TIMEOUT, Duration.ofMillis(1L));
+        config.set(RestOptions.CLIENT_CONNECTION_TIMEOUT, Duration.ofMillis(1L));
         try (final RestClient restClient = new RestClient(config, Executors.directExecutor())) {
             CompletableFuture<?> future =
                     restClient.sendRequest(

@@ -62,7 +62,7 @@ public final class RestClusterClientConfiguration {
         return awaitLeaderTimeout;
     }
 
-    /** @see RestOptions#RETRY_MAX_ATTEMPTS */
+    /** @see RestOptions#CLIENT_RETRY_MAX_ATTEMPTS */
     public int getRetryMaxAttempts() {
         return retryMaxAttempts;
     }
@@ -78,7 +78,7 @@ public final class RestClusterClientConfiguration {
                 RestClientConfiguration.fromConfiguration(config);
 
         final long awaitLeaderTimeout = config.get(RestOptions.AWAIT_LEADER_TIMEOUT).toMillis();
-        final int retryMaxAttempts = config.get(RestOptions.RETRY_MAX_ATTEMPTS);
+        final int retryMaxAttempts = config.get(RestOptions.CLIENT_RETRY_MAX_ATTEMPTS);
         final long retryDelay = config.get(RestOptions.RETRY_DELAY).toMillis();
 
         return new RestClusterClientConfiguration(
