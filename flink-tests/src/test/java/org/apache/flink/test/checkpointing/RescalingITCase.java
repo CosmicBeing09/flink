@@ -201,13 +201,13 @@ public class RescalingITCase extends TestLogger {
         ClusterClient<?> client = cluster.getClusterClient();
 
         try {
-            ExecutionPlan jobGraph =
+            ExecutionPlan executionPlan =
                     createJobGraphWithKeyedState(
                             parallelism, maxParallelism, numberKeys, numberElements, false, 100);
 
-            final JobID jobID = jobGraph.getJobID();
+            final JobID jobID = executionPlan.getJobID();
 
-            client.submitJob(jobGraph).get();
+            client.submitJob(executionPlan).get();
 
             // wait til the sources have emitted numberElements for each key and completed a
             // checkpoint
@@ -236,7 +236,7 @@ public class RescalingITCase extends TestLogger {
             // clear the CollectionSink set for the restarted job
             CollectionSink.clearElementsSet();
 
-            waitForAllTaskRunning(cluster.getMiniCluster(), jobGraph.getJobID(), false);
+            waitForAllTaskRunning(cluster.getMiniCluster(), executionPlan.getJobID(), false);
             CompletableFuture<String> savepointPathFuture =
                     client.triggerSavepoint(jobID, null, SavepointFormatType.CANONICAL);
 
@@ -252,7 +252,7 @@ public class RescalingITCase extends TestLogger {
             int restoreMaxParallelism =
                     deriveMaxParallelism ? JobVertex.MAX_PARALLELISM_DEFAULT : maxParallelism;
 
-            ExecutionPlan scaledJobGraph =
+            ExecutionPlan scaledExecutionPlan =
                     createJobGraphWithKeyedState(
                             parallelism2,
                             restoreMaxParallelism,
@@ -261,10 +261,10 @@ public class RescalingITCase extends TestLogger {
                             true,
                             100);
 
-            scaledJobGraph.setSavepointRestoreSettings(
+            scaledExecutionPlan.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath));
 
-            submitJobAndWaitForResult(client, scaledJobGraph, getClass().getClassLoader());
+            submitJobAndWaitForResult(client, scaledExecutionPlan, getClass().getClassLoader());
 
             Set<Tuple2<Integer, Integer>> actualResult2 = CollectionSink.getElementsSet();
 
