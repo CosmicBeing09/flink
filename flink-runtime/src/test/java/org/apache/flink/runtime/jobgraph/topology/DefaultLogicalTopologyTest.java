@@ -43,21 +43,21 @@ import static org.junit.Assert.assertEquals;
 /** Unit tests for {@link DefaultLogicalTopology}. */
 public class DefaultLogicalTopologyTest extends TestLogger {
 
-    private ExecutionPlan jobGraph;
+    private ExecutionPlan executionPlan;
 
     private DefaultLogicalTopology logicalTopology;
 
     @Before
     public void setUp() throws Exception {
-        jobGraph = createJobGraph();
-        logicalTopology = DefaultLogicalTopology.fromJobGraph(jobGraph);
+        executionPlan = createJobGraph();
+        logicalTopology = DefaultLogicalTopology.fromJobGraph(executionPlan);
     }
 
     @Test
     public void testGetVertices() {
         // vertices from getVertices() should be topologically sorted
         final Iterable<JobVertex> jobVertices =
-                jobGraph.getVerticesSortedTopologicallyFromSources();
+                executionPlan.getVerticesSortedTopologicallyFromSources();
         final Iterable<DefaultLogicalVertex> logicalVertices = logicalTopology.getVertices();
 
         assertEquals(Iterables.size(jobVertices), Iterables.size(logicalVertices));
