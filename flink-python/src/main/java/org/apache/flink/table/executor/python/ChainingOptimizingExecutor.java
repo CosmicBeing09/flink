@@ -20,7 +20,7 @@ package org.apache.flink.table.executor.python;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.JobClient;
@@ -52,7 +52,7 @@ public class ChainingOptimizingExecutor implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig configuration,
             String defaultJobName) {
@@ -61,7 +61,7 @@ public class ChainingOptimizingExecutor implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig configuration,
             @Nullable String defaultJobName,
@@ -79,12 +79,12 @@ public class ChainingOptimizingExecutor implements Executor {
     }
 
     @Override
-    public JobExecutionResult execute(Pipeline pipeline) throws Exception {
+    public JobExecutionResult execute(StreamGraph pipeline) throws Exception {
         return executor.execute(pipeline);
     }
 
     @Override
-    public JobClient executeAsync(Pipeline pipeline) throws Exception {
+    public JobClient executeAsync(StreamGraph pipeline) throws Exception {
         return executor.executeAsync(pipeline);
     }
 

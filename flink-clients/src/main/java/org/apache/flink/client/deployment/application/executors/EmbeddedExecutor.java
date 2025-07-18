@@ -20,7 +20,7 @@ package org.apache.flink.client.deployment.application.executors;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.client.deployment.executors.PipelineExecutorUtils;
 import org.apache.flink.configuration.Configuration;
@@ -105,7 +105,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
 
     @Override
     public CompletableFuture<JobClient> execute(
-            final Pipeline pipeline,
+            final StreamGraph pipeline,
             final Configuration configuration,
             ClassLoader userCodeClassloader)
             throws MalformedURLException {
@@ -132,7 +132,7 @@ public class EmbeddedExecutor implements PipelineExecutor {
     }
 
     private CompletableFuture<JobClient> submitAndGetJobClientFuture(
-            final Pipeline pipeline,
+            final StreamGraph pipeline,
             final Configuration configuration,
             final ClassLoader userCodeClassloader)
             throws MalformedURLException {

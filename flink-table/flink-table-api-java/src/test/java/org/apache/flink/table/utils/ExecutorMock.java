@@ -19,7 +19,7 @@
 package org.apache.flink.table.utils;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.core.execution.JobClient;
@@ -39,7 +39,7 @@ public class ExecutorMock implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @Nullable String defaultJobName) {
@@ -47,7 +47,7 @@ public class ExecutorMock implements Executor {
     }
 
     @Override
-    public Pipeline createPipeline(
+    public StreamGraph createPipeline(
             List<Transformation<?>> transformations,
             ReadableConfig tableConfiguration,
             @org.jetbrains.annotations.Nullable String defaultJobName,
@@ -56,12 +56,12 @@ public class ExecutorMock implements Executor {
     }
 
     @Override
-    public JobExecutionResult execute(Pipeline pipeline) throws Exception {
+    public JobExecutionResult execute(StreamGraph pipeline) throws Exception {
         return null;
     }
 
     @Override
-    public JobClient executeAsync(Pipeline pipeline) {
+    public JobClient executeAsync(StreamGraph pipeline) {
         return null;
     }
 

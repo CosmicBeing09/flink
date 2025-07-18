@@ -326,7 +326,7 @@ class ClientTest {
                 new Optimizer(new DataStatistics(), new DefaultCostEstimator(), config);
         Plan streamGraph =
                 (Plan)
-                        PackagedProgramUtils.getPipelineFromProgram(
+                        PackagedProgramUtils.getStreamGraphFromProgram(
                                 prg, new Configuration(), 1, true);
         OptimizedPlan op = optimizer.compile(streamGraph);
         assertThat(op).isNotNull();

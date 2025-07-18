@@ -19,7 +19,7 @@
 package org.apache.flink.test.optimizer.jsonplan;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.program.PackagedProgram;
 import org.apache.flink.client.program.PackagedProgramUtils;
 import org.apache.flink.configuration.Configuration;
@@ -130,8 +130,8 @@ public class PreviewPlanDumpTest extends CompilerTestBase {
                         .setArguments(args)
                         .build();
 
-        final Pipeline pipeline =
-                PackagedProgramUtils.getPipelineFromProgram(program, new Configuration(), 1, true);
+        final StreamGraph pipeline =
+                PackagedProgramUtils.getStreamGraphFromProgram(program, new Configuration(), 1, true);
 
         assertTrue(pipeline instanceof Plan);
 

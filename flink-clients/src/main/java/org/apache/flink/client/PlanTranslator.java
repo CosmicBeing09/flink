@@ -20,7 +20,7 @@
 package org.apache.flink.client;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
@@ -42,7 +42,7 @@ public class PlanTranslator implements FlinkPipelineTranslator {
 
     @Override
     public JobGraph translateToJobGraph(
-            Pipeline pipeline, Configuration optimizerConfiguration, int defaultParallelism) {
+            StreamGraph pipeline, Configuration optimizerConfiguration, int defaultParallelism) {
         checkArgument(pipeline instanceof Plan, "Given pipeline is not a DataSet Plan.");
 
         Plan plan = (Plan) pipeline;
@@ -66,7 +66,7 @@ public class PlanTranslator implements FlinkPipelineTranslator {
     }
 
     @Override
-    public String translateToJSONExecutionPlan(Pipeline pipeline) {
+    public String translateToJSONExecutionPlan(StreamGraph pipeline) {
         checkArgument(pipeline instanceof Plan, "Given pipeline is not a DataSet Plan.");
 
         Plan plan = (Plan) pipeline;
@@ -88,7 +88,7 @@ public class PlanTranslator implements FlinkPipelineTranslator {
     }
 
     @Override
-    public boolean canTranslate(Pipeline pipeline) {
+    public boolean canTranslate(StreamGraph pipeline) {
         return pipeline instanceof Plan;
     }
 }

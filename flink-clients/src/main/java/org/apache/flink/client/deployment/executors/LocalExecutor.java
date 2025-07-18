@@ -20,7 +20,7 @@ package org.apache.flink.client.deployment.executors;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.program.PerJobMiniClusterFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.DeploymentOptions;
@@ -47,7 +47,7 @@ import java.util.function.Function;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
-/** An {@link PipelineExecutor} for executing a {@link Pipeline} locally. */
+/** An {@link PipelineExecutor} for executing a {@link StreamGraph} locally. */
 @Internal
 public class LocalExecutor implements PipelineExecutor {
     private static final Logger LOG = LoggerFactory.getLogger(LocalExecutor.class);
@@ -84,7 +84,7 @@ public class LocalExecutor implements PipelineExecutor {
 
     @Override
     public CompletableFuture<JobClient> execute(
-            Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
+            StreamGraph pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws Exception {
         checkNotNull(pipeline);
         checkNotNull(configuration);
@@ -114,7 +114,7 @@ public class LocalExecutor implements PipelineExecutor {
     }
 
     private JobGraph getJobGraph(
-            Pipeline pipeline, Configuration configuration, ClassLoader userCodeClassloader)
+            StreamGraph pipeline, Configuration configuration, ClassLoader userCodeClassloader)
             throws MalformedURLException {
         // This is a quirk in how LocalEnvironment used to work. It sets the default parallelism
         // to <num taskmanagers> * <num task slots>. Might be questionable but we keep the behaviour

@@ -19,7 +19,7 @@
 package org.apache.flink.client.deployment.executors;
 
 import org.apache.flink.annotation.Internal;
-import org.apache.flink.api.dag.Pipeline;
+import org.apache.flink.api.dag.StreamGraph;
 import org.apache.flink.client.ClientUtils;
 import org.apache.flink.client.deployment.ClusterClientFactory;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
@@ -53,7 +53,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
 /**
- * An abstract {@link PipelineExecutor} used to execute {@link Pipeline pipelines} on an existing
+ * An abstract {@link PipelineExecutor} used to execute {@link StreamGraph pipelines} on an existing
  * (session) cluster.
  *
  * @param <ClusterID> the type of the id of the cluster.
@@ -86,7 +86,7 @@ public class AbstractSessionClusterExecutor<
 
     @Override
     public CompletableFuture<JobClient> execute(
-            @Nonnull final Pipeline pipeline,
+            @Nonnull final StreamGraph pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull final ClassLoader userCodeClassloader)
             throws Exception {
