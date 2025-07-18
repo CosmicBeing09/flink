@@ -58,8 +58,8 @@ public class DefaultRescaleManager implements RescaleManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
 
-    private final Temporal startTime;
-    private final Supplier<Temporal> timeSupplier;
+    private final Temporal lastRescaleTime;
+    private final Supplier<Temporal> clock;
 
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
@@ -104,8 +104,8 @@ public class DefaultRescaleManager implements RescaleManager {
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
-        this.startTime = initializationTime;
-        this.timeSupplier = clock;
+        this.lastRescaleTime = initializationTime;
+        this.clock = clock;
 
         this.maxTriggerDelay = maxTriggerDelay;
         this.triggerFuture = FutureUtils.completedVoidFuture();
@@ -157,7 +157,7 @@ public class DefaultRescaleManager implements RescaleManager {
     }
 
     private Duration timeSinceLastRescale() {
-        return Duration.between(this.startTime, timeSupplier.get());
+        return Duration.between(this.lastRescaleTime, clock.get());
     }
 
     private void maybeRescale() {
