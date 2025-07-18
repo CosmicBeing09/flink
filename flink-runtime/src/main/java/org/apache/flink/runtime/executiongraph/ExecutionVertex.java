@@ -66,7 +66,7 @@ public class ExecutionVertex
 
     final ExecutionJobVertex jobVertex;
 
-    private final Map<IntermediateResultPartitionID, IntermediateResultPartition> resultPartitions;
+    private final Map<IntermediateResultPartitionID, IntermediateResultPartition> producedPartitionsMap;
 
     private final int subTaskIndex;
 
@@ -80,7 +80,7 @@ public class ExecutionVertex
     private final String taskNameWithSubtask;
 
     /** The current or latest execution attempt of this vertex's task. */
-    Execution currentExecution; // this field must never be null
+    Execution latestExecutionAttempt; // this field must never be null
 
     final ArrayList<InputSplit> inputSplits;
 
@@ -125,7 +125,7 @@ public class ExecutionVertex
                         subTaskIndex + 1,
                         jobVertex.getParallelism());
 
-        this.resultPartitions = new LinkedHashMap<>(producedDataSets.length, 1);
+        this.producedPartitionsMap = new LinkedHashMap<>(producedDataSets.length, 1);
 
         for (IntermediateResult result : producedDataSets) {
             IntermediateResultPartition irp =
@@ -136,7 +136,7 @@ public class ExecutionVertex
                             getExecutionGraphAccessor().getEdgeManager());
             result.setPartition(subTaskIndex, irp);
 
-            resultPartitions.put(irp.getPartitionId(), irp);
+            producedPartitionsMap.put(irp.getPartitionId(), irp);
         }
 
         this.executionHistory = new ExecutionHistory(executionHistorySizeLimit);
@@ -148,9 +148,9 @@ public class ExecutionVertex
         this.timeout = timeout;
         this.inputSplits = new ArrayList<>();
 
-        this.currentExecution = createNewExecution(createTimestamp);
+        this.latestExecutionAttempt = createNewExecution(createTimestamp);
 
-        getExecutionGraphAccessor().registerExecution(currentExecution);
+        getExecutionGraphAccessor().registerExecution(latestExecutionAttempt);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -182,7 +182,7 @@ public class ExecutionVertex
     }
 
     public Execution getPartitionProducer() {
-        return currentExecution;
+        return latestExecutionAttempt;
     }
 
     public JobID getJobId() {
@@ -270,16 +270,16 @@ public class ExecutionVertex
 
     @Override
     public Execution getCurrentExecutionAttempt() {
-        return currentExecution;
+        return latestExecutionAttempt;
     }
 
     public Collection<Execution> getCurrentExecutions() {
-        return Collections.singleton(currentExecution);
+        return Collections.singleton(latestExecutionAttempt);
     }
 
     public Execution getCurrentExecution(int attemptNumber) {
-        checkArgument(attemptNumber == currentExecution.getAttemptNumber());
-        return currentExecution;
+        checkArgument(attemptNumber == latestExecutionAttempt.getAttemptNumber());
+        return latestExecutionAttempt;
     }
 
     @Override
@@ -339,11 +339,11 @@ public class ExecutionVertex
     }
 
     public Map<IntermediateResultPartitionID, IntermediateResultPartition> getProducedPartitions() {
-        return resultPartitions;
+        return producedPartitionsMap;
     }
 
     CompletableFuture<?> getTerminationFuture() {
-        return currentExecution.getTerminalStateFuture();
+        return latestExecutionAttempt.getTerminalStateFuture();
     }
 
     // --------------------------------------------------------------------------------------------
@@ -363,8 +363,8 @@ public class ExecutionVertex
      */
     public Optional<TaskManagerLocation> getPreferredLocationBasedOnState() {
         // only restore to same execution if it has state
-        if (currentExecution.getTaskRestore() != null
-                && currentExecution.getTaskRestore().getTaskStateSnapshot().hasState()) {
+        if (latestExecutionAttempt.getTaskRestore() != null
+                && latestExecutionAttempt.getTaskRestore().getTaskStateSnapshot().hasState()) {
             return findLastLocation();
         }
 
@@ -398,19 +398,19 @@ public class ExecutionVertex
         }
 
         // reset the intermediate results
-        for (IntermediateResultPartition resultPartition : resultPartitions.values()) {
+        for (IntermediateResultPartition resultPartition : producedPartitionsMap.values()) {
             resultPartition.resetForNewExecution();
         }
 
         final Execution newExecution = createNewExecution(timestamp);
-        currentExecution = newExecution;
+        latestExecutionAttempt = newExecution;
 
         // register this execution to the execution graph, to receive call backs
         getExecutionGraphAccessor().registerExecution(newExecution);
     }
 
     void resetExecutionsInternal() {
-        resetExecution(currentExecution);
+        resetExecution(latestExecutionAttempt);
     }
 
     void resetExecution(final Execution execution) {
@@ -434,30 +434,30 @@ public class ExecutionVertex
     }
 
     public void tryAssignResource(LogicalSlot slot) {
-        if (!currentExecution.tryAssignResource(slot)) {
+        if (!latestExecutionAttempt.tryAssignResource(slot)) {
             throw new IllegalStateException(
                     "Could not assign resource "
                             + slot
                             + " to current execution "
-                            + currentExecution
+                            + latestExecutionAttempt
                             + '.');
         }
     }
 
     public void deploy() throws JobException {
-        currentExecution.deploy();
+        latestExecutionAttempt.deploy();
     }
 
     @VisibleForTesting
     public void deployToSlot(LogicalSlot slot) throws JobException {
-        if (currentExecution.tryAssignResource(slot)) {
-            currentExecution.deploy();
+        if (latestExecutionAttempt.tryAssignResource(slot)) {
+            latestExecutionAttempt.deploy();
         } else {
             throw new IllegalStateException(
                     "Could not assign resource "
                             + slot
                             + " to current execution "
-                            + currentExecution
+                            + latestExecutionAttempt
                             + '.');
         }
     }
@@ -470,17 +470,17 @@ public class ExecutionVertex
     public CompletableFuture<?> cancel() {
         // to avoid any case of mixup in the presence of concurrent calls,
         // we copy a reference to the stack to make sure both calls go to the same Execution
-        final Execution exec = currentExecution;
+        final Execution exec = latestExecutionAttempt;
         exec.cancel();
         return exec.getReleaseFuture();
     }
 
     public CompletableFuture<?> suspend() {
-        return currentExecution.suspend();
+        return latestExecutionAttempt.suspend();
     }
 
     public void fail(Throwable t) {
-        currentExecution.fail(t);
+        latestExecutionAttempt.fail(t);
     }
 
     /**
@@ -490,7 +490,7 @@ public class ExecutionVertex
      * @param t The exception that caused the task to fail.
      */
     public void markFailed(Throwable t) {
-        currentExecution.markFailed(t);
+        latestExecutionAttempt.markFailed(t);
     }
 
     void cachePartitionInfo(PartitionInfo partitionInfo) {
@@ -507,7 +507,7 @@ public class ExecutionVertex
         List<IntermediateResultPartition> finishedPartitions = null;
         MarkPartitionFinishedStrategy markPartitionFinishedStrategy =
                 getExecutionGraphAccessor().getMarkPartitionFinishedStrategy();
-        for (IntermediateResultPartition partition : resultPartitions.values()) {
+        for (IntermediateResultPartition partition : producedPartitionsMap.values()) {
             if (markPartitionFinishedStrategy.needMarkPartitionFinished(
                     partition.getResultType())) {
 
@@ -573,7 +573,7 @@ public class ExecutionVertex
     }
 
     private boolean isCurrentExecution(Execution execution) {
-        return currentExecution == execution;
+        return latestExecutionAttempt == execution;
     }
 
     // --------------------------------------------------------------------------------------------
