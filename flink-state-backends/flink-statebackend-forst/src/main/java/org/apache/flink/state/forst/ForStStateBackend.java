@@ -43,7 +43,7 @@ import org.apache.flink.runtime.state.OperatorStateBackend;
 import org.apache.flink.runtime.state.StreamCompressionDecorator;
 import org.apache.flink.runtime.state.filesystem.FsCheckpointStorageAccess;
 import org.apache.flink.runtime.state.metrics.LatencyTrackingStateConfig;
-import org.apache.flink.state.forst.ForStMemoryControllerUtils.ForStMemoryFactory;
+import org.apache.flink.state.forst.ForestMemoryControllerUtils.ForStMemoryFactory;
 import org.apache.flink.state.forst.sync.ForStPriorityQueueConfig;
 import org.apache.flink.state.forst.sync.ForStSyncKeyedStateBackendBuilder;
 import org.apache.flink.util.AbstractID;

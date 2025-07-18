@@ -33,7 +33,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-/** Tests to guard {@link ForStMemoryControllerUtils}. */
+/** Tests to guard {@link ForestMemoryControllerUtils}. */
 public class ForStMemoryControllerUtilsTest {
 
     @Rule public final TemporaryFolder temporaryFolder = new TemporaryFolder();
@@ -51,13 +51,13 @@ public class ForStMemoryControllerUtilsTest {
         double highPriPoolRatio = 0.1;
         TestingForStMemoryFactory factory = new TestingForStMemoryFactory();
         ForStSharedResources forStSharedResources =
-                ForStMemoryControllerUtils.allocateForStSharedResources(
+                ForestMemoryControllerUtils.allocateForStSharedResources(
                         totalMemorySize, writeBufferRatio, highPriPoolRatio, false, factory);
         long expectedCacheCapacity =
-                ForStMemoryControllerUtils.calculateActualCacheCapacity(
+                ForestMemoryControllerUtils.calculateActualCacheCapacity(
                         totalMemorySize, writeBufferRatio);
         long expectedWbmCapacity =
-                ForStMemoryControllerUtils.calculateWriteBufferManagerCapacity(
+                ForestMemoryControllerUtils.calculateWriteBufferManagerCapacity(
                         totalMemorySize, writeBufferRatio);
 
         assertThat(factory.actualCacheCapacity, is(expectedCacheCapacity));
@@ -74,17 +74,17 @@ public class ForStMemoryControllerUtilsTest {
         // Normal case test
         assertThat(
                 "Arena block size calculation error for normal case",
-                ForStMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize),
+                ForestMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize),
                 is(expectArenaBlockSize));
 
         // Alignment tests
         assertThat(
                 "Arena block size calculation error for alignment case",
-                ForStMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize - 1),
+                ForestMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize - 1),
                 is(expectArenaBlockSize));
         assertThat(
                 "Arena block size calculation error for alignment case2",
-                ForStMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize + 8),
+                ForestMemoryControllerUtils.calculateForStDefaultArenaBlockSize(writeBufferSize + 8),
                 is(expectArenaBlockSize + align));
     }
 
@@ -92,29 +92,29 @@ public class ForStMemoryControllerUtilsTest {
     public void testCalculateForStMutableLimit() {
         long bufferSize = 64 * 1024 * 1024;
         long limit = bufferSize * 7 / 8;
-        assertThat(ForStMemoryControllerUtils.calculateForStMutableLimit(bufferSize), is(limit));
+        assertThat(ForestMemoryControllerUtils.calculateForStMutableLimit(bufferSize), is(limit));
     }
 
     @Test
     public void testValidateArenaBlockSize() {
         long arenaBlockSize = 8 * 1024 * 1024;
         assertFalse(
-                ForStMemoryControllerUtils.validateArenaBlockSize(
+                ForestMemoryControllerUtils.validateArenaBlockSize(
                         arenaBlockSize, (long) (arenaBlockSize * 0.5)));
         assertTrue(
-                ForStMemoryControllerUtils.validateArenaBlockSize(
+                ForestMemoryControllerUtils.validateArenaBlockSize(
                         arenaBlockSize, (long) (arenaBlockSize * 1.5)));
     }
 
     private static final class TestingForStMemoryFactory
-            implements ForStMemoryControllerUtils.ForStMemoryFactory {
+            implements ForestMemoryControllerUtils.ForStMemoryFactory {
         private Long actualCacheCapacity = null;
         private Long actualWbmCapacity = null;
 
         @Override
         public Cache createCache(long cacheCapacity, double highPriorityPoolRatio) {
             actualCacheCapacity = cacheCapacity;
-            return ForStMemoryControllerUtils.ForStMemoryFactory.DEFAULT.createCache(
+            return ForestMemoryControllerUtils.ForStMemoryFactory.DEFAULT.createCache(
                     cacheCapacity, highPriorityPoolRatio);
         }
 
@@ -122,7 +122,7 @@ public class ForStMemoryControllerUtilsTest {
         public WriteBufferManager createWriteBufferManager(
                 long writeBufferManagerCapacity, Cache cache) {
             actualWbmCapacity = writeBufferManagerCapacity;
-            return ForStMemoryControllerUtils.ForStMemoryFactory.DEFAULT.createWriteBufferManager(
+            return ForestMemoryControllerUtils.ForStMemoryFactory.DEFAULT.createWriteBufferManager(
                     writeBufferManagerCapacity, cache);
         }
     }

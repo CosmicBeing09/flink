@@ -117,7 +117,7 @@ enum ForStSharedResourcesFactory {
             Environment env,
             double memoryFraction,
             Logger logger,
-            ForStMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory)
+            ForestMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory)
             throws Exception {
         logger.info(
                 "Getting shared memory for ForSt: shareScope={}, managed={}", shareScope, managed);
@@ -152,9 +152,9 @@ enum ForStSharedResourcesFactory {
 
     private static LongFunctionWithException<ForStSharedResources, Exception> createAllocator(
             ForStMemoryConfiguration config,
-            ForStMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory) {
+            ForestMemoryControllerUtils.ForStMemoryFactory forStMemoryFactory) {
         return size ->
-                ForStMemoryControllerUtils.allocateForStSharedResources(
+                ForestMemoryControllerUtils.allocateForStSharedResources(
                         size,
                         config.getWriteBufferRatio(),
                         config.getHighPriorityPoolRatio(),
