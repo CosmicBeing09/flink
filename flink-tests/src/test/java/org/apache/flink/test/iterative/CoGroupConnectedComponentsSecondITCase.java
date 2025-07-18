@@ -21,7 +21,7 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
@@ -55,13 +55,13 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // read vertex and edge data
-        DataSet<Long> vertices =
+        DataStream<Long> vertices =
                 env.fromElements(
                                 ConnectedComponentsData.getEnumeratingVertices(NUM_VERTICES)
                                         .split("\n"))
                         .map(new VertexParser());
 
-        DataSet<Tuple2<Long, Long>> edges =
+        DataStream<Tuple2<Long, Long>> edges =
                 env.fromElements(
                                 ConnectedComponentsData.getRandomOddEvenEdges(
                                                 NUM_EDGES, NUM_VERTICES, SEED)
@@ -69,7 +69,7 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
                         .flatMap(new EdgeParser());
 
         // assign the initial components (equal to the vertex id)
-        DataSet<Tuple2<Long, Long>> verticesWithInitialId =
+        DataStream<Tuple2<Long, Long>> verticesWithInitialId =
                 vertices.map(new DuplicateValue<Long>());
 
         // open a delta iteration
@@ -78,7 +78,7 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
 
         // apply the step logic: join with the edges, select the minimum neighbor, update if the
         // component of the candidate is smaller
-        DataSet<Tuple2<Long, Long>> changes =
+        DataStream<Tuple2<Long, Long>> changes =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -91,7 +91,7 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
                         .with(new MinIdAndUpdate());
 
         // close the delta iteration (delta and new workset are identical)
-        DataSet<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
+        DataStream<Tuple2<Long, Long>> result = iteration.closeWith(changes, changes);
 
         // emit result
         List<Tuple2<Long, Long>> resutTuples = new ArrayList<>();

@@ -19,7 +19,7 @@
 package org.apache.flink.test.runtime;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -47,11 +47,11 @@ public class JoinDeadlockITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Long> longs = env.generateSequence(0, 100000);
+        DataStream<Long> longs = env.generateSequence(0, 100000);
 
-        DataSet<Tuple1<Long>> longT1 = longs.map(new TupleWrapper());
-        DataSet<Tuple1<Long>> longT2 = longT1.project(0);
-        DataSet<Tuple1<Long>> longT3 = longs.map(new TupleWrapper());
+        DataStream<Tuple1<Long>> longT1 = longs.map(new TupleWrapper());
+        DataStream<Tuple1<Long>> longT2 = longT1.project(0);
+        DataStream<Tuple1<Long>> longT3 = longs.map(new TupleWrapper());
 
         longT2.join(longT3)
                 .where(0)

@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.operators.SemanticProperties;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.configuration.Configuration;
 
 import java.util.Map;
@@ -59,12 +59,12 @@ public interface UdfOperator<O extends UdfOperator<O>> {
 
     /**
      * Gets the broadcast sets (name and data set) that have been added to context of the UDF.
-     * Broadcast sets are added to a UDF via the method {@link #withBroadcastSet(DataSet, String)}.
+     * Broadcast sets are added to a UDF via the method {@link #withBroadcastSet(DataStream, String)}.
      *
      * @return The broadcast data sets that have been added to this UDF.
      */
     @Internal
-    Map<String, DataSet<?>> getBroadcastSets();
+    Map<String, DataStream<?>> getBroadcastSets();
 
     /**
      * Gets the semantic properties that have been set for the user-defined functions (UDF).
@@ -102,5 +102,5 @@ public interface UdfOperator<O extends UdfOperator<O>> {
      * @param name The name under which the broadcast data set retrieved.
      * @return The operator itself, to allow chaining function calls.
      */
-    O withBroadcastSet(DataSet<?> data, String name);
+    O withBroadcastSet(DataStream<?> data, String name);
 }

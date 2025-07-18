@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -51,10 +51,10 @@ public class OverwriteObjects {
 
     public static final Logger LOG = LoggerFactory.getLogger(OverwriteObjects.class);
 
-    // DataSets are created with this number of elements
+    // DataStreams are created with this number of elements
     private static final int NUMBER_OF_ELEMENTS = 3_000_000;
 
-    // DataSet values are randomly generated over this range
+    // DataStream values are randomly generated over this range
     private static final int KEY_RANGE = 1_000_000;
 
     private static final int MAX_PARALLELISM = 4;
@@ -96,12 +96,12 @@ public class OverwriteObjects {
         env.getConfig().enableObjectReuse();
 
         Tuple2<IntValue, IntValue> enabledResult =
-                getDataSet(env).reduce(new OverwriteObjectsReduce(false)).collect().get(0);
+                getDataStream(env).reduce(new OverwriteObjectsReduce(false)).collect().get(0);
 
         env.getConfig().disableObjectReuse();
 
         Tuple2<IntValue, IntValue> disabledResult =
-                getDataSet(env).reduce(new OverwriteObjectsReduce(false)).collect().get(0);
+                getDataStream(env).reduce(new OverwriteObjectsReduce(false)).collect().get(0);
 
         Assert.assertEquals(NUMBER_OF_ELEMENTS, enabledResult.f1.getValue());
         Assert.assertEquals(NUMBER_OF_ELEMENTS, disabledResult.f1.getValue());
@@ -119,14 +119,14 @@ public class OverwriteObjects {
         env.getConfig().enableObjectReuse();
 
         List<Tuple2<IntValue, IntValue>> enabledResult =
-                getDataSet(env).groupBy(0).reduce(new OverwriteObjectsReduce(true)).collect();
+                getDataStream(env).groupBy(0).reduce(new OverwriteObjectsReduce(true)).collect();
 
         Collections.sort(enabledResult, comparator);
 
         env.getConfig().disableObjectReuse();
 
         List<Tuple2<IntValue, IntValue>> disabledResult =
-                getDataSet(env).groupBy(0).reduce(new OverwriteObjectsReduce(true)).collect();
+                getDataStream(env).groupBy(0).reduce(new OverwriteObjectsReduce(true)).collect();
 
         Collections.sort(disabledResult, comparator);
 
@@ -170,8 +170,8 @@ public class OverwriteObjects {
             env.getConfig().enableObjectReuse();
 
             enabledResult =
-                    getDataSet(env)
-                            .join(getDataSet(env), joinHint)
+                    getDataStream(env)
+                            .join(getDataStream(env), joinHint)
                             .where(0)
                             .equalTo(0)
                             .with(new OverwriteObjectsJoin())
@@ -182,8 +182,8 @@ public class OverwriteObjects {
             env.getConfig().disableObjectReuse();
 
             disabledResult =
-                    getDataSet(env)
-                            .join(getDataSet(env), joinHint)
+                    getDataStream(env)
+                            .join(getDataStream(env), joinHint)
                             .where(0)
                             .equalTo(0)
                             .with(new OverwriteObjectsJoin())
@@ -201,8 +201,8 @@ public class OverwriteObjects {
                 env.getConfig().enableObjectReuse();
 
                 enabledResult =
-                        getDataSet(env)
-                                .leftOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .leftOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -213,8 +213,8 @@ public class OverwriteObjects {
                 env.getConfig().disableObjectReuse();
 
                 disabledResult =
-                        getDataSet(env)
-                                .leftOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .leftOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -233,8 +233,8 @@ public class OverwriteObjects {
                 env.getConfig().enableObjectReuse();
 
                 enabledResult =
-                        getDataSet(env)
-                                .rightOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .rightOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -245,8 +245,8 @@ public class OverwriteObjects {
                 env.getConfig().disableObjectReuse();
 
                 disabledResult =
-                        getDataSet(env)
-                                .rightOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .rightOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -266,8 +266,8 @@ public class OverwriteObjects {
                 env.getConfig().enableObjectReuse();
 
                 enabledResult =
-                        getDataSet(env)
-                                .fullOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .fullOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -278,8 +278,8 @@ public class OverwriteObjects {
                 env.getConfig().disableObjectReuse();
 
                 disabledResult =
-                        getDataSet(env)
-                                .fullOuterJoin(getFilteredDataSet(env), joinHint)
+                        getDataStream(env)
+                                .fullOuterJoin(getFilteredDataStream(env), joinHint)
                                 .where(0)
                                 .equalTo(0)
                                 .with(new OverwriteObjectsJoin())
@@ -315,8 +315,8 @@ public class OverwriteObjects {
 
         LOG.info("Testing cross");
 
-        DataSet<Tuple2<IntValue, IntValue>> small = getDataSet(env, 100, 20);
-        DataSet<Tuple2<IntValue, IntValue>> large = getDataSet(env, 10000, 2000);
+        DataStream<Tuple2<IntValue, IntValue>> small = getDataStream(env, 100, 20);
+        DataStream<Tuple2<IntValue, IntValue>> large = getDataStream(env, 10000, 2000);
 
         // test NESTEDLOOP_BLOCKED_OUTER_FIRST and NESTEDLOOP_BLOCKED_OUTER_SECOND with object reuse
         // enabled
@@ -365,7 +365,7 @@ public class OverwriteObjects {
 
     // --------------------------------------------------------------------------------------------
 
-    private DataSet<Tuple2<IntValue, IntValue>> getDataSet(
+    private DataStream<Tuple2<IntValue, IntValue>> getDataStream(
             ExecutionEnvironment env, int numberOfElements, int keyRange) {
         return env.fromCollection(
                 new TupleIntValueIntValueIterator(numberOfElements, keyRange),
@@ -373,12 +373,12 @@ public class OverwriteObjects {
                         IntValue.class, IntValue.class));
     }
 
-    private DataSet<Tuple2<IntValue, IntValue>> getDataSet(ExecutionEnvironment env) {
-        return getDataSet(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
+    private DataStream<Tuple2<IntValue, IntValue>> getDataStream(ExecutionEnvironment env) {
+        return getDataStream(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
     }
 
-    private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataSet(ExecutionEnvironment env) {
-        return getDataSet(env)
+    private DataStream<Tuple2<IntValue, IntValue>> getFilteredDataStream(ExecutionEnvironment env) {
+        return getDataStream(env)
                 .filter(
                         new FilterFunction<Tuple2<IntValue, IntValue>>() {
                             @Override

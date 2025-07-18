@@ -20,7 +20,7 @@ package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -41,11 +41,11 @@ public class OpenIterationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Long> input = env.generateSequence(1, 10);
+            DataStream<Long> input = env.generateSequence(1, 10);
 
             IterativeDataSet<Long> iteration = input.iterate(10);
 
-            DataSet<Long> mapped = iteration.map(new IdentityMapper<Long>());
+            DataStream<Long> mapped = iteration.map(new IdentityMapper<Long>());
 
             mapped.output(new DiscardingOutputFormat<Long>());
 
@@ -66,11 +66,11 @@ public class OpenIterationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Long> input = env.generateSequence(1, 10);
+            DataStream<Long> input = env.generateSequence(1, 10);
 
             IterativeDataSet<Long> iteration = input.iterate(10);
 
-            DataSet<Long> mapped = iteration.map(new IdentityMapper<Long>());
+            DataStream<Long> mapped = iteration.map(new IdentityMapper<Long>());
 
             iteration.closeWith(mapped).output(new DiscardingOutputFormat<Long>());
 
@@ -96,12 +96,12 @@ public class OpenIterationTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     input.iterateDelta(input, 10, 0);
 
-            DataSet<Tuple2<Long, Long>> mapped =
+            DataStream<Tuple2<Long, Long>> mapped =
                     iteration.getSolutionSet().map(new IdentityMapper<Tuple2<Long, Long>>());
 
             mapped.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
@@ -124,12 +124,12 @@ public class OpenIterationTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     input.iterateDelta(input, 10, 0);
 
-            DataSet<Tuple2<Long, Long>> mapped =
+            DataStream<Tuple2<Long, Long>> mapped =
                     iteration.getWorkset().map(new IdentityMapper<Tuple2<Long, Long>>());
 
             mapped.output(new DiscardingOutputFormat<Tuple2<Long, Long>>());
@@ -152,15 +152,15 @@ public class OpenIterationTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     input.iterateDelta(input, 10, 0);
 
-            DataSet<Tuple2<Long, Long>> mapped =
+            DataStream<Tuple2<Long, Long>> mapped =
                     iteration.getSolutionSet().map(new IdentityMapper<Tuple2<Long, Long>>());
 
-            DataSet<Tuple2<Long, Long>> joined =
+            DataStream<Tuple2<Long, Long>> joined =
                     iteration
                             .getWorkset()
                             .join(mapped)

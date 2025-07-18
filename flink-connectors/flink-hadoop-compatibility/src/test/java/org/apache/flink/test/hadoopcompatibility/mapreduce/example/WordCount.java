@@ -20,7 +20,7 @@ package org.apache.flink.test.hadoopcompatibility.mapreduce.example;
 
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.hadoop.mapreduce.HadoopInputFormat;
@@ -65,16 +65,16 @@ public class WordCount {
         TextInputFormat.addInputPath(job, new Path(inputPath));
 
         // Create a Flink job with it
-        DataSet<Tuple2<LongWritable, Text>> text = env.createInput(hadoopInputFormat);
+        DataStream<Tuple2<LongWritable, Text>> text = env.createInput(hadoopInputFormat);
 
         // Tokenize the line and convert from Writable "Text" to String for better handling
-        DataSet<Tuple2<String, Integer>> words = text.flatMap(new Tokenizer());
+        DataStream<Tuple2<String, Integer>> words = text.flatMap(new Tokenizer());
 
         // Sum up the words
-        DataSet<Tuple2<String, Integer>> result = words.groupBy(0).aggregate(Aggregations.SUM, 1);
+        DataStream<Tuple2<String, Integer>> result = words.groupBy(0).aggregate(Aggregations.SUM, 1);
 
         // Convert String back to Writable "Text" for use with Hadoop Output Format
-        DataSet<Tuple2<Text, IntWritable>> hadoopResult = result.map(new HadoopDatatypeMapper());
+        DataStream<Tuple2<Text, IntWritable>> hadoopResult = result.map(new HadoopDatatypeMapper());
 
         // Set up Hadoop Output Format
         HadoopOutputFormat<Text, IntWritable> hadoopOutputFormat =

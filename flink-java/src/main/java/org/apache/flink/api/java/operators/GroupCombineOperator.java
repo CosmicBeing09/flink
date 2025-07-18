@@ -30,7 +30,7 @@ import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.GroupCombineOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.api.java.operators.translation.PlanUnwrappingGroupCombineOperator;
 import org.apache.flink.api.java.operators.translation.PlanUnwrappingSortedGroupCombineOperator;
@@ -71,7 +71,7 @@ public class GroupCombineOperator<IN, OUT>
      * @param defaultName The operator's name.
      */
     public GroupCombineOperator(
-            DataSet<IN> input,
+            DataStream<IN> input,
             TypeInformation<OUT> resultType,
             GroupCombineFunction<IN, OUT> function,
             String defaultName) {

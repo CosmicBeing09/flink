@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.io;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple8;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
@@ -69,7 +69,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
         final String dataPath = createInputData(inputData);
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJOItem> data =
+        DataStream<POJOItem> data =
                 env.readCsvFile(dataPath).pojoType(POJOItem.class, new String[] {"f1", "f3", "f2"});
         List<POJOItem> result = data.collect();
 
@@ -83,7 +83,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
         final String dataPath = createInputData(inputData);
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJOItem> data =
+        DataStream<POJOItem> data =
                 env.readCsvFile(dataPath).pojoType(POJOItem.class, new String[] {"f3", "f1", "f2"});
         List<POJOItem> result = data.collect();
 
@@ -115,7 +115,7 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
         final String dataPath = createInputData(inputData);
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJOItem> data =
+        DataStream<POJOItem> data =
                 env.readCsvFile(dataPath)
                         .includeFields(true, false, true)
                         .pojoType(POJOItem.class, new String[] {"f2", "f1"});
@@ -131,16 +131,16 @@ public class CsvReaderITCase extends MultipleProgramsTestBaseJUnit4 {
         final String dataPath = createInputData(inputData);
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<
-                        Tuple8<
-                                StringValue,
-                                BooleanValue,
-                                ByteValue,
-                                ShortValue,
-                                IntValue,
-                                LongValue,
-                                FloatValue,
-                                DoubleValue>>
+        DataStream<
+                                Tuple8<
+                                        StringValue,
+                                        BooleanValue,
+                                        ByteValue,
+                                        ShortValue,
+                                        IntValue,
+                                        LongValue,
+                                        FloatValue,
+                                        DoubleValue>>
                 data =
                         env.readCsvFile(dataPath)
                                 .types(

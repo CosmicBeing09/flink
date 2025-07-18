@@ -27,7 +27,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -146,7 +146,7 @@ public class KMeansSingleStepTest extends CompilerTestBase {
     public static Plan kmeans(String[] args) throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Point> points =
+        DataStream<Point> points =
                 env.readCsvFile(args[0])
                         .fieldDelimiter(" ")
                         .includeFields(true, true)
@@ -161,7 +161,7 @@ public class KMeansSingleStepTest extends CompilerTestBase {
                                     }
                                 });
 
-        DataSet<Centroid> centroids =
+        DataStream<Centroid> centroids =
                 env.readCsvFile(args[1])
                         .fieldDelimiter(" ")
                         .includeFields(true, true, true)
@@ -176,12 +176,12 @@ public class KMeansSingleStepTest extends CompilerTestBase {
                                     }
                                 });
 
-        DataSet<Tuple3<Integer, Point, Integer>> newCentroids =
+        DataStream<Tuple3<Integer, Point, Integer>> newCentroids =
                 points.map(new SelectNearestCenter())
                         .name(MAPPER_NAME)
                         .withBroadcastSet(centroids, "centroids");
 
-        DataSet<Tuple3<Integer, Point, Integer>> recomputeClusterCenter =
+        DataStream<Tuple3<Integer, Point, Integer>> recomputeClusterCenter =
                 newCentroids
                         .groupBy(0)
                         .reduceGroup(new RecomputeClusterCenter())

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -111,21 +111,21 @@ public class PageRank {
         env.getConfig().setGlobalJobParameters(params);
 
         // get input data
-        DataSet<Long> pagesInput = getPagesDataSet(env, params);
-        DataSet<Tuple2<Long, Long>> linksInput = getLinksDataSet(env, params);
+        DataStream<Long> pagesInput = getPagesDataSet(env, params);
+        DataStream<Tuple2<Long, Long>> linksInput = getLinksDataSet(env, params);
 
         // assign initial rank to pages
-        DataSet<Tuple2<Long, Double>> pagesWithRanks =
+        DataStream<Tuple2<Long, Double>> pagesWithRanks =
                 pagesInput.map(new RankAssigner((1.0d / numPages)));
 
         // build adjacency list from link input
-        DataSet<Tuple2<Long, Long[]>> adjacencyListInput =
+        DataStream<Tuple2<Long, Long[]>> adjacencyListInput =
                 linksInput.groupBy(0).reduceGroup(new BuildOutgoingEdgeList());
 
         // set iterative data set
         IterativeDataSet<Tuple2<Long, Double>> iteration = pagesWithRanks.iterate(maxIterations);
 
-        DataSet<Tuple2<Long, Double>> newRanks =
+        DataStream<Tuple2<Long, Double>> newRanks =
                 iteration
                         // join pages with outgoing edges and distribute rank
                         .join(adjacencyListInput)
@@ -138,7 +138,7 @@ public class PageRank {
                         // apply dampening factor
                         .map(new Dampener(DAMPENING_FACTOR, numPages));
 
-        DataSet<Tuple2<Long, Double>> finalPageRanks =
+        DataStream<Tuple2<Long, Double>> finalPageRanks =
                 iteration.closeWith(
                         newRanks,
                         newRanks.join(iteration)
@@ -255,7 +255,7 @@ public class PageRank {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Long> getPagesDataSet(ExecutionEnvironment env, ParameterTool params) {
+    private static DataStream<Long> getPagesDataSet(ExecutionEnvironment env, ParameterTool params) {
         if (params.has("pages")) {
             return env.readCsvFile(params.get("pages"))
                     .fieldDelimiter(" ")
@@ -275,7 +275,7 @@ public class PageRank {
         }
     }
 
-    private static DataSet<Tuple2<Long, Long>> getLinksDataSet(
+    private static DataStream<Tuple2<Long, Long>> getLinksDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         if (params.has("links")) {
             return env.readCsvFile(params.get("links"))

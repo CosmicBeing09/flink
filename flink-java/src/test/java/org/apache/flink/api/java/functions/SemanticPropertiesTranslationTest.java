@@ -28,7 +28,7 @@ import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldSet;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
@@ -54,7 +54,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, String, Integer>> input =
+        DataStream<Tuple3<Long, String, Integer>> input =
                 env.fromElements(new Tuple3<>(3L, "test", 42));
         input.map(new WildcardForwardedMapper<>()).output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
@@ -77,7 +77,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, String, Integer>> input =
+        DataStream<Tuple3<Long, String, Integer>> input =
                 env.fromElements(new Tuple3<>(3L, "test", 42));
         input.map(new IndividualForwardedMapper<>()).output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
@@ -98,7 +98,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ShufflingMapper<>()).output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
 
@@ -120,7 +120,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new NoAnnotationMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
@@ -142,7 +142,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ReadSetMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
@@ -164,7 +164,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ReadSetMapper<>())
                 .withForwardedFields("0->1; 2")
                 .output(new DiscardingOutputFormat<>());
@@ -186,7 +186,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new AllForwardedExceptMapper<>()).output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
 
@@ -206,7 +206,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input.map(new ReadSetMapper<>()).output(new DiscardingOutputFormat<>());
         Plan plan = env.createProgramPlan();
 
@@ -224,7 +224,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         assertThatThrownBy(
                         () ->
                                 input.map(new WildcardForwardedMapper<>())
@@ -237,7 +237,7 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         assertThatThrownBy(
                         () ->
                                 input.map(new AllForwardedExceptMapper<>())
@@ -250,9 +250,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, String>> input1 = env.fromElements(new Tuple2<>(3L, "test"));
+        DataStream<Tuple2<Long, String>> input1 = env.fromElements(new Tuple2<>(3L, "test"));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Double>> input2 = env.fromElements(new Tuple2<>(3L, 3.1415));
+        DataStream<Tuple2<Long, Double>> input2 = env.fromElements(new Tuple2<>(3L, 3.1415));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -276,9 +276,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -304,9 +304,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -334,9 +334,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -361,9 +361,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -388,9 +388,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
+        DataStream<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -416,9 +416,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         input1.join(input2)
                 .where(0)
                 .equalTo(0)
@@ -440,9 +440,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)
@@ -458,9 +458,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)
@@ -476,9 +476,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)
@@ -494,9 +494,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
+        DataStream<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
+        DataStream<Tuple2<Long, Long>> input2 = env.fromElements(new Tuple2<>(3L, 2L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)
@@ -512,9 +512,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
+        DataStream<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)
@@ -530,9 +530,9 @@ class SemanticPropertiesTranslationTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
+        DataStream<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
+        DataStream<Tuple3<Long, Long, Long>> input2 = env.fromElements(new Tuple3<>(3L, 2L, 1L));
         assertThatThrownBy(
                         () ->
                                 input1.join(input2)

@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
@@ -48,7 +48,7 @@ class NamesTest implements Serializable {
     void testDefaultName() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
+        DataStream<String> strs = env.fromCollection(Arrays.asList("a", "b"));
 
         // WARNING: The test will fail if this line is being moved down in the file (the line-number
         // is hard-coded)
@@ -70,7 +70,7 @@ class NamesTest implements Serializable {
     void testGivenName() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
+        DataStream<String> strs = env.fromCollection(Arrays.asList("a", "b"));
         strs.filter(
                         new FilterFunction<String>() {
                             private static final long serialVersionUID = 1L;
@@ -94,8 +94,8 @@ class NamesTest implements Serializable {
         strLi.add(new Tuple1<>("a"));
         strLi.add(new Tuple1<>("b"));
 
-        DataSet<Tuple1<String>> strs = env.fromCollection(strLi);
-        DataSet<Tuple1<String>> strs1 = env.fromCollection(strLi);
+        DataStream<Tuple1<String>> strs = env.fromCollection(strLi);
+        DataStream<Tuple1<String>> strs1 = env.fromCollection(strLi);
         strs.join(strs1)
                 .where(0)
                 .equalTo(0)

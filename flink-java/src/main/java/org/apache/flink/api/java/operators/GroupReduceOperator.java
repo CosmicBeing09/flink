@@ -33,7 +33,7 @@ import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.api.java.operators.translation.CombineToGroupCombineWrapper;
 import org.apache.flink.api.java.operators.translation.PlanUnwrappingReduceGroupOperator;
@@ -82,7 +82,7 @@ public class GroupReduceOperator<IN, OUT>
      * @param function The user-defined GroupReduce function.
      */
     public GroupReduceOperator(
-            DataSet<IN> input,
+            DataStream<IN> input,
             TypeInformation<OUT> resultType,
             GroupReduceFunction<IN, OUT> function,
             String defaultName) {

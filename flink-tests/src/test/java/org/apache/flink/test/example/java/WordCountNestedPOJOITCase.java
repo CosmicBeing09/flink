@@ -21,7 +21,7 @@ package org.apache.flink.test.example.java;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.testdata.WordCountData;
@@ -54,9 +54,9 @@ public class WordCountNestedPOJOITCase extends JavaProgramTestBaseJUnit4 impleme
     @Override
     protected void testProgram() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<String> text = env.readTextFile(textPath);
+        DataStream<String> text = env.readTextFile(textPath);
 
-        DataSet<WC> counts =
+        DataStream<WC> counts =
                 text.flatMap(new Tokenizer())
                         .groupBy("complex.someTest")
                         .reduce(

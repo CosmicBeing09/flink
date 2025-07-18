@@ -26,7 +26,7 @@ import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -52,7 +52,7 @@ class ReduceTranslationTests implements java.io.Serializable {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData
                     .reduce(
@@ -100,7 +100,7 @@ class ReduceTranslationTests implements java.io.Serializable {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData
                     .groupBy(2)
@@ -145,7 +145,7 @@ class ReduceTranslationTests implements java.io.Serializable {
             final int parallelism = 8;
             ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
 
-            DataSet<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
+            DataStream<Tuple3<Double, StringValue, LongValue>> initialData = getSourceDataSet(env);
 
             initialData
                     .groupBy(
@@ -210,7 +210,7 @@ class ReduceTranslationTests implements java.io.Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    private static DataSet<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
+    private static DataStream<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
             ExecutionEnvironment env) {
         return env.fromElements(
                         new Tuple3<>(3.141592, new StringValue("foobar"), new LongValue(77)))

@@ -19,7 +19,7 @@
 package org.apache.flink.examples.java.wordcount;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.MultipleParameterTool;
@@ -74,7 +74,7 @@ public class WordCount {
         env.getConfig().setGlobalJobParameters(params);
 
         // get input data
-        DataSet<String> text = null;
+        DataStream<String> text = null;
         if (params.has("input")) {
             // union all the inputs from text files
             for (String input : params.getMultiParameterRequired("input")) {
@@ -92,7 +92,7 @@ public class WordCount {
             text = WordCountData.getDefaultTextLineDataSet(env);
         }
 
-        DataSet<Tuple2<String, Integer>> counts =
+        DataStream<Tuple2<String, Integer>> counts =
                 // split up the lines in pairs (2-tuples) containing: (word,1)
                 text.flatMap(new Tokenizer())
                         // group by the tuple field "0" and sum up tuple field "1"

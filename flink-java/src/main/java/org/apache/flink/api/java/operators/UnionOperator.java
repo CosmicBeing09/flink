@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.Union;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * Java API operator for union of two data sets.
@@ -46,7 +46,7 @@ public class UnionOperator<T> extends TwoInputOperator<T, T, T, UnionOperator<T>
      * @param input1 The first data set to be unioned.
      * @param input2 The second data set to be unioned.
      */
-    public UnionOperator(DataSet<T> input1, DataSet<T> input2, String unionLocationName) {
+    public UnionOperator(DataStream<T> input1, DataStream<T> input2, String unionLocationName) {
         super(input1, input2, input1.getType());
 
         if (!input1.getType().equals(input2.getType())) {

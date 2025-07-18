@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -71,11 +71,11 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<Integer, Integer>> coGroupDs =
+        DataStream<Tuple2<Integer, Integer>> coGroupDs =
                 ds.coGroup(ds2).where(0).equalTo(0).with(new Tuple5CoGroup());
 
         List<Tuple2<Integer, Integer>> result = coGroupDs.collect();
@@ -93,9 +93,9 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> coGroupDs =
                 ds.coGroup(ds2)
                         .where(new KeySelector4())
                         .equalTo(new KeySelector5())
@@ -140,9 +140,9 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> coGroupDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> coGroupDs =
                 ds.coGroup(ds2).where(0).equalTo(0).with(new Tuple3ReturnLeft());
 
         List<Tuple3<Integer, Long, String>> result = coGroupDs.collect();
@@ -165,11 +165,11 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> coGroupDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> coGroupDs =
                 ds.coGroup(ds2).where(0).equalTo(0).with(new Tuple5ReturnRight());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = coGroupDs.collect();
@@ -193,13 +193,13 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Integer, Integer>> coGroupDs =
+        DataStream<Tuple3<Integer, Integer, Integer>> coGroupDs =
                 ds.coGroup(ds2)
                         .where(0)
                         .equalTo(0)
@@ -222,10 +222,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> coGroupDs =
+        DataStream<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> coGroupDs =
                 ds.coGroup(ds2).where(2).equalTo(new KeySelector2()).with(new MixedCoGroup());
 
         List<Tuple3<Integer, Long, String>> result = coGroupDs.collect();
@@ -268,10 +268,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> coGroupDs =
                 ds2.coGroup(ds).where(new KeySelector3()).equalTo(2).with(new MixedCoGroup2());
 
         List<CustomType> result = coGroupDs.collect();
@@ -313,11 +313,11 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> coGrouped =
+        DataStream<Tuple3<Integer, Long, String>> coGrouped =
                 ds1.coGroup(ds2).where(0, 4).equalTo(0, 1).with(new Tuple5Tuple3CoGroup());
 
         List<Tuple3<Integer, Long, String>> result = coGrouped.collect();
@@ -341,11 +341,11 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> coGrouped =
+        DataStream<Tuple3<Integer, Long, String>> coGrouped =
                 ds1.coGroup(ds2)
                         .where(new KeySelector7())
                         .equalTo(new KeySelector8())
@@ -373,11 +373,11 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> coGrouped =
+        DataStream<Tuple3<Integer, Long, String>> coGrouped =
                 ds1.coGroup(ds2)
                         .where(
                                 new KeySelector<
@@ -452,12 +452,12 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
         boolean correctExceptionTriggered = false;
         try {
-            DataSet<Tuple3<Integer, Long, String>> coGrouped =
+            DataStream<Tuple3<Integer, Long, String>> coGrouped =
                     ds1.coGroup(ds2)
                             .where(
                                     new KeySelector<
@@ -549,9 +549,9 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> ds2 = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> coGroupDs =
                 ds.coGroup(ds2).where("myInt").equalTo("myInt").with(new CustomTypeCoGroup());
 
         List<CustomType> result = coGroupDs.collect();
@@ -576,10 +576,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> coGroupDs =
                 ds.coGroup(ds2).where("nestedPojo.longNumber").equalTo(6).with(new CoGroup1());
 
         List<CustomType> result = coGroupDs.collect();
@@ -620,10 +620,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> coGroupDs =
                 ds.coGroup(ds2).where(new KeySelector6()).equalTo(6).with(new CoGroup3());
 
         List<CustomType> result = coGroupDs.collect();
@@ -673,10 +673,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
-        DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
+        DataStream<POJO> ds = CollectionDataSets.getSmallPojoDataSet(env);
+        DataStream<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> ds2 =
                 CollectionDataSets.getSmallTuplebasedDataSet(env);
-        DataSet<CustomType> coGroupDs =
+        DataStream<CustomType> coGroupDs =
                 ds.coGroup(ds2).where(new KeySelector1()).equalTo(6).with(new CoGroup2());
 
         List<CustomType> result = coGroupDs.collect();
@@ -689,10 +689,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testCoGroupWithAtomicType1() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Integer> ds2 = env.fromElements(0, 1, 2);
+        DataStream<Tuple3<Integer, Long, String>> ds1 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> ds2 = env.fromElements(0, 1, 2);
 
-        DataSet<Tuple3<Integer, Long, String>> coGroupDs =
+        DataStream<Tuple3<Integer, Long, String>> coGroupDs =
                 ds1.coGroup(ds2).where(0).equalTo("*").with(new CoGroupAtomic1());
 
         List<Tuple3<Integer, Long, String>> result = coGroupDs.collect();
@@ -705,10 +705,10 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testCoGroupWithAtomicType2() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds1 = env.fromElements(0, 1, 2);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Integer> ds1 = env.fromElements(0, 1, 2);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.getSmall3TupleDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> coGroupDs =
+        DataStream<Tuple3<Integer, Long, String>> coGroupDs =
                 ds1.coGroup(ds2).where("*").equalTo(0).with(new CoGroupAtomic2());
 
         List<Tuple3<Integer, Long, String>> result = coGroupDs.collect();
@@ -726,13 +726,13 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds1 =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds2 = CollectionDataSets.get3TupleDataSet(env);
 
         env.setParallelism(4);
         TestDistribution testDis = new TestDistribution();
-        DataSet<Tuple3<Integer, Long, String>> coGrouped =
+        DataStream<Tuple3<Integer, Long, String>> coGrouped =
                 DataSetUtils.partitionByRange(ds1, testDis, 0, 4)
                         .coGroup(DataSetUtils.partitionByRange(ds2, testDis, 0, 1))
                         .where(0, 4)
@@ -756,13 +756,13 @@ public class CoGroupITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testCoGroupLambda() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Integer, String>> left =
+        DataStream<Tuple2<Integer, String>> left =
                 env.fromElements(
                         new Tuple2<>(1, "hello"), new Tuple2<>(2, "what's"), new Tuple2<>(2, "up"));
-        DataSet<Tuple2<Integer, String>> right =
+        DataStream<Tuple2<Integer, String>> right =
                 env.fromElements(
                         new Tuple2<>(1, "not"), new Tuple2<>(1, "much"), new Tuple2<>(2, "really"));
-        DataSet<Integer> joined =
+        DataStream<Integer> joined =
                 left.coGroup(right)
                         .where(0)
                         .equalTo(0)

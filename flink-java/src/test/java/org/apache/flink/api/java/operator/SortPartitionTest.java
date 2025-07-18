@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.BasicArrayTypeInfo;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -40,7 +40,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#sortPartition(int, Order)}. */
+/** Tests for {@link DataStream#sortPartition(int, Order)}. */
 class SortPartitionTest {
 
     // TUPLE DATA
@@ -74,7 +74,7 @@ class SortPartitionTest {
     void testSortPartitionPositionKeys1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -89,7 +89,7 @@ class SortPartitionTest {
     void testSortPartitionPositionKeys2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -104,7 +104,7 @@ class SortPartitionTest {
     void testSortPartitionWithPositionKeys3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -116,7 +116,7 @@ class SortPartitionTest {
     void testSortPartitionWithPositionKeys4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -128,7 +128,7 @@ class SortPartitionTest {
     void testSortPartitionExpressionKeys1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -143,7 +143,7 @@ class SortPartitionTest {
     void testSortPartitionExpressionKeys2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -159,7 +159,7 @@ class SortPartitionTest {
     void testSortPartitionWithExpressionKeys3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -171,7 +171,7 @@ class SortPartitionTest {
     void testSortPartitionWithExpressionKeys4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -182,7 +182,7 @@ class SortPartitionTest {
     @Test
     void testSortPartitionWithKeySelector1() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -199,7 +199,7 @@ class SortPartitionTest {
     @Test
     void testSortPartitionWithKeySelector2() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -217,7 +217,7 @@ class SortPartitionTest {
     @Test
     void testSortPartitionWithKeySelector3() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work
@@ -240,7 +240,7 @@ class SortPartitionTest {
     @Test
     void testSortPartitionWithKeySelector4() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // should work
@@ -263,7 +263,7 @@ class SortPartitionTest {
     @Test
     void testSortPartitionWithKeySelector5() {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
+        DataStream<Tuple4<Integer, Long, CustomType, Long[]>> tupleDs =
                 env.fromCollection(tupleWithCustomData, tupleWithCustomInfo);
 
         // must not work

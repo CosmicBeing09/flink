@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.operators;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -40,7 +40,7 @@ public class JoinOnConflictingPartitioningsTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
+            DataStream<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
 
             Configuration cfg = new Configuration();
             cfg.setString(

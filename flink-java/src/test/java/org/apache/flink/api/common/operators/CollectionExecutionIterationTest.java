@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -51,7 +51,7 @@ class CollectionExecutionIterationTest implements Serializable {
 
             IterativeDataSet<Integer> iteration = env.fromElements(1).iterate(10);
 
-            DataSet<Integer> result =
+            DataStream<Integer> result =
                     iteration.closeWith(iteration.map(new AddSuperstepNumberMapper()));
 
             List<Integer> collected = new ArrayList<>();
@@ -73,9 +73,9 @@ class CollectionExecutionIterationTest implements Serializable {
 
             IterativeDataSet<Integer> iteration = env.fromElements(1).iterate(100);
 
-            DataSet<Integer> iterationResult = iteration.map(new AddSuperstepNumberMapper());
+            DataStream<Integer> iterationResult = iteration.map(new AddSuperstepNumberMapper());
 
-            DataSet<Integer> terminationCriterion =
+            DataStream<Integer> terminationCriterion =
                     iterationResult.filter((FilterFunction<Integer>) value -> value < 50);
 
             List<Integer> collected = new ArrayList<>();
@@ -99,7 +99,7 @@ class CollectionExecutionIterationTest implements Serializable {
             ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Integer, Integer>> solInput =
+            DataStream<Tuple2<Integer, Integer>> solInput =
                     env.fromElements(
                             new Tuple2<>(1, 0),
                             new Tuple2<>(2, 0),
@@ -107,7 +107,7 @@ class CollectionExecutionIterationTest implements Serializable {
                             new Tuple2<>(4, 0));
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple1<Integer>> workInput =
+            DataStream<Tuple1<Integer>> workInput =
                     env.fromElements(
                             new Tuple1<>(1), new Tuple1<>(2), new Tuple1<>(3), new Tuple1<>(4));
 
@@ -118,7 +118,7 @@ class CollectionExecutionIterationTest implements Serializable {
             DeltaIteration<Tuple2<Integer, Integer>, Tuple1<Integer>> iteration =
                     solInput.iterateDelta(workInput, 10, 0);
 
-            DataSet<Tuple2<Integer, Integer>> solDelta =
+            DataStream<Tuple2<Integer, Integer>> solDelta =
                     iteration
                             .getSolutionSet()
                             .join(iteration.getWorkset())
@@ -139,7 +139,7 @@ class CollectionExecutionIterationTest implements Serializable {
                                         }
                                     });
 
-            DataSet<Tuple1<Integer>> nextWorkset =
+            DataStream<Tuple1<Integer>> nextWorkset =
                     solDelta.flatMap(
                             new FlatMapFunction<Tuple2<Integer, Integer>, Tuple1<Integer>>() {
                                 @Override

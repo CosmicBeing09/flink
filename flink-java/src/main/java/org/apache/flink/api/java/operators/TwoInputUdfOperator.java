@@ -26,7 +26,7 @@ import org.apache.flink.api.common.operators.DualInputSemanticProperties;
 import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.TypeHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.configuration.Configuration;
@@ -64,7 +64,7 @@ public abstract class TwoInputUdfOperator<
         extends TwoInputOperator<IN1, IN2, OUT, O> implements UdfOperator<O> {
     private Configuration parameters;
 
-    private Map<String, DataSet<?>> broadcastVariables;
+    private Map<String, DataStream<?>> broadcastVariables;
 
     // NOTE: only set this variable via setSemanticProperties()
     private DualInputSemanticProperties udfSemantics;
@@ -82,7 +82,7 @@ public abstract class TwoInputUdfOperator<
      * @param resultType The type of the elements in the resulting data set.
      */
     protected TwoInputUdfOperator(
-            DataSet<IN1> input1, DataSet<IN2> input2, TypeInformation<OUT> resultType) {
+            DataStream<IN1> input1, DataStream<IN2> input2, TypeInformation<OUT> resultType) {
         super(input1, input2, resultType);
     }
 
@@ -102,7 +102,7 @@ public abstract class TwoInputUdfOperator<
     }
 
     @Override
-    public O withBroadcastSet(DataSet<?> data, String name) {
+    public O withBroadcastSet(DataStream<?> data, String name) {
         if (data == null) {
             throw new IllegalArgumentException("Broadcast variable data must not be null.");
         }
@@ -111,7 +111,7 @@ public abstract class TwoInputUdfOperator<
         }
 
         if (this.broadcastVariables == null) {
-            this.broadcastVariables = new HashMap<String, DataSet<?>>();
+            this.broadcastVariables = new HashMap<String, DataStream<?>>();
         }
 
         this.broadcastVariables.put(name, data);
@@ -390,9 +390,9 @@ public abstract class TwoInputUdfOperator<
 
     @Override
     @Internal
-    public Map<String, DataSet<?>> getBroadcastSets() {
+    public Map<String, DataStream<?>> getBroadcastSets() {
         return this.broadcastVariables == null
-                ? Collections.<String, DataSet<?>>emptyMap()
+                ? Collections.<String, DataStream<?>>emptyMap()
                 : Collections.unmodifiableMap(this.broadcastVariables);
     }
 

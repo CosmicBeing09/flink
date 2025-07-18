@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -57,9 +57,9 @@ public class MultipleJoinsWithSolutionSetCompilerTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple2<Long, Double>> inputData =
+            DataStream<Tuple2<Long, Double>> inputData =
                     env.fromElements(new Tuple2<Long, Double>(1L, 1.0));
-            DataSet<Tuple2<Long, Double>> result = constructPlan(inputData, 10);
+            DataStream<Tuple2<Long, Double>> result = constructPlan(inputData, 10);
 
             // add two sinks, to test the case of branching after an iteration
             result.output(new DiscardingOutputFormat<Tuple2<Long, Double>>());
@@ -91,13 +91,13 @@ public class MultipleJoinsWithSolutionSetCompilerTest extends CompilerTestBase {
         }
     }
 
-    public static DataSet<Tuple2<Long, Double>> constructPlan(
-            DataSet<Tuple2<Long, Double>> initialData, int numIterations) {
+    public static DataStream<Tuple2<Long, Double>> constructPlan(
+            DataStream<Tuple2<Long, Double>> initialData, int numIterations) {
 
         DeltaIteration<Tuple2<Long, Double>, Tuple2<Long, Double>> iteration =
                 initialData.iterateDelta(initialData, numIterations, 0);
 
-        DataSet<Tuple2<Long, Double>> delta =
+        DataStream<Tuple2<Long, Double>> delta =
                 iteration
                         .getSolutionSet()
                         .join(iteration.getWorkset().flatMap(new Duplicator()))
@@ -114,9 +114,9 @@ public class MultipleJoinsWithSolutionSetCompilerTest extends CompilerTestBase {
                         .with(new SummingJoinProject())
                         .name(JOIN_2);
 
-        DataSet<Tuple2<Long, Double>> changes = delta.groupBy(0).aggregate(Aggregations.SUM, 1);
+        DataStream<Tuple2<Long, Double>> changes = delta.groupBy(0).aggregate(Aggregations.SUM, 1);
 
-        DataSet<Tuple2<Long, Double>> result = iteration.closeWith(delta, changes);
+        DataStream<Tuple2<Long, Double>> result = iteration.closeWith(delta, changes);
 
         return result;
     }

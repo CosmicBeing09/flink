@@ -21,7 +21,7 @@ package org.apache.flink.api.java.operator;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -37,7 +37,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link DataSet#reduce(ReduceFunction)}. */
+/** Tests for {@link DataStream#reduce(ReduceFunction)}. */
 class ReduceOperatorTest {
 
     private final List<Tuple5<Integer, Long, String, Long, Integer>> emptyTupleData =
@@ -55,7 +55,7 @@ class ReduceOperatorTest {
     void testSemanticPropsWithKeySelector1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         ReduceOperator<Tuple5<Integer, Long, String, Long, Integer>> reduceOp =
@@ -84,7 +84,7 @@ class ReduceOperatorTest {
     void testSemanticPropsWithKeySelector2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         ReduceOperator<Tuple5<Integer, Long, String, Long, Integer>> reduceOp =
@@ -115,7 +115,7 @@ class ReduceOperatorTest {
     void testSemanticPropsWithKeySelector3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         ReduceOperator<Tuple5<Integer, Long, String, Long, Integer>> reduceOp =
@@ -146,7 +146,7 @@ class ReduceOperatorTest {
     void testSemanticPropsWithKeySelector4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         ReduceOperator<Tuple5<Integer, Long, String, Long, Integer>> reduceOp =

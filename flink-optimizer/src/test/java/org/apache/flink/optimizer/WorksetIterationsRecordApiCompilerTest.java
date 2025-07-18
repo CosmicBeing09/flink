@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -217,11 +217,11 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
         // construct the plan
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
-        DataSet<Tuple2<Long, Long>> solSetInput =
+        DataStream<Tuple2<Long, Long>> solSetInput =
                 env.readCsvFile("/tmp/sol.csv").types(Long.class, Long.class).name("Solution Set");
-        DataSet<Tuple2<Long, Long>> workSetInput =
+        DataStream<Tuple2<Long, Long>> workSetInput =
                 env.readCsvFile("/tmp/sol.csv").types(Long.class, Long.class).name("Workset");
-        DataSet<Tuple2<Long, Long>> invariantInput =
+        DataStream<Tuple2<Long, Long>> invariantInput =
                 env.readCsvFile("/tmp/sol.csv")
                         .types(Long.class, Long.class)
                         .name("Invariant Input");
@@ -229,7 +229,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> deltaIt =
                 solSetInput.iterateDelta(workSetInput, 100, 0).name(ITERATION_NAME);
 
-        DataSet<Tuple2<Long, Long>> join1 =
+        DataStream<Tuple2<Long, Long>> join1 =
                 deltaIt.getWorkset()
                         .join(invariantInput)
                         .where(0)
@@ -238,7 +238,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
                         .withForwardedFieldsFirst("*")
                         .name(JOIN_WITH_INVARIANT_NAME);
 
-        DataSet<Tuple2<Long, Long>> join2 =
+        DataStream<Tuple2<Long, Long>> join2 =
                 deltaIt.getSolutionSet()
                         .join(join1)
                         .where(0)
@@ -249,7 +249,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
             ((JoinOperator<?, ?, ?>) join2).withForwardedFieldsFirst("*");
         }
 
-        DataSet<Tuple2<Long, Long>> nextWorkset =
+        DataStream<Tuple2<Long, Long>> nextWorkset =
                 join2.groupBy(0)
                         .reduceGroup(new IdentityGroupReducer<Tuple2<Long, Long>>())
                         .withForwardedFields("*")
@@ -257,7 +257,7 @@ public class WorksetIterationsRecordApiCompilerTest extends CompilerTestBase {
 
         if (mapBeforeSolutionDelta) {
 
-            DataSet<Tuple2<Long, Long>> mapper =
+            DataStream<Tuple2<Long, Long>> mapper =
                     join2.map(new IdentityMapper<Tuple2<Long, Long>>())
                             .withForwardedFields("*")
                             .name(SOLUTION_DELTA_MAPPER_NAME);

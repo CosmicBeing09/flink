@@ -28,7 +28,7 @@ import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.BulkIterationBase;
 import org.apache.flink.api.common.operators.base.DeltaIterationBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.configuration.Configuration;
 
 import java.util.ArrayList;
@@ -41,7 +41,7 @@ import java.util.Map;
 public class OperatorTranslation {
 
     /** The already translated operations. */
-    private Map<DataSet<?>, Operator<?>> translated = new HashMap<>();
+    private Map<DataStream<?>, Operator<?>> translated = new HashMap<>();
 
     public Plan translateToPlan(List<DataSink<?>> sinks, String jobName) {
         List<GenericDataSinkBase<?>> planSinks = new ArrayList<>();
@@ -68,7 +68,7 @@ public class OperatorTranslation {
         return translatedSink;
     }
 
-    private <T> Operator<T> translate(DataSet<T> dataSet) {
+    private <T> Operator<T> translate(DataStream<T> dataSet) {
         while (dataSet instanceof NoOpOperator) {
             dataSet = ((NoOpOperator<T>) dataSet).getInput();
         }
@@ -146,7 +146,7 @@ public class OperatorTranslation {
         SingleInputOperator<I, O, ?> typedOp = (SingleInputOperator<I, O, ?>) op;
 
         @SuppressWarnings("unchecked")
-        DataSet<I> typedInput = (DataSet<I>) op.getInput();
+        DataStream<I> typedInput = (DataStream<I>) op.getInput();
 
         Operator<I> input = translate(typedInput);
 
@@ -182,9 +182,9 @@ public class OperatorTranslation {
         TwoInputOperator<I1, I2, O, ?> typedOp = (TwoInputOperator<I1, I2, O, ?>) op;
 
         @SuppressWarnings("unchecked")
-        DataSet<I1> typedInput1 = (DataSet<I1>) op.getInput1();
+        DataStream<I1> typedInput1 = (DataStream<I1>) op.getInput1();
         @SuppressWarnings("unchecked")
-        DataSet<I2> typedInput2 = (DataSet<I2>) op.getInput2();
+        DataStream<I2> typedInput2 = (DataStream<I2>) op.getInput2();
 
         Operator<I1> input1 = translate(typedInput1);
         Operator<I2> input2 = translate(typedInput2);
@@ -297,7 +297,7 @@ public class OperatorTranslation {
         return iterationOperator;
     }
 
-    private void translateBcVariables(DataSet<?> setOrOp, Operator<?> dataFlowOp) {
+    private void translateBcVariables(DataStream<?> setOrOp, Operator<?> dataFlowOp) {
         // check if this is actually an operator that could have broadcast variables
         if (setOrOp instanceof UdfOperator) {
             if (!(dataFlowOp instanceof AbstractUdfOperator<?, ?>)) {
@@ -308,7 +308,7 @@ public class OperatorTranslation {
             UdfOperator<?> udfOp = (UdfOperator<?>) setOrOp;
             AbstractUdfOperator<?, ?> udfDataFlowOp = (AbstractUdfOperator<?, ?>) dataFlowOp;
 
-            for (Map.Entry<String, DataSet<?>> bcVariable : udfOp.getBroadcastSets().entrySet()) {
+            for (Map.Entry<String, DataStream<?>> bcVariable : udfOp.getBroadcastSets().entrySet()) {
                 Operator<?> bcInput = translate(bcVariable.getValue());
                 udfDataFlowOp.setBroadcastVariable(bcVariable.getKey(), bcInput);
             }

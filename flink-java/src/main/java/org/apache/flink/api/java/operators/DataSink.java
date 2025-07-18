@@ -34,7 +34,7 @@ import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.util.OperatorValidationUtils;
 import org.apache.flink.api.common.typeinfo.NothingTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.configuration.Configuration;
 
 import java.util.Arrays;
@@ -57,7 +57,7 @@ public class DataSink<T> {
 
     private final TypeInformation<T> type;
 
-    private final DataSet<T> data;
+    private final DataStream<T> data;
 
     private String name;
 
@@ -73,7 +73,7 @@ public class DataSink<T> {
 
     private Order[] sortOrders;
 
-    public DataSink(DataSet<T> data, OutputFormat<T> format, TypeInformation<T> type) {
+    public DataSink(DataStream<T> data, OutputFormat<T> format, TypeInformation<T> type) {
         if (format == null) {
             throw new IllegalArgumentException("The output format must not be null.");
         }
@@ -100,7 +100,7 @@ public class DataSink<T> {
     }
 
     @Internal
-    public DataSet<T> getDataSet() {
+    public DataStream<T> getDataSet() {
         return data;
     }
 
@@ -128,7 +128,7 @@ public class DataSink<T> {
      * @return This data sink operator with specified output order.
      * @see org.apache.flink.api.java.tuple.Tuple
      * @see Order
-     * @deprecated Use {@link DataSet#sortPartition(int, Order)} instead
+     * @deprecated Use {@link DataStream#sortPartition(int, Order)} instead
      */
     @Deprecated
     @PublicEvolving
@@ -178,7 +178,7 @@ public class DataSink<T> {
      * @param order The Order in which the specified field(s) are locally sorted.
      * @return This data sink operator with specified output order.
      * @see Order
-     * @deprecated Use {@link DataSet#sortPartition(String, Order)} instead
+     * @deprecated Use {@link DataStream#sortPartition(String, Order)} instead
      */
     @Deprecated
     @PublicEvolving

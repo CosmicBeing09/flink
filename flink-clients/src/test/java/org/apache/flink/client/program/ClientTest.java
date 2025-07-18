@@ -24,7 +24,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -382,10 +382,10 @@ class ClientTest {
 
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> input =
+            DataStream<Tuple2<Long, Long>> input =
                     env.readCsvFile(args[0]).fieldDelimiter("\t").types(Long.class, Long.class);
 
-            DataSet<Tuple2<Long, Long>> result =
+            DataStream<Tuple2<Long, Long>> result =
                     input.map(
                             new MapFunction<Tuple2<Long, Long>, Tuple2<Long, Long>>() {
                                 public Tuple2<Long, Long> map(Tuple2<Long, Long> value) {

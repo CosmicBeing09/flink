@@ -21,7 +21,7 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -61,20 +61,20 @@ public class CoGroupSolutionSetFirstTest extends CompilerTestBase {
     @Test
     public void testCoGroupSolutionSet() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple1<Integer>> raw = env.readCsvFile(IN_FILE).types(Integer.class);
+        DataStream<Tuple1<Integer>> raw = env.readCsvFile(IN_FILE).types(Integer.class);
 
         DeltaIteration<Tuple1<Integer>, Tuple1<Integer>> iteration = raw.iterateDelta(raw, 1000, 0);
 
-        DataSet<Tuple1<Integer>> test = iteration.getWorkset().map(new SimpleMap());
-        DataSet<Tuple1<Integer>> delta =
+        DataStream<Tuple1<Integer>> test = iteration.getWorkset().map(new SimpleMap());
+        DataStream<Tuple1<Integer>> delta =
                 iteration
                         .getSolutionSet()
                         .coGroup(test)
                         .where(0)
                         .equalTo(0)
                         .with(new SimpleCGroup());
-        DataSet<Tuple1<Integer>> feedback = iteration.getWorkset().map(new SimpleMap());
-        DataSet<Tuple1<Integer>> result = iteration.closeWith(delta, feedback);
+        DataStream<Tuple1<Integer>> feedback = iteration.getWorkset().map(new SimpleMap());
+        DataStream<Tuple1<Integer>> result = iteration.closeWith(delta, feedback);
 
         result.output(new DiscardingOutputFormat<Tuple1<Integer>>());
 

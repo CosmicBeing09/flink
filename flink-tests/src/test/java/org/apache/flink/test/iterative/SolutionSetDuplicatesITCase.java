@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -52,7 +52,7 @@ public class SolutionSetDuplicatesITCase extends MultipleProgramsTestBaseJUnit4 
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.generateSequence(0, 10)
                             .flatMap(
                                     new FlatMapFunction<Long, Tuple2<Long, Long>>() {

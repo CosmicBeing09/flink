@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -77,8 +77,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
                     throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<byte[], Integer>> ds = CollectionDataSets.getTuple2WithByteArrayDataSet(env);
-        DataSet<Integer> reduceDs = ds.groupBy(0).reduceGroup(new ByteArrayGroupReduce());
+        DataStream<Tuple2<byte[], Integer>> ds = CollectionDataSets.getTuple2WithByteArrayDataSet(env);
+        DataStream<Integer> reduceDs = ds.groupBy(0).reduceGroup(new ByteArrayGroupReduce());
 
         List<Integer> result = reduceDs.collect();
 
@@ -108,8 +108,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, Long>> reduceDs =
                 ds.groupBy(1).reduceGroup(new Tuple3GroupReduce());
 
         List<Tuple2<Integer, Long>> result = reduceDs.collect();
@@ -128,9 +128,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy(4, 0).reduceGroup(new Tuple5GroupReduce());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = reduceDs.collect();
@@ -160,8 +160,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .sortGroup(2, Order.ASCENDING)
                         .reduceGroup(new Tuple3SortedGroupReduce());
@@ -187,8 +187,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, Long>> reduceDs =
                 ds.groupBy(new KeySelector1()).reduceGroup(new Tuple3GroupReduce());
 
         List<Tuple2<Integer, Long>> result = reduceDs.collect();
@@ -215,8 +215,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs =
                 ds.groupBy(new KeySelector2()).reduceGroup(new CustomTypeGroupReduce());
 
         List<CustomType> result = reduceDs.collect();
@@ -249,8 +249,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.reduceGroup(new AllAddingTuple3GroupReduce());
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
@@ -268,8 +268,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs = ds.reduceGroup(new AllAddingCustomTypeGroupReduce());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs = ds.reduceGroup(new AllAddingCustomTypeGroupReduce());
 
         List<CustomType> result = reduceDs.collect();
 
@@ -286,10 +286,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .reduceGroup(new BCTuple3GroupReduce())
                         .withBroadcastSet(intDs, "ints");
@@ -311,8 +311,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1).reduceGroup(new InputReturningTuple3GroupReduce());
 
         List<Tuple3<Integer, Long, String>> result = reduceDs.collect();
@@ -338,8 +338,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs =
                 ds.groupBy(new KeySelector3()).reduceGroup(new CustomTypeGroupReduceWithCombine());
 
         List<CustomType> result = reduceDs.collect();
@@ -374,8 +374,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(2); // important because it determines how often the combiner is called
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, String>> reduceDs =
                 ds.groupBy(1).reduceGroup(new Tuple3GroupReduceWithCombine());
 
         List<Tuple2<Integer, String>> result = reduceDs.collect();
@@ -400,14 +400,14 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds =
+        DataStream<Tuple3<Integer, Long, String>> ds =
                 CollectionDataSets.get3TupleDataSet(env)
                         .map(new IdentityMapper<Tuple3<Integer, Long, String>>())
                         .setParallelism(4);
 
         Configuration cfg = new Configuration();
         cfg.setString(Optimizer.HINT_SHIP_STRATEGY, Optimizer.HINT_SHIP_STRATEGY_REPARTITION);
-        DataSet<Tuple2<Integer, String>> reduceDs =
+        DataStream<Tuple2<Integer, String>> reduceDs =
                 ds.reduceGroup(new Tuple3AllGroupReduceWithCombine()).withParameters(cfg);
 
         List<Tuple2<Integer, String>> result = reduceDs.collect();
@@ -427,8 +427,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .sortGroup(2, Order.DESCENDING)
                         .reduceGroup(new Tuple3SortedGroupReduce());
@@ -455,9 +455,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy(new KeySelector4()).reduceGroup(new Tuple5GroupReduce());
 
         List<Tuple5<Integer, Long, Integer, String, Long>> result = reduceDs.collect();
@@ -498,8 +498,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .sortGroup(0, Order.ASCENDING)
                         .reduceGroup(new OrderCheckingCombinableReduce());
@@ -525,8 +525,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CrazyNested> ds = CollectionDataSets.getCrazyNestedDataSet(env);
-        DataSet<Tuple2<String, Integer>> reduceDs =
+        DataStream<CrazyNested> ds = CollectionDataSets.getCrazyNestedDataSet(env);
+        DataStream<Tuple2<String, Integer>> reduceDs =
                 ds.groupBy("nestLvl1.nestLvl2.nestLvl3.nestLvl4.f1nal")
                         .reduceGroup(new GroupReducer1());
 
@@ -562,8 +562,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<FromTupleWithCTor> ds = CollectionDataSets.getPojoExtendingFromTuple(env);
-        DataSet<Integer> reduceDs = ds.groupBy("special", "f2").reduceGroup(new GroupReducer2());
+        DataStream<FromTupleWithCTor> ds = CollectionDataSets.getPojoExtendingFromTuple(env);
+        DataStream<Integer> reduceDs = ds.groupBy("special", "f2").reduceGroup(new GroupReducer2());
 
         List<Integer> result = reduceDs.collect();
 
@@ -587,9 +587,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<PojoContainingTupleAndWritable> ds =
+        DataStream<PojoContainingTupleAndWritable> ds =
                 CollectionDataSets.getPojoContainingTupleAndWritable(env);
-        DataSet<Integer> reduceDs =
+        DataStream<Integer> reduceDs =
                 ds.groupBy("hadoopFan", "theTuple.*") // full tuple selection
                         .reduceGroup(new GroupReducer3());
 
@@ -617,10 +617,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, CrazyNested, POJO>> ds =
+        DataStream<Tuple3<Integer, CrazyNested, POJO>> ds =
                 CollectionDataSets.getTupleContainingPojos(env);
 
-        DataSet<Integer> reduceDs =
+        DataStream<Integer> reduceDs =
                 ds.groupBy("f0", "f1.*") // nested full tuple selection
                         .reduceGroup(new GroupReducer4());
 
@@ -651,8 +651,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(1)
                         .sortGroup("f2", Order.DESCENDING)
                         .reduceGroup(new Tuple3SortedGroupReduce());
@@ -678,9 +678,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet(env);
-        DataSet<String> reduceDs =
+        DataStream<String> reduceDs =
                 ds.groupBy("f1")
                         .sortGroup(0, Order.DESCENDING)
                         .reduceGroup(new NestedTupleReducer());
@@ -699,10 +699,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet(env);
         // f0.f0 is first integer
-        DataSet<String> reduceDs =
+        DataStream<String> reduceDs =
                 ds.groupBy("f1")
                         .sortGroup("f0.f0", Order.ASCENDING)
                         .sortGroup("f0.f1", Order.ASCENDING)
@@ -722,10 +722,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet(env);
         // f0.f0 is first integer
-        DataSet<String> reduceDs =
+        DataStream<String> reduceDs =
                 ds.groupBy("f1")
                         .sortGroup("f0.f0", Order.DESCENDING)
                         .reduceGroup(new NestedTupleReducer());
@@ -744,10 +744,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
+        DataStream<Tuple2<Tuple2<Integer, Integer>, String>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet(env);
         // f0.f0 is first integer
-        DataSet<String> reduceDs =
+        DataStream<String> reduceDs =
                 ds.groupBy("f1")
                         .sortGroup("f0.f0", Order.DESCENDING)
                         .sortGroup("f0.f1", Order.DESCENDING)
@@ -767,10 +767,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<PojoContainingTupleAndWritable> ds =
+        DataStream<PojoContainingTupleAndWritable> ds =
                 CollectionDataSets.getGroupSortedPojoContainingTupleAndWritable(env);
         // f0.f0 is first integer
-        DataSet<String> reduceDs =
+        DataStream<String> reduceDs =
                 ds.groupBy("hadoopFan")
                         .sortGroup("theTuple.f0", Order.DESCENDING)
                         .sortGroup("theTuple.f1", Order.DESCENDING)
@@ -791,8 +791,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> reduceDs =
                 ds.groupBy(new LongFieldExtractor<Tuple3<Integer, Long, String>>(1))
                         .sortGroup(
                                 new StringFieldExtractor<Tuple3<Integer, Long, String>>(2),
@@ -839,8 +839,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> reduceDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> reduceDs =
                 ds.groupBy(new TwoTuplePojoExtractor())
                         .sortGroup(new StringPojoExtractor(), Order.DESCENDING)
                         .reduceGroup(new CustomTypeSortedGroupReduce());
@@ -915,8 +915,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple2<Integer, String>> reduceDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple2<Integer, String>> reduceDs =
                 ds.groupBy(new LongFieldExtractor<Tuple3<Integer, Long, String>>(1))
                         .sortGroup(
                                 new StringFieldExtractor<Tuple3<Integer, Long, String>>(2),
@@ -958,9 +958,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> reduceDs =
                 ds.groupBy(new IntFieldExtractor<Tuple5<Integer, Long, Integer, String, Long>>(0))
                         .sortGroup(new FiveToTwoTupleExtractor(), Order.DESCENDING)
                         .reduceGroup(new Tuple5SortedGroupReduce());
@@ -1006,11 +1006,11 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<CollectionDataSets.PojoWithMultiplePojos> ds =
+        DataStream<CollectionDataSets.PojoWithMultiplePojos> ds =
                 CollectionDataSets.getPojoWithMultiplePojos(env);
 
         // f0.f0 is first integer
-        DataSet<String> reduceDs = ds.groupBy("p2.a2").reduceGroup(new GroupReducer6());
+        DataStream<String> reduceDs = ds.groupBy("p2.a2").reduceGroup(new GroupReducer6());
         List<String> result = reduceDs.collect();
 
         String expected = "b\nccc\nee\n";
@@ -1040,10 +1040,10 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<CollectionDataSets.PojoWithCollection> ds =
+        DataStream<CollectionDataSets.PojoWithCollection> ds =
                 CollectionDataSets.getPojoWithCollection(env);
         // f0.f0 is first integer
-        DataSet<String> reduceDs = ds.groupBy("key").reduceGroup(new GroupReducer7());
+        DataStream<String> reduceDs = ds.groupBy("key").reduceGroup(new GroupReducer7());
         List<String> result = reduceDs.collect();
 
         String expected =
@@ -1079,11 +1079,11 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(1);
 
-        DataSet<CollectionDataSets.PojoWithCollection> ds =
+        DataStream<CollectionDataSets.PojoWithCollection> ds =
                 CollectionDataSets.getPojoWithCollection(env);
 
         // f0.f0 is first integer
-        DataSet<String> reduceDs = ds.groupBy("bigInt").reduceGroup(new GroupReducer8());
+        DataStream<String> reduceDs = ds.groupBy("bigInt").reduceGroup(new GroupReducer8());
         List<String> result = reduceDs.collect();
         ExecutionConfig ec = env.getConfig();
 
@@ -1114,9 +1114,9 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> reduceDs =
+        DataStream<Tuple2<Integer, Long>> reduceDs =
                 ds
                         // group by selector key
                         .groupBy(
@@ -1181,8 +1181,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testGroupReduceWithAtomicValue() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds = env.fromElements(1, 1, 2, 3, 4);
-        DataSet<Integer> reduceDs =
+        DataStream<Integer> ds = env.fromElements(1, 1, 2, 3, 4);
+        DataStream<Integer> reduceDs =
                 ds.groupBy("*")
                         .reduceGroup(
                                 new GroupReduceFunction<Integer, Integer>() {
@@ -1209,8 +1209,8 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testJodatimeDateTimeWithKryo() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<Integer, DateTime>> ds = env.fromElements(new Tuple2<>(1, DateTime.now()));
-        DataSet<Tuple2<Integer, DateTime>> reduceDs = ds.groupBy("f1").sum(0).project(0);
+        DataStream<Tuple2<Integer, DateTime>> ds = env.fromElements(new Tuple2<>(1, DateTime.now()));
+        DataStream<Tuple2<Integer, DateTime>> reduceDs = ds.groupBy("f1").sum(0).project(0);
 
         List<Tuple2<Integer, DateTime>> result = reduceDs.collect();
 
@@ -1228,13 +1228,13 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testDateNullException() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Integer, Date>> in =
+        DataStream<Tuple2<Integer, Date>> in =
                 env.fromElements(
                         new Tuple2<>(0, new Date(1230000000)),
                         new Tuple2<Integer, Date>(1, null),
                         new Tuple2<>(2, new Date(1230000000)));
 
-        DataSet<String> r =
+        DataStream<String> r =
                 in.groupBy(0)
                         .reduceGroup(
                                 new GroupReduceFunction<Tuple2<Integer, Date>, String>() {

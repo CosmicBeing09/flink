@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -43,7 +43,7 @@ public class PartitionPushdownTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Long, Long, Long>> input =
+            DataStream<Tuple3<Long, Long, Long>> input =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));
 
             input.groupBy(0, 1)
@@ -82,7 +82,7 @@ public class PartitionPushdownTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Long, Long, Long>> input =
+            DataStream<Tuple3<Long, Long, Long>> input =
                     env.fromElements(new Tuple3<Long, Long, Long>(0L, 0L, 0L));
 
             input.groupBy(0)

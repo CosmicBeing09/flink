@@ -21,7 +21,7 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -110,15 +110,15 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
             final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
-            DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
+            DataStream<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
+            DataStream<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
             int keyPosition = 0;
 
             DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                     initialSolutionSet.iterateDelta(
                             initialSolutionSet, MAX_ITERATIONS, keyPosition);
 
-            DataSet<Long> candidates =
+            DataStream<Long> candidates =
                     iteration
                             .getWorkset()
                             .join(edges)
@@ -133,7 +133,7 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
                                     })
                             .reduceGroup(new RemoveDuplicatesReduce());
 
-            DataSet<Tuple2<Long, Long>> candidatesDependencies =
+            DataStream<Tuple2<Long, Long>> candidatesDependencies =
                     candidates
                             .join(edges)
                             .where(
@@ -150,7 +150,7 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
                                     })
                             .with(new FindCandidatesDependenciesJoin());
 
-            DataSet<Tuple2<Long, Long>> verticesWithNewComponents =
+            DataStream<Tuple2<Long, Long>> verticesWithNewComponents =
                     candidatesDependencies
                             .join(iteration.getSolutionSet())
                             .where(0)
@@ -159,7 +159,7 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
                             .groupBy(0)
                             .reduceGroup(new MinimumReduce());
 
-            DataSet<Tuple2<Long, Long>> updatedComponentId =
+            DataStream<Tuple2<Long, Long>> updatedComponentId =
                     verticesWithNewComponents
                             .join(iteration.getSolutionSet())
                             .where(0)

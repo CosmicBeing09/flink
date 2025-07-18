@@ -19,7 +19,7 @@
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.hadoopcompatibility.mapred.HadoopReduceCombineFunction;
@@ -52,10 +52,10 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
     void testStandardCountingWithCombiner(@TempDir Path tempFolder) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<IntWritable, IntWritable>> ds =
+        DataStream<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper1());
 
-        DataSet<Tuple2<IntWritable, IntWritable>> counts =
+        DataStream<Tuple2<IntWritable, IntWritable>> counts =
                 ds.groupBy(0)
                         .reduceGroup(
                                 new HadoopReduceCombineFunction<
@@ -76,10 +76,10 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
     void testUngroupedHadoopReducer(@TempDir Path tempFolder) throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<IntWritable, IntWritable>> ds =
+        DataStream<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper2());
 
-        DataSet<Tuple2<IntWritable, IntWritable>> sum =
+        DataStream<Tuple2<IntWritable, IntWritable>> sum =
                 ds.reduceGroup(
                         new HadoopReduceCombineFunction<
                                 IntWritable, IntWritable, IntWritable, IntWritable>(
@@ -100,10 +100,10 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
         assumeThat(mode).isEqualTo(TestExecutionMode.CLUSTER);
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<IntWritable, IntWritable>> ds =
+        DataStream<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper3());
 
-        DataSet<Tuple2<IntWritable, IntWritable>> counts =
+        DataStream<Tuple2<IntWritable, IntWritable>> counts =
                 ds.groupBy(0)
                         .reduceGroup(
                                 new HadoopReduceCombineFunction<
@@ -127,10 +127,10 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
         JobConf conf = new JobConf();
         conf.set("my.cntPrefix", "Hello");
 
-        DataSet<Tuple2<IntWritable, Text>> ds =
+        DataStream<Tuple2<IntWritable, Text>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper4());
 
-        DataSet<Tuple2<IntWritable, IntWritable>> hellos =
+        DataStream<Tuple2<IntWritable, IntWritable>> hellos =
                 ds.groupBy(0)
                         .reduceGroup(
                                 new HadoopReduceFunction<

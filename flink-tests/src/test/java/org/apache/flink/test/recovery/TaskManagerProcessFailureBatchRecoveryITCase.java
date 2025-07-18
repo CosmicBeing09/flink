@@ -21,7 +21,7 @@ package org.apache.flink.test.recovery;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
@@ -68,7 +68,7 @@ public class TaskManagerProcessFailureBatchRecoveryITCase
         env.getConfig().setExecutionMode(executionMode);
 
         final long numElements = 100000L;
-        final DataSet<Long> result =
+        final DataStream<Long> result =
                 env.generateSequence(1, numElements)
 
                         // make sure every mapper is involved (no one is skipped because of lazy

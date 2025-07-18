@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operators;
 
 import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * Base class for operations that operates on a single input data set.
@@ -38,9 +38,9 @@ import org.apache.flink.api.java.DataSet;
 public abstract class SingleInputOperator<IN, OUT, O extends SingleInputOperator<IN, OUT, O>>
         extends Operator<OUT, O> {
 
-    private final DataSet<IN> input;
+    private final DataStream<IN> input;
 
-    protected SingleInputOperator(DataSet<IN> input, TypeInformation<OUT> resultType) {
+    protected SingleInputOperator(DataStream<IN> input, TypeInformation<OUT> resultType) {
         super(input.getExecutionEnvironment(), resultType);
         this.input = input;
     }
@@ -50,7 +50,7 @@ public abstract class SingleInputOperator<IN, OUT, O extends SingleInputOperator
      *
      * @return The data set that this operation uses as its input.
      */
-    public DataSet<IN> getInput() {
+    public DataStream<IN> getInput() {
         return this.input;
     }
 

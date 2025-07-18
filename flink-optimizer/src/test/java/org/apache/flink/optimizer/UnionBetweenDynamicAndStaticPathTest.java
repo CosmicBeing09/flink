@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -44,12 +44,12 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Long> input1 = env.generateSequence(1, 10);
-            DataSet<Long> input2 = env.generateSequence(1, 10);
+            DataStream<Long> input1 = env.generateSequence(1, 10);
+            DataStream<Long> input2 = env.generateSequence(1, 10);
 
             IterativeDataSet<Long> iteration = input1.iterate(10);
 
-            DataSet<Long> result =
+            DataStream<Long> result =
                     iteration.closeWith(input2.union(input2).union(iteration.union(iteration)));
 
             result.output(new DiscardingOutputFormat<Long>());
@@ -97,12 +97,12 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Long> input1 = env.generateSequence(1, 10);
-            DataSet<Long> input2 = env.generateSequence(1, 10);
+            DataStream<Long> input1 = env.generateSequence(1, 10);
+            DataStream<Long> input2 = env.generateSequence(1, 10);
 
             IterativeDataSet<Long> iteration = input1.iterate(10);
 
-            DataSet<Long> iterResult =
+            DataStream<Long> iterResult =
                     iteration.closeWith(iteration.union(iteration).union(input2.union(input2)));
 
             iterResult.output(new DiscardingOutputFormat<Long>());

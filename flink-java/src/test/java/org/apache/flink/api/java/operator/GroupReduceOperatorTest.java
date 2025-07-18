@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
@@ -39,7 +39,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-/** Tests for {@link DataSet#reduceGroup(GroupReduceFunction)}. */
+/** Tests for {@link DataStream#reduceGroup(GroupReduceFunction)}. */
 @SuppressWarnings("serial")
 class GroupReduceOperatorTest {
 
@@ -58,7 +58,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -91,7 +91,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -127,7 +127,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -161,7 +161,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector4() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -198,7 +198,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector5() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -232,7 +232,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector6() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<
@@ -269,7 +269,7 @@ class GroupReduceOperatorTest {
     void testSemanticPropsWithKeySelector7() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         GroupReduceOperator<

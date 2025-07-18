@@ -20,7 +20,7 @@ package org.apache.flink.examples.java.relational;
 
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.FilterFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -120,26 +120,26 @@ public class WebLogAnalysis {
         env.getConfig().setGlobalJobParameters(params);
 
         // get input data
-        DataSet<Tuple2<String, String>> documents = getDocumentsDataSet(env, params);
-        DataSet<Tuple3<Integer, String, Integer>> ranks = getRanksDataSet(env, params);
-        DataSet<Tuple2<String, String>> visits = getVisitsDataSet(env, params);
+        DataStream<Tuple2<String, String>> documents = getDocumentsDataSet(env, params);
+        DataStream<Tuple3<Integer, String, Integer>> ranks = getRanksDataSet(env, params);
+        DataStream<Tuple2<String, String>> visits = getVisitsDataSet(env, params);
 
         // Retain documents with keywords
-        DataSet<Tuple1<String>> filterDocs = documents.filter(new FilterDocByKeyWords()).project(0);
+        DataStream<Tuple1<String>> filterDocs = documents.filter(new FilterDocByKeyWords()).project(0);
 
         // Filter ranks by minimum rank
-        DataSet<Tuple3<Integer, String, Integer>> filterRanks = ranks.filter(new FilterByRank());
+        DataStream<Tuple3<Integer, String, Integer>> filterRanks = ranks.filter(new FilterByRank());
 
         // Filter visits by visit date
-        DataSet<Tuple1<String>> filterVisits = visits.filter(new FilterVisitsByDate()).project(0);
+        DataStream<Tuple1<String>> filterVisits = visits.filter(new FilterVisitsByDate()).project(0);
 
         // Join the filtered documents and ranks, i.e., get all URLs with min rank and keywords
-        DataSet<Tuple3<Integer, String, Integer>> joinDocsRanks =
+        DataStream<Tuple3<Integer, String, Integer>> joinDocsRanks =
                 filterDocs.join(filterRanks).where(0).equalTo(1).projectSecond(0, 1, 2);
 
         // Anti-join urls with visits, i.e., retain all URLs which have NOT been visited in a
         // certain time
-        DataSet<Tuple3<Integer, String, Integer>> result =
+        DataStream<Tuple3<Integer, String, Integer>> result =
                 joinDocsRanks.coGroup(filterVisits).where(1).equalTo(0).with(new AntiJoinVisits());
 
         // emit result
@@ -258,7 +258,7 @@ public class WebLogAnalysis {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Tuple2<String, String>> getDocumentsDataSet(
+    private static DataStream<Tuple2<String, String>> getDocumentsDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for documents relation (URL, Doc-Text)
         if (params.has("documents")) {
@@ -272,7 +272,7 @@ public class WebLogAnalysis {
         }
     }
 
-    private static DataSet<Tuple3<Integer, String, Integer>> getRanksDataSet(
+    private static DataStream<Tuple3<Integer, String, Integer>> getRanksDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for ranks relation (Rank, URL, Avg-Visit-Duration)
         if (params.has("ranks")) {
@@ -286,7 +286,7 @@ public class WebLogAnalysis {
         }
     }
 
-    private static DataSet<Tuple2<String, String>> getVisitsDataSet(
+    private static DataStream<Tuple2<String, String>> getVisitsDataSet(
             ExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for visits relation (URL, Date)
         if (params.has("visits")) {

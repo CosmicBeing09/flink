@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.custompartition;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -49,7 +49,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0)).rebalance();
 
             data.partitionCustom(part, 0)
@@ -93,7 +93,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0)).rebalance();
 
             try {
@@ -117,7 +117,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
+            DataStream<Pojo> data = env.fromElements(new Pojo()).rebalance();
 
             data.partitionCustom(part, "a")
                     .mapPartition(new IdentityPartitionerMapper<Pojo>())
@@ -160,7 +160,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
+            DataStream<Pojo> data = env.fromElements(new Pojo()).rebalance();
 
             try {
                 data.partitionCustom(new TestPartitionerLong(), "a");
@@ -183,7 +183,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
+            DataStream<Pojo> data = env.fromElements(new Pojo()).rebalance();
 
             data.partitionCustom(part, new TestKeySelectorInt<Pojo>())
                     .mapPartition(new IdentityPartitionerMapper<Pojo>())
@@ -239,7 +239,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
             env.setParallelism(parallelism);
 
-            DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
+            DataStream<Pojo> data = env.fromElements(new Pojo()).rebalance();
 
             try {
                 data.partitionCustom(part, new TestKeySelectorInt<Pojo>());

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.FlatMapOperator;
 import org.apache.flink.api.java.operators.JoinOperator;
@@ -55,18 +55,18 @@ public class BroadcastBranchingITCase extends JavaProgramTestBaseJUnit4 {
 
         // Sc1 generates M parameters a,b,c for second degree polynomials P(x) = ax^2 + bx + c
         // identified by id
-        DataSet<Tuple4<String, Integer, Integer, Integer>> sc1 =
+        DataStream<Tuple4<String, Integer, Integer, Integer>> sc1 =
                 env.fromElements(
                         new Tuple4<>("1", 61, 6, 29),
                         new Tuple4<>("2", 7, 13, 10),
                         new Tuple4<>("3", 8, 13, 27));
 
         // Sc2 generates N x values to be evaluated with the polynomial identified by id
-        DataSet<Tuple2<String, Integer>> sc2 =
+        DataStream<Tuple2<String, Integer>> sc2 =
                 env.fromElements(new Tuple2<>("1", 5), new Tuple2<>("2", 3), new Tuple2<>("3", 6));
 
         // Sc3 generates N y values to be evaluated with the polynomial identified by id
-        DataSet<Tuple2<String, Integer>> sc3 =
+        DataStream<Tuple2<String, Integer>> sc3 =
                 env.fromElements(new Tuple2<>("1", 2), new Tuple2<>("2", 3), new Tuple2<>("3", 7));
 
         // Jn1 matches x and y values on id and emits (id, x, y) triples

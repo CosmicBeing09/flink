@@ -23,7 +23,7 @@ import org.apache.flink.api.common.accumulators.SimpleAccumulator;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.functions.RichReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -63,16 +63,16 @@ public class KMeansForTest {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
         // get input data
-        DataSet<Point> points =
+        DataStream<Point> points =
                 env.fromElements(pointsData.split("\n")).map(new TuplePointConverter());
 
-        DataSet<Centroid> centroids =
+        DataStream<Centroid> centroids =
                 env.fromElements(centersData.split("\n")).map(new TupleCentroidConverter());
 
         // set number of bulk iterations for KMeans algorithm
         IterativeDataSet<Centroid> loop = centroids.iterate(numIterations);
 
-        DataSet<Centroid> newCentroids =
+        DataStream<Centroid> newCentroids =
                 points
                         // compute closest centroid for each point
                         .map(new SelectNearestCenter())
@@ -89,7 +89,7 @@ public class KMeansForTest {
                         .map(new CentroidAverager());
 
         // feed new centroids back into next iteration
-        DataSet<Centroid> finalCentroids = loop.closeWith(newCentroids);
+        DataStream<Centroid> finalCentroids = loop.closeWith(newCentroids);
 
         // test that custom data type collects are working
         finalCentroids.collect();

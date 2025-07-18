@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -228,20 +228,20 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
             env.setParallelism(DEFAULT_PARALLELISM);
 
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Long, Long, Long>> solutionSetInput =
+            DataStream<Tuple3<Long, Long, Long>> solutionSetInput =
                     env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Solution Set");
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Long, Long, Long>> worksetInput =
+            DataStream<Tuple3<Long, Long, Long>> worksetInput =
                     env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Workset");
             @SuppressWarnings("unchecked")
-            DataSet<Tuple3<Long, Long, Long>> invariantInput =
+            DataStream<Tuple3<Long, Long, Long>> invariantInput =
                     env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L))
                             .name("Invariant Input");
 
             DeltaIteration<Tuple3<Long, Long, Long>, Tuple3<Long, Long, Long>> iter =
                     solutionSetInput.iterateDelta(worksetInput, 100, 1, 2);
 
-            DataSet<Tuple3<Long, Long, Long>> result =
+            DataStream<Tuple3<Long, Long, Long>> result =
                     iter.getWorkset()
                             .join(invariantInput)
                             .where(1, 2)
@@ -291,19 +291,19 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
         env.setParallelism(DEFAULT_PARALLELISM);
 
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> solutionSetInput =
+        DataStream<Tuple3<Long, Long, Long>> solutionSetInput =
                 env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Solution Set");
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> worksetInput =
+        DataStream<Tuple3<Long, Long, Long>> worksetInput =
                 env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Workset");
         @SuppressWarnings("unchecked")
-        DataSet<Tuple3<Long, Long, Long>> invariantInput =
+        DataStream<Tuple3<Long, Long, Long>> invariantInput =
                 env.fromElements(new Tuple3<Long, Long, Long>(1L, 2L, 3L)).name("Invariant Input");
 
         DeltaIteration<Tuple3<Long, Long, Long>, Tuple3<Long, Long, Long>> iter =
                 solutionSetInput.iterateDelta(worksetInput, 100, 1, 2);
 
-        DataSet<Tuple3<Long, Long, Long>> joinedWithSolutionSet =
+        DataStream<Tuple3<Long, Long, Long>> joinedWithSolutionSet =
                 iter.getWorkset()
                         .join(invariantInput)
                         .where(1, 2)
@@ -340,7 +340,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
                                         ? new String[] {"0->0", "1->1", "2->2"}
                                         : null);
 
-        DataSet<Tuple3<Long, Long, Long>> nextWorkset =
+        DataStream<Tuple3<Long, Long, Long>> nextWorkset =
                 joinedWithSolutionSet
                         .groupBy(1, 2)
                         .reduceGroup(
@@ -353,7 +353,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
                         .name(NEXT_WORKSET_REDUCER_NAME)
                         .withForwardedFields("1->1", "2->2", "0->0");
 
-        DataSet<Tuple3<Long, Long, Long>> nextSolutionSet =
+        DataStream<Tuple3<Long, Long, Long>> nextSolutionSet =
                 mapBeforeSolutionDelta
                         ? joinedWithSolutionSet
                                 .map(

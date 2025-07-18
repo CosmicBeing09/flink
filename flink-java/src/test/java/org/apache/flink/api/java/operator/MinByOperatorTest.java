@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.UnsortedGrouping;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -40,7 +40,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#minBy(int...)}. */
+/** Tests for {@link DataStream#minBy(int...)}. */
 class MinByOperatorTest {
 
     // TUPLE DATA
@@ -60,7 +60,7 @@ class MinByOperatorTest {
     void testMinByKeyFieldsDataset() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -84,7 +84,7 @@ class MinByOperatorTest {
 
         this.customTypeData.add(new CustomType());
 
-        DataSet<CustomType> customDs = env.fromCollection(customTypeData);
+        DataStream<CustomType> customDs = env.fromCollection(customTypeData);
         // should not work: groups on custom type
         assertThatThrownBy(() -> customDs.minBy(0)).isInstanceOf(InvalidProgramException.class);
     }
@@ -96,7 +96,7 @@ class MinByOperatorTest {
     void testOutOfTupleBoundsDataset1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, key out of tuple bounds
@@ -110,7 +110,7 @@ class MinByOperatorTest {
     void testOutOfTupleBoundsDataset2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, key out of tuple bounds
@@ -124,7 +124,7 @@ class MinByOperatorTest {
     void testOutOfTupleBoundsDataset3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work, key out of tuple bounds
@@ -223,7 +223,7 @@ class MinByOperatorTest {
 
         String[] fieldNames = new String[] {"id", "value"};
         RowTypeInfo rowTypeInfo = new RowTypeInfo(types, fieldNames);
-        DataSet<Row> tupleDs = env.fromCollection(Collections.singleton(new Row(2)), rowTypeInfo);
+        DataStream<Row> tupleDs = env.fromCollection(Collections.singleton(new Row(2)), rowTypeInfo);
 
         assertThatThrownBy(() -> tupleDs.minBy(0)).isInstanceOf(InvalidProgramException.class);
     }

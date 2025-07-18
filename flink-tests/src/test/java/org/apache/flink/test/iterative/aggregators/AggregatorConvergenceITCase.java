@@ -23,7 +23,7 @@ import org.apache.flink.api.common.aggregators.LongSumAggregator;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -108,8 +108,8 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
-        DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
+        DataStream<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
+        DataStream<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
 
         IterativeDataSet<Tuple2<Long, Long>> iteration = initialSolutionSet.iterate(10);
 
@@ -119,7 +119,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
                 new LongSumAggregator(),
                 new UpdatedElementsConvergenceCriterion(convergenceThreshold));
 
-        DataSet<Tuple2<Long, Long>> verticesWithNewComponents =
+        DataStream<Tuple2<Long, Long>> verticesWithNewComponents =
                 iteration
                         .join(edges)
                         .where(0)
@@ -128,7 +128,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
                         .groupBy(0)
                         .min(1);
 
-        DataSet<Tuple2<Long, Long>> updatedComponentId =
+        DataStream<Tuple2<Long, Long>> updatedComponentId =
                 verticesWithNewComponents
                         .join(iteration)
                         .where(0)
@@ -152,8 +152,8 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
-        DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
+        DataStream<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
+        DataStream<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                 initialSolutionSet.iterateDelta(initialSolutionSet, 10, 0);
@@ -164,7 +164,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
                 new LongSumAggregator(),
                 new UpdatedElementsConvergenceCriterion(convergenceThreshold));
 
-        DataSet<Tuple2<Long, Long>> verticesWithNewComponents =
+        DataStream<Tuple2<Long, Long>> verticesWithNewComponents =
                 iteration
                         .getWorkset()
                         .join(edges)
@@ -174,7 +174,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
                         .groupBy(0)
                         .min(1);
 
-        DataSet<Tuple2<Long, Long>> updatedComponentId =
+        DataStream<Tuple2<Long, Long>> updatedComponentId =
                 verticesWithNewComponents
                         .join(iteration.getSolutionSet())
                         .where(0)
@@ -197,8 +197,8 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
-        DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
+        DataStream<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
+        DataStream<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
 
         IterativeDataSet<Tuple2<Long, Long>> iteration = initialSolutionSet.iterate(maxIterations);
 
@@ -206,7 +206,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         iteration.registerAggregator(
                 aggregatorName, new LongSumAggregatorWithParameter(componentId));
 
-        DataSet<Tuple2<Long, Long>> verticesWithNewComponents =
+        DataStream<Tuple2<Long, Long>> verticesWithNewComponents =
                 iteration
                         .join(edges)
                         .where(0)
@@ -215,7 +215,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
                         .groupBy(0)
                         .min(1);
 
-        DataSet<Tuple2<Long, Long>> updatedComponentId =
+        DataStream<Tuple2<Long, Long>> updatedComponentId =
                 verticesWithNewComponents
                         .join(iteration)
                         .where(0)

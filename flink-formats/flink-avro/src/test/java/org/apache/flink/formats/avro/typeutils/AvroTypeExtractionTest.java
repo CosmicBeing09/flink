@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -94,7 +94,7 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users).map((value) -> value);
+        DataStream<User> usersDS = env.createInput(users).map((value) -> value);
 
         usersDS.writeAsText(resultPath);
 
@@ -137,7 +137,7 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS =
+        DataStream<User> usersDS =
                 env.createInput(users)
                         .map(
                                 (MapFunction<User, User>)
@@ -188,9 +188,9 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users);
+        DataStream<User> usersDS = env.createInput(users);
 
-        DataSet<Tuple2<String, Integer>> res =
+        DataStream<Tuple2<String, Integer>> res =
                 usersDS.groupBy("name")
                         .reduceGroup(
                                 (GroupReduceFunction<User, Tuple2<String, Integer>>)
@@ -216,9 +216,9 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users);
+        DataStream<User> usersDS = env.createInput(users);
 
-        DataSet<Tuple2<String, Integer>> res =
+        DataStream<Tuple2<String, Integer>> res =
                 usersDS.groupBy(
                                 (KeySelector<User, String>)
                                         value -> String.valueOf(value.getName()))
@@ -247,9 +247,9 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users);
+        DataStream<User> usersDS = env.createInput(users);
 
-        DataSet<Tuple2<String, Integer>> res =
+        DataStream<Tuple2<String, Integer>> res =
                 usersDS.groupBy(
                                 (KeySelector<User, String>)
                                         value -> String.valueOf(value.getName()))
@@ -291,9 +291,9 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataSet<User> usersDS = env.createInput(users);
+        DataStream<User> usersDS = env.createInput(users);
 
-        DataSet<Object> res =
+        DataStream<Object> res =
                 usersDS.groupBy(fieldName)
                         .reduceGroup(
                                 (GroupReduceFunction<User, Object>)

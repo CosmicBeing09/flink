@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -40,7 +40,7 @@ public class IterationIncompleteDynamicPathConsumptionITCase extends JavaProgram
         // the test data is constructed such that the merge join zig zag
         // has an early out, leaving elements on the dynamic path input unconsumed
 
-        DataSet<Path> edges =
+        DataStream<Path> edges =
                 env.fromElements(
                         new Path(1, 2),
                         new Path(1, 4),
@@ -55,7 +55,7 @@ public class IterationIncompleteDynamicPathConsumptionITCase extends JavaProgram
 
         IterativeDataSet<Path> currentPaths = edges.iterate(10);
 
-        DataSet<Path> newPaths =
+        DataStream<Path> newPaths =
                 currentPaths
                         .join(edges, JoinHint.REPARTITION_SORT_MERGE)
                         .where("to")
@@ -64,7 +64,7 @@ public class IterationIncompleteDynamicPathConsumptionITCase extends JavaProgram
                         .union(currentPaths)
                         .distinct("from", "to");
 
-        DataSet<Path> result = currentPaths.closeWith(newPaths);
+        DataStream<Path> result = currentPaths.closeWith(newPaths);
 
         result.output(new DiscardingOutputFormat<Path>());
 

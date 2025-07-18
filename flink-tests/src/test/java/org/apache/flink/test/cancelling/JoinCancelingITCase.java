@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.io.GenericInputFormat;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -62,9 +62,9 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int parallelism)
             throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<Integer, Integer>> input1 =
+        DataStream<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
-        DataSet<Tuple2<Integer, Integer>> input2 =
+        DataStream<Tuple2<Integer, Integer>> input2 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
 
         input1.join(input2, JoinOperatorBase.JoinHint.REPARTITION_SORT_MERGE)
@@ -105,9 +105,9 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int maxTimeTillCanceled)
             throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple2<Integer, Integer>> input1 =
+        DataStream<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
-        DataSet<Tuple2<Integer, Integer>> input2 =
+        DataStream<Tuple2<Integer, Integer>> input2 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
 
         input1.join(input2, JoinOperatorBase.JoinHint.REPARTITION_SORT_MERGE)
@@ -125,8 +125,8 @@ public class JoinCancelingITCase extends CancelingTestBase {
     public void testCancelSortMatchWhileDoingHeavySorting() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         HeavyCompareGeneratorInputFormat input = new HeavyCompareGeneratorInputFormat(100);
-        DataSet<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
-        DataSet<Tuple2<HeavyCompare, Integer>> input2 = env.createInput(input);
+        DataStream<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
+        DataStream<Tuple2<HeavyCompare, Integer>> input2 = env.createInput(input);
 
         input1.join(input2, JoinOperatorBase.JoinHint.REPARTITION_SORT_MERGE)
                 .where(0)

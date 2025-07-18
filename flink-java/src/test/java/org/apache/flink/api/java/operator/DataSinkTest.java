@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.CompositeType;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -37,7 +37,7 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.fail;
 
-/** Tests for {@link DataSet#writeAsText(String)}. */
+/** Tests for {@link DataStream#writeAsText(String)}. */
 class DataSinkTest {
 
     // TUPLE DATA
@@ -66,7 +66,7 @@ class DataSinkTest {
     void testTupleSingleOrderIdx() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -81,7 +81,7 @@ class DataSinkTest {
     void testTupleTwoOrderIdx() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -98,7 +98,7 @@ class DataSinkTest {
     void testTupleSingleOrderExp() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -112,7 +112,7 @@ class DataSinkTest {
     void testTupleSingleOrderExpFull() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should not work
@@ -123,7 +123,7 @@ class DataSinkTest {
     void testTupleTwoOrderExp() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -140,7 +140,7 @@ class DataSinkTest {
     void testTupleTwoOrderMixed() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // should work
@@ -157,7 +157,7 @@ class DataSinkTest {
     void testFailTupleIndexOutOfBounds() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // must not work
@@ -173,7 +173,7 @@ class DataSinkTest {
     void testFailTupleInv() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
+        DataStream<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
         // must not work
@@ -189,7 +189,7 @@ class DataSinkTest {
     void testPrimitiveOrder() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.generateSequence(0, 2);
+        DataStream<Long> longDs = env.generateSequence(0, 2);
 
         // should work
         try {
@@ -203,7 +203,7 @@ class DataSinkTest {
     void testFailPrimitiveOrder1() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.generateSequence(0, 2);
+        DataStream<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
         assertThatThrownBy(
@@ -217,7 +217,7 @@ class DataSinkTest {
     void testFailPrimitiveOrder2() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.generateSequence(0, 2);
+        DataStream<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
         assertThatThrownBy(
@@ -231,7 +231,7 @@ class DataSinkTest {
     void testFailPrimitiveOrder3() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Long> longDs = env.generateSequence(0, 2);
+        DataStream<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
         assertThatThrownBy(
@@ -245,7 +245,7 @@ class DataSinkTest {
     void testPojoSingleOrder() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
+        DataStream<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // should work
         try {
@@ -259,7 +259,7 @@ class DataSinkTest {
     void testPojoTwoOrder() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
+        DataStream<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // should work
         try {
@@ -275,7 +275,7 @@ class DataSinkTest {
     void testFailPojoIdx() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
+        DataStream<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
         assertThatThrownBy(
@@ -289,7 +289,7 @@ class DataSinkTest {
     void testFailPojoInvalidField() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
+        DataStream<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
         assertThatThrownBy(
@@ -304,7 +304,7 @@ class DataSinkTest {
     void testPojoSingleOrderFull() {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
+        DataStream<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
         assertThatThrownBy(
@@ -321,7 +321,7 @@ class DataSinkTest {
         arrayData.add(new Object[0]);
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Object[]> pojoDs = env.fromCollection(arrayData);
+        DataStream<Object[]> pojoDs = env.fromCollection(arrayData);
 
         // must not work
         assertThatThrownBy(

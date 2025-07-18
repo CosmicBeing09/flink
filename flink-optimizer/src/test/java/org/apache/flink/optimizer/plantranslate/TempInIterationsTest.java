@@ -19,7 +19,7 @@
 package org.apache.flink.optimizer.plantranslate;
 
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -46,13 +46,13 @@ public class TempInIterationsTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple2<Long, Long>> input =
+        DataStream<Tuple2<Long, Long>> input =
                 env.readCsvFile("file:///does/not/exist").types(Long.class, Long.class);
 
         DeltaIteration<Tuple2<Long, Long>, Tuple2<Long, Long>> iteration =
                 input.iterateDelta(input, 1, 0);
 
-        DataSet<Tuple2<Long, Long>> update =
+        DataStream<Tuple2<Long, Long>> update =
                 iteration
                         .getWorkset()
                         .join(iteration.getSolutionSet())

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.Partitioner;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -53,7 +53,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
 
             data.partitionCustom(
@@ -88,7 +88,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
 
             data.partitionByRange(1)
@@ -133,7 +133,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
 
             PartitionOperator<Tuple2<Long, Long>> rangePartitioned = data.partitionByRange(1);

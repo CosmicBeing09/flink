@@ -20,7 +20,7 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -39,14 +39,14 @@ public class IterationTerminationWithTwoTails extends JavaProgramTestBaseJUnit4 
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(4);
 
-        DataSet<String> initialInput = env.fromElements("1", "2", "3", "4", "5").name("input");
+        DataStream<String> initialInput = env.fromElements("1", "2", "3", "4", "5").name("input");
 
         IterativeDataSet<String> iteration = initialInput.iterate(5).name("Loop");
 
-        DataSet<String> sumReduce =
+        DataStream<String> sumReduce =
                 iteration.reduceGroup(new SumReducer()).name("Compute sum (GroupReduce");
 
-        DataSet<String> terminationFilter =
+        DataStream<String> terminationFilter =
                 iteration
                         .filter(new TerminationFilter())
                         .name("Compute termination criterion (Map)");

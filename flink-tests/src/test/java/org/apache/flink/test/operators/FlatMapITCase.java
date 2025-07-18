@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
@@ -54,8 +54,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> nonPassingFlatMapDs = ds.flatMap(new FlatMapper1());
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> nonPassingFlatMapDs = ds.flatMap(new FlatMapper1());
 
         List<String> result = nonPassingFlatMapDs.collect();
 
@@ -83,8 +83,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> duplicatingFlatMapDs = ds.flatMap(new FlatMapper2());
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> duplicatingFlatMapDs = ds.flatMap(new FlatMapper2());
 
         List<String> result = duplicatingFlatMapDs.collect();
 
@@ -127,8 +127,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> varyingTuplesMapDs = ds.flatMap(new FlatMapper3());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> varyingTuplesMapDs = ds.flatMap(new FlatMapper3());
 
         List<Tuple3<Integer, Long, String>> result = varyingTuplesMapDs.collect();
 
@@ -182,8 +182,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> typeConversionFlatMapDs =
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> typeConversionFlatMapDs =
                 ds.flatMap(new FlatMapper4());
 
         List<Tuple3<Integer, Long, String>> result = typeConversionFlatMapDs.collect();
@@ -237,8 +237,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<String> typeConversionFlatMapDs = ds.flatMap(new FlatMapper5());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<String> typeConversionFlatMapDs = ds.flatMap(new FlatMapper5());
 
         List<String> result = typeConversionFlatMapDs.collect();
 
@@ -289,8 +289,8 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> inputObjFlatMapDs = ds.flatMap(new FlatMapper6());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> inputObjFlatMapDs = ds.flatMap(new FlatMapper6());
 
         List<Tuple3<Integer, Long, String>> result = inputObjFlatMapDs.collect();
 
@@ -355,10 +355,10 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> bcFlatMapDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> bcFlatMapDs =
                 ds.flatMap(new RichFlatMapper1()).withBroadcastSet(ints, "ints");
         List<Tuple3<Integer, Long, String>> result = bcFlatMapDs.collect();
 

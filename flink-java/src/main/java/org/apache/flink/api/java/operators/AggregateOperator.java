@@ -30,7 +30,7 @@ import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.aggregation.AggregationFunction;
 import org.apache.flink.api.java.aggregation.AggregationFunctionFactory;
 import org.apache.flink.api.java.aggregation.Aggregations;
@@ -67,7 +67,7 @@ public class AggregateOperator<IN> extends SingleInputOperator<IN, IN, Aggregate
 
     /** Non grouped aggregation. */
     public AggregateOperator(
-            DataSet<IN> input, Aggregations function, int field, String aggregateLocationName) {
+            DataStream<IN> input, Aggregations function, int field, String aggregateLocationName) {
         super(Preconditions.checkNotNull(input), input.getType());
         Preconditions.checkNotNull(function);
 

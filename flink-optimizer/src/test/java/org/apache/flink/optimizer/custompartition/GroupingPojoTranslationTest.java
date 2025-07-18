@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
@@ -45,7 +45,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
+            DataStream<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
             data.groupBy("a")
                     .withPartitioner(new TestPartitionerInt())
@@ -73,7 +73,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
+            DataStream<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
             data.groupBy("a")
                     .withPartitioner(new TestPartitionerInt())
@@ -101,7 +101,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
+            DataStream<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
 
             data.groupBy("a")
                     .withPartitioner(new TestPartitionerInt())
@@ -130,7 +130,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo4> data = env.fromElements(new Pojo4()).rebalance().setParallelism(4);
+            DataStream<Pojo4> data = env.fromElements(new Pojo4()).rebalance().setParallelism(4);
 
             data.groupBy("a")
                     .withPartitioner(new TestPartitionerInt())
@@ -160,7 +160,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
+            DataStream<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
             try {
                 data.groupBy("a").withPartitioner(new TestPartitionerLong());
@@ -178,7 +178,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
+            DataStream<Pojo3> data = env.fromElements(new Pojo3()).rebalance().setParallelism(4);
 
             try {
                 data.groupBy("a")
@@ -198,7 +198,7 @@ public class GroupingPojoTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
+            DataStream<Pojo2> data = env.fromElements(new Pojo2()).rebalance().setParallelism(4);
 
             try {
                 data.groupBy("a", "b").withPartitioner(new TestPartitionerInt());

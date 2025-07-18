@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.operators;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -29,7 +29,7 @@ import java.util.List;
 
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsTuples;
 
-/** Integration tests for {@link DataSet#project}. */
+/** Integration tests for {@link DataStream#project}. */
 public class ProjectITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
@@ -40,9 +40,9 @@ public class ProjectITCase extends JavaProgramTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple3<String, Long, Integer>> projDs = ds.project(3, 4, 2);
+        DataStream<Tuple3<String, Long, Integer>> projDs = ds.project(3, 4, 2);
         List<Tuple3<String, Long, Integer>> result = projDs.collect();
 
         String expectedResult =

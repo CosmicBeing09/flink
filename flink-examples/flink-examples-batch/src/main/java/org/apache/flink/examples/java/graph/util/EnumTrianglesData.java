@@ -18,7 +18,7 @@
 
 package org.apache.flink.examples.java.graph.util;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.examples.java.graph.util.EnumTrianglesDataTypes.Edge;
 
@@ -45,7 +45,7 @@ public class EnumTrianglesData {
         {7, 8}
     };
 
-    public static DataSet<EnumTrianglesDataTypes.Edge> getDefaultEdgeDataSet(
+    public static DataStream<Edge> getDefaultEdgeDataSet(
             ExecutionEnvironment env) {
 
         List<EnumTrianglesDataTypes.Edge> edges = new ArrayList<EnumTrianglesDataTypes.Edge>();

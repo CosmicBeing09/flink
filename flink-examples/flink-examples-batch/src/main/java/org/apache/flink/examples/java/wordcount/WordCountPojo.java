@@ -20,7 +20,7 @@ package org.apache.flink.examples.java.wordcount;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.FileSystem.WriteMode;
@@ -99,7 +99,7 @@ public class WordCountPojo {
         env.getConfig().setGlobalJobParameters(params);
 
         // get input data
-        DataSet<String> text;
+        DataStream<String> text;
         if (params.has("input")) {
             // read the text file from given input path
             text = env.readTextFile(params.get("input"));
@@ -110,7 +110,7 @@ public class WordCountPojo {
             text = WordCountData.getDefaultTextLineDataSet(env);
         }
 
-        DataSet<Word> counts =
+        DataStream<Word> counts =
                 // split up the lines into Word objects (with frequency = 1)
                 text.flatMap(new Tokenizer())
                         // group by the field word and sum up the frequency

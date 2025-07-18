@@ -20,7 +20,7 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
@@ -77,9 +77,9 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataSet<Tuple2<String, Integer>> input = env.fromCollection(REDUCE_DATA);
+        DataStream<Tuple2<String, Integer>> input = env.fromCollection(REDUCE_DATA);
 
-        DataSet<Tuple2<String, Integer>> result =
+        DataStream<Tuple2<String, Integer>> result =
                 input.groupBy(0)
                         .reduce(
                                 new ReduceFunction<Tuple2<String, Integer>>() {
@@ -107,9 +107,9 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataSet<Tuple2<String, Integer>> input = env.fromCollection(REDUCE_DATA);
+        DataStream<Tuple2<String, Integer>> input = env.fromCollection(REDUCE_DATA);
 
-        DataSet<Tuple2<String, Integer>> result =
+        DataStream<Tuple2<String, Integer>> result =
                 input.reduce(
                         new ReduceFunction<Tuple2<String, Integer>>() {
 
@@ -142,9 +142,9 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataSet<Tuple2<String, Integer>> input = env.fromCollection(GROUP_REDUCE_DATA);
+        DataStream<Tuple2<String, Integer>> input = env.fromCollection(GROUP_REDUCE_DATA);
 
-        DataSet<Tuple2<String, Integer>> result =
+        DataStream<Tuple2<String, Integer>> result =
                 input.groupBy(0)
                         .reduceGroup(
                                 new GroupReduceFunction<
@@ -196,9 +196,9 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
             env.getConfig().disableObjectReuse();
         }
 
-        DataSet<Tuple2<String, Integer>> input = env.fromCollection(GROUP_REDUCE_DATA);
+        DataStream<Tuple2<String, Integer>> input = env.fromCollection(GROUP_REDUCE_DATA);
 
-        DataSet<Tuple2<String, Integer>> result =
+        DataStream<Tuple2<String, Integer>> result =
                 input.reduceGroup(
                         new GroupReduceFunction<
                                 Tuple2<String, Integer>, Tuple2<String, Integer>>() {

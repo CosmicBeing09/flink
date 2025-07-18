@@ -26,16 +26,16 @@ import org.apache.flink.api.common.aggregators.AggregatorRegistry;
 import org.apache.flink.api.common.aggregators.ConvergenceCriterion;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.types.Value;
 
 /**
  * The IterativeDataSet represents the start of an iteration. It is created from the DataSet that
- * represents the initial solution set via the {@link DataSet#iterate(int)} method.
+ * represents the initial solution set via the {@link DataStream#iterate(int)} method.
  *
  * @param <T> The data type of set that is the input and feedback of the iteration.
- * @see DataSet#iterate(int)
+ * @see DataStream#iterate(int)
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -53,7 +53,7 @@ public class IterativeDataSet<T> extends SingleInputOperator<T, T, IterativeData
     public IterativeDataSet(
             ExecutionEnvironment context,
             TypeInformation<T> type,
-            DataSet<T> input,
+            DataStream<T> input,
             int maxIterations) {
         super(input, type);
         this.maxIterations = maxIterations;
@@ -67,9 +67,9 @@ public class IterativeDataSet<T> extends SingleInputOperator<T, T, IterativeData
      * @param iterationResult The data set that will be fed back to the next iteration.
      * @return The DataSet that represents the result of the iteration, after the computation has
      *     terminated.
-     * @see DataSet#iterate(int)
+     * @see DataStream#iterate(int)
      */
-    public DataSet<T> closeWith(DataSet<T> iterationResult) {
+    public DataStream<T> closeWith(DataStream<T> iterationResult) {
         return new BulkIterationResultSet<T>(
                 getExecutionEnvironment(), getType(), this, iterationResult);
     }
@@ -89,9 +89,9 @@ public class IterativeDataSet<T> extends SingleInputOperator<T, T, IterativeData
      *     is empty.
      * @return The DataSet that represents the result of the iteration, after the computation has
      *     terminated.
-     * @see DataSet#iterate(int)
+     * @see DataStream#iterate(int)
      */
-    public DataSet<T> closeWith(DataSet<T> iterationResult, DataSet<?> terminationCriterion) {
+    public DataStream<T> closeWith(DataStream<T> iterationResult, DataStream<?> terminationCriterion) {
         return new BulkIterationResultSet<T>(
                 getExecutionEnvironment(), getType(), this, iterationResult, terminationCriterion);
     }

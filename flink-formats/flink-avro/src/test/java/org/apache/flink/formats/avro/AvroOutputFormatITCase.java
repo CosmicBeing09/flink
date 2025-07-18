@@ -19,7 +19,7 @@
 package org.apache.flink.formats.avro;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.formats.avro.AvroOutputFormat.Codec;
@@ -72,13 +72,13 @@ public class AvroOutputFormatITCase extends JavaProgramTestBaseJUnit4 {
     protected void testProgram() throws Exception {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<String, Integer, String>> input =
+        DataStream<Tuple3<String, Integer, String>> input =
                 env.readCsvFile(inputPath)
                         .fieldDelimiter("|")
                         .types(String.class, Integer.class, String.class);
 
         // output the data with AvroOutputFormat for specific user type
-        DataSet<User> specificUser = input.map(new ConvertToUser());
+        DataStream<User> specificUser = input.map(new ConvertToUser());
         AvroOutputFormat<User> avroOutputFormat = new AvroOutputFormat<>(User.class);
         avroOutputFormat.setCodec(Codec.SNAPPY); // FLINK-4771: use a codec
         avroOutputFormat.setSchema(
@@ -86,7 +86,7 @@ public class AvroOutputFormatITCase extends JavaProgramTestBaseJUnit4 {
         specificUser.write(avroOutputFormat, outputPath1);
 
         // output the data with AvroOutputFormat for reflect user type
-        DataSet<ReflectiveUser> reflectiveUser = specificUser.map(new ConvertToReflective());
+        DataStream<ReflectiveUser> reflectiveUser = specificUser.map(new ConvertToReflective());
         reflectiveUser.write(new AvroOutputFormat<>(ReflectiveUser.class), outputPath2);
 
         env.execute();

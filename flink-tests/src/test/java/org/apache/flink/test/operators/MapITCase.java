@@ -21,7 +21,7 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.configuration.Configuration;
@@ -58,8 +58,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> identityMapDs = ds.map(new Mapper1());
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> identityMapDs = ds.map(new Mapper1());
 
         List<String> result = identityMapDs.collect();
 
@@ -89,8 +89,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
         Configuration configuration = Configuration.fromMap(Collections.singletonMap(key, value));
         env.getConfig().setGlobalJobParameters(configuration);
 
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> identityMapDs =
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> identityMapDs =
                 ds.map(
                         new RichMapFunction<String, String>() {
                             @Override
@@ -135,8 +135,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> identityMapDs = ds.map(new Mapper2());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> identityMapDs = ds.map(new Mapper2());
 
         List<Tuple3<Integer, Long, String>> result = identityMapDs.collect();
 
@@ -185,8 +185,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> typeConversionMapDs = ds.map(new Mapper3());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> typeConversionMapDs = ds.map(new Mapper3());
 
         List<Tuple3<Integer, Long, String>> result = typeConversionMapDs.collect();
 
@@ -237,8 +237,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<String> typeConversionMapDs = ds.map(new Mapper4());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<String> typeConversionMapDs = ds.map(new Mapper4());
 
         List<String> result = typeConversionMapDs.collect();
 
@@ -286,8 +286,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, String, Long>> tupleMapDs = ds.map(new Mapper5());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, String, Long>> tupleMapDs = ds.map(new Mapper5());
 
         List<Tuple3<Integer, String, Long>> result = tupleMapDs.collect();
 
@@ -339,8 +339,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<CustomType> customMapDs = ds.map(new Mapper6());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<CustomType> customMapDs = ds.map(new Mapper6());
 
         List<CustomType> result = customMapDs.collect();
 
@@ -391,8 +391,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> inputObjMapDs = ds.map(new Mapper7());
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> inputObjMapDs = ds.map(new Mapper7());
 
         List<Tuple3<Integer, Long, String>> result = inputObjMapDs.collect();
 
@@ -443,10 +443,10 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> bcMapDs =
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> bcMapDs =
                 ds.map(new RichMapper1()).withBroadcastSet(ints, "ints");
         List<Tuple3<Integer, Long, String>> result = bcMapDs.collect();
 
@@ -511,10 +511,10 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         Configuration conf = new Configuration();
         conf.set(getIntConfigOption(TEST_KEY), TEST_VALUE);
-        DataSet<Tuple3<Integer, Long, String>> bcMapDs =
+        DataStream<Tuple3<Integer, Long, String>> bcMapDs =
                 ds.map(new RichMapper2()).withParameters(conf);
         List<Tuple3<Integer, Long, String>> result = bcMapDs.collect();
 
@@ -537,8 +537,8 @@ public class MapITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testMapWithLambdas() throws Exception {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Integer> stringDs = env.fromElements(11, 12, 13, 14);
-        DataSet<String> mappedDs =
+        DataStream<Integer> stringDs = env.fromElements(11, 12, 13, 14);
+        DataStream<String> mappedDs =
                 stringDs.map(Object::toString)
                         .map(s -> s.replace("1", "2"))
                         .map(Trade::new)

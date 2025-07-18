@@ -23,7 +23,7 @@ import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Keys;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 
 /**
  * Grouping is an intermediate step for a transformation on a grouped DataSet.
@@ -40,7 +40,7 @@ import org.apache.flink.api.java.DataSet;
  * </ul>
  *
  * @param <T> The type of the elements of the grouped DataSet.
- * @see DataSet
+ * @see DataStream
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -51,13 +51,13 @@ import org.apache.flink.api.java.DataSet;
 @Public
 public abstract class Grouping<T> {
 
-    protected final DataSet<T> inputDataSet;
+    protected final DataStream<T> inputDataSet;
 
     protected final Keys<T> keys;
 
     protected Partitioner<?> customPartitioner;
 
-    public Grouping(DataSet<T> set, Keys<T> keys) {
+    public Grouping(DataStream<T> set, Keys<T> keys) {
         if (set == null || keys == null) {
             throw new NullPointerException();
         }
@@ -84,7 +84,7 @@ public abstract class Grouping<T> {
      * corresponds to the input of the {@code groupBy()} (because of the {@code getDataset()}).
      */
     @Internal
-    public DataSet<T> getInputDataSet() {
+    public DataStream<T> getInputDataSet() {
         return this.inputDataSet;
     }
 

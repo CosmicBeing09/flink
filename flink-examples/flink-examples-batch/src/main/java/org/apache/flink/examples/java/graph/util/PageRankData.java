@@ -18,7 +18,7 @@
 
 package org.apache.flink.examples.java.graph.util;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -65,7 +65,7 @@ public class PageRankData {
 
     private static int numPages = 15;
 
-    public static DataSet<Tuple2<Long, Long>> getDefaultEdgeDataSet(ExecutionEnvironment env) {
+    public static DataStream<Tuple2<Long, Long>> getDefaultEdgeDataSet(ExecutionEnvironment env) {
 
         List<Tuple2<Long, Long>> edges = new ArrayList<Tuple2<Long, Long>>();
         for (Object[] e : EDGES) {
@@ -74,7 +74,7 @@ public class PageRankData {
         return env.fromCollection(edges);
     }
 
-    public static DataSet<Long> getDefaultPagesDataSet(ExecutionEnvironment env) {
+    public static DataStream<Long> getDefaultPagesDataSet(ExecutionEnvironment env) {
         return env.generateSequence(1, 15);
     }
 

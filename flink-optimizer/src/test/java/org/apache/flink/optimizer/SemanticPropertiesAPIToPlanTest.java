@@ -26,7 +26,7 @@ import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldSet;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -51,7 +51,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
     @Test
     public void forwardFieldsTestMapReduce() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> set =
+        DataStream<Tuple3<Integer, Integer, Integer>> set =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         set =
                 set.map(new MockMapper())
@@ -127,9 +127,9 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
     @Test
     public void forwardFieldsTestJoin() {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Tuple3<Integer, Integer, Integer>> in1 =
+        DataStream<Tuple3<Integer, Integer, Integer>> in1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
-        DataSet<Tuple3<Integer, Integer, Integer>> in2 =
+        DataStream<Tuple3<Integer, Integer, Integer>> in2 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         in1 =
                 in1.map(new MockMapper())
@@ -143,7 +143,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
                         .groupBy(1)
                         .reduce(new MockReducer())
                         .withForwardedFields("f1->f2");
-        DataSet<Tuple3<Integer, Integer, Integer>> out =
+        DataStream<Tuple3<Integer, Integer, Integer>> out =
                 in1.join(in2).where(1).equalTo(2).with(new MockJoin());
 
         out.output(new DiscardingOutputFormat<Tuple3<Integer, Integer, Integer>>());

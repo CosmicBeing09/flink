@@ -24,7 +24,7 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -125,7 +125,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
         IterativeDataSet<Integer> iteration = initialSolutionSet.iterate(MAX_ITERATIONS);
 
         // register aggregator
@@ -136,7 +136,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         iteration.registerAggregationConvergenceCriterion(
                 NEGATIVE_ELEMENTS_AGGR, aggr, new NegativeElementsConvergenceCriterion());
 
-        DataSet<Integer> updatedDs = iteration.map(new SubtractOneMap());
+        DataStream<Integer> updatedDs = iteration.map(new SubtractOneMap());
         List<Integer> result = iteration.closeWith(updatedDs).collect();
         Collections.sort(result);
 
@@ -154,7 +154,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
         IterativeDataSet<Integer> iteration = initialSolutionSet.iterate(MAX_ITERATIONS);
 
         // register aggregator
@@ -165,7 +165,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         iteration.registerAggregationConvergenceCriterion(
                 NEGATIVE_ELEMENTS_AGGR, aggr, new NegativeElementsConvergenceCriterion());
 
-        DataSet<Integer> updatedDs = iteration.map(new SubtractOneMapWithParam());
+        DataStream<Integer> updatedDs = iteration.map(new SubtractOneMapWithParam());
         List<Integer> result = iteration.closeWith(updatedDs).collect();
         Collections.sort(result);
 
@@ -183,7 +183,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
         IterativeDataSet<Integer> iteration = initialSolutionSet.iterate(MAX_ITERATIONS);
 
         // register aggregator
@@ -194,7 +194,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         iteration.registerAggregationConvergenceCriterion(
                 NEGATIVE_ELEMENTS_AGGR, aggr, new NegativeElementsConvergenceCriterionWithParam(3));
 
-        DataSet<Integer> updatedDs = iteration.map(new SubtractOneMap());
+        DataStream<Integer> updatedDs = iteration.map(new SubtractOneMap());
         List<Integer> result = iteration.closeWith(updatedDs).collect();
         Collections.sort(result);
 
@@ -212,7 +212,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Tuple2<Integer, Integer>> initialSolutionSet =
+        DataStream<Tuple2<Integer, Integer>> initialSolutionSet =
                 CollectionDataSets.getIntegerDataSet(env).map(new TupleMakerMap());
 
         DeltaIteration<Tuple2<Integer, Integer>, Tuple2<Integer, Integer>> iteration =
@@ -222,17 +222,17 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         LongSumAggregator aggr = new LongSumAggregator();
         iteration.registerAggregator(NEGATIVE_ELEMENTS_AGGR, aggr);
 
-        DataSet<Tuple2<Integer, Integer>> updatedDs =
+        DataStream<Tuple2<Integer, Integer>> updatedDs =
                 iteration.getWorkset().map(new AggregateMapDelta());
 
-        DataSet<Tuple2<Integer, Integer>> newElements =
+        DataStream<Tuple2<Integer, Integer>> newElements =
                 updatedDs
                         .join(iteration.getSolutionSet())
                         .where(0)
                         .equalTo(0)
                         .flatMap(new UpdateFilter());
 
-        DataSet<Tuple2<Integer, Integer>> iterationRes =
+        DataStream<Tuple2<Integer, Integer>> iterationRes =
                 iteration.closeWith(newElements, newElements);
         List<Integer> result = iterationRes.map(new ProjectSecondMapper()).collect();
         Collections.sort(result);
@@ -251,7 +251,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Tuple2<Integer, Integer>> initialSolutionSet =
+        DataStream<Tuple2<Integer, Integer>> initialSolutionSet =
                 CollectionDataSets.getIntegerDataSet(env).map(new TupleMakerMap());
 
         DeltaIteration<Tuple2<Integer, Integer>, Tuple2<Integer, Integer>> iteration =
@@ -261,17 +261,17 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         LongSumAggregator aggr = new LongSumAggregatorWithParameter(4);
         iteration.registerAggregator(NEGATIVE_ELEMENTS_AGGR, aggr);
 
-        DataSet<Tuple2<Integer, Integer>> updatedDs =
+        DataStream<Tuple2<Integer, Integer>> updatedDs =
                 iteration.getWorkset().map(new AggregateMapDelta());
 
-        DataSet<Tuple2<Integer, Integer>> newElements =
+        DataStream<Tuple2<Integer, Integer>> newElements =
                 updatedDs
                         .join(iteration.getSolutionSet())
                         .where(0)
                         .equalTo(0)
                         .flatMap(new UpdateFilter());
 
-        DataSet<Tuple2<Integer, Integer>> iterationRes =
+        DataStream<Tuple2<Integer, Integer>> iterationRes =
                 iteration.closeWith(newElements, newElements);
         List<Integer> result = iterationRes.map(new ProjectSecondMapper()).collect();
         Collections.sort(result);
@@ -290,7 +290,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(parallelism);
 
-        DataSet<Tuple2<Integer, Integer>> initialSolutionSet =
+        DataStream<Tuple2<Integer, Integer>> initialSolutionSet =
                 CollectionDataSets.getIntegerDataSet(env).map(new TupleMakerMap());
 
         DeltaIteration<Tuple2<Integer, Integer>, Tuple2<Integer, Integer>> iteration =
@@ -304,13 +304,13 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
         iteration.registerAggregationConvergenceCriterion(
                 NEGATIVE_ELEMENTS_AGGR, aggr, new NegativeElementsConvergenceCriterionWithParam(3));
 
-        DataSet<Tuple2<Integer, Integer>> updatedDs =
+        DataStream<Tuple2<Integer, Integer>> updatedDs =
                 iteration.getWorkset().map(new AggregateAndSubtractOneDelta());
 
-        DataSet<Tuple2<Integer, Integer>> newElements =
+        DataStream<Tuple2<Integer, Integer>> newElements =
                 updatedDs.join(iteration.getSolutionSet()).where(0).equalTo(0).projectFirst(0, 1);
 
-        DataSet<Tuple2<Integer, Integer>> iterationRes =
+        DataStream<Tuple2<Integer, Integer>> iterationRes =
                 iteration.closeWith(newElements, newElements);
         List<Integer> result = iterationRes.map(new ProjectSecondMapper()).collect();
         Collections.sort(result);

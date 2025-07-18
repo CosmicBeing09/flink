@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.actions;
 
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
@@ -47,7 +47,7 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
 
         Integer[] input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
-        DataSet<Integer> data = env.fromElements(input);
+        DataStream<Integer> data = env.fromElements(input);
 
         // count
         long numEntries = data.count();
@@ -63,10 +63,10 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
         ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableObjectReuse();
 
-        DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
-        DataSet<Integer> data2 = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        DataStream<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        DataStream<Integer> data2 = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
-        DataSet<Tuple2<Integer, Integer>> data3 = data.cross(data2);
+        DataStream<Tuple2<Integer, Integer>> data3 = data.cross(data2);
 
         // count
         long numEntries = data3.count();

@@ -27,7 +27,7 @@ import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.SortPartitionOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -56,7 +56,7 @@ public class SortPartitionOperator<T> extends SingleInputOperator<T, T, SortPart
 
     private boolean useKeySelector;
 
-    private SortPartitionOperator(DataSet<T> dataSet, String sortLocationName) {
+    private SortPartitionOperator(DataStream<T> dataSet, String sortLocationName) {
         super(dataSet, dataSet.getType());
 
         keys = new ArrayList<>();
@@ -65,7 +65,7 @@ public class SortPartitionOperator<T> extends SingleInputOperator<T, T, SortPart
     }
 
     public SortPartitionOperator(
-            DataSet<T> dataSet, int sortField, Order sortOrder, String sortLocationName) {
+            DataStream<T> dataSet, int sortField, Order sortOrder, String sortLocationName) {
         this(dataSet, sortLocationName);
         this.useKeySelector = false;
 
@@ -76,7 +76,7 @@ public class SortPartitionOperator<T> extends SingleInputOperator<T, T, SortPart
     }
 
     public SortPartitionOperator(
-            DataSet<T> dataSet, String sortField, Order sortOrder, String sortLocationName) {
+            DataStream<T> dataSet, String sortField, Order sortOrder, String sortLocationName) {
         this(dataSet, sortLocationName);
         this.useKeySelector = false;
 
@@ -87,7 +87,7 @@ public class SortPartitionOperator<T> extends SingleInputOperator<T, T, SortPart
     }
 
     public <K> SortPartitionOperator(
-            DataSet<T> dataSet,
+            DataStream<T> dataSet,
             Keys.SelectorFunctionKeys<T, K> sortKey,
             Order sortOrder,
             String sortLocationName) {

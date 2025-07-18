@@ -20,7 +20,7 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -41,7 +41,7 @@ import java.util.List;
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsText;
 import static org.apache.flink.test.util.TestBaseUtils.compareResultAsTuples;
 
-/** Integration tests for {@link DataSet#distinct}. */
+/** Integration tests for {@link DataStream#distinct}. */
 @SuppressWarnings("serial")
 @RunWith(Parameterized.class)
 public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
@@ -58,8 +58,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct(0, 1, 2);
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct(0, 1, 2);
 
         List<Tuple3<Integer, Long, String>> result = distinctDs.collect();
 
@@ -77,9 +77,9 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple1<Integer>> distinctDs = ds.union(ds).distinct(0).project(0);
+        DataStream<Tuple1<Integer>> distinctDs = ds.union(ds).distinct(0).project(0);
 
         List<Tuple1<Integer>> result = distinctDs.collect();
 
@@ -96,9 +96,9 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple1<Integer>> reduceDs = ds.union(ds).distinct(new KeySelector1()).project(0);
+        DataStream<Tuple1<Integer>> reduceDs = ds.union(ds).distinct(new KeySelector1()).project(0);
 
         List<Tuple1<Integer>> result = reduceDs.collect();
 
@@ -125,8 +125,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
-        DataSet<Tuple1<Integer>> reduceDs = ds.distinct(new KeySelector3()).map(new Mapper3());
+        DataStream<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
+        DataStream<Tuple1<Integer>> reduceDs = ds.distinct(new KeySelector3()).map(new Mapper3());
 
         List<Tuple1<Integer>> result = reduceDs.collect();
 
@@ -159,8 +159,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
-        DataSet<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct();
+        DataStream<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
+        DataStream<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct();
 
         List<Tuple3<Integer, Long, String>> result = distinctDs.collect();
 
@@ -178,9 +178,9 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
-        DataSet<Tuple2<Integer, Long>> reduceDs = ds.distinct(new KeySelector2()).project(0, 4);
+        DataStream<Tuple2<Integer, Long>> reduceDs = ds.distinct(new KeySelector2()).project(0, 4);
 
         List<Tuple2<Integer, Long>> result = reduceDs.collect();
 
@@ -210,9 +210,9 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
+        DataStream<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
-        DataSet<Tuple1<Integer>> reduceDs = ds.union(ds).distinct("f0").project(0);
+        DataStream<Tuple1<Integer>> reduceDs = ds.union(ds).distinct("f0").project(0);
 
         List<Tuple1<Integer>> result = reduceDs.collect();
 
@@ -229,8 +229,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
-        DataSet<Integer> reduceDs = ds.distinct("nestedPojo.longNumber").map(new Mapper2());
+        DataStream<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
+        DataStream<Integer> reduceDs = ds.distinct("nestedPojo.longNumber").map(new Mapper2());
 
         List<Integer> result = reduceDs.collect();
 
@@ -253,8 +253,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-        DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
-        DataSet<Integer> reduceDs = ds.distinct().map(new Mapper1());
+        DataStream<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
+        DataStream<Integer> reduceDs = ds.distinct().map(new Mapper1());
 
         List<Integer> result = reduceDs.collect();
 
@@ -277,8 +277,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          */
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
-        DataSet<Integer> reduceDs = ds.distinct();
+        DataStream<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
+        DataStream<Integer> reduceDs = ds.distinct();
 
         List<Integer> result = reduceDs.collect();
 
@@ -294,8 +294,8 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          */
 
         final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
-        DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
-        DataSet<String> reduceDs = ds.union(ds).distinct("*");
+        DataStream<String> ds = CollectionDataSets.getStringDataSet(env);
+        DataStream<String> reduceDs = ds.union(ds).distinct("*");
 
         List<String> result = reduceDs.collect();
 

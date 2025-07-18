@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.dataexchange;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -175,7 +175,7 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
             // is 1.
             env.setParallelism(2);
 
-            DataSet<Tuple2<Long, Long>> data =
+            DataStream<Tuple2<Long, Long>> data =
                     env.fromElements(33L, 44L)
                             .map(
                                     new MapFunction<Long, Tuple2<Long, Long>>() {
@@ -185,11 +185,11 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
                                         }
                                     });
 
-            DataSet<Tuple2<Long, Long>> reduced =
+            DataStream<Tuple2<Long, Long>> reduced =
                     data.groupBy(0).reduce(new SelectOneReducer<Tuple2<Long, Long>>());
             reduced.output(new DiscardingOutputFormat<Tuple2<Long, Long>>()).name("reduceSink");
 
-            DataSet<Tuple2<Long, Long>> filtered =
+            DataStream<Tuple2<Long, Long>> filtered =
                     data.filter(
                             new FilterFunction<Tuple2<Long, Long>>() {
                                 @Override
@@ -198,7 +198,7 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
                                 }
                             });
 
-            DataSet<Tuple2<Long, Long>> joined =
+            DataStream<Tuple2<Long, Long>> joined =
                     reduced.join(filtered)
                             .where(1)
                             .equalTo(1)

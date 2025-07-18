@@ -30,7 +30,7 @@ import org.apache.flink.api.common.operators.UnaryOperatorInformation;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.functions.SemanticPropUtil;
 import org.apache.flink.api.java.operators.translation.PlanUnwrappingReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -66,7 +66,7 @@ public class ReduceOperator<IN> extends SingleInputUdfOperator<IN, IN, ReduceOpe
      * @param input
      * @param function
      */
-    public ReduceOperator(DataSet<IN> input, ReduceFunction<IN> function, String defaultName) {
+    public ReduceOperator(DataStream<IN> input, ReduceFunction<IN> function, String defaultName) {
         super(input, input.getType());
 
         this.function = function;

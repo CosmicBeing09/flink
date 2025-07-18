@@ -38,7 +38,7 @@ import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
 import org.apache.flink.api.common.operators.base.OuterJoinOperatorBase;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
@@ -86,12 +86,12 @@ import org.apache.flink.util.Preconditions;
 import java.util.Arrays;
 
 /**
- * A {@link DataSet} that is the result of a Join transformation.
+ * A {@link DataStream} that is the result of a Join transformation.
  *
  * @param <I1> The type of the first input DataSet of the Join transformation.
  * @param <I2> The type of the second input DataSet of the Join transformation.
  * @param <OUT> The type of the result of the Join transformation.
- * @see DataSet
+ * @see DataStream
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
  *     future Flink major version. You can still build your application in DataSet, but you should
  *     move to either the DataStream and/or Table API.
@@ -112,8 +112,8 @@ public abstract class JoinOperator<I1, I2, OUT>
     private Partitioner<?> customPartitioner;
 
     protected JoinOperator(
-            DataSet<I1> input1,
-            DataSet<I2> input2,
+            DataStream<I1> input1,
+            DataStream<I2> input2,
             Keys<I1> keys1,
             Keys<I2> keys2,
             TypeInformation<OUT> returnType,
@@ -224,13 +224,13 @@ public abstract class JoinOperator<I1, I2, OUT>
     /**
      * A Join transformation that applies a {@link JoinFunction} on each pair of joining elements.
      *
-     * <p>It also represents the {@link DataSet} that is the result of a Join transformation.
+     * <p>It also represents the {@link DataStream} that is the result of a Join transformation.
      *
      * @param <I1> The type of the first input DataSet of the Join transformation.
      * @param <I2> The type of the second input DataSet of the Join transformation.
      * @param <OUT> The type of the result of the Join transformation.
      * @see org.apache.flink.api.common.functions.RichFlatJoinFunction
-     * @see DataSet
+     * @see DataStream
      */
     @Public
     public static class EquiJoin<I1, I2, OUT> extends JoinOperator<I1, I2, OUT> {
@@ -246,8 +246,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         private final String joinLocationName;
 
         public EquiJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 FlatJoinFunction<I1, I2, OUT> function,
@@ -267,8 +267,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         }
 
         public EquiJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 FlatJoinFunction<I1, I2, OUT> generatedFunction,
@@ -290,8 +290,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         }
 
         public EquiJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 FlatJoinFunction<I1, I2, OUT> function,
@@ -310,8 +310,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         }
 
         public EquiJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 FlatJoinFunction<I1, I2, OUT> generatedFunction,
@@ -607,20 +607,20 @@ public abstract class JoinOperator<I1, I2, OUT>
     /**
      * A Join transformation that wraps pairs of joining elements into {@link Tuple2}.
      *
-     * <p>It also represents the {@link DataSet} that is the result of a Join transformation.
+     * <p>It also represents the {@link DataStream} that is the result of a Join transformation.
      *
      * @param <I1> The type of the first input DataSet of the Join transformation.
      * @param <I2> The type of the second input DataSet of the Join transformation.
      * @see Tuple2
-     * @see DataSet
+     * @see DataStream
      */
     @Public
     public static final class DefaultJoin<I1, I2> extends EquiJoin<I1, I2, Tuple2<I1, I2>>
             implements JoinFunctionAssigner<I1, I2> {
 
         public DefaultJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 JoinHint hint,
@@ -649,7 +649,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          * @return An EquiJoin that represents the joined result DataSet
          * @see org.apache.flink.api.common.functions.RichFlatJoinFunction
          * @see org.apache.flink.api.java.operators.JoinOperator.EquiJoin
-         * @see DataSet
+         * @see DataStream
          */
         public <R> EquiJoin<I1, I2, R> with(FlatJoinFunction<I1, I2, R> function) {
             if (function == null) {
@@ -727,7 +727,7 @@ public abstract class JoinOperator<I1, I2, OUT>
         /**
          * Applies a ProjectJoin transformation and projects the first join input
          *
-         * <p>If the first join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -744,7 +744,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectJoin which represents the projected join result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.JoinOperator.ProjectJoin
          */
         public <OUT extends Tuple> ProjectJoin<I1, I2, OUT> projectFirst(int... firstFieldIndexes) {
@@ -764,7 +764,7 @@ public abstract class JoinOperator<I1, I2, OUT>
         /**
          * Applies a ProjectJoin transformation and projects the second join input
          *
-         * <p>If the second join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the second join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the second join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -781,7 +781,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectJoin which represents the projected join result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.JoinOperator.ProjectJoin
          */
         public <OUT extends Tuple> ProjectJoin<I1, I2, OUT> projectSecond(
@@ -824,13 +824,13 @@ public abstract class JoinOperator<I1, I2, OUT>
      * A Join transformation that projects joining elements or fields of joining {@link Tuple
      * Tuples} into result {@link Tuple Tuples}.
      *
-     * <p>It also represents the {@link DataSet} that is the result of a Join transformation.
+     * <p>It also represents the {@link DataStream} that is the result of a Join transformation.
      *
      * @param <I1> The type of the first input DataSet of the Join transformation.
      * @param <I2> The type of the second input DataSet of the Join transformation.
      * @param <OUT> The type of the result of the Join transformation.
      * @see Tuple
-     * @see DataSet
+     * @see DataStream
      */
     @Public
     public static class ProjectJoin<I1, I2, OUT extends Tuple> extends EquiJoin<I1, I2, OUT> {
@@ -838,8 +838,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         private JoinProjection<I1, I2> joinProj;
 
         protected ProjectJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 JoinHint hint,
@@ -870,8 +870,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         }
 
         protected ProjectJoin(
-                DataSet<I1> input1,
-                DataSet<I2> input2,
+                DataStream<I1> input1,
+                DataStream<I2> input2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 JoinHint hint,
@@ -909,7 +909,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          * Continues a ProjectJoin transformation and adds fields of the first join input to the
          * projection.
          *
-         * <p>If the first join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -927,7 +927,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectJoin which represents the projected join result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.JoinOperator.ProjectJoin
          */
         @SuppressWarnings("hiding")
@@ -941,7 +941,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          * Continues a ProjectJoin transformation and adds fields of the second join input to the
          * projection.
          *
-         * <p>If the second join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the second join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the second join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -959,7 +959,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return A ProjectJoin which represents the projected join result.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          * @see org.apache.flink.api.java.operators.JoinOperator.ProjectJoin
          */
         @SuppressWarnings("hiding")
@@ -1091,7 +1091,7 @@ public abstract class JoinOperator<I1, I2, OUT>
      * Intermediate step of a Join transformation.
      *
      * <p>To continue the Join transformation, select the join key of the first input {@link
-     * DataSet} by calling {@link JoinOperatorSets#where(int...)} or {@link
+     * DataStream} by calling {@link JoinOperatorSets#where(int...)} or {@link
      * JoinOperatorSets#where(org.apache.flink.api.java.functions.KeySelector)}.
      *
      * @param <I1> The type of the first input DataSet of the Join transformation.
@@ -1100,11 +1100,11 @@ public abstract class JoinOperator<I1, I2, OUT>
     @Public
     public static final class JoinOperatorSets<I1, I2> extends JoinOperatorSetsBase<I1, I2> {
 
-        public JoinOperatorSets(DataSet<I1> input1, DataSet<I2> input2) {
+        public JoinOperatorSets(DataStream<I1> input1, DataStream<I2> input2) {
             super(input1, input2);
         }
 
-        public JoinOperatorSets(DataSet<I1> input1, DataSet<I2> input2, JoinHint hint) {
+        public JoinOperatorSets(DataStream<I1> input1, DataStream<I2> input2, JoinHint hint) {
             super(input1, input2, hint);
         }
 
@@ -1160,7 +1160,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          * Intermediate step of a Join transformation.
          *
          * <p>To continue the Join transformation, select the join key of the second input {@link
-         * DataSet} by calling {@link
+         * DataStream} by calling {@link
          * org.apache.flink.api.java.operators.JoinOperator.JoinOperatorSets.JoinOperatorSetsPredicate#equalTo(int...)}
          * or {@link
          * org.apache.flink.api.java.operators.JoinOperator.JoinOperatorSets.JoinOperatorSetsPredicate#equalTo(KeySelector)}.
@@ -1174,7 +1174,7 @@ public abstract class JoinOperator<I1, I2, OUT>
 
             /**
              * Continues a Join transformation and defines the {@link Tuple} fields of the second
-             * join {@link DataSet} that should be used as join keys.
+             * join {@link DataStream} that should be used as join keys.
              *
              * <p><b>Note: Fields can only be selected as join keys on Tuple DataSets.</b>
              *
@@ -1193,7 +1193,7 @@ public abstract class JoinOperator<I1, I2, OUT>
 
             /**
              * Continues a Join transformation and defines the fields of the second join {@link
-             * DataSet} that should be used as join keys.
+             * DataStream} that should be used as join keys.
              *
              * <p>The resulting {@link DefaultJoin} wraps each pair of joining elements into a
              * {@link Tuple2}, with the element of the first input being the first field of the
@@ -1209,7 +1209,7 @@ public abstract class JoinOperator<I1, I2, OUT>
 
             /**
              * Continues a Join transformation and defines a {@link KeySelector} function for the
-             * second join {@link DataSet}.
+             * second join {@link DataStream}.
              *
              * <p>The KeySelector function is called for each element of the second DataSet and
              * extracts a single key value on which the DataSet is joined.
@@ -1317,8 +1317,8 @@ public abstract class JoinOperator<I1, I2, OUT>
     @Internal
     private static final class JoinProjection<I1, I2> {
 
-        private final DataSet<I1> ds1;
-        private final DataSet<I2> ds2;
+        private final DataStream<I1> ds1;
+        private final DataStream<I2> ds2;
         private final Keys<I1> keys1;
         private final Keys<I2> keys2;
         private final JoinHint hint;
@@ -1330,8 +1330,8 @@ public abstract class JoinOperator<I1, I2, OUT>
         private final int numFieldsDs2;
 
         public JoinProjection(
-                DataSet<I1> ds1,
-                DataSet<I2> ds2,
+                DataStream<I1> ds1,
+                DataStream<I2> ds2,
                 Keys<I1> keys1,
                 Keys<I2> keys2,
                 JoinHint hint,
@@ -1424,7 +1424,7 @@ public abstract class JoinOperator<I1, I2, OUT>
         /**
          * Continues a ProjectJoin transformation and adds fields of the first join input.
          *
-         * <p>If the first join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the first join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the first join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -1439,7 +1439,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return An extended JoinProjection.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         protected JoinProjection<I1, I2> projectFirst(int... firstFieldIndexes) {
 
@@ -1496,7 +1496,7 @@ public abstract class JoinOperator<I1, I2, OUT>
         /**
          * Continues a ProjectJoin transformation and adds fields of the second join input.
          *
-         * <p>If the second join input is a {@link Tuple} {@link DataSet}, fields can be selected by
+         * <p>If the second join input is a {@link Tuple} {@link DataStream}, fields can be selected by
          * their index. If the second join input is not a Tuple DataSet, no parameters should be
          * passed.
          *
@@ -1511,7 +1511,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *     fields in the output tuple is defined by to the order of field indexes.
          * @return An extended JoinProjection.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         protected JoinProjection<I1, I2> projectSecond(int... secondFieldIndexes) {
 
@@ -1671,7 +1671,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0> ProjectJoin<I1, I2, Tuple1<T0>> projectTuple1() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -1695,7 +1695,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1> ProjectJoin<I1, I2, Tuple2<T0, T1>> projectTuple2() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -1719,7 +1719,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2> ProjectJoin<I1, I2, Tuple3<T0, T1, T2>> projectTuple3() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -1743,7 +1743,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3> ProjectJoin<I1, I2, Tuple4<T0, T1, T2, T3>> projectTuple4() {
             TypeInformation<?>[] fTypes = extractFieldTypes(fieldIndexes);
@@ -1768,7 +1768,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4>
                 ProjectJoin<I1, I2, Tuple5<T0, T1, T2, T3, T4>> projectTuple5() {
@@ -1794,7 +1794,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5>
                 ProjectJoin<I1, I2, Tuple6<T0, T1, T2, T3, T4, T5>> projectTuple6() {
@@ -1820,7 +1820,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6>
                 ProjectJoin<I1, I2, Tuple7<T0, T1, T2, T3, T4, T5, T6>> projectTuple7() {
@@ -1846,7 +1846,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7>
                 ProjectJoin<I1, I2, Tuple8<T0, T1, T2, T3, T4, T5, T6, T7>> projectTuple8() {
@@ -1872,7 +1872,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8>
                 ProjectJoin<I1, I2, Tuple9<T0, T1, T2, T3, T4, T5, T6, T7, T8>> projectTuple9() {
@@ -1898,7 +1898,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>
                 ProjectJoin<I1, I2, Tuple10<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9>>
@@ -1925,7 +1925,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>
                 ProjectJoin<I1, I2, Tuple11<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10>>
@@ -1952,7 +1952,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>
                 ProjectJoin<I1, I2, Tuple12<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>>
@@ -1981,7 +1981,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>
                 ProjectJoin<I1, I2, Tuple13<T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>>
@@ -2010,7 +2010,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>
                 ProjectJoin<
@@ -2057,7 +2057,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>
                 ProjectJoin<
@@ -2122,7 +2122,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>
                 ProjectJoin<
@@ -2206,7 +2206,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>
                 ProjectJoin<
@@ -2310,7 +2310,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17>
                 ProjectJoin<
@@ -2418,7 +2418,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <T0, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16, T17, T18>
                 ProjectJoin<
@@ -2530,7 +2530,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -2666,7 +2666,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -2807,7 +2807,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -2953,7 +2953,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -3104,7 +3104,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,
@@ -3260,7 +3260,7 @@ public abstract class JoinOperator<I1, I2, OUT>
          *
          * @return The projected data set.
          * @see Tuple
-         * @see DataSet
+         * @see DataStream
          */
         public <
                         T0,

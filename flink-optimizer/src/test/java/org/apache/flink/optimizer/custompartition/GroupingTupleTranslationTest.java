@@ -22,7 +22,7 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
-import org.apache.flink.api.java.DataSet;
+import org.apache.flink.api.java.DataStream;
 import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -48,7 +48,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -79,7 +79,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -110,7 +110,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -141,7 +141,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -174,7 +174,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple4<Integer, Integer, Integer, Integer>> data =
+            DataStream<Tuple4<Integer, Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple4<Integer, Integer, Integer, Integer>(0, 0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -211,7 +211,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple2<Integer, Integer>> data =
+            DataStream<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -232,7 +232,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
@@ -255,7 +255,7 @@ public class GroupingTupleTranslationTest extends CompilerTestBase {
         try {
             ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
 
-            DataSet<Tuple3<Integer, Integer, Integer>> data =
+            DataStream<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
                             .rebalance()
                             .setParallelism(4);
