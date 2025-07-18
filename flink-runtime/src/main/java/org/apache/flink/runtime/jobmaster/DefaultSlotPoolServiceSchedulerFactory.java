@@ -160,7 +160,7 @@ public final class DefaultSlotPoolServiceSchedulerFactory
 
         final Duration jobSubmissionRpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
         final Duration schedulerSlotIdleTimeout = configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT);
-        final Duration batchSlotTimeout = configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT);
+        final Duration batchSlotTimeout = configuration.get(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT);
 
         final SlotPoolServiceFactory slotPoolServiceFactory;
         final SchedulerNGFactory schedulerNGFactory;

@@ -176,7 +176,7 @@ public class HiveTestUtils {
         settings.getConfiguration()
                 .set(JobManagerOptions.SCHEDULER, JobManagerOptions.SchedulerType.AdaptiveBatch);
         settings.getConfiguration()
-                .set(BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM, 4);
+                .set(BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM, 4);
         settings.getConfiguration()
                 .set(
                         BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_AVG_DATA_VOLUME_PER_TASK,

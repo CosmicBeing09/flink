@@ -431,7 +431,7 @@ public class JobManagerOptions {
 
     /** The timeout in milliseconds for requesting a slot from Slot Pool. */
     @Documentation.Section(Documentation.Sections.EXPERT_SCHEDULING)
-    public static final ConfigOption<Duration> JOB_MANAGER_SLOT_REQUEST_TIMEOUT =
+    public static final ConfigOption<Duration> JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT =
             key("slot.request.timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(5L * 60L * 1000L))

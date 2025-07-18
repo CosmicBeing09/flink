@@ -58,7 +58,7 @@ public class BatchExecutionOptions {
                                     .build());
 
     @Documentation.Section({Documentation.Sections.EXPERT_SCHEDULING})
-    public static final ConfigOption<Integer> ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM =
+    public static final ConfigOption<Integer> ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM =
             key("execution.batch.adaptive.auto-parallelism.max-parallelism")
                     .intType()
                     .defaultValue(128)
@@ -92,7 +92,7 @@ public class BatchExecutionOptions {
                                                             JobManagerOptions.SchedulerType
                                                                     .AdaptiveBatch.name()),
                                                     code(
-                                                            ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM
+                                                            ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM
                                                                     .key()))
                                             .build());
 
@@ -113,8 +113,8 @@ public class BatchExecutionOptions {
                                             code(
                                                     JobManagerOptions.SchedulerType.AdaptiveBatch
                                                             .name()),
-                                            code(ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.key()),
-                                            code(ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.key()),
+                                            code(ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.key()),
+                                            code(ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.key()),
                                             code(DEFAULT_PARALLELISM.key()))
                                     .build());
 

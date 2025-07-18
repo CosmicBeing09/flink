@@ -108,7 +108,7 @@ class MiniClusterITCase {
         final Duration slotRequestTimeout = Duration.ofMillis(100);
 
         // this triggers the failure for the default scheduler
-        config.set(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
         // this triggers the failure for the adaptive scheduler
         config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, slotRequestTimeout);
 
@@ -131,7 +131,7 @@ class MiniClusterITCase {
         final Duration slotRequestTimeout = Duration.ofNanos(Long.MAX_VALUE);
 
         // this triggers the failure for the default scheduler
-        config.set(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
+        config.set(JobManagerOptions.JOB_MANAGER_JOB_SUBMISSION_SLOT_REQUEST_TIMEOUT, slotRequestTimeout);
         // this triggers the failure for the adaptive scheduler
         config.set(JobManagerOptions.RESOURCE_WAIT_TIMEOUT, slotRequestTimeout);
 

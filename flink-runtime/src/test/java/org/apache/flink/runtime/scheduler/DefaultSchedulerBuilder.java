@@ -114,7 +114,7 @@ public class DefaultSchedulerBuilder {
     private VertexParallelismAndInputInfosDecider vertexParallelismAndInputInfosDecider =
             createCustomParallelismDecider(1);
     private int defaultMaxParallelism =
-            BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM.defaultValue();
+            BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM.defaultValue();
     private BlocklistOperations blocklistOperations = ignore -> {};
     private HybridPartitionDataConsumeConstraint hybridPartitionDataConsumeConstraint =
             HybridPartitionDataConsumeConstraint.UNFINISHED_PRODUCERS;
@@ -338,7 +338,7 @@ public class DefaultSchedulerBuilder {
         jobMasterConfiguration.set(
                 BatchExecutionOptions.SPECULATIVE_ENABLED, enableSpeculativeExecution);
         jobMasterConfiguration.set(
-                BatchExecutionOptions.ADAPTIVE_AUTO_PARALLELISM_MAX_PARALLELISM,
+                BatchExecutionOptions.ADAPTIVE_BATCH_SCHEDULER_MAX_PARALLELISM,
                 defaultMaxParallelism);
         if (enableSpeculativeExecution) {
             jobMasterConfiguration.set(
