@@ -128,7 +128,7 @@ public class ExecutionTimeBasedSlowTaskDetector implements SlowTaskDetector {
                             try {
                                 listener.notifySlowTasks(findSlowTasks(executionGraph));
                             } catch (Throwable throwable) {
-                                fatalErrorHandler.onFatalError(throwable);
+                                fatalErrorHandler.handleFatalError(throwable);
                             }
                             scheduleTask(executionGraph, listener, mainThreadExecutor);
                         },

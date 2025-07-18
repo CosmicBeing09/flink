@@ -59,7 +59,7 @@ public class MetricOptions {
      * metrics.reporter.bar.port = 1337
      * }</pre>
      */
-    public static final ConfigOption<String> REPORTERS_LIST =
+    public static final ConfigOption<String> METRICS_REPORTERS_LIST =
             key("metrics.reporters")
                     .stringType()
                     .noDefaultValue()

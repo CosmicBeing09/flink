@@ -2445,7 +2445,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
         }
 
         // The fatal error handler implementation should make sure that this call is non-blocking
-        fatalErrorHandler.onFatalError(t);
+        fatalErrorHandler.handleFatalError(t);
     }
 
     // ------------------------------------------------------------------------
@@ -2641,7 +2641,7 @@ public class TaskExecutor extends RpcEndpoint implements TaskExecutorGateway {
 
             // The fatal error handler implementation should make sure that this call is
             // non-blocking
-            fatalErrorHandler.onFatalError(cause);
+            fatalErrorHandler.handleFatalError(cause);
         }
 
         @Override

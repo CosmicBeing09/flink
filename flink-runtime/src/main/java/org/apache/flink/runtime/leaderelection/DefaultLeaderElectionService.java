@@ -563,7 +563,7 @@ public class DefaultLeaderElectionService extends DefaultLeaderElection.ParentSe
     private void forwardErrorToLeaderContender(Throwable t) {
         synchronized (lock) {
             if (leaderContenderRegistry.isEmpty()) {
-                fallbackErrorHandler.onFatalError(t);
+                fallbackErrorHandler.handleFatalError(t);
                 return;
             }
 

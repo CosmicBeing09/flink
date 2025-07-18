@@ -70,13 +70,13 @@ public class AdaptiveSchedulerBuilder {
 
     @Nullable private JobResourceRequirements jobResourceRequirements;
 
-    private Configuration jobMasterConfiguration = new Configuration();
+    private Configuration schedulerConfiguration = new Configuration();
     private ClassLoader userCodeLoader = ClassLoader.getSystemClassLoader();
     private CheckpointsCleaner checkpointsCleaner = new CheckpointsCleaner();
     private CheckpointRecoveryFactory checkpointRecoveryFactory =
             new StandaloneCheckpointRecoveryFactory();
     private DeclarativeSlotPool declarativeSlotPool;
-    private Duration rpcTimeout = DEFAULT_TIMEOUT;
+    private Duration remoteProcedureCallTimeout = DEFAULT_TIMEOUT;
     private BlobWriter blobWriter = VoidBlobWriter.getInstance();
     private JobManagerJobMetricGroup jobManagerJobMetricGroup =
             UnregisteredMetricGroups.createUnregisteredJobManagerJobMetricGroup();
@@ -119,7 +119,7 @@ public class AdaptiveSchedulerBuilder {
                         new DefaultAllocatedSlotPool(),
                         ignored -> {},
                         DEFAULT_TIMEOUT,
-                        rpcTimeout,
+                        remoteProcedureCallTimeout,
                         Duration.ZERO,
                         mainThreadExecutor);
         this.executorService = executorService;
@@ -133,13 +133,13 @@ public class AdaptiveSchedulerBuilder {
 
     public AdaptiveSchedulerBuilder setJobMasterConfiguration(
             final Configuration jobMasterConfiguration) {
-        this.jobMasterConfiguration = jobMasterConfiguration;
+        this.schedulerConfiguration = jobMasterConfiguration;
         return this;
     }
 
     public AdaptiveSchedulerBuilder withConfigurationOverride(
             Function<Configuration, Configuration> modifyFn) {
-        this.jobMasterConfiguration = modifyFn.apply(jobMasterConfiguration);
+        this.schedulerConfiguration = modifyFn.apply(schedulerConfiguration);
         return this;
     }
 
@@ -161,7 +161,7 @@ public class AdaptiveSchedulerBuilder {
     }
 
     public AdaptiveSchedulerBuilder setRpcTimeout(final Duration rpcTimeout) {
-        this.rpcTimeout = rpcTimeout;
+        this.remoteProcedureCallTimeout = rpcTimeout;
         return this;
     }
 
@@ -246,19 +246,19 @@ public class AdaptiveSchedulerBuilder {
     public AdaptiveScheduler build() throws Exception {
         final ExecutionGraphFactory executionGraphFactory =
                 new DefaultExecutionGraphFactory(
-                        jobMasterConfiguration,
+                        schedulerConfiguration,
                         userCodeLoader,
                         new DefaultExecutionDeploymentTracker(),
                         executorService,
                         executorService,
-                        rpcTimeout,
+                        remoteProcedureCallTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
                         shuffleMaster,
                         partitionTracker);
 
         final AdaptiveScheduler.Settings settings =
-                AdaptiveScheduler.Settings.of(jobMasterConfiguration);
+                AdaptiveScheduler.Settings.of(schedulerConfiguration);
         return new AdaptiveScheduler(
                 settings,
                 stateTransitionManagerFactory == null
@@ -267,12 +267,12 @@ public class AdaptiveSchedulerBuilder {
                 checkpointStatsTrackerFactory,
                 jobGraph,
                 jobResourceRequirements,
-                jobMasterConfiguration,
+                schedulerConfiguration,
                 declarativeSlotPool,
                 slotAllocator == null
                         ? AdaptiveSchedulerFactory.createSlotSharingSlotAllocator(
                                 declarativeSlotPool,
-                                jobMasterConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY))
+                                schedulerConfiguration.get(StateRecoveryOptions.LOCAL_RECOVERY))
                         : slotAllocator,
                 executorService,
                 userCodeLoader,

@@ -51,12 +51,12 @@ public class FixedDelayRestartBackoffTimeStrategy implements RestartBackoffTimeS
     }
 
     @Override
-    public boolean canRestart() {
+    public boolean isRestartAllowed() {
         return currentRestartAttempt <= maxNumberRestartAttempts;
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartDelayMillis() {
         return backoffTimeMS;
     }
 

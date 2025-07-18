@@ -135,7 +135,7 @@ public class DefaultScheduler extends SchedulerBase implements SchedulerOperatio
             final ExecutionGraphFactory executionGraphFactory,
             final ShuffleMaster<?> shuffleMaster,
             final Duration rpcTimeout,
-            final VertexParallelismStore vertexParallelismStore,
+            final VertexMaxParallelismRegistry vertexParallelismStore,
             final ExecutionDeployer.Factory executionDeployerFactory)
             throws Exception {
 

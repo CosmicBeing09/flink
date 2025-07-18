@@ -206,7 +206,7 @@ class ExecutingTest {
                             .build(ctx);
 
             assertThat(rescaleTriggered).isFalse();
-            testInstance.onCompletedCheckpoint();
+            testInstance.onCheckpointCompleted();
             assertThat(rescaleTriggered).isTrue();
         }
     }
@@ -234,7 +234,7 @@ class ExecutingTest {
 
                 // trigger an initial failed checkpoint event to show that the counting only starts
                 // with the subsequent change event
-                testInstance.onFailedCheckpoint();
+                testInstance.onCheckpointFailed();
 
                 // trigger change
                 testInstance.onNewResourceRequirements();
@@ -245,7 +245,7 @@ class ExecutingTest {
                                     "No rescale operation should have been triggered for iteration #%d, yet.",
                                     rescaleIteration)
                             .hasValue(rescaleIteration - 1);
-                    testInstance.onFailedCheckpoint();
+                    testInstance.onCheckpointFailed();
                 }
 
                 assertThat(rescaleTriggerCount)
@@ -276,19 +276,19 @@ class ExecutingTest {
 
             // trigger an initial failed checkpoint event to show that the counting only starts with
             // the subsequent change event
-            testInstance.onFailedCheckpoint();
+            testInstance.onCheckpointFailed();
 
             // trigger change
             testInstance.onNewResourcesAvailable();
 
             IntStream.range(0, rescaleOnFailedCheckpointsCount - 1)
-                    .forEach(ignored -> testInstance.onFailedCheckpoint());
+                    .forEach(ignored -> testInstance.onCheckpointFailed());
 
             assertThat(rescaleTriggeredCount)
                     .as("No rescaling should have been trigger, yet.")
                     .hasValue(0);
 
-            testInstance.onCompletedCheckpoint();
+            testInstance.onCheckpointCompleted();
 
             // trigger change
             testInstance.onNewResourceRequirements();
@@ -298,14 +298,14 @@ class ExecutingTest {
                     .hasValue(1);
 
             IntStream.range(0, rescaleOnFailedCheckpointsCount - 1)
-                    .forEach(ignored -> testInstance.onFailedCheckpoint());
+                    .forEach(ignored -> testInstance.onCheckpointFailed());
 
             assertThat(rescaleTriggeredCount)
                     .as(
                             "No additional rescaling should have been trigger by any subsequent failed checkpoint, yet.")
                     .hasValue(1);
 
-            testInstance.onFailedCheckpoint();
+            testInstance.onCheckpointFailed();
 
             assertThat(rescaleTriggeredCount)
                     .as("The previous failed checkpoint should have triggered the rescale.")

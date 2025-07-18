@@ -25,7 +25,7 @@ public enum DirectlyFailingFatalErrorHandler implements FatalErrorHandler {
     INSTANCE;
 
     @Override
-    public void onFatalError(Throwable exception) {
+    public void handleFatalError(Throwable exception) {
         throw new FlinkRuntimeException("Could not handle the fatal error, failing", exception);
     }
 }

@@ -33,12 +33,12 @@ public interface SlotAllocator {
      * @param vertices vertices to schedule
      * @return required resources
      */
-    ResourceCounter calculateRequiredSlots(Iterable<JobInformation.VertexInformation> vertices);
+    ResourceCounter calculateResourceRequirements(Iterable<JobInformation.VertexInformation> vertices);
 
     /**
      * Determines the parallelism at which the vertices could be scheduled given the collection of
      * slots. This method may be called with any number of slots providing any amount of resources,
-     * irrespective of what {@link #calculateRequiredSlots(Iterable)} returned.
+     * irrespective of what {@link #calculateResourceRequirements(Iterable)} returned.
      *
      * <p>If a {@link VertexParallelism} is returned then it covers all vertices contained in the
      * given job information.
@@ -52,11 +52,11 @@ public interface SlotAllocator {
      *     how the vertices could be assigned to slots, if all vertices could be run with the given
      *     slots
      */
-    Optional<VertexParallelism> determineParallelism(
+    Optional<VertexParallelism> determineVertexParallelism(
             JobInformation jobInformation, Collection<? extends SlotInfo> slots);
 
     /**
-     * Same as {@link #determineParallelism(JobInformation, Collection)} but additionally determine
+     * Same as {@link #determineVertexParallelism(JobInformation, Collection)} but additionally determine
      * assignment of slots to execution slot sharing groups.
      */
     Optional<JobSchedulingPlan> determineParallelismAndCalculateAssignment(

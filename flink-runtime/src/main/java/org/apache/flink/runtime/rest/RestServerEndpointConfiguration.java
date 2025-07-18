@@ -167,7 +167,7 @@ public final class RestServerEndpointConfiguration {
 
         final Path uploadDir =
                 Paths.get(
-                        config.get(WebOptions.UPLOAD_DIR, config.get(WebOptions.TMP_DIR)),
+                        config.get(WebOptions.UPLOAD_DIR, config.get(WebOptions.WEB_TEMP_DIRECTORY)),
                         "flink-web-upload");
 
         final int maxContentLength = config.get(RestOptions.SERVER_MAX_CONTENT_LENGTH);

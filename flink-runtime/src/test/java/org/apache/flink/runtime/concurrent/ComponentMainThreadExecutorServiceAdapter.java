@@ -83,7 +83,7 @@ public class ComponentMainThreadExecutorServiceAdapter implements ComponentMainT
     }
 
     @Override
-    public void assertRunningInMainThread() {
+    public void ensureMainThreadExecution() {
         mainThreadCheck.run();
     }
 

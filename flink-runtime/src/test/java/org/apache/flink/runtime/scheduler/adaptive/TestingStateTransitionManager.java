@@ -42,12 +42,12 @@ public class TestingStateTransitionManager implements StateTransitionManager {
     }
 
     @Override
-    public void onChange() {
+    public void onEnvironmentChange() {
         this.onChangeRunnable.run();
     }
 
     @Override
-    public void onTrigger() {
+    public void verifyAndTriggerTransition() {
         this.onTriggerRunnable.run();
     }
 }

@@ -49,7 +49,7 @@ public class TestingLeaderRetrievalDriver implements LeaderRetrievalDriver {
     }
 
     public void onFatalError(Throwable throwable) {
-        fatalErrorHandler.onFatalError(throwable);
+        fatalErrorHandler.handleFatalError(throwable);
     }
 
     /** Factory for create {@link TestingLeaderRetrievalDriver}. */

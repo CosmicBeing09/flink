@@ -151,11 +151,11 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     protected final InputsLocationsRetriever inputsLocationsRetriever;
 
-    private final CompletedCheckpointStore completedCheckpointStore;
+    private final CompletedCheckpointStore checkpointStore;
 
     private final CheckpointsCleaner checkpointsCleaner;
 
-    private final CheckpointIDCounter checkpointIdCounter;
+    private final CheckpointIDCounter checkpointIdGenerator;
 
     protected final JobManagerJobMetricGroup jobManagerJobMetricGroup;
 
@@ -194,7 +194,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final ComponentMainThreadExecutor mainThreadExecutor,
             final JobStatusListener jobStatusListener,
             final ExecutionGraphFactory executionGraphFactory,
-            final VertexParallelismStore vertexParallelismStore)
+            final VertexMaxParallelismRegistry vertexParallelismStore)
             throws Exception {
 
         this.log = checkNotNull(log);
@@ -207,14 +207,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
         this.mainThreadExecutor = mainThreadExecutor;
 
         this.checkpointsCleaner = checkpointsCleaner;
-        this.completedCheckpointStore =
+        this.checkpointStore =
                 SchedulerUtils.createCompletedCheckpointStoreIfCheckpointingIsEnabled(
                         jobGraph,
                         jobMasterConfiguration,
                         checkNotNull(checkpointRecoveryFactory),
                         ioExecutor,
                         log);
-        this.checkpointIdCounter =
+        this.checkpointIdGenerator =
                 SchedulerUtils.createCheckpointIDCounterIfCheckpointingIsEnabled(
                         jobGraph, checkNotNull(checkpointRecoveryFactory));
 
@@ -233,9 +233,9 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                                         jobManagerJobMetricGroup));
         this.executionGraph =
                 createAndRestoreExecutionGraph(
-                        completedCheckpointStore,
+                        checkpointStore,
                         checkpointsCleaner,
-                        checkpointIdCounter,
+                        checkpointIdGenerator,
                         checkpointStatsTracker,
                         initializationTimestamp,
                         mainThreadExecutor,
@@ -269,13 +269,13 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
         Exception exception = null;
 
         try {
-            completedCheckpointStore.shutdown(jobStatus, checkpointsCleaner);
+            checkpointStore.shutdown(jobStatus, checkpointsCleaner);
         } catch (Exception e) {
             exception = e;
         }
 
         try {
-            checkpointIdCounter.shutdown(jobStatus).get();
+            checkpointIdGenerator.shutdown(jobStatus).get();
         } catch (Exception e) {
             exception = ExceptionUtils.firstOrSuppressed(e, exception);
         }
@@ -303,14 +303,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 normalizeParallelism(vertex.getParallelism()));
     }
 
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices, Function<JobVertex, Integer> defaultMaxParallelismFunc) {
         return computeVertexParallelismStore(
                 vertices, defaultMaxParallelismFunc, SchedulerBase::normalizeParallelism);
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all given vertices, which will set defaults
+     * Compute the {@link VertexMaxParallelismRegistry} for all given vertices, which will set defaults
      * and ensure that the returned store contains valid parallelisms, with a custom function for
      * default max parallelism calculation and a custom function for normalizing vertex parallelism.
      *
@@ -320,7 +320,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
      * @param normalizeParallelismFunc a function for normalizing vertex parallelism
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices,
             Function<JobVertex, Integer> defaultMaxParallelismFunc,
             Function<Integer, Integer> normalizeParallelismFunc) {
@@ -357,25 +357,25 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all given vertices, which will set defaults
+     * Compute the {@link VertexMaxParallelismRegistry} for all given vertices, which will set defaults
      * and ensure that the returned store contains valid parallelisms.
      *
      * @param vertices the vertices to compute parallelism for
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices) {
         return computeVertexParallelismStore(vertices, SchedulerBase::getDefaultMaxParallelism);
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all vertices of a given job graph, which will
+     * Compute the {@link VertexMaxParallelismRegistry} for all vertices of a given job graph, which will
      * set defaults and ensure that the returned store contains valid parallelisms.
      *
      * @param jobGraph the job graph to retrieve vertices from
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(JobGraph jobGraph) {
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(JobGraph jobGraph) {
         return computeVertexParallelismStore(jobGraph.getVertices());
     }
 
@@ -387,7 +387,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             long initializationTimestamp,
             ComponentMainThreadExecutor mainThreadExecutor,
             JobStatusListener jobStatusListener,
-            VertexParallelismStore vertexParallelismStore)
+            VertexMaxParallelismRegistry vertexParallelismStore)
             throws Exception {
 
         final ExecutionGraph newExecutionGraph =
@@ -636,7 +636,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public final void startScheduling() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         registerJobMetrics(
                 jobManagerJobMetricGroup,
                 executionGraph,
@@ -674,7 +674,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<Void> closeAsync() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         final FlinkException cause = new FlinkException("Scheduler is being stopped.");
 
@@ -697,7 +697,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void cancel() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         incrementVersionsOfAllVertices();
         cancelAllPendingSlotRequestsInternal();
@@ -809,7 +809,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public SerializedInputSplit requestNextInputSplit(
             JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return executionGraphHandler.requestNextInputSplit(vertexID, executionAttempt);
     }
@@ -820,7 +820,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final ResultPartitionID resultPartitionId)
             throws PartitionProducerDisposedException {
 
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return executionGraphHandler.requestPartitionState(intermediateResultId, resultPartitionId);
     }
@@ -832,14 +832,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public ExecutionGraphInfo requestJob() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return new ExecutionGraphInfo(
                 ArchivedExecutionGraph.createFrom(executionGraph), getExceptionHistory());
     }
 
     @Override
     public CheckpointStatsSnapshot requestCheckpointStats() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return executionGraph.getCheckpointStatsSnapshot();
     }
 
@@ -851,7 +851,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public KvStateLocation requestKvStateLocation(final JobID jobId, final String registrationName)
             throws UnknownKvStateLocation, FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return kvStateHandler.requestKvStateLocation(jobId, registrationName);
     }
@@ -865,7 +865,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final KvStateID kvStateId,
             final InetSocketAddress kvStateServerAddress)
             throws FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         kvStateHandler.notifyKvStateRegistered(
                 jobId,
@@ -883,7 +883,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final KeyGroupRange keyGroupRange,
             final String registrationName)
             throws FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         kvStateHandler.notifyKvStateUnregistered(
                 jobId, jobVertexId, keyGroupRange, registrationName);
@@ -891,7 +891,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void updateAccumulators(final AccumulatorSnapshot accumulatorSnapshot) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         executionGraph.updateAccumulators(accumulatorSnapshot);
     }
@@ -901,7 +901,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final String targetDirectory,
             final boolean cancelJob,
             final SavepointFormatType formatType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         if (isAnyOutputBlocking(executionGraph)) {
             // TODO: Introduce a more general solution to mark times when
@@ -949,7 +949,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<CompletedCheckpoint> triggerCheckpoint(CheckpointType checkpointType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         final CheckpointCoordinator checkpointCoordinator =
                 executionGraph.getCheckpointCoordinator();
@@ -984,7 +984,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void startCheckpointScheduler() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         final CheckpointCoordinator checkpointCoordinator = getCheckpointCoordinator();
 
         if (checkpointCoordinator == null) {
@@ -1037,7 +1037,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             @Nullable final String targetDirectory,
             final boolean terminate,
             final SavepointFormatType formatType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         if (isAnyOutputBlocking(executionGraph)) {
             return FutureUtils.completedExceptionally(

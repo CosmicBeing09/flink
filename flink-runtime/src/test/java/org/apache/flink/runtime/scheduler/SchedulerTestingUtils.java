@@ -153,7 +153,7 @@ public class SchedulerTestingUtils {
             }
         }
 
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         config,
                         serializedStateBackend,

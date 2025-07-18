@@ -161,7 +161,7 @@ public class DefaultLeaderRetrievalService
     private class LeaderRetrievalFatalErrorHandler implements FatalErrorHandler {
 
         @Override
-        public void onFatalError(Throwable throwable) {
+        public void handleFatalError(Throwable throwable) {
             synchronized (lock) {
                 if (!running) {
                     if (LOG.isDebugEnabled()) {

@@ -271,7 +271,7 @@ class SubtaskGatewayImpl implements OperatorCoordinator.SubtaskGateway {
     }
 
     private void checkRunsInMainThread() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
     }
 
     private static final class BlockedEvent {

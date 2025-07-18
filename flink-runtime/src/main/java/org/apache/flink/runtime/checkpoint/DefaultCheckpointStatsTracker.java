@@ -208,7 +208,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     @Override
-    public void reportCompletedCheckpoint(CompletedCheckpointStats completed) {
+    public void reportCheckpointCompletion(CompletedCheckpointStats completed) {
         statsReadWriteLock.lock();
         try {
             latestCompletedCheckpoint = completed;
@@ -222,7 +222,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             logCheckpointStatistics(completed);
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onCompletedCheckpoint();
+                checkpointStatsListener.onCheckpointCompleted();
             }
         } finally {
             statsReadWriteLock.unlock();
@@ -240,7 +240,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             logCheckpointStatistics(failed);
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onFailedCheckpoint();
+                checkpointStatsListener.onCheckpointFailed();
             }
         } finally {
             statsReadWriteLock.unlock();
@@ -283,7 +283,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
             dirty = true;
 
             if (checkpointStatsListener != null) {
-                checkpointStatsListener.onFailedCheckpoint();
+                checkpointStatsListener.onCheckpointFailed();
             }
         } finally {
             statsReadWriteLock.unlock();
@@ -302,7 +302,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     @Override
-    public void reportIncompleteStats(
+    public void reportSubtaskCheckpointMetrics(
             long checkpointId, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {
         statsReadWriteLock.lock();
         try {

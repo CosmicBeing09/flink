@@ -253,7 +253,7 @@ class SsgNetworkMemoryCalculationUtilsTest {
                 createJobGraph(
                         slotSharingGroups, Arrays.asList(4, -1, -1), ResultPartitionType.BLOCKING);
 
-        final VertexParallelismStore vertexParallelismStore =
+        final VertexMaxParallelismRegistry vertexParallelismStore =
                 AdaptiveBatchScheduler.computeVertexParallelismStoreForDynamicGraph(
                         jobGraph.getVertices(), defaultMaxParallelism);
 

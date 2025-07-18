@@ -48,8 +48,8 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     private static final Logger LOG = LoggerFactory.getLogger(CheckpointsCleaner.class);
     private static final long serialVersionUID = 2545865801947537790L;
 
-    private final boolean parallelMode;
-    private final Object lock = new Object();
+    private final boolean isParallelCleanupEnabled;
+    private final Object cleanupLock = new Object();
 
     @GuardedBy("lock")
     private int numberOfCheckpointsToClean;
@@ -63,15 +63,15 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     private final List<CompletedCheckpoint> subsumedCheckpoints = new ArrayList<>();
 
     public CheckpointsCleaner() {
-        this.parallelMode = CheckpointingOptions.CLEANER_PARALLEL_MODE.defaultValue();
+        this.isParallelCleanupEnabled = CheckpointingOptions.CLEANER_PARALLEL_MODE.defaultValue();
     }
 
     public CheckpointsCleaner(boolean parallelMode) {
-        this.parallelMode = parallelMode;
+        this.isParallelCleanupEnabled = parallelMode;
     }
 
     int getNumberOfCheckpointsToClean() {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             return numberOfCheckpointsToClean;
         }
     }
@@ -84,14 +84,14 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
         LOG.debug(
                 "Clean checkpoint {} parallel-mode={} shouldDiscard={}",
                 checkpoint.getCheckpointID(),
-                parallelMode,
+                isParallelCleanupEnabled,
                 shouldDiscard);
         if (shouldDiscard) {
             incrementNumberOfCheckpointsToClean();
 
             Checkpoint.DiscardObject discardObject = checkpoint.markAsDiscarded();
             CompletableFuture<Void> discardFuture =
-                    parallelMode
+                    isParallelCleanupEnabled
                             ? discardObject.discardAsync(executor)
                             : FutureUtils.runAsync(discardObject::discard, executor);
             discardFuture.handle(
@@ -119,7 +119,7 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
      * @param completedCheckpoint which is subsumed.
      */
     public void addSubsumedCheckpoint(CompletedCheckpoint completedCheckpoint) {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             subsumedCheckpoints.add(completedCheckpoint);
         }
     }
@@ -134,7 +134,7 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
      */
     public void cleanSubsumedCheckpoints(
             long upTo, Set<Long> stillInUse, Runnable postCleanAction, Executor executor) {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             Iterator<CompletedCheckpoint> iterator = subsumedCheckpoints.iterator();
             while (iterator.hasNext()) {
                 CompletedCheckpoint checkpoint = iterator.next();
@@ -162,14 +162,14 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
     }
 
     private void incrementNumberOfCheckpointsToClean() {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             checkState(cleanUpFuture == null, "CheckpointsCleaner has already been closed");
             numberOfCheckpointsToClean++;
         }
     }
 
     private void decrementNumberOfCheckpointsToClean() {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             numberOfCheckpointsToClean--;
             maybeCompleteCloseUnsafe();
         }
@@ -183,7 +183,7 @@ public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
 
     @Override
     public CompletableFuture<Void> closeAsync() {
-        synchronized (lock) {
+        synchronized (cleanupLock) {
             if (cleanUpFuture == null) {
                 cleanUpFuture = new CompletableFuture<>();
             }

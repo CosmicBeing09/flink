@@ -106,8 +106,8 @@ import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
 import org.apache.flink.runtime.scheduler.SchedulerUtils;
 import org.apache.flink.runtime.scheduler.UpdateSchedulerNgOnInternalFailuresListener;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobAllocationsInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.ReservedSlots;
@@ -221,22 +221,22 @@ public class AdaptiveScheduler
                 throws ConfigurationException {
             final SchedulerExecutionMode executionMode =
                     configuration.get(JobManagerOptions.SCHEDULER_MODE);
-            Duration allocationTimeoutDefault =
+            Duration initialResourceAllocationTimeoutDefault =
                     JobManagerOptions.RESOURCE_WAIT_TIMEOUT.defaultValue();
-            Duration stabilizationTimeoutDefault =
+            Duration initialResourceStabilizationTimeoutDefault =
                     JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT.defaultValue();
             if (executionMode == SchedulerExecutionMode.REACTIVE) {
-                allocationTimeoutDefault = Duration.ofMillis(-1);
-                stabilizationTimeoutDefault = Duration.ZERO;
+                initialResourceAllocationTimeoutDefault = Duration.ofMillis(-1);
+                initialResourceStabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration executingCooldownIntervalMin =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
 
-            final int rescaleOnFailedCheckpointsCount =
+            final int rescaleOnFailedCheckpointCount =
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALE_ON_FAILED_CHECKPOINTS_COUNT);
-            if (rescaleOnFailedCheckpointsCount < 1) {
+            if (rescaleOnFailedCheckpointCount < 1) {
                 throw new ConfigurationException(
                         String.format(
                                 "%s should have a value of 1 or higher.",
@@ -245,7 +245,7 @@ public class AdaptiveScheduler
             }
 
             // default value generation is documented in JobManagerOption
-            final Duration maximumDelayForRescaleTriggerDefault =
+            final Duration maximumDelayForTriggeringRescaleDefault =
                     checkpointingConfiguration != null
                                     && checkpointingConfiguration
                                             .getCheckpointCoordinatorConfiguration()
@@ -262,7 +262,7 @@ public class AdaptiveScheduler
                             // Incrementing the default value should help avoiding causing this kind
                             // of confusing race condition.
                             ? Duration.ofMillis(
-                                    (rescaleOnFailedCheckpointsCount + 1)
+                                    (rescaleOnFailedCheckpointCount + 1)
                                             * checkpointingConfiguration
                                                     .getCheckpointCoordinatorConfiguration()
                                                     .getCheckpointInterval())
@@ -281,24 +281,25 @@ public class AdaptiveScheduler
                     executionMode,
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_WAIT_TIMEOUT)
-                            .orElse(allocationTimeoutDefault),
+                            .orElse(initialResourceAllocationTimeoutDefault),
                     configuration
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
-                            .orElse(stabilizationTimeoutDefault),
+                            .orElse(initialResourceStabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    executingCooldownIntervalMin,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
-                            MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTriggerDefault),
-                    rescaleOnFailedCheckpointsCount);
+                            MAXIMUM_DELAY_FOR_SCALE_TRIGGER,
+                            maximumDelayForTriggeringRescaleDefault),
+                    rescaleOnFailedCheckpointCount);
         }
 
         private final SchedulerExecutionMode executionMode;
         private final Duration initialResourceAllocationTimeout;
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
-        private final Duration scalingIntervalMin;
+        private final Duration executingCooldownInterval;
         private final Duration scalingResourceStabilizationTimeout;
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
@@ -308,7 +309,7 @@ public class AdaptiveScheduler
                 Duration initialResourceAllocationTimeout,
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
-                Duration scalingIntervalMin,
+                Duration executingCooldownInterval,
                 Duration scalingResourceStabilizationTimeout,
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
@@ -316,7 +317,7 @@ public class AdaptiveScheduler
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
-            this.scalingIntervalMin = scalingIntervalMin;
+            this.executingCooldownInterval = executingCooldownInterval;
             this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
@@ -338,8 +339,8 @@ public class AdaptiveScheduler
             return slotIdleTimeout;
         }
 
-        public Duration getScalingIntervalMin() {
-            return scalingIntervalMin;
+        public Duration getExecutingCooldownTimeout() {
+            return executingCooldownInterval;
         }
 
         public Duration getScalingResourceStabilizationTimeout() {
@@ -362,7 +363,7 @@ public class AdaptiveScheduler
 
     private final JobInfo jobInfo;
 
-    private final VertexParallelismStore initialParallelismStore;
+    private final VertexMaxParallelismRegistry initialParallelismStore;
 
     private final DeclarativeSlotPool declarativeSlotPool;
 
@@ -494,7 +495,7 @@ public class AdaptiveScheduler
         this.jobGraph = jobGraph;
         this.jobInfo = new JobInfoImpl(jobGraph.getJobID(), jobGraph.getName());
 
-        VertexParallelismStore vertexParallelismStore =
+        VertexMaxParallelismRegistry vertexParallelismStore =
                 computeVertexParallelismStore(jobGraph, settings.getExecutionMode());
         if (jobResourceRequirements != null) {
             vertexParallelismStore =
@@ -601,7 +602,7 @@ public class AdaptiveScheduler
      * @return The parallelism store.
      */
     @VisibleForTesting
-    static VertexParallelismStore computeReactiveModeVertexParallelismStore(
+    static VertexMaxParallelismRegistry computeReactiveModeVertexParallelismStore(
             Iterable<JobVertex> vertices,
             Function<JobVertex, Integer> defaultMaxParallelismFunc,
             boolean adjustParallelism) {
@@ -651,7 +652,7 @@ public class AdaptiveScheduler
      * @param executionMode The mode of scheduler execution.
      * @return The parallelism store.
      */
-    private static VertexParallelismStore computeVertexParallelismStore(
+    private static VertexMaxParallelismRegistry computeVertexParallelismStore(
             JobGraph jobGraph, SchedulerExecutionMode executionMode) {
         if (executionMode == SchedulerExecutionMode.REACTIVE) {
             return computeReactiveModeVertexParallelismStore(
@@ -671,7 +672,7 @@ public class AdaptiveScheduler
      * @return The parallelism store.
      */
     @VisibleForTesting
-    static VertexParallelismStore computeVertexParallelismStoreForExecution(
+    static VertexMaxParallelismRegistry computeVertexParallelismStoreForExecution(
             JobGraph jobGraph,
             SchedulerExecutionMode executionMode,
             Function<JobVertex, Integer> defaultMaxParallelismFunc) {
@@ -1063,7 +1064,7 @@ public class AdaptiveScheduler
             throw new UnsupportedOperationException(
                     "Cannot change the parallelism of a job running in reactive mode.");
         }
-        final Optional<VertexParallelismStore> maybeUpdateVertexParallelismStore =
+        final Optional<VertexMaxParallelismRegistry> maybeUpdateVertexParallelismStore =
                 DefaultVertexParallelismStore.applyJobResourceRequirements(
                         jobInformation.getVertexParallelismStore(), jobResourceRequirements);
         if (maybeUpdateVertexParallelismStore.isPresent()) {
@@ -1107,7 +1108,7 @@ public class AdaptiveScheduler
     @Override
     public boolean hasSufficientResources() {
         return slotAllocator
-                .determineParallelism(jobInformation, declarativeSlotPool.getAllSlotsInformation())
+                .determineVertexParallelism(jobInformation, declarativeSlotPool.getAllSlotsInformation())
                 .isPresent();
     }
 
@@ -1174,7 +1175,7 @@ public class AdaptiveScheduler
     }
 
     private ResourceCounter calculateDesiredResources() {
-        return slotAllocator.calculateRequiredSlots(jobInformation.getVertices());
+        return slotAllocator.calculateResourceRequirements(jobInformation.getVertices());
     }
 
     @Override
@@ -1201,7 +1202,7 @@ public class AdaptiveScheduler
         return stateTransitionManagerFactory.create(
                 ctx,
                 clock,
-                settings.getScalingIntervalMin(),
+                settings.getExecutingCooldownTimeout(),
                 settings.getScalingResourceStabilizationTimeout(),
                 settings.getMaximumDelayForTriggeringRescale());
     }
@@ -1322,7 +1323,7 @@ public class AdaptiveScheduler
             createExecutionGraphWithAvailableResourcesAsync(
                     @Nullable ExecutionGraph previousExecutionGraph) {
         final JobSchedulingPlan schedulingPlan;
-        final VertexParallelismStore adjustedParallelismStore;
+        final VertexMaxParallelismRegistry adjustedParallelismStore;
 
         try {
             schedulingPlan = determineParallelism(slotAllocator, previousExecutionGraph);
@@ -1344,7 +1345,7 @@ public class AdaptiveScheduler
                             settings.getExecutionMode(),
                             (vertex) -> {
                                 VertexParallelismInformation vertexParallelismInfo =
-                                        initialParallelismStore.getParallelismInfo(vertex.getID());
+                                        initialParallelismStore.getVertexParallelismInformation(vertex.getID());
                                 return vertexParallelismInfo.getMaxParallelism();
                             });
         } catch (Exception exception) {
@@ -1399,7 +1400,7 @@ public class AdaptiveScheduler
     }
 
     private CompletableFuture<ExecutionGraph> createExecutionGraphAndRestoreStateAsync(
-            VertexParallelismStore adjustedParallelismStore) {
+            VertexMaxParallelismRegistry adjustedParallelismStore) {
         backgroundTask.abort();
 
         backgroundTask =
@@ -1413,7 +1414,7 @@ public class AdaptiveScheduler
 
     @Nonnull
     private ExecutionGraph createExecutionGraphAndRestoreState(
-            VertexParallelismStore adjustedParallelismStore) throws Exception {
+            VertexMaxParallelismRegistry adjustedParallelismStore) throws Exception {
         return executionGraphFactory.createAndRestoreExecutionGraph(
                 jobInformation.copyJobGraph(),
                 completedCheckpointStore,
@@ -1434,7 +1435,7 @@ public class AdaptiveScheduler
 
     @Override
     public Optional<VertexParallelism> getAvailableVertexParallelism() {
-        return slotAllocator.determineParallelism(
+        return slotAllocator.determineVertexParallelism(
                 jobInformation, declarativeSlotPool.getAllSlotsInformation());
     }
 
@@ -1476,9 +1477,9 @@ public class AdaptiveScheduler
         }
 
         restartBackoffTimeStrategy.notifyFailure(failure);
-        if (restartBackoffTimeStrategy.canRestart()) {
+        if (restartBackoffTimeStrategy.isRestartAllowed()) {
             return FailureResult.canRestart(
-                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getBackoffTime()));
+                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getRestartDelayMillis()));
         } else {
             return FailureResult.canNotRestart(
                     new JobException(
@@ -1512,7 +1513,7 @@ public class AdaptiveScheduler
             try {
                 action.run();
             } catch (Throwable t) {
-                fatalErrorHandler.onFatalError(t);
+                fatalErrorHandler.handleFatalError(t);
             }
         } else {
             LOG.debug(
@@ -1547,7 +1548,7 @@ public class AdaptiveScheduler
         Preconditions.checkState(
                 state.getClass() != targetState.getStateClass(),
                 "Attempted to transition into the very state the scheduler is already in.");
-        componentMainThreadExecutor.assertRunningInMainThread();
+        componentMainThreadExecutor.ensureMainThreadExecution();
 
         try {
             isTransitioningState = true;
@@ -1568,7 +1569,7 @@ public class AdaptiveScheduler
                 final long timestamp = System.currentTimeMillis();
                 jobStatusListeners.forEach(
                         listener ->
-                                listener.jobStatusChanges(
+                                listener.onJobStatusChanged(
                                         jobInformation.getJobID(), newJobStatus, timestamp));
             }
 
@@ -1623,14 +1624,14 @@ public class AdaptiveScheduler
         return new CheckpointStatsListener() {
 
             @Override
-            public void onFailedCheckpoint() {
-                runIfSupported(CheckpointStatsListener::onFailedCheckpoint, "onFailedCheckpoint");
+            public void onCheckpointFailed() {
+                runIfSupported(CheckpointStatsListener::onCheckpointFailed, "onFailedCheckpoint");
             }
 
             @Override
-            public void onCompletedCheckpoint() {
+            public void onCheckpointCompleted() {
                 runIfSupported(
-                        CheckpointStatsListener::onCompletedCheckpoint, "onCompletedCheckpoint");
+                        CheckpointStatsListener::onCheckpointCompleted, "onCompletedCheckpoint");
             }
 
             private void runIfSupported(

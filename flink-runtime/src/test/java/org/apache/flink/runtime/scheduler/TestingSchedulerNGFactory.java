@@ -56,10 +56,10 @@ public class TestingSchedulerNGFactory implements SchedulerNGFactory {
     public SchedulerNG createInstance(
             Logger log,
             JobGraph jobGraph,
-            Executor ioExecutor,
+            Executor ioThreadExecutor,
             Configuration jobMasterConfiguration,
             SlotPoolService slotPoolService,
-            ScheduledExecutorService futureExecutor,
+            ScheduledExecutorService scheduledTaskExecutor,
             ClassLoader userCodeLoader,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
             Duration rpcTimeout,

@@ -25,14 +25,14 @@ public interface RestartBackoffTimeStrategy {
      *
      * @return whether a restart should be conducted
      */
-    boolean canRestart();
+    boolean isRestartAllowed();
 
     /**
      * Returns the delay to do the restarting.
      *
      * @return the delay to do the restarting
      */
-    long getBackoffTime();
+    long getRestartDelayMillis();
 
     /**
      * Notify the strategy about the task failure cause.

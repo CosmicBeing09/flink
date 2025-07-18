@@ -442,7 +442,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
 
     @Override
     public void handleError(Exception exception) {
-        fatalErrorHandler.onFatalError(exception);
+        fatalErrorHandler.handleFatalError(exception);
     }
 
     private void handleAsyncOperationError(CompletableFuture<Void> operation, String message) {
@@ -460,7 +460,7 @@ public class JobMasterServiceLeadershipRunner implements JobManagerRunner, Leade
 
     private void handleJobMasterServiceLeadershipRunnerError(Throwable cause) {
         if (ExceptionUtils.isJvmFatalError(cause)) {
-            fatalErrorHandler.onFatalError(cause);
+            fatalErrorHandler.handleFatalError(cause);
         } else {
             resultFuture.completeExceptionally(cause);
         }

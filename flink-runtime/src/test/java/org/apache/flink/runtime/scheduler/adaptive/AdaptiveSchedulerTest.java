@@ -97,7 +97,7 @@ import org.apache.flink.runtime.scheduler.SchedulerNG;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
 import org.apache.flink.runtime.scheduler.TestingPhysicalSlot;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlot;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlotAllocator;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
@@ -269,7 +269,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedCheckpointingSettingsNotNullIfCheckpointingIsEnabled() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
         scheduler =
@@ -287,7 +287,7 @@ public class AdaptiveSchedulerTest {
     @Test
     void testArchivedJobVerticesPresent() throws Exception {
         final JobGraph jobGraph = createJobGraph();
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -1002,7 +1002,7 @@ public class AdaptiveSchedulerTest {
 
         final JobGraph jobGraph = createJobGraph();
         // checkpointing components are only created if checkpointing is enabled
-        jobGraph.setSnapshotSettings(
+        jobGraph.setCheckpointingSettings(
                 new JobCheckpointingSettings(
                         CheckpointCoordinatorConfiguration.builder().build(), null));
 
@@ -1509,7 +1509,7 @@ public class AdaptiveSchedulerTest {
 
         assertThat(failureResult.canRestart()).isTrue();
         assertThat(failureResult.getBackoffTime().toMillis())
-                .isEqualTo(restartBackoffTimeStrategy.getBackoffTime());
+                .isEqualTo(restartBackoffTimeStrategy.getRestartDelayMillis());
 
         assertThat(spanCollector).isEmpty();
         mainThreadExecutor.trigger();
@@ -1681,7 +1681,7 @@ public class AdaptiveSchedulerTest {
         final Exception expectedException = new Exception("Expected Local Exception");
         Consumer<JobGraph> setupJobGraph =
                 jobGraph ->
-                        jobGraph.setSnapshotSettings(
+                        jobGraph.setCheckpointingSettings(
                                 new JobCheckpointingSettings(
                                         // set a large checkpoint interval so we can easily deduce
                                         // the savepoints checkpoint id
@@ -1979,14 +1979,14 @@ public class AdaptiveSchedulerTest {
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
         JobGraph graph = streamingJobGraph(v1, v2);
 
-        VertexParallelismStore parallelismStore =
+        VertexMaxParallelismRegistry parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
                         graph,
                         SchedulerExecutionMode.REACTIVE,
                         SchedulerBase::getDefaultMaxParallelism);
 
         for (JobVertex vertex : graph.getVertices()) {
-            VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
+            VertexParallelismInformation info = parallelismStore.getVertexParallelismInformation(vertex.getID());
 
             assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
@@ -1999,12 +1999,12 @@ public class AdaptiveSchedulerTest {
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
         JobGraph graph = streamingJobGraph(v1, v2);
 
-        VertexParallelismStore parallelismStore =
+        VertexMaxParallelismRegistry parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
                         graph, null, SchedulerBase::getDefaultMaxParallelism);
 
         for (JobVertex vertex : graph.getVertices()) {
-            VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
+            VertexParallelismInformation info = parallelismStore.getVertexParallelismInformation(vertex.getID());
 
             assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
@@ -2208,7 +2208,7 @@ public class AdaptiveSchedulerTest {
                 scalingStabilizationTimeout);
 
         final AdaptiveScheduler.Settings settings = AdaptiveScheduler.Settings.of(configuration);
-        assertThat(settings.getScalingIntervalMin()).isEqualTo(scalingIntervalMin);
+        assertThat(settings.getExecutingCooldownTimeout()).isEqualTo(scalingIntervalMin);
         assertThat(settings.getScalingResourceStabilizationTimeout())
                 .isEqualTo(scalingStabilizationTimeout);
     }
@@ -2216,13 +2216,13 @@ public class AdaptiveSchedulerTest {
     @Test
     void testOnCompletedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onCompletedCheckpoint, 1, Integer.MAX_VALUE);
+                CheckpointStatsListener::onCheckpointCompleted, 1, Integer.MAX_VALUE);
     }
 
     @Test
     void testOnFailedCheckpointIsHandledInMainThread() throws Exception {
         testCheckpointStatsEventBeingExecutedInTheMainThread(
-                CheckpointStatsListener::onFailedCheckpoint, 2, 2);
+                CheckpointStatsListener::onCheckpointFailed, 2, 2);
     }
 
     private void testCheckpointStatsEventBeingExecutedInTheMainThread(
@@ -2437,7 +2437,7 @@ public class AdaptiveSchedulerTest {
                                         TestingStateTransitionManager.withOnTriggerEventOnly(
                                                 () -> {
                                                     singleThreadMainThreadExecutor
-                                                            .assertRunningInMainThread();
+                                                            .ensureMainThreadExecution();
 
                                                     if (context instanceof WaitingForResources) {
                                                         context.transitionToSubsequentState();

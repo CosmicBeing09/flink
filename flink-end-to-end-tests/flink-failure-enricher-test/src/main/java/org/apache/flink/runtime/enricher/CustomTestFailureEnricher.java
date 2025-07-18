@@ -36,12 +36,12 @@ public class CustomTestFailureEnricher implements FailureEnricher {
     }
 
     @Override
-    public Set<String> getOutputKeys() {
+    public Set<String> getFailureLabelKeys() {
         return outputKeys;
     }
 
     @Override
-    public CompletableFuture<Map<String, String>> processFailure(Throwable cause, Context context) {
+    public CompletableFuture<Map<String, String>> enrichFailureLabels(Throwable cause, Context context) {
         if (cause instanceof FlinkException) {
             return CompletableFuture.completedFuture(Collections.singletonMap("type", "system"));
         } else {

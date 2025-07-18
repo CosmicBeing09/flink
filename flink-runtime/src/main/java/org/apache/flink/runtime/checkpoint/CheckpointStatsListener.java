@@ -22,12 +22,12 @@ package org.apache.flink.runtime.checkpoint;
 public interface CheckpointStatsListener {
 
     /** Called when a checkpoint was completed successfully. */
-    default void onCompletedCheckpoint() {
+    default void onCheckpointCompleted() {
         // No-op.
     }
 
     /** Called when a checkpoint failed. */
-    default void onFailedCheckpoint() {
+    default void onCheckpointFailed() {
         // No-op.
     }
 }

@@ -49,49 +49,49 @@ public class OnMainThreadJobManagerRunnerRegistry
 
     @Override
     public boolean isRegistered(JobID jobId) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.isRegistered(jobId);
     }
 
     @Override
     public void register(JobManagerRunner jobManagerRunner) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         delegate.register(jobManagerRunner);
     }
 
     @Override
     public JobManagerRunner get(JobID jobId) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.get(jobId);
     }
 
     @Override
     public int size() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.size();
     }
 
     @Override
     public Set<JobID> getRunningJobIds() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.getRunningJobIds();
     }
 
     @Override
     public Collection<JobManagerRunner> getJobManagerRunners() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.getJobManagerRunners();
     }
 
     @Override
     public CompletableFuture<Void> localCleanupAsync(JobID jobId, Executor executor) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.localCleanupAsync(jobId, executor);
     }
 
     @Override
     public JobManagerRunner unregister(JobID jobId) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return delegate.unregister(jobId);
     }
 

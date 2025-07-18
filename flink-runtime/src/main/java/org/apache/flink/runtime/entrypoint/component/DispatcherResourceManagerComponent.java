@@ -102,7 +102,7 @@ public class DispatcherResourceManagerComponent implements AutoCloseableAsync {
                 .whenComplete(
                         (ignored, throwable) -> {
                             if (isRunning.get()) {
-                                fatalErrorHandler.onFatalError(
+                                fatalErrorHandler.handleFatalError(
                                         new FlinkException(
                                                 "Unexpected termination of ResourceManagerService.",
                                                 throwable));

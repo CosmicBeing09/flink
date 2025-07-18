@@ -30,7 +30,7 @@ import static org.apache.flink.configuration.ConfigOptions.key;
 @Experimental
 public class TraceOptions {
 
-    private static final String NAMED_REPORTER_CONFIG_PREFIX =
+    private static final String NAMED_TRACE_REPORTER_CONFIG_KEY_PREFIX =
             ConfigConstants.TRACES_REPORTER_PREFIX + "<name>";
 
     /**
@@ -47,7 +47,7 @@ public class TraceOptions {
      * traces.reporter.foo.endpoint = 127.0.0.1:4137
      * }</pre>
      */
-    public static final ConfigOption<String> TRACE_REPORTERS_LIST =
+    public static final ConfigOption<String> TRACE_REPORTER_NAMES =
             key("traces.reporters")
                     .stringType()
                     .noDefaultValue()
@@ -91,7 +91,7 @@ public class TraceOptions {
                 configuration, ConfigConstants.TRACES_REPORTER_PREFIX + reporterName + ".");
     }
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(NAMED_TRACE_REPORTER_CONFIG_KEY_PREFIX)
     @Documentation.Section(value = Documentation.Sections.TRACE_REPORTERS, position = 1)
     public static final ConfigOption<String> REPORTER_FACTORY_CLASS =
             key("factory.class")
@@ -100,7 +100,7 @@ public class TraceOptions {
                     .withDescription(
                             "The reporter factory class to use for the reporter named <name>.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(NAMED_TRACE_REPORTER_CONFIG_KEY_PREFIX)
     @Documentation.Section(value = Documentation.Sections.TRACE_REPORTERS, position = 6)
     public static final ConfigOption<String> REPORTER_CONFIG_PARAMETER =
             key("<parameter>")
@@ -109,7 +109,7 @@ public class TraceOptions {
                     .withDescription(
                             "Configures the parameter <parameter> for the reporter named <name>.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(NAMED_TRACE_REPORTER_CONFIG_KEY_PREFIX)
     @Documentation.Section(value = Documentation.Sections.TRACE_REPORTERS, position = 3)
     public static final ConfigOption<Map<String, String>> REPORTER_ADDITIONAL_VARIABLES =
             key("scope.variables.additional")

@@ -274,7 +274,7 @@ public class ActiveResourceManager<WorkerType extends ResourceIDRetrievable>
 
     @Override
     public void onPreviousAttemptWorkersRecovered(Collection<WorkerType> recoveredWorkers) {
-        getMainThreadExecutor().assertRunningInMainThread();
+        getMainThreadExecutor().ensureMainThreadExecution();
         log.info("Recovered {} workers from previous attempt.", recoveredWorkers.size());
         for (WorkerType worker : recoveredWorkers) {
             final ResourceID resourceId = worker.getResourceID();

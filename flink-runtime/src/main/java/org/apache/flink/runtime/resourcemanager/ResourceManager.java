@@ -1275,7 +1275,7 @@ public abstract class ResourceManager<WorkerType extends ResourceIDRetrievable>
         }
 
         // The fatal error handler implementation should make sure that this call is non-blocking
-        fatalErrorHandler.onFatalError(t);
+        fatalErrorHandler.handleFatalError(t);
     }
 
     private void startHeartbeatServices() {

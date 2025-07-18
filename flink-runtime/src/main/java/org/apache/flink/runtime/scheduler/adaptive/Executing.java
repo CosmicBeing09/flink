@@ -101,8 +101,8 @@ class Executing extends StateWithExecutionGraph
         context.runIfState(
                 this,
                 () -> {
-                    stateTransitionManager.onChange();
-                    stateTransitionManager.onTrigger();
+                    stateTransitionManager.onEnvironmentChange();
+                    stateTransitionManager.verifyAndTriggerTransition();
                 },
                 Duration.ZERO);
     }
@@ -215,23 +215,23 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public void onNewResourcesAvailable() {
-        stateTransitionManager.onChange();
+        stateTransitionManager.onEnvironmentChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
     public void onNewResourceRequirements() {
-        stateTransitionManager.onChange();
+        stateTransitionManager.onEnvironmentChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
-    public void onCompletedCheckpoint() {
+    public void onCheckpointCompleted() {
         triggerPotentialRescale();
     }
 
     @Override
-    public void onFailedCheckpoint() {
+    public void onCheckpointFailed() {
         if (this.failedCheckpointCountdown != null
                 && this.failedCheckpointCountdown.decrementAndGet() <= 0) {
             triggerPotentialRescale();
@@ -239,7 +239,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     private void triggerPotentialRescale() {
-        stateTransitionManager.onTrigger();
+        stateTransitionManager.verifyAndTriggerTransition();
         this.failedCheckpointCountdown = null;
     }
 

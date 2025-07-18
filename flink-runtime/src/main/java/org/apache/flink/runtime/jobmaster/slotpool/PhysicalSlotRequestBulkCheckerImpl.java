@@ -22,7 +22,6 @@ import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
-import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor.DummyComponentMainThreadExecutor;
 import org.apache.flink.runtime.jobmanager.scheduler.NoResourceAvailableException;
 import org.apache.flink.runtime.jobmaster.SlotInfo;
 import org.apache.flink.util.clock.Clock;
@@ -44,7 +43,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class PhysicalSlotRequestBulkCheckerImpl implements PhysicalSlotRequestBulkChecker {
 
     private ComponentMainThreadExecutor componentMainThreadExecutor =
-            new DummyComponentMainThreadExecutor(
+            new ComponentMainThreadExecutor.UnsupportedComponentMainThreadExecutor(
                     "PhysicalSlotRequestBulkCheckerImpl is not initialized with proper main thread executor, "
                             + "call to PhysicalSlotRequestBulkCheckerImpl#start is required");
 

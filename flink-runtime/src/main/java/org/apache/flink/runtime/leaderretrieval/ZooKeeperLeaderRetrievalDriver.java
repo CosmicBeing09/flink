@@ -161,7 +161,7 @@ public class ZooKeeperLeaderRetrievalDriver implements LeaderRetrievalDriver {
             }
             notifyNoLeader();
         } catch (Exception e) {
-            fatalErrorHandler.onFatalError(
+            fatalErrorHandler.handleFatalError(
                     new LeaderRetrievalException("Could not handle node changed event.", e));
             ExceptionUtils.checkInterrupted(e);
         }

@@ -276,7 +276,7 @@ public class TaskManagerRunner implements FatalErrorHandler {
                         (unused, throwable) -> {
                             synchronized (lock) {
                                 if (!shutdown) {
-                                    onFatalError(
+                                    handleFatalError(
                                             new FlinkException(
                                                     "Unexpected termination of the TaskExecutor.",
                                                     throwable));
@@ -428,7 +428,7 @@ public class TaskManagerRunner implements FatalErrorHandler {
     // --------------------------------------------------------------------------------------------
 
     @Override
-    public void onFatalError(Throwable exception) {
+    public void handleFatalError(Throwable exception) {
         TaskManagerExceptionUtils.tryEnrichTaskManagerError(exception);
         LOG.error(
                 "Fatal error occurred while executing the TaskManager. Shutting it down...",

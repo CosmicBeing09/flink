@@ -96,12 +96,12 @@ public class ExponentialDelayRestartBackoffTimeStrategy implements RestartBackof
     }
 
     @Override
-    public boolean canRestart() {
+    public boolean isRestartAllowed() {
         return currentRestartAttempt <= attemptsBeforeResetBackoff;
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartDelayMillis() {
         checkState(
                 nextRestartTimestamp != DEFAULT_NEXT_RESTART_TIMESTAMP,
                 "Please call notifyFailure first.");

@@ -29,13 +29,13 @@ public class ManuallyTriggeredComponentMainThreadExecutor
     }
 
     @Override
-    public void assertRunningInMainThread() {
+    public void ensureMainThreadExecution() {
         assert Thread.currentThread() == executorThread;
     }
 
     @Override
     public void trigger() {
-        assertRunningInMainThread();
+        ensureMainThreadExecution();
         super.trigger();
     }
 }

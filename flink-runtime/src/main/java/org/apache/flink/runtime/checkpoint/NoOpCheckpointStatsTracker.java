@@ -37,7 +37,7 @@ public enum NoOpCheckpointStatsTracker implements CheckpointStatsTracker {
             long stateSize) {}
 
     @Override
-    public void reportCompletedCheckpoint(CompletedCheckpointStats completed) {}
+    public void reportCheckpointCompletion(CompletedCheckpointStats completed) {}
 
     @Nullable
     @Override
@@ -46,7 +46,7 @@ public enum NoOpCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     @Override
-    public void reportIncompleteStats(
+    public void reportSubtaskCheckpointMetrics(
             long checkpointId, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {}
 
     @Override

@@ -1414,7 +1414,7 @@ public class CheckpointCoordinator {
                     completedCheckpointStats.getEndToEndDuration());
             // Finalize the statsCallback and give the completed checkpoint a
             // callback for discards.
-            statsTracker.reportCompletedCheckpoint(completedCheckpointStats);
+            statsTracker.reportCheckpointCompletion(completedCheckpointStats);
         }
     }
 
@@ -2160,7 +2160,7 @@ public class CheckpointCoordinator {
 
     public void reportCheckpointMetrics(
             long id, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {
-        statsTracker.reportIncompleteStats(id, attemptId, metrics);
+        statsTracker.reportSubtaskCheckpointMetrics(id, attemptId, metrics);
     }
 
     public void reportInitializationMetrics(

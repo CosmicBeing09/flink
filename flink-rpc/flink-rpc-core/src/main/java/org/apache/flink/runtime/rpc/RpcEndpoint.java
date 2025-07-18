@@ -576,7 +576,7 @@ public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
         }
 
         @Override
-        public void assertRunningInMainThread() {
+        public void ensureMainThreadExecution() {
             mainThreadCheck.run();
         }
 

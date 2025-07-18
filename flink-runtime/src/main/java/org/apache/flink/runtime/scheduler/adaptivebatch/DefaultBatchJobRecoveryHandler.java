@@ -150,7 +150,7 @@ public class DefaultBatchJobRecoveryHandler
 
     @Override
     public void startRecovering() {
-        context.getMainThreadExecutor().assertRunningInMainThread();
+        context.getMainThreadExecutor().ensureMainThreadExecution();
 
         startRecoveringInternal();
 
@@ -582,7 +582,7 @@ public class DefaultBatchJobRecoveryHandler
     }
 
     private CompletableFuture<Void> recoverPartitions() {
-        context.getMainThreadExecutor().assertRunningInMainThread();
+        context.getMainThreadExecutor().ensureMainThreadExecution();
 
         CompletableFuture<Tuple2<ReconcileResult, Collection<PartitionWithMetrics>>>
                 reconcilePartitionsFuture = reconcilePartitions();

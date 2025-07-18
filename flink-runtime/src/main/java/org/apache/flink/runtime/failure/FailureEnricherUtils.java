@@ -143,7 +143,7 @@ public class FailureEnricherUtils {
         final Map<String, Set<Class<?>>> enrichersByKey = new HashMap<>();
         failureEnrichers.forEach(
                 enricher ->
-                        enricher.getOutputKeys()
+                        enricher.getFailureLabelKeys()
                                 .forEach(
                                         enricherKey ->
                                                 enrichersByKey
@@ -188,19 +188,19 @@ public class FailureEnricherUtils {
 
         for (final FailureEnricher enricher : failureEnrichers) {
             enrichFutures.add(
-                    enricher.processFailure(cause, context)
+                    enricher.enrichFailureLabels(cause, context)
                             .thenApply(
                                     enricherLabels -> {
                                         final Map<String, String> validLabels = new HashMap<>();
                                         enricherLabels.forEach(
                                                 (k, v) -> {
-                                                    if (!enricher.getOutputKeys().contains(k)) {
+                                                    if (!enricher.getFailureLabelKeys().contains(k)) {
                                                         LOG.warn(
                                                                 "Ignoring label with key {} from enricher {}"
                                                                         + " violating contract, keys allowed {}.",
                                                                 k,
                                                                 enricher.getClass(),
-                                                                enricher.getOutputKeys());
+                                                                enricher.getFailureLabelKeys());
                                                     } else {
                                                         validLabels.put(k, v);
                                                     }

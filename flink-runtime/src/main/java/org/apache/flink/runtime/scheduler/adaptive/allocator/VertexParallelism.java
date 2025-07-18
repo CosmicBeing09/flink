@@ -28,7 +28,7 @@ import java.util.Set;
 import static org.apache.flink.util.Preconditions.checkArgument;
 
 /**
- * Core result of {@link SlotAllocator#determineParallelism(JobInformation, Collection)} among with
+ * Core result of {@link SlotAllocator#determineVertexParallelism(JobInformation, Collection)} among with
  * {@link org.apache.flink.runtime.scheduler.adaptive.JobSchedulingPlan.SlotAssignment
  * slotAssignments}, describing the parallelism each vertex could be scheduled with.
  */

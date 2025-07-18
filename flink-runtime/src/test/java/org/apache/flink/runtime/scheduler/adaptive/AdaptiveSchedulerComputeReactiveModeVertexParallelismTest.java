@@ -20,8 +20,8 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameter;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
@@ -84,13 +84,13 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
     @TestTemplate
     void testCreateStoreWithoutAdjustedParallelism() {
         JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
-        VertexParallelismStore store =
+        VertexMaxParallelismRegistry store =
                 AdaptiveScheduler.computeReactiveModeVertexParallelismStore(
                         Collections.singleton(jobVertex),
                         SchedulerBase::getDefaultMaxParallelism,
                         false);
 
-        VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
+        VertexParallelismInformation info = store.getVertexParallelismInformation(jobVertex.getID());
 
         assertThat(info.getParallelism()).as("parallelism is not adjusted").isEqualTo(parallelism);
         assertThat(info.getMaxParallelism()).as("expected max").isEqualTo(expectedMaxParallelism);
@@ -103,13 +103,13 @@ class AdaptiveSchedulerComputeReactiveModeVertexParallelismTest {
     @TestTemplate
     void testCreateStoreWithAdjustedParallelism() {
         JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
-        VertexParallelismStore store =
+        VertexMaxParallelismRegistry store =
                 AdaptiveScheduler.computeReactiveModeVertexParallelismStore(
                         Collections.singleton(jobVertex),
                         SchedulerBase::getDefaultMaxParallelism,
                         true);
 
-        VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
+        VertexParallelismInformation info = store.getVertexParallelismInformation(jobVertex.getID());
 
         assertThat(info.getParallelism())
                 .as("parallelism is adjusted to max")

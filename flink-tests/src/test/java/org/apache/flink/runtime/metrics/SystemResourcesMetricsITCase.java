@@ -45,7 +45,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
-import static org.apache.flink.configuration.MetricOptions.REPORTERS_LIST;
+import static org.apache.flink.configuration.MetricOptions.METRICS_REPORTERS_LIST;
 import static org.apache.flink.configuration.MetricOptions.SYSTEM_RESOURCE_METRICS;
 import static org.junit.Assert.assertEquals;
 
@@ -74,7 +74,7 @@ class SystemResourcesMetricsITCase {
     private static Configuration getConfiguration() {
         Configuration configuration = new Configuration();
         configuration.set(SYSTEM_RESOURCE_METRICS, true);
-        configuration.set(REPORTERS_LIST, "test_reporter");
+        configuration.set(METRICS_REPORTERS_LIST, "test_reporter");
         configuration.set(MetricOptions.SCOPE_NAMING_JM, "jobmanager");
         configuration.set(MetricOptions.SCOPE_NAMING_TM, "taskmanager");
         MetricOptions.forReporter(configuration, "test_reporter")

@@ -44,7 +44,7 @@ class PerJobCheckpointRecoveryTest {
                         maxCheckpoints -> store);
         final JobID firstJobId = new JobID();
         assertThat(
-                        factory.createRecoveredCompletedCheckpointStore(
+                        factory.createRestoredCompletedCheckpointStore(
                                 firstJobId,
                                 1,
                                 SharedStateRegistry.DEFAULT_FACTORY,
@@ -54,7 +54,7 @@ class PerJobCheckpointRecoveryTest {
         assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(
                         () ->
-                                factory.createRecoveredCompletedCheckpointStore(
+                                factory.createRestoredCompletedCheckpointStore(
                                         firstJobId,
                                         1,
                                         SharedStateRegistry.DEFAULT_FACTORY,
@@ -63,7 +63,7 @@ class PerJobCheckpointRecoveryTest {
 
         final JobID secondJobId = new JobID();
         assertThat(
-                        factory.createRecoveredCompletedCheckpointStore(
+                        factory.createRestoredCompletedCheckpointStore(
                                 secondJobId,
                                 1,
                                 SharedStateRegistry.DEFAULT_FACTORY,
@@ -73,7 +73,7 @@ class PerJobCheckpointRecoveryTest {
         assertThatExceptionOfType(UnsupportedOperationException.class)
                 .isThrownBy(
                         () ->
-                                factory.createRecoveredCompletedCheckpointStore(
+                                factory.createRestoredCompletedCheckpointStore(
                                         secondJobId,
                                         1,
                                         SharedStateRegistry.DEFAULT_FACTORY,

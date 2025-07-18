@@ -43,11 +43,11 @@ class FailureRateRestartBackoffTimeStrategyTest {
 
         for (int failuresLeft = numFailures; failuresLeft > 0; failuresLeft--) {
             restartStrategy.notifyFailure(failure);
-            assertThat(restartStrategy.canRestart()).isTrue();
+            assertThat(restartStrategy.isRestartAllowed()).isTrue();
             clock.advanceTime(intervalMS + 1, TimeUnit.MILLISECONDS);
         }
 
-        assertThat(restartStrategy.canRestart()).isTrue();
+        assertThat(restartStrategy.isRestartAllowed()).isTrue();
     }
 
     @Test
@@ -61,11 +61,11 @@ class FailureRateRestartBackoffTimeStrategyTest {
 
         for (int failuresLeft = numFailures; failuresLeft > 0; failuresLeft--) {
             restartStrategy.notifyFailure(failure);
-            assertThat(restartStrategy.canRestart()).isTrue();
+            assertThat(restartStrategy.isRestartAllowed()).isTrue();
         }
 
         restartStrategy.notifyFailure(failure);
-        assertThat(restartStrategy.canRestart()).isFalse();
+        assertThat(restartStrategy.isRestartAllowed()).isFalse();
     }
 
     @Test
@@ -75,6 +75,6 @@ class FailureRateRestartBackoffTimeStrategyTest {
         final FailureRateRestartBackoffTimeStrategy restartStrategy =
                 new FailureRateRestartBackoffTimeStrategy(new ManualClock(), 1, 1, backoffTimeMS);
 
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(backoffTimeMS);
+        assertThat(restartStrategy.getRestartDelayMillis()).isEqualTo(backoffTimeMS);
     }
 }

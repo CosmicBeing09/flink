@@ -185,7 +185,7 @@ public class ApplicationDispatcherBootstrap implements DispatcherBootstrap {
                                     return FutureUtils.<Acknowledge>completedExceptionally(t);
                                 })
                         .thenCompose(Function.identity());
-        FutureUtils.handleUncaughtException(shutdownFuture, (t, e) -> errorHandler.onFatalError(e));
+        FutureUtils.handleUncaughtException(shutdownFuture, (t, e) -> errorHandler.handleFatalError(e));
         return shutdownFuture;
     }
 

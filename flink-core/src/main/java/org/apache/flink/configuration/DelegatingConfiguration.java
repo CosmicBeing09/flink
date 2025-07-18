@@ -256,8 +256,8 @@ public final class DelegatingConfiguration extends Configuration {
     @Override
     public void addAllToProperties(Properties props) {
         // only add keys with our prefix
-        synchronized (backingConfig.confData) {
-            for (Map.Entry<String, Object> entry : backingConfig.confData.entrySet()) {
+        synchronized (backingConfig.configurationEntries) {
+            for (Map.Entry<String, Object> entry : backingConfig.configurationEntries.entrySet()) {
                 if (entry.getKey().startsWith(prefix)) {
                     String keyWithoutPrefix =
                             entry.getKey().substring(prefix.length(), entry.getKey().length());

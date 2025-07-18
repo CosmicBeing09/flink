@@ -60,10 +60,10 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
     public SchedulerNG createInstance(
             final Logger log,
             final JobGraph jobGraph,
-            final Executor ioExecutor,
+            final Executor ioThreadExecutor,
             final Configuration jobMasterConfiguration,
             final SlotPoolService slotPoolService,
-            final ScheduledExecutorService futureExecutor,
+            final ScheduledExecutorService scheduledTaskExecutor,
             final ClassLoader userCodeLoader,
             final CheckpointRecoveryFactory checkpointRecoveryFactory,
             final Duration rpcTimeout,
@@ -113,8 +113,8 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                         jobMasterConfiguration,
                         userCodeLoader,
                         executionDeploymentTracker,
-                        futureExecutor,
-                        ioExecutor,
+                        scheduledTaskExecutor,
+                        ioThreadExecutor,
                         rpcTimeout,
                         jobManagerJobMetricGroup,
                         blobWriter,
@@ -128,10 +128,10 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
         return new DefaultScheduler(
                 log,
                 jobGraph,
-                ioExecutor,
+                ioThreadExecutor,
                 jobMasterConfiguration,
                 schedulerComponents.getStartUpAction(),
-                new ScheduledExecutorServiceAdapter(futureExecutor),
+                new ScheduledExecutorServiceAdapter(scheduledTaskExecutor),
                 userCodeLoader,
                 checkpointsCleaner,
                 checkpointRecoveryFactory,
@@ -150,7 +150,7 @@ public class DefaultSchedulerFactory implements SchedulerNGFactory {
                     } else {
                         slotPool.setIsJobRestarting(false);
                     }
-                    jobStatusListener.jobStatusChanges(jobId, jobStatus, timestamp);
+                    jobStatusListener.onJobStatusChanged(jobId, jobStatus, timestamp);
                 },
                 failureEnrichers,
                 executionGraphFactory,
