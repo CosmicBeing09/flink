@@ -85,9 +85,9 @@ public class DefaultKubernetesArtifactUploader implements KubernetesArtifactUplo
             return artifactUriStr;
         }
 
-        final String targetDir = config.get(KubernetesConfigOptions.LOCAL_UPLOAD_TARGET);
+        final String remoteDirectory = config.get(KubernetesConfigOptions.LOCAL_UPLOAD_TARGET);
         checkArgument(
-                !StringUtils.isNullOrWhitespaceOnly(targetDir),
+                !StringUtils.isNullOrWhitespaceOnly(remoteDirectory),
                 String.format(
                         "Setting '%s' to a valid remote path is required.",
                         KubernetesConfigOptions.LOCAL_UPLOAD_TARGET.key()));
@@ -97,8 +97,8 @@ public class DefaultKubernetesArtifactUploader implements KubernetesArtifactUplo
                         ? FileSystem.WriteMode.OVERWRITE
                         : FileSystem.WriteMode.NO_OVERWRITE;
 
-        final File src = new File(artifactUri.getPath());
-        final Path target = new Path(targetDir, src.getName());
+        final File localFile = new File(artifactUri.getPath());
+        final Path target = new Path(remoteDirectory, localFile.getName());
         if (target.getFileSystem().exists(target)
                 && writeMode == FileSystem.WriteMode.NO_OVERWRITE) {
             LOG.info(
@@ -110,11 +110,11 @@ public class DefaultKubernetesArtifactUploader implements KubernetesArtifactUplo
             final long start = System.currentTimeMillis();
             final FileSystem fs = target.getFileSystem();
             try (FSDataOutputStream os = fs.create(target, writeMode)) {
-                FileUtils.copyFile(src, os);
+                FileUtils.copyFile(localFile, os);
             }
             LOG.debug(
                     "Copied file from {} to {}, cost {} ms",
-                    src,
+                    localFile,
                     target,
                     System.currentTimeMillis() - start);
         }
