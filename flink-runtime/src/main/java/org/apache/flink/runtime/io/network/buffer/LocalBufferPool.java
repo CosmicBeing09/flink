@@ -95,13 +95,13 @@ public class LocalBufferPool implements BufferPool {
     private final ArrayDeque<BufferListener> registeredListeners = new ArrayDeque<>();
 
     /**
-     * The number of expected memory segments of this buffer pool.
+     * The number of required memory segments of this buffer pool.
      *
      * <p>Usually, the buffers in {@link NetworkBufferPool} do not exactly meet the expectations of
      * all {@link LocalBufferPool}s, so typically this value is used as a weight to allocate buffers
      * to each {@link LocalBufferPool}.
      */
-    private final int expectedNumberOfMemorySegments;
+    private final int requiredNumberOfMemorySegments;
 
     /** The number of guaranteed (minimum number of) memory segments of this buffer pool. */
     private final int minNumberOfMemorySegments;
@@ -230,7 +230,7 @@ public class LocalBufferPool implements BufferPool {
                 maxNumberOfMemorySegments);
 
         this.networkBufferPool = networkBufferPool;
-        this.expectedNumberOfMemorySegments = expectedNumberOfMemorySegments;
+        this.requiredNumberOfMemorySegments = expectedNumberOfMemorySegments;
         this.currentPoolSize = minNumberOfMemorySegments;
         this.minNumberOfMemorySegments = minNumberOfMemorySegments;
         this.maxNumberOfMemorySegments = maxNumberOfMemorySegments;
@@ -293,7 +293,7 @@ public class LocalBufferPool implements BufferPool {
     }
 
     public int getRequiredNumberOfMemorySegments() {
-        return expectedNumberOfMemorySegments;
+        return requiredNumberOfMemorySegments;
     }
 
     @Override
@@ -735,7 +735,7 @@ public class LocalBufferPool implements BufferPool {
                     currentPoolSize,
                     numberOfRequestedMemorySegments,
                     availableMemorySegments.size(),
-                    expectedNumberOfMemorySegments,
+                    requiredNumberOfMemorySegments,
                     minNumberOfMemorySegments,
                     maxNumberOfMemorySegments,
                     registeredListeners.size(),
