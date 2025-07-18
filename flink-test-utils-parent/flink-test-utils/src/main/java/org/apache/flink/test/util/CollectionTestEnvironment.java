@@ -21,7 +21,7 @@ package org.apache.flink.test.util;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.CollectionEnvironment;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironmentFactory;
+import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 
 /**
  * A {@link CollectionEnvironment} to be used in tests. The predominant feature of this class is
@@ -50,10 +50,10 @@ public class CollectionTestEnvironment extends CollectionEnvironment {
     }
 
     protected void setAsContext() {
-        ExecutionEnvironmentFactory factory =
-                new ExecutionEnvironmentFactory() {
+        BatchExecutionEnvironmentFactory factory =
+                new BatchExecutionEnvironmentFactory() {
                     @Override
-                    public ExecutionEnvironment createExecutionEnvironment() {
+                    public ExecutionEnvironment createBatchExecutionEnvironment() {
                         lastEnv = new CollectionTestEnvironment();
                         return lastEnv;
                     }

@@ -21,8 +21,8 @@ package org.apache.flink.hdfstests;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.io.FileOutputFormat;
 import org.apache.flink.api.common.io.FirstAttemptInitializationContext;
+import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironmentFactory;
 import org.apache.flink.api.java.LocalEnvironment;
 import org.apache.flink.api.java.io.TextOutputFormat;
 import org.apache.flink.configuration.BlobServerOptions;
@@ -300,10 +300,10 @@ public class HDFSTest {
             le.setParallelism(1);
 
             initializeContextEnvironment(
-                    new ExecutionEnvironmentFactory() {
+                    new BatchExecutionEnvironmentFactory() {
 
                         @Override
-                        public ExecutionEnvironment createExecutionEnvironment() {
+                        public ExecutionEnvironment createBatchExecutionEnvironment() {
                             return le;
                         }
                     });

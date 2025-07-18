@@ -20,7 +20,7 @@ package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironmentFactory;
+import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -83,7 +83,7 @@ public class ClusterTestEnvironment extends ExecutionEnvironment {
     }
 
     public void setAsContext() {
-        ExecutionEnvironmentFactory factory =
+        BatchExecutionEnvironmentFactory factory =
                 () -> {
                     lastEnv =
                             new ClusterTestEnvironment(
@@ -114,7 +114,7 @@ public class ClusterTestEnvironment extends ExecutionEnvironment {
             final Collection<Path> jarFiles,
             final Collection<URL> classPaths) {
 
-        ExecutionEnvironmentFactory factory =
+        BatchExecutionEnvironmentFactory factory =
                 () -> new ClusterTestEnvironment(miniCluster, parallelism, false, jarFiles, classPaths);
 
         initializeContextEnvironment(factory);

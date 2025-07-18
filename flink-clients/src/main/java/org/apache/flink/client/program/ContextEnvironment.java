@@ -20,8 +20,8 @@ package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironmentFactory;
 import org.apache.flink.client.ClientUtils;
 import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.configuration.Configuration;
@@ -179,7 +179,7 @@ public class ContextEnvironment extends ExecutionEnvironment {
             final ClassLoader userCodeClassLoader,
             final boolean enforceSingleJobExecution,
             final boolean suppressSysout) {
-        ExecutionEnvironmentFactory factory =
+        BatchExecutionEnvironmentFactory factory =
                 () ->
                         new ContextEnvironment(
                                 executorServiceLoader,

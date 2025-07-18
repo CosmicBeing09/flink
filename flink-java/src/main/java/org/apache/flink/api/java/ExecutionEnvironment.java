@@ -114,10 +114,10 @@ public class ExecutionEnvironment {
     /**
      * The environment of the context (local by default, cluster if invoked through command line).
      */
-    private static ExecutionEnvironmentFactory contextEnvironmentFactory = null;
+    private static BatchExecutionEnvironmentFactory contextEnvironmentFactory = null;
 
-    /** The ThreadLocal used to store {@link ExecutionEnvironmentFactory}. */
-    private static final ThreadLocal<ExecutionEnvironmentFactory>
+    /** The ThreadLocal used to store {@link BatchExecutionEnvironmentFactory}. */
+    private static final ThreadLocal<BatchExecutionEnvironmentFactory>
             threadLocalContextEnvironmentFactory = new ThreadLocal<>();
 
     /** The default parallelism used by local environments. */
@@ -1097,7 +1097,7 @@ public class ExecutionEnvironment {
      */
     public static ExecutionEnvironment getExecutionEnvironment() {
         return Utils.resolveFactory(threadLocalContextEnvironmentFactory, contextEnvironmentFactory)
-                .map(ExecutionEnvironmentFactory::createExecutionEnvironment)
+                .map(BatchExecutionEnvironmentFactory::createBatchExecutionEnvironment)
                 .orElseGet(ExecutionEnvironment::createLocalEnvironment);
     }
 
@@ -1293,7 +1293,7 @@ public class ExecutionEnvironment {
      *
      * @param ctx The context environment factory.
      */
-    protected static void initializeContextEnvironment(ExecutionEnvironmentFactory ctx) {
+    protected static void initializeContextEnvironment(BatchExecutionEnvironmentFactory ctx) {
         contextEnvironmentFactory = Preconditions.checkNotNull(ctx);
         threadLocalContextEnvironmentFactory.set(ctx);
     }
