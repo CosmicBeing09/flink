@@ -35,13 +35,13 @@ class FixedDelayRestartBackoffTimeStrategyTest {
                 new FixedDelayRestartBackoffTimeStrategy(numberOfRestarts, 0L);
 
         for (int restartsLeft = numberOfRestarts; restartsLeft > 0; --restartsLeft) {
-            strategy.notifyFailure(failure);
+            strategy.notifyTaskFailure(failure);
             // two calls to 'canRestart()' to make sure this is not used to maintain the counter
             assertThat(strategy.canRestart()).isTrue();
             assertThat(strategy.canRestart()).isTrue();
         }
 
-        strategy.notifyFailure(failure);
+        strategy.notifyTaskFailure(failure);
         assertThat(strategy.canRestart()).isFalse();
     }
 
@@ -52,6 +52,6 @@ class FixedDelayRestartBackoffTimeStrategyTest {
         final FixedDelayRestartBackoffTimeStrategy restartStrategy =
                 new FixedDelayRestartBackoffTimeStrategy(1, backoffTimeMS);
 
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(backoffTimeMS);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(backoffTimeMS);
     }
 }

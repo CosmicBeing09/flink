@@ -1475,10 +1475,10 @@ public class AdaptiveScheduler
                     new JobException("The failure is not recoverable", failure));
         }
 
-        restartBackoffTimeStrategy.notifyFailure(failure);
+        restartBackoffTimeStrategy.notifyTaskFailure(failure);
         if (restartBackoffTimeStrategy.canRestart()) {
             return FailureResult.canRestart(
-                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getBackoffTime()));
+                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getRestartBackoffDelay()));
         } else {
             return FailureResult.canNotRestart(
                     new JobException(

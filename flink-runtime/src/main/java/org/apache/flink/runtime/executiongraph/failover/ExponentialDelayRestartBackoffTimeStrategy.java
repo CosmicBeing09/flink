@@ -101,7 +101,7 @@ public class ExponentialDelayRestartBackoffTimeStrategy implements RestartBackof
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartBackoffDelay() {
         checkState(
                 nextRestartTimestamp != DEFAULT_NEXT_RESTART_TIMESTAMP,
                 "Please call notifyFailure first.");
@@ -109,7 +109,7 @@ public class ExponentialDelayRestartBackoffTimeStrategy implements RestartBackof
     }
 
     @Override
-    public boolean notifyFailure(Throwable cause) {
+    public boolean notifyTaskFailure(Throwable cause) {
         long now = clock.absoluteTimeMillis();
 
         // Merge multiple failures into one attempt if there are tasks will be restarted later.
