@@ -2462,7 +2462,7 @@ class JobMasterTest {
 
             jobMasterGateway
                     .updateTaskExecutionState(
-                            new TaskExecutionState(executionAttemptId, ExecutionState.INITIALIZING))
+                            new TaskExecutionState(executionAttemptId, ExecutionState.RESTORING_STATE))
                     .get();
             jobMasterGateway
                     .updateTaskExecutionState(

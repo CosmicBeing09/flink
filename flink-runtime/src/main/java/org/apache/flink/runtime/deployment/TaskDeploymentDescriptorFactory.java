@@ -387,7 +387,7 @@ public class TaskDeploymentDescriptorFactory {
 
     private static boolean isProducerAvailable(ExecutionState producerState) {
         return producerState == ExecutionState.RUNNING
-                || producerState == ExecutionState.INITIALIZING
+                || producerState == ExecutionState.RESTORING_STATE
                 || producerState == ExecutionState.FINISHED
                 || producerState == ExecutionState.SCHEDULED
                 || producerState == ExecutionState.DEPLOYING;

@@ -215,7 +215,7 @@ public class SpeculativeExecutionVertex extends ExecutionVertex {
                 return 0;
             case RUNNING:
                 return 1;
-            case INITIALIZING:
+            case RESTORING_STATE:
                 return 2;
             case DEPLOYING:
                 return 3;

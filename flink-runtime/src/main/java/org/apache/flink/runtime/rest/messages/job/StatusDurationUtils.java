@@ -52,12 +52,12 @@ public class StatusDurationUtils {
                                 ? now
                                 : execution.getStateEndTimestamp(ExecutionState.DEPLOYING)));
         executionStateDuration.put(
-                ExecutionState.INITIALIZING,
+                ExecutionState.RESTORING_STATE,
                 calculateStateDuration(
-                        execution.getStateTimestamp(ExecutionState.INITIALIZING),
-                        state == ExecutionState.INITIALIZING
+                        execution.getStateTimestamp(ExecutionState.RESTORING_STATE),
+                        state == ExecutionState.RESTORING_STATE
                                 ? now
-                                : execution.getStateEndTimestamp(ExecutionState.INITIALIZING)));
+                                : execution.getStateEndTimestamp(ExecutionState.RESTORING_STATE)));
         executionStateDuration.put(
                 ExecutionState.RUNNING,
                 calculateStateDuration(

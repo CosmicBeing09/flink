@@ -74,7 +74,7 @@ class DeploymentStateTimeMetricsTest {
 
         metrics.onStateUpdate(id1, ExecutionState.CREATED, ExecutionState.SCHEDULED);
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
 
         final ExecutionAttemptID id2 = createExecutionAttemptId();
 
@@ -98,7 +98,7 @@ class DeploymentStateTimeMetricsTest {
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
         metrics.onStateUpdate(id2, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
 
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
         assertThat(metrics.getBinary()).isEqualTo(0L);
     }
 
@@ -116,10 +116,10 @@ class DeploymentStateTimeMetricsTest {
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
         metrics.onStateUpdate(id2, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
 
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
         assertThat(metrics.getBinary()).isEqualTo(1L);
 
-        metrics.onStateUpdate(id2, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id2, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
         assertThat(metrics.getBinary()).isEqualTo(0L);
     }
 
@@ -137,11 +137,11 @@ class DeploymentStateTimeMetricsTest {
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
         metrics.onStateUpdate(id2, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
 
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
-        metrics.onStateUpdate(id1, ExecutionState.INITIALIZING, ExecutionState.FINISHED);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
+        metrics.onStateUpdate(id1, ExecutionState.RESTORING_STATE, ExecutionState.FINISHED);
         assertThat(metrics.getBinary()).isEqualTo(1L);
 
-        metrics.onStateUpdate(id2, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id2, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
         assertThat(metrics.getBinary()).isEqualTo(0L);
     }
 
@@ -174,7 +174,7 @@ class DeploymentStateTimeMetricsTest {
 
         metrics.onStateUpdate(id1, ExecutionState.CREATED, ExecutionState.SCHEDULED);
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
 
         assertThat(metrics.getCurrentTime()).isEqualTo(0L);
     }
@@ -253,8 +253,8 @@ class DeploymentStateTimeMetricsTest {
 
         metrics.onStateUpdate(id1, ExecutionState.CREATED, ExecutionState.SCHEDULED);
         metrics.onStateUpdate(id1, ExecutionState.SCHEDULED, ExecutionState.DEPLOYING);
-        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.INITIALIZING);
-        metrics.onStateUpdate(id1, ExecutionState.INITIALIZING, ExecutionState.RUNNING);
+        metrics.onStateUpdate(id1, ExecutionState.DEPLOYING, ExecutionState.RESTORING_STATE);
+        metrics.onStateUpdate(id1, ExecutionState.RESTORING_STATE, ExecutionState.RUNNING);
         metrics.onStateUpdate(id1, ExecutionState.RUNNING, ExecutionState.CANCELING);
         metrics.onStateUpdate(id1, ExecutionState.CANCELING, ExecutionState.CANCELED);
 

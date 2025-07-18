@@ -347,7 +347,7 @@ public class DispatcherCleanupITCase extends AbstractDispatcherTest {
             final CompletableFuture<List<TaskDeploymentDescriptor>> descriptorsFuture =
                     tester.deployVertices(2);
             awaitStatus(dispatcherGateway, jobId, JobStatus.RUNNING);
-            tester.transitionTo(descriptorsFuture.get(), ExecutionState.INITIALIZING).get();
+            tester.transitionTo(descriptorsFuture.get(), ExecutionState.RESTORING_STATE).get();
             tester.transitionTo(descriptorsFuture.get(), ExecutionState.RUNNING).get();
             tester.getCheckpointFuture(1L).get();
             tester.transitionTo(descriptorsFuture.get(), ExecutionState.FINISHED).get();

@@ -116,7 +116,7 @@ public class DeploymentStateTimeMetrics
             case DEPLOYING:
                 pendingDeployments++;
                 break;
-            case INITIALIZING:
+            case RESTORING_STATE:
             case RUNNING:
                 completedDeployments++;
                 break;
@@ -128,7 +128,7 @@ public class DeploymentStateTimeMetrics
             case DEPLOYING:
                 pendingDeployments--;
                 break;
-            case INITIALIZING:
+            case RESTORING_STATE:
             case RUNNING:
                 completedDeployments--;
                 break;

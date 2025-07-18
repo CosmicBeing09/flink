@@ -96,7 +96,7 @@ class ShuffleDescriptorTest {
 
             // These states are allowed
             if (state == ExecutionState.RUNNING
-                    || state == ExecutionState.INITIALIZING
+                    || state == ExecutionState.RESTORING_STATE
                     || state == ExecutionState.FINISHED
                     || state == ExecutionState.SCHEDULED
                     || state == ExecutionState.DEPLOYING) {

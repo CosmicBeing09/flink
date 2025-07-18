@@ -2291,7 +2291,7 @@ public class DefaultSchedulerTest {
     private void transitionToRunning(DefaultScheduler scheduler, ExecutionAttemptID attemptId) {
         Preconditions.checkState(
                 scheduler.updateTaskExecutionState(
-                        new TaskExecutionState(attemptId, ExecutionState.INITIALIZING)));
+                        new TaskExecutionState(attemptId, ExecutionState.RESTORING_STATE)));
         Preconditions.checkState(
                 scheduler.updateTaskExecutionState(
                         new TaskExecutionState(attemptId, ExecutionState.RUNNING)));

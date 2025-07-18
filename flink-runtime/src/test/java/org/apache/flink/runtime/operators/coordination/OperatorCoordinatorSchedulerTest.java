@@ -816,7 +816,7 @@ class OperatorCoordinatorSchedulerTest {
 
     private void failAndRestartTask(DefaultScheduler scheduler, int subtask) {
         failAndRedeployTask(scheduler, subtask);
-        setExecutionToState(ExecutionState.INITIALIZING, scheduler, testVertexId, subtask);
+        setExecutionToState(ExecutionState.RESTORING_STATE, scheduler, testVertexId, subtask);
         setExecutionToState(ExecutionState.RUNNING, scheduler, testVertexId, subtask);
 
         // guard the test assumptions: This must bring the task back to RUNNING

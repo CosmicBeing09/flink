@@ -1125,7 +1125,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         final Execution failedExecution = currentExecutions.get(failingAttempt);
         if (failedExecution != null
                 && (failedExecution.getState() == ExecutionState.RUNNING
-                        || failedExecution.getState() == ExecutionState.INITIALIZING)) {
+                        || failedExecution.getState() == ExecutionState.RESTORING_STATE)) {
             failGlobal(cause);
         } else {
             LOG.debug(
@@ -1443,7 +1443,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
         Map<String, Accumulator<?, ?>> accumulators;
 
         switch (state.getExecutionState()) {
-            case INITIALIZING:
+            case RESTORING_STATE:
                 return attempt.switchToInitializing();
 
             case RUNNING:

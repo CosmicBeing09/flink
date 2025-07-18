@@ -246,7 +246,7 @@ public class BatchJobRecoveryTest {
         runInMainThread(
                 () -> {
                     // transition all middle tasks to RUNNING state
-                    transitionExecutionsState(scheduler, ExecutionState.INITIALIZING, MIDDLE_ID);
+                    transitionExecutionsState(scheduler, ExecutionState.RESTORING_STATE, MIDDLE_ID);
                     transitionExecutionsState(scheduler, ExecutionState.RUNNING, MIDDLE_ID);
                 });
         List<ExecutionAttemptID> sourceExecutions =

@@ -665,8 +665,8 @@ public class ExecutionJobVertex
             return ExecutionState.CANCELING;
         } else if (verticesPerState[ExecutionState.CANCELED.ordinal()] > 0) {
             return ExecutionState.CANCELED;
-        } else if (verticesPerState[ExecutionState.INITIALIZING.ordinal()] > 0) {
-            return ExecutionState.INITIALIZING;
+        } else if (verticesPerState[ExecutionState.RESTORING_STATE.ordinal()] > 0) {
+            return ExecutionState.RESTORING_STATE;
         } else if (verticesPerState[ExecutionState.RUNNING.ordinal()] > 0) {
             return ExecutionState.RUNNING;
         } else if (verticesPerState[ExecutionState.FINISHED.ordinal()] > 0) {

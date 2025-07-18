@@ -61,7 +61,7 @@ class SubtaskExecutionAttemptDetailsInfoTest
         statusDuration.put(ExecutionState.CREATED, 10L);
         statusDuration.put(ExecutionState.SCHEDULED, 20L);
         statusDuration.put(ExecutionState.DEPLOYING, 30L);
-        statusDuration.put(ExecutionState.INITIALIZING, 40L);
+        statusDuration.put(ExecutionState.RESTORING_STATE, 40L);
         statusDuration.put(ExecutionState.RUNNING, 50L);
 
         return new SubtaskExecutionAttemptDetailsInfo(

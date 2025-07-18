@@ -57,7 +57,7 @@ public class AggregatedTaskDetailsInfo implements ResponseBody {
     private static final String[] statusNames = {
         ExecutionState.CREATED.name(),
         ExecutionState.SCHEDULED.name(),
-        ExecutionState.INITIALIZING.name(),
+        ExecutionState.RESTORING_STATE.name(),
         ExecutionState.DEPLOYING.name(),
         ExecutionState.RUNNING.name()
     };
@@ -146,8 +146,8 @@ public class AggregatedTaskDetailsInfo implements ResponseBody {
                             .get(ExecutionState.SCHEDULED.name())
                             .addValue(status.get(ExecutionState.SCHEDULED));
                     statusDuration
-                            .get(ExecutionState.INITIALIZING.name())
-                            .addValue(status.get(ExecutionState.INITIALIZING));
+                            .get(ExecutionState.RESTORING_STATE.name())
+                            .addValue(status.get(ExecutionState.RESTORING_STATE));
                     statusDuration
                             .get(ExecutionState.DEPLOYING.name())
                             .addValue(status.get(ExecutionState.DEPLOYING));
