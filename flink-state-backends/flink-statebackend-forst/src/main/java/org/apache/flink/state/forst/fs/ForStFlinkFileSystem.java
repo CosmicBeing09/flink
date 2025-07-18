@@ -56,12 +56,12 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class ForStFlinkFileSystem extends FileSystem {
 
     // TODO: make it configurable
-    private static final int DEFAULT_INPUT_STREAM_CAPACITY = 32;
+    private static final int DEFAULT_BYTE_BUFFER_CAPACITY = 32;
 
-    private static final long SST_FILE_SIZE = 1024 * 1024 * 64;
+    private static final long DEFAULT_SST_FILE_THRESHOLD_BYTES = 1024 * 1024 * 64;
 
-    private final FileSystem localFS;
-    private final FileSystem delegateFS;
+    private final FileSystem localFileSystem;
+    private final FileSystem delegateFileSystem;
     @Nullable private final FileBasedCache fileBasedCache;
     private final FileMappingManager fileMappingManager;
 
@@ -70,11 +70,11 @@ public class ForStFlinkFileSystem extends FileSystem {
             String remoteBase,
             String localBase,
             @Nullable FileBasedCache fileBasedCache) {
-        this.localFS = FileSystem.getLocalFileSystem();
-        this.delegateFS = delegateFS;
+        this.localFileSystem = FileSystem.getLocalFileSystem();
+        this.delegateFileSystem = delegateFS;
         this.fileBasedCache = fileBasedCache;
         this.fileMappingManager =
-                new FileMappingManager(delegateFS, localFS, remoteBase, localBase);
+                new FileMappingManager(delegateFS, localFileSystem, remoteBase, localBase);
     }
 
     /**
@@ -112,13 +112,14 @@ public class ForStFlinkFileSystem extends FileSystem {
                             new SpaceBasedCacheLimitPolicy(
                                     new File(cacheBase.toString()),
                                     cacheReservedSize,
-                                    SST_FILE_SIZE));
+                                    DEFAULT_SST_FILE_THRESHOLD_BYTES));
         } else if (cacheCapacity > 0) {
             cacheLimitPolicy = new SizeBasedCacheLimitPolicy(cacheCapacity);
         } else if (cacheReservedSize > 0) {
             cacheLimitPolicy =
                     new SpaceBasedCacheLimitPolicy(
-                            new File(cacheBase.toString()), cacheReservedSize, SST_FILE_SIZE);
+                            new File(cacheBase.toString()), cacheReservedSize,
+                            DEFAULT_SST_FILE_THRESHOLD_BYTES);
         }
         return new FileBasedCache(
                 Integer.MAX_VALUE,
@@ -147,10 +148,10 @@ public class ForStFlinkFileSystem extends FileSystem {
         FileMappingManager.RealPath realPath = fileMappingManager.createFile(path);
         if (realPath.isLocal) {
             return new ByteBufferWritableFSDataOutputStream(
-                    localFS.create(realPath.path, overwriteMode));
+                    localFileSystem.create(realPath.path, overwriteMode));
         }
 
-        FSDataOutputStream originalOutputStream = delegateFS.create(path, overwriteMode);
+        FSDataOutputStream originalOutputStream = delegateFileSystem.create(path, overwriteMode);
         CachedDataOutputStream cachedDataOutputStream =
                 fileBasedCache == null ? null : fileBasedCache.create(originalOutputStream, path);
         return new ByteBufferWritableFSDataOutputStream(
@@ -160,49 +161,49 @@ public class ForStFlinkFileSystem extends FileSystem {
     @Override
     public synchronized ByteBufferReadableFSDataInputStream open(Path path, int bufferSize)
             throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
-                    () -> localFS.open(realPath.path, bufferSize),
-                    DEFAULT_INPUT_STREAM_CAPACITY,
-                    localFS.getFileStatus(realPath.path).getLen());
+                    () -> localFileSystem.open(realPath.path, bufferSize),
+                    DEFAULT_BYTE_BUFFER_CAPACITY,
+                    localFileSystem.getFileStatus(realPath.path).getLen());
         }
         FileStatus fileStatus = checkNotNull(getFileStatus(realPath.path));
         return new ByteBufferReadableFSDataInputStream(
                 () -> {
-                    FSDataInputStream inputStream = delegateFS.open(realPath.path, bufferSize);
+                    FSDataInputStream inputStream = delegateFileSystem.open(realPath.path, bufferSize);
                     CachedDataInputStream cachedDataInputStream =
                             fileBasedCache == null
                                     ? null
                                     : fileBasedCache.open(realPath.path, inputStream);
                     return cachedDataInputStream == null ? inputStream : cachedDataInputStream;
                 },
-                DEFAULT_INPUT_STREAM_CAPACITY,
+                DEFAULT_BYTE_BUFFER_CAPACITY,
                 fileStatus.getLen());
     }
 
     @Override
     public synchronized ByteBufferReadableFSDataInputStream open(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
             return new ByteBufferReadableFSDataInputStream(
-                    () -> localFS.open(realPath.path),
-                    DEFAULT_INPUT_STREAM_CAPACITY,
-                    localFS.getFileStatus(realPath.path).getLen());
+                    () -> localFileSystem.open(realPath.path),
+                    DEFAULT_BYTE_BUFFER_CAPACITY,
+                    localFileSystem.getFileStatus(realPath.path).getLen());
         }
         FileStatus fileStatus = checkNotNull(getFileStatus(realPath.path));
         return new ByteBufferReadableFSDataInputStream(
                 () -> {
-                    FSDataInputStream inputStream = delegateFS.open(realPath.path);
+                    FSDataInputStream inputStream = delegateFileSystem.open(realPath.path);
                     CachedDataInputStream cachedDataInputStream =
                             fileBasedCache == null
                                     ? null
                                     : fileBasedCache.open(realPath.path, inputStream);
                     return cachedDataInputStream == null ? inputStream : cachedDataInputStream;
                 },
-                DEFAULT_INPUT_STREAM_CAPACITY,
+                DEFAULT_BYTE_BUFFER_CAPACITY,
                 fileStatus.getLen());
     }
 
@@ -213,59 +214,59 @@ public class ForStFlinkFileSystem extends FileSystem {
 
     @Override
     public synchronized Path getWorkingDirectory() {
-        return delegateFS.getWorkingDirectory();
+        return delegateFileSystem.getWorkingDirectory();
     }
 
     @Override
     public synchronized Path getHomeDirectory() {
-        return delegateFS.getHomeDirectory();
+        return delegateFileSystem.getHomeDirectory();
     }
 
     @Override
     public synchronized URI getUri() {
-        return delegateFS.getUri();
+        return delegateFileSystem.getUri();
     }
 
     @Override
     public synchronized boolean exists(final Path f) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(f);
-        if (realPath == null) {
-            return delegateFS.exists(f) && delegateFS.getFileStatus(f).isDir();
+        FileMappingManager.RealPath mappingEntry = fileMappingManager.mappingEntry(f);
+        if (mappingEntry == null) {
+            return delegateFileSystem.exists(f) && delegateFileSystem.getFileStatus(f).isDir();
         }
 
         boolean status = false;
-        if (realPath.isLocal) {
-            status |= localFS.exists(realPath.path);
+        if (mappingEntry.isLocal) {
+            status |= localFileSystem.exists(mappingEntry.path);
             if (!status) {
-                status = delegateFS.exists(f);
+                status = delegateFileSystem.exists(f);
             }
         } else {
-            status = delegateFS.exists(realPath.path);
+            status = delegateFileSystem.exists(mappingEntry.path);
         }
         return status;
     }
 
     @Override
     public synchronized FileStatus getFileStatus(Path path) throws IOException {
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
-            return localFS.getFileStatus(realPath.path);
+            return localFileSystem.getFileStatus(realPath.path);
         }
-        return delegateFS.getFileStatus(realPath.path);
+        return delegateFileSystem.getFileStatus(realPath.path);
     }
 
     @Override
     public synchronized BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
             throws IOException {
         Path path = file.getPath();
-        FileMappingManager.RealPath realPath = fileMappingManager.realPath(path);
+        FileMappingManager.RealPath realPath = fileMappingManager.mappingEntry(path);
         Preconditions.checkNotNull(realPath);
         if (realPath.isLocal) {
-            FileStatus localFile = localFS.getFileStatus(realPath.path);
-            return localFS.getFileBlockLocations(localFile, start, len);
+            FileStatus localFile = localFileSystem.getFileStatus(realPath.path);
+            return localFileSystem.getFileBlockLocations(localFile, start, len);
         }
-        return delegateFS.getFileBlockLocations(file, start, len);
+        return delegateFileSystem.getFileBlockLocations(file, start, len);
     }
 
     @Override
@@ -299,12 +300,12 @@ public class ForStFlinkFileSystem extends FileSystem {
 
     @Override
     public synchronized boolean mkdirs(Path path) throws IOException {
-        return delegateFS.mkdirs(path);
+        return delegateFileSystem.mkdirs(path);
     }
 
     @Override
     public synchronized boolean isDistributedFS() {
-        return delegateFS.isDistributedFS();
+        return delegateFileSystem.isDistributedFS();
     }
 
     public synchronized int link(Path src, Path dst) throws IOException {
