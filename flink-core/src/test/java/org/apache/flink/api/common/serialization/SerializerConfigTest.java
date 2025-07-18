@@ -300,7 +300,7 @@ class SerializerConfigTest {
 
     private SerializerConfig getConfiguredSerializerConfig(String serializationConfigStr) {
         Configuration configuration = new Configuration();
-        configuration.setString(PipelineOptions.SERIALIZATION_CONFIG.key(), serializationConfigStr);
+        configuration.setString(PipelineOptions.SERIALIZATION_CONFIGS.key(), serializationConfigStr);
 
         SerializerConfig serializerConfig = new SerializerConfig();
         serializerConfig.configure(configuration, Thread.currentThread().getContextClassLoader());
