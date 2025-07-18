@@ -172,7 +172,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /** Tests for the {@link AdaptiveScheduler}. */
 public class AdaptiveSchedulerTest {
 
-    private static final Duration DEFAULT_TIMEOUT = Duration.ofHours(1);
+    private static final Duration JOB_MANAGER_IDLE_SLOT_TIMEOUT_DEFAULT = Duration.ofHours(1);
     private static final int PARALLELISM = 4;
     private static final JobVertex JOB_VERTEX = createNoOpVertex("v1", PARALLELISM);
 
@@ -2482,7 +2482,7 @@ public class AdaptiveSchedulerTest {
     }
 
     private static DefaultDeclarativeSlotPool createDeclarativeSlotPool(JobID jobId) {
-        return createDeclarativeSlotPool(jobId, DEFAULT_TIMEOUT);
+        return createDeclarativeSlotPool(jobId, JOB_MANAGER_IDLE_SLOT_TIMEOUT_DEFAULT);
     }
 
     private static DefaultDeclarativeSlotPool createDeclarativeSlotPool(
@@ -2492,7 +2492,7 @@ public class AdaptiveSchedulerTest {
                 new DefaultAllocatedSlotPool(),
                 ignored -> {},
                 idleSlotTimeout,
-                DEFAULT_TIMEOUT,
+                JOB_MANAGER_IDLE_SLOT_TIMEOUT_DEFAULT,
                 Duration.ZERO,
                 forMainThread());
     }
