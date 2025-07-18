@@ -96,7 +96,7 @@ public abstract class SavepointReaderITTestBase extends AbstractTestBaseJUnit4 {
                 .uid(UID)
                 .sinkTo(new DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         String savepoint = takeSavepoint(jobGraph);
 

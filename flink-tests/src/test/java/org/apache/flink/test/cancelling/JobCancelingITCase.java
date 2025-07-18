@@ -92,7 +92,7 @@ public class JobCancelingITCase extends TestLogger {
                 .addSink(new SleepingSink());
 
         StreamGraph streamGraph = env.getStreamGraph();
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
         ClusterClient<?> client = MINI_CLUSTER.getClusterClient();
         JobID jobID = client.submitJob(jobGraph).get();

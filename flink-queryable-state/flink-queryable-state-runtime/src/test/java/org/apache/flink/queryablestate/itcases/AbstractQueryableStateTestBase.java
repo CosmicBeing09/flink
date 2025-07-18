@@ -293,7 +293,7 @@ public abstract class AbstractQueryableStateTestBase {
                         .asQueryableState(queryName);
 
         // Submit the job graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         clusterClient
                 .submitJob(jobGraph)
@@ -1274,7 +1274,7 @@ public abstract class AbstractQueryableStateTestBase {
             Preconditions.checkNotNull(env);
 
             this.clusterClient = Preconditions.checkNotNull(clusterClient);
-            this.jobGraph = env.getStreamGraph().getJobGraph();
+            this.jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
             this.jobId = Preconditions.checkNotNull(jobGraph.getJobID());
 

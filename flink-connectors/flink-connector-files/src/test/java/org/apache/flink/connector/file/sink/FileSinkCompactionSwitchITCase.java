@@ -233,7 +233,7 @@ public class FileSinkCompactionSwitchITCase {
                 .setParallelism(NUM_SINKS);
 
         StreamGraph streamGraph = env.getStreamGraph();
-        return streamGraph.getJobGraph();
+        return streamGraph.getStreamingJobGraph();
     }
 
     private FileSink<Integer> createFileSink(

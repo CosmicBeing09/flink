@@ -54,7 +54,7 @@ class StreamGraphCoLocationConstraintTest {
         result.getTransformation().setCoLocationGroupKey("group2");
 
         // get the graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         assertThat(jobGraph.getNumberOfVertices()).isEqualTo(4);
 
         List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
@@ -91,7 +91,7 @@ class StreamGraphCoLocationConstraintTest {
         result.getTransformation().setCoLocationGroupKey("co2");
 
         // get the graph
-        assertThatThrownBy(() -> env.getStreamGraph().getJobGraph())
+        assertThatThrownBy(() -> env.getStreamGraph().getStreamingJobGraph())
                 .isInstanceOf(IllegalStateException.class);
     }
 }

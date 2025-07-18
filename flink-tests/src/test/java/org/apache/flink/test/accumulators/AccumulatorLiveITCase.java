@@ -130,7 +130,7 @@ public class AccumulatorLiveITCase extends TestLogger {
                 .writeUsingOutputFormat(new DummyOutputFormat())
                 .disableChaining();
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         submitJobAndVerifyResults(jobGraph);
     }

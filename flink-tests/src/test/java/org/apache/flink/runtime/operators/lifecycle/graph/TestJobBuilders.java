@@ -115,7 +115,7 @@ public class TestJobBuilders {
                     operatorsNumberOfInputs.put(mapForward, 1);
 
                     return new TestJobWithDescription(
-                            env.getStreamGraph().getJobGraph(),
+                            env.getStreamGraph().getStreamingJobGraph(),
                             singleton(unitedSourceLeft),
                             new HashSet<>(singletonList(mapForward)),
                             new HashSet<>(asList(unitedSourceLeft, mapForward)),
@@ -249,7 +249,7 @@ public class TestJobBuilders {
                             stateBackend != null
                                     ? StateBackendUtils.configureStateBackendAndGetJobGraph(
                                             env, stateBackend)
-                                    : env.getStreamGraph().getJobGraph();
+                                    : env.getStreamGraph().getStreamingJobGraph();
 
                     return new TestJobWithDescription(
                             jobGraph,

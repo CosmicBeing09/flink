@@ -89,7 +89,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>())
                 .name("sink");
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         final Map<JobVertexID, String> ids = rememberIds(jobGraph);
 
@@ -114,7 +114,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>())
                 .name("sink");
 
-        jobGraph = env.getStreamGraph().getJobGraph();
+        jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         verifyIdsEqual(jobGraph, ids);
     }
@@ -140,7 +140,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
         src0.union(src1)
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         assertThat(vertices.get(0).isInputVertex()).isTrue();
@@ -172,7 +172,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .filter(new NoOpFilterFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertexID sourceId = jobGraph.getVerticesSortedTopologicallyFromSources().get(0).getID();
 
@@ -185,7 +185,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .filter(new NoOpFilterFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        jobGraph = env.getStreamGraph().getJobGraph();
+        jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertexID unchainedSourceId =
                 jobGraph.getVerticesSortedTopologicallyFromSources().get(0).getID();
@@ -215,7 +215,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .filter(new NoOpFilterFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertex chainedMap = jobGraph.getVerticesSortedTopologicallyFromSources().get(1);
         assertThat(chainedMap.getName()).startsWith("map");
@@ -232,7 +232,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .startNewChain()
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        jobGraph = env.getStreamGraph().getJobGraph();
+        jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertex unchainedMap = jobGraph.getVerticesSortedTopologicallyFromSources().get(1);
         assertThat(unchainedMap.getName()).isEqualTo("map");
@@ -265,7 +265,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
         src.map(new NoOpMapFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         Set<JobVertexID> vertexIds = new HashSet<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             assertThat(vertexIds.add(vertex.getID())).isTrue();
@@ -277,13 +277,13 @@ class StreamingJobGraphGeneratorNodeHashTest {
     void testChangedOperatorName() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         env.addSource(new NoOpSourceFunction(), "A").map(new NoOpMapFunction());
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertexID expected = jobGraph.getVerticesAsArray()[0].getID();
 
         env = StreamExecutionEnvironment.createLocalEnvironment();
         env.addSource(new NoOpSourceFunction(), "B").map(new NoOpMapFunction());
-        jobGraph = env.getStreamGraph().getJobGraph();
+        jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobVertexID actual = jobGraph.getVerticesAsArray()[0].getID();
 
@@ -328,7 +328,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .name("sink1")
                 .uid("sink1");
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         Set<JobVertexID> ids = new HashSet<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             assertThat(ids.add(vertex.getID())).isTrue();
@@ -360,7 +360,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .name("sink1")
                 .uid("sink1");
 
-        JobGraph newJobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph newJobGraph = env.getStreamGraph().getStreamingJobGraph();
         assertThat(newJobGraph.getJobID()).isNotEqualTo(jobGraph.getJobID());
 
         for (JobVertex vertex : newJobGraph.getVertices()) {
@@ -388,7 +388,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
         // This call is necessary to generate the job graph
-        assertThatThrownBy(() -> env.getStreamGraph().getJobGraph())
+        assertThatThrownBy(() -> env.getStreamGraph().getStreamingJobGraph())
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -404,7 +404,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .uid("map")
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        env.getStreamGraph().getJobGraph();
+        env.getStreamGraph().getStreamingJobGraph();
     }
 
     /** Tests that a manual hash at the beginning of a chain is accepted. */
@@ -418,7 +418,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .map(new NoOpMapFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        env.getStreamGraph().getJobGraph();
+        env.getStreamGraph().getStreamingJobGraph();
     }
 
     @Test
@@ -436,7 +436,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .name("reduce")
                 .setUidHash("dddddddddddddddddddddddddddddddd");
 
-        env.getStreamGraph().getJobGraph();
+        env.getStreamGraph().getStreamingJobGraph();
     }
 
     @Test

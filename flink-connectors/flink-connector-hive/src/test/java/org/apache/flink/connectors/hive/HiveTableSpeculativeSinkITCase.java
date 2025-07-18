@@ -171,7 +171,7 @@ class HiveTableSpeculativeSinkITCase {
                                                                                     .parse(
                                                                                             insertQuery)
                                                                                     .get(0))))
-                                    .getJobGraph();
+                                    .getStreamingJobGraph();
 
                     for (JobVertex jobVertex : jobGraph.getVertices()) {
                         if (jobVertex.getName().contains("slowMap")) {

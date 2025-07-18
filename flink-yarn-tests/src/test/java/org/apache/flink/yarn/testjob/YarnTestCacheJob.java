@@ -61,7 +61,7 @@ public class YarnTestCacheJob {
                 .sinkTo(new DiscardingSink<String>())
                 .setParallelism(1);
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class MapperFunction extends RichMapFunction<String, String> {

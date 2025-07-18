@@ -113,7 +113,7 @@ class RescalePartitionerTest extends StreamPartitionerTest {
 
         counts.rescale().print().setParallelism(2);
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         List<JobVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 

@@ -68,7 +68,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -103,7 +103,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -146,7 +146,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
                 .toSink(new WrappedSink<>(new DiscardingSink<>()))
                 .withParallelism(3);
         StreamGraph streamGraph = env.getStreamGraph();
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -183,7 +183,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);

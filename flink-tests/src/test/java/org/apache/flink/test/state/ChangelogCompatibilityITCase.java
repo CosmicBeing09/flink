@@ -153,7 +153,7 @@ public class ChangelogCompatibilityITCase {
                 .countWindowAll(37) // any stateful transformation suffices
                 .reduce((ReduceFunction<Long>) Long::sum) // overflow is fine, result is discarded
                 .sinkTo(new DiscardingSink<>());
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private String tryCheckpointAndStop(JobGraph jobGraph) throws Exception {

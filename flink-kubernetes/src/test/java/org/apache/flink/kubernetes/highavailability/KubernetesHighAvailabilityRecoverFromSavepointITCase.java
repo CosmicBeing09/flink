@@ -204,7 +204,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
                 .uid(FLAT_MAP_UID)
                 .sinkTo(new DiscardingSink<>());
 
-        return sEnv.getStreamGraph().getJobGraph();
+        return sEnv.getStreamGraph().getStreamingJobGraph();
     }
 
     private static final class InfiniteSourceFunction extends RichParallelSourceFunction<Integer>

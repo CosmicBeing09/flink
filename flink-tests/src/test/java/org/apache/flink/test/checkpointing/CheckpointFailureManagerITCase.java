@@ -98,7 +98,7 @@ public class CheckpointFailureManagerITCase extends TestLogger {
         env.getCheckpointConfig().setTolerableCheckpointFailureNumber(0);
         RestartStrategyUtils.configureNoRestartStrategy(env);
         env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE).sinkTo(new DiscardingSink<>());
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(env.getStreamGraph());
         try {
             TestUtils.submitJobAndWaitForResult(
                     cluster.getClusterClient(), jobGraph, getClass().getClassLoader());
@@ -124,7 +124,7 @@ public class CheckpointFailureManagerITCase extends TestLogger {
                 env,
                 "org.apache.flink.test.checkpointing.CheckpointFailureManagerITCase$AsyncFailureStateBackendFactory");
         env.addSource(new StringGeneratingSourceFunction()).sinkTo(new DiscardingSink<>());
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(env.getStreamGraph());
         try {
             // assert that the job only execute checkpoint once and only failed once.
             TestUtils.submitJobAndWaitForResult(

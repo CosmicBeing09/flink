@@ -146,7 +146,7 @@ public class DistributedCacheDfsTest extends TestLogger {
                         "testSubmittingJobViaRestClusterClient");
 
         final JobGraph jobGraph =
-                createJobWithRegisteredCachedFiles().getStreamGraph().getJobGraph();
+                createJobWithRegisteredCachedFiles().getStreamGraph().getStreamingJobGraph();
 
         final JobResult jobResult =
                 restClusterClient

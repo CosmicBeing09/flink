@@ -591,7 +591,7 @@ class AsyncWaitOperatorTest {
                 .sinkTo(new DiscardingSink<>());
 
         // be build our own OperatorChain
-        final JobGraph jobGraph = chainEnv.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = chainEnv.getStreamGraph().getStreamingJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(3);
 

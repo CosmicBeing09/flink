@@ -265,7 +265,7 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         ClusterClient<?> client = miniClusterResource.getClusterClient();
 
         // Submit the job
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         JobID jobID = client.submitJob(jobGraph).get();
 
@@ -343,7 +343,7 @@ public abstract class SnapshotMigrationTestBase extends TestLogger {
         ClusterClient<?> client = miniClusterResource.getClusterClient();
 
         // Submit the job
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         jobGraph.setSavepointRestoreSettings(SavepointRestoreSettings.forPath(snapshotPath));
 

@@ -46,7 +46,7 @@ public class YarnTestJob {
                 .sinkTo(new DiscardingSink<>())
                 .setParallelism(2);
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     /** Helper class to signal between multiple processes that a job should stop. */

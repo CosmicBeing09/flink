@@ -242,12 +242,12 @@ class StreamExecutionEnvironmentTest {
         assertThat(operator.getParallelism()).isEqualTo(1 << 15);
 
         // default value after generating
-        env.getStreamGraph(false).getJobGraph();
+        env.getStreamGraph(false).getStreamingJobGraph();
         assertThat(operator.getTransformation().getMaxParallelism()).isEqualTo(-1);
 
         // configured value after generating
         env.setMaxParallelism(42);
-        env.getStreamGraph(false).getJobGraph();
+        env.getStreamGraph(false).getStreamingJobGraph();
         assertThat(operator.getTransformation().getMaxParallelism()).isEqualTo(42);
 
         // bounds configured parallelism 1
@@ -275,7 +275,7 @@ class StreamExecutionEnvironmentTest {
         assertThat(operator.getTransformation().getMaxParallelism()).isEqualTo(1 << 15);
 
         // override config
-        env.getStreamGraph(false).getJobGraph();
+        env.getStreamGraph(false).getStreamingJobGraph();
         assertThat(operator.getTransformation().getMaxParallelism()).isEqualTo(1 << 15);
     }
 

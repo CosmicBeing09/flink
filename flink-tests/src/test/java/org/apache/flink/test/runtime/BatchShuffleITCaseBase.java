@@ -121,7 +121,7 @@ class BatchShuffleITCaseBase {
 
         StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setJobType(JobType.BATCH);
-        return StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        return StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
     }
 
     protected Configuration getConfiguration() {

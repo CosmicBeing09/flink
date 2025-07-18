@@ -296,7 +296,7 @@ class JobIDLoggingITCase {
                                 .withTimestampAssigner((r, t) -> (long) r),
                         "Source-42441337")
                 .addSink(new DiscardingSink<>());
-        JobID jobId = clusterClient.submitJob(env.getStreamGraph().getJobGraph()).get();
+        JobID jobId = clusterClient.submitJob(env.getStreamGraph().getStreamingJobGraph()).get();
         Deadline deadline = Deadline.fromNow(Duration.ofMinutes(5));
         while (deadline.hasTimeLeft()
                 && clusterClient.listJobs().get().stream()

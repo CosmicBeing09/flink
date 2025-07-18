@@ -81,7 +81,7 @@ class StreamExecutionEnvironmentComplexConfigurationTest {
 
         DefaultScheduler scheduler =
                 new DefaultSchedulerBuilder(
-                                env.getStreamGraph().getJobGraph(),
+                                env.getStreamGraph().getStreamingJobGraph(),
                                 ComponentMainThreadExecutorServiceAdapter.forMainThread(),
                                 Executors.newSingleThreadScheduledExecutor())
                         .build();

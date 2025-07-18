@@ -131,7 +131,7 @@ public class IncrementalStateReuseAfterFailureITCase {
         transform2.sinkTo(new DiscardingSink<>());
 
         return new TestJobWithDescription(
-                env.getStreamGraph().getJobGraph(),
+                env.getStreamGraph().getStreamingJobGraph(),
                 emptySet(),
                 emptySet(),
                 emptySet(),

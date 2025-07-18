@@ -103,7 +103,7 @@ public class StateBackendUtils {
             StreamExecutionEnvironment env, StateBackend stateBackend) {
         StreamGraph streamGraph = env.getStreamGraph();
         streamGraph.setStateBackend(stateBackend);
-        return streamGraph.getJobGraph();
+        return streamGraph.getStreamingJobGraph();
     }
 
     /**

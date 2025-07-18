@@ -50,7 +50,7 @@ public class StreamingNoop {
                 .sinkTo(new DiscardingSink<>());
 
         // generate a job graph
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         File jobGraphFile = new File(params.get("output", "job.graph"));
         try (FileOutputStream output = new FileOutputStream(jobGraphFile);
                 ObjectOutputStream obOutput = new ObjectOutputStream(output)) {

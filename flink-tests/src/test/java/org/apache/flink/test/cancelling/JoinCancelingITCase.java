@@ -73,7 +73,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
 
         env.setParallelism(parallelism);
 
-        runAndCancelJob(env.getStreamGraph().getJobGraph(), 5 * 1000, 10 * 1000);
+        runAndCancelJob(env.getStreamGraph().getStreamingJobGraph(), 5 * 1000, 10 * 1000);
     }
 
     @Test
@@ -116,7 +116,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
                 .sinkTo(new DiscardingSink<>());
 
         runAndCancelJob(
-                env.getStreamGraph().getJobGraph(), msecsTillCanceling, maxTimeTillCanceled);
+                env.getStreamGraph().getStreamingJobGraph(), msecsTillCanceling, maxTimeTillCanceled);
     }
 
     // --------------- Test Sort Matches that are canceled while in the Matching Phase

@@ -175,7 +175,7 @@ public class NotifyCheckpointAbortedITCase extends TestLogger {
                 .transform(DECLINE_SINK_NAME, TypeInformation.of(Object.class), new DeclineSink());
 
         final ClusterClient<?> clusterClient = cluster.getClusterClient();
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         JobID jobID = jobGraph.getJobID();
 
         clusterClient.submitJob(jobGraph).get();

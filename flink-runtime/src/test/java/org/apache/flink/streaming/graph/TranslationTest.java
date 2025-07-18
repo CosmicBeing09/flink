@@ -37,7 +37,7 @@ class TranslationTest {
         // with deactivated fault tolerance, the checkpoint mode should be at-least-once
         StreamExecutionEnvironment deactivated = getSimpleJob();
 
-        for (JobVertex vertex : deactivated.getStreamGraph().getJobGraph().getVertices()) {
+        for (JobVertex vertex : deactivated.getStreamGraph().getStreamingJobGraph().getVertices()) {
             assertThat(new StreamConfig(vertex.getConfiguration()).getCheckpointMode())
                     .isEqualTo(CheckpointingMode.AT_LEAST_ONCE);
         }
@@ -45,7 +45,7 @@ class TranslationTest {
         // with activated fault tolerance, the checkpoint mode should be by default exactly once
         StreamExecutionEnvironment activated = getSimpleJob();
         activated.enableCheckpointing(1000L);
-        for (JobVertex vertex : activated.getStreamGraph().getJobGraph().getVertices()) {
+        for (JobVertex vertex : activated.getStreamGraph().getStreamingJobGraph().getVertices()) {
             assertThat(new StreamConfig(vertex.getConfiguration()).getCheckpointMode())
                     .isEqualTo(CheckpointingMode.EXACTLY_ONCE);
         }
@@ -53,7 +53,7 @@ class TranslationTest {
         // explicitly setting the mode
         StreamExecutionEnvironment explicit = getSimpleJob();
         explicit.enableCheckpointing(1000L, CheckpointingMode.AT_LEAST_ONCE);
-        for (JobVertex vertex : explicit.getStreamGraph().getJobGraph().getVertices()) {
+        for (JobVertex vertex : explicit.getStreamGraph().getStreamingJobGraph().getVertices()) {
             assertThat(new StreamConfig(vertex.getConfiguration()).getCheckpointMode())
                     .isEqualTo(CheckpointingMode.AT_LEAST_ONCE);
         }
