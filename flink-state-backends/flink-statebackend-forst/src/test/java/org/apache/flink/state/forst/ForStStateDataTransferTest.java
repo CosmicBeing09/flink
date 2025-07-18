@@ -358,7 +358,7 @@ class ForStStateDataTransferTest extends TestLogger {
         FileStatus fileStatus = fileSystem.getFileStatus(path);
         Preconditions.checkNotNull(fileStatus);
 
-        long len = fileStatus.getLen();
+        long len = fileStatus.getLength();
         Preconditions.checkState(len >= headBytes);
 
         try (FSDataInputStream inputStream = fileSystem.open(path)) {

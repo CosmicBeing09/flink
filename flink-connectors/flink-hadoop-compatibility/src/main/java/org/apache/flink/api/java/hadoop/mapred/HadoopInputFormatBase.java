@@ -253,7 +253,7 @@ public abstract class HadoopInputFormatBase<K, V, T>
         // calculate the whole length
         long len = 0;
         for (FileStatus s : files) {
-            len += s.getLen();
+            len += s.getLength();
         }
 
         // sanity check

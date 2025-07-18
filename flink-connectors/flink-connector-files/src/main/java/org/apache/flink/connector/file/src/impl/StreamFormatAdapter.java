@@ -154,7 +154,7 @@ public final class StreamFormatAdapter<T> implements BulkFormat<T, FileSourceSpl
             throws IOException {
 
         final FileSystem fs = file.getFileSystem();
-        final long fileLength = fs.getFileStatus(file).getLen();
+        final long fileLength = fs.getFileStatus(file).getLength();
 
         final int fetchSize =
                 MathUtils.checkedDownCast(config.get(StreamFormat.FETCH_IO_SIZE).getBytes());

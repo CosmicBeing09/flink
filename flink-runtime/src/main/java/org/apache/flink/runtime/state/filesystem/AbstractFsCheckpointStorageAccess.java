@@ -303,7 +303,7 @@ public abstract class AbstractFsCheckpointStorageAccess implements CheckpointSto
         }
 
         final FileStateHandle metaDataFileHandle =
-                new FileStateHandle(metadataFileStatus.getPath(), metadataFileStatus.getLen());
+                new FileStateHandle(metadataFileStatus.getPath(), metadataFileStatus.getLength());
 
         final String pointer = checkpointDir.makeQualified(fs).toString();
 

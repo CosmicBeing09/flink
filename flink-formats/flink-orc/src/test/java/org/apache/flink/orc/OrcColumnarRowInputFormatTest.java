@@ -419,7 +419,7 @@ class OrcColumnarRowInputFormatTest {
             throws IOException {
         final List<FileSourceSplit> splits = new ArrayList<>(minNumSplits);
         final FileStatus fileStatus = path.getFileSystem().getFileStatus(path);
-        final long len = fileStatus.getLen();
+        final long len = fileStatus.getLength();
         final long preferSplitSize = len / minNumSplits + (len % minNumSplits == 0 ? 0 : 1);
         int splitNum = 0;
         long position = 0;

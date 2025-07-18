@@ -90,7 +90,7 @@ class DummyFSFileSystem extends FileSystem {
     @Override
     public BlockLocation[] getFileBlockLocations(FileStatus file, long start, long len)
             throws IOException {
-        return new BlockLocation[] {new LocalBlockLocation(file.getLen())};
+        return new BlockLocation[] {new LocalBlockLocation(file.getLength())};
     }
 
     @Override

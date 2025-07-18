@@ -109,9 +109,9 @@ public class HiveCompactReaderFactory implements CompactReader.Factory<RowData> 
                 "id",
                 path,
                 0,
-                fileStatus.getLen(),
+                fileStatus.getLength(),
                 fileStatus.getModificationTime(),
-                fileStatus.getLen(),
+                fileStatus.getLength(),
                 new String[0],
                 null,
                 createPartition(path));

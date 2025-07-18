@@ -167,7 +167,7 @@ public class ForStFlinkFileSystem extends FileSystem {
             return new ByteBufferReadableFSDataInputStream(
                     () -> localFileSystem.open(realPath.path, bufferSize),
                     DEFAULT_BYTE_BUFFER_CAPACITY,
-                    localFileSystem.getFileStatus(realPath.path).getLen());
+                    localFileSystem.getFileStatus(realPath.path).getLength());
         }
         FileStatus fileStatus = checkNotNull(getFileStatus(realPath.path));
         return new ByteBufferReadableFSDataInputStream(
@@ -180,7 +180,7 @@ public class ForStFlinkFileSystem extends FileSystem {
                     return cachedDataInputStream == null ? inputStream : cachedDataInputStream;
                 },
                 DEFAULT_BYTE_BUFFER_CAPACITY,
-                fileStatus.getLen());
+                fileStatus.getLength());
     }
 
     @Override
@@ -191,7 +191,7 @@ public class ForStFlinkFileSystem extends FileSystem {
             return new ByteBufferReadableFSDataInputStream(
                     () -> localFileSystem.open(realPath.path),
                     DEFAULT_BYTE_BUFFER_CAPACITY,
-                    localFileSystem.getFileStatus(realPath.path).getLen());
+                    localFileSystem.getFileStatus(realPath.path).getLength());
         }
         FileStatus fileStatus = checkNotNull(getFileStatus(realPath.path));
         return new ByteBufferReadableFSDataInputStream(
@@ -204,7 +204,7 @@ public class ForStFlinkFileSystem extends FileSystem {
                     return cachedDataInputStream == null ? inputStream : cachedDataInputStream;
                 },
                 DEFAULT_BYTE_BUFFER_CAPACITY,
-                fileStatus.getLen());
+                fileStatus.getLength());
     }
 
     @Override

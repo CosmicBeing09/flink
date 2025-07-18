@@ -427,7 +427,7 @@ class ParquetColumnarRowInputFormatTest {
         Path testPath = createTempParquetFile(folder, rows, rowGroupSize);
 
         // test reading and splitting
-        long fileLen = testPath.getFileSystem().getFileStatus(testPath).getLen();
+        long fileLen = testPath.getFileSystem().getFileStatus(testPath).getLength();
         int len1 = testReadingSplit(subList(records, 0), testPath, 0, fileLen / 3);
         int len2 = testReadingSplit(subList(records, len1), testPath, fileLen / 3, fileLen * 2 / 3);
         int len3 =
@@ -502,7 +502,7 @@ class ParquetColumnarRowInputFormatTest {
                                 splitStart,
                                 splitLength,
                                 fileStatus.getModificationTime(),
-                                fileStatus.getLen(),
+                                fileStatus.getLength(),
                                 new String[0],
                                 new CheckpointedPosition(
                                         CheckpointedPosition.NO_OFFSET, seekToRow)));
@@ -796,7 +796,7 @@ class ParquetColumnarRowInputFormatTest {
                                 0,
                                 Long.MAX_VALUE,
                                 fileStatus.getModificationTime(),
-                                fileStatus.getLen())),
+                                fileStatus.getLength())),
                 row -> {
                     int i = cnt.get();
                     // common values

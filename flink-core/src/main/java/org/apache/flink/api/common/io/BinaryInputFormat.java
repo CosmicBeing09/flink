@@ -110,7 +110,7 @@ public abstract class BinaryInputFormat<T> extends FileInputFormat<T>
             final long blockSize =
                     this.blockSize == NATIVE_BLOCK_SIZE ? fs.getDefaultBlockSize() : this.blockSize;
 
-            for (long pos = 0, length = file.getLen(); pos < length; pos += blockSize) {
+            for (long pos = 0, length = file.getLength(); pos < length; pos += blockSize) {
                 long remainingLength = Math.min(pos + blockSize, length) - pos;
 
                 // get the block locations and make sure they are in order with respect to their
@@ -135,11 +135,11 @@ public abstract class BinaryInputFormat<T> extends FileInputFormat<T>
                             blockSize, Arrays.toString(getFilePaths()), minNumSplits));
             FileStatus last = files.get(files.size() - 1);
             final BlockLocation[] blocks =
-                    last.getPath().getFileSystem().getFileBlockLocations(last, 0, last.getLen());
+                    last.getPath().getFileSystem().getFileBlockLocations(last, 0, last.getLength());
             for (int index = inputSplits.size(); index < minNumSplits; index++) {
                 inputSplits.add(
                         new FileInputSplit(
-                                index, last.getPath(), last.getLen(), 0, blocks[0].getHosts()));
+                                index, last.getPath(), last.getLength(), 0, blocks[0].getHosts()));
             }
         }
 
@@ -249,13 +249,13 @@ public abstract class BinaryInputFormat<T> extends FileInputFormat<T>
         long totalCount = 0;
         for (FileStatus file : files) {
             // invalid file
-            if (file.getLen() < blockInfo.getInfoSize()) {
+            if (file.getLength() < blockInfo.getInfoSize()) {
                 continue;
             }
 
             FileSystem fs = file.getPath().getFileSystem();
             try (FSDataInputStream fdis = fs.open(file.getPath(), blockInfo.getInfoSize())) {
-                fdis.seek(file.getLen() - blockInfo.getInfoSize());
+                fdis.seek(file.getLength() - blockInfo.getInfoSize());
 
                 blockInfo.read(new DataInputViewStreamWrapper(fdis));
                 totalCount += blockInfo.getAccumulatedRecordCount();

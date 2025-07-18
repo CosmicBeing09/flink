@@ -37,7 +37,7 @@ public interface FileStatus {
      *
      * @return the length of this file
      */
-    long getLen();
+    long getLength();
 
     /**
      * Get the block size of the file.
@@ -51,7 +51,7 @@ public interface FileStatus {
      *
      * @return the replication factor of a file.
      */
-    short getReplication();
+    short getReplicationFactor();
 
     /**
      * Get the modification time of the file.

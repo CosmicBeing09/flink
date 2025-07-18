@@ -653,7 +653,7 @@ class FileInputFormatTest {
         final FileSystem fs = path.getFileSystem();
         for (FileStatus file : fs.listStatus(path)) {
             // split created like in DeserializationSchemaAdapter.Reader()
-            splits.add(new FileInputSplit(0, file.getPath(), 0, file.getLen(), null));
+            splits.add(new FileInputSplit(0, file.getPath(), 0, file.getLength(), null));
         }
         return splits;
     }

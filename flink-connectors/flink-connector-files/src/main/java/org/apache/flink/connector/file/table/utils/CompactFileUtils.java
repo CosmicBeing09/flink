@@ -64,7 +64,7 @@ public class CompactFileUtils {
 
         Map<Path, Long> inputMap = new HashMap<>();
         for (Path path : paths) {
-            inputMap.put(path, fileSystem.getFileStatus(path).getLen());
+            inputMap.put(path, fileSystem.getFileStatus(path).getLength());
         }
 
         if (fileSystem.exists(target)) {
@@ -87,7 +87,7 @@ public class CompactFileUtils {
         }
 
         Map<Path, Long> targetMap = new HashMap<>();
-        targetMap.put(target, fileSystem.getFileStatus(target).getLen());
+        targetMap.put(target, fileSystem.getFileStatus(target).getLength());
 
         double costSeconds = ((double) (System.currentTimeMillis() - startMillis)) / 1000;
         LOG.info(

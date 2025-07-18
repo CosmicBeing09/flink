@@ -420,7 +420,7 @@ public abstract class DelimitedInputFormat<OT> extends FileInputFormat<OT>
                 // make a split for the sample and use it to read a record
                 FileStatus file = allFiles.get(fileNum);
                 FileInputSplit split =
-                        new FileInputSplit(0, file.getPath(), offset, file.getLen() - offset, null);
+                        new FileInputSplit(0, file.getPath(), offset, file.getLength() - offset, null);
 
                 // we open the split, read one line, and take its length
                 try {
@@ -438,8 +438,8 @@ public abstract class DelimitedInputFormat<OT> extends FileInputFormat<OT>
 
                 // skip to the next file, if necessary
                 while (fileNum < allFiles.size()
-                        && offset >= (file = allFiles.get(fileNum)).getLen()) {
-                    offset -= file.getLen();
+                        && offset >= (file = allFiles.get(fileNum)).getLength()) {
+                    offset -= file.getLength();
                     fileNum++;
                 }
             }

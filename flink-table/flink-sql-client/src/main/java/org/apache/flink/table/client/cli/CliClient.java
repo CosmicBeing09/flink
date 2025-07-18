@@ -385,7 +385,7 @@ public class CliClient implements AutoCloseable {
         FileSystem fs = path.getFileSystem();
         try (FSDataInputStream inputStream = fs.open(path)) {
             return new String(
-                    FileUtils.read(inputStream, (int) fs.getFileStatus(path).getLen()),
+                    FileUtils.read(inputStream, (int) fs.getFileStatus(path).getLength()),
                     StandardCharsets.UTF_8);
         }
     }

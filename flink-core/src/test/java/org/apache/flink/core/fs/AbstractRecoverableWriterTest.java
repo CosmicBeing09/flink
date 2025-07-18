@@ -383,7 +383,7 @@ public abstract class AbstractRecoverableWriterTest {
 
         final FileStatus[] filesInBucket = getFileSystem().listStatus(directory);
         for (FileStatus file : filesInBucket) {
-            final long fileLength = file.getLen();
+            final long fileLength = file.getLength();
             byte[] serContents = new byte[(int) fileLength];
 
             try (FSDataInputStream stream = getFileSystem().open(file.getPath())) {

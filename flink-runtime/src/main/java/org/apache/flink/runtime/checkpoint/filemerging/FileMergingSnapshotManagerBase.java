@@ -911,7 +911,7 @@ public abstract class FileMergingSnapshotManagerBase implements FileMergingSnaps
         if (fileStatus == null || fileStatus.isDir()) {
             throw new FileNotFoundException("File " + file.getFilePath() + " does not exist.");
         } else {
-            return fileStatus.getLen();
+            return fileStatus.getLength();
         }
     }
 

@@ -130,7 +130,7 @@ public class AvroInputFormat<E> extends FileInputFormat<E>
         SeekableInput in =
                 new FSDataInputStreamWrapper(
                         stream,
-                        split.getPath().getFileSystem().getFileStatus(split.getPath()).getLen());
+                        split.getPath().getFileSystem().getFileStatus(split.getPath()).getLength());
         DataFileReader<E> dataFileReader =
                 (DataFileReader) DataFileReader.openReader(in, datumReader);
 
