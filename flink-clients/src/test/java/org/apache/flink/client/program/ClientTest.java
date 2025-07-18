@@ -49,7 +49,7 @@ import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.costs.DefaultCostEstimator;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
@@ -331,11 +331,11 @@ class ClientTest {
         OptimizedPlan op = optimizer.compile(streamGraph);
         assertThat(op).isNotNull();
 
-        PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+        StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
         assertThat(dumper.getOptimizerPlanAsJSON(op)).isNotNull();
 
         // test HTML escaping
-        PlanJSONDumpGenerator dumper2 = new PlanJSONDumpGenerator();
+        StreamGraphJSONDumpGenerator dumper2 = new StreamGraphJSONDumpGenerator();
         dumper2.setEncodeForHTML(true);
         String htmlEscaped = dumper2.getOptimizerPlanAsJSON(op);
 

@@ -35,7 +35,7 @@ import org.apache.flink.optimizer.plan.BulkIterationPlanNode;
 import org.apache.flink.optimizer.plan.Channel;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.testfunctions.IdentityKeyExtractor;
 import org.apache.flink.optimizer.testfunctions.IdentityMapper;
@@ -84,7 +84,7 @@ public class IterationsCompilerTest extends CompilerTestBase {
             OptimizedPlan p = compileNoStats(env.createProgramPlan());
 
             // check that the JSON generator accepts this plan
-            new PlanJSONDumpGenerator().getOptimizerPlanAsJSON(p);
+            new StreamGraphJSONDumpGenerator().getOptimizerPlanAsJSON(p);
 
             // check that the JobGraphGenerator accepts the plan
             new JobGraphGenerator().compileJobGraph(p);

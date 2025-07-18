@@ -31,7 +31,7 @@ import org.apache.flink.optimizer.plan.OptimizedPlan;
  * Utility for extracting an execution plan (as JSON) from a given {@link Plan}.
  *
  * <p>We need this util here in the optimizer because it is the only module that has {@link
- * Optimizer}, {@link OptimizedPlan}, and {@link PlanJSONDumpGenerator} available. We use this
+ * Optimizer}, {@link OptimizedPlan}, and {@link StreamGraphJSONDumpGenerator} available. We use this
  * reflectively from the batch execution environments to generate the plan, which we cannot do
  * there. It is used from {@link ExecutionPlanUtil}.
  */
@@ -44,6 +44,6 @@ public class ExecutionPlanJSONGenerator implements ExecutionPlanUtil.ExecutionPl
                 new Optimizer(
                         new DataStatistics(), new DefaultCostEstimator(), new Configuration());
         OptimizedPlan optPlan = opt.compile(plan);
-        return new PlanJSONDumpGenerator().getOptimizerPlanAsJSON(optPlan);
+        return new StreamGraphJSONDumpGenerator().getOptimizerPlanAsJSON(optPlan);
     }
 }

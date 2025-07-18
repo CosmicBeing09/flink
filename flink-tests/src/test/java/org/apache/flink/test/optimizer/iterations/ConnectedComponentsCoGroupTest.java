@@ -37,7 +37,7 @@ import org.apache.flink.optimizer.plan.OptimizedPlan;
 import org.apache.flink.optimizer.plan.SinkPlanNode;
 import org.apache.flink.optimizer.plan.SourcePlanNode;
 import org.apache.flink.optimizer.plan.WorksetIterationPlanNode;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.optimizer.util.CompilerTestBase;
 import org.apache.flink.runtime.operators.DriverStrategy;
@@ -74,7 +74,7 @@ public class ConnectedComponentsCoGroupTest extends CompilerTestBase {
         OptimizerPlanNodeResolver or = getOptimizerPlanNodeResolver(optPlan);
 
         if (PRINT_PLAN) {
-            PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
+            StreamGraphJSONDumpGenerator dumper = new StreamGraphJSONDumpGenerator();
             String json = dumper.getOptimizerPlanAsJSON(optPlan);
             System.out.println(json);
         }

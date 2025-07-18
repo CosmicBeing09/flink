@@ -26,7 +26,7 @@ import org.apache.flink.optimizer.DataStatistics;
 import org.apache.flink.optimizer.Optimizer;
 import org.apache.flink.optimizer.costs.DefaultCostEstimator;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
-import org.apache.flink.optimizer.plandump.PlanJSONDumpGenerator;
+import org.apache.flink.optimizer.plandump.StreamGraphJSONDumpGenerator;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
 import org.apache.flink.runtime.jobgraph.JobGraph;
 
@@ -76,7 +76,7 @@ public class PlanTranslator implements FlinkPipelineTranslator {
                         new DataStatistics(), new DefaultCostEstimator(), new Configuration());
         OptimizedPlan optPlan = opt.compile(plan);
 
-        return new PlanJSONDumpGenerator().getOptimizerPlanAsJSON(optPlan);
+        return new StreamGraphJSONDumpGenerator().getOptimizerPlanAsJSON(optPlan);
     }
 
     private JobGraph compilePlan(Plan plan, Configuration optimizerConfiguration) {

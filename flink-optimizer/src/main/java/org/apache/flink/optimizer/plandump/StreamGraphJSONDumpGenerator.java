@@ -56,7 +56,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class PlanJSONDumpGenerator {
+public class StreamGraphJSONDumpGenerator {
 
     private Map<DumpableNode<?>, Integer> nodeIds; // resolves pact nodes to ids
 
@@ -74,7 +74,7 @@ public class PlanJSONDumpGenerator {
         return encodeForHTML;
     }
 
-    public void dumpPactPlanAsJSON(List<DataSinkNode> nodes, PrintWriter writer) {
+    public void dumpPactStreamGraphAsJSON(List<DataSinkNode> nodes, PrintWriter writer) {
         @SuppressWarnings("unchecked")
         List<DumpableNode<?>> n = (List<DumpableNode<?>>) (List<?>) nodes;
         compilePlanToJSON(n, writer);
@@ -83,7 +83,7 @@ public class PlanJSONDumpGenerator {
     public String getPactPlanAsJSON(List<DataSinkNode> nodes) {
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
-        dumpPactPlanAsJSON(nodes, pw);
+        dumpPactStreamGraphAsJSON(nodes, pw);
         return sw.toString();
     }
 
