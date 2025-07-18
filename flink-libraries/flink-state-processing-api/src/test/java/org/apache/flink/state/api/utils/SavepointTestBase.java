@@ -52,14 +52,14 @@ public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
-        ExecutionPlan jobGraph = executionEnvironment.getStreamGraph().getJobGraph();
+        ExecutionPlan executionPlan = executionEnvironment.getStreamGraph().getJobGraph();
 
-        JobID jobId = jobGraph.getJobID();
+        JobID executionJobId = executionPlan.getJobID();
 
         ClusterClient<?> client = MINI_CLUSTER_RESOURCE.getClusterClient();
 
         try {
-            JobID jobID = client.submitJob(jobGraph).get();
+            JobID jobID = client.submitJob(executionPlan).get();
 
             waitForAllRunningOrSomeTerminal(jobID, MINI_CLUSTER_RESOURCE);
 
@@ -67,7 +67,7 @@ public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
         } catch (Exception e) {
             throw new RuntimeException("Failed to take savepoint", e);
         } finally {
-            client.cancel(jobId);
+            client.cancel(executionJobId);
         }
     }
 
