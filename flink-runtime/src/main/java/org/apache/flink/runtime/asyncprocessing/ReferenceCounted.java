@@ -66,8 +66,8 @@ public abstract class ReferenceCounted<ReleaseHelper> {
 
     private volatile int referenceCount;
 
-    public ReferenceCounted(int initReference) {
-        this.referenceCount = initReference;
+    public ReferenceCounted(int initialReferenceCount) {
+        this.referenceCount = initialReferenceCount;
     }
 
     public int retain() {
@@ -80,11 +80,12 @@ public abstract class ReferenceCounted<ReleaseHelper> {
      * @return zero if failed, otherwise current reference count.
      */
     public int tryRetain() {
-        int v;
+        int currentCount;
         do {
-            v = unsafe.getIntVolatile(this, referenceOffset);
-        } while (v != 0 && !unsafe.compareAndSwapInt(this, referenceOffset, v, v + 1));
-        return v == 0 ? 0 : v + 1;
+            currentCount = unsafe.getIntVolatile(this, referenceOffset);
+        } while (currentCount != 0 && !unsafe.compareAndSwapInt(this, referenceOffset,
+                currentCount, currentCount + 1));
+        return currentCount == 0 ? 0 : currentCount + 1;
     }
 
     public int release() {
