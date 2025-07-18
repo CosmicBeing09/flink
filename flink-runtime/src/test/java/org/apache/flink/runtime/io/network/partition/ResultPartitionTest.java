@@ -292,7 +292,7 @@ class ResultPartitionTest {
         try {
             resultPartition.setup();
 
-            resultPartition.getBufferPool().setNumBuffers(2);
+            resultPartition.getBufferPool().setNumberOfBuffers(2);
 
             assertThat(resultPartition.getAvailableFuture()).isDone();
 

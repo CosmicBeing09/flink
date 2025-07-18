@@ -127,16 +127,16 @@ class BufferPoolFactoryTest {
             }
             assertThat(bufferPool1.bestEffortGetNumOfUsedBuffers())
                     .isEqualTo(buffersToTakeFromPool1);
-            assertThat(bufferPool1.getNumBuffers()).isEqualTo(numBuffers);
+            assertThat(bufferPool1.getNumberOfBuffers()).isEqualTo(numBuffers);
 
             // create a second pool which requires more buffers than are available at the moment
             bufferPool2 =
                     networkBufferPool.createBufferPool(
                             buffersToTakeFromPool1, buffersToTakeFromPool1, numBuffers);
 
-            assertThat(bufferPool2.getNumBuffers())
+            assertThat(bufferPool2.getNumberOfBuffers())
                     .isEqualTo(bufferPool2.getNumberOfRequiredMemorySegments());
-            assertThat(bufferPool1.getNumBuffers())
+            assertThat(bufferPool1.getNumberOfBuffers())
                     .isEqualTo(bufferPool1.getNumberOfRequiredMemorySegments());
             assertThat(bufferPool1.requestBuffer()).isNull();
 
@@ -184,10 +184,10 @@ class BufferPoolFactoryTest {
     @Test
     void testBoundedPools() throws IOException {
         BufferPool bufferPool1 = networkBufferPool.createBufferPool(1, 1, 1);
-        assertThat(bufferPool1.getNumBuffers()).isOne();
+        assertThat(bufferPool1.getNumberOfBuffers()).isOne();
 
         BufferPool bufferPool2 = networkBufferPool.createBufferPool(1, 1, 2);
-        assertThat(bufferPool2.getNumBuffers()).isEqualTo(2);
+        assertThat(bufferPool2.getNumberOfBuffers()).isEqualTo(2);
 
         bufferPool1.lazyDestroy();
         bufferPool2.lazyDestroy();
@@ -197,7 +197,7 @@ class BufferPoolFactoryTest {
     void testSingleManagedPoolGetsAll() throws IOException {
         BufferPool bufferPool = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
 
-        assertThat(bufferPool.getNumBuffers())
+        assertThat(bufferPool.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         bufferPool.lazyDestroy();
@@ -209,11 +209,11 @@ class BufferPoolFactoryTest {
 
         BufferPool flexibleBufferPool = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
 
-        assertThat(fixedBufferPool.getNumBuffers()).isEqualTo(24);
-        assertThat(flexibleBufferPool.getNumBuffers())
+        assertThat(fixedBufferPool.getNumberOfBuffers()).isEqualTo(24);
+        assertThat(flexibleBufferPool.getNumberOfBuffers())
                 .isEqualTo(
                         networkBufferPool.getTotalNumberOfMemorySegments()
-                                - fixedBufferPool.getNumBuffers());
+                                - fixedBufferPool.getNumberOfBuffers());
 
         fixedBufferPool.lazyDestroy();
         flexibleBufferPool.lazyDestroy();
@@ -222,13 +222,13 @@ class BufferPoolFactoryTest {
     @Test
     void testUniformDistribution() throws IOException {
         BufferPool first = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         BufferPool second = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
-        assertThat(second.getNumBuffers())
+        assertThat(second.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
 
         first.lazyDestroy();
@@ -246,7 +246,7 @@ class BufferPoolFactoryTest {
                         networkBufferPool.getTotalNumberOfMemorySegments() / 2,
                         networkBufferPool.getTotalNumberOfMemorySegments() / 2,
                         Integer.MAX_VALUE);
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         BufferPool second =
@@ -254,9 +254,9 @@ class BufferPoolFactoryTest {
                         networkBufferPool.getTotalNumberOfMemorySegments() / 2,
                         networkBufferPool.getTotalNumberOfMemorySegments() / 2,
                         Integer.MAX_VALUE);
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
-        assertThat(second.getNumBuffers())
+        assertThat(second.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
 
         first.lazyDestroy();
@@ -268,15 +268,15 @@ class BufferPoolFactoryTest {
         BufferPool first =
                 networkBufferPool.createBufferPool(
                         1, 1, networkBufferPool.getTotalNumberOfMemorySegments());
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         BufferPool second =
                 networkBufferPool.createBufferPool(
                         1, 1, networkBufferPool.getTotalNumberOfMemorySegments());
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
-        assertThat(second.getNumBuffers())
+        assertThat(second.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
 
         first.lazyDestroy();
@@ -286,11 +286,11 @@ class BufferPoolFactoryTest {
     @Test
     void testUniformDistributionBounded2() throws IOException {
         BufferPool first = networkBufferPool.createBufferPool(1, 1, 10);
-        assertThat(first.getNumBuffers()).isEqualTo(10);
+        assertThat(first.getNumberOfBuffers()).isEqualTo(10);
 
         BufferPool second = networkBufferPool.createBufferPool(1, 1, 10);
-        assertThat(first.getNumBuffers()).isEqualTo(10);
-        assertThat(second.getNumBuffers()).isEqualTo(10);
+        assertThat(first.getNumberOfBuffers()).isEqualTo(10);
+        assertThat(second.getNumberOfBuffers()).isEqualTo(10);
 
         first.lazyDestroy();
         second.lazyDestroy();
@@ -301,18 +301,18 @@ class BufferPoolFactoryTest {
         NetworkBufferPool globalPool = new NetworkBufferPool(3, 128);
         try {
             BufferPool first = globalPool.createBufferPool(1, 1, 10);
-            assertThat(first.getNumBuffers()).isEqualTo(3);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(3);
 
             BufferPool second = globalPool.createBufferPool(1, 1, 10);
             // the order of which buffer pool received 2 or 1 buffer is undefined
-            assertThat(first.getNumBuffers() + second.getNumBuffers()).isEqualTo(3);
-            assertThat(first.getNumBuffers()).isNotEqualTo(3);
-            assertThat(second.getNumBuffers()).isNotEqualTo(3);
+            assertThat(first.getNumberOfBuffers() + second.getNumberOfBuffers()).isEqualTo(3);
+            assertThat(first.getNumberOfBuffers()).isNotEqualTo(3);
+            assertThat(second.getNumberOfBuffers()).isNotEqualTo(3);
 
             BufferPool third = globalPool.createBufferPool(1, 1, 10);
-            assertThat(first.getNumBuffers()).isOne();
-            assertThat(second.getNumBuffers()).isOne();
-            assertThat(third.getNumBuffers()).isOne();
+            assertThat(first.getNumberOfBuffers()).isOne();
+            assertThat(second.getNumberOfBuffers()).isOne();
+            assertThat(third.getNumberOfBuffers()).isOne();
 
             // similar to #verifyAllBuffersReturned()
             String msg = "Wrong number of available segments after creating buffer pools.";
@@ -336,25 +336,25 @@ class BufferPoolFactoryTest {
         NetworkBufferPool globalPool = new NetworkBufferPool(10, 128);
         try {
             BufferPool first = globalPool.createBufferPool(1, 1, 10);
-            assertThat(first.getNumBuffers()).isEqualTo(10);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(10);
 
             List<MemorySegment> segmentList1 = globalPool.requestUnpooledMemorySegments(2);
             assertThat(segmentList1).hasSize(2);
-            assertThat(first.getNumBuffers()).isEqualTo(8);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(8);
 
             BufferPool second = globalPool.createBufferPool(1, 1, 10);
-            assertThat(first.getNumBuffers()).isEqualTo(4);
-            assertThat(second.getNumBuffers()).isEqualTo(4);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(4);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(4);
 
             List<MemorySegment> segmentList2 = globalPool.requestUnpooledMemorySegments(2);
             assertThat(segmentList2).hasSize(2);
-            assertThat(first.getNumBuffers()).isEqualTo(3);
-            assertThat(second.getNumBuffers()).isEqualTo(3);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(3);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(3);
 
             List<MemorySegment> segmentList3 = globalPool.requestUnpooledMemorySegments(2);
             assertThat(segmentList3).hasSize(2);
-            assertThat(first.getNumBuffers()).isEqualTo(2);
-            assertThat(second.getNumBuffers()).isEqualTo(2);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(2);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(2);
 
             String msg =
                     "Wrong number of available segments after creating buffer pools and requesting segments.";
@@ -366,28 +366,28 @@ class BufferPoolFactoryTest {
             assertThat(globalPool.getNumberOfAvailableMemorySegments())
                     .withFailMessage(msg)
                     .isEqualTo(4);
-            assertThat(first.getNumBuffers()).isEqualTo(3);
-            assertThat(second.getNumBuffers()).isEqualTo(3);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(3);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(3);
 
             globalPool.recycleUnpooledMemorySegments(segmentList2);
             assertThat(globalPool.getNumberOfAvailableMemorySegments())
                     .withFailMessage(msg)
                     .isEqualTo(6);
-            assertThat(first.getNumBuffers()).isEqualTo(4);
-            assertThat(second.getNumBuffers()).isEqualTo(4);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(4);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(4);
 
             globalPool.recycleUnpooledMemorySegments(segmentList3);
             assertThat(globalPool.getNumberOfAvailableMemorySegments())
                     .withFailMessage(msg)
                     .isEqualTo(8);
-            assertThat(first.getNumBuffers()).isEqualTo(5);
-            assertThat(second.getNumBuffers()).isEqualTo(5);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(5);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(5);
 
             first.lazyDestroy();
             assertThat(globalPool.getNumberOfAvailableMemorySegments())
                     .withFailMessage(msg)
                     .isEqualTo(9);
-            assertThat(second.getNumBuffers()).isEqualTo(10);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(10);
         } finally {
             globalPool.destroyAllBufferPools();
             globalPool.destroy();
@@ -399,34 +399,34 @@ class BufferPoolFactoryTest {
         // try multiple times for various orders during redistribution
         for (int i = 0; i < 1_000; ++i) {
             BufferPool first = networkBufferPool.createBufferPool(10, 1, 10);
-            assertThat(first.getNumBuffers()).isEqualTo(10);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(10);
 
             BufferPool second = networkBufferPool.createBufferPool(10, 1, 10);
-            assertThat(first.getNumBuffers()).isEqualTo(10);
-            assertThat(second.getNumBuffers()).isEqualTo(10);
+            assertThat(first.getNumberOfBuffers()).isEqualTo(10);
+            assertThat(second.getNumberOfBuffers()).isEqualTo(10);
 
             BufferPool third = networkBufferPool.createBufferPool(10, 1, Integer.MAX_VALUE);
             // note: exact buffer distribution depends on the order during the redistribution
             for (BufferPool bp : new BufferPool[] {first, second}) {
-                assertThat(bp.getNumBuffers())
+                assertThat(bp.getNumberOfBuffers())
                         .withFailMessage("Wrong buffer pool size after redistribution")
                         .isEqualTo(10);
             }
 
-            assertThat(third.getNumBuffers())
+            assertThat(third.getNumberOfBuffers())
                     .withFailMessage("Wrong buffer pool size after redistribution")
                     .isEqualTo(numBuffers - 10 * 2);
 
             BufferPool fourth = networkBufferPool.createBufferPool(10, 1, Integer.MAX_VALUE);
             // note: exact buffer distribution depends on the order during the redistribution
             for (BufferPool bp : new BufferPool[] {first, second}) {
-                assertThat(bp.getNumBuffers())
+                assertThat(bp.getNumberOfBuffers())
                         .withFailMessage("Wrong buffer pool size after redistribution")
                         .isEqualTo(10);
             }
 
             for (BufferPool bp : new BufferPool[] {third, fourth}) {
-                assertThat(bp.getNumBuffers())
+                assertThat(bp.getNumberOfBuffers())
                         .withFailMessage("Wrong buffer pool size after redistribution")
                         .isEqualTo((numBuffers - 10 * 2) / 2);
             }
@@ -448,9 +448,9 @@ class BufferPoolFactoryTest {
             BufferPool pool2 = globalPool.createBufferPool(5, 2, Integer.MAX_VALUE);
             BufferPool pool3 = globalPool.createBufferPool(7, 2, Integer.MAX_VALUE);
 
-            assertThat(pool1.getNumBuffers()).isEqualTo(8);
-            assertThat(pool2.getNumBuffers()).isEqualTo(10);
-            assertThat(pool3.getNumBuffers()).isEqualTo(14);
+            assertThat(pool1.getNumberOfBuffers()).isEqualTo(8);
+            assertThat(pool2.getNumberOfBuffers()).isEqualTo(10);
+            assertThat(pool3.getNumberOfBuffers()).isEqualTo(14);
 
             Stream.of(pool1, pool2, pool3).forEach(BufferPool::lazyDestroy);
         }
@@ -466,8 +466,8 @@ class BufferPoolFactoryTest {
             BufferPool pool1 = globalPool.createBufferPool(10, 2, Integer.MAX_VALUE);
             BufferPool pool2 = globalPool.createBufferPool(10, 2, Integer.MAX_VALUE);
 
-            assertThat(pool1.getNumBuffers()).isEqualTo(2);
-            assertThat(pool2.getNumBuffers()).isEqualTo(2);
+            assertThat(pool1.getNumberOfBuffers()).isEqualTo(2);
+            assertThat(pool2.getNumberOfBuffers()).isEqualTo(2);
 
             Stream.of(pool1, pool2).forEach(BufferPool::lazyDestroy);
         }
@@ -487,9 +487,9 @@ class BufferPoolFactoryTest {
                             pieceOfBuffers * 3 / 2, pieceOfBuffers + 3, numBuffers);
             BufferPool pool3 = globalPool.createBufferPool(pieceOfBuffers * 3, 1, numBuffers);
 
-            assertThat(pool1.getNumBuffers()).isEqualTo(pieceOfBuffers - 1);
-            assertThat(pool2.getNumBuffers()).isEqualTo(pieceOfBuffers + 3);
-            assertThat(pool3.getNumBuffers()).isEqualTo(pieceOfBuffers * 2 - 2);
+            assertThat(pool1.getNumberOfBuffers()).isEqualTo(pieceOfBuffers - 1);
+            assertThat(pool2.getNumberOfBuffers()).isEqualTo(pieceOfBuffers + 3);
+            assertThat(pool3.getNumberOfBuffers()).isEqualTo(pieceOfBuffers * 2 - 2);
 
             Stream.of(pool1, pool2, pool3).forEach(BufferPool::lazyDestroy);
         }
@@ -508,9 +508,9 @@ class BufferPoolFactoryTest {
                     globalPool.createBufferPool(pieceOfBuffers / 2, 1, pieceOfBuffers - 3);
             BufferPool pool3 = globalPool.createBufferPool(pieceOfBuffers, 1, numBuffers);
 
-            assertThat(pool1.getNumBuffers()).isEqualTo(pieceOfBuffers + 1);
-            assertThat(pool2.getNumBuffers()).isEqualTo(pieceOfBuffers - 3);
-            assertThat(pool3.getNumBuffers()).isEqualTo(pieceOfBuffers * 2 + 2);
+            assertThat(pool1.getNumberOfBuffers()).isEqualTo(pieceOfBuffers + 1);
+            assertThat(pool2.getNumberOfBuffers()).isEqualTo(pieceOfBuffers - 3);
+            assertThat(pool3.getNumberOfBuffers()).isEqualTo(pieceOfBuffers * 2 + 2);
 
             Stream.of(pool1, pool2, pool3).forEach(BufferPool::lazyDestroy);
         }
@@ -541,7 +541,7 @@ class BufferPoolFactoryTest {
                 // after every iteration, all buffers (up to maxTotalUsed) must be distributed
                 int numDistributedBuffers = 0;
                 for (BufferPool pool : pools) {
-                    numDistributedBuffers += pool.getNumBuffers();
+                    numDistributedBuffers += pool.getNumberOfBuffers();
                 }
                 assertThat(numDistributedBuffers).isEqualTo(maxTotalUsed);
             }
@@ -556,20 +556,20 @@ class BufferPoolFactoryTest {
     void testCreateDestroy() throws IOException {
         BufferPool first = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
 
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         BufferPool second = networkBufferPool.createBufferPool(1, 1, Integer.MAX_VALUE);
 
-        assertThat(first.getNumBuffers())
+        assertThat(first.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
 
-        assertThat(second.getNumBuffers())
+        assertThat(second.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments() / 2);
 
         first.lazyDestroy();
 
-        assertThat(second.getNumBuffers())
+        assertThat(second.getNumberOfBuffers())
                 .isEqualTo(networkBufferPool.getTotalNumberOfMemorySegments());
 
         second.lazyDestroy();

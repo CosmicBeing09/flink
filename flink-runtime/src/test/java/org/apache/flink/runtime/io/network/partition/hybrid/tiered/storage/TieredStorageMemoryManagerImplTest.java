@@ -104,7 +104,7 @@ class TieredStorageMemoryManagerImplTest {
             requestedBuffers.add(builder);
         }
 
-        bufferPool.setNumBuffers(numBuffers / 2);
+        bufferPool.setNumberOfBuffers(numBuffers / 2);
 
         for (int i = 0; i < numBuffers; i++) {
             recycleBufferBuilder(requestedBuffers.get(i));

@@ -207,7 +207,7 @@ class LocalBufferPoolTest {
 
     @Test
     void testRequestMoreThanAvailable() {
-        localBufferPool.setNumBuffers(numBuffers);
+        localBufferPool.setNumberOfBuffers(numBuffers);
 
         List<Buffer> requests = new ArrayList<>(numBuffers);
 
@@ -235,19 +235,19 @@ class LocalBufferPoolTest {
 
     @Test
     void testSetNumAfterDestroyDoesNotProactivelyFetchSegments() {
-        localBufferPool.setNumBuffers(2);
-        assertThat(localBufferPool.getNumBuffers()).isEqualTo(2);
+        localBufferPool.setNumberOfBuffers(2);
+        assertThat(localBufferPool.getNumberOfBuffers()).isEqualTo(2);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
 
         localBufferPool.lazyDestroy();
-        localBufferPool.setNumBuffers(3);
-        assertThat(localBufferPool.getNumBuffers()).isEqualTo(3);
+        localBufferPool.setNumberOfBuffers(3);
+        assertThat(localBufferPool.getNumberOfBuffers()).isEqualTo(3);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isZero();
     }
 
     @Test
     void testRecycleAfterDestroy() {
-        localBufferPool.setNumBuffers(numBuffers);
+        localBufferPool.setNumberOfBuffers(numBuffers);
 
         List<Buffer> requests = new ArrayList<>(numBuffers);
 
@@ -314,8 +314,8 @@ class LocalBufferPoolTest {
         List<MemorySegment> buffers = new ArrayList<>();
 
         // set a larger pool size.
-        bufferPool.setNumBuffers(largePoolSize);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(largePoolSize);
+        bufferPool.setNumberOfBuffers(largePoolSize);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(largePoolSize);
 
         // request buffers.
         for (int i = 0; i < numBuffersToRequest; i++) {
@@ -323,8 +323,8 @@ class LocalBufferPoolTest {
         }
 
         // set a small pool size.
-        bufferPool.setNumBuffers(smallPoolSize);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(smallPoolSize);
+        bufferPool.setNumberOfBuffers(smallPoolSize);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(smallPoolSize);
         assertThat(getNumberRequestedOverdraftBuffers(bufferPool))
                 .isEqualTo(numRequestedOverdraftBuffersAfterDecreasing);
         assertThat(getNumberRequestedOrdinaryBuffers(bufferPool))
@@ -401,8 +401,8 @@ class LocalBufferPoolTest {
         List<MemorySegment> buffers = new ArrayList<>();
 
         // set a small pool size.
-        bufferPool.setNumBuffers(smallPoolSize);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(smallPoolSize);
+        bufferPool.setNumberOfBuffers(smallPoolSize);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(smallPoolSize);
 
         // request all buffer.
         for (int i = 0; i < smallPoolSize; i++) {
@@ -419,8 +419,8 @@ class LocalBufferPoolTest {
         assertThat(bufferPool.isAvailable()).isFalse();
 
         // set a large pool size.
-        bufferPool.setNumBuffers(largePoolSize);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(largePoolSize);
+        bufferPool.setNumberOfBuffers(largePoolSize);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(largePoolSize);
         assertThat(bufferPool.getNumberOfAvailableMemorySegments())
                 .isEqualTo(numAvailableBuffersAfterIncreasePoolSize);
         assertThat(getNumberRequestedOverdraftBuffers(bufferPool))
@@ -480,7 +480,7 @@ class LocalBufferPoolTest {
 
     @Test
     void testRecycleExcessBuffersAfterRecycling() {
-        localBufferPool.setNumBuffers(numBuffers);
+        localBufferPool.setNumberOfBuffers(numBuffers);
 
         List<Buffer> requests = new ArrayList<>(numBuffers);
 
@@ -492,7 +492,7 @@ class LocalBufferPoolTest {
         assertThat(getNumRequestedFromMemorySegmentPool()).isEqualTo(numBuffers);
 
         // Reduce the number of buffers in the local pool
-        localBufferPool.setNumBuffers(numBuffers / 2);
+        localBufferPool.setNumberOfBuffers(numBuffers / 2);
 
         // Need to wait until we recycle the buffers
         assertThat(getNumRequestedFromMemorySegmentPool()).isEqualTo(numBuffers);
@@ -509,7 +509,7 @@ class LocalBufferPoolTest {
 
     @Test
     void testRecycleExcessBuffersAfterChangingNumBuffers() {
-        localBufferPool.setNumBuffers(numBuffers);
+        localBufferPool.setNumberOfBuffers(numBuffers);
 
         List<Buffer> requests = new ArrayList<>(numBuffers);
 
@@ -525,16 +525,16 @@ class LocalBufferPoolTest {
 
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isEqualTo(numBuffers);
 
-        localBufferPool.setNumBuffers(numBuffers / 2);
+        localBufferPool.setNumberOfBuffers(numBuffers / 2);
 
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isEqualTo(numBuffers / 2);
     }
 
     @Test
     void testSetLessThanRequiredNumBuffers() {
-        localBufferPool.setNumBuffers(1);
+        localBufferPool.setNumberOfBuffers(1);
 
-        assertThatThrownBy(() -> localBufferPool.setNumBuffers(0))
+        assertThatThrownBy(() -> localBufferPool.setNumberOfBuffers(0))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -574,7 +574,7 @@ class LocalBufferPoolTest {
                                 invokeNotifyBufferDestroyedCounter::incrementAndGet)
                         .build();
 
-        localBufferPool.setNumBuffers(1);
+        localBufferPool.setNumberOfBuffers(1);
 
         Buffer available = localBufferPool.requestBuffer();
         Buffer unavailable = localBufferPool.requestBuffer();
@@ -601,7 +601,7 @@ class LocalBufferPoolTest {
         int numConcurrentTasks = 128;
         int numBuffersToRequestPerTask = 1024;
 
-        localBufferPool.setNumBuffers(numConcurrentTasks);
+        localBufferPool.setNumberOfBuffers(numConcurrentTasks);
 
         Future<Boolean>[] taskResults = new Future[numConcurrentTasks];
         for (int i = 0; i < numConcurrentTasks; i++) {
@@ -629,7 +629,7 @@ class LocalBufferPoolTest {
         Buffer buffer1, buffer2;
 
         // check min number of buffers:
-        localBufferPool.setNumBuffers(1);
+        localBufferPool.setNumberOfBuffers(1);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
         assertThat(buffer1 = localBufferPool.requestBuffer()).isNotNull();
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isZero();
@@ -639,7 +639,7 @@ class LocalBufferPoolTest {
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
 
         // check max number of buffers:
-        localBufferPool.setNumBuffers(2);
+        localBufferPool.setNumberOfBuffers(2);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
         assertThat(buffer1 = localBufferPool.requestBuffer()).isNotNull();
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
@@ -653,7 +653,7 @@ class LocalBufferPoolTest {
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isEqualTo(2);
 
         // try to set too large buffer size:
-        localBufferPool.setNumBuffers(3);
+        localBufferPool.setNumberOfBuffers(3);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isEqualTo(2);
         assertThat(buffer1 = localBufferPool.requestBuffer()).isNotNull();
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
@@ -667,7 +667,7 @@ class LocalBufferPoolTest {
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isEqualTo(2);
 
         // decrease size again
-        localBufferPool.setNumBuffers(1);
+        localBufferPool.setNumberOfBuffers(1);
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isOne();
         assertThat(buffer1 = localBufferPool.requestBuffer()).isNotNull();
         assertThat(localBufferPool.getNumberOfAvailableMemorySegments()).isZero();
@@ -681,7 +681,7 @@ class LocalBufferPoolTest {
     void testMaxBuffersPerChannelAndAvailability() throws Exception {
         localBufferPool.lazyDestroy();
         localBufferPool = new LocalBufferPool(networkBufferPool, 1, 1, Integer.MAX_VALUE, 3, 2, 0);
-        localBufferPool.setNumBuffers(10);
+        localBufferPool.setNumberOfBuffers(10);
 
         assertThat(localBufferPool.getAvailableFuture()).isDone();
 
@@ -732,7 +732,7 @@ class LocalBufferPoolTest {
 
             // set the pool size
             final int numLocalBuffers = 5;
-            localBufferPool.setNumBuffers(numLocalBuffers);
+            localBufferPool.setNumberOfBuffers(numLocalBuffers);
             assertThat(availableFuture).isDone();
             assertThat(localBufferPool.isAvailable()).isTrue();
 
@@ -755,7 +755,7 @@ class LocalBufferPoolTest {
 
             // scale down (first buffer still taken), but there should still be one segment locally
             // available
-            localBufferPool.setNumBuffers(2);
+            localBufferPool.setNumberOfBuffers(2);
             assertThat(localBufferPool.isAvailable()).isTrue();
 
             final Buffer buffer2 = checkNotNull(localBufferPool.requestBuffer());
@@ -765,7 +765,7 @@ class LocalBufferPoolTest {
             assertThat(localBufferPool.isAvailable()).isTrue();
 
             // reset the pool size
-            localBufferPool.setNumBuffers(1);
+            localBufferPool.setNumberOfBuffers(1);
             assertThat(localBufferPool.getAvailableFuture()).isNotDone();
             // recycle the requested buffer
         }
@@ -781,7 +781,7 @@ class LocalBufferPoolTest {
         try {
             BufferPool localPool = new LocalBufferPool(globalPool, 1);
             MemorySegment segment = localPool.requestMemorySegmentBlocking();
-            localPool.setNumBuffers(2);
+            localPool.setNumberOfBuffers(2);
 
             localPool.recycle(segment);
             localPool.lazyDestroy();
@@ -825,7 +825,7 @@ class LocalBufferPoolTest {
                         numberOfChannels,
                         maxBuffersPerChannel,
                         maxOverdraftBuffers);
-        bufferPool.setNumBuffers(poolSize);
+        bufferPool.setNumberOfBuffers(poolSize);
 
         // Request all buffers inside the buffer pool
         Map<Integer, AutoCloseableRegistry> closeableRegistryMap = new HashMap<>();
@@ -896,12 +896,12 @@ class LocalBufferPoolTest {
 
     private static int getNumberRequestedOverdraftBuffers(LocalBufferPool bufferPool) {
         return Math.max(
-                bufferPool.getNumberOfRequestedMemorySegments() - bufferPool.getNumBuffers(), 0);
+                bufferPool.getNumberOfRequestedMemorySegments() - bufferPool.getNumberOfBuffers(), 0);
     }
 
     private static int getNumberRequestedOrdinaryBuffers(LocalBufferPool bufferPool) {
         return Math.min(
-                bufferPool.getNumBuffers(), bufferPool.getNumberOfRequestedMemorySegments());
+                bufferPool.getNumberOfBuffers(), bufferPool.getNumberOfRequestedMemorySegments());
     }
 
     private int getNumRequestedFromMemorySegmentPool() {

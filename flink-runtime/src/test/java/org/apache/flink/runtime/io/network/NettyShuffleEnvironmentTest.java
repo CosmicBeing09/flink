@@ -322,7 +322,7 @@ class NettyShuffleEnvironmentTest {
         for (ResultPartition rp : resultPartitions) {
             assertThat(rp.getBufferPool().getNumberOfRequiredMemorySegments())
                     .isEqualTo(rp.getNumberOfSubpartitions() + 1);
-            assertThat(rp.getBufferPool().getNumBuffers())
+            assertThat(rp.getBufferPool().getNumberOfBuffers())
                     .isEqualTo(rp.getNumberOfSubpartitions() + 1);
         }
 

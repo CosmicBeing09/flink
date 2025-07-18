@@ -224,7 +224,7 @@ class HsMemoryDataManagerTest {
         NetworkBufferPool networkBufferPool = new NetworkBufferPool(maxBuffers, bufferSize);
         BufferPool bufferPool =
                 networkBufferPool.createBufferPool(requiredBuffers, requiredBuffers, maxBuffers);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(maxBuffers);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(maxBuffers);
 
         HsSpillingStrategy spillingStrategy =
                 TestingSpillingStrategy.builder()
@@ -240,7 +240,7 @@ class HsMemoryDataManagerTest {
         createMemoryDataManager(spillingStrategy, bufferPool);
         networkBufferPool.createBufferPool(
                 maxBuffers - requiredBuffers, maxBuffers - requiredBuffers, maxBuffers);
-        assertThat(bufferPool.getNumBuffers()).isEqualTo(requiredBuffers);
+        assertThat(bufferPool.getNumberOfBuffers()).isEqualTo(requiredBuffers);
 
         assertThatFuture(triggerGlobalDecision).eventuallySucceeds();
     }

@@ -47,7 +47,7 @@ import static org.apache.flink.util.concurrent.FutureUtils.assertNoException;
  * default mechanism for buffer recycling, which ensures that every buffer is ultimately returned to
  * the network buffer pool.
  *
- * <p>The size of this pool can be dynamically changed at runtime ({@link #setNumBuffers(int)}. It
+ * <p>The size of this pool can be dynamically changed at runtime ({@link #setNumberOfBuffers(int)}. It
  * will then lazily return the required number of buffers to the {@link NetworkBufferPool} to match
  * its new size.
  *
@@ -337,7 +337,7 @@ public class LocalBufferPool implements BufferPool {
     }
 
     @Override
-    public int getNumBuffers() {
+    public int getNumberOfBuffers() {
         synchronized (availableMemorySegments) {
             return currentPoolSize;
         }
@@ -686,7 +686,7 @@ public class LocalBufferPool implements BufferPool {
     }
 
     @Override
-    public void setNumBuffers(int numBuffers) {
+    public void setNumberOfBuffers(int numBuffers) {
         CompletableFuture<?> toNotify;
         synchronized (availableMemorySegments) {
             checkArgument(

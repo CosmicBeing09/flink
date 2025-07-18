@@ -221,7 +221,7 @@ class TieredResultPartitionTest {
         }
         verifySubpartitionBytes(numRecords * NETWORK_BUFFER_SIZE);
 
-        bufferPool.setNumBuffers(1);
+        bufferPool.setNumberOfBuffers(1);
         resultPartition.emitRecord(ByteBuffer.allocate(NETWORK_BUFFER_SIZE), 0);
         verifySubpartitionBytes((numRecords + 1) * NETWORK_BUFFER_SIZE);
 

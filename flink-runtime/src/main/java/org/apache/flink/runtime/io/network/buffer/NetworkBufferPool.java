@@ -435,7 +435,7 @@ public class NetworkBufferPool
 
         synchronized (factoryLock) {
             for (BufferPool bp : allBufferPools) {
-                buffers += bp.getNumBuffers();
+                buffers += bp.getNumberOfBuffers();
             }
         }
 
@@ -611,7 +611,7 @@ public class NetworkBufferPool
         if (numAvailableMemorySegment == 0) {
             // in this case, we need to redistribute buffers so that every pool gets its minimum
             for (LocalBufferPool bufferPool : resizableBufferPools) {
-                bufferPool.setNumBuffers(bufferPool.getMinNumberOfMemorySegments());
+                bufferPool.setNumberOfBuffers(bufferPool.getMinNumberOfMemorySegments());
             }
             return;
         }
@@ -662,7 +662,7 @@ public class NetworkBufferPool
         }
 
         for (LocalBufferPool bufferPool : resizableBufferPools) {
-            bufferPool.setNumBuffers(
+            bufferPool.setNumberOfBuffers(
                     cachedPoolSize.getOrDefault(
                             bufferPool, bufferPool.getMinNumberOfMemorySegments()));
         }

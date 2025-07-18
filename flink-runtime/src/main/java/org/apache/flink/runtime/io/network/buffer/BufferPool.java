@@ -61,14 +61,14 @@ public interface BufferPool extends BufferProvider, BufferRecycler {
      *
      * <p>The size of the buffer pool can change dynamically at runtime.
      */
-    int getNumBuffers();
+    int getNumberOfBuffers();
 
     /**
      * Sets the current size of this buffer pool.
      *
      * <p>The size needs to be greater or equal to the guaranteed number of memory segments.
      */
-    void setNumBuffers(int numBuffers);
+    void setNumberOfBuffers(int numBuffers);
 
     /** Sets the max overdraft buffer size of per gate. */
     void setMaxOverdraftBuffersPerGate(int maxOverdraftBuffersPerGate);
