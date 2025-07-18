@@ -124,9 +124,9 @@ public class BlockSplittingRecursiveEnumerator extends NonSplittingRecursiveEnum
             return true;
         }
 
-        final String path = filePath.getPath();
+        final String filePathString = filePath.getPath();
         for (String suffix : nonSplittableFileSuffixes) {
-            if (path.endsWith(suffix)) {
+            if (filePathString.endsWith(suffix)) {
                 return false;
             }
         }
