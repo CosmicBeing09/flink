@@ -33,19 +33,19 @@ import static org.apache.flink.table.planner.plan.utils.FlinkRelOptUtil.contains
 public abstract class QueryHintsRelShuttle extends RelShuttleImpl {
 
     @Override
-    public RelNode visit(LogicalJoin join) {
-        if (containsSubQuery(join)) {
-            join = (LogicalJoin) resolveSubQuery(join, relNode -> relNode.accept(this));
+    public RelNode visit(LogicalJoin joinNode) {
+        if (containsSubQuery(joinNode)) {
+            joinNode = (LogicalJoin) resolveSubQuery(joinNode, relNode -> relNode.accept(this));
         }
-        return visitBiRel(join);
+        return visitBinaryRelNode(joinNode);
     }
 
     @Override
-    public RelNode visit(LogicalCorrelate correlate) {
-        return visitBiRel(correlate);
+    public RelNode visit(LogicalCorrelate correlateNode) {
+        return visitBinaryRelNode(correlateNode);
     }
 
-    protected abstract RelNode visitBiRel(BiRel biRel);
+    protected abstract RelNode visitBinaryRelNode(BiRel binaryNode);
 
     @Override
     public RelNode visit(LogicalFilter filter) {

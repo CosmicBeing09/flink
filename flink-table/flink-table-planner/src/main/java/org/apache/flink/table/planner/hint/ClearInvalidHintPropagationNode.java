@@ -47,18 +47,18 @@ import java.util.stream.Collectors;
  * org.apache.calcite.sql2rel.SqlToRelConverter#convertFrom(SqlToRelConverter.Blackboard, SqlNode,
  * List)}.
  */
-public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelShuttle {
+public class ClearInvalidHintPropagationNode extends QueryHintsRelShuttle {
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
-        List<RelHint> hints = ((Hintable) biRel).getHints();
+    protected RelNode visitBinaryRelNode(BiRel binaryNode) {
+        List<RelHint> hints = ((Hintable) binaryNode).getHints();
 
         Set<String> allHintNames =
                 hints.stream().map(hint -> hint.hintName).collect(Collectors.toSet());
 
         // there are no query hints on this Join/Correlate node
         if (allHintNames.stream().noneMatch(FlinkHints::isQueryHint)) {
-            return super.visit(biRel);
+            return super.visit(binaryNode);
         }
 
         Optional<RelHint> firstAliasHint =
@@ -68,7 +68,7 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
 
         // there are no alias hints on this Join/Correlate node
         if (!firstAliasHint.isPresent()) {
-            return super.visit(biRel);
+            return super.visit(binaryNode);
         }
 
         List<RelHint> queryHintsFromOuterQueryBlock =
@@ -84,10 +84,10 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
                         .collect(Collectors.toList());
 
         if (queryHintsFromOuterQueryBlock.isEmpty()) {
-            return super.visit(biRel);
+            return super.visit(binaryNode);
         }
 
-        RelNode newRelNode = biRel;
+        RelNode newRelNode = binaryNode;
         ClearOuterQueryHintShuttle clearOuterQueryHintShuttle;
 
         for (RelHint outerQueryHint : queryHintsFromOuterQueryBlock) {
@@ -127,13 +127,13 @@ public class ClearQueryHintsWithInvalidPropagationShuttle extends QueryHintsRelS
         }
 
         @Override
-        public RelNode visit(LogicalCorrelate correlate) {
-            return visitBiRel(correlate);
+        public RelNode visit(LogicalCorrelate correlateNode) {
+            return visitBiRel(correlateNode);
         }
 
         @Override
-        public RelNode visit(LogicalJoin join) {
-            return visitBiRel(join);
+        public RelNode visit(LogicalJoin joinNode) {
+            return visitBiRel(joinNode);
         }
 
         private RelNode visitBiRel(BiRel biRel) {

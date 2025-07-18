@@ -83,22 +83,22 @@ public class QueryHintsResolver extends QueryHintsRelShuttle {
     }
 
     @Override
-    protected RelNode visitBiRel(BiRel biRel) {
-        Optional<String> leftName = extractAliasOrTableName(biRel.getLeft());
-        Optional<String> rightName = extractAliasOrTableName(biRel.getRight());
+    protected RelNode visitBinaryRelNode(BiRel binaryNode) {
+        Optional<String> leftName = extractAliasOrTableName(binaryNode.getLeft());
+        Optional<String> rightName = extractAliasOrTableName(binaryNode.getRight());
 
-        Set<RelHint> existentKVHints = new HashSet<>();
+        Set<RelHint> seenKeyValueHints = new HashSet<>();
 
-        List<RelHint> oldHints = ((Hintable) biRel).getHints();
-        List<RelHint> oldQueryHints = FlinkHints.getAllQueryHints(oldHints);
+        List<RelHint> originalHints = ((Hintable) binaryNode).getHints();
+        List<RelHint> oldQueryHints = FlinkHints.getAllQueryHints(originalHints);
         // has no hints, return directly.
         if (oldQueryHints.isEmpty()) {
-            return super.visitChildren(biRel);
+            return super.visitChildren(binaryNode);
         }
 
         List<RelHint> newHints = new ArrayList<>();
 
-        for (RelHint hint : oldHints) {
+        for (RelHint hint : originalHints) {
             if (JoinStrategy.isLookupHint(hint.hintName)) {
                 allHints.add(trimInheritPath(hint));
                 Configuration conf = Configuration.fromMap(hint.kvOptions);
@@ -150,14 +150,14 @@ public class QueryHintsResolver extends QueryHintsRelShuttle {
                     newHints.add(RelHint.builder(hint.hintName).hintOptions(newKvOptions).build());
                 }
             } else {
-                if (!existentKVHints.contains(hint)) {
-                    existentKVHints.add(hint);
+                if (!seenKeyValueHints.contains(hint)) {
+                    seenKeyValueHints.add(hint);
                     newHints.add(hint);
                 }
             }
         }
 
-        RelNode newNode = super.visitChildren(biRel);
+        RelNode newNode = super.visitChildren(binaryNode);
 
         newHints = mergeQueryHintsIfNecessary(newHints);
         // replace new query hints

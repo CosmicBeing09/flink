@@ -248,7 +248,7 @@ public class ConfigurationUtils {
             Configuration configuration, boolean flattenYaml) {
         if (configuration.standardYaml && !flattenYaml) {
             return YamlParserUtils.convertAndDumpYamlFromFlatMap(
-                    Collections.unmodifiableMap(configuration.confData));
+                    Collections.unmodifiableMap(configuration.configData));
         } else {
             Map<String, String> fileWritableMap = configuration.toFileWritableMap();
             return fileWritableMap.entrySet().stream()
