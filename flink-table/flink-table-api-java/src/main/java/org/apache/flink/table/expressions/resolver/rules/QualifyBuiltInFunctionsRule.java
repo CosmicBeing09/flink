@@ -38,8 +38,8 @@ import java.util.stream.Collectors;
 final class QualifyBuiltInFunctionsRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
                 .map(expr -> expr.accept(new QualifyBuiltInFunctionVisitor(context)))
                 .collect(Collectors.toList());
     }

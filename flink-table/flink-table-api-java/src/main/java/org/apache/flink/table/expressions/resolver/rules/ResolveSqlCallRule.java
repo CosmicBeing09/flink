@@ -42,12 +42,12 @@ import java.util.stream.Collectors;
 final class ResolveSqlCallRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         // only the top-level expressions may access the output data type
         final LogicalType outputType =
                 context.getOutputDataType().map(DataType::getLogicalType).orElse(null);
         final TranslateSqlCallsVisitor visitor = new TranslateSqlCallsVisitor(context, outputType);
-        return expression.stream().map(expr -> expr.accept(visitor)).collect(Collectors.toList());
+        return inputExpressions.stream().map(expr -> expr.accept(visitor)).collect(Collectors.toList());
     }
 
     private static class TranslateSqlCallsVisitor extends RuleExpressionVisitor<Expression> {

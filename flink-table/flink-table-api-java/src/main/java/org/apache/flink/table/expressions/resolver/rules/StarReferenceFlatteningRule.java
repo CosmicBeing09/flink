@@ -39,10 +39,10 @@ import static java.util.Collections.singletonList;
 final class StarReferenceFlatteningRule implements ResolverRule {
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
         final List<ColumnExpansionStrategy> strategies =
                 context.configuration().get(TableConfigOptions.TABLE_COLUMN_EXPANSION_STRATEGY);
-        return expression.stream()
+        return inputExpressions.stream()
                 .flatMap(e -> e.accept(new FieldFlatteningVisitor(context, strategies)).stream())
                 .collect(Collectors.toList());
     }

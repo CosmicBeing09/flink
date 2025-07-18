@@ -45,7 +45,7 @@ import java.util.Optional;
 @Internal
 public interface ResolverRule {
 
-    List<Expression> apply(List<Expression> expression, ResolutionContext context);
+    List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context);
 
     /**
      * Contextual information that can be used during application of the rule. E.g. one can access

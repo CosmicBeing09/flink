@@ -49,8 +49,8 @@ final class OverWindowResolverRule implements ResolverRule {
     private static final WindowKindExtractor OVER_WINDOW_KIND_EXTRACTOR = new WindowKindExtractor();
 
     @Override
-    public List<Expression> apply(List<Expression> expression, ResolutionContext context) {
-        return expression.stream()
+    public List<Expression> apply(List<Expression> inputExpressions, ResolutionContext context) {
+        return inputExpressions.stream()
                 .map(expr -> expr.accept(new ExpressionResolverVisitor(context)))
                 .collect(Collectors.toList());
     }
