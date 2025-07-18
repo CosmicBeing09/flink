@@ -509,7 +509,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // make snapshot
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     createStreamFactory(),
@@ -598,7 +598,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             try {
                 // backends that lazily serializes (such as memory state backend) will fail here
                 runSnapshot(
-                        backend.snapshot(
+                        backend.createStateSnapshot(
                                 682375462378L,
                                 2,
                                 streamFactory,
@@ -674,7 +674,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             try {
                 // backends that lazily serializes (such as memory state backend) will fail here
                 runSnapshot(
-                        backend.snapshot(
+                        backend.createStateSnapshot(
                                 682375462378L,
                                 2,
                                 streamFactory,
@@ -744,7 +744,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             try {
                 // backends that lazily serializes (such as memory state backend) will fail here
                 runSnapshot(
-                        backend.snapshot(
+                        backend.createStateSnapshot(
                                 682375462378L,
                                 2,
                                 streamFactory,
@@ -817,7 +817,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             try {
                 // backends that lazily serializes (such as memory state backend) will fail here
                 runSnapshot(
-                        backend.snapshot(
+                        backend.createStateSnapshot(
                                 682375462378L,
                                 2,
                                 streamFactory,
@@ -883,7 +883,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -961,7 +961,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -994,7 +994,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1068,7 +1068,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1099,7 +1099,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1189,7 +1189,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1242,7 +1242,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // this tests backends that lazily serialize, such as memory state backend
             runSnapshot(
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             682375462378L,
                             2,
                             streamFactory,
@@ -1303,7 +1303,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1344,7 +1344,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             // this tests backends that lazily serialize, such as memory state backend
             runSnapshot(
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             682375462378L,
                             2,
                             streamFactory,
@@ -1421,7 +1421,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1439,7 +1439,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw another snapshot
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     4,
                                     streamFactory,
@@ -1763,7 +1763,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1855,7 +1855,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1944,7 +1944,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -1964,7 +1964,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw another snapshot
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     4,
                                     streamFactory,
@@ -2501,7 +2501,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -2519,7 +2519,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw another snapshot
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     4,
                                     streamFactory,
@@ -3284,7 +3284,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -3309,7 +3309,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw another snapshot
             KeyedStateHandle snapshot2 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     4,
                                     streamFactory,
@@ -3709,7 +3709,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             keyedStateHandle =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     1L,
                                     createStreamFactory(),
@@ -3847,7 +3847,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // take a snapshot, and then restore backend with snapshot
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -3860,7 +3860,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // now take a snapshot again without accessing the state
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -4008,7 +4008,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 // snapshot
                 snapshots.add(
                         runSnapshot(
-                                backend.snapshot(
+                                backend.createStateSnapshot(
                                         0,
                                         0,
                                         streamFactory,
@@ -4090,7 +4090,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -4133,7 +4133,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -4191,7 +4191,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -4251,7 +4251,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -4313,7 +4313,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot1 =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -4563,7 +4563,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     4,
                                     streamFactory,
@@ -4614,7 +4614,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             // draw a snapshot
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     682375462379L,
                                     1,
                                     streamFactory,
@@ -4719,7 +4719,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             }
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot1 =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,
@@ -4741,7 +4741,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             streamFactory.setBlockerLatch(null);
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot2 =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             1L,
                             1L,
                             streamFactory,
@@ -4806,7 +4806,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             }
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,
@@ -5030,7 +5030,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
             }
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,
@@ -5200,7 +5200,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
                 futureList.add(
                         runSnapshotAsync(
                                 executorService,
-                                backend.snapshot(
+                                backend.createStateSnapshot(
                                         checkpointID++,
                                         System.currentTimeMillis(),
                                         streamFactory,
@@ -5708,7 +5708,7 @@ public abstract class StateBackendTestBase<B extends AbstractStateBackend> {
     }
 
     /**
-     * @return true if {@link org.apache.flink.runtime.state.Snapshotable#snapshot
+     * @return true if {@link StateSnapshotter#createStateSnapshot
      *     backend.snapshot()} actually uses passed {@link CheckpointStreamFactory}.
      */
     protected boolean snapshotUsesStreamFactory() {

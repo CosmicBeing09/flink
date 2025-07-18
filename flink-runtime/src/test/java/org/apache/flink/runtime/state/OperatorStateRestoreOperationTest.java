@@ -83,7 +83,7 @@ public class OperatorStateRestoreOperationTest {
             }
             final SnapshotResult<OperatorStateHandle> result =
                     operatorStateBackend
-                            .snapshot(
+                            .createStateSnapshot(
                                     1,
                                     1,
                                     new MemCheckpointStreamFactory(4096),

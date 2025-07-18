@@ -298,7 +298,7 @@ class OperatorStateBackendTest {
 
         CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(4096);
         RunnableFuture<SnapshotResult<OperatorStateHandle>> runnableFuture =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         1, 1, streamFactory, CheckpointOptions.forCheckpointWithDefaultLocation());
         FutureUtils.runIfNotDoneAndGet(runnableFuture);
 
@@ -420,7 +420,7 @@ class OperatorStateBackendTest {
         CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(4096);
 
         RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         0L,
                         0L,
                         streamFactory,
@@ -477,7 +477,7 @@ class OperatorStateBackendTest {
                         0);
 
         RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         0L,
                         0L,
                         streamFactory,
@@ -518,7 +518,7 @@ class OperatorStateBackendTest {
 
         try {
             RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot =
-                    operatorStateBackend.snapshot(
+                    operatorStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,
@@ -548,7 +548,7 @@ class OperatorStateBackendTest {
             expected.remove(1);
 
             snapshot =
-                    operatorStateBackend.snapshot(
+                    operatorStateBackend.createStateSnapshot(
                             1L,
                             1L,
                             streamFactory,
@@ -575,7 +575,7 @@ class OperatorStateBackendTest {
             expected.clear();
 
             snapshot =
-                    operatorStateBackend.snapshot(
+                    operatorStateBackend.createStateSnapshot(
                             2L,
                             2L,
                             streamFactory,
@@ -666,7 +666,7 @@ class OperatorStateBackendTest {
 
         CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(2 * 4096);
         RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         1L,
                         1L,
                         streamFactory,
@@ -824,7 +824,7 @@ class OperatorStateBackendTest {
         streamFactory.setBlockerLatch(blockerLatch);
 
         RunnableFuture<SnapshotResult<OperatorStateHandle>> runnableFuture =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         1, 1, streamFactory, CheckpointOptions.forCheckpointWithDefaultLocation());
 
         ExecutorService executorService = EXECUTOR_EXTENSION.getExecutor();
@@ -979,7 +979,7 @@ class OperatorStateBackendTest {
         streamFactory.setBlockerLatch(blockerLatch);
 
         RunnableFuture<SnapshotResult<OperatorStateHandle>> runnableFuture =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         1, 1, streamFactory, CheckpointOptions.forCheckpointWithDefaultLocation());
 
         EXECUTOR_EXTENSION.getExecutor().submit(runnableFuture);
@@ -1024,7 +1024,7 @@ class OperatorStateBackendTest {
         streamFactory.setBlockerLatch(blockerLatch);
 
         RunnableFuture<SnapshotResult<OperatorStateHandle>> runnableFuture =
-                operatorStateBackend.snapshot(
+                operatorStateBackend.createStateSnapshot(
                         1, 1, streamFactory, CheckpointOptions.forCheckpointWithDefaultLocation());
 
         EXECUTOR_EXTENSION.getExecutor().submit(runnableFuture);

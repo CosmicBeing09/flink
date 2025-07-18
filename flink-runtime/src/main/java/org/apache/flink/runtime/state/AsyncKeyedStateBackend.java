@@ -42,7 +42,7 @@ import java.io.Closeable;
  */
 @Internal
 public interface AsyncKeyedStateBackend<K>
-        extends Snapshotable<SnapshotResult<KeyedStateHandle>>,
+        extends StateSnapshotter<SnapshotResult<KeyedStateHandle>>,
                 InternalCheckpointListener,
                 PriorityQueueSetFactory,
                 Disposable,

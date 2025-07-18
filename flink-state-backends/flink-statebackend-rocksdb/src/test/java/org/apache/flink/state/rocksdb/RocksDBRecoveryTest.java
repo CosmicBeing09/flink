@@ -356,7 +356,7 @@ public class RocksDBRecoveryTest {
                             4096);
 
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    backend.snapshot(
+                    backend.createStateSnapshot(
                             0L,
                             0L,
                             fsCheckpointStreamFactory,

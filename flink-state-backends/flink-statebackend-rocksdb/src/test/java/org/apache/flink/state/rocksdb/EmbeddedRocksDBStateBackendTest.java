@@ -389,7 +389,7 @@ public class EmbeddedRocksDBStateBackendTest
 
         try {
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             testStreamFactory,
@@ -426,7 +426,7 @@ public class EmbeddedRocksDBStateBackendTest
         setupRocksKeyedStateBackend();
         try {
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             testStreamFactory,
@@ -445,7 +445,7 @@ public class EmbeddedRocksDBStateBackendTest
         setupRocksKeyedStateBackend();
         try {
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             testStreamFactory,
@@ -468,7 +468,7 @@ public class EmbeddedRocksDBStateBackendTest
         setupRocksKeyedStateBackend();
         try {
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             testStreamFactory,
@@ -505,7 +505,7 @@ public class EmbeddedRocksDBStateBackendTest
         setupRocksKeyedStateBackend();
         try {
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    keyedStateBackend.snapshot(
+                    keyedStateBackend.createStateSnapshot(
                             0L,
                             0L,
                             testStreamFactory,
@@ -593,7 +593,7 @@ public class EmbeddedRocksDBStateBackendTest
                     state.update("Hello-" + checkpointId);
 
                     RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     checkpointId,
                                     checkpointId,
                                     createStreamFactory(),
@@ -735,7 +735,7 @@ public class EmbeddedRocksDBStateBackendTest
                 state.update(Integer.toString(i));
                 // snapshot to force flushing memtables to disk and create a new SST file
                 runSnapshot(
-                        backend.snapshot(
+                        backend.createStateSnapshot(
                                 i, // checkpoint id
                                 i, // timestamp
                                 streamFactory,

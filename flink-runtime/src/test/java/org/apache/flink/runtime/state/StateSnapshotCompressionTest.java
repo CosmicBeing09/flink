@@ -150,7 +150,7 @@ class StateSnapshotCompressionTest {
             state.update("45");
             CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(4 * 1024 * 1024);
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
-                    stateBackend.snapshot(
+                    stateBackend.createStateSnapshot(
                             0L,
                             0L,
                             streamFactory,

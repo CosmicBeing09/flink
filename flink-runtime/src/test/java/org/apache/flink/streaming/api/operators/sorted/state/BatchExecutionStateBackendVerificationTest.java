@@ -48,7 +48,7 @@ class BatchExecutionStateBackendVerificationTest {
 
         assertThatThrownBy(
                         () ->
-                                stateBackend.snapshot(
+                                stateBackend.createStateSnapshot(
                                         checkpointId,
                                         0L,
                                         streamFactory,

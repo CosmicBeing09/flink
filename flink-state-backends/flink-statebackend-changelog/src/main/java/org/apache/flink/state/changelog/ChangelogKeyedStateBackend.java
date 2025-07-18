@@ -168,7 +168,7 @@ public class ChangelogKeyedStateBackend<K>
 
     /**
      * {@link SequenceNumber} denoting last upload range <b>start</b>, inclusive. Updated to {@link
-     * ChangelogSnapshotState#materializedTo} when {@link #snapshot(long, long,
+     * ChangelogSnapshotState#materializedTo} when {@link #createStateSnapshot(long, long,
      * CheckpointStreamFactory, CheckpointOptions) starting snapshot}. Used to notify {@link
      * #stateChangelogWriter} about changelog ranges that were confirmed or aborted by JM.
      */
@@ -176,7 +176,7 @@ public class ChangelogKeyedStateBackend<K>
 
     /**
      * {@link SequenceNumber} denoting last upload range <b>end</b>, exclusive. Updated to {@link
-     * StateChangelogWriter#nextSequenceNumber()} when {@link #snapshot(long, long,
+     * StateChangelogWriter#nextSequenceNumber()} when {@link #createStateSnapshot(long, long,
      * CheckpointStreamFactory, CheckpointOptions) starting snapshot}. Used to notify {@link
      * #stateChangelogWriter} about changelog ranges that were confirmed or aborted by JM.
      */
@@ -391,7 +391,7 @@ public class ChangelogKeyedStateBackend<K>
 
     @Nonnull
     @Override
-    public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+    public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
             long checkpointId,
             long timestamp,
             @Nonnull CheckpointStreamFactory streamFactory,
@@ -457,7 +457,7 @@ public class ChangelogKeyedStateBackend<K>
         long materializationID = materializedId++;
         // For NO_SHARING native savepoint, trigger delegated one
         RunnableFuture<SnapshotResult<KeyedStateHandle>> delegatedSnapshotResult =
-                keyedStateBackend.snapshot(
+                keyedStateBackend.createStateSnapshot(
                         materializationID, timestamp, streamFactory, checkpointOptions);
 
         materializationIdByCheckpointId.put(checkpointId, materializationID);
@@ -869,7 +869,7 @@ public class ChangelogKeyedStateBackend<K>
 
             MaterializationRunnable materializationRunnable =
                     new MaterializationRunnable(
-                            keyedStateBackend.snapshot(
+                            keyedStateBackend.createStateSnapshot(
                                     materializationID,
                                     System.currentTimeMillis(),
                                     // TODO: implement its own streamFactory.

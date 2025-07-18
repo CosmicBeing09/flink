@@ -181,7 +181,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -213,7 +213,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -303,7 +303,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -344,7 +344,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -462,7 +462,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -527,7 +527,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -562,7 +562,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -647,7 +647,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -670,7 +670,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -745,7 +745,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -772,7 +772,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     2L,
                                     3L,
                                     streamFactory,
@@ -848,7 +848,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             OperatorStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -943,7 +943,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             OperatorStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -1097,7 +1097,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             OperatorStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,
@@ -1150,7 +1150,7 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             OperatorStateHandle snapshot =
                     runSnapshot(
-                            backend.snapshot(
+                            backend.createStateSnapshot(
                                     1L,
                                     2L,
                                     streamFactory,

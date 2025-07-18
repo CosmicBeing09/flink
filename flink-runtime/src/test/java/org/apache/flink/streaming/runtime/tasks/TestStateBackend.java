@@ -189,7 +189,7 @@ public class TestStateBackend extends AbstractStateBackend {
 
         @Nonnull
         @Override
-        public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+        public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
                 long checkpointId,
                 long timestamp,
                 @Nonnull CheckpointStreamFactory streamFactory,

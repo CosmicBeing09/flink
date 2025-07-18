@@ -201,7 +201,7 @@ public class ChangelogMetricGroupTest {
 
     private void runSnapshot(long checkpointId) throws Exception {
         changelogKeyedStateBackend
-                .snapshot(
+                .createStateSnapshot(
                         checkpointId,
                         System.currentTimeMillis(),
                         new MemCheckpointStreamFactory(1024),

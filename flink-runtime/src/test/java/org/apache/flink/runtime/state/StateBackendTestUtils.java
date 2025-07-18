@@ -186,7 +186,7 @@ public class StateBackendTestUtils {
         }
 
         @Override
-        public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+        public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
                 long checkpointId,
                 long timestamp,
                 CheckpointStreamFactory streamFactory,
@@ -303,14 +303,14 @@ public class StateBackendTestUtils {
 
                 @Nonnull
                 @Override
-                public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+                public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
                         long checkpointId,
                         long timestamp,
                         @Nonnull CheckpointStreamFactory streamFactory,
                         @Nonnull CheckpointOptions checkpointOptions)
                         throws Exception {
                     RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshotResultRunnableFuture =
-                            delegatedKeyedStateBackend.snapshot(
+                            delegatedKeyedStateBackend.createStateSnapshot(
                                     checkpointId, timestamp, streamFactory, checkpointOptions);
                     return snapshotResultFunction.apply(snapshotResultRunnableFuture);
                 }

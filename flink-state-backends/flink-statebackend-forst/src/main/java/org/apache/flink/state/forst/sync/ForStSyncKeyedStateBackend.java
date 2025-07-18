@@ -581,7 +581,7 @@ public class ForStSyncKeyedStateBackend<K> extends AbstractKeyedStateBackend<K> 
      */
     @Nonnull
     @Override
-    public RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot(
+    public RunnableFuture<SnapshotResult<KeyedStateHandle>> createStateSnapshot(
             final long checkpointId,
             final long timestamp,
             @Nonnull final CheckpointStreamFactory streamFactory,

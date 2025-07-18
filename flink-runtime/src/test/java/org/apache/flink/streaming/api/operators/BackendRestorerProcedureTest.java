@@ -93,7 +93,7 @@ class BackendRestorerProcedureTest {
             listState.add(3);
 
             RunnableFuture<SnapshotResult<OperatorStateHandle>> snapshot =
-                    originalBackend.snapshot(
+                    originalBackend.createStateSnapshot(
                             0L,
                             0L,
                             checkpointStreamFactory,

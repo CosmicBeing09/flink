@@ -259,7 +259,7 @@ public class ChangelogStateBackendTestUtils {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            keyedBackend.snapshot(
+                            keyedBackend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,
@@ -348,7 +348,7 @@ public class ChangelogStateBackendTestUtils {
 
             KeyedStateHandle snapshot =
                     runSnapshot(
-                            keyedBackend.snapshot(
+                            keyedBackend.createStateSnapshot(
                                     682375462378L,
                                     2,
                                     streamFactory,

@@ -161,7 +161,7 @@ public interface StateBackend extends java.io.Serializable {
      *
      * <p>If a state backend supports {@code NO_CLAIM} mode, it should create an independent
      * snapshot when it receives {@link CheckpointType#FULL_CHECKPOINT} in {@link
-     * Snapshotable#snapshot(long, long, CheckpointStreamFactory, CheckpointOptions)}.
+     * StateSnapshotter#createStateSnapshot(long, long, CheckpointStreamFactory, CheckpointOptions)}.
      *
      * @return If the state backend supports {@link RecoveryClaimMode#NO_CLAIM} mode.
      */

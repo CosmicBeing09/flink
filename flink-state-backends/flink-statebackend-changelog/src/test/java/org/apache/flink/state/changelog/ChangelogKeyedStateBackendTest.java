@@ -174,7 +174,7 @@ public class ChangelogKeyedStateBackendTest {
 
     private RunnableFuture<SnapshotResult<KeyedStateHandle>> checkpoint(
             ChangelogKeyedStateBackend<Integer> backend, long checkpointId) throws Exception {
-        return backend.snapshot(
+        return backend.createStateSnapshot(
                 checkpointId,
                 0L,
                 new MemCheckpointStreamFactory(1000),

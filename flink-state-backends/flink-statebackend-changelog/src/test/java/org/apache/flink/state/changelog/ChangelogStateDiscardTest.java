@@ -348,7 +348,7 @@ public class ChangelogStateDiscardTest {
 
     private static void checkpoint(ChangelogKeyedStateBackend<String> backend, long checkpointId)
             throws Exception {
-        backend.snapshot(
+        backend.createStateSnapshot(
                 checkpointId,
                 1L,
                 new MemCheckpointStreamFactory(1000),
