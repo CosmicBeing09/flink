@@ -80,7 +80,7 @@ class ClientTest {
             new InternalMiniClusterExtension(
                     new MiniClusterResourceConfiguration.Builder().build());
 
-    private Plan plan;
+    private Plan streamGraph;
 
     private Configuration config;
 
@@ -96,7 +96,7 @@ class ClientTest {
 
         ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
         env.generateSequence(1, 1000).output(new DiscardingOutputFormat<>());
-        plan = env.createProgramPlan();
+        streamGraph = env.createProgramPlan();
 
         config = new Configuration();
         config.set(JobManagerOptions.ADDRESS, "localhost");
@@ -135,7 +135,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -157,7 +157,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -179,7 +179,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -202,7 +202,7 @@ class ClientTest {
                             final Configuration configuration = fromPackagedProgram(prg, 1, true);
 
                             ClientUtils.executeProgram(
-                                    new TestExecutorServiceLoader(clusterClient, plan),
+                                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                                     configuration,
                                     prg,
                                     false,
@@ -250,7 +250,7 @@ class ClientTest {
             final Configuration configuration = fromPackagedProgram(program, 1, false);
 
             ClientUtils.executeProgram(
-                    new TestExecutorServiceLoader(clusterClient, plan),
+                    new TestExecutorServiceLoader(clusterClient, streamGraph),
                     configuration,
                     program,
                     enforceSingleJobExecution,
@@ -266,7 +266,7 @@ class ClientTest {
         JobGraph jobGraph =
                 FlinkPipelineTranslationUtil.getJobGraph(
                         Thread.currentThread().getContextClassLoader(),
-                        plan,
+                        streamGraph,
                         new Configuration(),
                         1);
 
@@ -301,7 +301,7 @@ class ClientTest {
                                 final Configuration configuration =
                                         fromPackagedProgram(packagedProgramMock, 1, true);
                                 ClientUtils.executeProgram(
-                                        new TestExecutorServiceLoader(client, plan),
+                                        new TestExecutorServiceLoader(client, streamGraph),
                                         configuration,
                                         packagedProgramMock,
                                         false,
@@ -324,11 +324,11 @@ class ClientTest {
 
         Optimizer optimizer =
                 new Optimizer(new DataStatistics(), new DefaultCostEstimator(), config);
-        Plan plan =
+        Plan streamGraph =
                 (Plan)
                         PackagedProgramUtils.getPipelineFromProgram(
                                 prg, new Configuration(), 1, true);
-        OptimizedPlan op = optimizer.compile(plan);
+        OptimizedPlan op = optimizer.compile(streamGraph);
         assertThat(op).isNotNull();
 
         PlanJSONDumpGenerator dumper = new PlanJSONDumpGenerator();
@@ -359,7 +359,8 @@ class ClientTest {
             assertThatThrownBy(
                             () ->
                                     ClientUtils.executeProgram(
-                                            new TestExecutorServiceLoader(clusterClient, plan),
+                                            new TestExecutorServiceLoader(clusterClient,
+                                                    streamGraph),
                                             configuration,
                                             program,
                                             true,
@@ -470,11 +471,11 @@ class ClientTest {
 
         private final ClusterClient<?> clusterClient;
 
-        private final Plan plan;
+        private final Plan streamGraph;
 
-        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final Plan plan) {
+        TestExecutorServiceLoader(final ClusterClient<?> clusterClient, final Plan streamGraph) {
             this.clusterClient = checkNotNull(clusterClient);
-            this.plan = checkNotNull(plan);
+            this.streamGraph = checkNotNull(streamGraph);
         }
 
         @Override
@@ -498,7 +499,7 @@ class ClientTest {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
                         final JobGraph jobGraph =
                                 FlinkPipelineTranslationUtil.getJobGraph(
-                                        classLoader, plan, config, parallelism);
+                                        classLoader, streamGraph, config, parallelism);
 
                         final ExecutionConfigAccessor accessor =
                                 ExecutionConfigAccessor.fromConfiguration(config);
