@@ -141,7 +141,7 @@ public class JobStatusChangedListenerITCase extends TestLogger {
             env.addSource(new FastFailureSourceFunction()).addSink(new SleepingSink());
 
             StreamGraph streamGraph = env.getStreamGraph();
-            JobGraph jobGraph = streamGraph.getJobGraph();
+            JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
             ClusterClient<?> client = MINI_CLUSTER.getClusterClient();
             JobID jobID = client.submitJob(jobGraph).get();
@@ -175,7 +175,7 @@ public class JobStatusChangedListenerITCase extends TestLogger {
             source.addSink(new SleepingSink());
 
             StreamGraph streamGraph = env.getStreamGraph();
-            JobGraph jobGraph = streamGraph.getJobGraph();
+            JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
             verifyLineageGraph(streamGraph.getLineageGraph());
             ClusterClient<?> client = MINI_CLUSTER.getClusterClient();

@@ -89,7 +89,7 @@ public class AdaptiveSchedulerFactory implements SchedulerNGFactory {
         if (executionPlan instanceof JobGraph) {
             jobGraph = (JobGraph) executionPlan;
         } else if (executionPlan instanceof StreamGraph) {
-            jobGraph = ((StreamGraph) executionPlan).getJobGraph(userCodeLoader);
+            jobGraph = ((StreamGraph) executionPlan).getStreamingJobGraph(userCodeLoader);
         } else {
             throw new FlinkException(
                     "Unsupported execution plan " + executionPlan.getClass().getCanonicalName());

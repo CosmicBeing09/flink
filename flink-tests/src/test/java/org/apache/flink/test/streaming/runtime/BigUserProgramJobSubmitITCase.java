@@ -85,7 +85,7 @@ public class BigUserProgramJobSubmitITCase extends TestLogger {
                         })
                 .addSink(resultSink);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(env.getStreamGraph());
 
         final RestClusterClient<StandaloneClusterId> restClusterClient =
                 new RestClusterClient<>(

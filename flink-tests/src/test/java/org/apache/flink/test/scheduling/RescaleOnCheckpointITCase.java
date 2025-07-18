@@ -113,7 +113,7 @@ class RescaleOnCheckpointITCase {
         env.setParallelism(BEFORE_RESCALE_PARALLELISM);
         env.fromSequence(0, Integer.MAX_VALUE).sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         final Iterator<JobVertex> jobVertexIterator = jobGraph.getVertices().iterator();
         assertThat(jobVertexIterator.hasNext())
                 .as("There needs to be at least one JobVertex.")

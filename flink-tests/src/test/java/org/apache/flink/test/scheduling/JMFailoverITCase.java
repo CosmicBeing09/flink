@@ -468,7 +468,7 @@ class JMFailoverITCase {
         streamGraph.setGlobalStreamExchangeMode(GlobalStreamExchangeMode.ALL_EDGES_BLOCKING);
         streamGraph.setJobType(JobType.BATCH);
         streamGraph.setJobName(jobName);
-        return StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        return StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
     }
 
     private JobGraph createStreamGraphWithUnsupportedBatchSnapshotOperatorCoordinator(
@@ -500,7 +500,7 @@ class JMFailoverITCase {
         streamGraph.setGlobalStreamExchangeMode(GlobalStreamExchangeMode.ALL_EDGES_BLOCKING);
         streamGraph.setJobType(JobType.BATCH);
         streamGraph.setJobName(jobName);
-        return StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        return StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
     }
 
     private static void setSubtaskBlocked(

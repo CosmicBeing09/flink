@@ -96,7 +96,7 @@ class StreamingExecutionFileSinkITCase extends FileSinkITBase {
         configureSink(sink);
 
         StreamGraph streamGraph = env.getStreamGraph();
-        return streamGraph.getJobGraph();
+        return streamGraph.getStreamingJobGraph();
     }
 
     protected void configureSink(DataStreamSink<Integer> sink) {}

@@ -202,7 +202,7 @@ public class RegionFailoverITCase extends TestLogger {
                 .map((MapFunction<Tuple2<Integer, Integer>, Object>) value -> value)
                 .setParallelism(1);
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class StringGeneratingSourceFunction

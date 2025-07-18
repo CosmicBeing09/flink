@@ -59,7 +59,7 @@ public class MapCancelingITCase extends CancelingTestBase {
 
         env.setParallelism(PARALLELISM);
 
-        runAndCancelJob(env.getStreamGraph().getJobGraph(), 5 * 1000, 10 * 1000);
+        runAndCancelJob(env.getStreamGraph().getStreamingJobGraph(), 5 * 1000, 10 * 1000);
     }
 
     // --------------------------------------------------------------------------------------------

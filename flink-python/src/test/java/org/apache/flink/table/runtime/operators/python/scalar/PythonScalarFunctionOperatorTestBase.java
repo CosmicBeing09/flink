@@ -225,7 +225,7 @@ public abstract class PythonScalarFunctionOperatorTestBase<IN, OUT, UDFIN> {
         Table t = tEnv.fromDataStream(ds, $("a"), $("b")).select(call("pyFunc", $("a"), $("b")));
         // force generating the physical plan for the given table
         tEnv.toDataStream(t, DataTypes.INT());
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         assertThat(vertices).hasSize(1);
     }

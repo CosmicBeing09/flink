@@ -92,7 +92,7 @@ class ForwardForUnspecifiedPartitionerTest {
                 .name("sink");
 
         List<JobVertex> jobVertices =
-                env.getStreamGraph().getJobGraph().getVerticesSortedTopologicallyFromSources();
+                env.getStreamGraph().getStreamingJobGraph().getVerticesSortedTopologicallyFromSources();
         assertThat(jobVertices.size()).isEqualTo(2);
 
         JobVertex sourceVertex = jobVertices.get(0);

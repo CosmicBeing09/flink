@@ -157,7 +157,7 @@ public class ChangelogRecoveryCachingITCase extends TestLogger {
                         })
                 .sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private Configuration configureJob(File cpDir) {

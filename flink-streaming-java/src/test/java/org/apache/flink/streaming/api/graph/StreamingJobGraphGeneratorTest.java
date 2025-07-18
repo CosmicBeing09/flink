@@ -28,7 +28,7 @@ import org.apache.flink.shaded.guava32.com.google.common.collect.Iterables;
 class StreamingJobGraphGeneratorTest extends JobGraphGeneratorTestBase {
     @Override
     JobGraph createJobGraph(StreamGraph streamGraph) {
-        return StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        return StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
     }
 
     @Override

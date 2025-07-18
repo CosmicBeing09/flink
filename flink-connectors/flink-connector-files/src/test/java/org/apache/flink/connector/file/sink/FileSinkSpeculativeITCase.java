@@ -114,7 +114,7 @@ class FileSinkSpeculativeITCase {
                         .name("file_sink")
                         .setParallelism(NUM_SINKS);
 
-        JobGraph jobGraph = env.getStreamGraph(false).getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph(false).getStreamingJobGraph();
 
         // Assert that the TestingMap operator is chained with FileSink, which will lead
         // to a slow sink as well.

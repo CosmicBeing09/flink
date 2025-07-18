@@ -147,7 +147,7 @@ class FileSinkMigrationITCase {
                 .addSink(sink)
                 .setParallelism(NUM_SINKS)
                 .uid(SINK_UID);
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private JobGraph createFileSinkJobGraph(String outputPath) {
@@ -168,7 +168,7 @@ class FileSinkMigrationITCase {
                 .sinkTo(sink)
                 .setParallelism(NUM_SINKS)
                 .uid(SINK_UID);
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private String executeAndTakeSavepoint(

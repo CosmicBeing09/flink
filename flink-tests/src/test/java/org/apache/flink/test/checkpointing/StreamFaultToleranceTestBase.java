@@ -131,7 +131,7 @@ public abstract class StreamFaultToleranceTestBase extends TestLogger {
 
             testProgram(env);
 
-            JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+            JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
             try {
                 submitJobAndWaitForResult(
                         cluster.getClusterClient(), jobGraph, getClass().getClassLoader());

@@ -271,7 +271,7 @@ public abstract class AbstractOperatorRestoreTestBase extends TestLogger impleme
                 break;
         }
 
-        return StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph());
+        return StreamingJobGraphGenerator.createStreamingJobGraph(env.getStreamGraph());
     }
 
     private Path getSavepointPath(FlinkVersion version) {

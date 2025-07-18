@@ -258,7 +258,7 @@ class ClientTest {
     void shouldSubmitToJobClient() {
         final ClusterClient<?> clusterClient =
                 new MiniClusterClient(new Configuration(), MINI_CLUSTER_RESOURCE.getMiniCluster());
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
         jobGraph.addJars(Collections.emptyList());
         jobGraph.setClasspaths(Collections.emptyList());
@@ -496,7 +496,7 @@ class ClientTest {
                 public PipelineExecutor getExecutor(@Nonnull Configuration configuration) {
                     return (pipeline, config, classLoader) -> {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
-                        final JobGraph jobGraph = streamGraph.getJobGraph();
+                        final JobGraph jobGraph = streamGraph.getStreamingJobGraph();
                         // The job graphs from different cases are generated from the same stream
                         // graph, resulting in the same job ID, which can lead to exceptions.
                         // Therefore, we manually set a unique job ID here.

@@ -182,7 +182,7 @@ public abstract class UnalignedCheckpointTestBase extends TestLogger {
             System.out.println(
                     "Starting " + getClass().getCanonicalName() + "#" + name.getMethodName() + ".");
             final CompletableFuture<JobSubmissionResult> result =
-                    miniCluster.getMiniCluster().submitJob(streamGraph.getJobGraph());
+                    miniCluster.getMiniCluster().submitJob(streamGraph.getStreamingJobGraph());
 
             checkCounters(
                     miniCluster

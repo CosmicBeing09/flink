@@ -147,7 +147,7 @@ class AlignedWatermarksITCase {
 
         slowSource.union(fastSource).sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class PunctuatedGenerator implements WatermarkGenerator<Long> {

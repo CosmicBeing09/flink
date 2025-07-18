@@ -178,7 +178,7 @@ public class CheckpointRestoreWithUidHashITCase {
         }
 
         source.addSink(new CollectSink(result)).setParallelism(1);
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         if (savepointPath != null) {
             jobGraph.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath, false));

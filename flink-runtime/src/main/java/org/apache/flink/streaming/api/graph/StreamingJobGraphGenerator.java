@@ -130,7 +130,7 @@ public class StreamingJobGraphGenerator {
     // ------------------------------------------------------------------------
 
     @VisibleForTesting
-    public static JobGraph createJobGraph(StreamGraph streamGraph) {
+    public static JobGraph createStreamingJobGraph(StreamGraph streamGraph) {
         return new StreamingJobGraphGenerator(
                         Thread.currentThread().getContextClassLoader(),
                         streamGraph,
@@ -139,7 +139,7 @@ public class StreamingJobGraphGenerator {
                 .createJobGraph();
     }
 
-    public static JobGraph createJobGraph(
+    public static JobGraph createStreamingJobGraph(
             ClassLoader userClassLoader, StreamGraph streamGraph, @Nullable JobID jobID) {
         // TODO Currently, we construct a new thread pool for the compilation of each job. In the
         // future, we may refactor the job submission framework and make it reusable across jobs.

@@ -115,7 +115,7 @@ class StreamOperatorChainingTest {
                         });
 
         // be build our own StreamTask and OperatorChain
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(2);
 
@@ -242,7 +242,7 @@ class StreamOperatorChainingTest {
                         });
 
         // be build our own StreamTask and OperatorChain
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         assertThat(jobGraph.getVerticesSortedTopologicallyFromSources()).hasSize(2);
 

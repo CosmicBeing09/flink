@@ -85,7 +85,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("Map"), 0);
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -136,7 +136,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
         env.disableOperatorChaining();
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(env.getStreamGraph(false));
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(env.getStreamGraph(false));
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -187,7 +187,7 @@ public class StreamingJobGraphGeneratorWithOperatorAttributesTest {
         assertManagedMemoryWeightsSize(nodeMap.get("transform"), 0);
         assertManagedMemoryWeightsSize(nodeMap.get("sink: Writer"), 0);
 
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);

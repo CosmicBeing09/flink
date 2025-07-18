@@ -105,7 +105,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
 
             RestartStrategyUtils.configureNoRestartStrategy(env);
             env.enableCheckpointing(100);
-            JobGraph jobGraph = getStreamGraph(env, true, false).getJobGraph();
+            JobGraph jobGraph = getStreamGraph(env, true, false).getStreamingJobGraph();
             miniCluster.submitJob(jobGraph).get();
 
             CommonTestUtils.waitForSubtasksToFinish(
@@ -128,7 +128,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
             env.enableCheckpointing(
                     Duration.ofNanos(Long.MAX_VALUE) /* max duration allowed by FLINK */
                             .toMillis());
-            JobGraph restoredJobGraph = getStreamGraph(env, true, false).getJobGraph();
+            JobGraph restoredJobGraph = getStreamGraph(env, true, false).getStreamingJobGraph();
             restoredJobGraph.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath, false));
             miniCluster.submitJob(restoredJobGraph).get();
@@ -167,7 +167,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
             miniCluster.start();
 
             env.enableCheckpointing(100);
-            JobGraph jobGraph = getStreamGraph(env, true, true).getJobGraph();
+            JobGraph jobGraph = getStreamGraph(env, true, true).getStreamingJobGraph();
             miniCluster.submitJob(jobGraph).get();
 
             CommonTestUtils.waitForSubtasksToFinish(

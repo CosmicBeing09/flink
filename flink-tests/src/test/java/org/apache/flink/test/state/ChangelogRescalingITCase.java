@@ -202,7 +202,7 @@ public class ChangelogRescalingITCase extends TestLogger {
                         })
                 .sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static long key(Long num) {

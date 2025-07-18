@@ -83,7 +83,7 @@ class WithMasterCheckpointHookConfigTest {
                 .union(env.addSource(source4).map(identityWithHook2))
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jg = env.getStreamGraph().getJobGraph();
+        final JobGraph jg = env.getStreamGraph().getStreamingJobGraph();
 
         SerializedValue<Factory[]> serializedConfiguredHooks =
                 jg.getCheckpointingSettings().getMasterHooks();

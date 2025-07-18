@@ -59,7 +59,7 @@ public class StreamPartitionerTestUtils {
                 .slotSharingGroup(sinkSlotSharingGroup)
                 .name("sink");
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static <T> DataStream<T> setPartitioner(

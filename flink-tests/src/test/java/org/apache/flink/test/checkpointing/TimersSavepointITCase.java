@@ -153,7 +153,7 @@ public class TimersSavepointITCase {
                 TMP_FOLDER.newFolder().toURI().toString());
         config.set(RocksDBOptions.TIMER_SERVICE_FACTORY, priorityQueueStateType);
         env.configure(config, this.getClass().getClassLoader());
-        return env.getStreamGraph(false).getJobGraph();
+        return env.getStreamGraph(false).getStreamingJobGraph();
     }
 
     private static String getResourceFilename(String filename) {

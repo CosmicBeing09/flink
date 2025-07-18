@@ -363,7 +363,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
         stream.sinkTo(new DiscardingSink<>());
 
         final StreamGraph streamGraph = stream.getExecutionEnvironment().getStreamGraph();
-        return StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        return StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
     }
 
     private static void verifySequence(

@@ -206,7 +206,7 @@ class YARNITCase extends YarnTestBase {
 
         env.addSource(new NoDataSource()).shuffle().sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private Configuration createDefaultConfiguration(

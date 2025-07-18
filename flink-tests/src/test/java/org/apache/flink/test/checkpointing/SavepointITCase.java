@@ -210,7 +210,7 @@ public class SavepointITCase extends TestLogger {
                         .transform("pass-through", BasicTypeInfo.LONG_TYPE_INFO, operator);
         stream.sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
         final JobID jobId = jobGraph.getJobID();
 
         MiniClusterWithClientResource cluster = clusterFactory.get();
@@ -255,7 +255,7 @@ public class SavepointITCase extends TestLogger {
                 // different parallelism to break chaining and add some concurrent tasks
                 .setParallelism(sinkParallelism);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         cluster.before();
         try {
@@ -319,7 +319,7 @@ public class SavepointITCase extends TestLogger {
                 // different parallelism to break chaining and add some concurrent tasks
                 .setParallelism(sinkParallelism);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         cluster.before();
         try {
@@ -509,7 +509,7 @@ public class SavepointITCase extends TestLogger {
                         })
                 .setParallelism(1);
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         MiniClusterWithClientResource cluster =
                 new MiniClusterWithClientResource(
@@ -802,7 +802,7 @@ public class SavepointITCase extends TestLogger {
 
         env.addSource(new IntegerStreamSource()).sinkTo(new DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         Configuration config = getFileBasedCheckpointsConfig();
         config.addAll(jobGraph.getJobConfiguration());
@@ -917,7 +917,7 @@ public class SavepointITCase extends TestLogger {
 
             stream.sinkTo(new DiscardingSink<>());
 
-            final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+            final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
             final JobID jobId = jobGraph.getJobID();
 
             MiniClusterWithClientResource cluster = clusterFactory.get();
@@ -1047,7 +1047,7 @@ public class SavepointITCase extends TestLogger {
                 .name("Infinite test source")
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         cluster.before();
         try {
@@ -1146,7 +1146,7 @@ public class SavepointITCase extends TestLogger {
                         })
                 .sinkTo(new DiscardingSink<>());
 
-        final JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        final JobGraph jobGraph = env.getStreamGraph().getStreamingJobGraph();
 
         cluster.before();
         try {
@@ -1264,7 +1264,7 @@ public class SavepointITCase extends TestLogger {
                     .map(value -> 2 * value)
                     .sinkTo(new DiscardingSink<>());
 
-            JobGraph originalJobGraph = env.getStreamGraph().getJobGraph();
+            JobGraph originalJobGraph = env.getStreamGraph().getStreamingJobGraph();
 
             JobID jobID = client.submitJob(originalJobGraph).get();
 
@@ -1312,7 +1312,7 @@ public class SavepointITCase extends TestLogger {
                     .map(value -> value)
                     .sinkTo(new DiscardingSink<>());
 
-            JobGraph modifiedJobGraph = env.getStreamGraph().getJobGraph();
+            JobGraph modifiedJobGraph = env.getStreamGraph().getStreamingJobGraph();
 
             // Set the savepoint path
             modifiedJobGraph.setSavepointRestoreSettings(
@@ -1359,7 +1359,7 @@ public class SavepointITCase extends TestLogger {
 
         stream.sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class InfiniteTestSource implements ParallelSourceFunction<Integer> {

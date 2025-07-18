@@ -340,7 +340,7 @@ public class SavepointFormatITCase extends TestLogger {
                 .map(new StatefulCounter())
                 .sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static final class StatefulCounter extends RichMapFunction<Long, Long> {

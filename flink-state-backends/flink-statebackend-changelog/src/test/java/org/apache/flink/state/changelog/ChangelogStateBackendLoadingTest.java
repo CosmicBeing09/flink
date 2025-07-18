@@ -302,7 +302,7 @@ public class ChangelogStateBackendLoadingTest {
                         .orElse(TernaryBoolean.UNDEFINED));
 
         JobCheckpointingSettings checkpointingSettings =
-                streamGraph.getJobGraph().getCheckpointingSettings();
+                streamGraph.getStreamingJobGraph().getCheckpointingSettings();
         assertEquals(isChangelogEnabled, checkpointingSettings.isChangelogStateBackendEnabled());
     }
 

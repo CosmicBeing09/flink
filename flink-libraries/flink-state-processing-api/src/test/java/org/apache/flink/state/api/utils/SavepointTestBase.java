@@ -52,7 +52,7 @@ public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
-        JobGraph jobGraph = executionEnvironment.getStreamGraph().getJobGraph();
+        JobGraph jobGraph = executionEnvironment.getStreamGraph().getStreamingJobGraph();
 
         JobID jobId = jobGraph.getJobID();
 

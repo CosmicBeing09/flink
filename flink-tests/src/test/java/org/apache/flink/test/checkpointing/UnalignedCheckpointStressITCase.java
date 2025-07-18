@@ -250,7 +250,7 @@ class UnalignedCheckpointStressITCase {
                 .map(File::toString)
                 .map(SavepointRestoreSettings::forPath)
                 .ifPresent(streamGraph::setSavepointRestoreSettings);
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
         try {
             submitJobAndWaitForResult(

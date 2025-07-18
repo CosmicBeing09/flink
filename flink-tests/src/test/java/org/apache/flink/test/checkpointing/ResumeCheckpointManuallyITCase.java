@@ -469,7 +469,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
 
         StreamGraph streamGraph = env.getStreamGraph();
 
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        JobGraph jobGraph = streamGraph.getStreamingJobGraph();
 
         // recover from previous iteration?
         if (externalCheckpoint != null) {

@@ -171,7 +171,7 @@ class CoordinatorEventsToStreamOperatorRecipientExactlyOnceITCase
         JobExecutionResult executionResult =
                 MINI_CLUSTER
                         .getMiniCluster()
-                        .executeJobBlocking(env.getStreamGraph().getJobGraph());
+                        .executeJobBlocking(env.getStreamGraph().getStreamingJobGraph());
 
         List<Integer> receivedInts =
                 executionResult.getAccumulatorResult(EventReceivingOperator.ACCUMULATOR_NAME);

@@ -648,7 +648,7 @@ public class RescalingITCase extends TestLogger {
 
         input.sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static JobGraph createJobGraphWithKeyedState(
@@ -690,7 +690,7 @@ public class RescalingITCase extends TestLogger {
 
         result.addSink(new CollectionSink<Tuple2<Integer, Integer>>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static JobGraph createJobGraphWithKeyedAndNonPartitionedOperatorState(
@@ -731,7 +731,7 @@ public class RescalingITCase extends TestLogger {
 
         result.addSink(new CollectionSink<Tuple2<Integer, Integer>>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class SubtaskIndexSource extends RichParallelSourceFunction<Integer> {

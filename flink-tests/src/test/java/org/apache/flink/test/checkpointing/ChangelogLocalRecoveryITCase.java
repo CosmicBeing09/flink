@@ -128,7 +128,7 @@ public class ChangelogLocalRecoveryITCase extends TestLogger {
                 .process(new CountFunction())
                 .addSink(new CollectionSink())
                 .setParallelism(1);
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     @Test

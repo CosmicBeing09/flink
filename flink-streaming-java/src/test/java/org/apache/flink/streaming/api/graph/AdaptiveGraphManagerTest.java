@@ -183,7 +183,7 @@ public class AdaptiveGraphManagerTest extends JobGraphGeneratorTestBase {
         result.sinkTo(new DiscardingSink<>());
         StreamGraph streamGraph = env.getStreamGraph();
         JobGraph jobGraph1 = generateJobGraphInLazilyMode(streamGraph);
-        JobGraph jobGraph2 = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        JobGraph jobGraph2 = StreamingJobGraphGenerator.createStreamingJobGraph(streamGraph);
         assertThat(isJobGraphEquivalent(jobGraph1, jobGraph2)).isEqualTo(true);
     }
 

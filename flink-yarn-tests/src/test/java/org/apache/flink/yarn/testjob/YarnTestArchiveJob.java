@@ -113,7 +113,7 @@ public class YarnTestArchiveJob {
                                 LIST, localizedPath, TypeInformation.of(String.class)))
                 .sinkTo(new DiscardingSink<>());
 
-        return env.getStreamGraph().getJobGraph();
+        return env.getStreamGraph().getStreamingJobGraph();
     }
 
     private static class SourceFunctionWithArchive<T> extends RichSourceFunction<T>
