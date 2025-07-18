@@ -62,9 +62,9 @@ public interface RescaleManager {
     interface Factory {
 
         /**
-         * Creates a {@code RescaleManager} instance for the given {@code rescaleContext} and
+         * Creates a {@code RescaleManager} instance for the given {@code context} and
          * previous rescale time.
          */
-        RescaleManager create(Context rescaleContext, Instant lastStateTransition);
+        RescaleManager create(Context context, Instant lastStateTransition);
     }
 }
