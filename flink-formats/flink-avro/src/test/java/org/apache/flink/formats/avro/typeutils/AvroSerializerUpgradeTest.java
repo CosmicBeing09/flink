@@ -99,7 +99,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<GenericRecord> testDataMatcher() {
+        public Matcher<GenericRecord> testDataConditionCriterion() {
             GenericData.Record record = new GenericData.Record(Address.getClassSchema());
             record.put("num", 239);
             record.put("street", "Baker Street");
@@ -110,7 +110,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<GenericRecord>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<GenericRecord>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -161,7 +161,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Address> testDataMatcher() {
+        public Matcher<Address> testDataConditionCriterion() {
             Address addr = new Address();
             addr.setNum(239);
             addr.setStreet("Baker Street");
@@ -172,7 +172,7 @@ class AvroSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Address>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Address>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

@@ -89,7 +89,7 @@ class MapSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Map<Integer, String>> testDataMatcher() {
+        public Matcher<Map<Integer, String>> testDataConditionCriterion() {
             Map<Integer, String> data = new HashMap<>(3);
             for (int i = 0; i < 3; ++i) {
                 data.put(i, String.valueOf(i));
@@ -99,7 +99,7 @@ class MapSerializerUpgradeTest
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Map<Integer, String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

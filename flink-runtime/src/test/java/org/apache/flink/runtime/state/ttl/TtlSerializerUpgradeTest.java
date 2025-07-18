@@ -80,13 +80,13 @@ class TtlSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TtlValue<String>> testDataMatcher() {
+        public Matcher<TtlValue<String>> testDataConditionCriterion() {
             return ttlValue(is("hello Gordon"), is(13L));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TtlValue<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

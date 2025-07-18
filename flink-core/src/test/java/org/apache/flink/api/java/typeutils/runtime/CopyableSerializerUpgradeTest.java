@@ -146,13 +146,13 @@ class CopyableSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<SimpleCopyable> testDataMatcher() {
+        public Matcher<SimpleCopyable> testDataConditionCriterion() {
             return is(new SimpleCopyable(123456));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<SimpleCopyable>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

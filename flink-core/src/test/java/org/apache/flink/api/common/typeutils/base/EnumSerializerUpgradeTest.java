@@ -112,12 +112,12 @@ class EnumSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<TestEnum, 
         }
 
         @Override
-        public Matcher<TestEnum> testDataMatcher() {
+        public Matcher<TestEnum> testDataConditionCriterion() {
             return is(EMMA);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<TestEnum>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<TestEnum>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -176,12 +176,12 @@ class EnumSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<TestEnum, 
         }
 
         @Override
-        public Matcher<EnumAfter> testDataMatcher() {
+        public Matcher<EnumAfter> testDataConditionCriterion() {
             return is(EnumAfter.EMMA);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<EnumAfter>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<EnumAfter>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleWithReconfiguredSerializer();
         }

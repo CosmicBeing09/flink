@@ -99,14 +99,14 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
         TypeSerializer<UpgradedElementT> createUpgradedSerializer();
 
         /** Returns a {@link Matcher} for asserting the deserialized test data. */
-        Matcher<UpgradedElementT> testDataMatcher();
+        Matcher<UpgradedElementT> testDataConditionCriterion();
 
         /**
          * Returns a {@link Matcher} for comparing the {@link TypeSerializerSchemaCompatibility}
          * that the serializer upgrade produced with an expected {@link
          * TypeSerializerSchemaCompatibility}.
          */
-        Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>> schemaCompatibilityMatcher(
+        Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>> schemaCompatibilityCondition(
                 FlinkVersion version);
     }
 
@@ -176,19 +176,19 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
         }
 
         @Override
-        public Matcher<UpgradedElementT> testDataMatcher() {
+        public Matcher<UpgradedElementT> testDataConditionCriterion() {
             try (ThreadContextClassLoader ignored =
                     new ThreadContextClassLoader(verifierClassloader)) {
-                return delegateVerifier.testDataMatcher();
+                return delegateVerifier.testDataConditionCriterion();
             }
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<UpgradedElementT>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             try (ThreadContextClassLoader ignored =
                     new ThreadContextClassLoader(verifierClassloader)) {
-                return delegateVerifier.schemaCompatibilityMatcher(version);
+                return delegateVerifier.schemaCompatibilityCondition(version);
             }
         }
     }
@@ -281,7 +281,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
                     .is(
                             HamcrestCondition.matching(
                                     not(
-                                            testSpecification.verifier.schemaCompatibilityMatcher(
+                                            testSpecification.verifier.schemaCompatibilityCondition(
                                                     testSpecification.flinkVersion))));
 
             TypeSerializerSnapshot<UpgradedElementT> restoredSerializerSnapshot =
@@ -292,7 +292,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     restoredSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataConditionCriterion());
         }
     }
 
@@ -316,7 +316,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertThat(upgradeCompatibility)
                     .is(
                             HamcrestCondition.matching(
-                                    testSpecification.verifier.schemaCompatibilityMatcher(
+                                    testSpecification.verifier.schemaCompatibilityCondition(
                                             testSpecification.flinkVersion)));
         }
     }
@@ -353,11 +353,11 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
                             dataUnderTest(testSpecification),
                             restoreSerializer,
                             upgradedSerializer,
-                            testSpecification.verifier.testDataMatcher());
+                            testSpecification.verifier.testDataConditionCriterion());
 
             // .. and then assert that the upgraded serializer is valid with the migrated data
             assertSerializerIsValid(
-                    upgradedSerializer, migratedData, testSpecification.verifier.testDataMatcher());
+                    upgradedSerializer, migratedData, testSpecification.verifier.testDataConditionCriterion());
         }
     }
 
@@ -390,7 +390,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     reconfiguredUpgradedSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataConditionCriterion());
         }
     }
 
@@ -418,7 +418,7 @@ public abstract class TypeSerializerUpgradeTestBase<PreviousElementT, UpgradedEl
             assertSerializerIsValid(
                     upgradedSerializer,
                     dataUnderTest(testSpecification),
-                    testSpecification.verifier.testDataMatcher());
+                    testSpecification.verifier.testDataConditionCriterion());
         }
     }
 

@@ -84,13 +84,13 @@ class LockableTypeSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Lockable<String>> testDataMatcher() {
+        public Matcher<Lockable<String>> testDataConditionCriterion() {
             return is(new Lockable<>("flink", 10));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Lockable<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

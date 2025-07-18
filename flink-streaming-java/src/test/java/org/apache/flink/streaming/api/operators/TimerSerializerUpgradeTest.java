@@ -85,13 +85,13 @@ class TimerSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TimerHeapInternalTimer<String, Integer>> testDataMatcher() {
+        public Matcher<TimerHeapInternalTimer<String, Integer>> testDataConditionCriterion() {
             return is(new TimerHeapInternalTimer<>(12345, "key", 678));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TimerHeapInternalTimer<String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

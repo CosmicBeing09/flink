@@ -95,13 +95,13 @@ class UnionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TaggedUnion<String, Long>> testDataMatcher() {
+        public Matcher<TaggedUnion<String, Long>> testDataConditionCriterion() {
             return is(TaggedUnion.one("flink"));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TaggedUnion<String, Long>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
@@ -139,13 +139,13 @@ class UnionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TaggedUnion<String, Long>> testDataMatcher() {
+        public Matcher<TaggedUnion<String, Long>> testDataConditionCriterion() {
             return is(TaggedUnion.two(23456L));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<TaggedUnion<String, Long>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

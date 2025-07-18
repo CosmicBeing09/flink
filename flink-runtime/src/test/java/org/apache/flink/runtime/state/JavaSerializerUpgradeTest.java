@@ -85,12 +85,12 @@ class JavaSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Serializab
         }
 
         @Override
-        public Matcher<Serializable> testDataMatcher() {
+        public Matcher<Serializable> testDataConditionCriterion() {
             return is(26);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Serializable>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Serializable>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

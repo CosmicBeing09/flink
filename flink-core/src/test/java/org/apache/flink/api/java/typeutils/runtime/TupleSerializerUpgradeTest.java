@@ -92,13 +92,13 @@ class TupleSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Tuple3<String, String, Integer>> testDataMatcher() {
+        public Matcher<Tuple3<String, String, Integer>> testDataConditionCriterion() {
             return is(new Tuple3<>("hello Gordon", "ciao", 14));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Tuple3<String, String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

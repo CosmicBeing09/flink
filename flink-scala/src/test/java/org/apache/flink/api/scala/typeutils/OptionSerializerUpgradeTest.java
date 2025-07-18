@@ -89,13 +89,13 @@ class OptionSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<Option<String>> testDataMatcher() {
+        public Matcher<Option<String>> testDataConditionCriterion() {
             return is(Option.empty());
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Option<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }

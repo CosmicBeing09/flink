@@ -114,7 +114,7 @@ public class RowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Row,
         }
 
         @Override
-        public Matcher<Row> testDataMatcher() {
+        public Matcher<Row> testDataConditionCriterion() {
             Row row = new Row(RowKind.INSERT, 4);
             row.setField(0, null);
             row.setField(1, 42L);
@@ -124,7 +124,7 @@ public class RowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Row,
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Row>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Row>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             if (version.isNewerVersionThan(FlinkVersion.v1_10)) {
                 return TypeSerializerMatchers.isCompatibleAsIs();

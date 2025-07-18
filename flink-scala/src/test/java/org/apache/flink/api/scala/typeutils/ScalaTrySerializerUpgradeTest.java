@@ -90,12 +90,12 @@ class ScalaTrySerializerUpgradeTest
 
         @SuppressWarnings("unchecked")
         @Override
-        public Matcher<Try<String>> testDataMatcher() {
+        public Matcher<Try<String>> testDataConditionCriterion() {
             return is(new Failure(new SpecifiedException("Specified exception for ScalaTry.")));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Try<String>>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Try<String>>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

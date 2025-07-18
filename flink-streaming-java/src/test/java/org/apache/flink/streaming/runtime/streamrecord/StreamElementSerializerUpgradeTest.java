@@ -85,12 +85,12 @@ class StreamElementSerializerUpgradeTest
 
         @SuppressWarnings({"unchecked", "rawtypes"})
         @Override
-        public Matcher<StreamElement> testDataMatcher() {
+        public Matcher<StreamElement> testDataConditionCriterion() {
             return (Matcher) streamRecord(is("key"), is(123456L));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<StreamElement>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<StreamElement>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

@@ -224,13 +224,14 @@ public interface TypeSerializerSnapshot<T> {
      * <p>This method reads snapshots written by {@link #writeVersionedSnapshot(DataOutputView,
      * TypeSerializerSnapshot)}.
      */
-    static <T> TypeSerializerSnapshot<T> readVersionedSnapshot(DataInputView in, ClassLoader cl)
+    static <T> TypeSerializerSnapshot<T> readVersionedSnapshot(DataInputView in, ClassLoader classLoader)
             throws IOException {
         final TypeSerializerSnapshot<T> snapshot =
-                TypeSerializerSnapshotSerializationUtil.readAndInstantiateSnapshotClass(in, cl);
+                TypeSerializerSnapshotSerializationUtil.readAndInstantiateSnapshotClass(in,
+                        classLoader);
 
         int version = in.readInt();
-        snapshot.readSnapshot(version, in, cl);
+        snapshot.readSnapshot(version, in, classLoader);
         return snapshot;
     }
 }

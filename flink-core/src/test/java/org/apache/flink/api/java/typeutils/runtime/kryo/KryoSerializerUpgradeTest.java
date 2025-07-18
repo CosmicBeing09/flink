@@ -101,12 +101,12 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataConditionCriterion() {
             return is(new Dog("Hasso"));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -130,12 +130,12 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataConditionCriterion() {
             return is(new Dog("Hasso"));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(
@@ -182,12 +182,12 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataConditionCriterion() {
             return is(new Dog("Hasso"));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(
@@ -238,12 +238,12 @@ class KryoSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, Ob
         }
 
         @Override
-        public Matcher<Animal> testDataMatcher() {
+        public Matcher<Animal> testDataConditionCriterion() {
             return is(new Dog("Hasso"));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<Animal>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return hasSameCompatibilityAs(
                     compatibleWithReconfiguredSerializer(

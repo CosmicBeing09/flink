@@ -67,7 +67,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<boolean[]> testDataMatcher() {
+        public Matcher<boolean[]> testDataConditionCriterion() {
             boolean[] expected = new boolean[2];
             expected[0] = true;
             expected[1] = false;
@@ -75,7 +75,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<boolean[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<boolean[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -117,7 +117,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<byte[]> testDataMatcher() {
+        public Matcher<byte[]> testDataConditionCriterion() {
             byte[] expected = new byte[10];
             for (int i = 0; i < expected.length; ++i) {
                 expected[i] = (byte) i;
@@ -126,7 +126,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<byte[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<byte[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -168,7 +168,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<char[]> testDataMatcher() {
+        public Matcher<char[]> testDataConditionCriterion() {
             char[] data = new char[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = (char) i;
@@ -177,7 +177,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<char[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<char[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -219,7 +219,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<double[]> testDataMatcher() {
+        public Matcher<double[]> testDataConditionCriterion() {
             double[] data = new double[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i + 0.1f;
@@ -228,7 +228,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<double[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<double[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -270,7 +270,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<float[]> testDataMatcher() {
+        public Matcher<float[]> testDataConditionCriterion() {
             float[] data = new float[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i + 0.2f;
@@ -279,7 +279,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<float[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<float[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -321,7 +321,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<int[]> testDataMatcher() {
+        public Matcher<int[]> testDataConditionCriterion() {
             int[] data = new int[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i;
@@ -330,7 +330,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<int[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<int[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -372,7 +372,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<long[]> testDataMatcher() {
+        public Matcher<long[]> testDataConditionCriterion() {
             long[] data = new long[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = i;
@@ -381,7 +381,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<long[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<long[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -423,7 +423,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<short[]> testDataMatcher() {
+        public Matcher<short[]> testDataConditionCriterion() {
             short[] data = new short[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = (short) i;
@@ -432,7 +432,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<short[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<short[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -474,7 +474,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<String[]> testDataMatcher() {
+        public Matcher<String[]> testDataConditionCriterion() {
             String[] data = new String[10];
             for (int i = 0; i < data.length; ++i) {
                 data[i] = String.valueOf(i);
@@ -483,7 +483,7 @@ public class PrimitiveArraySerializerUpgradeTestSpecifications {
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

@@ -105,7 +105,7 @@ public class TwoPhaseCommitSinkStateSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<TwoPhaseCommitSinkFunction.State<Integer, String>> testDataMatcher() {
+        public Matcher<TwoPhaseCommitSinkFunction.State<Integer, String>> testDataConditionCriterion() {
             TwoPhaseCommitSinkFunction.TransactionHolder<Integer> pendingTransaction =
                     new TwoPhaseCommitSinkFunction.TransactionHolder<>(12, 1523467890);
             List<TwoPhaseCommitSinkFunction.TransactionHolder<Integer>> list = new ArrayList<>();
@@ -118,7 +118,7 @@ public class TwoPhaseCommitSinkStateSerializerUpgradeTest
         public Matcher<
                         TypeSerializerSchemaCompatibility<
                                 TwoPhaseCommitSinkFunction.State<Integer, String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             if (version.isNewerVersionThan(FlinkVersion.v1_13)) {
                 return TypeSerializerMatchers.isCompatibleAsIs();
             } else {

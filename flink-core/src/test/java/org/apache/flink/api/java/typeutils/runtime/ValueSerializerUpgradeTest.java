@@ -77,14 +77,14 @@ class ValueSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<NameValue> testDataMatcher() {
+        public Matcher<NameValue> testDataConditionCriterion() {
             NameValue value = new NameValue();
             value.setName("klion26");
             return is(value);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<NameValue>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<NameValue>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

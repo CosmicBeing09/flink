@@ -90,13 +90,13 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
         }
 
         @Override
-        public Matcher<Either<String, Integer>> testDataMatcher() {
+        public Matcher<Either<String, Integer>> testDataConditionCriterion() {
             return is(new Either.Left<>("ApacheFlink"));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<Either<String, Integer>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
@@ -134,13 +134,13 @@ class CompositeTypeSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<O
         }
 
         @Override
-        public Matcher<String[]> testDataMatcher() {
+        public Matcher<String[]> testDataConditionCriterion() {
             String[] data = {"Apache", "Flink"};
             return is(data);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<String[]>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

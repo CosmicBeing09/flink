@@ -129,14 +129,14 @@ class WritableSerializerUpgradeTest
         }
 
         @Override
-        public Matcher<WritableName> testDataMatcher() {
+        public Matcher<WritableName> testDataConditionCriterion() {
             WritableName writable = new WritableName();
             writable.setName("flink");
             return is(writable);
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<WritableName>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<WritableName>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

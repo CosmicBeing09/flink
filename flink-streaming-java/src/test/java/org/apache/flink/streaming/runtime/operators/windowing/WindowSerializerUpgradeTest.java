@@ -90,12 +90,12 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<TimeWindow> testDataMatcher() {
+        public Matcher<TimeWindow> testDataConditionCriterion() {
             return is(new TimeWindow(12345, 67890));
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<TimeWindow>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<TimeWindow>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
@@ -133,12 +133,12 @@ class WindowSerializerUpgradeTest extends TypeSerializerUpgradeTestBase<Object, 
         }
 
         @Override
-        public Matcher<GlobalWindow> testDataMatcher() {
+        public Matcher<GlobalWindow> testDataConditionCriterion() {
             return is(GlobalWindow.get());
         }
 
         @Override
-        public Matcher<TypeSerializerSchemaCompatibility<GlobalWindow>> schemaCompatibilityMatcher(
+        public Matcher<TypeSerializerSchemaCompatibility<GlobalWindow>> schemaCompatibilityCondition(
                 FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }

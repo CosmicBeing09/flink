@@ -90,13 +90,13 @@ class BufferEntrySerializerUpgradeTest
         }
 
         @Override
-        public Matcher<BufferEntry<String>> testDataMatcher() {
+        public Matcher<BufferEntry<String>> testDataConditionCriterion() {
             return bufferEntry(is("hello"), is(false));
         }
 
         @Override
         public Matcher<TypeSerializerSchemaCompatibility<BufferEntry<String>>>
-                schemaCompatibilityMatcher(FlinkVersion version) {
+        schemaCompatibilityCondition(FlinkVersion version) {
             return TypeSerializerMatchers.isCompatibleAsIs();
         }
     }
