@@ -86,13 +86,13 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Cooldown.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         ctx.passTime(Duration.ofMillis(1));
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilizing.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -111,7 +111,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilizing.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -125,11 +125,11 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Idling.class);
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilizing.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -147,7 +147,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilized.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -161,7 +161,7 @@ class DefaultStateTransitionManagerTest {
         final DefaultStateTransitionManager testInstance =
                 ctx.createTestInstance(
                         manager -> {
-                            manager.onChange();
+                            manager.onEnvironmentChanged();
                             ctx.transitionOutOfCooldownPhase();
                         });
 
@@ -214,7 +214,7 @@ class DefaultStateTransitionManagerTest {
         final DefaultStateTransitionManager testInstance =
                 ctx.createTestInstance(
                         manager -> {
-                            manager.onChange();
+                            manager.onEnvironmentChanged();
                             ctx.transitionOutOfCooldownPhase();
                         });
 
@@ -255,7 +255,7 @@ class DefaultStateTransitionManagerTest {
 
         ctx.passResourceStabilizationTimeout();
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -269,13 +269,13 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Idling.class);
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
 
         triggerWithoutPhaseMove(ctx, testInstance, Stabilizing.class);
 
         ctx.passResourceStabilizationTimeout();
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -289,7 +289,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilized.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -303,7 +303,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Idling.class);
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
 
         triggerWithoutPhaseMove(ctx, testInstance, Stabilizing.class);
 
@@ -311,7 +311,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilizing.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -325,7 +325,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Idling.class);
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
 
         triggerWithoutPhaseMove(ctx, testInstance, Stabilizing.class);
 
@@ -343,7 +343,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Stabilized.class);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertFinalStateTransitionHappened(ctx, testInstance);
     }
@@ -359,7 +359,7 @@ class DefaultStateTransitionManagerTest {
 
         ctx.withRevokeResources();
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertPhaseWithoutStateTransition(ctx, testInstance, Idling.class);
     }
@@ -405,7 +405,7 @@ class DefaultStateTransitionManagerTest {
             Class<? extends Phase> expectedPhase) {
         assertPhaseWithoutStateTransition(ctx, testInstance, expectedPhase);
 
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
 
         assertPhaseWithoutStateTransition(ctx, testInstance, expectedPhase);
     }
@@ -417,7 +417,7 @@ class DefaultStateTransitionManagerTest {
 
         assertPhaseWithoutStateTransition(ctx, testInstance, expectedPhase);
 
-        testInstance.onTrigger();
+        testInstance.triggerStateTransitionCheck();
 
         assertPhaseWithoutStateTransition(ctx, testInstance, expectedPhase);
     }
@@ -426,14 +426,14 @@ class DefaultStateTransitionManagerTest {
             TestingStateTransitionManagerContext ctx, DefaultStateTransitionManager testInstance) {
 
         ctx.withSufficientResources();
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
     }
 
     private static void withDesiredChange(
             TestingStateTransitionManagerContext ctx, DefaultStateTransitionManager testInstance) {
 
         ctx.withDesiredResources();
-        testInstance.onChange();
+        testInstance.onEnvironmentChanged();
     }
 
     /**
@@ -571,7 +571,7 @@ class DefaultStateTransitionManagerTest {
         public DefaultStateTransitionManager createTestInstanceInStabilizedPhase() {
             return createTestInstance(
                     manager -> {
-                        manager.onChange();
+                        manager.onEnvironmentChanged();
                         passResourceStabilizationTimeout();
                     });
         }
@@ -583,9 +583,9 @@ class DefaultStateTransitionManagerTest {
         public DefaultStateTransitionManager createTestInstanceInTransitioningPhase() {
             return createTestInstance(
                     manager -> {
-                        manager.onChange();
+                        manager.onEnvironmentChanged();
                         passResourceStabilizationTimeout();
-                        manager.onTrigger();
+                        manager.triggerStateTransitionCheck();
                         clearStateTransition();
                     });
         }
@@ -605,8 +605,8 @@ class DefaultStateTransitionManagerTest {
                             resourceStabilizationTimeout,
                             maxTriggerDelay) {
                         @Override
-                        public void onChange() {
-                            super.onChange();
+                        public void onEnvironmentChanged() {
+                            super.onEnvironmentChanged();
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
@@ -614,8 +614,8 @@ class DefaultStateTransitionManagerTest {
                         }
 
                         @Override
-                        public void onTrigger() {
-                            super.onTrigger();
+                        public void triggerStateTransitionCheck() {
+                            super.triggerStateTransitionCheck();
 
                             // hack to avoid calling this method in every test method
                             // we want to trigger tasks that are meant to run right-away
