@@ -54,10 +54,10 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
     private static final long serialVersionUID = 1L;
 
     /** The left input type. */
-    private final TypeInformation<IN1> inputTypeInfo1;
+    private final TypeInformation<IN1> leftInputTypeInfo;
 
     /** The right input type. */
-    private final TypeInformation<IN2> inputTypeInfo2;
+    private final TypeInformation<IN2> rightInputTypeInfo;
 
     /** The TypeInformation of python worker input data. */
     private transient TypeInformation<Row> runnerInputTypeInfo;
@@ -85,8 +85,8 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
             TypeInformation<IN2> inputTypeInfo2,
             TypeInformation<OUT> outputTypeInfo) {
         super(config, pythonFunctionInfo, outputTypeInfo);
-        this.inputTypeInfo1 = Preconditions.checkNotNull(inputTypeInfo1);
-        this.inputTypeInfo2 = Preconditions.checkNotNull(inputTypeInfo2);
+        this.leftInputTypeInfo = Preconditions.checkNotNull(inputTypeInfo1);
+        this.rightInputTypeInfo = Preconditions.checkNotNull(inputTypeInfo2);
     }
 
     @Override
@@ -97,7 +97,7 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
         baosWrapper = new DataOutputViewStreamWrapper(baos);
 
         runnerInputTypeInfo =
-                RunnerInputHandler.getRunnerInputTypeInfo(inputTypeInfo1, inputTypeInfo2);
+                RunnerInputHandler.getRunnerInputTypeInfo(leftInputTypeInfo, rightInputTypeInfo);
         runnerOutputTypeInfo = RunnerOutputCollector.getRunnerOutputTypeInfo(getProducedType());
         runnerInputTypeSerializer = typeInfoSerializerConverter(runnerInputTypeInfo);
         runnerOutputTypeSerializer = typeInfoSerializerConverter(runnerOutputTypeInfo);
@@ -160,11 +160,11 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
     // ----------------------------------------------------------------------
 
     protected TypeInformation<IN1> getLeftInputType() {
-        return inputTypeInfo1;
+        return leftInputTypeInfo;
     }
 
     protected TypeInformation<IN2> getRightInputType() {
-        return inputTypeInfo2;
+        return rightInputTypeInfo;
     }
 
     private static final class RunnerInputHandler {
