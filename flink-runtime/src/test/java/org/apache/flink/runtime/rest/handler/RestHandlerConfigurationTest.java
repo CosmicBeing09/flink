@@ -88,7 +88,7 @@ class RestHandlerConfigurationTest {
 
     private static void testWebSubmitFeatureFlag(boolean webSubmitEnabled) {
         final Configuration config = new Configuration();
-        config.set(WebOptions.SUBMIT_ENABLE, webSubmitEnabled);
+        config.set(WebOptions.ENABLE_JOB_SUBMISSION, webSubmitEnabled);
 
         RestHandlerConfiguration restHandlerConfiguration =
                 RestHandlerConfiguration.fromConfiguration(config);
@@ -97,7 +97,7 @@ class RestHandlerConfigurationTest {
 
     private static void testWebCancelFeatureFlag(boolean webCancelEnabled) {
         final Configuration config = new Configuration();
-        config.set(WebOptions.CANCEL_ENABLE, webCancelEnabled);
+        config.set(WebOptions.ENABLE_JOB_CANCELLATION, webCancelEnabled);
 
         RestHandlerConfiguration restHandlerConfiguration =
                 RestHandlerConfiguration.fromConfiguration(config);

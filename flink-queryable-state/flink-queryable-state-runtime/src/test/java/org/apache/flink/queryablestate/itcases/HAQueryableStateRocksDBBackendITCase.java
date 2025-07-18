@@ -111,7 +111,7 @@ class HAQueryableStateRocksDBBackendITCase extends AbstractQueryableStateTestBas
         config.set(
                 QueryableStateOptions.SERVER_PORT_RANGE,
                 QS_SERVER_PORT_RANGE_START + "-" + (QS_SERVER_PORT_RANGE_START + NUM_TMS));
-        config.set(WebOptions.SUBMIT_ENABLE, false);
+        config.set(WebOptions.ENABLE_JOB_SUBMISSION, false);
 
         config.set(HighAvailabilityOptions.HA_STORAGE_PATH, tmpHaStoragePath.toString());
 

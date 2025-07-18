@@ -99,7 +99,7 @@ public class WebOptions {
                             "Path to the log file (may be in /log for standalone but under log directory when using YARN).");
 
     /** Config parameter indicating whether jobs can be uploaded and run from the web-frontend. */
-    public static final ConfigOption<Boolean> SUBMIT_ENABLE =
+    public static final ConfigOption<Boolean> ENABLE_JOB_SUBMISSION =
             key("web.submit.enable")
                     .booleanType()
                     .defaultValue(true)
@@ -108,7 +108,7 @@ public class WebOptions {
                             "Flag indicating whether jobs can be uploaded and run from the web-frontend.");
 
     /** Config parameter indicating whether jobs can be canceled from the web-frontend. */
-    public static final ConfigOption<Boolean> CANCEL_ENABLE =
+    public static final ConfigOption<Boolean> ENABLE_JOB_CANCELLATION =
             key("web.cancel.enable")
                     .booleanType()
                     .defaultValue(true)
