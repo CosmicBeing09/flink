@@ -125,7 +125,7 @@ public class PackagedProgramUtilsPipelineTest {
         assertThat(
                         executionConfig
                                 .getSerializerConfig()
-                                .getDefaultKryoSerializerClasses()
+                                .getDefaultKryoSerializers()
                                 .get(PackagedProgramUtilsPipelineTest.class)
                                 .getName())
                 .isEqualTo(userSerializerClassName);

@@ -332,7 +332,7 @@ public class AvroRecordInputFormatTest {
                     te.getTypeClass(), ec.getSerializerConfig(), new HashSet<>());
 
             TypeSerializer<GenericData.Record> tser = te.createSerializer(ec.getSerializerConfig());
-            assertThat(ec.getSerializerConfig().getDefaultKryoSerializerClasses())
+            assertThat(ec.getSerializerConfig().getDefaultKryoSerializers())
                     .hasSize(1)
                     .containsEntry(
                             Schema.class, AvroKryoSerializerUtils.AvroSchemaSerializer.class);

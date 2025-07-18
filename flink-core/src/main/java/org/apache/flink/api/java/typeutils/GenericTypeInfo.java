@@ -82,7 +82,7 @@ public class GenericTypeInfo<T> extends TypeInformation<T> implements AtomicType
     @Override
     @PublicEvolving
     public TypeSerializer<T> createSerializer(SerializerConfig config) {
-        if (config.hasGenericTypesDisabled()) {
+        if (config.isGenericTypesDisabled()) {
             throw new UnsupportedOperationException(
                     "Generic types have been disabled in the ExecutionConfig and type "
                             + this.typeClass.getName()

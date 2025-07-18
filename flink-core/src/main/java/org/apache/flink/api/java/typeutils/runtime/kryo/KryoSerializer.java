@@ -172,7 +172,7 @@ public class KryoSerializer<T> extends TypeSerializer<T> {
 
         this.defaultSerializers =
                 ((SerializerConfigImpl) serializerConfig).getDefaultKryoSerializers();
-        this.defaultSerializerClasses = serializerConfig.getDefaultKryoSerializerClasses();
+        this.defaultSerializerClasses = serializerConfig.getDefaultKryoSerializers();
 
         this.kryoRegistrations =
                 buildKryoRegistrations(

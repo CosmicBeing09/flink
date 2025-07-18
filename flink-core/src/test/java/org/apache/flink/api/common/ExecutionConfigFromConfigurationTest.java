@@ -95,7 +95,7 @@ class ExecutionConfigFromConfigurationTest {
                                                         .setGenericTypes(false)))
                         .getterVia(
                                 execConfig ->
-                                        !execConfig.getSerializerConfig().hasGenericTypesDisabled())
+                                        !execConfig.getSerializerConfig().isGenericTypesDisabled())
                         .nonDefaultValue(false),
                 TestSpec.testValue(getTestGlobalJobParameters())
                         .whenSetFromFile(
