@@ -32,19 +32,19 @@ import java.util.concurrent.ThreadLocalRandom;
  */
 public class SometimesInstantiationErrorSender extends BlockingNoOpInvokable {
 
-    private static Set<Integer> failingSenders;
+    private static Set<Integer> unstableSenderIndices;
 
     private static final Random RANDOM = new Random();
 
     public SometimesInstantiationErrorSender(Environment environment) {
         super(environment);
 
-        if (failingSenders.contains(this.getIndexInSubtaskGroup())) {
+        if (unstableSenderIndices.contains(this.getIndexInSubtaskGroup())) {
             throw new RuntimeException("Test exception in constructor");
         }
     }
 
-    static void configFailingSenders(int numOfTasks) {
-        failingSenders = Collections.singleton(ThreadLocalRandom.current().nextInt(numOfTasks));
+    static void configUnstableSenderIndices(int numOfTasks) {
+        unstableSenderIndices = Collections.singleton(ThreadLocalRandom.current().nextInt(numOfTasks));
     }
 }

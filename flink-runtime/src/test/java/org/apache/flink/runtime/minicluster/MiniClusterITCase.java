@@ -549,7 +549,7 @@ class MiniClusterITCase {
             sender.setSlotSharingGroup(group);
 
             // set failing senders
-            SometimesInstantiationErrorSender.configFailingSenders(parallelism);
+            SometimesInstantiationErrorSender.configUnstableSenderIndices(parallelism);
 
             final JobVertex receiver = new JobVertex("Receiver");
             receiver.setInvokableClass(Receiver.class);
