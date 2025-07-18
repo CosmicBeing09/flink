@@ -254,7 +254,7 @@ public class DefaultJobGraphStore<R extends ResourceVersion<R>>
                                 "JobGraph for job [%s] was not found in JobGraphStore and is needed for attaching JobResourceRequirements.",
                                 jobId));
             }
-            JobResourceRequirements.writeToJobGraph(jobGraph, jobResourceRequirements);
+            JobResourceRequirements.writeResourceRequirementsToJobGraph(jobGraph, jobResourceRequirements);
             putJobGraph(jobGraph);
         }
     }
