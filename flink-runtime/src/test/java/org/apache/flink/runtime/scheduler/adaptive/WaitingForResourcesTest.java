@@ -294,8 +294,8 @@ class WaitingForResourcesTest {
         private final StateValidator<Void> creatingExecutionGraphStateValidator =
                 new StateValidator<>("executing");
 
-        private Supplier<Boolean> hasDesiredResourcesSupplier = () -> false;
-        private Supplier<Boolean> hasSufficientResourcesSupplier = () -> false;
+        private Supplier<Boolean> desiredResourcesAvailableSupplier = () -> false;
+        private Supplier<Boolean> sufficientResourcesAvailableSupplier = () -> false;
 
         private final Queue<ScheduledTask<Void>> scheduledTasks =
                 new PriorityQueue<>(
@@ -307,11 +307,11 @@ class WaitingForResourcesTest {
                                 runScheduledTasks(durationSinceTestStart.toMillis()));
 
         public void setHasDesiredResources(Supplier<Boolean> sup) {
-            hasDesiredResourcesSupplier = sup;
+            desiredResourcesAvailableSupplier = sup;
         }
 
         public void setHasSufficientResources(Supplier<Boolean> sup) {
-            hasSufficientResourcesSupplier = sup;
+            sufficientResourcesAvailableSupplier = sup;
         }
 
         void setExpectCreatingExecutionGraph() {
@@ -348,12 +348,12 @@ class WaitingForResourcesTest {
 
         @Override
         public boolean hasDesiredResources() {
-            return hasDesiredResourcesSupplier.get();
+            return desiredResourcesAvailableSupplier.get();
         }
 
         @Override
         public boolean hasSufficientResources() {
-            return hasSufficientResourcesSupplier.get();
+            return sufficientResourcesAvailableSupplier.get();
         }
 
         @Override
