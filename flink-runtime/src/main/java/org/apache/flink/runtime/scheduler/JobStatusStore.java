@@ -25,26 +25,26 @@ import org.apache.flink.runtime.executiongraph.JobStatusProvider;
 /** Listens for and exposes the current job state and state timestamps. */
 public class JobStatusStore implements JobStatusListener, JobStatusProvider {
 
-    private final long[] stateTimestamps = new long[JobStatus.values().length];
-    private JobStatus jobStatus = JobStatus.INITIALIZING;
+    private final long[] jobStatusTimestamps = new long[JobStatus.values().length];
+    private JobStatus currentJobStatus = JobStatus.INITIALIZING;
 
     public JobStatusStore(long initializationTimestamp) {
-        stateTimestamps[JobStatus.INITIALIZING.ordinal()] = initializationTimestamp;
+        jobStatusTimestamps[JobStatus.INITIALIZING.ordinal()] = initializationTimestamp;
     }
 
     @Override
     public void onJobStatusChanged(JobID jobId, JobStatus newJobStatus, long timestamp) {
-        jobStatus = newJobStatus;
-        stateTimestamps[jobStatus.ordinal()] = timestamp;
+        currentJobStatus = newJobStatus;
+        jobStatusTimestamps[currentJobStatus.ordinal()] = timestamp;
     }
 
     @Override
     public JobStatus getState() {
-        return jobStatus;
+        return currentJobStatus;
     }
 
     @Override
     public long getStatusTimestamp(JobStatus status) {
-        return stateTimestamps[status.ordinal()];
+        return jobStatusTimestamps[status.ordinal()];
     }
 }
