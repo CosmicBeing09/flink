@@ -150,7 +150,7 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
         CollectionSink.clearExpectedResult();
     }
 
-    protected StreamExecutionEnvironment getEnv(
+    protected StreamExecutionEnvironment getTestStreamExecutionEnvironment(
             long checkpointInterval,
             int restartAttempts,
             long materializationInterval,
@@ -180,14 +180,14 @@ public abstract class ChangelogRecoveryITCaseBase extends TestLogger {
         return env;
     }
 
-    protected StreamExecutionEnvironment getEnv(
+    protected StreamExecutionEnvironment getTestStreamExecutionEnvironmentWithFileCheckpoint(
             File checkpointFile,
             long checkpointInterval,
             int restartAttempts,
             long materializationInterval,
             int materializationMaxFailure) {
         StreamExecutionEnvironment env =
-                getEnv(
+                getTestStreamExecutionEnvironment(
                         checkpointInterval,
                         restartAttempts,
                         materializationInterval,
