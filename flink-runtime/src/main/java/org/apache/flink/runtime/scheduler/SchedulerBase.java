@@ -210,14 +210,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
         this.checkpointsCleaner = checkpointsCleaner;
         this.completedCheckpointStore =
-                SchedulerUtils.createCompletedCheckpointStoreIfCheckpointingIsEnabled(
+                SchedulerUtils.createCheckpointStoreIfEnabled(
                         jobGraph,
                         jobMasterConfiguration,
                         checkNotNull(checkpointRecoveryFactory),
                         ioExecutor,
                         log);
         this.checkpointIdCounter =
-                SchedulerUtils.createCheckpointIDCounterIfCheckpointingIsEnabled(
+                SchedulerUtils.createCheckpointIdCounterIfEnabled(
                         jobGraph, checkNotNull(checkpointRecoveryFactory));
 
         this.jobStatusMetricsSettings =

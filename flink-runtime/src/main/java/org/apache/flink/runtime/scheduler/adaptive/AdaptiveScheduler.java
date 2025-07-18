@@ -524,10 +524,10 @@ public class AdaptiveScheduler
         this.fatalErrorHandler = fatalErrorHandler;
         this.checkpointCleanerService = checkpointsCleaner;
         this.checkpointStore =
-                SchedulerUtils.createCompletedCheckpointStoreIfCheckpointingIsEnabled(
+                SchedulerUtils.createCheckpointStoreIfEnabled(
                         jobGraph, configuration, checkpointRecoveryFactory, ioExecutor, LOG);
         this.checkpointIdCounter =
-                SchedulerUtils.createCheckpointIDCounterIfCheckpointingIsEnabled(
+                SchedulerUtils.createCheckpointIdCounterIfEnabled(
                         jobGraph, checkpointRecoveryFactory);
         this.checkpointStatisticsTracker =
                 SchedulerUtils.createCheckpointStatsTrackerIfCheckpointingIsEnabled(

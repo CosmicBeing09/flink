@@ -48,7 +48,7 @@ public final class SchedulerUtils {
                 "Instantiation of SchedulerUtils is not supported.");
     }
 
-    public static CompletedCheckpointStore createCompletedCheckpointStoreIfCheckpointingIsEnabled(
+    public static CompletedCheckpointStore createCheckpointStoreIfEnabled(
             JobGraph jobGraph,
             Configuration configuration,
             CheckpointRecoveryFactory checkpointRecoveryFactory,
@@ -94,7 +94,7 @@ public final class SchedulerUtils {
                 recoveryClaimMode);
     }
 
-    public static CheckpointIDCounter createCheckpointIDCounterIfCheckpointingIsEnabled(
+    public static CheckpointIDCounter createCheckpointIdCounterIfEnabled(
             JobGraph jobGraph, CheckpointRecoveryFactory checkpointRecoveryFactory)
             throws JobExecutionException {
         final JobID jobId = jobGraph.getJobID();
