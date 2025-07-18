@@ -42,12 +42,13 @@ class DefaultRescaleManagerTest {
     @Test
     void testProperConfiguration() throws ConfigurationException {
         final Duration scalingIntervalMin = Duration.ofMillis(1337);
-        final Duration scalingIntervalMax = Duration.ofMillis(7331);
+        final Duration resourceStabilizationTimeout = Duration.ofMillis(7331);
         final Duration maximumDelayForRescaleTrigger = Duration.ofMillis(4242);
 
         final Configuration configuration = new Configuration();
         configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN, scalingIntervalMin);
-        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX, scalingIntervalMax);
+        configuration.set(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX,
+                resourceStabilizationTimeout);
         configuration.set(
                 JobManagerOptions.MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTrigger);
 
@@ -56,7 +57,7 @@ class DefaultRescaleManagerTest {
                                 AdaptiveScheduler.Settings.of(configuration))
                         .create(TestingRescaleManagerContext.stableContext(), Instant.now());
         assertThat(testInstance.scalingIntervalMin).isEqualTo(scalingIntervalMin);
-        assertThat(testInstance.scalingIntervalMax).isEqualTo(scalingIntervalMax);
+        assertThat(testInstance.resourceStabilizationTimeout).isEqualTo(resourceStabilizationTimeout);
         assertThat(testInstance.maxTriggerDelay).isEqualTo(maximumDelayForRescaleTrigger);
     }
 
@@ -463,8 +464,8 @@ class DefaultRescaleManagerTest {
     private static class TestingRescaleManagerContext implements RescaleManager.Context {
 
         // default configuration values to allow for easy transitioning between the phases
-        private static final Duration SCALING_MIN = Duration.ofHours(1);
-        private static final Duration SCALING_MAX = Duration.ofHours(2);
+        private static final Duration RESOURCE_STABILIZATION_INTERVAL_MIN = Duration.ofHours(1);
+        private static final Duration RESOURCE_STABILIZATION_TIMEOUT = Duration.ofHours(2);
 
         // configuration that defines what kind of rescaling would be possible
         private boolean hasSufficientResources = false;
@@ -580,8 +581,8 @@ class DefaultRescaleManagerTest {
                             // clock that returns the time based on the configured elapsedTime
                             () -> Objects.requireNonNull(initializationTime).plus(elapsedTime),
                             this,
-                            SCALING_MIN,
-                            SCALING_MAX,
+                            RESOURCE_STABILIZATION_INTERVAL_MIN,
+                            RESOURCE_STABILIZATION_TIMEOUT,
                             Duration.ofHours(5)) {
                         @Override
                         public void onChange() {
@@ -615,7 +616,7 @@ class DefaultRescaleManagerTest {
          * phase.
          */
         public void transitionIntoCooldownTimeframe() {
-            this.elapsedTime = SCALING_MIN.dividedBy(2);
+            this.elapsedTime = RESOURCE_STABILIZATION_INTERVAL_MIN.dividedBy(2);
             this.triggerOutdatedTasks();
         }
 
@@ -626,10 +627,10 @@ class DefaultRescaleManagerTest {
         public void transitionIntoSoftScalingTimeframe() {
             // the state transition is scheduled based on the current event's time rather than the
             // initializationTime
-            this.elapsedTime = elapsedTime.plus(SCALING_MIN);
+            this.elapsedTime = elapsedTime.plus(RESOURCE_STABILIZATION_INTERVAL_MIN);
 
-            // make sure that we're still below the scalingIntervalMax
-            this.elapsedTime = elapsedTime.plus(SCALING_MAX.minus(elapsedTime).dividedBy(2));
+            // make sure that we're still below the resourceStabilizationTimeout
+            this.elapsedTime = elapsedTime.plus(RESOURCE_STABILIZATION_TIMEOUT.minus(elapsedTime).dividedBy(2));
             this.triggerOutdatedTasks();
         }
 
@@ -640,7 +641,7 @@ class DefaultRescaleManagerTest {
         public void transitionIntoHardScalingTimeframe() {
             // the state transition is scheduled based on the current event's time rather than the
             // initializationTime
-            this.elapsedTime = elapsedTime.plus(SCALING_MAX).plusMinutes(1);
+            this.elapsedTime = elapsedTime.plus(RESOURCE_STABILIZATION_TIMEOUT).plusMinutes(1);
             this.triggerOutdatedTasks();
         }
 

@@ -210,22 +210,22 @@ public class AdaptiveScheduler
                 stabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration minScalingInterval =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
-            final Duration scalingIntervalMax =
+            final Duration maxScalingInterval =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX);
             Preconditions.checkState(
-                    !scalingIntervalMin.isNegative(),
+                    !minScalingInterval.isNegative(),
                     "%s must be positive integer or 0",
                     JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN.key());
-            if (scalingIntervalMax != null) {
+            if (maxScalingInterval != null) {
                 Preconditions.checkState(
-                        scalingIntervalMax.compareTo(scalingIntervalMin) > 0,
+                        maxScalingInterval.compareTo(minScalingInterval) > 0,
                         "%s(%d) must be greater than %s(%d)",
                         JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MAX.key(),
-                        scalingIntervalMax,
+                        maxScalingInterval,
                         JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN.key(),
-                        scalingIntervalMin);
+                        minScalingInterval);
             }
 
             final int rescaleOnFailedCheckpointsCount =
@@ -272,8 +272,8 @@ public class AdaptiveScheduler
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
-                    scalingIntervalMax,
+                    minScalingInterval,
+                    maxScalingInterval,
                     configuration.get(MIN_PARALLELISM_INCREASE),
                     configuration.get(
                             MAXIMUM_DELAY_FOR_SCALE_TRIGGER, maximumDelayForRescaleTriggerDefault),
