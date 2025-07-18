@@ -18,8 +18,8 @@
 
 package org.apache.flink.examples.java.graph.util;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import java.util.LinkedList;
@@ -34,7 +34,7 @@ public class ConnectedComponentsData {
     public static final long[] VERTICES =
             new long[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
 
-    public static DataSet<Long> getDefaultVertexDataSet(ExecutionEnvironment env) {
+    public static DataSet<Long> getDefaultVertexDataSet(BatchExecutionEnvironment env) {
         List<Long> verticesList = new LinkedList<Long>();
         for (long vertexId : VERTICES) {
             verticesList.add(vertexId);
@@ -60,7 +60,7 @@ public class ConnectedComponentsData {
                 new Object[] {16L, 1L}
             };
 
-    public static DataSet<Tuple2<Long, Long>> getDefaultEdgeDataSet(ExecutionEnvironment env) {
+    public static DataSet<Tuple2<Long, Long>> getDefaultEdgeDataSet(BatchExecutionEnvironment env) {
 
         List<Tuple2<Long, Long>> edgeList = new LinkedList<Tuple2<Long, Long>>();
         for (Object[] edge : EDGES) {

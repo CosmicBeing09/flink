@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.dag.DataSinkNode;
@@ -61,7 +61,7 @@ public class PipelineBreakingTest {
     @Test
     public void testSimpleForwardPlan() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> dataSet = env.readTextFile("/never/accessed");
             dataSet.map(
@@ -120,7 +120,7 @@ public class PipelineBreakingTest {
     @Test
     public void testBranchingPlanNotReJoined() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Integer> data =
                     env.readTextFile("/never/accessed")
@@ -211,7 +211,7 @@ public class PipelineBreakingTest {
         try {
             // build a test program
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromElements(33L, 44L)

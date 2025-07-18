@@ -21,7 +21,7 @@ package org.apache.flink.test.hadoopcompatibility.mapreduce.example;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.hadoop.mapreduce.HadoopInputFormat;
 import org.apache.flink.api.java.hadoop.mapreduce.HadoopOutputFormat;
@@ -55,7 +55,7 @@ public class WordCount {
         final String inputPath = args[0];
         final String outputPath = args[1];
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Set up the Hadoop Input Format
         Job job = Job.getInstance();

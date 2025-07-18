@@ -21,8 +21,8 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
 import org.apache.flink.test.operators.util.CollectionDataSets.CustomType;
@@ -52,7 +52,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test non-passing flatmap
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         DataSet<String> nonPassingFlatMapDs = ds.flatMap(new FlatMapper1());
@@ -81,7 +81,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test data duplicating flatmap
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         DataSet<String> duplicatingFlatMapDs = ds.flatMap(new FlatMapper2());
@@ -125,7 +125,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test flatmap with varying number of emitted tuples
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> varyingTuplesMapDs = ds.flatMap(new FlatMapper3());
@@ -180,7 +180,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test type conversion flatmapper (Custom -> Tuple)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> typeConversionFlatMapDs =
@@ -235,7 +235,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test type conversion flatmapper (Tuple -> Basic)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<String> typeConversionFlatMapDs = ds.flatMap(new FlatMapper5());
@@ -287,7 +287,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * multiple times and changes it in between
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> inputObjFlatMapDs = ds.flatMap(new FlatMapper6());
@@ -353,7 +353,7 @@ public class FlatMapITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test flatmap with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ints = CollectionDataSets.getIntegerDataSet(env);
 

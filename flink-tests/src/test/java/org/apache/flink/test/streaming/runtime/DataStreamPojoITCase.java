@@ -49,7 +49,7 @@ public class DataStreamPojoITCase extends AbstractTestBaseJUnit4 {
     /** Test composite key on the Data POJO (with nested fields). */
     @Test
     public void testCompositeKeyOnNestedPojo() throws Exception {
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         see.getConfig().disableObjectReuse();
         see.setParallelism(3);
 
@@ -101,7 +101,7 @@ public class DataStreamPojoITCase extends AbstractTestBaseJUnit4 {
     /** Test composite & nested key on the Data POJO. */
     @Test
     public void testNestedKeyOnNestedPojo() throws Exception {
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         see.getConfig().disableObjectReuse();
         see.setParallelism(4);
 
@@ -156,7 +156,7 @@ public class DataStreamPojoITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testNestedPojoFieldAccessor() throws Exception {
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         see.getConfig().disableObjectReuse();
         see.setParallelism(4);
 
@@ -196,7 +196,7 @@ public class DataStreamPojoITCase extends AbstractTestBaseJUnit4 {
 
     @Test(expected = CompositeType.InvalidFieldReferenceException.class)
     public void testFailOnNestedPojoFieldAccessor() throws Exception {
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Data> dataStream = see.fromData(elements);
         dataStream.keyBy("aaa", "stats.count").sum("stats.nonExistingField");

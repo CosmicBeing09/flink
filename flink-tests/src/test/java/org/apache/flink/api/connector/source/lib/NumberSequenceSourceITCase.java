@@ -60,7 +60,7 @@ public class NumberSequenceSourceITCase extends TestLogger {
 
     @Test
     public void testParallelSourceExecution() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         final DataStream<Long> stream =
@@ -75,7 +75,7 @@ public class NumberSequenceSourceITCase extends TestLogger {
 
     @Test
     public void testCheckpointingWithDelayedAssignment() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         RestartStrategyUtils.configureNoRestartStrategy(env);
         env.enableCheckpointing(10, CheckpointingMode.EXACTLY_ONCE);
@@ -94,7 +94,7 @@ public class NumberSequenceSourceITCase extends TestLogger {
 
     @Test
     public void testLessSplitsThanParallelism() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         int n = PARALLELISM - 2;
         DataStream<Long> stream = env.fromSequence(0, n).map(l -> l);

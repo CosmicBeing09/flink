@@ -25,8 +25,8 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -75,7 +75,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     public void
             testCorrectnessofGroupReduceOnTupleContainingPrimitiveByteArrayWithKeyFieldSelectors()
                     throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<byte[], Integer>> ds = CollectionDataSets.getTuple2WithByteArrayDataSet(env);
         DataSet<Integer> reduceDs = ds.groupBy(0).reduceGroup(new ByteArrayGroupReduce());
@@ -106,7 +106,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on tuples with key field selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Integer, Long>> reduceDs =
@@ -126,7 +126,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on tuples with multiple key field selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -157,7 +157,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on tuples with key field selector and group sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -185,7 +185,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on tuples with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Integer, Long>> reduceDs =
@@ -213,7 +213,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on custom type with type extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs =
@@ -247,7 +247,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of all-groupreduce for tuples
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> reduceDs =
@@ -266,7 +266,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of all-groupreduce for custom types
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs = ds.reduceGroup(new AllAddingCustomTypeGroupReduce());
@@ -284,7 +284,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
@@ -309,7 +309,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce if UDF returns input objects multiple times and changes it in between
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> reduceDs =
@@ -336,7 +336,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         org.junit.Assume.assumeTrue(mode != TestExecutionMode.COLLECTION);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs =
@@ -371,7 +371,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         org.junit.Assume.assumeTrue(mode != TestExecutionMode.COLLECTION);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(2); // important because it determines how often the combiner is called
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -398,7 +398,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          */
         org.junit.Assume.assumeTrue(mode != TestExecutionMode.COLLECTION);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds =
                 CollectionDataSets.get3TupleDataSet(env)
@@ -424,7 +424,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * check correctness of groupReduce with descending group sort
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -453,7 +453,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of groupReduce on tuples with tuple-returning key selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -495,7 +495,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check that input of combiner is also sorted for combinable groupReduce with group sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -523,7 +523,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Deep nesting test
          * + null value in pojo
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CrazyNested> ds = CollectionDataSets.getCrazyNestedDataSet(env);
         DataSet<Tuple2<String, Integer>> reduceDs =
@@ -560,7 +560,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test Pojo extending from tuple WITH custom fields
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<FromTupleWithCTor> ds = CollectionDataSets.getPojoExtendingFromTuple(env);
         DataSet<Integer> reduceDs = ds.groupBy("special", "f2").reduceGroup(new GroupReducer2());
@@ -585,7 +585,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test Pojo containing a Writable and Tuples
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<PojoContainingTupleAndWritable> ds =
                 CollectionDataSets.getPojoContainingTupleAndWritable(env);
@@ -615,7 +615,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test Tuple containing pojos and regular fields
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, CrazyNested, POJO>> ds =
                 CollectionDataSets.getTupleContainingPojos(env);
@@ -648,7 +648,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test string-based definition on group sort, based on test:
          * check correctness of groupReduce with descending group sort
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -675,7 +675,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test int-based definition on group sort, for (full) nested Tuple
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
@@ -696,7 +696,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test int-based definition on group sort, for (partial) nested Tuple ASC
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
@@ -719,7 +719,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test string-based definition on group sort, for (partial) nested Tuple DESC
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
@@ -741,7 +741,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test string-based definition on group sort, for two grouping keys
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple2<Tuple2<Integer, Integer>, String>> ds =
@@ -764,7 +764,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test string-based definition on group sort, for two grouping keys with Pojos
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<PojoContainingTupleAndWritable> ds =
@@ -788,7 +788,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of sorted groupReduce on tuples with keyselector sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -837,7 +837,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of sorted groupReduce on custom type with keyselector sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs =
@@ -912,7 +912,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of sorted groupReduce with combine on tuples with keyselector sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -955,7 +955,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of sorted groupReduceon with Tuple2 keyselector sorting
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
@@ -1003,7 +1003,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test grouping with pojo containing multiple pojos (was a bug)
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<CollectionDataSets.PojoWithMultiplePojos> ds =
@@ -1037,7 +1037,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test Java collections within pojos ( == test kryo)
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<CollectionDataSets.PojoWithCollection> ds =
@@ -1076,7 +1076,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Group by generic type
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(1);
 
         DataSet<CollectionDataSets.PojoWithCollection> ds =
@@ -1111,7 +1111,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test that semantic properties are correctly adapted when using Selector Keys
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
@@ -1180,7 +1180,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testGroupReduceWithAtomicValue() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds = env.fromElements(1, 1, 2, 3, 4);
         DataSet<Integer> reduceDs =
                 ds.groupBy("*")
@@ -1208,7 +1208,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
      */
     @Test
     public void testJodatimeDateTimeWithKryo() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Integer, DateTime>> ds = env.fromElements(new Tuple2<>(1, DateTime.now()));
         DataSet<Tuple2<Integer, DateTime>> reduceDs = ds.groupBy("f1").sum(0).project(0);
 
@@ -1226,7 +1226,7 @@ public class GroupReduceITCase extends MultipleProgramsTestBaseJUnit4 {
      */
     @Test
     public void testDateNullException() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Integer, Date>> in =
                 env.fromElements(

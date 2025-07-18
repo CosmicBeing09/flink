@@ -24,8 +24,8 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.client.ClientUtils;
@@ -94,7 +94,7 @@ class ClientTest {
     @BeforeEach
     void setUp() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.generateSequence(1, 1000).output(new DiscardingOutputFormat<>());
         plan = env.createProgramPlan();
 
@@ -278,7 +278,7 @@ class ClientTest {
 
     public static class TestEntrypoint {
         public static void main(String[] args) {
-            ExecutionEnvironment.createLocalEnvironment();
+            BatchExecutionEnvironment.createLocalEnvironment();
         }
     }
 
@@ -380,7 +380,7 @@ class ClientTest {
                 return;
             }
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input =
                     env.readCsvFile(args[0]).fieldDelimiter("\t").types(Long.class, Long.class);
@@ -406,7 +406,7 @@ class ClientTest {
     public static final class TestEager {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).collect();
         }
     }
@@ -415,7 +415,7 @@ class ClientTest {
     public static final class TestMultiExecute {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             for (int i = 0; i < 2; i++) {
                 env.fromElements(1, 2).output(new DiscardingOutputFormat<>());
@@ -430,7 +430,7 @@ class ClientTest {
     public static final class TestGetRuntime {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getNetRuntime();
         }
@@ -440,7 +440,7 @@ class ClientTest {
     public static final class TestGetJobID {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getJobID();
         }
@@ -450,7 +450,7 @@ class ClientTest {
     public static final class TestGetAccumulator {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getAccumulatorResult(ACCUMULATOR_NAME);
         }
@@ -460,7 +460,7 @@ class ClientTest {
     public static final class TestGetAllAccumulator {
 
         public static void main(String[] args) throws Exception {
-            final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements(1, 2).output(new DiscardingOutputFormat<Integer>());
             env.execute().getAllAccumulatorResults();
         }

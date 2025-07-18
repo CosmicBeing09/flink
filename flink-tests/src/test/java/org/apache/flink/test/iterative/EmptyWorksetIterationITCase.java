@@ -19,8 +19,8 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -38,7 +38,7 @@ public class EmptyWorksetIterationITCase extends JavaProgramTestBaseJUnit4 {
     @Override
     protected void testProgram() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input = env.generateSequence(1, 20).map(new Dupl());
 

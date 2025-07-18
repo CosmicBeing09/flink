@@ -49,7 +49,7 @@ class TypeFillTest {
 
     @Test
     void test() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         assertThatThrownBy(() -> env.addSource(new TestSource<Integer>()).print())
                 .isInstanceOf(InvalidTypesException.class);

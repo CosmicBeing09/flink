@@ -157,7 +157,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
      * </pre>
      */
     private DataStream<Long> createProgramWithSourcesOnly() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.getConfig().enableObjectReuse();
 
@@ -196,7 +196,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
      * </pre>
      */
     private DataStream<Long> createProgramWithMixedInputs() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.getConfig().enableObjectReuse();
 
@@ -240,7 +240,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
      * </pre>
      */
     private DataStream<Long> createProgramWithUnionInput() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.getConfig().enableObjectReuse();
 
@@ -291,7 +291,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
      * </pre>
      */
     private DataStream<Long> createProgramWithMultipleUnionInputs() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.getConfig().enableObjectReuse();
 

@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.misc;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -56,12 +56,12 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
     public static final MiniClusterWithClientResource MINI_CLUSTER_RESOURCE =
             new MiniClusterWithClientResource(
                     new MiniClusterResourceConfiguration.Builder()
-                            .setConfiguration(getConfiguration())
+                            .setConfiguration(getBatchConfiguration())
                             .setNumberTaskManagers(2)
                             .setNumberSlotsPerTaskManager(2)
                             .build());
 
-    private static Configuration getConfiguration() {
+    private static Configuration getBatchConfiguration() {
         Configuration config = new Configuration();
         config.set(TaskManagerOptions.MANAGED_MEMORY_SIZE, MemorySize.parse("20m"));
         config.set(TaskManagerOptions.NETWORK_MEMORY_MIN, MemorySize.ofMebiBytes(3L));
@@ -71,7 +71,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
 
     @Test
     public void testSuccessfulProgramAfterFailure() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         runConnectedComponents(env);
 
@@ -87,7 +87,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
         runConnectedComponents(env);
     }
 
-    private static void runConnectedComponents(ExecutionEnvironment env) throws Exception {
+    private static void runConnectedComponents(BatchExecutionEnvironment env) throws Exception {
 
         env.setParallelism(PARALLELISM);
 
@@ -131,7 +131,7 @@ public class SuccessAfterNetworkBuffersFailureITCase extends TestLogger {
         env.execute();
     }
 
-    private static void runKMeans(ExecutionEnvironment env) throws Exception {
+    private static void runKMeans(BatchExecutionEnvironment env) throws Exception {
 
         env.setParallelism(PARALLELISM);
 

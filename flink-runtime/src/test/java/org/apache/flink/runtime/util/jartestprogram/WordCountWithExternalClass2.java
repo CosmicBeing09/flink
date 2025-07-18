@@ -18,15 +18,15 @@
 
 package org.apache.flink.runtime.util.jartestprogram;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 public class WordCountWithExternalClass2 {
 
     public static void main(String[] args) throws Exception {
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // get input data
         DataSet<String> text = StaticData.getDefaultTextLineDataSet(env);

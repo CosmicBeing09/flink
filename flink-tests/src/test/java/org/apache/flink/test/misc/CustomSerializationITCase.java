@@ -19,7 +19,7 @@
 package org.apache.flink.test.misc;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.program.ProgramInvocationException;
 import org.apache.flink.configuration.Configuration;
@@ -70,7 +70,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer1() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -98,7 +98,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -126,7 +126,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer3() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)
@@ -154,7 +154,7 @@ public class CustomSerializationITCase extends TestLogger {
     @Test
     public void testIncorrectSerializer4() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(PARLLELISM);
 
             env.generateSequence(1, 10 * PARLLELISM)

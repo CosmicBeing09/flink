@@ -577,7 +577,7 @@ public class AutoRescalingITCase extends TestLogger {
     private static JobGraph createJobGraphWithOperatorState(
             int parallelism, int maxParallelism, OperatorCheckpointMethod checkpointMethod) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         configureCheckpointing(env.getCheckpointConfig());
         env.setParallelism(parallelism);
         env.getConfig().setMaxParallelism(maxParallelism);
@@ -656,7 +656,7 @@ public class AutoRescalingITCase extends TestLogger {
             int numberElements,
             int numberElementsAfterRestart) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.getConfig().setMaxParallelism(maxParallelism);
         configureCheckpointing(env.getCheckpointConfig());

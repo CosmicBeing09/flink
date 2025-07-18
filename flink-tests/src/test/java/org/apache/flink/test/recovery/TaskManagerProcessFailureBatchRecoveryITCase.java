@@ -21,8 +21,8 @@ package org.apache.flink.test.recovery;
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.testutils.junit.extensions.parameterized.ParameterizedTestExtension;
 import org.apache.flink.testutils.junit.extensions.parameterized.Parameters;
@@ -62,8 +62,8 @@ public class TaskManagerProcessFailureBatchRecoveryITCase
     @Override
     public void testTaskManagerFailure(Configuration configuration, final File coordinateDir)
             throws Exception {
-        ExecutionEnvironment env =
-                ExecutionEnvironment.createRemoteEnvironment("localhost", 1337, configuration);
+        BatchExecutionEnvironment env =
+                BatchExecutionEnvironment.createRemoteEnvironment("localhost", 1337, configuration);
         env.setParallelism(PARALLELISM);
         env.getConfig().setExecutionMode(executionMode);
 

@@ -271,7 +271,7 @@ class JobIDLoggingITCase {
     }
 
     private static JobID runJob(ClusterClient<?> clusterClient) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE).addSink(new DiscardingSink<>());
         JobID jobId = clusterClient.submitJob(env.getStreamGraph().getJobGraph()).get();
         Deadline deadline = Deadline.fromNow(Duration.ofMinutes(5));

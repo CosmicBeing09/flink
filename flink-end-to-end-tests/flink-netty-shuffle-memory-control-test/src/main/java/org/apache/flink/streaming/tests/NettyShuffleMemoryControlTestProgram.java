@@ -88,7 +88,7 @@ public class NettyShuffleMemoryControlTestProgram {
                 "The number of reduce tasks should be positive, but it is {}",
                 reduceParallelism);
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.addSource(new StringSourceFunction(runningTimeInSeconds))
                 .setParallelism(mapParallelism)
                 .slotSharingGroup("a")

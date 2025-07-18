@@ -83,7 +83,7 @@ public class SinkV2MetricsITCase extends TestLogger {
 
     @Test
     public void testMetrics() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         int numSplits = Math.max(1, env.getParallelism() - 2);
 
         int numRecordsPerSplit = 10;
@@ -130,7 +130,7 @@ public class SinkV2MetricsITCase extends TestLogger {
     @Test
     public void testCommitterMetrics() throws Exception {
         final int numCommittables = 7;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // make sure all parallel instances have processed the records once before validating
         // metrics

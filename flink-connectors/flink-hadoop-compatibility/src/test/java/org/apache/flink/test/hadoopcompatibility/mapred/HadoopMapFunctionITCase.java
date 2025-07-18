@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.hadoopcompatibility.mapred.HadoopMapFunction;
@@ -47,7 +47,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testNonPassingMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
         DataSet<Tuple2<IntWritable, Text>> nonPassingFlatMapDs =
@@ -65,7 +65,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testDataDuplicatingMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
         DataSet<Tuple2<IntWritable, Text>> duplicatingFlatMapDs =
@@ -127,7 +127,7 @@ class HadoopMapFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testConfigurableMapper(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         JobConf conf = new JobConf();
         conf.set("my.filterPrefix", "Hello");

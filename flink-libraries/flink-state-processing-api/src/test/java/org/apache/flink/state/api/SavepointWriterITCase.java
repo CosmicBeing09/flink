@@ -116,7 +116,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
     }
 
     private void bootstrapState(StateBackend backend, String savepointPath) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
         StateBootstrapTransformation<Account> transformation =
@@ -171,7 +171,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
     private void modifySavepoint(StateBackend backend, String savepointPath, String modifyPath)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
         StateBootstrapTransformation<Integer> transformation =

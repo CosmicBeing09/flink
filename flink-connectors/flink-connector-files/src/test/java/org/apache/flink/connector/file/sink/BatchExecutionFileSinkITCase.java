@@ -42,7 +42,7 @@ class BatchExecutionFileSinkITCase extends FileSinkITBase {
      * file writer so the data would be re-written.
      */
     protected JobGraph createJobGraph(boolean triggerFailover, String path) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
         env.configure(config, getClass().getClassLoader());

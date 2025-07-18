@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -102,7 +102,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        TestEnvironment env = MINI_CLUSTER_RESOURCE.getTestEnvironment();
+        ClusterTestEnvironment env = MINI_CLUSTER_RESOURCE.getTestStreamEnvironment();
         env.getConfig().enableObjectReuse();
 
         // Possibly run the test multiple times
@@ -148,7 +148,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_RESOURCE.getTestEnvironment();
+        BatchExecutionEnvironment env = MINI_CLUSTER_RESOURCE.getTestStreamEnvironment();
         env.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times
@@ -198,7 +198,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
 
         // prepare the test environment
         CollectionTestEnvironment env = new CollectionTestEnvironment();
-        env.setAsContext();
+        env.setAsBatchExecutionEnvironmentContext();
 
         // call the test program
         try {
@@ -209,7 +209,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
             e.printStackTrace();
             Assert.fail("Error while calling the test program: " + e.getMessage());
         } finally {
-            MINI_CLUSTER_RESOURCE.getTestEnvironment().setAsContext();
+            MINI_CLUSTER_RESOURCE.getTestStreamEnvironment().setAsContext();
         }
 
         Assert.assertNotNull(

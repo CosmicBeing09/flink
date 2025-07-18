@@ -76,7 +76,7 @@ public class StatefulStreamJobUpgradeTestProgram {
     public static void main(String[] args) throws Exception {
         final ParameterTool pt = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         setupEnvironment(env, pt);
         env.getCheckpointConfig().enableUnalignedCheckpoints(true);

@@ -21,7 +21,7 @@ package org.apache.flink.test.example.client;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.deployment.executors.LocalExecutor;
 import org.apache.flink.configuration.Configuration;
@@ -114,7 +114,7 @@ public class LocalExecutorITCase extends TestLogger {
     }
 
     private Plan getWordCountPlan(File inFile, File outFile, int parallelism) {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
         env.readTextFile(inFile.getAbsolutePath())
                 .flatMap(new Tokenizer())
@@ -125,7 +125,7 @@ public class LocalExecutorITCase extends TestLogger {
     }
 
     private Plan getRuntimeExceptionPlan() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements(1)
                 .map(
                         element -> {

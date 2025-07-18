@@ -97,7 +97,7 @@ public class UnalignedCheckpointFailureHandlingITCase {
 
     @Test
     public void testCheckpointSuccessAfterFailure() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         TestCheckpointStorageFactory.failOnCloseRef = sharedObjects.add(new AtomicBoolean(true));
         TestCheckpointStorageFactory.tempFolderRef = sharedObjects.add(temporaryFolder);
 

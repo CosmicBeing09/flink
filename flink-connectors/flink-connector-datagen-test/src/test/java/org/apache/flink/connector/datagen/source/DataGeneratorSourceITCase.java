@@ -70,7 +70,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Combined results of parallel source readers produce the expected sequence.")
     void testParallelSourceExecution() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         final DataStream<Long> stream = getGeneratorSourceStream(index -> index, env, 1_000L);
@@ -83,7 +83,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Generator function can be instantiated as an anonymous class.")
     void testParallelSourceExecutionWithAnonymousClass() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         GeneratorFunction<Long, Long> generatorFunction =
@@ -105,7 +105,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Exceptions from the generator function are not 'swallowed'.")
     void testFailingGeneratorFunction() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         GeneratorFunction<Long, Long> generatorFunction =
@@ -133,7 +133,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     // https://github.com/apache/flink/blob/bccecc23067eb7f18e20bade814be73393401be5/flink-runtime/src/main/java/org/apache/flink/runtime/taskmanager/Task.java#L780
     @Disabled
     void testFailingGeneratorFunctionInitialization() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         GeneratorFunction<Long, Long> generatorFunctionFailingInit =
@@ -164,7 +164,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @DisplayName(
             "Result is correct when less elements are expected than the number of parallel source readers")
     void testLessSplitsThanParallelism() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         int n = PARALLELISM - 2;
         DataStream<Long> stream = getGeneratorSourceStream(index -> index, env, n).map(l -> l);
@@ -177,7 +177,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Test GatedRateLimiter")
     void testGatedRateLimiter() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(100);
 
         env.setParallelism(PARALLELISM);
@@ -209,7 +209,7 @@ class DataGeneratorSourceITCase extends TestLogger {
     @DisplayName("Stream returns() call is propagated correctly.")
     @SuppressWarnings("unchecked")
     void testReturnsIsCorrectlyPropagated() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         OutputTypeConfigurableGeneratorFunction generatorFunction =

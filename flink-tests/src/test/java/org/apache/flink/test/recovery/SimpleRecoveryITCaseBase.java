@@ -20,7 +20,7 @@ package org.apache.flink.test.recovery;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RestartStrategyOptions;
 import org.apache.flink.runtime.client.JobExecutionException;
@@ -57,7 +57,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
         try {
             // attempt 1
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
                 env.setParallelism(4);
                 Configuration configuration = new Configuration();
@@ -78,7 +78,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
 
             // attempt 2
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
                 env.setParallelism(4);
                 Configuration configuration = new Configuration();
@@ -107,7 +107,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
     @Test
     public void testRestart() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             env.setParallelism(4);
             // the default restart strategy should be taken
@@ -132,7 +132,7 @@ public abstract class SimpleRecoveryITCaseBase extends TestLogger {
     @Test
     public void testRestartMultipleTimes() throws Exception {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             env.setParallelism(4);
 

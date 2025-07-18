@@ -21,8 +21,8 @@ package org.apache.flink.optimizer.custompartition;
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -46,7 +46,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Integer, Integer>> data =
@@ -90,7 +90,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
         try {
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Integer, Integer>> data =
@@ -114,7 +114,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -157,7 +157,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
         try {
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -180,7 +180,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
             final Partitioner<Integer> part = new TestPartitionerInt();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();
@@ -236,7 +236,7 @@ public class CustomPartitioningTest extends CompilerTestBase {
                     (Partitioner<Integer>) (Partitioner<?>) new TestPartitionerLong();
             final int parallelism = 4;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Pojo> data = env.fromElements(new Pojo()).rebalance();

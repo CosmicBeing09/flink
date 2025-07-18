@@ -535,7 +535,7 @@ class AsyncWaitOperatorTest {
             AsyncFunction<Integer, Integer> firstFunction,
             AsyncFunction<Integer, Integer> secondFunction) {
 
-        StreamExecutionEnvironment chainEnv = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment chainEnv = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // set parallelism to 2 to avoid chaining with source in case when available processors is
         // 1.

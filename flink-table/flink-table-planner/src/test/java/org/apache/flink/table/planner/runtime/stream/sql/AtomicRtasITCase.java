@@ -31,6 +31,6 @@ public class AtomicRtasITCase extends AtomicRtasITCaseBase {
     protected TableEnvironment getTableEnvironment() {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
         return StreamTableEnvironment.create(
-                StreamExecutionEnvironment.getExecutionEnvironment(), settings);
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment(), settings);
     }
 }

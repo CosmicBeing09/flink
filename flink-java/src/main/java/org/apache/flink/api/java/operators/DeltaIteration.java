@@ -30,7 +30,7 @@ import org.apache.flink.api.common.operators.ResourceSpec;
 import org.apache.flink.api.common.operators.util.OperatorValidationUtils;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.types.Value;
 
 import java.util.Arrays;
@@ -77,7 +77,7 @@ public class DeltaIteration<ST, WT> {
     private boolean solutionSetUnManaged;
 
     public DeltaIteration(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             TypeInformation<ST> type,
             DataSet<ST> solutionSet,
             DataSet<WT> workset,
@@ -374,7 +374,7 @@ public class DeltaIteration<ST, WT> {
         private final DeltaIteration<ST, ?> deltaIteration;
 
         private SolutionSetPlaceHolder(
-                ExecutionEnvironment context,
+                BatchExecutionEnvironment context,
                 TypeInformation<ST> type,
                 DeltaIteration<ST, ?> deltaIteration) {
             super(context, type);
@@ -399,7 +399,7 @@ public class DeltaIteration<ST, WT> {
      */
     @Public
     public static class WorksetPlaceHolder<WT> extends DataSet<WT> {
-        private WorksetPlaceHolder(ExecutionEnvironment context, TypeInformation<WT> type) {
+        private WorksetPlaceHolder(BatchExecutionEnvironment context, TypeInformation<WT> type) {
             super(context, type);
         }
     }

@@ -22,7 +22,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.util.FieldSet;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -58,7 +58,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource1() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -90,7 +90,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource2() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -123,7 +123,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource3() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -156,7 +156,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource4() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -189,7 +189,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource5() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -221,7 +221,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource6() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -254,7 +254,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedSource7() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -288,7 +288,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource1() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -321,7 +321,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource2() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -354,7 +354,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource3() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -386,7 +386,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource4() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -419,7 +419,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource5() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -452,7 +452,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource6() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -487,7 +487,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource7() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -520,7 +520,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedGroupedSource8() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -553,7 +553,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource1() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -588,7 +588,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource2() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -623,7 +623,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource3() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -657,7 +657,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource4() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data =
@@ -692,7 +692,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource5() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -728,7 +728,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource6() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -763,7 +763,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkSinglePartitionedOrderedSource7() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple3<Long, SomePojo, String>> data =
@@ -798,7 +798,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkCoPartitionedSources1() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data1 =
@@ -856,7 +856,7 @@ public class PropertyDataSourceTest extends CompilerTestBase {
     @Test
     public void checkCoPartitionedSources2() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSource<Tuple2<Long, String>> data1 =

@@ -55,7 +55,7 @@ public class AsyncCalcITCase extends StreamingTestBase {
 
     @BeforeEach
     public void before() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(2);
         tEnv = StreamTableEnvironment.create(env, EnvironmentSettings.inStreamingMode());
         tEnv.getConfig().set(ExecutionConfigOptions.TABLE_EXEC_ASYNC_SCALAR_BUFFER_CAPACITY, 2);

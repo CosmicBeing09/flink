@@ -20,7 +20,7 @@ package org.apache.flink.test.execution;
 
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.deployment.executors.RemoteExecutor;
 import org.apache.flink.configuration.Configuration;
@@ -63,7 +63,7 @@ public class JobListenerITCase extends TestLogger {
         OneShotLatch submissionLatch = new OneShotLatch();
         OneShotLatch executionLatch = new OneShotLatch();
 
-        ExecutionEnvironment env = new ExecutionEnvironment(getClientConfiguration());
+        BatchExecutionEnvironment env = new BatchExecutionEnvironment(getClientConfiguration());
 
         env.registerJobListener(
                 new JobListener() {
@@ -94,7 +94,7 @@ public class JobListenerITCase extends TestLogger {
         AtomicReference<JobID> jobIdReference = new AtomicReference<>();
         OneShotLatch submissionLatch = new OneShotLatch();
 
-        ExecutionEnvironment env = new ExecutionEnvironment(getClientConfiguration());
+        BatchExecutionEnvironment env = new BatchExecutionEnvironment(getClientConfiguration());
 
         env.registerJobListener(
                 new JobListener() {
@@ -122,7 +122,7 @@ public class JobListenerITCase extends TestLogger {
     public void testExecuteCallsJobListenerOnMainThreadOnBatchEnvironment() throws Exception {
         AtomicReference<Thread> threadReference = new AtomicReference<>();
 
-        ExecutionEnvironment env = new ExecutionEnvironment(getClientConfiguration());
+        BatchExecutionEnvironment env = new BatchExecutionEnvironment(getClientConfiguration());
 
         env.registerJobListener(
                 new JobListener() {
@@ -146,7 +146,7 @@ public class JobListenerITCase extends TestLogger {
     public void testExecuteAsyncCallsJobListenerOnMainThreadOnBatchEnvironment() throws Exception {
         AtomicReference<Thread> threadReference = new AtomicReference<>();
 
-        ExecutionEnvironment env = new ExecutionEnvironment(getClientConfiguration());
+        BatchExecutionEnvironment env = new BatchExecutionEnvironment(getClientConfiguration());
 
         env.registerJobListener(
                 new JobListener() {

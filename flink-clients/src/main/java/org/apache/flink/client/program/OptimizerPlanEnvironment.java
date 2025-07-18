@@ -19,15 +19,15 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.api.java.ExecutionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironmentFactory;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.execution.JobClient;
 
 /**
- * An {@link ExecutionEnvironment} that never executes a job but only extracts the {@link Pipeline}.
+ * An {@link BatchExecutionEnvironment} that never executes a job but only extracts the {@link Pipeline}.
  */
-public class OptimizerPlanEnvironment extends ExecutionEnvironment {
+public class OptimizerPlanEnvironment extends BatchExecutionEnvironment {
 
     private Pipeline pipeline;
 
@@ -52,7 +52,7 @@ public class OptimizerPlanEnvironment extends ExecutionEnvironment {
     }
 
     public void setAsContext() {
-        ExecutionEnvironmentFactory factory = () -> this;
+        BatchExecutionEnvironmentFactory factory = () -> this;
         initializeContextEnvironment(factory);
     }
 

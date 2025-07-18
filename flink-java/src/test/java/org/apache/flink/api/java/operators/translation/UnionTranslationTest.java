@@ -26,8 +26,8 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.SingleInputOperator;
 import org.apache.flink.api.common.operators.Union;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -47,7 +47,7 @@ class UnionTranslationTest {
     void translateUnion2Group() {
         try {
             final int parallelism = 4;
-            ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment(parallelism);
 
             DataSet<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 3);
 
@@ -96,7 +96,7 @@ class UnionTranslationTest {
     void translateUnion3SortedGroup() {
         try {
             final int parallelism = 4;
-            ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment(parallelism);
 
             DataSet<Tuple3<Double, StringValue, LongValue>> dataset1 = getSourceDataSet(env, 2);
 
@@ -161,7 +161,7 @@ class UnionTranslationTest {
 
     @SuppressWarnings("unchecked")
     private static DataSet<Tuple3<Double, StringValue, LongValue>> getSourceDataSet(
-            ExecutionEnvironment env, int parallelism) {
+            BatchExecutionEnvironment env, int parallelism) {
         return env.fromElements(new Tuple3<>(0.0, new StringValue(""), new LongValue(1L)))
                 .setParallelism(parallelism);
     }

@@ -19,8 +19,8 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.dag.TempMode;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
@@ -40,7 +40,7 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
     @Test
     public void testNoBreakerForIndependentVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> source1 = env.fromElements("test");
             DataSet<String> source2 = env.fromElements("test");
@@ -71,7 +71,7 @@ public class BroadcastVariablePipelinebreakerTest extends CompilerTestBase {
     @Test
     public void testBreakerForDependentVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<String> source1 = env.fromElements("test");
 

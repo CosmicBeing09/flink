@@ -19,8 +19,8 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.FlatJoinFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.operators.DeltaIteration;
@@ -68,7 +68,7 @@ public class ConnectedComponentsWithSolutionSetFirstITCase extends JavaProgramTe
     @Override
     protected void testProgram() throws Exception {
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // read vertex and edge data
         DataSet<Tuple1<Long>> vertices = env.readCsvFile(verticesPath).types(Long.class);

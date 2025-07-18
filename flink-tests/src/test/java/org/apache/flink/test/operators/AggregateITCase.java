@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.operators;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -53,7 +53,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Full Aggregate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Integer, Long>> aggregateDs =
@@ -72,7 +72,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Full Aggregate of mutable value types
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);
@@ -92,7 +92,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Grouped Aggregate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Long, Integer>> aggregateDs =
@@ -111,7 +111,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Grouped Aggregate of mutable value types
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);
@@ -131,7 +131,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Nested Aggregate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple1<Integer>> aggregateDs =
@@ -153,7 +153,7 @@ public class AggregateITCase extends MultipleProgramsTestBaseJUnit4 {
          * Nested Aggregate of mutable value types
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<IntValue, LongValue, StringValue>> ds =
                 ValueCollectionDataSets.get3TupleDataSet(env);

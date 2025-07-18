@@ -21,7 +21,7 @@ package org.apache.flink.formats.avro.testjar;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.Path;
@@ -199,7 +199,7 @@ public class AvroExternalJarProgram {
     public static void main(String[] args) throws Exception {
         String inputPath = args[0];
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<MyUser> input =
                 env.createInput(new AvroInputFormat<MyUser>(new Path(inputPath), MyUser.class));

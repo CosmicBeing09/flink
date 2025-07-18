@@ -31,7 +31,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * An {@link ExecutionEnvironment} that sends programs to a cluster for execution. The environment
+ * An {@link BatchExecutionEnvironment} that sends programs to a cluster for execution. The environment
  * needs to be created with the address and port of the JobManager of the Flink cluster that should
  * execute the programs.
  *
@@ -48,7 +48,7 @@ import java.util.List;
  */
 @Deprecated
 @Public
-public class RemoteEnvironment extends ExecutionEnvironment {
+public class RemoteEnvironment extends BatchExecutionEnvironment {
 
     /**
      * Creates a new RemoteEnvironment that points to the master (JobManager) described by the given

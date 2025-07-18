@@ -26,7 +26,7 @@ import org.apache.flink.api.common.io.NonParallelInput;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.OperatorInformation;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.SplitDataProperties;
 import org.apache.flink.configuration.Configuration;
 
@@ -64,7 +64,7 @@ public class DataSource<OUT> extends Operator<OUT, DataSource<OUT>> {
      * @param type The type of the elements produced by this input format.
      */
     public DataSource(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             InputFormat<OUT, ?> inputFormat,
             TypeInformation<OUT> type,
             String dataSourceLocationName) {

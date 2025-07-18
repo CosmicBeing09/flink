@@ -24,8 +24,8 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -63,7 +63,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce on tuples with key field selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> reduceDs =
@@ -88,7 +88,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce on tuples with multiple key field selectors
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -125,7 +125,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce on tuples with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> reduceDs =
@@ -159,7 +159,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce on custom type with key extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs =
@@ -193,7 +193,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * All-reduce for tuple
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> reduceDs = ds.reduce(new AllAddingTuple3Reduce());
@@ -211,7 +211,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * All-reduce for custom types
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<CustomType> reduceDs = ds.reduce(new AllAddingCustomTypeReduce());
@@ -229,7 +229,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
@@ -251,7 +251,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Reduce with a Tuple-returning KeySelector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -292,7 +292,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Case 2 with String-based field expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -322,7 +322,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
          * Case 2 with String-based field expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -349,7 +349,7 @@ public class ReduceITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testSupportForDataAndEnumSerialization() throws Exception {
         /** Test support for Date and enum serialization */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<PojoWithDateAndEnum> ds = env.generateSequence(0, 2).map(new Mapper1());
         ds = ds.union(CollectionDataSets.getPojoWithDateAndEnum(env));
 

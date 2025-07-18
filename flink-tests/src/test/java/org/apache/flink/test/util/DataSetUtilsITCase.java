@@ -19,8 +19,8 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.summarize.BooleanColumnSummary;
 import org.apache.flink.api.java.summarize.NumericColumnSummary;
@@ -54,7 +54,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testCountElementsPerPartition() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
@@ -66,7 +66,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testZipWithIndex() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(0, expectedSize - 1);
 
@@ -91,7 +91,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testZipWithUniqueId() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         long expectedSize = 100L;
         DataSet<Long> numbers = env.generateSequence(1L, expectedSize);
 
@@ -112,7 +112,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testIntegerDataSetChecksumHashCode() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
 
@@ -123,7 +123,7 @@ public class DataSetUtilsITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSummarize() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         List<Tuple8<Short, Integer, Long, Float, Double, String, Boolean, DoubleValue>> data =
                 new ArrayList<>();

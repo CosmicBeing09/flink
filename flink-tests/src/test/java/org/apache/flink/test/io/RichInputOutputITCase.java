@@ -21,7 +21,7 @@ package org.apache.flink.test.io;
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.io.RichOutputFormat;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.TextInputFormat;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.fs.FileInputSplit;
@@ -54,7 +54,7 @@ public class RichInputOutputITCase extends JavaProgramTestBaseJUnit4 {
 
         readCalls = new ConcurrentLinkedQueue<Integer>();
         writeCalls = new ConcurrentLinkedQueue<Integer>();
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.createInput(new TestInputFormat(new Path(inputPath))).output(new TestOutputFormat());
 
         JobExecutionResult result = env.execute();

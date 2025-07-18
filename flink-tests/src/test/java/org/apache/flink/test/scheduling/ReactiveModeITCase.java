@@ -84,7 +84,7 @@ public class ReactiveModeITCase extends TestLogger {
         // test preparation: ensure we have 2 TaskManagers running
         startAdditionalTaskManager();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         // we set maxParallelism = 1 and assert it never exceeds it
         final DataStream<String> input =
                 env.addSource(new FailOnParallelExecutionSource()).setMaxParallelism(1);
@@ -99,7 +99,7 @@ public class ReactiveModeITCase extends TestLogger {
     /** Test that a job scales up when a TaskManager gets added to the cluster. */
     @Test
     public void testScaleUpOnAdditionalTaskManager() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final DataStream<String> input = env.addSource(new DummySource());
         input.sinkTo(new DiscardingSink<>());
 
@@ -121,7 +121,7 @@ public class ReactiveModeITCase extends TestLogger {
 
     @Test
     public void testJsonPlanParallelismAfterRescale() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final DataStream<String> input = env.addSource(new DummySource());
         input.sinkTo(new DiscardingSink<>());
 
@@ -173,7 +173,7 @@ public class ReactiveModeITCase extends TestLogger {
         // test preparation: ensure we have 2 TaskManagers running
         startAdditionalTaskManager();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         // configure exactly one restart to avoid restart loops in error cases
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
         final DataStream<String> input = env.addSource(new DummySource());
@@ -198,7 +198,7 @@ public class ReactiveModeITCase extends TestLogger {
     /** Test for FLINK-28274. */
     @Test
     public void testContinuousFileMonitoringFunctionWithReactiveMode() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final DataStream<String> input = env.readTextFile(tempFolder.getRoot().getPath());
         input.sinkTo(new DiscardingSink<>());
 

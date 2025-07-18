@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.UnsortedGrouping;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -84,7 +84,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testAllGroupCombineIdentity() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
@@ -103,7 +103,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testIdentity() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
@@ -122,7 +122,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testIdentityWithGroupBy() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
@@ -141,7 +141,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testIdentityWithGroupByAndSort() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
 
@@ -163,7 +163,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testPartialReduceWithIdenticalInputOutputType() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // data
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -209,7 +209,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testPartialReduceWithDifferentInputOutputType() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // data
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -252,7 +252,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
 
         org.junit.Assume.assumeTrue(mode != TestExecutionMode.COLLECTION);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // data
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -301,7 +301,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     // check if parallelism of 1 results in the same data like a shuffle
     public void testCheckPartitionShuffleDOP1() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.setParallelism(1);
 
@@ -342,7 +342,7 @@ public class GroupCombineITCase extends MultipleProgramsTestBaseJUnit4 {
     // check if all API methods are callable
     public void testAPI() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple1<String>> ds =
                 CollectionDataSets.getStringDataSet(env)

@@ -21,8 +21,8 @@ package org.apache.flink.examples.java.distcp;
 import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.LocalEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.operators.FlatMapOperator;
@@ -71,7 +71,7 @@ public class DistCp {
         LOGGER.warn(DATASET_DEPRECATION_INFO);
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         ParameterTool params = ParameterTool.fromArgs(args);
         if (!params.has("input") || !params.has("output")) {
@@ -180,7 +180,7 @@ public class DistCp {
     // HELPER METHODS
     // -----------------------------------------------------------------------------------------
 
-    private static boolean isLocal(final ExecutionEnvironment env) {
+    private static boolean isLocal(final BatchExecutionEnvironment env) {
         return env instanceof LocalEnvironment;
     }
 

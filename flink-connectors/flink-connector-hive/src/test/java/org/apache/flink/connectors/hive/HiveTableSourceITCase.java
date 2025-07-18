@@ -629,7 +629,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         final String catalogName = "hive";
         final String dbName = "source_db";
         final String tblName = "stream_partition_name_test";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
@@ -685,7 +685,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         final String catalogName = "hive";
         final String dbName = "source_db";
         final String tblName = "stream_create_time_test";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
@@ -740,7 +740,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         final String catalogName = "hive";
         final String dbName = "source_db";
         final String tblName = "stream_test";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
@@ -812,7 +812,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
     private void testNonPartitionStreamingSource(Boolean useMapredReader, String tblName)
             throws Exception {
         final String catalogName = "hive";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
         tEnv.getConfig().set(HiveOptions.TABLE_EXEC_HIVE_FALLBACK_MAPRED_READER, useMapredReader);
@@ -932,7 +932,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         final String catalogName = "hive";
         final String dbName = "source_db";
         final String tblName = "stream_project_pushdown_test";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
@@ -985,7 +985,7 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
     @Test(timeout = 120000)
     public void testReadParquetWithNullableComplexType() throws Exception {
         final String catalogName = "hive";
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(3);
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv =

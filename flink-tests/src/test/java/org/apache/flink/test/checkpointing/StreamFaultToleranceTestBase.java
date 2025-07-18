@@ -124,7 +124,7 @@ public abstract class StreamFaultToleranceTestBase extends TestLogger {
     @Test
     public void runCheckpointedProgram() throws Exception {
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(500);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 0L);

@@ -26,8 +26,8 @@ import org.apache.flink.api.common.aggregators.AggregatorRegistry;
 import org.apache.flink.api.common.aggregators.ConvergenceCriterion;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.types.Value;
 
 /**
@@ -51,7 +51,7 @@ public class IterativeDataSet<T> extends SingleInputOperator<T, T, IterativeData
     private int maxIterations;
 
     public IterativeDataSet(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             TypeInformation<T> type,
             DataSet<T> input,
             int maxIterations) {

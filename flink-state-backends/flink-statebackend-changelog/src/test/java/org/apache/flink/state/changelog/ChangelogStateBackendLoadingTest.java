@@ -261,7 +261,7 @@ public class ChangelogStateBackendLoadingTest {
     }
 
     private StreamExecutionEnvironment getEnvironment() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         SourceFunction<Integer> srcFun =
                 new SourceFunction<Integer>() {
                     private static final long serialVersionUID = 1L;

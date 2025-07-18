@@ -23,8 +23,8 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.time.Deadline;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.HighAvailabilityOptions;
@@ -143,8 +143,8 @@ class JobManagerHAProcessFailureRecoveryITCase {
         config.set(HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM, zkQuorum);
         config.set(HighAvailabilityOptions.HA_STORAGE_PATH, zookeeperStoragePath.getAbsolutePath());
 
-        ExecutionEnvironment env =
-                ExecutionEnvironment.createRemoteEnvironment("leader", 1, config);
+        BatchExecutionEnvironment env =
+                BatchExecutionEnvironment.createRemoteEnvironment("leader", 1, config);
         env.setParallelism(PARALLELISM);
         Configuration configuration = new Configuration();
         configuration.set(RestartStrategyOptions.RESTART_STRATEGY, "fixed-delay");

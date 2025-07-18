@@ -22,8 +22,8 @@ import org.apache.flink.api.common.distributions.DataDistribution;
 import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.DataSetUtils;
@@ -64,7 +64,7 @@ public class CustomDistributionITCase extends TestLogger {
     public void testPartitionWithDistribution1() throws Exception {
         final TestDataDist1 dist = new TestDataDist1();
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
         DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
@@ -128,7 +128,7 @@ public class CustomDistributionITCase extends TestLogger {
     public void testRangeWithDistribution2() throws Exception {
         final TestDataDist2 dist = new TestDataDist2();
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
         DataSet<Tuple3<Integer, Integer, String>> input =
@@ -217,7 +217,7 @@ public class CustomDistributionITCase extends TestLogger {
     public void testPartitionKeyLessDistribution() throws Exception {
         final TestDataDist2 dist = new TestDataDist2();
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(dist.getParallelism());
 
         DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
@@ -280,7 +280,7 @@ public class CustomDistributionITCase extends TestLogger {
     public void testPartitionMoreThanDistribution() throws Exception {
         final TestDataDist2 dist = new TestDataDist2();
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> input = CollectionDataSets.get3TupleDataSet(env);
         DataSetUtils.partitionByRange(input, dist, 0, 1, 2);

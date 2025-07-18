@@ -41,7 +41,7 @@ public class KafkaEventsGeneratorJob {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final double errorRate = params.getDouble("error-rate", 0.0);
         final int sleep = params.getInt("sleep", 1);

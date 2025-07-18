@@ -35,7 +35,7 @@ class SavepointWriterTest {
 
     @Test
     void testCustomStateBackend() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         Configuration configuration = new Configuration();
         configuration.set(
                 StateBackendOptions.STATE_BACKEND,
@@ -55,7 +55,7 @@ class SavepointWriterTest {
 
     @Test
     void testCantCreateSavepointFromNothing() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         assertThatThrownBy(() -> SavepointWriter.newSavepoint(env, 128).write("file:///tmp/path"))
                 .isInstanceOf(IllegalStateException.class)

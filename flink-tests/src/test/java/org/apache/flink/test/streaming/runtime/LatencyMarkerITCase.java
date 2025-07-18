@@ -46,7 +46,7 @@ public class LatencyMarkerITCase {
         int inputCount = 100000;
         int parallelism = 4;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.getConfig().setLatencyTrackingInterval(2000);
         RestartStrategyUtils.configureNoRestartStrategy(env);

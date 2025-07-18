@@ -42,7 +42,7 @@ public class DistributedCacheViaBlobTestProgram {
         final Path inputFile = Paths.get(params.getRequired("inputFile"));
         final Path inputDir = Paths.get(params.getRequired("inputDir"));
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         env.registerCachedFile(inputFile.toString(), "test_data", false);

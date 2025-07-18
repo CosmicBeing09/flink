@@ -18,8 +18,8 @@
 
 package org.apache.flink.examples.java.misc;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import org.slf4j.Logger;
@@ -87,7 +87,7 @@ public class CollectionExecutionExample {
         LOGGER.warn(DATASET_DEPRECATION_INFO);
 
         // initialize a new Collection-based execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
         // create objects for users and emails
         User[] usersArray = {new User(1, "Peter"), new User(2, "John"), new User(3, "Bill")};

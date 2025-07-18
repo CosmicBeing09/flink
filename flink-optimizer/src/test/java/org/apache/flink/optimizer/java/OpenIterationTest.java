@@ -20,8 +20,8 @@ package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -39,7 +39,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkInOpenBulkIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input = env.generateSequence(1, 10);
 
@@ -64,7 +64,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkInClosedBulkIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input = env.generateSequence(1, 10);
 
@@ -93,7 +93,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkOnSolutionSetDeltaIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
@@ -121,7 +121,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testSinkOnWorksetDeltaIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));
@@ -149,7 +149,7 @@ public class OpenIterationTest extends CompilerTestBase {
     @Test
     public void testOperationOnSolutionSet() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<Long, Long>(0L, 0L));

@@ -48,7 +48,7 @@ public class StreamingCustomInputSplitProgram {
 
         config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(5));
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Integer> data = env.createInput(new CustomInputFormat());
 

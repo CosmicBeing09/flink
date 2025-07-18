@@ -79,7 +79,7 @@ class RescalePartitionerTest extends StreamPartitionerTest {
 
     @Test
     void testExecutionGraphGeneration() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(4);
 

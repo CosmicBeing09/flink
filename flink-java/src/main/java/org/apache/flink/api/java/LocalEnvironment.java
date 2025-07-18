@@ -27,15 +27,15 @@ import org.apache.flink.configuration.DeploymentOptions;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /**
- * An {@link ExecutionEnvironment} that runs the program locally, multi-threaded, in the JVM where
+ * An {@link BatchExecutionEnvironment} that runs the program locally, multi-threaded, in the JVM where
  * the environment is instantiated.
  *
  * <p>When this environment is instantiated, it uses a default parallelism of {@code 1}. The default
  * parallelism can be set via {@link #setParallelism(int)}.
  *
  * <p>Local environments can also be instantiated through {@link
- * ExecutionEnvironment#createLocalEnvironment()} and {@link
- * ExecutionEnvironment#createLocalEnvironment(int)}. The former version will pick a default
+ * BatchExecutionEnvironment#createLocalEnvironment()} and {@link
+ * BatchExecutionEnvironment#createLocalEnvironment(int)}. The former version will pick a default
  * parallelism equal to the number of hardware contexts in the local machine.
  *
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
@@ -46,7 +46,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Deprecated
 @Public
-public class LocalEnvironment extends ExecutionEnvironment {
+public class LocalEnvironment extends BatchExecutionEnvironment {
 
     /** Creates a new local environment. */
     public LocalEnvironment() {
@@ -64,7 +64,7 @@ public class LocalEnvironment extends ExecutionEnvironment {
     }
 
     private static Configuration validateAndGetConfiguration(final Configuration configuration) {
-        if (!ExecutionEnvironment.areExplicitEnvironmentsAllowed()) {
+        if (!BatchExecutionEnvironment.areExplicitEnvironmentsAllowed()) {
             throw new InvalidProgramException(
                     "The LocalEnvironment cannot be instantiated when running in a pre-defined context "
                             + "(such as Command Line Client or TestEnvironment)");

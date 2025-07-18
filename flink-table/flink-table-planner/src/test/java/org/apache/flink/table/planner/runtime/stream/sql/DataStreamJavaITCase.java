@@ -173,7 +173,7 @@ class DataStreamJavaITCase {
 
     @BeforeEach
     void before() throws IOException {
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.STREAMING);
         env.setParallelism(4);
         if (objectReuse == ObjectReuse.ENABLED) {

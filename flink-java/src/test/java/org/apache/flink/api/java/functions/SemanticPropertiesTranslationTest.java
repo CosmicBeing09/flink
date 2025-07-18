@@ -28,8 +28,8 @@ import org.apache.flink.api.common.operators.SingleInputSemanticProperties;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldSet;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
@@ -51,7 +51,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionWildcardForwardedAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, String, Integer>> input =
@@ -74,7 +74,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionInPlaceForwardedAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, String, Integer>> input =
@@ -95,7 +95,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionMovingForwardedAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -117,7 +117,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionForwardedInLine1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -139,7 +139,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionForwardedInLine2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -161,7 +161,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionForwardedInLine3() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -183,7 +183,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionAllForwardedExceptAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -203,7 +203,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryFunctionReadFieldsAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -221,7 +221,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryForwardedOverwritingInLine1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -234,7 +234,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testUnaryForwardedOverwritingInLine2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input = env.fromElements(new Tuple3<>(3L, 2L, 1L));
@@ -247,7 +247,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, String>> input1 = env.fromElements(new Tuple2<>(3L, "test"));
@@ -273,7 +273,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedInLine1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -301,7 +301,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedInLine2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -331,7 +331,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedAnnotationInLineMixed1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -358,7 +358,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedAnnotationInLineMixed2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -385,7 +385,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryAllForwardedExceptAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
@@ -413,7 +413,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryReadFieldsAnnotation() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -437,7 +437,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine1() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -455,7 +455,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine2() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -473,7 +473,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine3() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -491,7 +491,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine4() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Long>> input1 = env.fromElements(new Tuple2<>(3L, 4L));
@@ -509,7 +509,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine5() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));
@@ -527,7 +527,7 @@ class SemanticPropertiesTranslationTest {
 
     @Test
     void testBinaryForwardedOverwritingInLine6() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple3<Long, Long, Long>> input1 = env.fromElements(new Tuple3<>(3L, 4L, 5L));

@@ -21,7 +21,7 @@ package org.apache.flink.test.cancelling;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.test.util.InfiniteIntegerInputFormat;
 
@@ -51,7 +51,7 @@ public class MapCancelingITCase extends CancelingTestBase {
     }
 
     public void executeTask(MapFunction<Integer, Integer> mapper) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.createInput(new InfiniteIntegerInputFormat(false))
                 .map(mapper)

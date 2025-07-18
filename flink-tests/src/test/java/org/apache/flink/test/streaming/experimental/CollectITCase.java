@@ -38,7 +38,7 @@ public class CollectITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testCollect() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         final long n = 10;

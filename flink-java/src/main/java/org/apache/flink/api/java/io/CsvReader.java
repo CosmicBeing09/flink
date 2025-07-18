@@ -21,7 +21,7 @@ package org.apache.flink.api.java.io;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.Utils;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -76,7 +76,7 @@ public class CsvReader {
 
     private final Path path;
 
-    private final ExecutionEnvironment executionContext;
+    private final BatchExecutionEnvironment executionContext;
 
     protected boolean[] includedMask;
 
@@ -98,7 +98,7 @@ public class CsvReader {
 
     // --------------------------------------------------------------------------------------------
 
-    public CsvReader(Path filePath, ExecutionEnvironment executionContext) {
+    public CsvReader(Path filePath, BatchExecutionEnvironment executionContext) {
         Preconditions.checkNotNull(filePath, "The file path may not be null.");
         Preconditions.checkNotNull(executionContext, "The execution context may not be null.");
 
@@ -106,7 +106,7 @@ public class CsvReader {
         this.executionContext = executionContext;
     }
 
-    public CsvReader(String filePath, ExecutionEnvironment executionContext) {
+    public CsvReader(String filePath, BatchExecutionEnvironment executionContext) {
         this(
                 new Path(Preconditions.checkNotNull(filePath, "The file path may not be null.")),
                 executionContext);

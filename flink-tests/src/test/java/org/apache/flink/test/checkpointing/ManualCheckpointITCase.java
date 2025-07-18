@@ -70,7 +70,7 @@ public class ManualCheckpointITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testTriggeringWhenPeriodicDisabled() throws Exception {
         int parallelism = MINI_CLUSTER_RESOURCE.getNumberSlots();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         storageConfigurer.accept(temporaryFolder.newFolder().toURI().toString(), env);
 
@@ -99,7 +99,7 @@ public class ManualCheckpointITCase extends AbstractTestBaseJUnit4 {
     public void testTriggeringWhenPeriodicEnabled() throws Exception {
         int parallelism = MINI_CLUSTER_RESOURCE.getNumberSlots();
         final int checkpointingInterval = 500;
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.enableCheckpointing(checkpointingInterval);
         storageConfigurer.accept(temporaryFolder.newFolder().toURI().toString(), env);

@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -47,7 +47,7 @@ class CollectionExecutionIterationTest implements Serializable {
     @Test
     void testBulkIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
             IterativeDataSet<Integer> iteration = env.fromElements(1).iterate(10);
 
@@ -69,7 +69,7 @@ class CollectionExecutionIterationTest implements Serializable {
     @Test
     void testBulkIterationWithTerminationCriterion() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
             IterativeDataSet<Integer> iteration = env.fromElements(1).iterate(100);
 
@@ -96,7 +96,7 @@ class CollectionExecutionIterationTest implements Serializable {
     @Test
     void testDeltaIteration() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple2<Integer, Integer>> solInput =

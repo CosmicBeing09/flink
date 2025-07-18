@@ -85,7 +85,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
         final int numKeys = 1;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
@@ -162,7 +162,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
         final int numKeys = 1;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
@@ -240,7 +240,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
         final int numKeys = 1;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
@@ -321,7 +321,7 @@ public class EventTimeAllWindowCheckpointingITCase extends TestLogger {
         final int numKeys = 1;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.enableCheckpointing(100);
             RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);

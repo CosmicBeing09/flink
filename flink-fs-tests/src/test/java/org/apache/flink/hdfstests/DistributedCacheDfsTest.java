@@ -162,7 +162,7 @@ public class DistributedCacheDfsTest extends TestLogger {
     }
 
     private StreamExecutionEnvironment createJobWithRegisteredCachedFiles() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         env.registerCachedFile(testFile.toString(), "test_data", false);

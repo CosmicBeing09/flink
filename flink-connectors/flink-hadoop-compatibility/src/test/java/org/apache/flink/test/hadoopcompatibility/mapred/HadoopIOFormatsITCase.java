@@ -19,8 +19,8 @@
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.hadoop.mapred.HadoopInputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.JavaProgramTestBase;
@@ -185,8 +185,8 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                 case 1:
                     {
                         /** Test sequence file, including a key access. */
-                        final ExecutionEnvironment env =
-                                ExecutionEnvironment.getExecutionEnvironment();
+                        final BatchExecutionEnvironment env =
+                                BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
                         SequenceFileInputFormat<LongWritable, Text> sfif =
                                 new SequenceFileInputFormat<LongWritable, Text>();
@@ -237,8 +237,8 @@ public class HadoopIOFormatsITCase extends JavaProgramTestBase {
                     }
                 case 2:
                     {
-                        final ExecutionEnvironment env =
-                                ExecutionEnvironment.getExecutionEnvironment();
+                        final BatchExecutionEnvironment env =
+                                BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
                         SequenceFileInputFormat<NullWritable, LongWritable> sfif =
                                 new SequenceFileInputFormat<NullWritable, LongWritable>();

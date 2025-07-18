@@ -18,12 +18,12 @@
 
 package org.apache.flink.runtime.webmonitor.handlers.utils;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 /** Javadoc. */
 public class EagerSinkProgram {
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("hello", "world").print();
     }
 }

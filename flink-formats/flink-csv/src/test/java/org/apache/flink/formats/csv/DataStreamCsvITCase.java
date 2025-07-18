@@ -192,7 +192,7 @@ class DataStreamCsvITCase {
     @Test
     void testCustomBulkWriter() throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         // fromCollection is not bounded, using fromSequence instead
@@ -342,7 +342,7 @@ class DataStreamCsvITCase {
         final FileSource<T> source =
                 FileSource.forRecordStreamFormat(csvFormat, Path.fromLocalFile(testDir)).build();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
 

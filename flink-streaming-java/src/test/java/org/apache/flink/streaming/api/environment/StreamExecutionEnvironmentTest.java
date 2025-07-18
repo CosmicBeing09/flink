@@ -68,13 +68,13 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void fromElementsWithBaseTypeTest1() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.fromData(ParentClass.class, new SubClass(1, "Java"), new ParentClass(1, "hello"));
     }
 
     @Test
     void fromElementsWithBaseTypeTest2() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         assertThatThrownBy(
                         () ->
                                 env.fromData(
@@ -86,7 +86,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testFromElementsDeducedType() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<String> source = env.fromData("a", "b");
 
         DataGeneratorSource<String> generatorSource = getSourceFromStream(source);
@@ -96,7 +96,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testFromElementsPostConstructionType() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<String> source = env.fromData("a", "b");
         TypeInformation<String> customType = new GenericTypeInfo<>(String.class);
 
@@ -113,7 +113,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     @SuppressWarnings({"unchecked", "rawtypes"})
     void testFromElementsPostConstructionTypeIncompatible() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<String> source = env.fromData("a", "b");
         source.returns((TypeInformation) BasicTypeInfo.INT_TYPE_INFO);
         source.sinkTo(new DiscardingSink<>());
@@ -125,7 +125,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testFromElementsNullElement() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         assertThatThrownBy(() -> env.fromData("a", null, "c"))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("contains a null element");
@@ -136,7 +136,7 @@ class StreamExecutionEnvironmentTest {
     void testFromCollectionParallelism() {
         try {
             TypeInformation<Integer> typeInfo = BasicTypeInfo.INT_TYPE_INFO;
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
             DataStreamSource<Integer> dataStream2 =
                     env.fromParallelCollection(new DummySplittableIterator<Integer>(), typeInfo)
@@ -160,7 +160,7 @@ class StreamExecutionEnvironmentTest {
     void testSources() {
         // TODO: remove this test when SourceFunction API gets removed together with the deprecated
         //  StreamExecutionEnvironment generateSequence() and fromCollection() methods
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         SourceFunction<Integer> srcFun =
                 new SourceFunction<Integer>() {
@@ -192,7 +192,7 @@ class StreamExecutionEnvironmentTest {
     /** Verifies that the API method doesn't throw and creates a source of the expected type. */
     @Test
     void testFromSequence() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Long> src = env.fromSequence(0, 2);
 
@@ -201,7 +201,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testParallelismBounds() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         SourceFunction<Integer> srcFun =
                 new SourceFunction<Integer>() {
@@ -285,7 +285,7 @@ class StreamExecutionEnvironmentTest {
                 SlotSharingGroup.newBuilder("ssg1").setCpuCores(1).setTaskHeapMemoryMB(100).build();
         final SlotSharingGroup ssg2 =
                 SlotSharingGroup.newBuilder("ssg2").setCpuCores(2).setTaskHeapMemoryMB(200).build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.registerSlotSharingGroup(ssg1);
         env.registerSlotSharingGroup(ssg2);
         env.registerSlotSharingGroup(SlotSharingGroup.newBuilder("ssg3").build());
@@ -307,7 +307,7 @@ class StreamExecutionEnvironmentTest {
                 SlotSharingGroup.newBuilder("ssg1").setCpuCores(1).setTaskHeapMemoryMB(100).build();
         final SlotSharingGroup ssgConflict =
                 SlotSharingGroup.newBuilder("ssg1").setCpuCores(2).setTaskHeapMemoryMB(200).build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.registerSlotSharingGroup(ssg);
 
         final DataStream<Integer> source = env.fromData(1).slotSharingGroup("ssg1");
@@ -318,7 +318,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testGetStreamGraph() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Integer> dataStream1 = env.fromData(1, 2, 3);
         dataStream1.sinkTo(new DiscardingSink<>());
@@ -341,7 +341,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testDefaultJobName() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         testJobName(StreamGraphGenerator.DEFAULT_STREAMING_JOB_NAME, env);
 
@@ -363,7 +363,7 @@ class StreamExecutionEnvironmentTest {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
         config.set(PipelineOptions.NAME, jobName);
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         testJobName(jobName, env);
     }
@@ -376,7 +376,7 @@ class StreamExecutionEnvironmentTest {
 
     @Test
     void testAddSourceWithUserDefinedTypeInfo() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<Row> source1 =
                 env.addSource(new RowSourceFunction(), Types.ROW(Types.STRING));
         // the source type information should be the user defined type
@@ -390,7 +390,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testPeriodicMaterializeEnabled() {
         Configuration config = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         assertThat(env.getConfig().isPeriodicMaterializeEnabled())
                 .isEqualTo(StateChangelogOptions.PERIODIC_MATERIALIZATION_ENABLED.defaultValue());
@@ -403,7 +403,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testPeriodicMaterializeInterval() {
         Configuration config = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         assertThat(env.getConfig().getPeriodicMaterializeIntervalMillis())
                 .isEqualTo(
@@ -428,14 +428,14 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testBufferTimeoutByDefault() {
         Configuration config = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         testBufferTimeout(config, env);
     }
 
     @Test
     void testBufferTimeoutEnabled() {
         Configuration config = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         config.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, true);
         testBufferTimeout(config, env);
     }
@@ -444,7 +444,7 @@ class StreamExecutionEnvironmentTest {
     void testBufferTimeoutDisabled() {
         Configuration config = new Configuration();
         config.set(ExecutionOptions.BUFFER_TIMEOUT_ENABLED, false);
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // The execution.buffer-timeout's default value 100ms will not take effect.
         env.configure(config, this.getClass().getClassLoader());
@@ -465,7 +465,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testAsyncExecutionConfigurations() {
         Configuration config = new Configuration();
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
 
         assertThat(env.getConfig().getAsyncInflightRecordsLimit())
@@ -528,7 +528,7 @@ class StreamExecutionEnvironmentTest {
                             try {
                                 waitingThreadCount.countDown();
                                 latch.awaitQuietly();
-                                assertThat(StreamExecutionEnvironment.getExecutionEnvironment())
+                                assertThat(StreamExecutionEnvironment.getTestStreamExecutionEnvironment())
                                         .isSameAs(preparedEnvironment);
                             } finally {
                                 StreamExecutionEnvironment.resetContextEnvironment();

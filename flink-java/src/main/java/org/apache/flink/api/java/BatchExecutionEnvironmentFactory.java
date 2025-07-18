@@ -31,12 +31,12 @@ import org.apache.flink.annotation.Public;
  */
 @Deprecated
 @Public
-public interface ExecutionEnvironmentFactory {
+public interface BatchExecutionEnvironmentFactory {
 
     /**
      * Creates an ExecutionEnvironment from this factory.
      *
      * @return An ExecutionEnvironment.
      */
-    ExecutionEnvironment createExecutionEnvironment();
+    BatchExecutionEnvironment createBatchExecutionEnvironment();
 }

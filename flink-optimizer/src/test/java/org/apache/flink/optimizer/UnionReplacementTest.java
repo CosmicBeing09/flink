@@ -23,8 +23,8 @@ import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.Ordering;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.dataproperties.PartitioningProperty;
@@ -53,7 +53,7 @@ public class UnionReplacementTest extends CompilerTestBase {
     @Test
     public void testUnionReplacement() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             DataSet<String> input1 = env.fromElements("test1");
             DataSet<String> input2 = env.fromElements("test2");
 
@@ -94,7 +94,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -204,7 +204,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -287,7 +287,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -361,7 +361,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -448,7 +448,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -511,7 +511,7 @@ public class UnionReplacementTest extends CompilerTestBase {
     @Test
     public void testUnionForwardOutput() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> src1 = env.fromElements(new Tuple2<>(0L, 0L));
@@ -571,7 +571,7 @@ public class UnionReplacementTest extends CompilerTestBase {
         int fullDop = DEFAULT_PARALLELISM;
         int halfDop = DEFAULT_PARALLELISM / 2;
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         DataSet<Tuple2<Long, Long>> in1 =

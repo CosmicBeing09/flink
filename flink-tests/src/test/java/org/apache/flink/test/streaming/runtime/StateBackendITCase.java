@@ -53,7 +53,7 @@ public class StateBackendITCase extends AbstractTestBaseJUnit4 {
     /** Verify that the user-specified state backend is used even if checkpointing is disabled. */
     @Test
     public void testStateBackendWithoutCheckpointing() throws Exception {
-        StreamExecutionEnvironment see = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment see = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         see.setParallelism(1);
 
         StateBackendUtils.configureStateBackendWithFactory(

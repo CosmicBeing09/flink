@@ -133,7 +133,7 @@ public class TimersSavepointITCase {
     }
 
     public JobGraph getJobGraph(PriorityQueueStateType priorityQueueStateType) throws IOException {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.addSource(new Source())
                 .assignTimestampsAndWatermarks(

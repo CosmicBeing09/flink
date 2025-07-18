@@ -20,7 +20,7 @@ package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.operators.ResourceSpec;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.operators.Operator;
 import org.apache.flink.api.java.typeutils.ValueTypeInfo;
 
@@ -71,7 +71,7 @@ class OperatorTest {
     private class MockOperator extends Operator {
         public MockOperator() {
             super(
-                    ExecutionEnvironment.createCollectionsEnvironment(),
+                    BatchExecutionEnvironment.createBatchCollectionsEnvironment(),
                     ValueTypeInfo.NULL_VALUE_TYPE_INFO);
         }
     }

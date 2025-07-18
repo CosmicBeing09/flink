@@ -23,8 +23,8 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.operators.Operator;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.translation.PlanFilterOperator;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -46,7 +46,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testDefaultName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
 
@@ -68,7 +68,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testGivenName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> strs = env.fromCollection(Arrays.asList("a", "b"));
         strs.filter(
@@ -88,7 +88,7 @@ class NamesTest implements Serializable {
 
     @Test
     void testJoinWith() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         List<Tuple1<String>> strLi = new ArrayList<>();
         strLi.add(new Tuple1<>("a"));

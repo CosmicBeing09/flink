@@ -40,7 +40,7 @@ public class CheckpointedStreamingProgram {
     private static final int CHECKPOINT_INTERVALL = 100;
 
     public static void main(String[] args) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.enableCheckpointing(CHECKPOINT_INTERVALL);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 100L);

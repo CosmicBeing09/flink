@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
@@ -100,7 +100,7 @@ public class ConnectedComponents {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         final int maxIterations = params.getInt("iterations", 10);
 
@@ -221,7 +221,7 @@ public class ConnectedComponents {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Long> getVertexDataSet(ExecutionEnvironment env, ParameterTool params) {
+    private static DataSet<Long> getVertexDataSet(BatchExecutionEnvironment env, ParameterTool params) {
         if (params.has("vertices")) {
             return env.readCsvFile(params.get("vertices"))
                     .types(Long.class)
@@ -240,7 +240,7 @@ public class ConnectedComponents {
     }
 
     private static DataSet<Tuple2<Long, Long>> getEdgeDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         if (params.has("edges")) {
             return env.readCsvFile(params.get("edges"))
                     .fieldDelimiter(" ")

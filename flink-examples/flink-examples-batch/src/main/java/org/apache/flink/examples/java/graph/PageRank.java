@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -105,7 +105,7 @@ public class PageRank {
         final int maxIterations = params.getInt("iterations", 10);
 
         // set up execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make the parameters available to the web ui
         env.getConfig().setGlobalJobParameters(params);
@@ -255,7 +255,7 @@ public class PageRank {
     //     UTIL METHODS
     // *************************************************************************
 
-    private static DataSet<Long> getPagesDataSet(ExecutionEnvironment env, ParameterTool params) {
+    private static DataSet<Long> getPagesDataSet(BatchExecutionEnvironment env, ParameterTool params) {
         if (params.has("pages")) {
             return env.readCsvFile(params.get("pages"))
                     .fieldDelimiter(" ")
@@ -276,7 +276,7 @@ public class PageRank {
     }
 
     private static DataSet<Tuple2<Long, Long>> getLinksDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         if (params.has("links")) {
             return env.readCsvFile(params.get("links"))
                     .fieldDelimiter(" ")

@@ -195,7 +195,7 @@ public class UnalignedCheckpointCompatibilityITCase extends TestLogger {
 
     @SuppressWarnings("unchecked")
     private StreamExecutionEnvironment env(boolean isAligned, int checkpointingInterval) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         RestartStrategyUtils.configureNoRestartStrategy(env);
         env.getCheckpointConfig().enableUnalignedCheckpoints(!isAligned);

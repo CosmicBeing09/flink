@@ -106,18 +106,18 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Deprecated
 @Public
-public class ExecutionEnvironment {
+public class BatchExecutionEnvironment {
 
     /** The logger used by the environment and its subclasses. */
-    protected static final Logger LOG = LoggerFactory.getLogger(ExecutionEnvironment.class);
+    protected static final Logger LOG = LoggerFactory.getLogger(BatchExecutionEnvironment.class);
 
     /**
      * The environment of the context (local by default, cluster if invoked through command line).
      */
-    private static ExecutionEnvironmentFactory contextEnvironmentFactory = null;
+    private static BatchExecutionEnvironmentFactory contextEnvironmentFactory = null;
 
-    /** The ThreadLocal used to store {@link ExecutionEnvironmentFactory}. */
-    private static final ThreadLocal<ExecutionEnvironmentFactory>
+    /** The ThreadLocal used to store {@link BatchExecutionEnvironmentFactory}. */
+    private static final ThreadLocal<BatchExecutionEnvironmentFactory>
             threadLocalContextEnvironmentFactory = new ThreadLocal<>();
 
     /** The default parallelism used by local environments. */
@@ -148,35 +148,35 @@ public class ExecutionEnvironment {
     private final List<JobListener> jobListeners = new ArrayList<>();
 
     /**
-     * Creates a new {@link ExecutionEnvironment} that will use the given {@link Configuration} to
+     * Creates a new {@link BatchExecutionEnvironment} that will use the given {@link Configuration} to
      * configure the {@link PipelineExecutor}.
      */
     @PublicEvolving
-    public ExecutionEnvironment(final Configuration configuration) {
+    public BatchExecutionEnvironment(final Configuration configuration) {
         this(configuration, null);
     }
 
     /**
-     * Creates a new {@link ExecutionEnvironment} that will use the given {@link Configuration} to
+     * Creates a new {@link BatchExecutionEnvironment} that will use the given {@link Configuration} to
      * configure the {@link PipelineExecutor}.
      *
      * <p>In addition, this constructor allows specifying the user code {@link ClassLoader}.
      */
     @PublicEvolving
-    public ExecutionEnvironment(
+    public BatchExecutionEnvironment(
             final Configuration configuration, final ClassLoader userClassloader) {
         this(new DefaultExecutorServiceLoader(), configuration, userClassloader);
     }
 
     /**
-     * Creates a new {@link ExecutionEnvironment} that will use the given {@link Configuration} to
+     * Creates a new {@link BatchExecutionEnvironment} that will use the given {@link Configuration} to
      * configure the {@link PipelineExecutor}.
      *
      * <p>In addition, this constructor allows specifying the {@link PipelineExecutorServiceLoader}
      * and user code {@link ClassLoader}.
      */
     @PublicEvolving
-    public ExecutionEnvironment(
+    public BatchExecutionEnvironment(
             final PipelineExecutorServiceLoader executorServiceLoader,
             final Configuration configuration,
             final ClassLoader userClassloader) {
@@ -201,7 +201,7 @@ public class ExecutionEnvironment {
     }
 
     /** Creates a new Execution Environment. */
-    protected ExecutionEnvironment() {
+    protected BatchExecutionEnvironment() {
         this(new Configuration());
     }
 
@@ -281,7 +281,7 @@ public class ExecutionEnvironment {
 
     /**
      * Sets all relevant options contained in the {@link ReadableConfig} such as e.g. {@link
-     * PipelineOptions#CACHED_FILES}. It will reconfigure {@link ExecutionEnvironment} and {@link
+     * PipelineOptions#CACHED_FILES}. It will reconfigure {@link BatchExecutionEnvironment} and {@link
      * ExecutionConfig}.
      *
      * <p>It will change the value of a setting only if a corresponding option was set in the {@code
@@ -1095,10 +1095,10 @@ public class ExecutionEnvironment {
      *
      * @return The execution environment of the context in which the program is executed.
      */
-    public static ExecutionEnvironment getExecutionEnvironment() {
+    public static BatchExecutionEnvironment getBatchExecutionEnvironment() {
         return Utils.resolveFactory(threadLocalContextEnvironmentFactory, contextEnvironmentFactory)
-                .map(ExecutionEnvironmentFactory::createExecutionEnvironment)
-                .orElseGet(ExecutionEnvironment::createLocalEnvironment);
+                .map(BatchExecutionEnvironmentFactory::createBatchExecutionEnvironment)
+                .orElseGet(BatchExecutionEnvironment::createLocalEnvironment);
     }
 
     /**
@@ -1110,7 +1110,7 @@ public class ExecutionEnvironment {
      * @return A Collection Environment
      */
     @PublicEvolving
-    public static CollectionEnvironment createCollectionsEnvironment() {
+    public static CollectionEnvironment createBatchCollectionsEnvironment() {
         CollectionEnvironment ce = new CollectionEnvironment();
         ce.setParallelism(1);
         return ce;
@@ -1164,7 +1164,7 @@ public class ExecutionEnvironment {
      * will be used for the web UI. Otherwise, the default port (8081) will be used.
      */
     @PublicEvolving
-    public static ExecutionEnvironment createLocalEnvironmentWithWebUI(Configuration conf) {
+    public static BatchExecutionEnvironment createLocalEnvironmentWithWebUI(Configuration conf) {
         checkNotNull(conf, "conf");
 
         if (!conf.contains(RestOptions.PORT)) {
@@ -1197,7 +1197,7 @@ public class ExecutionEnvironment {
      * Creates a {@link RemoteEnvironment}. The remote environment sends (parts of) the program to a
      * cluster for execution. Note that all file paths used in the program must be accessible from
      * the cluster. The execution will use the cluster's default parallelism, unless the parallelism
-     * is set explicitly via {@link ExecutionEnvironment#setParallelism(int)}.
+     * is set explicitly via {@link BatchExecutionEnvironment#setParallelism(int)}.
      *
      * @param host The host name or address of the master (JobManager), where the program should be
      *     executed.
@@ -1207,7 +1207,7 @@ public class ExecutionEnvironment {
      *     must be provided in the JAR files.
      * @return A remote environment that executes the program on a cluster.
      */
-    public static ExecutionEnvironment createRemoteEnvironment(
+    public static BatchExecutionEnvironment createRemoteEnvironment(
             String host, int port, String... jarFiles) {
         return new RemoteEnvironment(host, port, jarFiles);
     }
@@ -1217,7 +1217,7 @@ public class ExecutionEnvironment {
      * cluster for execution. Note that all file paths used in the program must be accessible from
      * the cluster. The custom configuration file is used to configure Pekko specific configuration
      * parameters for the Client only; Program parallelism can be set via {@link
-     * ExecutionEnvironment#setParallelism(int)}.
+     * BatchExecutionEnvironment#setParallelism(int)}.
      *
      * <p>Cluster configuration has to be done in the remotely running Flink instance.
      *
@@ -1230,7 +1230,7 @@ public class ExecutionEnvironment {
      *     must be provided in the JAR files.
      * @return A remote environment that executes the program on a cluster.
      */
-    public static ExecutionEnvironment createRemoteEnvironment(
+    public static BatchExecutionEnvironment createRemoteEnvironment(
             String host, int port, Configuration clientConfiguration, String... jarFiles) {
         return new RemoteEnvironment(host, port, clientConfiguration, jarFiles, null);
     }
@@ -1249,7 +1249,7 @@ public class ExecutionEnvironment {
      *     must be provided in the JAR files.
      * @return A remote environment that executes the program on a cluster.
      */
-    public static ExecutionEnvironment createRemoteEnvironment(
+    public static BatchExecutionEnvironment createRemoteEnvironment(
             String host, int port, int parallelism, String... jarFiles) {
         RemoteEnvironment rec = new RemoteEnvironment(host, port, jarFiles);
         rec.setParallelism(parallelism);
@@ -1293,14 +1293,14 @@ public class ExecutionEnvironment {
      *
      * @param ctx The context environment factory.
      */
-    protected static void initializeContextEnvironment(ExecutionEnvironmentFactory ctx) {
+    protected static void initializeContextEnvironment(BatchExecutionEnvironmentFactory ctx) {
         contextEnvironmentFactory = Preconditions.checkNotNull(ctx);
         threadLocalContextEnvironmentFactory.set(ctx);
     }
 
     /**
      * Un-sets the context environment factory. After this method is called, the call to {@link
-     * #getExecutionEnvironment()} will again return a default local execution environment, and it
+     * #getBatchExecutionEnvironment()} will again return a default local execution environment, and it
      * is possible to explicitly instantiate the LocalEnvironment and the RemoteEnvironment.
      */
     protected static void resetContextEnvironment() {

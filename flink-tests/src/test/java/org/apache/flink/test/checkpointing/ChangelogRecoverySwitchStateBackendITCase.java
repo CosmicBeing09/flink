@@ -155,7 +155,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
     }
 
     private StreamExecutionEnvironment getEnv(boolean enableChangelog, int parallelism) {
-        StreamExecutionEnvironment env = getEnv(100, 0, 500, 0);
+        StreamExecutionEnvironment env = getTestStreamExecutionEnvironment(100, 0, 500, 0);
         env.enableChangelogStateBackend(enableChangelog);
         env.setParallelism(parallelism);
         env.getCheckpointConfig()
@@ -170,7 +170,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
             long checkpointInterval,
             long materializationInterval) {
         StreamExecutionEnvironment env =
-                getEnv(checkpointFile, checkpointInterval, 0, materializationInterval, 0);
+                getTestStreamExecutionEnvironmentWithFileCheckpoint(checkpointFile, checkpointInterval, 0, materializationInterval, 0);
         env.enableChangelogStateBackend(changelogEnabled);
         env.getCheckpointConfig()
                 .setExternalizedCheckpointRetention(

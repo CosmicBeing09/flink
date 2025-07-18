@@ -17,25 +17,25 @@
 
 package org.apache.flink.api.java.io;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** Tests for {@link ExecutionEnvironment#fromElements}. */
+/** Tests for {@link BatchExecutionEnvironment#fromElements}. */
 class FromElementsTest {
 
     @Test
     void fromElementsWithBaseTypeTest1() {
-        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment executionEnvironment = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         executionEnvironment.fromElements(
                 ParentType.class, new SubType(1, "Java"), new ParentType(1, "hello"));
     }
 
     @Test
     void fromElementsWithBaseTypeTest2() {
-        ExecutionEnvironment executionEnvironment = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment executionEnvironment = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         assertThatThrownBy(
                         () ->
                                 executionEnvironment.fromElements(

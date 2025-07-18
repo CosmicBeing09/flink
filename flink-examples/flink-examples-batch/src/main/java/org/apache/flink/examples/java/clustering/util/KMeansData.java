@@ -19,7 +19,7 @@
 package org.apache.flink.examples.java.clustering.util;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.examples.java.clustering.KMeans.Centroid;
 import org.apache.flink.examples.java.clustering.KMeans.Point;
 
@@ -85,7 +85,7 @@ public class KMeansData {
                 new Object[] {20.83, 57.85}
             };
 
-    public static DataSet<Centroid> getDefaultCentroidDataSet(ExecutionEnvironment env) {
+    public static DataSet<Centroid> getDefaultCentroidDataSet(BatchExecutionEnvironment env) {
         List<Centroid> centroidList = new LinkedList<Centroid>();
         for (Object[] centroid : CENTROIDS) {
             centroidList.add(
@@ -95,7 +95,7 @@ public class KMeansData {
         return env.fromCollection(centroidList);
     }
 
-    public static DataSet<Point> getDefaultPointDataSet(ExecutionEnvironment env) {
+    public static DataSet<Point> getDefaultPointDataSet(BatchExecutionEnvironment env) {
         List<Point> pointList = new LinkedList<Point>();
         for (Object[] point : POINTS) {
             pointList.add(new Point((Double) point[0], (Double) point[1]));

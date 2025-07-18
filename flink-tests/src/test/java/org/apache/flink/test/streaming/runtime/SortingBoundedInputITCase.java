@@ -88,7 +88,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testOneInputOperator() throws Exception {
         long numberOfRecords = 1_000_000;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
@@ -119,7 +119,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testTwoInputOperator() throws Exception {
         long numberOfRecords = 500_000;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
@@ -158,7 +158,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
     @Test
     public void testThreeInputOperator() throws Exception {
         long numberOfRecords = 500_000;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
@@ -212,7 +212,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testBatchExecutionWithTimersOneInput() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1); // set parallelism to 1 to have consistent order of results
 
         Configuration config = new Configuration();
@@ -340,7 +340,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testBatchExecutionWithTimersTwoInput() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1); // set parallelism to 1 to have consistent order of results
 
         Configuration config = new Configuration();

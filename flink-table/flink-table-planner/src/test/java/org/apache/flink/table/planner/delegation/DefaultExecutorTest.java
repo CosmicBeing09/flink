@@ -42,7 +42,7 @@ class DefaultExecutorTest {
 
     @Test
     void testJobName() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final Executor executor = new DefaultExecutor(env);
         final List<Transformation<?>> dummyTransformations =
                 Collections.singletonList(
@@ -70,7 +70,7 @@ class DefaultExecutorTest {
 
     @Test
     void testDefaultBatchProperties() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final Executor executor = new DefaultExecutor(env);
 
         final List<Transformation<?>> dummyTransformations =

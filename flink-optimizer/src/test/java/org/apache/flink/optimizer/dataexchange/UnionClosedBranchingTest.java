@@ -19,7 +19,7 @@ package org.apache.flink.optimizer.dataexchange;
 
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -120,7 +120,7 @@ public class UnionClosedBranchingTest extends CompilerTestBase {
         // Build test program
         // -----------------------------------------------------------------------------------------
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().setExecutionMode(executionMode);
         env.setParallelism(4);
 

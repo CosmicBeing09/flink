@@ -64,7 +64,7 @@ class CompressionFactoryITCase {
         final File folder = tmpDir.toFile();
         final Path testPath = Path.fromLocalFile(folder);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

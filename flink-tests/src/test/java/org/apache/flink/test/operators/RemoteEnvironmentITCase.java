@@ -20,8 +20,8 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.common.io.GenericInputFormat;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.RpcOptions;
 import org.apache.flink.core.io.GenericInputSplit;
@@ -67,8 +67,8 @@ public class RemoteEnvironmentITCase extends TestLogger {
         final String hostname = restAddress.getHost();
         final int port = restAddress.getPort();
 
-        final ExecutionEnvironment env =
-                ExecutionEnvironment.createRemoteEnvironment(hostname, port, config);
+        final BatchExecutionEnvironment env =
+                BatchExecutionEnvironment.createRemoteEnvironment(hostname, port, config);
         env.setParallelism(USER_DOP);
 
         DataSet<Integer> result =

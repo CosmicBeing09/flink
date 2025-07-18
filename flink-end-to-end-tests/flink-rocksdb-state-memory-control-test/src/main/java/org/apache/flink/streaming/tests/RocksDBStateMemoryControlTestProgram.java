@@ -54,7 +54,7 @@ public class RocksDBStateMemoryControlTestProgram {
         final boolean useListState = pt.getBoolean("useListState", false);
         final boolean useMapState = pt.getBoolean("useMapState", false);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         setupEnvironment(env, pt);
         KeyedStream<Event, Integer> keyedStream =

@@ -22,8 +22,8 @@ import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.fs.Path;
@@ -35,9 +35,9 @@ import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.test.junit5.InjectMiniCluster;
 import org.apache.flink.test.junit5.MiniClusterExtension;
+import org.apache.flink.test.util.ClusterTestEnvironment;
 import org.apache.flink.test.util.CollectionTestEnvironment;
 import org.apache.flink.test.util.TestBaseUtils;
-import org.apache.flink.test.util.TestEnvironment;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -90,7 +90,7 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testSimpleAvroRead(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
@@ -132,7 +132,7 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testSerializeWithAvro(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         env.getConfig().getSerializerConfig().setForceAvro(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
@@ -183,7 +183,7 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testKeySelection(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         env.getConfig().enableObjectReuse();
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
@@ -211,7 +211,7 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testWithAvroGenericSer(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         env.getConfig().getSerializerConfig().setForceAvro(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
@@ -242,7 +242,7 @@ class AvroTypeExtractionTest {
     @ValueSource(booleans = {true, false})
     void testWithKryoGenericSer(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         env.getConfig().getSerializerConfig().setForceKryo(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
@@ -287,7 +287,7 @@ class AvroTypeExtractionTest {
             final String fieldName,
             @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
-        final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
+        final BatchExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
@@ -326,10 +326,10 @@ class AvroTypeExtractionTest {
         }
     }
 
-    private static ExecutionEnvironment getExecutionEnvironment(
+    private static BatchExecutionEnvironment getExecutionEnvironment(
             boolean useMiniCluster, MiniCluster miniCluster) {
         return useMiniCluster
-                ? new TestEnvironment(miniCluster, PARALLELISM, false)
+                ? new ClusterTestEnvironment(miniCluster, PARALLELISM, false)
                 : new CollectionTestEnvironment();
     }
 }

@@ -33,7 +33,7 @@ class MultipleInvokationsTest {
     @Test
     void testMultipleInvocationsGetPlan() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             // ----------- Execution 1 ---------------
 

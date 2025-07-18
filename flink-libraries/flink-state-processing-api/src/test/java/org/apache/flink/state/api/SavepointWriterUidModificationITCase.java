@@ -175,7 +175,7 @@ public class SavepointWriterUidModificationITCase {
         final String savepointPath =
                 tmp.resolve(new AbstractID().toHexString()).toAbsolutePath().toString();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
         final SavepointWriter writer = SavepointWriter.newSavepoint(env, 128);
@@ -201,7 +201,7 @@ public class SavepointWriterUidModificationITCase {
         final String newSavepointPath =
                 tmp.resolve(new AbstractID().toHexString()).toAbsolutePath().toString();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
         SavepointWriter writer = SavepointWriter.fromExistingSavepoint(env, savepointPath);
@@ -251,7 +251,7 @@ public class SavepointWriterUidModificationITCase {
             }
         }
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // prepare collection of state
         final List<CloseableIterator<Integer>> iterators = new ArrayList<>();

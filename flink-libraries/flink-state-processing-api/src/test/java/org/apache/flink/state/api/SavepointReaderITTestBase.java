@@ -85,7 +85,7 @@ public abstract class SavepointReaderITTestBase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testOperatorStateInputFormat() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> data = env.addSource(new SavepointSource()).rebalance();

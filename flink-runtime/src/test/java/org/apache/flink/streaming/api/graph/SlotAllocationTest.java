@@ -43,7 +43,7 @@ class SlotAllocationTest {
 
     @Test
     void testTwoPipelines() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.fromSequence(1, 10)
                 .filter(DUMMY_FILTER)
@@ -100,7 +100,7 @@ class SlotAllocationTest {
 
     @Test
     void testUnion() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Long> src1 = env.fromSequence(1, 10);
         DataStream<Long> src2 = env.fromSequence(1, 10).slotSharingGroup("src-1");
@@ -137,7 +137,7 @@ class SlotAllocationTest {
     void testInheritOverride() {
         // verify that we can explicitly disable inheritance of the input slot sharing groups
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Long> src1 = env.fromSequence(1, 10).slotSharingGroup("group-1");
         DataStream<Long> src2 = env.fromSequence(1, 10).slotSharingGroup("group-1");
@@ -157,7 +157,7 @@ class SlotAllocationTest {
 
     @Test
     void testCoOperation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         CoMapFunction<Long, Long, Long> dummyCoMap =
                 new CoMapFunction<Long, Long, Long>() {

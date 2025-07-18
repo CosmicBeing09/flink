@@ -18,7 +18,7 @@
 
 package org.apache.flink.client.testjar;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.cli.CliFrontendTestUtils;
 import org.apache.flink.client.program.PackagedProgram;
@@ -73,7 +73,7 @@ public class BlockingJob {
 
     public static void main(String[] args) throws Exception {
         final String blockId = args[0];
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromCollection(Arrays.asList(1, 2, 3))
                 .map(element -> element + 1)
                 .map(

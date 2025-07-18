@@ -39,8 +39,8 @@ import org.apache.flink.runtime.testutils.MiniClusterResource;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.util.TestStreamEnvironment;
 import org.apache.flink.test.testdata.KMeansData;
+import org.apache.flink.test.util.ClusterTestEnvironment;
 import org.apache.flink.test.util.SuccessException;
-import org.apache.flink.test.util.TestEnvironment;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.SerializedThrowable;
 import org.apache.flink.util.TestLogger;
@@ -159,7 +159,7 @@ public class ClassLoaderITCase extends TestLogger {
     @After
     public void tearDown() {
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
+        ClusterTestEnvironment.unsetAsContext();
     }
 
     @Test
@@ -170,7 +170,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(INPUT_SPLITS_PROG_JAR_FILE))
                         .build();
 
-        TestEnvironment.setAsContext(
+        ClusterTestEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(INPUT_SPLITS_PROG_JAR_FILE)),
@@ -205,7 +205,7 @@ public class ClassLoaderITCase extends TestLogger {
                         .setJarFile(new File(INPUT_SPLITS_PROG_JAR_FILE))
                         .build();
 
-        TestEnvironment.setAsContext(
+        ClusterTestEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.emptyList(),
@@ -275,7 +275,7 @@ public class ClassLoaderITCase extends TestLogger {
                                 })
                         .build();
 
-        TestEnvironment.setAsContext(
+        ClusterTestEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(KMEANS_JAR_PATH)),
@@ -289,7 +289,7 @@ public class ClassLoaderITCase extends TestLogger {
         PackagedProgram userCodeTypeProg =
                 PackagedProgram.newBuilder().setJarFile(new File(USERCODETYPE_JAR_PATH)).build();
 
-        TestEnvironment.setAsContext(
+        ClusterTestEnvironment.setAsContext(
                 miniClusterResource.getMiniCluster(),
                 parallelism,
                 Collections.singleton(new Path(USERCODETYPE_JAR_PATH)),

@@ -43,7 +43,7 @@ public class ContinuousFileReaderOperatorITCase {
     /** Tests https://issues.apache.org/jira/browse/FLINK-20888. */
     @Test
     public void testChainedOperatorsAreNotPrematurelyClosed() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         File input = temp.newFile("input");
         FileUtils.write(input, "test", StandardCharsets.UTF_8);

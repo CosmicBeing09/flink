@@ -24,8 +24,8 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -84,7 +84,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
             writer.write(testString);
         }
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.registerCachedFile(resultPath, testName);
 
         IterativeDataSet<Long> solution = env.fromElements(1L).iterate(2);
@@ -122,7 +122,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test aggregator without parameter for iterate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
@@ -151,7 +151,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test aggregator with parameter for iterate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
@@ -180,7 +180,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test convergence criterion with parameter for iterate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Integer> initialSolutionSet = CollectionDataSets.getIntegerDataSet(env);
@@ -209,7 +209,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test aggregator without parameter for iterateDelta
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Tuple2<Integer, Integer>> initialSolutionSet =
@@ -248,7 +248,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test aggregator with parameter for iterateDelta
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Tuple2<Integer, Integer>> initialSolutionSet =
@@ -287,7 +287,7 @@ public class AggregatorsITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test convergence criterion with parameter for iterate delta
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Tuple2<Integer, Integer>> initialSolutionSet =

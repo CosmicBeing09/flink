@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 import org.junit.jupiter.api.Test;
 
@@ -94,14 +94,14 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        TestEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+        ClusterTestEnvironment env = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
         env.getConfig().enableObjectReuse();
 
         // Possibly run the test multiple times
         executeProgramMultipleTimes(env);
     }
 
-    private void executeProgramMultipleTimes(ExecutionEnvironment env) throws Exception {
+    private void executeProgramMultipleTimes(BatchExecutionEnvironment env) throws Exception {
         for (int i = 0; i < numberOfTestRepetitions; i++) {
             try {
                 testProgram();
@@ -129,7 +129,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+        BatchExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
         env.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times
@@ -149,7 +149,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         preSubmit();
         // prepare the test environment
         CollectionTestEnvironment env = new CollectionTestEnvironment();
-        env.setAsContext();
+        env.setAsBatchExecutionEnvironmentContext();
 
         // call the test program
         try {
@@ -160,7 +160,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
             e.printStackTrace();
             fail("Error while calling the test program: " + e.getMessage());
         } finally {
-            MINI_CLUSTER_EXTENSION.getTestEnvironment().setAsContext();
+            MINI_CLUSTER_EXTENSION.getTestClusterEnvironment().setAsContext();
         }
 
         assertThat(this.latestExecutionResult)

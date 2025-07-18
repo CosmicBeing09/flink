@@ -119,7 +119,7 @@ public class ChangelogCompatibilityITCase {
     }
 
     private Optional<String> runAndStoreIfAllowed() throws Exception {
-        JobGraph initialGraph = addGraph(initEnvironment());
+        JobGraph initialGraph = buildStreamJobGraph(initStreamExecutionEnvironment());
         try {
             String location = tryCheckpointAndStop(initialGraph);
             if (!testCase.allowStore) {
@@ -135,7 +135,7 @@ public class ChangelogCompatibilityITCase {
         }
     }
 
-    private StreamExecutionEnvironment initEnvironment() {
+    private StreamExecutionEnvironment initStreamExecutionEnvironment() {
         Configuration conf = new Configuration();
         // TODO:remove file-merging setting after FLINK-32085 & FLINK-32081 are resolved.
         conf.set(FILE_MERGING_ENABLED, false);
@@ -148,7 +148,7 @@ public class ChangelogCompatibilityITCase {
         return env;
     }
 
-    private JobGraph addGraph(StreamExecutionEnvironment env) {
+    private JobGraph buildStreamJobGraph(StreamExecutionEnvironment env) {
         env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE)
                 .countWindowAll(37) // any stateful transformation suffices
                 .reduce((ReduceFunction<Long>) Long::sum) // overflow is fine, result is discarded
@@ -187,7 +187,7 @@ public class ChangelogCompatibilityITCase {
         conf.set(FILE_MERGING_ENABLED, false);
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
         env.enableChangelogStateBackend(testCase.restoreWithChangelog);
-        JobGraph jobGraph = addGraph(env);
+        JobGraph jobGraph = buildStreamJobGraph(env);
         jobGraph.setSavepointRestoreSettings(forPath(location));
 
         if (tryRun(jobGraph) != testCase.allowRestore) {

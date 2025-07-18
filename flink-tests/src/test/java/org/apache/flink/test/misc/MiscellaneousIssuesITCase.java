@@ -23,8 +23,8 @@ import org.apache.flink.api.common.accumulators.LongCounter;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.core.fs.FileSystem;
 import org.apache.flink.runtime.client.JobExecutionException;
@@ -63,7 +63,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
     @Test
     public void testNullValues() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(1);
 
             DataSet<String> data =
@@ -92,7 +92,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
     @Test
     public void testDisjointDataflows() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(5);
 
             // generate two different flows
@@ -111,7 +111,7 @@ public class MiscellaneousIssuesITCase extends TestLogger {
         final String accName = "test_accumulator";
 
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(6);
 
             env.generateSequence(1, 1000000)

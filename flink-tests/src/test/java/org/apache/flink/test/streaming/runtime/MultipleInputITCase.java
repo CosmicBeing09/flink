@@ -66,7 +66,7 @@ public class MultipleInputITCase extends AbstractTestBaseJUnit4 {
     }
 
     public void testNonKeyed(boolean withUnion) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         TestListResultSink<Long> resultSink = new TestListResultSink<>();
@@ -111,7 +111,7 @@ public class MultipleInputITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testKeyedState() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         TestListResultSink<Long> resultSink = new TestListResultSink<>();

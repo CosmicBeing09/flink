@@ -19,8 +19,8 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.FlatMapOperator;
 import org.apache.flink.api.java.operators.MapPartitionOperator;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -53,7 +53,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Before
     public void initiate() {
-        ExecutionEnvironment.getExecutionEnvironment().setParallelism(5);
+        BatchExecutionEnvironment.getBatchExecutionEnvironment().setParallelism(5);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     private void verifySamplerWithFraction(boolean withReplacement, double fraction, long seed)
             throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         FlatMapOperator<Tuple3<Integer, Long, String>, String> ds = getSourceDataSet(env);
         MapPartitionOperator<String, String> sampled =
                 DataSetUtils.sample(ds, withReplacement, fraction, seed);
@@ -133,7 +133,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
 
     private void verifySamplerWithFixedSize(boolean withReplacement, int numSamples, long seed)
             throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         FlatMapOperator<Tuple3<Integer, Long, String>, String> ds = getSourceDataSet(env);
         DataSet<String> sampled =
                 DataSetUtils.sampleWithSize(ds, withReplacement, numSamples, seed);
@@ -143,7 +143,7 @@ public class SampleITCase extends MultipleProgramsTestBaseJUnit4 {
     }
 
     private FlatMapOperator<Tuple3<Integer, Long, String>, String> getSourceDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
         return CollectionDataSets.get3TupleDataSet(env)
                 .flatMap(
                         new FlatMapFunction<Tuple3<Integer, Long, String>, String>() {

@@ -105,7 +105,7 @@ public class YarnTestArchiveJob {
                         + File.separator
                         + testDirectory.getName();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         env.addSource(

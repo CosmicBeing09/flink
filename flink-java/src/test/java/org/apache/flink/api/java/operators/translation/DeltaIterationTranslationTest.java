@@ -28,8 +28,8 @@ import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.base.DeltaIterationBase;
 import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -63,7 +63,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
             final int defaultParallelism = 133;
             final int iterationParallelism = 77;
 
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             // ------------ construct the test program ------------------
             {
@@ -179,7 +179,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
     @Test
     void testRejectWhenSolutionSetKeysDontMatchJoin() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Double, Long, String>> initialSolutionSet =
@@ -215,7 +215,7 @@ class DeltaIterationTranslationTest implements java.io.Serializable {
     @Test
     void testRejectWhenSolutionSetKeysDontMatchCoGroup() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Double, Long, String>> initialSolutionSet =

@@ -58,7 +58,7 @@ public class CoGroupJoinITCase extends AbstractTestBaseJUnit4 {
 
         testResults = new ArrayList<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> source1 =
@@ -168,7 +168,7 @@ public class CoGroupJoinITCase extends AbstractTestBaseJUnit4 {
 
         testResults = new ArrayList<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple3<String, String, Integer>> source1 =
@@ -282,7 +282,7 @@ public class CoGroupJoinITCase extends AbstractTestBaseJUnit4 {
 
         testResults = new ArrayList<>();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple3<String, String, Integer>> source1 =
@@ -382,7 +382,7 @@ public class CoGroupJoinITCase extends AbstractTestBaseJUnit4 {
     public void testCoGroupOperatorWithCheckpoint() throws Exception {
 
         // generate an operator for the co-group operation
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> source1 =

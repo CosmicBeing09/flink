@@ -39,7 +39,7 @@ public class QuickstartExample {
 
         int numRecordsToEmit = parameterTool.getInt("numRecords");
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(5000);
 
         DataStream<String> source =

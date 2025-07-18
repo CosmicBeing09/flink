@@ -21,8 +21,8 @@ package org.apache.flink.api.common.operators;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCrossFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 
 import org.junit.jupiter.api.Test;
@@ -45,7 +45,7 @@ class CollectionExecutionWithBroadcastVariableTest {
     @Test
     void testUnaryOp() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
             DataSet<String> bcData = env.fromElements(SUFFIX);
 
@@ -71,7 +71,7 @@ class CollectionExecutionWithBroadcastVariableTest {
     @Test
     void testBinaryOp() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.createCollectionsEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createBatchCollectionsEnvironment();
 
             DataSet<String> bcData = env.fromElements(SUFFIX);
             DataSet<String> inData = env.fromElements(TEST_DATA);

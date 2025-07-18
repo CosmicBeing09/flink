@@ -21,7 +21,7 @@ package org.apache.flink.api.java.utils;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import org.junit.jupiter.api.Test;
@@ -51,7 +51,7 @@ class PlanGeneratorTest {
                                         new DistributedCache.DistributedCacheEntry("test2", false)))
                         .collect(Collectors.toMap(x -> x.f0, x -> x.f1));
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(10);
         env.registerCachedFile("test1", fileA, true);
         env.registerCachedFile("test2", fileB, false);

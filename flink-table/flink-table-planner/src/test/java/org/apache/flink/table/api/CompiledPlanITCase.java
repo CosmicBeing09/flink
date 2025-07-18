@@ -57,8 +57,8 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
     @BeforeEach
     @Override
-    protected void setup() throws Exception {
-        super.setup();
+    protected void setupStreamingEnvironment() throws Exception {
+        super.setupStreamingEnvironment();
 
         String srcTableDdl =
                 "CREATE TABLE MyTable (\n"
@@ -66,7 +66,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
                         + ") with (\n"
                         + "  'connector' = 'values',\n"
                         + "  'bounded' = 'false')";
-        tableEnv.executeSql(srcTableDdl);
+        streamingTableEnv.executeSql(srcTableDdl);
 
         String sinkTableDdl =
                 "CREATE TABLE MySink (\n"
@@ -74,13 +74,13 @@ class CompiledPlanITCase extends JsonPlanTestBase {
                         + ") with (\n"
                         + "  'connector' = 'values',\n"
                         + "  'table-sink-class' = 'DEFAULT')";
-        tableEnv.executeSql(sinkTableDdl);
+        streamingTableEnv.executeSql(sinkTableDdl);
     }
 
     @Test
     void testCompilePlanSql() throws IOException {
         CompiledPlan compiledPlan =
-                tableEnv.compilePlanSql("INSERT INTO MySink SELECT * FROM MyTable");
+                streamingTableEnv.compilePlanSql("INSERT INTO MySink SELECT * FROM MyTable");
         String expected = TableTestUtil.readFromResource("/jsonplan/testGetJsonPlan.out");
         assertThat(getPreparedToCompareCompiledPlan(compiledPlan.asJsonString()))
                 .isEqualTo(getPreparedToCompareCompiledPlan(expected));
@@ -89,7 +89,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
     @Test
     void testSourceTableWithHints() {
         CompiledPlan compiledPlan =
-                tableEnv.compilePlanSql(
+                streamingTableEnv.compilePlanSql(
                         "INSERT INTO MySink SELECT * FROM MyTable"
                                 // OPTIONS hints here do not play any significant role
                                 // we just have to be sure that these options are present in
@@ -105,7 +105,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
     void testExecutePlanSql() throws Exception {
         File sinkPath = createSourceSinkTables();
 
-        tableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src").execute().await();
+        streamingTableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src").execute().await();
 
         assertResult(DATA, sinkPath);
     }
@@ -117,7 +117,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkPath = TempDirUtils.newFolder(tempFolder);
         assertThatThrownBy(
                         () ->
-                                tableEnv.compilePlanSql(
+                                streamingTableEnv.compilePlanSql(
                                                 String.format(
                                                         "CREATE TABLE sink\n"
                                                                 + "WITH (\n"
@@ -138,7 +138,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
     void testExecutePlanTable() throws Exception {
         File sinkPath = createSourceSinkTables();
 
-        tableEnv.from("src").select($("*")).insertInto("sink").compilePlan().execute().await();
+        streamingTableEnv.from("src").select($("*")).insertInto("sink").compilePlan().execute().await();
 
         assertResult(DATA, sinkPath);
     }
@@ -150,10 +150,10 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         File sinkPath = createSourceSinkTables();
 
-        CompiledPlan plan = tableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src");
+        CompiledPlan plan = streamingTableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src");
         plan.writeToFile(planPath);
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath.toAbsolutePath())).await();
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath.toAbsolutePath())).await();
 
         assertResult(DATA, sinkPath);
     }
@@ -165,12 +165,12 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         File sinkPath = createSourceSinkTables();
 
-        tableEnv.executeSql(
+        streamingTableEnv.executeSql(
                 String.format(
                         "COMPILE PLAN 'file://%s' FOR INSERT INTO sink SELECT * FROM src",
                         planPath.toAbsolutePath()));
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN 'file://%s'", planPath.toAbsolutePath()))
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN 'file://%s'", planPath.toAbsolutePath()))
                 .await();
 
         assertResult(DATA, sinkPath);
@@ -185,7 +185,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkPath = createSourceSinkTables();
 
         TableResult tableResult =
-                tableEnv.executeSql(
+                streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE PLAN '%s' FOR INSERT INTO sink SELECT * FROM src",
                                 planPath));
@@ -195,13 +195,13 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         assertThatThrownBy(
                         () ->
-                                tableEnv.executeSql(
+                                streamingTableEnv.executeSql(
                                         String.format(
                                                 "COMPILE PLAN '%s' FOR INSERT INTO sink SELECT * FROM src",
                                                 planPath)))
                 .satisfies(anyCauseMatches(TableException.class, "Cannot overwrite the plan file"));
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
 
         assertResult(DATA, sinkPath);
     }
@@ -217,7 +217,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkBPath = createTestCsvSinkTable("sinkB", COLUMNS_DEFINITION);
 
         TableResult tableResult =
-                tableEnv.executeSql(
+                streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE PLAN '%s' FOR STATEMENT SET BEGIN "
                                         + "INSERT INTO sinkA SELECT * FROM src;"
@@ -228,7 +228,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         assertThat(tableResult).isEqualTo(TableResultInternal.TABLE_RESULT_OK);
         assertThat(planPath.toFile()).exists();
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
 
         assertResult(DATA, sinkAPath);
         assertResult(
@@ -246,7 +246,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkPath = createSourceSinkTables();
 
         TableResult tableResult =
-                tableEnv.executeSql(
+                streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE PLAN '%s' IF NOT EXISTS FOR INSERT INTO sink SELECT * FROM src",
                                 planPath));
@@ -256,20 +256,20 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         // This should not mutate the plan, as it already exists
         assertThat(
-                        tableEnv.executeSql(
+                        streamingTableEnv.executeSql(
                                 String.format(
                                         "COMPILE PLAN '%s' IF NOT EXISTS FOR INSERT INTO sink SELECT a + 1, b + 1, CONCAT(c, '-something') FROM src",
                                         planPath)))
                 .isEqualTo(TableResultInternal.TABLE_RESULT_OK);
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
 
         assertResult(DATA, sinkPath);
     }
 
     @Test
     void testCompilePlanOverwrite() throws Exception {
-        tableEnv.getConfig().set(TableConfigOptions.PLAN_FORCE_RECOMPILE, true);
+        streamingTableEnv.getConfig().set(TableConfigOptions.PLAN_FORCE_RECOMPILE, true);
 
         Path planPath =
                 Paths.get(
@@ -284,7 +284,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkPath = createSourceSinkTables();
 
         TableResult tableResult =
-                tableEnv.executeSql(
+                streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE PLAN '%s' FOR INSERT INTO sink "
                                         + "SELECT IF(a > b, a, b) AS a, b + 1 AS b, SUBSTR(c, 1, 4) AS c FROM src WHERE a > 10",
@@ -295,7 +295,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         // This should overwrite the plan
         assertThat(
-                        tableEnv.executeSql(
+                        streamingTableEnv.executeSql(
                                 String.format(
                                         "COMPILE PLAN '%s' FOR INSERT INTO sink SELECT a + 1, b + 1, CONCAT(c, '-something') FROM src",
                                         planPath)))
@@ -306,7 +306,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
                                         planPath.toFile(), StandardCharsets.UTF_8)))
                 .isTrue();
 
-        tableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
+        streamingTableEnv.executeSql(String.format("EXECUTE PLAN '%s'", planPath)).await();
 
         assertResult(expectedData, sinkPath);
     }
@@ -319,7 +319,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
         File sinkPath = createSourceSinkTables();
 
-        tableEnv.executeSql(
+        streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE AND EXECUTE PLAN '%s' FOR INSERT INTO sink SELECT * FROM src",
                                 planPath))
@@ -340,7 +340,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkAPath = createTestCsvSinkTable("sinkA", COLUMNS_DEFINITION);
         File sinkBPath = createTestCsvSinkTable("sinkB", COLUMNS_DEFINITION);
 
-        tableEnv.executeSql(
+        streamingTableEnv.executeSql(
                         String.format(
                                 "COMPILE AND EXECUTE PLAN '%s' FOR STATEMENT SET BEGIN "
                                         + "INSERT INTO sinkA SELECT * FROM src;"
@@ -367,7 +367,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
                         .toString();
 
         String actual =
-                tableEnv.loadPlan(PlanReference.fromJsonString(planFromResources))
+                streamingTableEnv.loadPlan(PlanReference.fromJsonString(planFromResources))
                         .explain(ExplainDetail.JSON_EXECUTION_PLAN);
         String expected = TableTestUtil.readFromResource("/explain/testExplainJsonPlan.out");
         assertThat(TableTestUtil.replaceNodeIdInOperator(TableTestUtil.replaceStreamNodeId(actual)))
@@ -389,16 +389,16 @@ class CompiledPlanITCase extends JsonPlanTestBase {
         File sinkPath = createTestCsvSinkTable("sink", sinkColumnDefinitions);
 
         // Set config option to trim the strings, so it's persisted in the json plan
-        tableEnv.getConfig()
+        streamingTableEnv.getConfig()
                 .getConfiguration()
                 .set(
                         ExecutionConfigOptions.TABLE_EXEC_SINK_TYPE_LENGTH_ENFORCER,
                         ExecutionConfigOptions.TypeLengthEnforcer.TRIM_PAD);
-        CompiledPlan plan = tableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src");
+        CompiledPlan plan = streamingTableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src");
 
         // Set config option to trim the strings to IGNORE, to validate that the persisted config
         // is overriding the environment setting.
-        tableEnv.getConfig()
+        streamingTableEnv.getConfig()
                 .getConfiguration()
                 .set(
                         ExecutionConfigOptions.TABLE_EXEC_SINK_TYPE_LENGTH_ENFORCER,
@@ -413,11 +413,11 @@ class CompiledPlanITCase extends JsonPlanTestBase {
 
     @Test
     void testCompileAndExecutePlanBatchMode() throws Exception {
-        tableEnv = TableEnvironment.create(EnvironmentSettings.inBatchMode());
+        streamingTableEnv = TableEnvironment.create(EnvironmentSettings.inBatchMode());
 
         File sinkPath = createSourceSinkTables();
 
-        tableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src").execute().await();
+        streamingTableEnv.compilePlanSql("INSERT INTO sink SELECT * FROM src").execute().await();
         assertResult(DATA, sinkPath);
     }
 

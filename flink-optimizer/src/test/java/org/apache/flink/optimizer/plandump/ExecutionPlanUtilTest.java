@@ -21,7 +21,7 @@ package org.apache.flink.optimizer.plandump;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.typeinfo.TypeHint;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.ExecutionPlanUtil;
 import org.apache.flink.api.java.tuple.Tuple2;
 
@@ -39,7 +39,7 @@ public class ExecutionPlanUtilTest {
 
     @Test
     public void executionPlanCanBeRetrieved() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(8);
 
         env.readCsvFile("file:///will/never/be/executed")

@@ -618,7 +618,7 @@ public class RescalingITCase extends TestLogger {
     private static JobGraph createJobGraphWithOperatorState(
             int parallelism, int maxParallelism, OperatorCheckpointMethod checkpointMethod) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.getConfig().setMaxParallelism(maxParallelism);
         RestartStrategyUtils.configureNoRestartStrategy(env);
@@ -659,7 +659,7 @@ public class RescalingITCase extends TestLogger {
             boolean terminateAfterEmission,
             int checkpointingInterval) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         if (0 < maxParallelism) {
             env.getConfig().setMaxParallelism(maxParallelism);
@@ -702,7 +702,7 @@ public class RescalingITCase extends TestLogger {
             boolean terminateAfterEmission,
             int checkpointingInterval) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.getConfig().setMaxParallelism(maxParallelism);
         env.enableCheckpointing(checkpointingInterval);

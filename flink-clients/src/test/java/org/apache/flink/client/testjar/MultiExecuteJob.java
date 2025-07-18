@@ -18,7 +18,7 @@
 
 package org.apache.flink.client.testjar;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.cli.CliFrontendTestUtils;
 import org.apache.flink.client.program.PackagedProgram;
@@ -33,7 +33,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A testing job with configurable number of calls to {@link ExecutionEnvironment#executeAsync()}.
+ * A testing job with configurable number of calls to {@link BatchExecutionEnvironment#executeAsync()}.
  */
 public class MultiExecuteJob {
 
@@ -57,7 +57,7 @@ public class MultiExecuteJob {
         int noOfExecutes = Integer.parseInt(args[0]);
         boolean attached = args.length > 1 && Boolean.parseBoolean(args[1]);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         for (int i = 0; i < noOfExecutes; i++) {
             final List<Integer> input = new ArrayList<>();

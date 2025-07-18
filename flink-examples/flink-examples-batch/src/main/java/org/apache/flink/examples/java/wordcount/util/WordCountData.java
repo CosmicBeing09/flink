@@ -19,7 +19,7 @@
 package org.apache.flink.examples.java.wordcount.util;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 /**
  * Provides the default data sets used for the WordCount example program. The default data sets are
@@ -66,7 +66,7 @@ public class WordCountData {
                 "Be all my sins remember'd."
             };
 
-    public static DataSet<String> getDefaultTextLineDataSet(ExecutionEnvironment env) {
+    public static DataSet<String> getDefaultTextLineDataSet(BatchExecutionEnvironment env) {
         return env.fromElements(WORDS);
     }
 }

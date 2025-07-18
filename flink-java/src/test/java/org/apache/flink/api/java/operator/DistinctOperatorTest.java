@@ -20,8 +20,8 @@ package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
@@ -58,7 +58,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -73,7 +73,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
         // should not work: distinct on basic type
@@ -83,7 +83,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -95,7 +95,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -106,7 +106,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         this.customTypeData.add(new CustomType());
 
@@ -119,7 +119,7 @@ class DistinctOperatorTest {
     @Test
     void testDistinctByKeyFields6() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -130,7 +130,7 @@ class DistinctOperatorTest {
 
     @Test
     void testDistinctByKeyFields7() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
 
         // should work
@@ -145,7 +145,7 @@ class DistinctOperatorTest {
     @SuppressWarnings("serial")
     void testDistinctByKeySelector1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         this.customTypeData.add(new CustomType());
 
         try {
@@ -166,7 +166,7 @@ class DistinctOperatorTest {
 
     @Test
     void testDistinctByKeyIndices1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         try {
             DataSet<Long> longDs = env.fromCollection(emptyLongData, BasicTypeInfo.LONG_TYPE_INFO);
             // should work
@@ -181,7 +181,7 @@ class DistinctOperatorTest {
         /*
          * should not work. NotComparable data type cannot be used as key
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         NotComparable a = new NotComparable();
         List<NotComparable> l = new ArrayList<>();
@@ -200,7 +200,7 @@ class DistinctOperatorTest {
         /*
          * should not work. NotComparable data type cannot be used as key
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         NotComparable a = new NotComparable();
         List<NotComparable> l = new ArrayList<>();

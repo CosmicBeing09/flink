@@ -20,8 +20,8 @@ package org.apache.flink.test.operators.util;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.PrimitiveArrayTypeInfo;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -54,7 +54,7 @@ import scala.math.BigInt;
 public class CollectionDataSets {
 
     public static DataSet<Tuple3<Integer, Long, String>> get3TupleDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
 
         List<Tuple3<Integer, Long, String>> data = new ArrayList<>();
         data.add(new Tuple3<>(1, 1L, "Hi"));
@@ -85,7 +85,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple3<Integer, Long, String>> getSmall3TupleDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
 
         List<Tuple3<Integer, Long, String>> data = new ArrayList<>();
         data.add(new Tuple3<>(1, 1L, "Hi"));
@@ -98,7 +98,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple5<Integer, Long, Integer, String, Long>> get5TupleDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
 
         List<Tuple5<Integer, Long, Integer, String, Long>> data = new ArrayList<>();
         data.add(new Tuple5<>(1, 1L, 0, "Hallo", 1L));
@@ -131,7 +131,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple5<Integer, Long, Integer, String, Long>> getSmall5TupleDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
 
         List<Tuple5<Integer, Long, Integer, String, Long>> data = new ArrayList<>();
         data.add(new Tuple5<>(1, 1L, 0, "Hallo", 1L));
@@ -152,7 +152,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple2<Tuple2<Integer, Integer>, String>> getSmallNestedTupleDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
 
         List<Tuple2<Tuple2<Integer, Integer>, String>> data = new ArrayList<>();
         data.add(new Tuple2<>(new Tuple2<>(1, 1), "one"));
@@ -169,7 +169,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple2<Tuple2<Integer, Integer>, String>>
-            getGroupSortedNestedTupleDataSet(ExecutionEnvironment env) {
+            getGroupSortedNestedTupleDataSet(BatchExecutionEnvironment env) {
 
         List<Tuple2<Tuple2<Integer, Integer>, String>> data = new ArrayList<>();
         data.add(new Tuple2<>(new Tuple2<>(1, 3), "a"));
@@ -190,7 +190,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple3<Tuple2<Integer, Integer>, String, Integer>>
-            getGroupSortedNestedTupleDataSet2(ExecutionEnvironment env) {
+            getGroupSortedNestedTupleDataSet2(BatchExecutionEnvironment env) {
 
         List<Tuple3<Tuple2<Integer, Integer>, String, Integer>> data = new ArrayList<>();
         data.add(new Tuple3<>(new Tuple2<>(1, 3), "a", 2));
@@ -212,7 +212,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple2<byte[], Integer>> getTuple2WithByteArrayDataSet(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
         List<Tuple2<byte[], Integer>> data = new ArrayList<>();
         data.add(new Tuple2<>(new byte[] {0, 4}, 1));
         data.add(new Tuple2<>(new byte[] {2, 0}, 1));
@@ -229,7 +229,7 @@ public class CollectionDataSets {
         return env.fromCollection(data, type);
     }
 
-    public static DataSet<String> getStringDataSet(ExecutionEnvironment env) {
+    public static DataSet<String> getStringDataSet(BatchExecutionEnvironment env) {
 
         List<String> data = new ArrayList<>();
         data.add("Hi");
@@ -246,7 +246,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<Integer> getIntegerDataSet(ExecutionEnvironment env) {
+    public static DataSet<Integer> getIntegerDataSet(BatchExecutionEnvironment env) {
 
         List<Integer> data = new ArrayList<>();
         data.add(1);
@@ -270,7 +270,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<CustomType> getCustomTypeDataSet(ExecutionEnvironment env) {
+    public static DataSet<CustomType> getCustomTypeDataSet(BatchExecutionEnvironment env) {
 
         List<CustomType> data = new ArrayList<>();
         data.add(new CustomType(1, 0L, "Hi"));
@@ -300,7 +300,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<CustomType> getSmallCustomTypeDataSet(ExecutionEnvironment env) {
+    public static DataSet<CustomType> getSmallCustomTypeDataSet(BatchExecutionEnvironment env) {
 
         List<CustomType> data = new ArrayList<>();
         data.add(new CustomType(1, 0L, "Hi"));
@@ -348,7 +348,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple7<Integer, String, Integer, Integer, Long, String, Long>>
-            getSmallTuplebasedDataSet(ExecutionEnvironment env) {
+            getSmallTuplebasedDataSet(BatchExecutionEnvironment env) {
         List<Tuple7<Integer, String, Integer, Integer, Long, String, Long>> data =
                 new ArrayList<>();
         data.add(new Tuple7<>(1, "First", 10, 100, 1000L, "One", 10000L));
@@ -358,7 +358,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple7<Long, Integer, Integer, Long, String, Integer, String>>
-            getSmallTuplebasedDataSetMatchingPojo(ExecutionEnvironment env) {
+            getSmallTuplebasedDataSetMatchingPojo(BatchExecutionEnvironment env) {
         List<Tuple7<Long, Integer, Integer, Long, String, Integer, String>> data =
                 new ArrayList<>();
         data.add(new Tuple7<>(10000L, 10, 100, 1000L, "One", 1, "First"));
@@ -368,7 +368,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<POJO> getSmallPojoDataSet(ExecutionEnvironment env) {
+    public static DataSet<POJO> getSmallPojoDataSet(BatchExecutionEnvironment env) {
         List<POJO> data = new ArrayList<>();
         data.add(
                 new POJO(
@@ -384,7 +384,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<POJO> getDuplicatePojoDataSet(ExecutionEnvironment env) {
+    public static DataSet<POJO> getDuplicatePojoDataSet(BatchExecutionEnvironment env) {
         List<POJO> data = new ArrayList<>();
         data.add(new POJO(1, "First", 10, 100, 1000L, "One", 10000L)); // 5x
         data.add(new POJO(1, "First", 10, 100, 1000L, "One", 10000L));
@@ -397,7 +397,7 @@ public class CollectionDataSets {
         return env.fromCollection(data);
     }
 
-    public static DataSet<POJO> getMixedPojoDataSet(ExecutionEnvironment env) {
+    public static DataSet<POJO> getMixedPojoDataSet(BatchExecutionEnvironment env) {
         List<POJO> data = new ArrayList<>();
         data.add(new POJO(1, "First", 10, 100, 1000L, "One", 10100L)); // 5x
         data.add(new POJO(2, "First_", 10, 105, 1000L, "One", 10200L));
@@ -442,7 +442,7 @@ public class CollectionDataSets {
         public NestedPojo() {}
     }
 
-    public static DataSet<CrazyNested> getCrazyNestedDataSet(ExecutionEnvironment env) {
+    public static DataSet<CrazyNested> getCrazyNestedDataSet(BatchExecutionEnvironment env) {
         List<CrazyNested> data = new ArrayList<>();
         data.add(new CrazyNested("aa"));
         data.add(new CrazyNested("bb"));
@@ -519,7 +519,7 @@ public class CollectionDataSets {
         }
     }
 
-    public static DataSet<FromTupleWithCTor> getPojoExtendingFromTuple(ExecutionEnvironment env) {
+    public static DataSet<FromTupleWithCTor> getPojoExtendingFromTuple(BatchExecutionEnvironment env) {
         List<FromTupleWithCTor> data = new ArrayList<>();
         data.add(new FromTupleWithCTor(1, 10L)); // 3x
         data.add(new FromTupleWithCTor(1, 10L));
@@ -546,7 +546,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<PojoContainingTupleAndWritable> getPojoContainingTupleAndWritable(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
         List<PojoContainingTupleAndWritable> data = new ArrayList<>();
         data.add(new PojoContainingTupleAndWritable(1, 10L, 100L)); // 1x
         data.add(new PojoContainingTupleAndWritable(2, 20L, 200L)); // 5x
@@ -558,7 +558,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<PojoContainingTupleAndWritable>
-            getGroupSortedPojoContainingTupleAndWritable(ExecutionEnvironment env) {
+            getGroupSortedPojoContainingTupleAndWritable(BatchExecutionEnvironment env) {
         List<PojoContainingTupleAndWritable> data = new ArrayList<>();
         data.add(new PojoContainingTupleAndWritable(1, 10L, 100L)); // 1x
         data.add(new PojoContainingTupleAndWritable(2, 20L, 200L)); // 5x
@@ -570,7 +570,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<Tuple3<Integer, CrazyNested, POJO>> getTupleContainingPojos(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
         List<Tuple3<Integer, CrazyNested, POJO>> data = new ArrayList<>();
         data.add(
                 new Tuple3<>(
@@ -635,7 +635,7 @@ public class CollectionDataSets {
     }
 
     public static DataSet<PojoWithMultiplePojos> getPojoWithMultiplePojos(
-            ExecutionEnvironment env) {
+            BatchExecutionEnvironment env) {
         List<PojoWithMultiplePojos> data = new ArrayList<>();
         data.add(new PojoWithMultiplePojos("a", "aa", "b", "bb", 1));
         data.add(new PojoWithMultiplePojos("b", "bb", "c", "cc", 2));
@@ -659,7 +659,7 @@ public class CollectionDataSets {
         public Category cat;
     }
 
-    public static DataSet<PojoWithDateAndEnum> getPojoWithDateAndEnum(ExecutionEnvironment env) {
+    public static DataSet<PojoWithDateAndEnum> getPojoWithDateAndEnum(BatchExecutionEnvironment env) {
         List<PojoWithDateAndEnum> data = new ArrayList<>();
 
         PojoWithDateAndEnum one = new PojoWithDateAndEnum();
@@ -746,7 +746,7 @@ public class CollectionDataSets {
         }
     }
 
-    public static DataSet<PojoWithCollection> getPojoWithCollection(ExecutionEnvironment env) {
+    public static DataSet<PojoWithCollection> getPojoWithCollection(BatchExecutionEnvironment env) {
         List<PojoWithCollection> data = new ArrayList<>();
 
         List<Pojo1> pojosList1 = new ArrayList<>();

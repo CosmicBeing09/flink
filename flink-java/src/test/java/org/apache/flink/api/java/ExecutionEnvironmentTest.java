@@ -42,17 +42,17 @@ class ExecutionEnvironmentTest {
                     new CheckedThread() {
                         @Override
                         public void go() {
-                            final ExecutionEnvironment preparedEnvironment =
-                                    new ExecutionEnvironment();
-                            ExecutionEnvironment.initializeContextEnvironment(
+                            final BatchExecutionEnvironment preparedEnvironment =
+                                    new BatchExecutionEnvironment();
+                            BatchExecutionEnvironment.initializeContextEnvironment(
                                     () -> preparedEnvironment);
                             try {
                                 waitingThreadCount.countDown();
                                 latch.awaitQuietly();
-                                assertThat(ExecutionEnvironment.getExecutionEnvironment())
+                                assertThat(BatchExecutionEnvironment.getBatchExecutionEnvironment())
                                         .isSameAs(preparedEnvironment);
                             } finally {
-                                ExecutionEnvironment.resetContextEnvironment();
+                                BatchExecutionEnvironment.resetContextEnvironment();
                             }
                         }
                     };

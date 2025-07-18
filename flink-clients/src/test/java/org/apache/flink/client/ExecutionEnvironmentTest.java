@@ -21,8 +21,8 @@ package org.apache.flink.client;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
@@ -35,7 +35,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
- * Tests for {@link ExecutionEnvironment}.
+ * Tests for {@link BatchExecutionEnvironment}.
  *
  * <p>NOTE: This test is in the flink-client package because we cannot have it in flink-java, where
  * the JSON plan generator is not available. Making it available, by depending on flink-optimizer
@@ -44,13 +44,13 @@ import static org.assertj.core.api.Assertions.fail;
 class ExecutionEnvironmentTest implements Serializable {
 
     /**
-     * Tests that verifies consecutive calls to {@link ExecutionEnvironment#getExecutionPlan()} do
-     * not cause any exceptions. {@link ExecutionEnvironment#getExecutionPlan()} must not modify the
+     * Tests that verifies consecutive calls to {@link BatchExecutionEnvironment#getExecutionPlan()} do
+     * not cause any exceptions. {@link BatchExecutionEnvironment#getExecutionPlan()} must not modify the
      * state of the plan
      */
     @Test
     void testExecuteAfterGetExecutionPlanContextEnvironment() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> baseSet = env.fromElements(1, 2);
 
@@ -67,7 +67,7 @@ class ExecutionEnvironmentTest implements Serializable {
 
     @Test
     void testDefaultJobName() {
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         testJobName("Flink Java Job at", env);
     }
 
@@ -76,7 +76,7 @@ class ExecutionEnvironmentTest implements Serializable {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
         config.set(PipelineOptions.NAME, jobName);
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(config);
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment(config);
         testJobName(jobName, env);
     }
 
@@ -85,12 +85,12 @@ class ExecutionEnvironmentTest implements Serializable {
         String jobName = "MyTestJob";
         Configuration config = new Configuration();
         config.set(PipelineOptions.NAME, jobName);
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.configure(config, this.getClass().getClassLoader());
         testJobName(jobName, env);
     }
 
-    private void testJobName(String prefixOfExpectedJobName, ExecutionEnvironment env) {
+    private void testJobName(String prefixOfExpectedJobName, BatchExecutionEnvironment env) {
         env.fromElements(1, 2, 3).writeAsText("/dev/null");
         Plan plan = env.createProgramPlan();
         assertThat(plan.getJobName()).startsWith(prefixOfExpectedJobName);

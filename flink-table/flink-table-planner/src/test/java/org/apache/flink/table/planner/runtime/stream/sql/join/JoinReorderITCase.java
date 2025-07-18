@@ -54,7 +54,7 @@ public class JoinReorderITCase extends JoinReorderITCaseBase {
     @Override
     protected TableEnvironment getTableEnvironment() {
         EnvironmentSettings settings = EnvironmentSettings.newInstance().inStreamingMode().build();
-        env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         return StreamTableEnvironment.create(env, settings);
     }
 

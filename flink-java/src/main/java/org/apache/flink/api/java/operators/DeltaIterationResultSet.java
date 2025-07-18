@@ -22,8 +22,8 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.Public;
 import org.apache.flink.api.common.operators.Keys;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 
 /**
  * Resulting {@link DataSet} of a delta iteration operation.
@@ -53,7 +53,7 @@ public class DeltaIterationResultSet<ST, WT> extends DataSet<ST> {
     private TypeInformation<WT> typeWS;
 
     DeltaIterationResultSet(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             TypeInformation<ST> typeSS,
             TypeInformation<WT> typeWS,
             DeltaIteration<ST, WT> iterationHead,

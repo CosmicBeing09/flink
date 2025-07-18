@@ -70,11 +70,11 @@ public abstract class JsonPlanTestBase {
 
     @TempDir protected Path tempFolder;
 
-    protected TableEnvironment tableEnv;
+    protected TableEnvironment streamingTableEnv;
 
     @BeforeEach
-    protected void setup() throws Exception {
-        tableEnv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
+    protected void setupStreamingEnvironment() throws Exception {
+        streamingTableEnv = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
     }
 
     @AfterEach
@@ -88,11 +88,11 @@ public abstract class JsonPlanTestBase {
 
     protected TableResult compileSqlAndExecutePlan(
             String sql, Function<String, String> jsonPlanTransformer) {
-        CompiledPlan compiledPlan = tableEnv.compilePlanSql(sql);
+        CompiledPlan compiledPlan = streamingTableEnv.compilePlanSql(sql);
         checkTransformationUids(compiledPlan);
         // try to execute the string json plan to validate to ser/de result
         CompiledPlan newCompiledPlan =
-                tableEnv.loadPlan(
+                streamingTableEnv.loadPlan(
                         PlanReference.fromJsonString(
                                 jsonPlanTransformer.apply(compiledPlan.asJsonString())));
         return newCompiledPlan.execute();
@@ -100,7 +100,7 @@ public abstract class JsonPlanTestBase {
 
     protected void checkTransformationUids(CompiledPlan compiledPlan) {
         List<Transformation<?>> transformations =
-                CompiledPlanUtils.toTransformations(tableEnv, compiledPlan);
+                CompiledPlanUtils.toTransformations(streamingTableEnv, compiledPlan);
 
         transformations.stream()
                 .flatMap(t -> t.getTransitivePredecessors().stream())
@@ -168,7 +168,7 @@ public abstract class JsonPlanTestBase {
                         properties.entrySet().stream()
                                 .map(e -> String.format("'%s'='%s'", e.getKey(), e.getValue()))
                                 .collect(Collectors.joining(",\n")));
-        tableEnv.executeSql(ddl);
+        streamingTableEnv.executeSql(ddl);
     }
 
     protected void createTestValuesSinkTable(String tableName, String... fieldNameAndTypes) {
@@ -225,7 +225,7 @@ public abstract class JsonPlanTestBase {
                         properties.entrySet().stream()
                                 .map(e -> String.format("'%s'='%s'", e.getKey(), e.getValue()))
                                 .collect(Collectors.joining(",\n")));
-        tableEnv.executeSql(ddl);
+        streamingTableEnv.executeSql(ddl);
     }
 
     protected void createTestCsvSourceTable(
@@ -245,7 +245,7 @@ public abstract class JsonPlanTestBase {
                         tableName,
                         String.join(",\n", fieldNameAndTypes),
                         sourceFile.getAbsolutePath());
-        tableEnv.executeSql(ddl);
+        streamingTableEnv.executeSql(ddl);
     }
 
     protected File createTestCsvSinkTable(String tableName, String... fieldNameAndTypes)
@@ -274,7 +274,7 @@ public abstract class JsonPlanTestBase {
                         String.join(",\n", fieldNameAndTypes),
                         partitionedBy,
                         sinkPath.getAbsolutePath());
-        tableEnv.executeSql(ddl);
+        streamingTableEnv.executeSql(ddl);
         return sinkPath;
     }
 

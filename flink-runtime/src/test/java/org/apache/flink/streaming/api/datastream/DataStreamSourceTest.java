@@ -33,7 +33,7 @@ class DataStreamSourceTest {
     @Test
     void testConstructor() {
         int expectParallelism = 100;
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         MockSource mockSource = new MockSource(Boundedness.BOUNDED, 10);
         DataStreamSource<Integer> stream =
                 env.fromSource(mockSource, WatermarkStrategy.noWatermarks(), "TestingSource");

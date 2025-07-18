@@ -86,7 +86,7 @@ public class StreamCheckpointNotifierITCase extends AbstractTestBaseJUnit4 {
     public void testProgram() {
         try {
             final StreamExecutionEnvironment env =
-                    StreamExecutionEnvironment.getExecutionEnvironment();
+                    StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             assertEquals("test setup broken", PARALLELISM, env.getParallelism());
 
             env.enableCheckpointing(500);

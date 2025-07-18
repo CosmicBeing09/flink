@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.webmonitor.testutils;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 
 /** Simple test program that exposes passed arguments. */
@@ -29,7 +29,7 @@ public class ParameterProgram {
     public static void main(String[] args) throws Exception {
         actualArguments = args;
 
-        ExecutionEnvironment env = ExecutionEnvironment.getExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("hello", "world").output(new DiscardingOutputFormat<>());
         env.execute();
     }

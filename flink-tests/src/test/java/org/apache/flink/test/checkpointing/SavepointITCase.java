@@ -201,7 +201,7 @@ public class SavepointITCase extends TestLogger {
                 new MiniClusterResourceFactory(
                         numTaskManagers, numSlotsPerTaskManager, getFileBasedCheckpointsConfig());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         BoundedPassThroughOperator<Long> operator =
@@ -247,7 +247,7 @@ public class SavepointITCase extends TestLogger {
                                 .setNumberSlotsPerTaskManager(sinkParallelism + 1)
                                 .build());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         RestartStrategyUtils.configureNoRestartStrategy(env);
         env.addSource(new InfiniteTestSource())
                 .setParallelism(1)
@@ -310,7 +310,7 @@ public class SavepointITCase extends TestLogger {
                                 .setNumberSlotsPerTaskManager(sinkParallelism + 1)
                                 .build());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 3, 10);
         env.setParallelism(1);
         env.addSource(new InfiniteTestSource())
@@ -461,7 +461,7 @@ public class SavepointITCase extends TestLogger {
         final int numSlotsPerTaskManager = 2;
         final int parallelism = numTaskManagers * numSlotsPerTaskManager;
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StateBackendUtils.configureRocksDBStateBackend(env, true);
         env.getCheckpointConfig()
                 .setExternalizedCheckpointRetention(
@@ -797,7 +797,7 @@ public class SavepointITCase extends TestLogger {
 
     @Test
     public void testTriggerSavepointWithoutCheckpointBaseLocations() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.getCheckpointConfig().disableCheckpointing();
         env.setParallelism(1);
 
@@ -910,7 +910,7 @@ public class SavepointITCase extends TestLogger {
                             numSlotsPerTaskManager,
                             getFileBasedCheckpointsConfig());
 
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(1);
 
             BoundedPassThroughOperator<Integer> operator =
@@ -1044,7 +1044,7 @@ public class SavepointITCase extends TestLogger {
                                 .setNumberSlotsPerTaskManager(parallelism)
                                 .build());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, Integer.MAX_VALUE, 0L);
         env.addSource(new InfiniteTestSource())
@@ -1129,7 +1129,7 @@ public class SavepointITCase extends TestLogger {
         failingPipelineLatch = new OneShotLatch();
         succeedingPipelineLatch = new OneShotLatch();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(
                 env, expectedMaximumNumberOfRestarts, 0L);
@@ -1256,7 +1256,7 @@ public class SavepointITCase extends TestLogger {
             final StatefulCounter statefulCounter = new StatefulCounter();
             StatefulCounter.resetForTest(parallelism);
 
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(parallelism);
             env.addSource(new InfiniteTestSource())
                     .shuffle()
@@ -1304,7 +1304,7 @@ public class SavepointITCase extends TestLogger {
             StatefulCounter.resetForTest(parallelism);
 
             // Gather all task deployment descriptors
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(parallelism);
 
             // generate a modified job graph that adds a stateless op
@@ -1353,7 +1353,7 @@ public class SavepointITCase extends TestLogger {
     /** Creates a streaming JobGraph from the StreamEnvironment. */
     private JobGraph createJobGraph(int parallelism, int numberOfRetries, long restartDelay) {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.disableOperatorChaining();
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, numberOfRetries, restartDelay);
