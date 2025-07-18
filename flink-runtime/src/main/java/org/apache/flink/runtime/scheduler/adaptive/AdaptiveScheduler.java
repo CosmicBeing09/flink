@@ -1568,7 +1568,7 @@ public class AdaptiveScheduler
                 final long timestamp = System.currentTimeMillis();
                 jobStatusListeners.forEach(
                         listener ->
-                                listener.jobStatusChanges(
+                                listener.onJobStatusChanged(
                                         jobInformation.getJobID(), newJobStatus, timestamp));
             }
 

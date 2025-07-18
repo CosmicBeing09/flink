@@ -47,9 +47,9 @@ class JobStatusMetricsTest {
         final StateTimeMetric metric = jobStatusMetrics.createTimeMetric(JobStatus.RUNNING);
 
         assertThat(metric.getBinary()).isEqualTo(0L);
-        jobStatusMetrics.jobStatusChanges(new JobID(), JobStatus.RUNNING, 1L);
+        jobStatusMetrics.onJobStatusChanged(new JobID(), JobStatus.RUNNING, 1L);
         assertThat(metric.getBinary()).isEqualTo(1L);
-        jobStatusMetrics.jobStatusChanges(new JobID(), JobStatus.RESTARTING, 2L);
+        jobStatusMetrics.onJobStatusChanged(new JobID(), JobStatus.RESTARTING, 2L);
         assertThat(metric.getBinary()).isEqualTo(0L);
     }
 
@@ -67,10 +67,10 @@ class JobStatusMetricsTest {
         final StateTimeMetric metric = jobStatusMetrics.createTimeMetric(JobStatus.RUNNING);
 
         assertThat(metric.getCurrentTime()).isEqualTo(0L);
-        jobStatusMetrics.jobStatusChanges(new JobID(), JobStatus.RUNNING, 1L);
+        jobStatusMetrics.onJobStatusChanged(new JobID(), JobStatus.RUNNING, 1L);
         clock.advanceTime(Duration.ofMillis(11));
         assertThat(metric.getCurrentTime()).isEqualTo(10L);
-        jobStatusMetrics.jobStatusChanges(new JobID(), JobStatus.RESTARTING, 15L);
+        jobStatusMetrics.onJobStatusChanged(new JobID(), JobStatus.RESTARTING, 15L);
         assertThat(metric.getCurrentTime()).isEqualTo(0L);
     }
 
@@ -90,19 +90,19 @@ class JobStatusMetricsTest {
 
         assertThat(metric.getTotalTime()).isEqualTo(0L);
 
-        jobStatusMetrics.jobStatusChanges(
+        jobStatusMetrics.onJobStatusChanged(
                 new JobID(), JobStatus.RUNNING, clock.absoluteTimeMillis());
 
         clock.advanceTime(Duration.ofMillis(10));
         assertThat(metric.getTotalTime()).isEqualTo(10L);
 
-        jobStatusMetrics.jobStatusChanges(
+        jobStatusMetrics.onJobStatusChanged(
                 new JobID(), JobStatus.RESTARTING, clock.absoluteTimeMillis());
 
         clock.advanceTime(Duration.ofMillis(4));
         assertThat(metric.getTotalTime()).isEqualTo(10L);
 
-        jobStatusMetrics.jobStatusChanges(
+        jobStatusMetrics.onJobStatusChanged(
                 new JobID(), JobStatus.RUNNING, clock.absoluteTimeMillis());
 
         clock.advanceTime(Duration.ofMillis(1));

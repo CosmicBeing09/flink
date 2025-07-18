@@ -1584,7 +1584,7 @@ public class JobMaster extends FencedRpcEndpoint<JobMasterId>
         private volatile boolean running = true;
 
         @Override
-        public void jobStatusChanges(
+        public void onJobStatusChanged(
                 final JobID jobId, final JobStatus newJobStatus, final long timestamp) {
 
             if (running) {
