@@ -53,25 +53,25 @@ public class MassiveStringValueSorting {
     private static final long SEED = 347569784659278346L;
 
     public void testStringValueSorting() {
-        File input = null;
-        File sorted = null;
+        File inputFile = null;
+        File sortedFile = null;
 
         try {
             // the source file
-            input =
+            inputFile =
                     generateFileWithStrings(
                             300000, "http://some-uri.com/that/is/a/common/prefix/to/all");
 
             // the sorted file
-            sorted = File.createTempFile("sorted_strings", "txt");
+            sortedFile = File.createTempFile("sorted_strings", "txt");
 
             String[] command = {
                 "/bin/bash",
                 "-c",
                 "export LC_ALL=\"C\" && cat \""
-                        + input.getAbsolutePath()
+                        + inputFile.getAbsolutePath()
                         + "\" | sort > \""
-                        + sorted.getAbsolutePath()
+                        + sortedFile.getAbsolutePath()
                         + "\""
             };
 
@@ -103,7 +103,7 @@ public class MassiveStringValueSorting {
                 TypeComparator<StringValue> comparator =
                         new CopyableValueComparator<StringValue>(true, StringValue.class);
 
-                reader = new BufferedReader(new FileReader(input));
+                reader = new BufferedReader(new FileReader(inputFile));
                 MutableObjectIterator<StringValue> inputIterator =
                         new StringValueReaderMutableObjectIterator(reader);
 
@@ -121,7 +121,7 @@ public class MassiveStringValueSorting {
                 reader.close();
 
                 // verify
-                verifyReader = new BufferedReader(new FileReader(sorted));
+                verifyReader = new BufferedReader(new FileReader(sortedFile));
                 String nextVerify;
                 StringValue nextFromFlinkSort = new StringValue();
 
@@ -150,13 +150,13 @@ public class MassiveStringValueSorting {
             e.printStackTrace();
             Assert.fail(e.getMessage());
         } finally {
-            if (input != null) {
+            if (inputFile != null) {
                 //noinspection ResultOfMethodCallIgnored
-                input.delete();
+                inputFile.delete();
             }
-            if (sorted != null) {
+            if (sortedFile != null) {
                 //noinspection ResultOfMethodCallIgnored
-                sorted.delete();
+                sortedFile.delete();
             }
         }
     }
