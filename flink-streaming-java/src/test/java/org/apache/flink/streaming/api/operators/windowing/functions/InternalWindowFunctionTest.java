@@ -81,11 +81,11 @@ class InternalWindowFunctionTest {
 
         // check setOutputType
         TypeInformation<String> stringType = BasicTypeInfo.STRING_TYPE_INFO;
-        ExecutionConfig execConf = new ExecutionConfig();
-        execConf.setParallelism(42);
+        ExecutionConfig executionConfig = new ExecutionConfig();
+        executionConfig.setParallelism(42);
 
-        StreamingFunctionUtils.setOutputType(windowFunction, stringType, execConf);
-        verify(mock).setOutputType(stringType, execConf);
+        StreamingFunctionUtils.setOutputType(windowFunction, stringType, executionConfig);
+        verify(mock).setOutputType(stringType, executionConfig);
 
         // check open
         OpenContext openContext = DefaultOpenContext.INSTANCE;
@@ -101,14 +101,14 @@ class InternalWindowFunctionTest {
 
         // check apply
         TimeWindow w = mock(TimeWindow.class);
-        Iterable<Long> i = (Iterable<Long>) mock(Iterable.class);
+        Iterable<Long> inputElements = (Iterable<Long>) mock(Iterable.class);
         Collector<String> c = (Collector<String>) mock(Collector.class);
 
         InternalWindowFunction.InternalWindowContext ctx =
                 mock(InternalWindowFunction.InternalWindowContext.class);
 
-        windowFunction.process(((byte) 0), w, ctx, i, c);
-        verify(mock).apply(w, i, c);
+        windowFunction.process(((byte) 0), w, ctx, inputElements, c);
+        verify(mock).apply(w, inputElements, c);
 
         // check close
         windowFunction.close();
