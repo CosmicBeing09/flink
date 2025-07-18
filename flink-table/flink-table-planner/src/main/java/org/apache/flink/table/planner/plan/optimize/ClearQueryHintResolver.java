@@ -30,8 +30,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/** A shuttle to remove query block alias hint. */
-public class ClearQueryBlockAliasResolver extends RelShuttleImpl {
+/** A shuttle to remove query hint. */
+public class ClearQueryHintResolver extends RelShuttleImpl {
 
     public List<RelNode> resolve(List<RelNode> roots) {
         return roots.stream().map(node -> node.accept(this)).collect(Collectors.toList());
