@@ -43,13 +43,13 @@ class StateTest {
     @Test
     void testEmptyAs() {
         State state = new Created(ctx, LOG);
-        assertThat(state.as(WaitingForResources.class)).isEmpty();
+        assertThat(state.castTo(WaitingForResources.class)).isEmpty();
     }
 
     @Test
     void testCast() {
         Created state = new Created(ctx, LOG);
-        assertThat(state.as(Created.class)).hasValue(state);
+        assertThat(state.castTo(Created.class)).hasValue(state);
     }
 
     @Test

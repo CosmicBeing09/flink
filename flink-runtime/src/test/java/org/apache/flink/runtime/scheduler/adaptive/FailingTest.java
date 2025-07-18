@@ -143,8 +143,8 @@ class FailingTest {
             assertThat(meg.getState()).isEqualTo(JobStatus.FAILED);
 
             assertThat(failing.getJobStatus()).isEqualTo(JobStatus.FAILING);
-            assertThat(failing.getJob().getState()).isEqualTo(JobStatus.FAILING);
-            assertThat(failing.getJob().getStatusTimestamp(JobStatus.FAILED)).isZero();
+            assertThat(failing.getArchivedExecutionGraph().getState()).isEqualTo(JobStatus.FAILING);
+            assertThat(failing.getArchivedExecutionGraph().getStatusTimestamp(JobStatus.FAILED)).isZero();
         }
     }
 

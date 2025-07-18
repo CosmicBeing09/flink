@@ -60,7 +60,7 @@ abstract class StateWithoutExecutionGraph implements State {
     }
 
     @Override
-    public ArchivedExecutionGraph getJob() {
+    public ArchivedExecutionGraph getArchivedExecutionGraph() {
         return schedulerContext.getArchivedExecutionGraph(getJobStatus(), null);
     }
 

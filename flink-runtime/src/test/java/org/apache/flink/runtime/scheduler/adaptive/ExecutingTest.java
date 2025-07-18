@@ -559,8 +559,8 @@ class ExecutingTest {
         try (MockExecutingContext ctx = new MockExecutingContext()) {
             Executing exec = new ExecutingStateBuilder().build(ctx);
             final JobID jobId = exec.getExecutionGraph().getJobID();
-            assertThat(exec.getJob()).isInstanceOf(ArchivedExecutionGraph.class);
-            assertThat(exec.getJob().getJobID()).isEqualTo(jobId);
+            assertThat(exec.getArchivedExecutionGraph()).isInstanceOf(ArchivedExecutionGraph.class);
+            assertThat(exec.getArchivedExecutionGraph().getJobID()).isEqualTo(jobId);
             assertThat(exec.getJobStatus()).isEqualTo(JobStatus.RUNNING);
         }
     }
@@ -585,8 +585,8 @@ class ExecutingTest {
             assertThat(executing.getExecutionGraph().getState()).isEqualTo(JobStatus.FINISHED);
 
             assertThat(executing.getJobStatus()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getState()).isEqualTo(JobStatus.RUNNING);
-            assertThat(executing.getJob().getStatusTimestamp(JobStatus.FINISHED)).isZero();
+            assertThat(executing.getArchivedExecutionGraph().getState()).isEqualTo(JobStatus.RUNNING);
+            assertThat(executing.getArchivedExecutionGraph().getStatusTimestamp(JobStatus.FINISHED)).isZero();
         }
     }
 
@@ -1049,7 +1049,7 @@ class ExecutingTest {
         }
 
         @Override
-        public ArchivedExecutionGraph getJob() {
+        public ArchivedExecutionGraph getArchivedExecutionGraph() {
             return null;
         }
 

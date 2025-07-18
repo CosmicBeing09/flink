@@ -53,7 +53,7 @@ class Finished implements State {
     }
 
     @Override
-    public ArchivedExecutionGraph getJob() {
+    public ArchivedExecutionGraph getArchivedExecutionGraph() {
         return archivedExecutionGraph;
     }
 

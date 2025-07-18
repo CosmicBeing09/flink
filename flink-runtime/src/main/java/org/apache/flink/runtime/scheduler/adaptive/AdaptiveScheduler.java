@@ -704,7 +704,7 @@ public class AdaptiveScheduler
     @Override
     public void startScheduling() {
         checkIdleSlotTimeout();
-        state.as(Created.class)
+        state.castTo(Created.class)
                 .orElseThrow(
                         () ->
                                 new IllegalStateException(
@@ -830,12 +830,12 @@ public class AdaptiveScheduler
 
     @Override
     public ExecutionGraphInfo requestJob() {
-        return new ExecutionGraphInfo(state.getJob(), exceptionHistory.toArrayList());
+        return new ExecutionGraphInfo(state.getArchivedExecutionGraph(), exceptionHistory.toArrayList());
     }
 
     @Override
     public CheckpointStatsSnapshot requestCheckpointStats() {
-        return state.getJob().getCheckpointStatsSnapshot();
+        return state.getArchivedExecutionGraph().getCheckpointStatsSnapshot();
     }
 
     @Override
@@ -852,7 +852,7 @@ public class AdaptiveScheduler
     public KvStateLocation requestKvStateLocation(JobID jobId, String registrationName)
             throws UnknownKvStateLocation, FlinkJobNotFoundException {
         final Optional<StateWithExecutionGraph> asOptional =
-                state.as(StateWithExecutionGraph.class);
+                state.castTo(StateWithExecutionGraph.class);
 
         if (asOptional.isPresent()) {
             return asOptional.get().requestKvStateLocation(jobId, registrationName);
@@ -1033,7 +1033,7 @@ public class AdaptiveScheduler
             ExecutionAttemptID taskExecution, OperatorID operator, OperatorEvent evt)
             throws FlinkException {
         final StateWithExecutionGraph stateWithExecutionGraph =
-                state.as(StateWithExecutionGraph.class)
+                state.castTo(StateWithExecutionGraph.class)
                         .orElseThrow(
                                 () ->
                                         new TaskNotRunningException(
