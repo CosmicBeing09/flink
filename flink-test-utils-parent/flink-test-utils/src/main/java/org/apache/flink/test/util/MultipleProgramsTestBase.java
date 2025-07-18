@@ -74,19 +74,19 @@ public class MultipleProgramsTestBase extends AbstractTestBase {
 
     @BeforeEach
     public void setupEnvironment() {
-        TestEnvironment testEnvironment;
+        ClusterTestEnvironment testEnvironment;
         switch (mode) {
             case CLUSTER:
                 // This only works because of the quirks we built in the TestEnvironment.
                 // We should refactor this in the future!!!
-                testEnvironment = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+                testEnvironment = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
                 testEnvironment.getConfig().disableObjectReuse();
                 testEnvironment.setAsContext();
                 break;
             case CLUSTER_OBJECT_REUSE:
                 // This only works because of the quirks we built in the TestEnvironment.
                 // We should refactor this in the future!!!
-                testEnvironment = MINI_CLUSTER_EXTENSION.getTestEnvironment();
+                testEnvironment = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
                 testEnvironment.getConfig().enableObjectReuse();
                 testEnvironment.setAsContext();
                 break;
@@ -101,7 +101,7 @@ public class MultipleProgramsTestBase extends AbstractTestBase {
         switch (mode) {
             case CLUSTER:
             case CLUSTER_OBJECT_REUSE:
-                TestEnvironment.unsetAsContext();
+                ClusterTestEnvironment.unsetAsContext();
                 break;
             case COLLECTION:
                 CollectionTestEnvironment.unsetAsContext();

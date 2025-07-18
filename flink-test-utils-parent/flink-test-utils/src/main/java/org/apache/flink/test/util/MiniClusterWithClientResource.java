@@ -35,7 +35,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
     private ClusterClient<?> clusterClient;
     private RestClusterClient<MiniClusterClient.MiniClusterId> restClusterClient;
 
-    private TestEnvironment executionEnvironment;
+    private ClusterTestEnvironment executionEnvironment;
 
     public MiniClusterWithClientResource(
             final MiniClusterResourceConfiguration miniClusterResourceConfiguration) {
@@ -55,7 +55,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
         return restClusterClient;
     }
 
-    public TestEnvironment getTestEnvironment() {
+    public ClusterTestEnvironment getTestStreamEnvironment() {
         return executionEnvironment;
     }
 
@@ -66,7 +66,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
         clusterClient = createMiniClusterClient();
         restClusterClient = createRestClusterClient();
 
-        executionEnvironment = new TestEnvironment(getMiniCluster(), getNumberSlots(), false);
+        executionEnvironment = new ClusterTestEnvironment(getMiniCluster(), getNumberSlots(), false);
         executionEnvironment.setAsContext();
         TestStreamEnvironment.setAsContext(getMiniCluster(), getNumberSlots());
     }
@@ -75,7 +75,7 @@ public class MiniClusterWithClientResource extends MiniClusterResource {
     public void after() {
         log.info("Finalization triggered: Cluster shutdown is going to be initiated.");
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
+        ClusterTestEnvironment.unsetAsContext();
 
         Exception exception = null;
 

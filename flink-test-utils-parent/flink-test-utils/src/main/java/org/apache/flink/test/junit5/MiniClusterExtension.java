@@ -30,7 +30,7 @@ import org.apache.flink.runtime.testutils.InternalMiniClusterExtension;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.util.TestStreamEnvironment;
-import org.apache.flink.test.util.TestEnvironment;
+import org.apache.flink.test.util.ClusterTestEnvironment;
 
 import org.junit.jupiter.api.TestFactory;
 import org.junit.jupiter.api.extension.AfterAllCallback;
@@ -145,7 +145,7 @@ public final class MiniClusterExtension
 
     private InternalMiniClusterExtension internalMiniClusterExtension;
 
-    private TestEnvironment executionEnvironment;
+    private ClusterTestEnvironment executionEnvironment;
 
     public MiniClusterExtension() {
         this(
@@ -250,7 +250,7 @@ public final class MiniClusterExtension
         }
     }
 
-    public TestEnvironment getTestEnvironment() {
+    public ClusterTestEnvironment getTestClusterEnvironment() {
         return this.executionEnvironment;
     }
 
@@ -265,12 +265,12 @@ public final class MiniClusterExtension
                         .getOptional(CoreOptions.DEFAULT_PARALLELISM)
                         .orElse(internalMiniClusterExtension.getNumberSlots());
 
-        TestEnvironment executionEnvironment =
-                new TestEnvironment(
+        ClusterTestEnvironment executionEnvironment =
+                new ClusterTestEnvironment(
                         internalMiniClusterExtension.getMiniCluster(), defaultParallelism, false);
         executionEnvironment.setAsContext();
         this.executionEnvironment =
-                new TestEnvironment(
+                new ClusterTestEnvironment(
                         internalMiniClusterExtension.getMiniCluster(),
                         internalMiniClusterExtension.getNumberSlots(),
                         false);
@@ -281,7 +281,7 @@ public final class MiniClusterExtension
 
     private void unregisterEnv(InternalMiniClusterExtension internalMiniClusterExtension) {
         TestStreamEnvironment.unsetAsContext();
-        TestEnvironment.unsetAsContext();
+        ClusterTestEnvironment.unsetAsContext();
     }
 
     private MiniClusterClient createMiniClusterClient(

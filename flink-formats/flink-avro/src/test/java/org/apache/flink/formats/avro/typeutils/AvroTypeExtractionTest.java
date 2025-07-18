@@ -35,9 +35,9 @@ import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.test.junit5.InjectMiniCluster;
 import org.apache.flink.test.junit5.MiniClusterExtension;
+import org.apache.flink.test.util.ClusterTestEnvironment;
 import org.apache.flink.test.util.CollectionTestEnvironment;
 import org.apache.flink.test.util.TestBaseUtils;
-import org.apache.flink.test.util.TestEnvironment;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -329,7 +329,7 @@ class AvroTypeExtractionTest {
     private static ExecutionEnvironment getExecutionEnvironment(
             boolean useMiniCluster, MiniCluster miniCluster) {
         return useMiniCluster
-                ? new TestEnvironment(miniCluster, PARALLELISM, false)
+                ? new ClusterTestEnvironment(miniCluster, PARALLELISM, false)
                 : new CollectionTestEnvironment();
     }
 }
