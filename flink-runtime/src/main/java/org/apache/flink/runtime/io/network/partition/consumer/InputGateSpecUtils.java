@@ -36,7 +36,7 @@ public class InputGateSpecUtils {
     public static GateBuffersSpec createGateBuffersSpec(
             Optional<Integer> configuredMaxRequiredBuffersPerGate,
             int configuredNetworkBuffersPerChannel,
-            int floatingBuffersPerGate,
+            int totalFloatingBuffers,
             ResultPartitionType partitionType,
             int numInputChannels,
             boolean enableTieredStorage) {
@@ -50,7 +50,7 @@ public class InputGateSpecUtils {
                 getTotalBuffersPerGate(
                         numInputChannels,
                         configuredNetworkBuffersPerChannel,
-                        floatingBuffersPerGate);
+                        totalFloatingBuffers);
         int expectedBuffersPerGate =
                 Math.min(maxRequiredBuffersThresholdPerGate, targetExpectedBuffersPerGate);
         int effectiveExclusiveBuffersPerChannel =
@@ -114,8 +114,8 @@ public class InputGateSpecUtils {
     private static int getTotalBuffersPerGate(
             int numInputChannels,
             int configuredNetworkBuffersPerChannel,
-            int floatingBuffersPerGate) {
+            int totalFloatingBuffers) {
         return numInputChannels * configuredNetworkBuffersPerChannel
-                + floatingBuffersPerGate;
+                + totalFloatingBuffers;
     }
 }

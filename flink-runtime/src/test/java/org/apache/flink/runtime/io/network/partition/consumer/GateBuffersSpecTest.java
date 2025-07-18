@@ -45,14 +45,14 @@ class GateBuffersSpecTest {
 
         int numExclusivePerChannel = 2;
         int expectedBuffersPerGate = 999;
-        int maxBuffersPerGate = 1006;
+        int totalFloatingBuffers = 1006;
 
         checkBuffersInGate(
                 gateBuffersSpec,
                 numExclusivePerChannel,
                 expectedBuffersPerGate,
                 expectedBuffersPerGate,
-                maxBuffersPerGate);
+                totalFloatingBuffers);
     }
 
     @ParameterizedTest
@@ -64,14 +64,14 @@ class GateBuffersSpecTest {
         boolean isPipeline = isPipelinedOrHybridResultPartition(partitionType);
         int numExclusivePerChannel = isPipelinedOrHybridResultPartition(partitionType) ? 2 : 1;
         int expectedBuffersPerGate = isPipeline ? 1001 : 1000;
-        int maxBuffersPerGate = 1008;
+        int totalFloatingBuffers = 1008;
 
         checkBuffersInGate(
                 gateBuffersSpec,
                 numExclusivePerChannel,
                 expectedBuffersPerGate,
                 expectedBuffersPerGate,
-                maxBuffersPerGate);
+                totalFloatingBuffers);
     }
 
     @ParameterizedTest
@@ -183,7 +183,7 @@ class GateBuffersSpecTest {
                 .isEqualTo(numExclusivePerChannel);
         assertThat(gateBuffersSpec.getExpectedBuffersPerGate()).isEqualTo(expectedBuffersPerGate);
         assertThat(gateBuffersSpec.getMinBuffersPerGate()).isEqualTo(minBuffersPerGate);
-        assertThat(gateBuffersSpec.getMaxBuffersPerGate()).isEqualTo(maxBuffersPerGate);
+        assertThat(gateBuffersSpec.getTotalFloatingBuffers()).isEqualTo(maxBuffersPerGate);
     }
 
     private static GateBuffersSpec createGateBuffersSpec(
