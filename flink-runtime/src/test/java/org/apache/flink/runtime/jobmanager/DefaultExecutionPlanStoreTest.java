@@ -72,7 +72,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     private final long timeout = 100L;
 
     private TestingStateHandleStore.Builder<org.apache.flink.streaming.api.graph.ExecutionPlan> builder;
-    private TestingRetrievableStateStorageHelper<org.apache.flink.streaming.api.graph.ExecutionPlan> jobGraphStorageHelper;
+    private TestingRetrievableStateStorageHelper<org.apache.flink.streaming.api.graph.ExecutionPlan> executionPlanStorageHelper;
     private TestingExecutionPlanStoreWatcher testingExecutionPlanStoreWatcher;
     private TestingExecutionPlanListener testingExecutionPlanListener;
 
@@ -81,7 +81,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
         builder = TestingStateHandleStore.newBuilder();
         testingExecutionPlanStoreWatcher = new TestingExecutionPlanStoreWatcher();
         testingExecutionPlanListener = new TestingExecutionPlanListener();
-        jobGraphStorageHelper = new TestingRetrievableStateStorageHelper<>();
+        executionPlanStorageHelper = new TestingRetrievableStateStorageHelper<>();
     }
 
     @After
@@ -94,7 +94,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testRecoverExecutionPlan() throws Exception {
         final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandle =
-                jobGraphStorageHelper.store(testingExecutionPlan);
+                executionPlanStorageHelper.store(testingExecutionPlan);
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(ignore -> stateHandle).build();
 
@@ -159,7 +159,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
                         .setAddFunction(
                                 (ignore, state) -> {
                                     addFuture.complete(state);
-                                    return jobGraphStorageHelper.store(state);
+                                    return executionPlanStorageHelper.store(state);
                                 })
                         .build();
 
@@ -187,7 +187,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
                                         return IntegerResourceVersion.notExisting();
                                     }
                                 })
-                        .setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                        .setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .setReplaceConsumer(replaceFuture::complete)
                         .build();
 
@@ -208,7 +208,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     public void testGlobalCleanup() throws Exception {
         final CompletableFuture<JobID> removeFuture = new CompletableFuture<>();
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .setRemoveFunction(name -> removeFuture.complete(JobID.fromHexString(name)))
                         .build();
 
@@ -275,7 +275,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnAddedExecutionPlanShouldNotProcessKnownExecutionPlans() throws Exception {
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -288,10 +288,10 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnAddedExecutionPlanShouldOnlyProcessUnknownExecutionPlans() throws Exception {
         final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandle =
-                jobGraphStorageHelper.store(testingExecutionPlan);
+                executionPlanStorageHelper.store(testingExecutionPlan);
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
                 builder.setGetFunction(ignore -> stateHandle)
-                        .setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                        .setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -309,7 +309,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnRemovedExecutionPlanShouldOnlyProcessKnownExecutionPlans() throws Exception {
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -328,7 +328,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnRemovedExecutionPlanShouldNotProcessUnknownExecutionPlans() throws Exception {
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         createAndStartExecutionPlanStore(stateHandleStore);
 
@@ -339,7 +339,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnAddedExecutionPlanIsIgnoredAfterBeingStop() throws Exception {
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -352,7 +352,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
     @Test
     public void testOnRemovedExecutionPlanIsIgnoredAfterBeingStop() throws Exception {
         final TestingStateHandleStore<org.apache.flink.streaming.api.graph.ExecutionPlan> stateHandleStore =
-                builder.setAddFunction((ignore, state) -> jobGraphStorageHelper.store(state))
+                builder.setAddFunction((ignore, state) -> executionPlanStorageHelper.store(state))
                         .build();
         final ExecutionPlanStore executionPlanStore =
                 createAndStartExecutionPlanStore(stateHandleStore);
@@ -399,7 +399,7 @@ public class DefaultExecutionPlanStoreTest extends TestLogger {
                 builder.setAddFunction(
                                 (key, state) -> {
                                     final RetrievableStateHandle<org.apache.flink.streaming.api.graph.ExecutionPlan> handle =
-                                            jobGraphStorageHelper.store(state);
+                                            executionPlanStorageHelper.store(state);
                                     handles.put(key, handle);
                                     return handle;
                                 })
