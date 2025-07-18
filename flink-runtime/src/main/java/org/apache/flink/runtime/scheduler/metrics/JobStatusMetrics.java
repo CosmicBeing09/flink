@@ -103,7 +103,7 @@ public class JobStatusMetrics implements JobStatusListener, MetricsRegistrar {
     }
 
     @Override
-    public void jobStatusChanges(JobID jobId, JobStatus newJobStatus, long timestamp) {
+    public void onJobStatusChanged(JobID jobId, JobStatus newJobStatus, long timestamp) {
         cumulativeStatusTimes[currentStatus.ordinal()] += timestamp - currentStatusTimestamp;
 
         currentStatus = newJobStatus;
