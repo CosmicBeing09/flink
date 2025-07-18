@@ -51,7 +51,7 @@ import java.util.Collection;
  * Specifications for creating state backends to be used in {@link
  * SavepointStateBackendSwitchTestBase}.
  */
-public final class BackendSwitchSpecs {
+public final class StateBackendSwitchSpecification {
 
     /**
      * A factory interface for creating a state backend that should be able to restore its state
@@ -67,7 +67,7 @@ public final class BackendSwitchSpecs {
     }
 
     /** Specification for a {@link RocksDBKeyedStateBackend}. */
-    static final BackendSwitchSpec ROCKS =
+    static final BackendSwitchSpec ROCKSDB_STATE_BACKEND =
             new RocksSpec(EmbeddedRocksDBStateBackend.PriorityQueueStateType.ROCKSDB);
 
     /** Specification for a {@link RocksDBKeyedStateBackend} which stores its timers on heap. */

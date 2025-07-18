@@ -43,7 +43,7 @@ import org.apache.flink.runtime.state.memory.MemCheckpointStreamFactory;
 import org.apache.flink.streaming.api.operators.StreamOperatorStateHandler;
 import org.apache.flink.streaming.api.operators.TimerHeapInternalTimer;
 import org.apache.flink.streaming.api.operators.TimerSerializer;
-import org.apache.flink.test.state.BackendSwitchSpecs.BackendSwitchSpec;
+import org.apache.flink.test.state.StateBackendSwitchSpecification.BackendSwitchSpec;
 import org.apache.flink.util.InstantiationUtil;
 
 import org.junit.ClassRule;
