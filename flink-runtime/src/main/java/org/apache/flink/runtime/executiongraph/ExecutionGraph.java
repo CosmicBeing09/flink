@@ -83,9 +83,9 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     SchedulingTopology getSchedulingTopology();
 
     void enableCheckpointing(
-            CheckpointCoordinatorConfiguration chkConfig,
+            CheckpointCoordinatorConfiguration checkpointCoordinatorConfig,
             List<MasterTriggerRestoreHook<?>> masterHooks,
-            CheckpointIDCounter checkpointIDCounter,
+            CheckpointIDCounter checkpointIdCounter,
             CompletedCheckpointStore checkpointStore,
             StateBackend checkpointStateBackend,
             CheckpointStorage checkpointStorage,
