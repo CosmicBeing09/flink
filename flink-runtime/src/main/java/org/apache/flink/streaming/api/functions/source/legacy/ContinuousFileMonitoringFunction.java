@@ -88,7 +88,7 @@ public class ContinuousFileMonitoringFunction<OUT>
     public static final long MIN_MONITORING_INTERVAL = 1L;
 
     /** The path to monitor. */
-    private final String path;
+    private final String monitoredDirectoryPath;
 
     /** The parallelism of the downstream readers. */
     private final int readerParallelism;
@@ -131,7 +131,7 @@ public class ContinuousFileMonitoringFunction<OUT>
                 "FileInputFormats with multiple paths are not supported yet.");
 
         this.format = Preconditions.checkNotNull(format, "Unspecified File Input Format.");
-        this.path =
+        this.monitoredDirectoryPath =
                 Preconditions.checkNotNull(
                         format.getFilePaths()[0].toString(), "Unspecified Path.");
 
@@ -210,17 +210,17 @@ public class ContinuousFileMonitoringFunction<OUT>
                     "Opened {} (taskIdx= {}) for path: {}",
                     getClass().getSimpleName(),
                     getRuntimeContext().getTaskInfo().getIndexOfThisSubtask(),
-                    path);
+                    monitoredDirectoryPath);
         }
     }
 
     @Override
     public void run(SourceFunction.SourceContext<TimestampedFileInputSplit> context)
             throws Exception {
-        Path p = new Path(path);
+        Path p = new Path(monitoredDirectoryPath);
         FileSystem fileSystem = FileSystem.get(p.toUri());
         if (!fileSystem.exists(p)) {
-            throw new FileNotFoundException("The provided file path " + path + " does not exist.");
+            throw new FileNotFoundException("The provided file path " + monitoredDirectoryPath + " does not exist.");
         }
 
         checkpointLock = context.getCheckpointLock();
@@ -263,7 +263,7 @@ public class ContinuousFileMonitoringFunction<OUT>
             FileSystem fs, SourceContext<TimestampedFileInputSplit> context) throws IOException {
         assert (Thread.holdsLock(checkpointLock));
 
-        Map<Path, FileStatus> eligibleFiles = listEligibleFiles(fs, new Path(path));
+        Map<Path, FileStatus> eligibleFiles = listEligibleFiles(fs, new Path(monitoredDirectoryPath));
         Map<Long, List<TimestampedFileInputSplit>> splitsSortedByModTime =
                 getInputSplitsSortedByModTime(eligibleFiles);
 
@@ -322,11 +322,11 @@ public class ContinuousFileMonitoringFunction<OUT>
      *
      * @param fileSystem The filesystem where the monitored directory resides.
      */
-    private Map<Path, FileStatus> listEligibleFiles(FileSystem fileSystem, Path path) {
+    private Map<Path, FileStatus> listEligibleFiles(FileSystem fileSystem, Path directoryPath) {
 
         final FileStatus[] statuses;
         try {
-            statuses = fileSystem.listStatus(path);
+            statuses = fileSystem.listStatus(directoryPath);
         } catch (IOException e) {
             // we may run into an IOException if files are moved while listing their status
             // delay the check for eligible files in this case
@@ -334,7 +334,7 @@ public class ContinuousFileMonitoringFunction<OUT>
         }
 
         if (statuses == null) {
-            LOG.warn("Path does not exist: {}", path);
+            LOG.warn("Path does not exist: {}", directoryPath);
             return Collections.emptyMap();
         } else {
             Map<Path, FileStatus> files = new HashMap<>();
@@ -388,7 +388,7 @@ public class ContinuousFileMonitoringFunction<OUT>
         }
 
         if (LOG.isDebugEnabled()) {
-            LOG.debug("Closed File Monitoring Source for path: " + path + ".");
+            LOG.debug("Closed File Monitoring Source for path: " + monitoredDirectoryPath + ".");
         }
     }
 
