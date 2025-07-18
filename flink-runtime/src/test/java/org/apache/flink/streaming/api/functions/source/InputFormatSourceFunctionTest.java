@@ -61,14 +61,14 @@ class InputFormatSourceFunctionTest {
         testFormatLifecycle(true);
     }
 
-    private void testFormatLifecycle(final boolean midCancel) throws Exception {
+    private void testFormatLifecycle(final boolean shouldCancelMidRun) throws Exception {
 
         final int noOfSplits = 5;
         final int cancelAt = 2;
 
-        final LifeCycleTestInputFormat format = new LifeCycleTestInputFormat();
+        final LifeCycleTestInputFormat lifecycleTestInputFormat = new LifeCycleTestInputFormat();
         final InputFormatSourceFunction<Integer> reader =
-                new InputFormatSourceFunction<>(format, TypeInformation.of(Integer.class));
+                new InputFormatSourceFunction<>(lifecycleTestInputFormat, TypeInformation.of(Integer.class));
 
         try (MockEnvironment environment =
                 new MockEnvironmentBuilder()
@@ -76,26 +76,27 @@ class InputFormatSourceFunctionTest {
                         .setManagedMemorySize(4 * MemoryManager.DEFAULT_PAGE_SIZE)
                         .build()) {
 
-            reader.setRuntimeContext(new MockRuntimeContext(format, noOfSplits, environment));
+            reader.setRuntimeContext(new MockRuntimeContext(lifecycleTestInputFormat, noOfSplits, environment));
 
-            assertThat(format.isConfigured).isFalse();
-            assertThat(format.isInputFormatOpen).isFalse();
-            assertThat(format.isSplitOpen).isFalse();
+            assertThat(lifecycleTestInputFormat.isConfigured).isFalse();
+            assertThat(lifecycleTestInputFormat.isInputFormatOpen).isFalse();
+            assertThat(lifecycleTestInputFormat.isSplitOpen).isFalse();
 
             reader.open(DefaultOpenContext.INSTANCE);
-            assertThat(format.isConfigured).isTrue();
+            assertThat(lifecycleTestInputFormat.isConfigured).isTrue();
 
-            TestSourceContext ctx = new TestSourceContext(reader, format, midCancel, cancelAt);
+            TestSourceContext ctx = new TestSourceContext(reader,
+                    lifecycleTestInputFormat, shouldCancelMidRun, cancelAt);
             reader.run(ctx);
 
             int splitsSeen = ctx.getSplitsSeen();
-            assertThat(midCancel ? splitsSeen == cancelAt : splitsSeen == noOfSplits).isTrue();
+            assertThat(shouldCancelMidRun ? splitsSeen == cancelAt : splitsSeen == noOfSplits).isTrue();
 
             // we have exhausted the splits so the
             // format and splits should be closed by now
 
-            assertThat(format.isSplitOpen).isFalse();
-            assertThat(format.isInputFormatOpen).isFalse();
+            assertThat(lifecycleTestInputFormat.isSplitOpen).isFalse();
+            assertThat(lifecycleTestInputFormat.isInputFormatOpen).isFalse();
         }
     }
 
