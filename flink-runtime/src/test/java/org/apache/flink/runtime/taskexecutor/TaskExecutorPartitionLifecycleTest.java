@@ -108,7 +108,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /** Tests for the partition-lifecycle logic in the {@link TaskExecutor}. */
 class TaskExecutorPartitionLifecycleTest {
 
-    private static final Duration timeout = Duration.ofSeconds(10L);
+    private static final Duration jobMasterConnectionTimeout = Duration.ofSeconds(10L);
 
     private static TestingRpcService rpc;
 
@@ -124,7 +124,7 @@ class TaskExecutorPartitionLifecycleTest {
 
     private TestingHeartbeatServices heartbeatServices;
 
-    private ResourceID jmResourceId;
+    private ResourceID jobManagerResourceId;
 
     private Duration duration = Duration.ofSeconds(15);
 
@@ -146,7 +146,7 @@ class TaskExecutorPartitionLifecycleTest {
         haServices.setJobMasterLeaderRetriever(jobId, jobManagerLeaderRetriever);
         configuration = new Configuration();
         heartbeatServices = new TestingHeartbeatServices(50000L, 50000L);
-        jmResourceId = ResourceID.generate();
+        jobManagerResourceId = ResourceID.generate();
         disconnectTaskManagerFuture = new CompletableFuture<>();
     }
 
@@ -336,7 +336,7 @@ class TaskExecutorPartitionLifecycleTest {
                             resultPartitionDeploymentDescriptor.getResultId();
 
                     taskExecutorGateway.releaseClusterPartitions(
-                            Collections.singleton(dataSetId), timeout);
+                            Collections.singleton(dataSetId), jobMasterConnectionTimeout);
 
                     assertThat(releasePartitionsFuture.get()).contains(dataSetId);
                 });
@@ -453,7 +453,7 @@ class TaskExecutorPartitionLifecycleTest {
                                 resultPartitionDeploymentDescriptor.getResultId();
 
                         taskExecutorGateway.releaseClusterPartitions(
-                                Collections.singleton(dataSetId), timeout);
+                                Collections.singleton(dataSetId), jobMasterConnectionTimeout);
 
                         // execute some operation to check whether the TaskExecutor is blocked
                         taskExecutorGateway.canBeReleased().get(5, TimeUnit.SECONDS);
@@ -537,7 +537,7 @@ class TaskExecutorPartitionLifecycleTest {
                         .setRegisterTaskManagerFunction(
                                 (ignoredJobId, ignoredTaskManagerRegistrationInformation) ->
                                         CompletableFuture.completedFuture(
-                                                new JMTMRegistrationSuccess(jmResourceId)))
+                                                new JMTMRegistrationSuccess(jobManagerResourceId)))
                         .setOfferSlotsFunction(
                                 (resourceID, slotOffers) -> {
                                     slotOfferedLatch.trigger();
@@ -615,7 +615,7 @@ class TaskExecutorPartitionLifecycleTest {
                                     ResourceProfile.ZERO,
                                     jobMasterAddress,
                                     testingResourceManagerGateway.getFencingToken(),
-                                    timeout)
+                                    jobMasterConnectionTimeout)
                             .get();
                     break;
                 } catch (Exception e) {
@@ -634,7 +634,8 @@ class TaskExecutorPartitionLifecycleTest {
 
             taskExecutorGateway
                     .submitTask(
-                            taskDeploymentDescriptor, jobMasterGateway.getFencingToken(), timeout)
+                            taskDeploymentDescriptor, jobMasterGateway.getFencingToken(),
+                            jobMasterConnectionTimeout)
                     .get();
 
             TestingInvokable.sync.awaitBlocker();
@@ -648,7 +649,7 @@ class TaskExecutorPartitionLifecycleTest {
                                     .getResultPartitionID());
 
             TestingInvokable.sync.releaseBlocker();
-            taskFinishedFuture.get(timeout.toMillis(), TimeUnit.MILLISECONDS);
+            taskFinishedFuture.get(jobMasterConnectionTimeout.toMillis(), TimeUnit.MILLISECONDS);
 
             testAction.accept(
                     jobId, taskResultPartitionDescriptor, taskExecutor, taskExecutorGateway);
@@ -701,7 +702,7 @@ class TaskExecutorPartitionLifecycleTest {
 
     private static TaskSlotTable<Task> createTaskSlotTable() {
         return TaskSlotUtils.createTaskSlotTable(
-                1, timeout, TEST_EXECUTOR_SERVICE_RESOURCE.getExecutor());
+                1, jobMasterConnectionTimeout, TEST_EXECUTOR_SERVICE_RESOURCE.getExecutor());
     }
 
     @FunctionalInterface
