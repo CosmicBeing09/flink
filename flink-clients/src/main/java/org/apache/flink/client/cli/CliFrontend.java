@@ -310,8 +310,8 @@ public class CliFrontend {
         final Configuration effectiveConfiguration =
                 getEffectiveConfiguration(activeCustomCommandLine, commandLine);
 
-        final ExecutionConfigAccessor executionParameters =
-                ExecutionConfigAccessor.fromProgramOptions(
+        final StreamingExecutionConfigAccessor executionParameters =
+                StreamingExecutionConfigAccessor.fromProgramOptions(
                         checkNotNull(programOptions), checkNotNull(jobJars));
 
         executionParameters.applyToConfiguration(effectiveConfiguration);

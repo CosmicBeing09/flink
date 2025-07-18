@@ -26,7 +26,7 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.dag.Pipeline;
 import org.apache.flink.client.ClientUtils;
 import org.apache.flink.client.FlinkPipelineTranslationUtil;
-import org.apache.flink.client.cli.ExecutionConfigAccessor;
+import org.apache.flink.client.cli.StreamingExecutionConfigAccessor;
 import org.apache.flink.client.deployment.ClusterClientJobClientAdapter;
 import org.apache.flink.client.testjar.ForbidConfigurationJob;
 import org.apache.flink.configuration.ConfigUtils;
@@ -498,8 +498,8 @@ class ClientTest {
                         final int parallelism = config.get(CoreOptions.DEFAULT_PARALLELISM);
                         final JobGraph jobGraph = streamGraph.getJobGraph();
 
-                        final ExecutionConfigAccessor accessor =
-                                ExecutionConfigAccessor.fromConfiguration(config);
+                        final StreamingExecutionConfigAccessor accessor =
+                                StreamingExecutionConfigAccessor.fromConfiguration(config);
                         jobGraph.addJars(accessor.getJars());
                         jobGraph.setClasspaths(accessor.getClasspaths());
 
