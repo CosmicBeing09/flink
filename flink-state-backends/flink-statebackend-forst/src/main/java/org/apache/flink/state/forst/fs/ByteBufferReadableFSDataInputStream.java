@@ -38,7 +38,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 @Experimental
 public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
 
-    private final FSDataInputStream originalInputStream;
+    private final FSDataInputStream fsInputStream;
 
     /**
      * InputStream Pool which provides multiple input streams to random read concurrently. An input
@@ -56,7 +56,7 @@ public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
             long totalFileSize)
             throws IOException {
         try {
-            this.originalInputStream = inputStreamBuilder.call();
+            this.fsInputStream = inputStreamBuilder.call();
         } catch (Exception e) {
             throw new IOException("Exception when build original input stream", e);
         }
@@ -83,9 +83,9 @@ public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
         } else if (bb.remaining() == 0) {
             return 0;
         }
-        return originalInputStream instanceof ByteBufferReadable
-                ? ((ByteBufferReadable) originalInputStream).read(bb)
-                : readFullyFromFSDataInputStream(originalInputStream, bb);
+        return fsInputStream instanceof ByteBufferReadable
+                ? ((ByteBufferReadable) fsInputStream).read(bb)
+                : readFullyFromFSDataInputStream(fsInputStream, bb);
     }
 
     /**
@@ -155,46 +155,46 @@ public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
 
     private int readFullyFromFSDataInputStream(FSDataInputStream originalInputStream, ByteBuffer bb)
             throws IOException {
-        int c = originalInputStream.read();
-        if (c == -1) {
+        int byteRead = originalInputStream.read();
+        if (byteRead == -1) {
             return -1;
         }
-        bb.put((byte) c);
+        bb.put((byte) byteRead);
 
         int n = 1, len = bb.remaining() + 1;
         for (; n < len; n++) {
-            c = originalInputStream.read();
-            if (c == -1) {
+            byteRead = originalInputStream.read();
+            if (byteRead == -1) {
                 break;
             }
-            bb.put((byte) c);
+            bb.put((byte) byteRead);
         }
         return n;
     }
 
     @Override
     public void seek(long desired) throws IOException {
-        originalInputStream.seek(desired);
+        fsInputStream.seek(desired);
     }
 
     @Override
     public long getPos() throws IOException {
-        return originalInputStream.getPos();
+        return fsInputStream.getPos();
     }
 
     @Override
     public int read() throws IOException {
-        return originalInputStream.read();
+        return fsInputStream.read();
     }
 
     @Override
     public int read(byte[] b) throws IOException {
-        return originalInputStream.read(b);
+        return fsInputStream.read(b);
     }
 
     @Override
     public int read(byte[] b, int off, int len) throws IOException {
-        return originalInputStream.read(b, off, len);
+        return fsInputStream.read(b, off, len);
     }
 
     @Override
@@ -206,12 +206,12 @@ public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
 
     @Override
     public int available() throws IOException {
-        return originalInputStream.available();
+        return fsInputStream.available();
     }
 
     @Override
     public void close() throws IOException {
-        originalInputStream.close();
+        fsInputStream.close();
         for (FSDataInputStream fsDataInputStream : readInputStreamPool) {
             fsDataInputStream.close();
         }
@@ -219,16 +219,16 @@ public class ByteBufferReadableFSDataInputStream extends FSDataInputStream {
 
     @Override
     public synchronized void mark(int readlimit) {
-        originalInputStream.mark(readlimit);
+        fsInputStream.mark(readlimit);
     }
 
     @Override
     public synchronized void reset() throws IOException {
-        originalInputStream.reset();
+        fsInputStream.reset();
     }
 
     @Override
     public boolean markSupported() {
-        return originalInputStream.markSupported();
+        return fsInputStream.markSupported();
     }
 }
