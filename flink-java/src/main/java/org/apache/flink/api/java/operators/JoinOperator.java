@@ -173,7 +173,7 @@ public abstract class JoinOperator<I1, I2, OUT>
      * @return The JoinHint.
      */
     @Internal
-    public JoinHint getJoinHint() {
+    public JoinHint joinHint() {
         return this.joinHint;
     }
 
@@ -183,7 +183,7 @@ public abstract class JoinOperator<I1, I2, OUT>
      * @return The JoinType
      */
     @Internal
-    public JoinType getJoinType() {
+    public JoinType joinType() {
         return this.joinType;
     }
 
@@ -411,7 +411,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                     new JoinOperatorBaseBuilder<OUT>(name, joinType)
                             .withParallelism(getParallelism())
                             .withPartitioner(getPartitioner())
-                            .withJoinHint(getJoinHint())
+                            .withJoinHint(joinHint())
                             .withResultType(getResultType());
 
             final boolean requiresTupleUnwrapping =
@@ -669,7 +669,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                     getKeys2(),
                     clean(function),
                     returnType,
-                    getJoinHint(),
+                    joinHint(),
                     Utils.getCallLocationName(),
                     joinType);
         }
@@ -695,7 +695,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                     generatedFunction,
                     function,
                     returnType,
-                    getJoinHint(),
+                    joinHint(),
                     Utils.getCallLocationName(),
                     joinType);
         }
@@ -754,7 +754,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                             getInput2(),
                             getKeys1(),
                             getKeys2(),
-                            getJoinHint(),
+                            joinHint(),
                             firstFieldIndexes,
                             null);
 
@@ -792,7 +792,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                             getInput2(),
                             getKeys1(),
                             getKeys2(),
-                            getJoinHint(),
+                            joinHint(),
                             null,
                             secondFieldIndexes);
 
