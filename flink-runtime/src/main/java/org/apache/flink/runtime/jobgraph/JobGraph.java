@@ -106,7 +106,7 @@ public class JobGraph implements Serializable {
     private SerializedValue<ExecutionConfig> serializedExecutionConfig;
 
     /** The settings for the job checkpoints. */
-    private JobCheckpointingSettings snapshotSettings;
+    private JobCheckpointingSettings checkpointingSettings;
 
     /** Savepoint restore settings. */
     private SavepointRestoreSettings savepointRestoreSettings = SavepointRestoreSettings.none();
@@ -361,8 +361,8 @@ public class JobGraph implements Serializable {
      *
      * @param settings The snapshot settings
      */
-    public void setSnapshotSettings(JobCheckpointingSettings settings) {
-        this.snapshotSettings = settings;
+    public void setCheckpointingSettings(JobCheckpointingSettings settings) {
+        this.checkpointingSettings = settings;
     }
 
     /**
@@ -372,7 +372,7 @@ public class JobGraph implements Serializable {
      * @return The snapshot settings
      */
     public JobCheckpointingSettings getCheckpointingSettings() {
-        return snapshotSettings;
+        return checkpointingSettings;
     }
 
     /**
@@ -382,11 +382,11 @@ public class JobGraph implements Serializable {
      */
     public boolean isCheckpointingEnabled() {
 
-        if (snapshotSettings == null) {
+        if (checkpointingSettings == null) {
             return false;
         }
 
-        return snapshotSettings.getCheckpointCoordinatorConfiguration().isCheckpointingEnabled();
+        return checkpointingSettings.getCheckpointCoordinatorConfiguration().isCheckpointingEnabled();
     }
 
     /**

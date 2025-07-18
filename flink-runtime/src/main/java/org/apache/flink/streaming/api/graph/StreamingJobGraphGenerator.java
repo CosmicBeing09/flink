@@ -2087,7 +2087,7 @@ public class StreamingJobGraphGenerator {
                         serializedCheckpointStorage,
                         serializedHooks);
 
-        jobGraph.setSnapshotSettings(settings);
+        jobGraph.setCheckpointingSettings(settings);
     }
 
     private static String nameWithChainedSourcesInfo(

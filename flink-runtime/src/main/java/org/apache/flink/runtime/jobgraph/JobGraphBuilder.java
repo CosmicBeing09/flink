@@ -133,7 +133,7 @@ public class JobGraphBuilder {
         }
 
         if (jobCheckpointingSettings != null) {
-            jobGraph.setSnapshotSettings(jobCheckpointingSettings);
+            jobGraph.setCheckpointingSettings(jobCheckpointingSettings);
         }
 
         if (savepointRestoreSettings != null) {

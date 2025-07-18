@@ -592,7 +592,7 @@ class OperatorCoordinatorSchedulerTest {
     }
 
     private DefaultScheduler createSchedulerWithoutCheckpointingAndDeployTasks() throws Exception {
-        final Consumer<JobGraph> noCheckpoints = (jobGraph) -> jobGraph.setSnapshotSettings(null);
+        final Consumer<JobGraph> noCheckpoints = (jobGraph) -> jobGraph.setCheckpointingSettings(null);
         final DefaultScheduler scheduler =
                 setupTestJobAndScheduler(
                         new TestingOperatorCoordinator.Provider(testOperatorId),
