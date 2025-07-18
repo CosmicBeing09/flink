@@ -269,9 +269,9 @@ public class CsvTableSource
         private String path;
         private String fieldDelim = CsvInputFormat.DEFAULT_FIELD_DELIMITER;
         private String lineDelim = CsvInputFormat.DEFAULT_LINE_DELIMITER;
-        private boolean isIgnoreFirstLine = false;
+        private boolean ignoreFirstLine = false;
         private String commentPrefix;
-        private boolean lenient = false;
+        private boolean skipOnParseError = false;
         private boolean emptyColumnAsNull = false;
 
         /**
@@ -375,13 +375,13 @@ public class CsvTableSource
 
         /** Ignore the first line. Not skip the first line by default. */
         public Builder ignoreFirstLine() {
-            this.isIgnoreFirstLine = true;
+            this.ignoreFirstLine = true;
             return this;
         }
 
         /** Skip records with parse error instead to fail. Throw an exception by default. */
         public Builder ignoreParseErrors() {
-            this.lenient = true;
+            this.skipOnParseError = true;
             return this;
         }
 
@@ -413,9 +413,9 @@ public class CsvTableSource
                             fieldDelim,
                             lineDelim,
                             quoteCharacter,
-                            isIgnoreFirstLine,
+                            ignoreFirstLine,
                             commentPrefix,
-                            lenient,
+                            skipOnParseError,
                             emptyColumnAsNull));
         }
     }
