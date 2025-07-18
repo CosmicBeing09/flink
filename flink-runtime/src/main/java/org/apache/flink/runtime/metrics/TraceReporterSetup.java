@@ -136,7 +136,7 @@ public final class TraceReporterSetup {
 
     public static List<TraceReporterSetup> fromConfiguration(
             final Configuration configuration, @Nullable final PluginManager pluginManager) {
-        String includedReportersString = configuration.get(TraceOptions.TRACE_REPORTERS_LIST, "");
+        String includedReportersString = configuration.get(TraceOptions.TRACE_REPORTER_NAMES, "");
 
         Set<String> namedReporters =
                 ReporterSetup.findEnabledTraceReportersInConfiguration(
