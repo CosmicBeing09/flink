@@ -25,18 +25,18 @@ public interface CacheLimitPolicy {
     /**
      * Whether the cache usage is safe to add.
      *
-     * @param toAddSize
+     * @param sizeToAdd
      * @return false if the toAddSize is larger than max available capacity, true otherwise.
      */
-    boolean isSafeToAdd(long toAddSize);
+    boolean isSafeToAdd(long sizeToAdd);
 
     /**
      * Whether the cache usage is exceeded the upperbound.
      *
-     * @param toAddSize
+     * @param sizeToAdd
      * @return true if the cache usage is overflow, false otherwise.
      */
-    boolean isOverflow(long toAddSize);
+    boolean isOverflow(long sizeToAdd);
 
     /**
      * Acquire cache.
