@@ -88,12 +88,12 @@ public class PartitionLoader implements Closeable {
     public void loadPartition(
             LinkedHashMap<String, String> partSpec, List<Path> srcPaths, boolean srcPathIsDir)
             throws Exception {
-        Optional<Path> pathFromMeta = metaStore.getPartition(partSpec);
+        Optional<Path> pathFromMeta = metaStore.getPartitionLocationPath(partSpec);
         Path path =
                 pathFromMeta.orElseGet(
                         () ->
                                 new Path(
-                                        metaStore.getLocationPath(),
+                                        metaStore.getTableLocationPath(),
                                         generatePartitionPath(partSpec)));
 
         overwriteAndMoveFiles(srcPaths, path, srcPathIsDir);
@@ -110,7 +110,7 @@ public class PartitionLoader implements Closeable {
      *     every path.
      */
     public void loadNonPartition(List<Path> srcPaths, boolean srcPathIsDir) throws Exception {
-        Path tableLocation = metaStore.getLocationPath();
+        Path tableLocation = metaStore.getTableLocationPath();
         overwriteAndMoveFiles(srcPaths, tableLocation, srcPathIsDir);
         commitPartition(new LinkedHashMap<>(), tableLocation);
         metaStore.finishWritingTable(tableLocation);
@@ -130,12 +130,12 @@ public class PartitionLoader implements Closeable {
      * </pre>
      */
     public void loadEmptyPartition(LinkedHashMap<String, String> partSpec) throws Exception {
-        Optional<Path> pathFromMeta = metaStore.getPartition(partSpec);
+        Optional<Path> pathFromMeta = metaStore.getPartitionLocationPath(partSpec);
         if (pathFromMeta.isPresent() && !overwrite) {
             commitPartition(partSpec, pathFromMeta.get());
             return;
         }
-        Path path = new Path(metaStore.getLocationPath(), generatePartitionPath(partSpec));
+        Path path = new Path(metaStore.getTableLocationPath(), generatePartitionPath(partSpec));
         if (pathFromMeta.isPresent()) {
             fs.delete(pathFromMeta.get(), true);
             fs.mkdirs(path);
