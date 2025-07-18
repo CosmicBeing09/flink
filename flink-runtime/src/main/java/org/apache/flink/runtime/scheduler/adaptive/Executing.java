@@ -214,13 +214,13 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void onNewResourcesAvailable() {
+    public void onResourcesAvailable() {
         stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
-    public void onNewResourceRequirements() {
+    public void onResourceRequirementsChanged() {
         stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }

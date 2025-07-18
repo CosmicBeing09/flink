@@ -697,7 +697,7 @@ public class AdaptiveScheduler
     private void newResourcesAvailable(Collection<? extends PhysicalSlot> physicalSlots) {
         state.tryRun(
                 ResourceListener.class,
-                ResourceListener::onNewResourcesAvailable,
+                ResourceListener::onResourcesAvailable,
                 "newResourcesAvailable");
     }
 
@@ -1085,7 +1085,7 @@ public class AdaptiveScheduler
             declareDesiredResources();
             state.tryRun(
                     ResourceListener.class,
-                    ResourceListener::onNewResourceRequirements,
+                    ResourceListener::onResourceRequirementsChanged,
                     "Current state does not react to desired parallelism changes.");
         }
     }

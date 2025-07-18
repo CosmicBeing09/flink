@@ -25,8 +25,8 @@ package org.apache.flink.runtime.scheduler.adaptive;
 interface ResourceListener {
 
     /** Notifies that new resources are available. */
-    void onNewResourcesAvailable();
+    void onResourcesAvailable();
 
     /** Notifies that the resource requirements have changed. */
-    void onNewResourceRequirements();
+    void onResourceRequirementsChanged();
 }

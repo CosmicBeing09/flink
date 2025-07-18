@@ -237,7 +237,7 @@ class ExecutingTest {
                 testInstance.onFailedCheckpoint();
 
                 // trigger change
-                testInstance.onNewResourceRequirements();
+                testInstance.onResourceRequirementsChanged();
 
                 for (int i = 0; i < rescaleOnFailedCheckpointsCount; i++) {
                     assertThat(rescaleTriggerCount)
@@ -279,7 +279,7 @@ class ExecutingTest {
             testInstance.onFailedCheckpoint();
 
             // trigger change
-            testInstance.onNewResourcesAvailable();
+            testInstance.onResourcesAvailable();
 
             IntStream.range(0, rescaleOnFailedCheckpointsCount - 1)
                     .forEach(ignored -> testInstance.onFailedCheckpoint());
@@ -291,7 +291,7 @@ class ExecutingTest {
             testInstance.onCompletedCheckpoint();
 
             // trigger change
-            testInstance.onNewResourceRequirements();
+            testInstance.onResourceRequirementsChanged();
 
             assertThat(rescaleTriggeredCount)
                     .as("The completed checkpoint should have triggered a rescale.")
@@ -665,7 +665,7 @@ class ExecutingTest {
                             .setExecutionGraph(executionGraph)
                             .build(adaptiveSchedulerCtx);
 
-            exec.onNewResourcesAvailable();
+            exec.onResourcesAvailable();
             assertThat(onChangeCalled.get()).isTrue();
         }
     }
