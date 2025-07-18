@@ -19,7 +19,7 @@
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 
 import org.apache.hadoop.io.IntWritable;
@@ -32,7 +32,7 @@ import java.util.List;
 /** Test data. */
 public class HadoopTestData {
 
-    public static DataSet<Tuple2<IntWritable, Text>> getKVPairDataSet(ExecutionEnvironment env) {
+    public static DataSet<Tuple2<IntWritable, Text>> getKVPairDataSet(BatchExecutionEnvironment env) {
 
         List<Tuple2<IntWritable, Text>> data = new ArrayList<Tuple2<IntWritable, Text>>();
         data.add(new Tuple2<IntWritable, Text>(new IntWritable(1), new Text("Hi")));

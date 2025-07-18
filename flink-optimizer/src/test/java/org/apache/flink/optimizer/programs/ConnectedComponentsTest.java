@@ -22,8 +22,8 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -257,7 +257,7 @@ public class ConnectedComponentsTest extends CompilerTestBase {
     private static Plan getConnectedComponentsPlan(
             int parallelism, int iterations, boolean solutionSetFirst) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(parallelism);
 
         DataSet<Tuple2<Long, Long>> verticesWithId =

@@ -26,8 +26,8 @@ import org.apache.flink.api.common.functions.MapPartitionFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.io.ReplicatingInputFormat;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.TupleCsvInputFormat;
 import org.apache.flink.api.java.operators.DataSink;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -52,7 +52,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInput() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -91,7 +91,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInputBehindMap() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -134,7 +134,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInputBehindFilter() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -177,7 +177,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInputBehindFlatMap() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -220,7 +220,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInputBehindMapPartition() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -263,7 +263,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkJoinWithReplicatedSourceInputBehindMultiMaps() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -309,7 +309,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkCrossWithReplicatedSourceInput() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -348,7 +348,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test
     public void checkCrossWithReplicatedSourceInputBehindMap() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -392,7 +392,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test(expected = CompilerException.class)
     public void checkJoinWithReplicatedSourceInputChangingparallelism() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -425,7 +425,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     @Test(expected = CompilerException.class)
     public void checkJoinWithReplicatedSourceInputBehindMapChangingparallelism() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -455,7 +455,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     /** Tests compiler fail for join program with replicated data source behind reduce. */
     @Test(expected = CompilerException.class)
     public void checkJoinWithReplicatedSourceInputBehindReduce() {
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);
@@ -484,7 +484,7 @@ public class ReplicatingDataSourceTest extends CompilerTestBase {
     /** Tests compiler fail for join program with replicated data source behind rebalance. */
     @Test(expected = CompilerException.class)
     public void checkJoinWithReplicatedSourceInputBehindRebalance() {
-        ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         TupleTypeInfo<Tuple1<String>> typeInfo = TupleTypeInfo.getBasicTupleTypeInfo(String.class);

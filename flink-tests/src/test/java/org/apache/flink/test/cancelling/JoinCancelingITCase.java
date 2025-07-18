@@ -23,8 +23,8 @@ import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.io.GenericInputFormat;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.InfiniteIntegerTupleInputFormat;
@@ -61,7 +61,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
             boolean slow,
             int parallelism)
             throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
         DataSet<Tuple2<Integer, Integer>> input2 =
@@ -104,7 +104,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int msecsTillCanceling,
             int maxTimeTillCanceled)
             throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
         DataSet<Tuple2<Integer, Integer>> input2 =
@@ -123,7 +123,7 @@ public class JoinCancelingITCase extends CancelingTestBase {
 
     @Test
     public void testCancelSortMatchWhileDoingHeavySorting() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         HeavyCompareGeneratorInputFormat input = new HeavyCompareGeneratorInputFormat(100);
         DataSet<Tuple2<HeavyCompare, Integer>> input1 = env.createInput(input);
         DataSet<Tuple2<HeavyCompare, Integer>> input2 = env.createInput(input);

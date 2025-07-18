@@ -19,8 +19,8 @@
 package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.hadoopcompatibility.mapred.HadoopReduceCombineFunction;
 import org.apache.flink.hadoopcompatibility.mapred.HadoopReduceFunction;
@@ -50,7 +50,7 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testStandardCountingWithCombiner(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper1());
@@ -74,7 +74,7 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testUngroupedHadoopReducer(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper2());
@@ -98,7 +98,7 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
     @TestTemplate
     void testCombiner(@TempDir Path tempFolder) throws Exception {
         assumeThat(mode).isEqualTo(TestExecutionMode.CLUSTER);
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, IntWritable>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper3());
@@ -122,7 +122,7 @@ class HadoopReduceCombineFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testConfigurationViaJobConf(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         JobConf conf = new JobConf();
         conf.set("my.cntPrefix", "Hello");

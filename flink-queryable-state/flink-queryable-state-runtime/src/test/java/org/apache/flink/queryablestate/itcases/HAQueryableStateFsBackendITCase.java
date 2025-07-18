@@ -79,7 +79,7 @@ class HAQueryableStateFsBackendITCase extends AbstractQueryableStateTestBase {
                                     .build());
 
     @Override
-    protected StreamExecutionEnvironment createEnv() throws Exception {
+    protected StreamExecutionEnvironment createTestStreamEnvironment() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(env);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(

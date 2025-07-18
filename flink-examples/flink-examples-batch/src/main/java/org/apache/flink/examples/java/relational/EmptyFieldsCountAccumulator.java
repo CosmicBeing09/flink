@@ -22,8 +22,8 @@ import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.accumulators.Accumulator;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFilterFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.ParameterTool;
 
@@ -43,7 +43,7 @@ import static org.apache.flink.examples.java.util.DataSetDeprecationInfo.DATASET
  * context, empty fields are those, that at most contain whitespace characters like space and tab.
  *
  * <p>The input file is a plain text CSV file with the semicolon as field separator and double
- * quotes as field delimiters and three columns. See {@link #getDataSet(ExecutionEnvironment,
+ * quotes as field delimiters and three columns. See {@link #getDataSet(BatchExecutionEnvironment,
  * ParameterTool)} for configuration.
  *
  * <p>Usage: <code>EmptyFieldsCountAccumulator --input &lt;path&gt; --output &lt;path&gt;</code>
@@ -79,7 +79,7 @@ public class EmptyFieldsCountAccumulator {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);
@@ -114,7 +114,7 @@ public class EmptyFieldsCountAccumulator {
 
     @SuppressWarnings("unchecked")
     private static DataSet<StringTriple> getDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         if (params.has("input")) {
             return env.readCsvFile(params.get("input"))
                     .fieldDelimiter(";")

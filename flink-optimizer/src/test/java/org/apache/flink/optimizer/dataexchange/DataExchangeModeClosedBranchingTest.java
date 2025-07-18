@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.DualInputPlanNode;
@@ -168,7 +168,7 @@ public class DataExchangeModeClosedBranchingTest extends CompilerTestBase {
             DataExchangeMode toCoGroup2,
             DataExchangeMode toCoGroupSink) {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(execMode);
 
             // set parallelism to 2 to avoid chaining with source in case when available processors

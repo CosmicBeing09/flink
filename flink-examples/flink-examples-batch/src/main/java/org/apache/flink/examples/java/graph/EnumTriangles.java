@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.utils.ParameterTool;
@@ -96,7 +96,7 @@ public class EnumTriangles {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

@@ -18,13 +18,13 @@
 
 package org.apache.flink.runtime.webmonitor.handlers.utils;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 
 /** Simple test program. */
 public class TestProgram {
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("hello", "world").output(new DiscardingOutputFormat<>());
         env.execute();
     }

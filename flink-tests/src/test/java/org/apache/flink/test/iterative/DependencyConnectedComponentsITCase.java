@@ -21,8 +21,8 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -107,7 +107,7 @@ public class DependencyConnectedComponentsITCase extends JavaProgramTestBaseJUni
 
         public static String runProgram(String resultPath) throws Exception {
 
-            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(parallelism);
 
             DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);

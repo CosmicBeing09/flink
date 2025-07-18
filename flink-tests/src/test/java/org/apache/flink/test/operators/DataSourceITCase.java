@@ -19,7 +19,7 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.TextInputFormat;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.fs.Path;
@@ -47,7 +47,7 @@ public class DataSourceITCase extends JavaProgramTestBaseJUnit4 {
          * Test passing a configuration object to an input format
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         Configuration ifConf = new Configuration();
         ifConf.setString("prepend", "test");
 

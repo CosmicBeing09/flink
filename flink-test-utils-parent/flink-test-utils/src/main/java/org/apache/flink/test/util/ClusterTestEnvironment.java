@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.core.fs.Path;
@@ -31,9 +31,9 @@ import java.util.Collection;
 import java.util.Collections;
 
 /**
- * A {@link ExecutionEnvironment} implementation which executes its jobs on a {@link MiniCluster}.
+ * A {@link BatchExecutionEnvironment} implementation which executes its jobs on a {@link MiniCluster}.
  */
-public class ClusterTestEnvironment extends ExecutionEnvironment {
+public class ClusterTestEnvironment extends BatchExecutionEnvironment {
 
     private final MiniCluster miniCluster;
 
@@ -99,7 +99,7 @@ public class ClusterTestEnvironment extends ExecutionEnvironment {
     // ---------------------------------------------------------------------------------------------
 
     /**
-     * Sets the current {@link ExecutionEnvironment} to be a {@link ClusterTestEnvironment}. The test
+     * Sets the current {@link BatchExecutionEnvironment} to be a {@link ClusterTestEnvironment}. The test
      * environment executes the given jobs on a Flink mini cluster with the given default
      * parallelism and the additional jar files and class paths.
      *
@@ -121,7 +121,7 @@ public class ClusterTestEnvironment extends ExecutionEnvironment {
     }
 
     /**
-     * Sets the current {@link ExecutionEnvironment} to be a {@link ClusterTestEnvironment}. The test
+     * Sets the current {@link BatchExecutionEnvironment} to be a {@link ClusterTestEnvironment}. The test
      * environment executes the given jobs on a Flink mini cluster with the given default
      * parallelism and the additional jar files and class paths.
      *

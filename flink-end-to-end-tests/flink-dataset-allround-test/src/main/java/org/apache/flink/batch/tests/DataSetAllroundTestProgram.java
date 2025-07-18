@@ -24,8 +24,8 @@ import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase;
 import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -65,7 +65,7 @@ public class DataSetAllroundTestProgram {
         String outputPath = params.getRequired("outputPath");
         boolean infinite = params.getBoolean("infinite", false);
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         int numKeys = loadFactor * 128 * 1024;
         DataSet<Tuple2<String, Integer>> x1Keys;

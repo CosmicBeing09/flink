@@ -20,8 +20,8 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -51,7 +51,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerWithBroadcastVariable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -88,7 +88,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerBroadcastedAllReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -144,7 +144,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     @Test
     public void testPipelineBreakerBroadcastedPartialSolution() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.getConfig().setExecutionMode(ExecutionMode.PIPELINED);
             env.setParallelism(64);
 
@@ -188,7 +188,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
     public void testPipelineBreakerWithCross() {
         try {
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -216,7 +216,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -245,7 +245,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);
@@ -274,7 +274,7 @@ public class PipelineBreakerTest extends CompilerTestBase {
             }
 
             {
-                ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+                BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
                 env.setParallelism(64);
 
                 DataSet<Long> initialSource = env.generateSequence(1, 10);

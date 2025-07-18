@@ -20,7 +20,7 @@ package org.apache.flink.test.misc;
 
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.functions.RichMapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -33,7 +33,7 @@ public class CustomPartitioningITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         if (!isCollectionExecution()) {
             Assert.assertTrue(env.getParallelism() > 1);

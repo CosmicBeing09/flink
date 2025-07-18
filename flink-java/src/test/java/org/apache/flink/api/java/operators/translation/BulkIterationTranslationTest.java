@@ -22,8 +22,8 @@ package org.apache.flink.api.java.operators.translation;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.base.BulkIterationBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -48,7 +48,7 @@ class BulkIterationTranslationTest implements java.io.Serializable {
         final int defaultParallelism = 133;
         final int iterationParallelism = 77;
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // ------------ construct the test program ------------------
 

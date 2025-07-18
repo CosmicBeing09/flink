@@ -19,8 +19,8 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
 
@@ -34,7 +34,7 @@ public class IterationWithAllReducerITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         DataSet<String> initialInput = env.fromElements("1", "1", "1", "1", "1", "1", "1", "1");

@@ -20,7 +20,7 @@
 package org.apache.flink.batch.tests;
 
 import org.apache.flink.api.common.ExecutionMode;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.FileSystem;
 
@@ -32,7 +32,7 @@ public class DataSetFineGrainedRecoveryTestProgram {
         final String latchFilePath = params.getRequired("latchFilePath");
         final String outputPath = params.getRequired("outputPath");
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().setExecutionMode(ExecutionMode.BATCH_FORCED);
         env.setParallelism(4);
 

@@ -22,8 +22,8 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.operators.base.FlatMapOperatorBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -50,7 +50,7 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
     @Test
     public void testUnion1() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> sourceA = env.generateSequence(0, 1);
         DataSet<Long> sourceB = env.generateSequence(0, 1);
@@ -104,7 +104,7 @@ public class UnionPropertyPropagationTest extends CompilerTestBase {
 
         // construct the plan it will be multiple flat maps, all unioned
         // and the "unioned" inputDataSet will be grouped
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> source = env.readTextFile(IN_FILE);
         DataSet<Tuple2<String, Integer>> lastUnion = source.flatMap(new DummyFlatMap());

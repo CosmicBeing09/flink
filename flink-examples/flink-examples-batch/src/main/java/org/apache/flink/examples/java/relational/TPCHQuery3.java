@@ -20,8 +20,8 @@ package org.apache.flink.examples.java.relational;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple4;
@@ -115,7 +115,7 @@ public class TPCHQuery3 {
             return;
         }
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.getConfig().setGlobalJobParameters(params);
 
@@ -309,7 +309,7 @@ public class TPCHQuery3 {
     // *************************************************************************
 
     private static DataSet<Lineitem> getLineitemDataSet(
-            ExecutionEnvironment env, String lineitemPath) {
+            BatchExecutionEnvironment env, String lineitemPath) {
         return env.readCsvFile(lineitemPath)
                 .fieldDelimiter("|")
                 .includeFields("1000011000100000")
@@ -317,14 +317,14 @@ public class TPCHQuery3 {
     }
 
     private static DataSet<Customer> getCustomerDataSet(
-            ExecutionEnvironment env, String customerPath) {
+            BatchExecutionEnvironment env, String customerPath) {
         return env.readCsvFile(customerPath)
                 .fieldDelimiter("|")
                 .includeFields("10000010")
                 .tupleType(Customer.class);
     }
 
-    private static DataSet<Order> getOrdersDataSet(ExecutionEnvironment env, String ordersPath) {
+    private static DataSet<Order> getOrdersDataSet(BatchExecutionEnvironment env, String ordersPath) {
         return env.readCsvFile(ordersPath)
                 .fieldDelimiter("|")
                 .includeFields("110010010")

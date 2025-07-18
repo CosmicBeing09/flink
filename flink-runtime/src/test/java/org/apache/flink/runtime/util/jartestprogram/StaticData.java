@@ -18,11 +18,11 @@
 
 package org.apache.flink.runtime.util.jartestprogram;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 
 public class StaticData {
-    public static DataSet<String> getDefaultTextLineDataSet(ExecutionEnvironment env) {
+    public static DataSet<String> getDefaultTextLineDataSet(BatchExecutionEnvironment env) {
 
         return env.fromElements(
                 "To be, or not to be,--that is the question:--",

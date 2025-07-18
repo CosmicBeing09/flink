@@ -25,8 +25,8 @@ import org.apache.flink.api.common.functions.MapPartitionFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.AggregateOperator;
 import org.apache.flink.api.java.operators.DataSource;
@@ -68,7 +68,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition by key field
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Long> uniqLongs = ds.partitionByHash(1).mapPartition(new UniqueTupleLongMapper());
@@ -85,7 +85,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition by key field
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Long> uniqLongs = ds.partitionByRange(1).mapPartition(new UniqueTupleLongMapper());
@@ -102,7 +102,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition by key field
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         AggregateOperator<Tuple3<Integer, Long, String>> sum =
@@ -129,7 +129,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition by key field
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         AggregateOperator<Tuple3<Integer, Long, String>> sum =
@@ -156,7 +156,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition of atomic type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> uniqLongs =
                 env.generateSequence(1, 6)
@@ -177,7 +177,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition of atomic type
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> uniqLongs =
                 env.generateSequence(1, 6)
@@ -198,7 +198,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition by key selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Long> uniqLongs =
@@ -228,7 +228,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition by key selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Long> uniqLongs =
@@ -255,7 +255,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test forced rebalancing
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // generate some number in parallel
         DataSet<Long> ds = env.generateSequence(1, 3000);
@@ -320,7 +320,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition by key field and different parallelism
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -339,7 +339,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition by key field and different parallelism
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
@@ -358,7 +358,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test hash partition with key expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
@@ -379,7 +379,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Test range partition with key expression
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(3);
 
         DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
@@ -454,7 +454,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testRangePartitionerOnSequenceData() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSource<Long> dataSource = env.generateSequence(0, 10000);
         KeySelector<Long, Long> keyExtractor = new ObjectSelfKeySelector();
 
@@ -489,7 +489,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
             throw new InvalidProgramException("Does not apply for collection execution");
         }
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSource<Long> source = env.generateSequence(0, 10000);
 
         DataSet<Tuple2<Long, String>> tuples =
@@ -519,7 +519,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testRangePartitionerOnSequenceDataWithOrders() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple2<Long, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(
@@ -568,7 +568,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testRangePartitionerOnSequenceNestedDataWithOrders() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         final DataSet<Tuple2<Tuple2<Long, Long>, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(
@@ -631,7 +631,7 @@ public class PartitionITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testRangePartitionerWithKeySelectorOnSequenceNestedDataWithOrders()
             throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         final DataSet<Tuple2<ComparablePojo, Long>> dataSet =
                 env.generateSequence(0, 10000)
                         .map(

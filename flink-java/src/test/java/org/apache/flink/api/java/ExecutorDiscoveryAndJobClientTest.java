@@ -34,7 +34,7 @@ import java.util.concurrent.CompletableFuture;
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
- * Tests the {@link PipelineExecutorFactory} discovery in the {@link ExecutionEnvironment} and the
+ * Tests the {@link PipelineExecutorFactory} discovery in the {@link BatchExecutionEnvironment} and the
  * calls of the {@link JobClient}.
  */
 class ExecutorDiscoveryAndJobClientTest {
@@ -63,7 +63,7 @@ class ExecutorDiscoveryAndJobClientTest {
 
     private JobExecutionResult executeTestJobBasedOnConfig(final Configuration configuration)
             throws Exception {
-        final ExecutionEnvironment env = new ExecutionEnvironment(configuration);
+        final BatchExecutionEnvironment env = new BatchExecutionEnvironment(configuration);
         env.fromCollection(Collections.singletonList(42)).output(new DiscardingOutputFormat<>());
         return env.execute();
     }

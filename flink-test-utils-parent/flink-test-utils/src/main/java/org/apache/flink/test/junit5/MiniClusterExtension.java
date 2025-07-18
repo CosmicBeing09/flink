@@ -19,7 +19,7 @@
 package org.apache.flink.test.junit5;
 
 import org.apache.flink.annotation.Experimental;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.MiniClusterClient;
 import org.apache.flink.client.program.rest.RestClusterClient;
@@ -46,7 +46,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import java.util.function.Supplier;
 
 /**
- * Starts a Flink {@link MiniCluster} and registers the respective {@link ExecutionEnvironment} and
+ * Starts a Flink {@link MiniCluster} and registers the respective {@link BatchExecutionEnvironment} and
  * {@link StreamExecutionEnvironment} in the correct thread local environment.
  *
  * <p>Example usage:

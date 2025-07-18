@@ -21,8 +21,8 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.CombineFunction;
 import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.UnsortedGrouping;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -51,7 +51,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testReduceOnNonKeyedDataset() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -67,7 +67,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testForkingReduceOnNonKeyedDataset() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -85,7 +85,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testReduceOnKeyedDataset() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -101,7 +101,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testReduceOnKeyedDatasetWithSelector() throws Exception {
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -117,7 +117,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testForkingReduceOnKeyedDataset() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -137,7 +137,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testForkingReduceOnKeyedDatasetWithSelection() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(4);
 
         // creates the input data and distributes them evenly among the available downstream tasks
@@ -156,7 +156,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         compareResultAsTuples(actual, expected);
     }
 
-    private DataSet<Tuple2<Integer, Boolean>> createNonKeyedInput(ExecutionEnvironment env) {
+    private DataSet<Tuple2<Integer, Boolean>> createNonKeyedInput(BatchExecutionEnvironment env) {
         return env.fromCollection(
                         Arrays.asList(
                                 new Tuple2<>(1, false),
@@ -234,7 +234,7 @@ public class ReduceWithCombinerITCase extends MultipleProgramsTestBaseJUnit4 {
         }
     }
 
-    private DataSet<Tuple3<String, Integer, Boolean>> createKeyedInput(ExecutionEnvironment env) {
+    private DataSet<Tuple3<String, Integer, Boolean>> createKeyedInput(BatchExecutionEnvironment env) {
         return env.fromCollection(
                         Arrays.asList(
                                 new Tuple3<>("k1", 1, false),

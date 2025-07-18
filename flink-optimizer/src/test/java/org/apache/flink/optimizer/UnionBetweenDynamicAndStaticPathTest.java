@@ -19,8 +19,8 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.optimizer.plan.BinaryUnionPlanNode;
@@ -42,7 +42,7 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
     @Test
     public void testUnionStaticFirst() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input1 = env.generateSequence(1, 10);
             DataSet<Long> input2 = env.generateSequence(1, 10);
@@ -95,7 +95,7 @@ public class UnionBetweenDynamicAndStaticPathTest extends CompilerTestBase {
     @Test
     public void testUnionStaticSecond() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Long> input1 = env.generateSequence(1, 10);
             DataSet<Long> input2 = env.generateSequence(1, 10);

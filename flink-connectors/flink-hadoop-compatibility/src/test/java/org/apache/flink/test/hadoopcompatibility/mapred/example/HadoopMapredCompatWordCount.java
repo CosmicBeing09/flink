@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.hadoopcompatibility.mapred.example;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.hadoop.mapred.HadoopInputFormat;
 import org.apache.flink.api.java.hadoop.mapred.HadoopOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -58,7 +58,7 @@ public class HadoopMapredCompatWordCount {
         final String inputPath = args[0];
         final String outputPath = args[1];
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Set up the Hadoop Input Format
         HadoopInputFormat<LongWritable, Text> hadoopInputFormat =

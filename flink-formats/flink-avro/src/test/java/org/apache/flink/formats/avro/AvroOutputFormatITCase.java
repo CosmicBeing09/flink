@@ -19,8 +19,8 @@
 package org.apache.flink.formats.avro;
 
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.formats.avro.AvroOutputFormat.Codec;
 import org.apache.flink.formats.avro.generated.Colors;
@@ -70,7 +70,7 @@ public class AvroOutputFormatITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<String, Integer, String>> input =
                 env.readCsvFile(inputPath)

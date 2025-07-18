@@ -20,8 +20,8 @@ package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
@@ -32,7 +32,7 @@ public class StaticlyNestedIterationsITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> data1 = env.generateSequence(1, 100);
         DataSet<Long> data2 = env.generateSequence(1, 100);

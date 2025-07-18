@@ -21,7 +21,7 @@ package org.apache.flink.client.program;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.dag.Pipeline;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.runtime.execution.Environment;
@@ -78,7 +78,7 @@ public class PackagedProgramUtilsPipelineTest {
     void testConfigurationForwarding() throws Exception {
         // we want to test forwarding with this config, ensure that the default is what we expect.
         assertThat(
-                        ExecutionEnvironment.getBatchExecutionEnvironment()
+                        BatchExecutionEnvironment.getBatchExecutionEnvironment()
                                 .getConfig()
                                 .isAutoTypeRegistrationDisabled())
                 .isFalse();
@@ -192,7 +192,7 @@ public class PackagedProgramUtilsPipelineTest {
     /** Test Program for the DataSet API. */
     public static class DataSetTestProgram {
         public static void main(String[] args) throws Exception {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.fromElements("hello").print();
             env.execute();
         }

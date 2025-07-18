@@ -22,8 +22,8 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.GenericDataSinkBase;
 import org.apache.flink.api.common.operators.GenericDataSourceBase;
 import org.apache.flink.api.common.operators.base.GroupReduceOperatorBase;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -41,7 +41,7 @@ class AggregateTranslationTest {
     void translateAggregate() {
         try {
             final int parallelism = 8;
-            ExecutionEnvironment env = ExecutionEnvironment.createLocalEnvironment(parallelism);
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.createLocalEnvironment(parallelism);
 
             @SuppressWarnings("unchecked")
             DataSet<Tuple3<Double, StringValue, Long>> initialData =

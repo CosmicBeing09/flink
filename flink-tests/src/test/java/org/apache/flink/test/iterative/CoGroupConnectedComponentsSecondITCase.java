@@ -21,8 +21,8 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsSecond;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
@@ -52,7 +52,7 @@ public class CoGroupConnectedComponentsSecondITCase extends JavaProgramTestBaseJ
     protected void testProgram() throws Exception {
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // read vertex and edge data
         DataSet<Long> vertices =

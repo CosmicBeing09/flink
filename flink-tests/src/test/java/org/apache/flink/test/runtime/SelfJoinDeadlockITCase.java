@@ -21,8 +21,8 @@ package org.apache.flink.test.runtime;
 import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.io.GenericInputFormat;
 import org.apache.flink.api.common.io.NonParallelInput;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -52,7 +52,7 @@ public class SelfJoinDeadlockITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Integer, String>> ds =
                 env.createInput(new LargeJoinDataGeneratorInputFormat(1000000));

@@ -22,8 +22,8 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.Partitioner;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.PartitionOperator;
@@ -51,7 +51,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testPartitionCustomOperatorPreservesFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
@@ -86,7 +86,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testRangePartitionOperatorPreservesFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));
@@ -131,7 +131,7 @@ public class PartitionOperatorTest extends CompilerTestBase {
     @Test
     public void testRangePartitionOperatorPreservesFields2() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> data =
                     env.fromCollection(Collections.singleton(new Tuple2<>(0L, 0L)));

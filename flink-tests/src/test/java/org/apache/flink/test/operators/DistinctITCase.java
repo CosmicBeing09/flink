@@ -20,8 +20,8 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -56,7 +56,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on tuples with key field selector
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct(0, 1, 2);
@@ -75,7 +75,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on tuples with key field selector with not all fields selected
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -94,7 +94,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on tuples with key extractor function
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -123,7 +123,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on custom type with type extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getCustomTypeDataSet(env);
         DataSet<Tuple1<Integer>> reduceDs = ds.distinct(new KeySelector3()).map(new Mapper3());
@@ -157,7 +157,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on tuples
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> distinctDs = ds.union(ds).distinct();
@@ -176,7 +176,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on custom type with tuple-returning type extractor
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.get5TupleDataSet(env);
@@ -208,7 +208,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on tuples with field expressions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -227,7 +227,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on Pojos
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
         DataSet<Integer> reduceDs = ds.distinct("nestedPojo.longNumber").map(new Mapper2());
@@ -251,7 +251,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * distinct on full Pojo
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<POJO> ds = CollectionDataSets.getDuplicatePojoDataSet(env);
         DataSet<Integer> reduceDs = ds.distinct().map(new Mapper1());
@@ -276,7 +276,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on Integers
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
         DataSet<Integer> reduceDs = ds.distinct();
 
@@ -293,7 +293,7 @@ public class DistinctITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of distinct on Strings, using Keys.ExpressionKeys.SELECT_ALL_CHAR
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         DataSet<String> reduceDs = ds.union(ds).distinct("*");
 

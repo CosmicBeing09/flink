@@ -23,8 +23,8 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.base.JoinOperatorBase.JoinHint;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.types.IntValue;
@@ -70,7 +70,7 @@ public class OverwriteObjects {
     public void run() throws Exception {
         LOG.info("Random seed = {}", RANDOM_SEED);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         for (int parallelism = MAX_PARALLELISM; parallelism > 0; parallelism--) {
             LOG.info("Parallelism = {}", parallelism);
@@ -86,7 +86,7 @@ public class OverwriteObjects {
 
     // --------------------------------------------------------------------------------------------
 
-    public void testReduce(ExecutionEnvironment env) throws Exception {
+    public void testReduce(BatchExecutionEnvironment env) throws Exception {
         /*
          * Test ChainedAllReduceDriver
          */
@@ -109,7 +109,7 @@ public class OverwriteObjects {
         Assert.assertEquals(disabledResult, enabledResult);
     }
 
-    public void testGroupedReduce(ExecutionEnvironment env) throws Exception {
+    public void testGroupedReduce(BatchExecutionEnvironment env) throws Exception {
         /*
          * Test ReduceCombineDriver and ReduceDriver
          */
@@ -149,7 +149,7 @@ public class OverwriteObjects {
 
     // --------------------------------------------------------------------------------------------
 
-    public void testJoin(ExecutionEnvironment env) throws Exception {
+    public void testJoin(BatchExecutionEnvironment env) throws Exception {
         /*
          * Test JoinDriver, LeftOuterJoinDriver, RightOuterJoinDriver, and FullOuterJoinDriver
          */
@@ -308,7 +308,7 @@ public class OverwriteObjects {
 
     // --------------------------------------------------------------------------------------------
 
-    public void testCross(ExecutionEnvironment env) throws Exception {
+    public void testCross(BatchExecutionEnvironment env) throws Exception {
         /*
          * Test CrossDriver
          */
@@ -366,18 +366,18 @@ public class OverwriteObjects {
     // --------------------------------------------------------------------------------------------
 
     private DataSet<Tuple2<IntValue, IntValue>> getDataSet(
-            ExecutionEnvironment env, int numberOfElements, int keyRange) {
+            BatchExecutionEnvironment env, int numberOfElements, int keyRange) {
         return env.fromCollection(
                 new TupleIntValueIntValueIterator(numberOfElements, keyRange),
                 TupleTypeInfo.<Tuple2<IntValue, IntValue>>getBasicAndBasicValueTupleTypeInfo(
                         IntValue.class, IntValue.class));
     }
 
-    private DataSet<Tuple2<IntValue, IntValue>> getDataSet(ExecutionEnvironment env) {
+    private DataSet<Tuple2<IntValue, IntValue>> getDataSet(BatchExecutionEnvironment env) {
         return getDataSet(env, NUMBER_OF_ELEMENTS, KEY_RANGE);
     }
 
-    private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataSet(ExecutionEnvironment env) {
+    private DataSet<Tuple2<IntValue, IntValue>> getFilteredDataSet(BatchExecutionEnvironment env) {
         return getDataSet(env)
                 .filter(
                         new FilterFunction<Tuple2<IntValue, IntValue>>() {

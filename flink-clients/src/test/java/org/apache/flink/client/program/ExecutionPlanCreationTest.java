@@ -21,8 +21,8 @@ package org.apache.flink.client.program;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.ProgramDescription;
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
@@ -91,7 +91,7 @@ class ExecutionPlanCreationTest {
                 return;
             }
 
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Long>> input =
                     env.readCsvFile(args[0]).fieldDelimiter("\t").types(Long.class, Long.class);

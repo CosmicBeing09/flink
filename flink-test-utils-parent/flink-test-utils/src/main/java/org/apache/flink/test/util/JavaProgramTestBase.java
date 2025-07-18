@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 import org.junit.jupiter.api.Test;
 
@@ -101,7 +101,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         executeProgramMultipleTimes(env);
     }
 
-    private void executeProgramMultipleTimes(ExecutionEnvironment env) throws Exception {
+    private void executeProgramMultipleTimes(BatchExecutionEnvironment env) throws Exception {
         for (int i = 0; i < numberOfTestRepetitions; i++) {
             try {
                 testProgram();
@@ -129,7 +129,7 @@ public abstract class JavaProgramTestBase extends AbstractTestBase {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
+        BatchExecutionEnvironment env = MINI_CLUSTER_EXTENSION.getTestClusterEnvironment();
         env.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times

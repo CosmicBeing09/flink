@@ -19,8 +19,8 @@
 package org.apache.flink.optimizer.java;
 
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
@@ -40,7 +40,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
     @Test
     public void testDistinctPreservesPartitioningOfDistinctFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")
@@ -79,7 +79,7 @@ public class DistinctAndGroupingOptimizerTest extends CompilerTestBase {
     @Test
     public void testDistinctDestroysPartitioningOfNonDistinctFields() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(4);
 
             @SuppressWarnings("unchecked")

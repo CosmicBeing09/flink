@@ -21,7 +21,7 @@ package org.apache.flink.test.iterative;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -39,7 +39,7 @@ public class BulkIterationWithAllReducerITCase extends JavaProgramTestBaseJUnit4
     @Override
     protected void testProgram() throws Exception {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8);
 

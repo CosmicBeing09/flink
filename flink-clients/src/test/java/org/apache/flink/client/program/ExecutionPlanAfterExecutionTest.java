@@ -19,8 +19,8 @@
 package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.LocalEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
@@ -33,8 +33,8 @@ import java.io.Serializable;
 import static org.assertj.core.api.Assertions.fail;
 
 /**
- * Tests that verify subsequent calls to {@link ExecutionEnvironment#getExecutionPlan()} and {@link
- * ExecutionEnvironment#execute()}/{@link ExecutionEnvironment#createProgramPlan()} do not cause any
+ * Tests that verify subsequent calls to {@link BatchExecutionEnvironment#getExecutionPlan()} and {@link
+ * BatchExecutionEnvironment#execute()}/{@link BatchExecutionEnvironment#createProgramPlan()} do not cause any
  * exceptions.
  */
 @SuppressWarnings("serial")
@@ -42,7 +42,7 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
 
     @Test
     void testExecuteAfterGetExecutionPlan() {
-        ExecutionEnvironment env = new LocalEnvironment();
+        BatchExecutionEnvironment env = new LocalEnvironment();
 
         DataSet<Integer> baseSet = env.fromElements(1, 2);
 
@@ -67,7 +67,7 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
 
     @Test
     void testCreatePlanAfterGetExecutionPlan() {
-        ExecutionEnvironment env = new LocalEnvironment();
+        BatchExecutionEnvironment env = new LocalEnvironment();
 
         DataSet<Integer> baseSet = env.fromElements(1, 2);
 
@@ -85,7 +85,7 @@ class ExecutionPlanAfterExecutionTest implements Serializable {
 
     @Test
     void testGetExecutionPlanOfRangePartition() {
-        ExecutionEnvironment env = new LocalEnvironment();
+        BatchExecutionEnvironment env = new LocalEnvironment();
 
         DataSet<Integer> baseSet = env.fromElements(1, 2);
 

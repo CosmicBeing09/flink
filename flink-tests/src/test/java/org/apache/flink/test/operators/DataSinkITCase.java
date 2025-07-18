@@ -20,8 +20,8 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
@@ -65,7 +65,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testIntSortingParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> ds = CollectionDataSets.getIntegerDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("*", Order.DESCENDING).setParallelism(1);
@@ -78,7 +78,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testStringSortingParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> ds = CollectionDataSets.getStringDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("*", Order.ASCENDING).setParallelism(1);
@@ -100,7 +100,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testTupleSortingSingleAscParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath).sortLocalOutput(0, Order.ASCENDING).setParallelism(1);
@@ -135,7 +135,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testTupleSortingSingleDescParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath).sortLocalOutput(0, Order.DESCENDING).setParallelism(1);
@@ -170,7 +170,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testTupleSortingDualParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         ds.writeAsCsv(resultPath)
@@ -208,7 +208,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testTupleSortingNestedParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet2(env);
@@ -233,7 +233,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testTupleSortingNestedParallelism1_2() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Tuple2<Integer, Integer>, String, Integer>> ds =
                 CollectionDataSets.getGroupSortedNestedTupleDataSet2(env);
@@ -258,7 +258,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testPojoSortingSingleParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath).sortLocalOutput("number", Order.ASCENDING).setParallelism(1);
@@ -280,7 +280,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testPojoSortingDualParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath)
@@ -305,7 +305,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testPojoSortingNestedParallelism1() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CollectionDataSets.POJO> ds = CollectionDataSets.getMixedPojoDataSet(env);
         ds.writeAsText(resultPath)
@@ -331,7 +331,7 @@ public class DataSinkITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSortingParallelism4() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> ds = env.generateSequence(0, 1000);
         // randomize

@@ -20,7 +20,7 @@ package org.apache.flink.test.hadoopcompatibility.mapred;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.hadoopcompatibility.mapred.HadoopReduceFunction;
 import org.apache.flink.test.util.MultipleProgramsTestBase;
@@ -48,7 +48,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testStandardGrouping(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds =
                 HadoopTestData.getKVPairDataSet(env).map(new Mapper1());
@@ -72,7 +72,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testUngroupedHadoopReducer(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<IntWritable, Text>> ds = HadoopTestData.getKVPairDataSet(env);
 
@@ -93,7 +93,7 @@ class HadoopReduceFunctionITCase extends MultipleProgramsTestBase {
 
     @TestTemplate
     void testConfigurationViaJobConf(@TempDir Path tempFolder) throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         JobConf conf = new JobConf();
         conf.set("my.cntPrefix", "Hello");

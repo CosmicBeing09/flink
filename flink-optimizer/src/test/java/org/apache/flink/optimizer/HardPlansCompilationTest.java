@@ -19,8 +19,8 @@
 package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.optimizer.plan.OptimizedPlan;
 import org.apache.flink.optimizer.plantranslate.JobGraphGenerator;
@@ -50,7 +50,7 @@ public class HardPlansCompilationTest extends CompilerTestBase {
     @Test
     public void testTicket158() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
 

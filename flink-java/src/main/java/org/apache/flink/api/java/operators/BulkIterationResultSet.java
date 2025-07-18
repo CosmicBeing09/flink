@@ -21,7 +21,7 @@ package org.apache.flink.api.java.operators;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 /**
  * Resulting {@link DataSet} of bulk iterations.
@@ -38,7 +38,7 @@ public class BulkIterationResultSet<T> extends DataSet<T> {
     private final DataSet<?> terminationCriterion;
 
     BulkIterationResultSet(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             TypeInformation<T> type,
             IterativeDataSet<T> iterationHead,
             DataSet<T> nextPartialSolution) {
@@ -46,7 +46,7 @@ public class BulkIterationResultSet<T> extends DataSet<T> {
     }
 
     BulkIterationResultSet(
-            ExecutionEnvironment context,
+            BatchExecutionEnvironment context,
             TypeInformation<T> type,
             IterativeDataSet<T> iterationHead,
             DataSet<T> nextPartialSolution,

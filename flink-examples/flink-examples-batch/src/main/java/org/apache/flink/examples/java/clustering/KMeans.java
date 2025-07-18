@@ -22,8 +22,8 @@ import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFields;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -100,7 +100,7 @@ public class KMeans {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig()
                 .setGlobalJobParameters(params); // make parameters available in the web interface
 
@@ -150,7 +150,7 @@ public class KMeans {
     // *************************************************************************
 
     private static DataSet<Centroid> getCentroidDataSet(
-            ParameterTool params, ExecutionEnvironment env) {
+            ParameterTool params, BatchExecutionEnvironment env) {
         DataSet<Centroid> centroids;
         if (params.has("centroids")) {
             centroids =
@@ -165,7 +165,7 @@ public class KMeans {
         return centroids;
     }
 
-    private static DataSet<Point> getPointDataSet(ParameterTool params, ExecutionEnvironment env) {
+    private static DataSet<Point> getPointDataSet(ParameterTool params, BatchExecutionEnvironment env) {
         DataSet<Point> points;
         if (params.has("points")) {
             // read points from CSV file

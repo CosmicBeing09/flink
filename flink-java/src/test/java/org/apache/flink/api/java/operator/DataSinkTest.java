@@ -22,8 +22,8 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.CompositeType;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple5;
 import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 
@@ -65,7 +65,7 @@ class DataSinkTest {
     @Test
     void testTupleSingleOrderIdx() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -80,7 +80,7 @@ class DataSinkTest {
     @Test
     void testTupleTwoOrderIdx() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -97,7 +97,7 @@ class DataSinkTest {
     @Test
     void testTupleSingleOrderExp() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -111,7 +111,7 @@ class DataSinkTest {
 
     void testTupleSingleOrderExpFull() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -122,7 +122,7 @@ class DataSinkTest {
     @Test
     void testTupleTwoOrderExp() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -139,7 +139,7 @@ class DataSinkTest {
     @Test
     void testTupleTwoOrderMixed() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -156,7 +156,7 @@ class DataSinkTest {
     @Test
     void testFailTupleIndexOutOfBounds() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -172,7 +172,7 @@ class DataSinkTest {
     @Test
     void testFailTupleInv() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -188,7 +188,7 @@ class DataSinkTest {
     @Test
     void testPrimitiveOrder() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.generateSequence(0, 2);
 
         // should work
@@ -202,7 +202,7 @@ class DataSinkTest {
     @Test
     void testFailPrimitiveOrder1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
@@ -216,7 +216,7 @@ class DataSinkTest {
     @Test
     void testFailPrimitiveOrder2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
@@ -230,7 +230,7 @@ class DataSinkTest {
     @Test
     void testFailPrimitiveOrder3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Long> longDs = env.generateSequence(0, 2);
 
         // must not work
@@ -244,7 +244,7 @@ class DataSinkTest {
     @Test
     void testPojoSingleOrder() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // should work
@@ -258,7 +258,7 @@ class DataSinkTest {
     @Test
     void testPojoTwoOrder() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // should work
@@ -274,7 +274,7 @@ class DataSinkTest {
     @Test
     void testFailPojoIdx() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
@@ -288,7 +288,7 @@ class DataSinkTest {
     @Test
     void testFailPojoInvalidField() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
@@ -303,7 +303,7 @@ class DataSinkTest {
     @Test
     void testPojoSingleOrderFull() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> pojoDs = env.fromCollection(pojoData);
 
         // must not work
@@ -320,7 +320,7 @@ class DataSinkTest {
         List<Object[]> arrayData = new ArrayList<>();
         arrayData.add(new Object[0]);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Object[]> pojoDs = env.fromCollection(arrayData);
 
         // must not work

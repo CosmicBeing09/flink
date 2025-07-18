@@ -45,7 +45,7 @@ class TypeExtractionTest {
                 };
 
         TypeInformation<?> info =
-                ExecutionEnvironment.getBatchExecutionEnvironment()
+                BatchExecutionEnvironment.getBatchExecutionEnvironment()
                         .fromElements("arbitrary", "data")
                         .map(function)
                         .returns(Types.STRING)
@@ -56,7 +56,7 @@ class TypeExtractionTest {
 
     @Test
     void testGetterSetterWithVertex() {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements(new VertexTyped(0L, 3.0), new VertexTyped(1L, 1.0));
     }
 

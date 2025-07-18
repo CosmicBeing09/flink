@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.actions;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
 
@@ -43,7 +43,7 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSimple() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         Integer[] input = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
@@ -60,7 +60,7 @@ public class CountCollectITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testAdvanced() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.getConfig().disableObjectReuse();
 
         DataSet<Integer> data = env.fromElements(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);

@@ -19,7 +19,7 @@
 package org.apache.flink.test.recovery;
 
 import org.apache.flink.api.common.functions.MapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.client.program.ProgramInvocationException;
 import org.apache.flink.configuration.Configuration;
@@ -176,8 +176,8 @@ class ProcessFailureCancelingITCase {
                         @Override
                         public void run() {
                             try {
-                                ExecutionEnvironment env =
-                                        ExecutionEnvironment.createRemoteEnvironment(
+                                BatchExecutionEnvironment env =
+                                        BatchExecutionEnvironment.createRemoteEnvironment(
                                                 "localhost", 1337, config);
                                 env.setParallelism(2);
                                 Configuration configuration = new Configuration();

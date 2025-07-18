@@ -21,7 +21,7 @@ package org.apache.flink.examples.java.relational;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation.ForwardedFieldsFirst;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -115,7 +115,7 @@ public class WebLogAnalysis {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         env.getConfig().setGlobalJobParameters(params);
 
@@ -259,7 +259,7 @@ public class WebLogAnalysis {
     // *************************************************************************
 
     private static DataSet<Tuple2<String, String>> getDocumentsDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for documents relation (URL, Doc-Text)
         if (params.has("documents")) {
             return env.readCsvFile(params.get("documents"))
@@ -273,7 +273,7 @@ public class WebLogAnalysis {
     }
 
     private static DataSet<Tuple3<Integer, String, Integer>> getRanksDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for ranks relation (Rank, URL, Avg-Visit-Duration)
         if (params.has("ranks")) {
             return env.readCsvFile(params.get("ranks"))
@@ -287,7 +287,7 @@ public class WebLogAnalysis {
     }
 
     private static DataSet<Tuple2<String, String>> getVisitsDataSet(
-            ExecutionEnvironment env, ParameterTool params) {
+            BatchExecutionEnvironment env, ParameterTool params) {
         // Create DataSet for visits relation (URL, Date)
         if (params.has("visits")) {
             return env.readCsvFile(params.get("visits"))

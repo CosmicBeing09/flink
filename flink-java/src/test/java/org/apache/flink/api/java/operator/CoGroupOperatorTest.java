@@ -22,8 +22,8 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.functions.CoGroupFunction;
 import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operator.JoinOperatorTest.CustomType;
@@ -69,7 +69,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -86,7 +86,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -100,7 +100,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -114,7 +114,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -128,7 +128,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -142,7 +142,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyFields6() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -155,7 +155,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -170,7 +170,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -182,7 +182,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -194,7 +194,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -205,7 +205,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicExpression1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
 
@@ -214,7 +214,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicExpression2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -223,7 +223,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         assertThatThrownBy(() -> ds1.coGroup(ds2).where("*", "invalidKey"))
@@ -232,7 +232,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 1);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -242,7 +242,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression3() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
 
@@ -252,7 +252,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression4() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 1);
 
@@ -262,7 +262,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression5() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<>());
         DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
 
@@ -272,7 +272,7 @@ class CoGroupOperatorTest {
 
     @Test
     void testCoGroupKeyAtomicInvalidExpression6() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
         DataSet<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<>());
 
@@ -283,7 +283,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions1Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -299,7 +299,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions2Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -311,7 +311,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions3Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -327,7 +327,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyExpressions4Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -343,7 +343,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeySelectors1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -360,7 +360,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyMixing1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -378,7 +378,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyMixing2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -396,7 +396,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyMixing3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -415,7 +415,7 @@ class CoGroupOperatorTest {
     @Test
     void testCoGroupKeyMixing4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -434,7 +434,7 @@ class CoGroupOperatorTest {
     @Test
     void testSemanticPropsWithKeySelector1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
@@ -471,7 +471,7 @@ class CoGroupOperatorTest {
     @Test
     void testSemanticPropsWithKeySelector2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =

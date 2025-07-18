@@ -20,7 +20,7 @@ package org.apache.flink.api.java.io;
 
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.operators.DataSource;
 import org.apache.flink.api.java.tuple.Tuple4;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -301,7 +301,7 @@ class CSVReaderTest {
 
     private static CsvReader getCsvReader() {
         return new CsvReader(
-                "/some/none/existing/path", ExecutionEnvironment.createLocalEnvironment(1));
+                "/some/none/existing/path", BatchExecutionEnvironment.createLocalEnvironment(1));
     }
 
     // --------------------------------------------------------------------------------------------

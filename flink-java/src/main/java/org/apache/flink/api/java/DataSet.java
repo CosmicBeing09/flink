@@ -115,14 +115,14 @@ import java.util.List;
 @Public
 public abstract class DataSet<T> {
 
-    protected final ExecutionEnvironment context;
+    protected final BatchExecutionEnvironment context;
 
     // NOTE: the type must not be accessed directly, but only via getType()
     private TypeInformation<T> type;
 
     private boolean typeUsed = false;
 
-    protected DataSet(ExecutionEnvironment context, TypeInformation<T> typeInfo) {
+    protected DataSet(BatchExecutionEnvironment context, TypeInformation<T> typeInfo) {
         if (context == null) {
             throw new NullPointerException("context is null");
         }
@@ -135,12 +135,12 @@ public abstract class DataSet<T> {
     }
 
     /**
-     * Returns the {@link ExecutionEnvironment} in which this DataSet is registered.
+     * Returns the {@link BatchExecutionEnvironment} in which this DataSet is registered.
      *
      * @return The ExecutionEnvironment in which this DataSet is registered.
-     * @see ExecutionEnvironment
+     * @see BatchExecutionEnvironment
      */
-    public ExecutionEnvironment getExecutionEnvironment() {
+    public BatchExecutionEnvironment getExecutionEnvironment() {
         return this.context;
     }
 

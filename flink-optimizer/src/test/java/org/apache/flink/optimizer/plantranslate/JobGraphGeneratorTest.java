@@ -25,8 +25,8 @@ import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.ResourceSpec;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.BlockingShuffleOutputFormat;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DataSink;
@@ -106,7 +106,7 @@ public class JobGraphGeneratorTest {
                     }
                 };
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Long> input = env.fromElements(1L, 2L, 3L);
         opMethod.invoke(input, resource1);
@@ -190,7 +190,7 @@ public class JobGraphGeneratorTest {
                     }
                 };
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input = env.fromElements(new Tuple2<>(1L, 2L));
         opMethod.invoke(input, resource1);
@@ -288,7 +288,7 @@ public class JobGraphGeneratorTest {
 
     @Test
     public void testGeneratedJobsAreBatchJobType() {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.fromElements("test").output(new DiscardingOutputFormat<>());
 
         JobGraph graph = compileJob(env);
@@ -298,7 +298,7 @@ public class JobGraphGeneratorTest {
     @Test
     public void testGeneratingJobGraphWithUnconsumedResultPartition() {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> input =
                 env.fromElements(new Tuple2<>(1L, 2L)).setParallelism(1);
@@ -348,7 +348,7 @@ public class JobGraphGeneratorTest {
         assertFalse(filePath.getFileSystem().getFileStatus(filePath).isDir());
     }
 
-    private static JobGraph compileJob(ExecutionEnvironment env) {
+    private static JobGraph compileJob(BatchExecutionEnvironment env) {
         Plan plan = env.createProgramPlan();
         Optimizer pc = new Optimizer(new Configuration());
         OptimizedPlan op = pc.compile(plan);

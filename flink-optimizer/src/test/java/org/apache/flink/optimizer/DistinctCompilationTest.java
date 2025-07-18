@@ -20,8 +20,8 @@ package org.apache.flink.optimizer;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DistinctOperator;
@@ -44,7 +44,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctPlain() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -100,7 +100,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithCombineHint() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -157,7 +157,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithSelectorFunctionKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -227,7 +227,7 @@ public class DistinctCompilationTest extends CompilerTestBase implements java.io
     @Test
     public void testDistinctWithFieldPositionKeyCombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =

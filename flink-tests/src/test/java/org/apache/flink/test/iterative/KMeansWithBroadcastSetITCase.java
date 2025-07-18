@@ -19,8 +19,8 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.common.functions.MapFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.examples.java.clustering.KMeans;
 import org.apache.flink.examples.java.clustering.KMeans.Centroid;
@@ -42,7 +42,7 @@ public class KMeansWithBroadcastSetITCase extends JavaProgramTestBaseJUnit4 {
         String[] centers = KMeansData.INITIAL_CENTERS_2D.split("\n");
 
         // set up execution environment
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // get input data
         DataSet<Point> pointsSet =

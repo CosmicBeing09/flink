@@ -48,7 +48,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 public class RemoteEnvironmentConfigUtils {
 
     public static void validate(final String host, final int port) {
-        if (!ExecutionEnvironment.areExplicitEnvironmentsAllowed()) {
+        if (!BatchExecutionEnvironment.areExplicitEnvironmentsAllowed()) {
             throw new InvalidProgramException(
                     "The RemoteEnvironment cannot be instantiated when running in a pre-defined context "
                             + "(such as Command Line Client or TestEnvironment)");

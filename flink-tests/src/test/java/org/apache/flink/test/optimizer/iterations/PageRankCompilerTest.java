@@ -20,7 +20,7 @@ package org.apache.flink.test.optimizer.iterations;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -51,7 +51,7 @@ public class PageRankCompilerTest extends CompilerTestBase {
     @Test
     public void testPageRank() {
         try {
-            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             // get input data
             DataSet<Long> pagesInput = env.fromElements(1L);

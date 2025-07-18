@@ -19,8 +19,8 @@
 
 package org.apache.flink.test.example.java;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -60,7 +60,7 @@ public class WordCountWithCollectionITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> text = env.fromElements(WordCountData.TEXT);
         DataSet<Tuple2<String, Integer>> words = text.flatMap(new WordCount.Tokenizer());

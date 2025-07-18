@@ -18,14 +18,14 @@
 
 package org.apache.flink.runtime.util.jartestprogram;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 
 /** Filter with additional indirections. */
 public class FilterWithIndirection {
 
     public static void main(String[] args) throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<String> input = env.fromElements("Please filter", "the words", "but not this");
 
         DataSet<String> output = input.filter(UtilFunctionWrapper.UtilFunction.getWordFilter());

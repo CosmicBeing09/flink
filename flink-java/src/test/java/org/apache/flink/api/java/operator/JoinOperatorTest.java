@@ -24,8 +24,8 @@ import org.apache.flink.api.common.operators.SemanticProperties;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.common.typeutils.CompositeType;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.FunctionAnnotation;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.JoinOperator;
@@ -103,7 +103,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -120,7 +120,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -134,7 +134,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -148,7 +148,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -162,7 +162,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -176,7 +176,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyFields6() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -189,7 +189,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -204,7 +204,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressionsNested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<NestedCustomType> ds1 = env.fromCollection(customNestedTypeData);
         DataSet<NestedCustomType> ds2 = env.fromCollection(customNestedTypeData);
 
@@ -219,7 +219,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -231,7 +231,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -243,7 +243,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -255,7 +255,7 @@ class JoinOperatorTest {
     /** Test if mixed types of key selectors are properly working. */
     @Test
     void testJoinKeyMixedKeySelector() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         try {
@@ -276,7 +276,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedKeySelectorTurned() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         try {
@@ -297,7 +297,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedTupleIndex() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -312,7 +312,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyNestedTuples() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -327,7 +327,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyNestedTuplesWithCustom() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<CustomType, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedCustomTupleData, nestedCustomTupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -343,7 +343,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyWithCustomContainingTuple0() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
         DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
@@ -356,7 +356,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyWithCustomContainingTuple1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
         DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
@@ -369,7 +369,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyWithCustomContainingTuple2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomTypeWithTuple> ds1 = env.fromCollection(customTypeWithTupleData);
         DataSet<CustomTypeWithTuple> ds2 = env.fromCollection(customTypeWithTupleData);
         try {
@@ -384,7 +384,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyNestedTuplesWrongType() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Tuple2<Integer, String>, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyNestedTupleData, nestedTupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -398,7 +398,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedTupleIndexTurned() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -413,7 +413,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedTupleIndexWrongType() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -429,7 +429,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedTupleIndex2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -443,7 +443,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyMixedWrong() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         // wrongly mix String and Integer
@@ -460,7 +460,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions1Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -476,7 +476,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions2Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -488,7 +488,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions3Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -504,7 +504,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyExpressions4Nested() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -517,7 +517,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeySelectors1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
 
@@ -534,7 +534,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixing1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -551,7 +551,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixing2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -567,7 +567,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixing3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -586,7 +586,7 @@ class JoinOperatorTest {
     @Test
     void testJoinKeyMixing4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
@@ -604,7 +604,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyAtomic1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -614,7 +614,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyAtomic2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
@@ -624,7 +624,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic1() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -635,7 +635,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic2() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
@@ -646,7 +646,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic3() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
@@ -657,7 +657,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic4() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
@@ -668,7 +668,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic5() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<ArrayList<Integer>> ds1 = env.fromElements(new ArrayList<Integer>());
         DataSet<Integer> ds2 = env.fromElements(0, 0, 0);
 
@@ -678,7 +678,7 @@ class JoinOperatorTest {
 
     @Test
     void testJoinKeyInvalidAtomic6() {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Integer> ds1 = env.fromElements(0, 0, 0);
         DataSet<ArrayList<Integer>> ds2 = env.fromElements(new ArrayList<Integer>());
 
@@ -689,7 +689,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -706,7 +706,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection21() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -743,7 +743,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -760,7 +760,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -777,7 +777,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection4() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -799,7 +799,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection5() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -821,7 +821,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection6() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         // should work
@@ -841,7 +841,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection26() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<CustomType> ds1 = env.fromCollection(customTypeData);
         DataSet<CustomType> ds2 = env.fromCollection(customTypeData);
         // should work
@@ -861,7 +861,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection7() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -878,7 +878,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection27() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -895,7 +895,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection8() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -909,7 +909,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection28() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -923,7 +923,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection9() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -937,7 +937,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection29() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -950,7 +950,7 @@ class JoinOperatorTest {
 
     void testJoinProjection10() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -963,7 +963,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection30() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -976,7 +976,7 @@ class JoinOperatorTest {
 
     void testJoinProjection11() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -988,7 +988,7 @@ class JoinOperatorTest {
 
     void testJoinProjection12() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -1001,7 +1001,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection13() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -1015,7 +1015,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection33() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -1030,7 +1030,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection14() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -1044,7 +1044,7 @@ class JoinOperatorTest {
     @Test
     void testJoinProjection34() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> ds2 =
@@ -1059,7 +1059,7 @@ class JoinOperatorTest {
     @Test
     void testSemanticPropsWithKeySelector1() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
@@ -1096,7 +1096,7 @@ class JoinOperatorTest {
     @Test
     void testSemanticPropsWithKeySelector2() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =
@@ -1136,7 +1136,7 @@ class JoinOperatorTest {
     @Test
     void testSemanticPropsWithKeySelector3() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs1 =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs2 =

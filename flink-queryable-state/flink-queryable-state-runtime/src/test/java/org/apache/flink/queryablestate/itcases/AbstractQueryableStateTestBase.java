@@ -128,14 +128,14 @@ public abstract class AbstractQueryableStateTestBase {
 
     @BeforeEach
     void setUp() throws Exception {
-        this.env = createEnv();
+        this.env = createTestStreamEnvironment();
 
         assertThat(clusterClient).isNotNull();
 
         maxParallelism = 4;
     }
 
-    protected abstract StreamExecutionEnvironment createEnv() throws Exception;
+    protected abstract StreamExecutionEnvironment createTestStreamEnvironment() throws Exception;
 
     /**
      * Runs a simple topology producing random (key, 1) pairs at the sources (where number of keys

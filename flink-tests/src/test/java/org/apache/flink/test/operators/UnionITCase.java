@@ -19,8 +19,8 @@
 package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.RichFilterFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.test.operators.util.CollectionDataSets;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
@@ -69,7 +69,7 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Union of 2 Same Data Sets
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> unionDs =
@@ -88,7 +88,7 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
          * Union of 5 same Data Sets, with multiple unions
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple3<Integer, Long, String>> unionDs =
@@ -114,7 +114,7 @@ public class UnionITCase extends MultipleProgramsTestBaseJUnit4 {
         /*
          * Test on union with empty dataset
          */
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // Don't know how to make an empty result in an other way than filtering it
         DataSet<Tuple3<Integer, Long, String>> empty =

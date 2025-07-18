@@ -20,8 +20,8 @@ package org.apache.flink.client.program;
 
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.JobExecutionResult;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.client.ClientUtils;
 import org.apache.flink.client.cli.ClientOptions;
 import org.apache.flink.configuration.Configuration;
@@ -45,9 +45,9 @@ import java.util.concurrent.TimeUnit;
 import static org.apache.flink.util.Preconditions.checkNotNull;
 
 /** Execution Environment for remote execution with the Client. */
-public class ContextEnvironment extends ExecutionEnvironment {
+public class ContextEnvironment extends BatchExecutionEnvironment {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ExecutionEnvironment.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BatchExecutionEnvironment.class);
 
     private final boolean suppressSysout;
 

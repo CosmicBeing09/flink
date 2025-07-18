@@ -26,8 +26,8 @@ import org.apache.flink.api.common.operators.base.InnerJoinOperatorBase;
 import org.apache.flink.api.common.operators.base.MapOperatorBase;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase;
 import org.apache.flink.api.common.operators.util.FieldSet;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.optimizer.dataproperties.GlobalProperties;
@@ -50,7 +50,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
 
     @Test
     public void forwardFieldsTestMapReduce() {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         set =
@@ -126,7 +126,7 @@ public class SemanticPropertiesAPIToPlanTest extends CompilerTestBase {
 
     @Test
     public void forwardFieldsTestJoin() {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> in1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> in2 =

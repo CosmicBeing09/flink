@@ -19,7 +19,7 @@
 package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -148,7 +148,7 @@ public abstract class JavaProgramTestBaseJUnit4 extends AbstractTestBaseJUnit4 {
         // We should fix that we are able to get access to the latest execution result from a
         // different
         // execution environment and how the object reuse mode is enabled
-        ExecutionEnvironment env = MINI_CLUSTER_RESOURCE.getTestStreamEnvironment();
+        BatchExecutionEnvironment env = MINI_CLUSTER_RESOURCE.getTestStreamEnvironment();
         env.getConfig().disableObjectReuse();
 
         // Possibly run the test multiple times

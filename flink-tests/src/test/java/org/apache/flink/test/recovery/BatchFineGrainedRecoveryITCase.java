@@ -22,7 +22,7 @@ import org.apache.flink.api.common.ExecutionMode;
 import org.apache.flink.api.common.JobID;
 import org.apache.flink.api.common.functions.RichMapPartitionFunction;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.JobManagerOptions;
@@ -215,7 +215,7 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
 
     @Test
     public void testProgram() throws Exception {
-        ExecutionEnvironment env = createExecutionEnvironment();
+        BatchExecutionEnvironment env = createExecutionEnvironment();
 
         DataSet<Long> input = env.generateSequence(0, EMITTED_RECORD_NUMBER - 1);
         for (int trackingIndex = 0; trackingIndex < MAP_NUMBER; trackingIndex++) {
@@ -262,9 +262,9 @@ public class BatchFineGrainedRecoveryITCase extends TestLogger {
         return failureStrategy;
     }
 
-    private static ExecutionEnvironment createExecutionEnvironment() {
+    private static BatchExecutionEnvironment createExecutionEnvironment() {
         @SuppressWarnings("StaticVariableUsedBeforeInitialization")
-        ExecutionEnvironment env = new ClusterTestEnvironment(miniCluster, 1, true);
+        BatchExecutionEnvironment env = new ClusterTestEnvironment(miniCluster, 1, true);
 
         env.getConfig()
                 .setExecutionMode(

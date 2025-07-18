@@ -18,8 +18,8 @@
 
 package org.apache.flink.test.operators;
 
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -47,7 +47,7 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
 
     @Test
     public void testSumMaxAndProject() throws Exception {
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Integer, Long>> sumDs = ds.sum(0).andMax(1).project(0, 1);
@@ -65,7 +65,7 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
          * Grouped Aggregate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Long, Integer>> aggregateDs = ds.groupBy(1).sum(0).project(1, 0);
@@ -83,7 +83,7 @@ public class SumMinMaxITCase extends MultipleProgramsTestBaseJUnit4 {
          * Nested Aggregate
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple1<Integer>> aggregateDs = ds.groupBy(1).min(0).min(0).project(0);

@@ -20,8 +20,8 @@ package org.apache.flink.api.java.operator;
 
 import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.aggregation.UnsupportedAggregationTypeException;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -58,7 +58,7 @@ class AggregateOperatorTest {
     @Test
     void testFieldsAggregate() {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                 env.fromCollection(emptyTupleData, tupleTypeInfo);
 
@@ -79,7 +79,7 @@ class AggregateOperatorTest {
     @Test
     void testAggregationTypes() {
         try {
-            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             DataSet<Tuple5<Integer, Long, String, Long, Integer>> tupleDs =
                     env.fromCollection(emptyTupleData, tupleTypeInfo);
 

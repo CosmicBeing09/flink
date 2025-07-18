@@ -22,8 +22,8 @@ import org.apache.flink.api.common.InvalidProgramException;
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.Partitioner;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple;
@@ -47,7 +47,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningKeySelectorReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
@@ -82,7 +82,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningKeySelectorGroupReduce() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
@@ -113,7 +113,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningKeySelectorGroupReduceSorted() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
@@ -148,7 +148,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningKeySelectorInvalidType() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Integer, Integer>> data =
                     env.fromElements(new Tuple2<Integer, Integer>(0, 0))
@@ -170,7 +170,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningKeySelectorInvalidTypeSorted() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))
@@ -193,7 +193,7 @@ public class GroupingKeySelectorTranslationTest extends CompilerTestBase {
     @Test
     public void testCustomPartitioningTupleRejectCompositeKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple3<Integer, Integer, Integer>> data =
                     env.fromElements(new Tuple3<Integer, Integer, Integer>(0, 0, 0))

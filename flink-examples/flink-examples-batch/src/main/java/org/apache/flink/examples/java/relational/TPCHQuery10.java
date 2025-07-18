@@ -19,8 +19,8 @@
 package org.apache.flink.examples.java.relational;
 
 import org.apache.flink.api.common.typeinfo.Types;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.aggregation.Aggregations;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -109,7 +109,7 @@ public class TPCHQuery10 {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         if (!params.has("customer")
                 && !params.has("orders")
@@ -201,7 +201,7 @@ public class TPCHQuery10 {
     // *************************************************************************
 
     private static DataSet<Tuple5<Integer, String, String, Integer, Double>> getCustomerDataSet(
-            ExecutionEnvironment env, String customerPath) {
+            BatchExecutionEnvironment env, String customerPath) {
         return env.readCsvFile(customerPath)
                 .fieldDelimiter("|")
                 .includeFields("11110100")
@@ -209,7 +209,7 @@ public class TPCHQuery10 {
     }
 
     private static DataSet<Tuple3<Integer, Integer, String>> getOrdersDataSet(
-            ExecutionEnvironment env, String ordersPath) {
+            BatchExecutionEnvironment env, String ordersPath) {
         return env.readCsvFile(ordersPath)
                 .fieldDelimiter("|")
                 .includeFields("110010000")
@@ -217,7 +217,7 @@ public class TPCHQuery10 {
     }
 
     private static DataSet<Tuple4<Integer, Double, Double, String>> getLineitemDataSet(
-            ExecutionEnvironment env, String lineitemPath) {
+            BatchExecutionEnvironment env, String lineitemPath) {
         return env.readCsvFile(lineitemPath)
                 .fieldDelimiter("|")
                 .includeFields("1000011010000000")
@@ -225,7 +225,7 @@ public class TPCHQuery10 {
     }
 
     private static DataSet<Tuple2<Integer, String>> getNationsDataSet(
-            ExecutionEnvironment env, String nationPath) {
+            BatchExecutionEnvironment env, String nationPath) {
         return env.readCsvFile(nationPath)
                 .fieldDelimiter("|")
                 .includeFields("1100")

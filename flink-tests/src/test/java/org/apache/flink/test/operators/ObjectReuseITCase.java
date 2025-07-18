@@ -20,8 +20,8 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.util.MultipleProgramsTestBaseJUnit4;
 import org.apache.flink.test.util.TestBaseUtils.TupleComparator;
@@ -70,7 +70,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testKeyedReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -100,7 +100,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testGlobalReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -135,7 +135,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testKeyedGroupReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {
@@ -189,7 +189,7 @@ public class ObjectReuseITCase extends MultipleProgramsTestBaseJUnit4 {
     @Test
     public void testGlobalGroupReduce() throws Exception {
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         if (objectReuse) {
             env.getConfig().enableObjectReuse();
         } else {

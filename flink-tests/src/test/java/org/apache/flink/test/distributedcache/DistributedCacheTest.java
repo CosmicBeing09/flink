@@ -21,7 +21,7 @@ package org.apache.flink.test.distributedcache;
 import org.apache.flink.api.common.cache.DistributedCache;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple1;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -88,7 +88,7 @@ public class DistributedCacheTest extends AbstractTestBaseJUnit4 {
     @Test
     public void testBatchDistributedCache() throws Exception {
         String textPath = createTempFile("count.txt", DATA);
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.registerCachedFile(textPath, "cache_test");
         env.readTextFile(textPath).flatMap(new WordChecker()).count();
     }

@@ -20,7 +20,7 @@ package org.apache.flink.optimizer;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.optimizer.plan.Channel;
@@ -44,7 +44,7 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
     @Test
     public void testCrossWithSmall() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
         DataSet<Long> set2 = env.generateSequence(0, 1);
@@ -73,7 +73,7 @@ public class AdditionalOperatorsTest extends CompilerTestBase {
     @Test
     public void testCrossWithLarge() {
         // construct the plan
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
         DataSet<Long> set1 = env.generateSequence(0, 1);
         DataSet<Long> set2 = env.generateSequence(0, 1);

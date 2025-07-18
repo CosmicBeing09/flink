@@ -20,8 +20,8 @@ package org.apache.flink.examples.java.wordcount;
 
 import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.utils.ParameterTool;
 import org.apache.flink.core.fs.FileSystem.WriteMode;
 import org.apache.flink.examples.java.wordcount.util.WordCountData;
@@ -93,7 +93,7 @@ public class WordCountPojo {
         final ParameterTool params = ParameterTool.fromArgs(args);
 
         // set up the execution environment
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         // make parameters available in the web interface
         env.getConfig().setGlobalJobParameters(params);

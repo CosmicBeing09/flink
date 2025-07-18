@@ -21,8 +21,8 @@ package org.apache.flink.test.operators;
 import org.apache.flink.api.common.functions.CrossFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCrossFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.tuple.Tuple5;
@@ -55,7 +55,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross on two tuple inputs
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -85,7 +85,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross if UDF returns left input object
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -114,7 +114,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross if UDF returns right input object
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -144,7 +144,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross with broadcast set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Integer> intDs = CollectionDataSets.getIntegerDataSet(env);
 
@@ -177,7 +177,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of crossWithHuge (only correctness of result -> should be the same as with normal cross)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -207,7 +207,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of crossWithTiny (only correctness of result -> should be the same as with normal cross)
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);
@@ -237,7 +237,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * project cross on a tuple input 1
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -271,7 +271,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * project cross on a tuple input 2
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -305,7 +305,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of default cross
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.getSmall3TupleDataSet(env);
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds2 =
@@ -336,7 +336,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross on two custom type inputs
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<CustomType> ds = CollectionDataSets.getSmallCustomTypeDataSet(env);
         DataSet<CustomType> ds2 = CollectionDataSets.getSmallCustomTypeDataSet(env);
@@ -364,7 +364,7 @@ public class CrossITCase extends MultipleProgramsTestBaseJUnit4 {
          * check correctness of cross a tuple input and a custom type input
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple5<Integer, Long, Integer, String, Long>> ds =
                 CollectionDataSets.getSmall5TupleDataSet(env);

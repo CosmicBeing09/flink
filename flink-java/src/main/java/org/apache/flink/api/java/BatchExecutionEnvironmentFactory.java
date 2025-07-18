@@ -38,5 +38,5 @@ public interface BatchExecutionEnvironmentFactory {
      *
      * @return An ExecutionEnvironment.
      */
-    ExecutionEnvironment createBatchExecutionEnvironment();
+    BatchExecutionEnvironment createBatchExecutionEnvironment();
 }

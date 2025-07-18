@@ -20,7 +20,7 @@ package org.apache.flink.test.optimizer.jsonplan;
 
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.common.Plan;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.examples.java.clustering.KMeans;
@@ -335,7 +335,7 @@ public class JsonJobGraphGenerationTest {
 
     // ------------------------------------------------------------------------
 
-    private static class TestingExecutionEnvironment extends ExecutionEnvironment {
+    private static class TestingExecutionEnvironment extends BatchExecutionEnvironment {
 
         private final JsonValidator validator;
 
@@ -368,8 +368,8 @@ public class JsonJobGraphGenerationTest {
             initializeContextEnvironment(
                     new BatchExecutionEnvironmentFactory() {
                         @Override
-                        public ExecutionEnvironment createBatchExecutionEnvironment() {
-                            ExecutionEnvironment env = new TestingExecutionEnvironment(validator);
+                        public BatchExecutionEnvironment createBatchExecutionEnvironment() {
+                            BatchExecutionEnvironment env = new TestingExecutionEnvironment(validator);
                             env.setParallelism(defaultParallelism);
                             return env;
                         }
@@ -377,7 +377,7 @@ public class JsonJobGraphGenerationTest {
         }
 
         public static void unset() {
-            ExecutionEnvironment.resetContextEnvironment();
+            BatchExecutionEnvironment.resetContextEnvironment();
         }
     }
 }

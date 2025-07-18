@@ -25,8 +25,8 @@ import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.common.functions.RichMapFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -224,7 +224,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
     @Test
     public void testRejectPlanIfSolutionSetKeysAndJoinKeysDontMatch() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(DEFAULT_PARALLELISM);
 
             @SuppressWarnings("unchecked")
@@ -287,7 +287,7 @@ public class WorksetIterationsJavaApiCompilerTest extends CompilerTestBase {
 
     private Plan getJavaTestPlan(boolean joinPreservesSolutionSet, boolean mapBeforeSolutionDelta) {
 
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(DEFAULT_PARALLELISM);
 
         @SuppressWarnings("unchecked")

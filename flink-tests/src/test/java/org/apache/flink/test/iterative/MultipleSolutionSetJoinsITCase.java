@@ -19,7 +19,7 @@
 package org.apache.flink.test.iterative;
 
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.test.optimizer.iterations.MultipleJoinsWithSolutionSetCompilerTest;
@@ -40,7 +40,7 @@ public class MultipleSolutionSetJoinsITCase extends JavaProgramTestBaseJUnit4 {
         final double expectedFactor = (int) Math.pow(7, numIters);
 
         // this is an artificial program, it does not compute anything sensical
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         @SuppressWarnings("unchecked")
         DataSet<Tuple2<Long, Double>> initialData =

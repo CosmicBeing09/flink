@@ -20,8 +20,8 @@ package org.apache.flink.optimizer.operators;
 
 import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.JoinFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple3;
 import org.apache.flink.api.java.utils.DataSetUtils;
@@ -37,7 +37,7 @@ public class JoinWithDistributionTest extends CompilerTestBase {
 
     @Test
     public void JoinWithSameDistributionTest() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> set2 =
@@ -67,7 +67,7 @@ public class JoinWithDistributionTest extends CompilerTestBase {
 
     @Test
     public void JoinWithDifferentDistributionTest() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         DataSet<Tuple3<Integer, Integer, Integer>> set1 =
                 env.readCsvFile(IN_FILE).types(Integer.class, Integer.class, Integer.class);
         DataSet<Tuple3<Integer, Integer, Integer>> set2 =

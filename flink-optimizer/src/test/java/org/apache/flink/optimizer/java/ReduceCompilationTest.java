@@ -22,8 +22,8 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.functions.RichReduceFunction;
 import org.apache.flink.api.common.operators.base.ReduceOperatorBase.CombineHint;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -45,7 +45,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
     @Test
     public void testAllReduceNoCombiner() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
@@ -91,7 +91,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
     @Test
     public void testAllReduceWithCombiner() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Long> data = env.generateSequence(1, 8000000).name("source");
@@ -145,7 +145,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
     @Test
     public void testGroupedReduceWithFieldPositionKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -210,7 +210,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
     @Test
     public void testGroupedReduceWithSelectorFunctionKey() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -289,7 +289,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
     @Test
     public void testGroupedReduceWithHint() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -372,7 +372,7 @@ public class ReduceCompilationTest extends CompilerTestBase implements java.io.S
      */
     @Test
     public void testGroupedReduceWithoutCombiner() {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
         env.setParallelism(8);
 
         DataSet<Tuple2<String, Double>> data =

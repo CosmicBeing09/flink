@@ -25,8 +25,8 @@ import org.apache.flink.api.common.functions.FlatJoinFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichCoGroupFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.core.memory.DataInputView;
@@ -61,7 +61,7 @@ public class DanglingPageRankITCase extends MultipleProgramsTestBaseJUnit4 {
     public void testDanglingPageRank() {
         try {
             final int numIterations = 25;
-            final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
             DataSet<Tuple2<Long, Boolean>> vertices =
                     env.fromElements(

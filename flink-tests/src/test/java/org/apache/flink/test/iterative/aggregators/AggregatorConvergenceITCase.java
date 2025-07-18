@@ -23,8 +23,8 @@ import org.apache.flink.api.common.aggregators.LongSumAggregator;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichFlatMapFunction;
 import org.apache.flink.api.common.functions.RichJoinFunction;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.operators.DeltaIteration;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.api.java.tuple.Tuple2;
@@ -106,7 +106,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         // the iteration stops if less than this number of elements change value
         final long convergenceThreshold = 3;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
@@ -150,7 +150,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         // the iteration stops if less than this number of elements change value
         final long convergenceThreshold = 3;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);
@@ -195,7 +195,7 @@ public class AggregatorConvergenceITCase extends MultipleProgramsTestBaseJUnit4 
         final String aggregatorName = "elements.in.component.aggregator";
         final long componentId = 1L;
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple2<Long, Long>> initialSolutionSet = env.fromCollection(verticesInput);
         DataSet<Tuple2<Long, Long>> edges = env.fromCollection(edgesInput);

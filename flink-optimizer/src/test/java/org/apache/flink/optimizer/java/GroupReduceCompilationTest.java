@@ -23,8 +23,8 @@ import org.apache.flink.api.common.functions.GroupCombineFunction;
 import org.apache.flink.api.common.functions.GroupReduceFunction;
 import org.apache.flink.api.common.functions.RichGroupReduceFunction;
 import org.apache.flink.api.common.operators.util.FieldList;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.io.DiscardingOutputFormat;
 import org.apache.flink.api.java.operators.GroupReduceOperator;
@@ -47,7 +47,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testAllGroupReduceNoCombiner() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Double> data = env.fromElements(0.2, 0.3, 0.4, 0.5).name("source");
@@ -93,7 +93,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testAllReduceWithCombiner() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Long> data = env.generateSequence(1, 8000000).name("source");
@@ -141,7 +141,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testGroupedReduceWithFieldPositionKeyNonCombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -197,7 +197,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testGroupedReduceWithFieldPositionKeyCombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -255,7 +255,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testGroupedReduceWithSelectorFunctionKeyNoncombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =
@@ -325,7 +325,7 @@ public class GroupReduceCompilationTest extends CompilerTestBase implements java
     @Test
     public void testGroupedReduceWithSelectorFunctionKeyCombinable() {
         try {
-            ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+            BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
             env.setParallelism(8);
 
             DataSet<Tuple2<String, Double>> data =

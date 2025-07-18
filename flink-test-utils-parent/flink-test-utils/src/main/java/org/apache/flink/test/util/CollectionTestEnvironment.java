@@ -20,13 +20,13 @@ package org.apache.flink.test.util;
 
 import org.apache.flink.api.common.JobExecutionResult;
 import org.apache.flink.api.java.CollectionEnvironment;
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.BatchExecutionEnvironmentFactory;
 
 /**
  * A {@link CollectionEnvironment} to be used in tests. The predominant feature of this class is
  * that it allows setting it as a context environment, causing it to be returned by {@link
- * ExecutionEnvironment#getBatchExecutionEnvironment()}. This also allows retrieving the {@link
+ * BatchExecutionEnvironment#getBatchExecutionEnvironment()}. This also allows retrieving the {@link
  * JobExecutionResult} outside the actual program.
  */
 public class CollectionTestEnvironment extends CollectionEnvironment {
@@ -53,7 +53,7 @@ public class CollectionTestEnvironment extends CollectionEnvironment {
         BatchExecutionEnvironmentFactory factory =
                 new BatchExecutionEnvironmentFactory() {
                     @Override
-                    public ExecutionEnvironment createBatchExecutionEnvironment() {
+                    public BatchExecutionEnvironment createBatchExecutionEnvironment() {
                         lastEnv = new CollectionTestEnvironment();
                         return lastEnv;
                     }

@@ -20,8 +20,8 @@ package org.apache.flink.test.operators;
 
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.operators.Order;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.DataSet;
-import org.apache.flink.api.java.ExecutionEnvironment;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.operators.GroupReduceOperator;
 import org.apache.flink.api.java.tuple.Tuple1;
@@ -51,7 +51,7 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
          * First-n on ungrouped data set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple1<Integer>> seven = ds.first(7).map(new OneMapper()).sum(0);
@@ -69,7 +69,7 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
          * First-n on grouped data set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Long, Integer>> first =
@@ -88,7 +88,7 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
          * First-n on grouped and sorted data set
          */
 
-        final ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        final BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<Tuple3<Integer, Long, String>> ds = CollectionDataSets.get3TupleDataSet(env);
         DataSet<Tuple2<Long, Integer>> first =
@@ -110,7 +110,7 @@ public class FirstNITCase extends MultipleProgramsTestBaseJUnit4 {
     /** Test for FLINK-2135. */
     @Test
     public void testFaultyCast() throws Exception {
-        ExecutionEnvironment ee = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment ee = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         DataSet<String> b = ee.fromElements("a", "b");
         GroupReduceOperator<String, String> a =

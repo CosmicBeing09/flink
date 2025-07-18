@@ -24,7 +24,7 @@ import org.apache.flink.api.common.Plan;
 import org.apache.flink.api.common.operators.CollectionExecutor;
 
 /**
- * Version of {@link ExecutionEnvironment} that allows serial, local, collection-based executions of
+ * Version of {@link BatchExecutionEnvironment} that allows serial, local, collection-based executions of
  * Flink programs.
  *
  * @deprecated All Flink DataSet APIs are deprecated since Flink 1.18 and will be removed in a
@@ -35,7 +35,7 @@ import org.apache.flink.api.common.operators.CollectionExecutor;
  */
 @Deprecated
 @PublicEvolving
-public class CollectionEnvironment extends ExecutionEnvironment {
+public class CollectionEnvironment extends BatchExecutionEnvironment {
 
     @Override
     public JobExecutionResult execute(String jobName) throws Exception {

@@ -18,7 +18,7 @@
 
 package org.apache.flink.client.python;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.python.util.PythonDependencyUtils;
@@ -124,7 +124,7 @@ public interface PythonFunctionFactory {
 
         Configuration mergedConfig =
                 new Configuration(
-                        ExecutionEnvironment.getBatchExecutionEnvironment().getConfiguration());
+                        BatchExecutionEnvironment.getBatchExecutionEnvironment().getConfiguration());
         if (config instanceof TableConfig) {
             PythonDependencyUtils.merge(mergedConfig, ((TableConfig) config).getConfiguration());
         } else {

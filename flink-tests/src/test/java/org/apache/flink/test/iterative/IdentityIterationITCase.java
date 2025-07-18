@@ -18,7 +18,7 @@
 
 package org.apache.flink.test.iterative;
 
-import org.apache.flink.api.java.ExecutionEnvironment;
+import org.apache.flink.api.java.BatchExecutionEnvironment;
 import org.apache.flink.api.java.io.LocalCollectionOutputFormat;
 import org.apache.flink.api.java.operators.IterativeDataSet;
 import org.apache.flink.test.util.JavaProgramTestBaseJUnit4;
@@ -35,7 +35,7 @@ public class IdentityIterationITCase extends JavaProgramTestBaseJUnit4 {
 
     @Override
     protected void testProgram() throws Exception {
-        ExecutionEnvironment env = ExecutionEnvironment.getBatchExecutionEnvironment();
+        BatchExecutionEnvironment env = BatchExecutionEnvironment.getBatchExecutionEnvironment();
 
         IterativeDataSet<Long> iteration = env.generateSequence(1, 10).iterate(100);
         iteration.closeWith(iteration).output(new LocalCollectionOutputFormat<Long>(result));
