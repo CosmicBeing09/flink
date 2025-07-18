@@ -74,9 +74,9 @@ class FlinkYarnSessionCliTest {
     private static final String TEST_YARN_JOB_MANAGER_ADDRESS = "22.33.44.55";
     private static final int TEST_YARN_JOB_MANAGER_PORT = 6655;
 
-    private static final String validPropertiesFile = "applicationID=" + TEST_YARN_APPLICATION_ID;
+    private static final String validYarnPropertiesFile = "applicationID=" + TEST_YARN_APPLICATION_ID;
 
-    private static final String invalidPropertiesFile =
+    private static final String invalidYarnPropertiesFile =
             "jasfobManager=" + TEST_YARN_JOB_MANAGER_ADDRESS + ":asf" + TEST_YARN_JOB_MANAGER_PORT;
 
     @TempDir private Path tmp;
@@ -182,7 +182,7 @@ class FlinkYarnSessionCliTest {
 
     @Test
     void testExecutorCLIisPrioritised() throws Exception {
-        final File directoryPath = writeYarnPropertiesFile(validPropertiesFile);
+        final File directoryPath = writeYarnPropertiesFile(validYarnPropertiesFile);
 
         final Configuration configuration = new Configuration();
         configuration.set(
@@ -229,7 +229,7 @@ class FlinkYarnSessionCliTest {
     @Test
     void testResumeFromYarnPropertiesFile() throws Exception {
 
-        File directoryPath = writeYarnPropertiesFile(validPropertiesFile);
+        File directoryPath = writeYarnPropertiesFile(validYarnPropertiesFile);
 
         final Configuration configuration = new Configuration();
         configuration.set(
@@ -255,7 +255,7 @@ class FlinkYarnSessionCliTest {
     @Test
     void testInvalidYarnPropertiesFile() throws Exception {
 
-        File directoryPath = writeYarnPropertiesFile(invalidPropertiesFile);
+        File directoryPath = writeYarnPropertiesFile(invalidYarnPropertiesFile);
 
         final Configuration configuration = new Configuration();
         configuration.set(
@@ -330,7 +330,7 @@ class FlinkYarnSessionCliTest {
 
     @Test
     void testYarnIDOverridesPropertiesFile() throws Exception {
-        File directoryPath = writeYarnPropertiesFile(validPropertiesFile);
+        File directoryPath = writeYarnPropertiesFile(validYarnPropertiesFile);
 
         final Configuration configuration = new Configuration();
         configuration.set(
