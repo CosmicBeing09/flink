@@ -27,17 +27,17 @@ import java.util.function.Supplier;
 /** Extension which starts/stops an {@link ExecutorService} for testing purposes. */
 public class TestExecutorExtension<T extends ExecutorService>
         implements BeforeAllCallback, AfterAllCallback {
-    private final Supplier<T> serviceFactory;
+    private final Supplier<T> executorServiceFactory;
 
     private T executorService;
 
-    public TestExecutorExtension(Supplier<T> serviceFactory) {
-        this.serviceFactory = serviceFactory;
+    public TestExecutorExtension(Supplier<T> executorServiceFactory) {
+        this.executorServiceFactory = executorServiceFactory;
     }
 
     @Override
     public void beforeAll(ExtensionContext context) throws Exception {
-        executorService = serviceFactory.get();
+        executorService = executorServiceFactory.get();
     }
 
     public T getExecutor() {
