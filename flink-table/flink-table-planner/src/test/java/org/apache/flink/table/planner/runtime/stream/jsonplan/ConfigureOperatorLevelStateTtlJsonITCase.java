@@ -53,7 +53,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
                         + "GROUP BY buyer",
                 json -> {
                     try {
-                        JsonNode target = JsonTestUtils.readFromString(json);
+                        JsonNode target = JsonTestUtils.readFromStringInternal(json);
                         JsonTestUtils.setExecNodeStateMetadata(
                                 target, "stream-exec-deduplicate", 0, 6000L);
                         JsonTestUtils.setExecNodeStateMetadata(
@@ -80,7 +80,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
                         + "GROUP BY buyer",
                 json -> {
                     try {
-                        JsonNode target = JsonTestUtils.readFromString(json);
+                        JsonNode target = JsonTestUtils.readFromStringInternal(json);
                         JsonTestUtils.setExecNodeStateMetadata(
                                 target, "stream-exec-deduplicate", 0, 6000L);
                         return JsonTestUtils.writeToString(target);
@@ -97,7 +97,7 @@ class ConfigureOperatorLevelStateTtlJsonITCase extends JsonPlanTestBase {
                         + "SELECT a.order_id, a.line_order_id, b.ship_mode FROM Orders a JOIN LineOrders b ON a.line_order_id = b.line_order_id",
                 json -> {
                     try {
-                        JsonNode target = JsonTestUtils.readFromString(json);
+                        JsonNode target = JsonTestUtils.readFromStringInternal(json);
                         JsonTestUtils.setExecNodeStateMetadata(
                                 target, "stream-exec-join", 0, 3000L);
                         JsonTestUtils.setExecNodeStateMetadata(

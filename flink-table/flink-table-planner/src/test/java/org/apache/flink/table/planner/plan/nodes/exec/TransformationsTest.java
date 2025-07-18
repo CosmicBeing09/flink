@@ -259,7 +259,7 @@ class TransformationsTest {
             throws IOException {
         final TableEnvironment env = TableEnvironment.create(EnvironmentSettings.inStreamingMode());
         configModifier.accept(env.getConfig());
-        final JsonNode json = JsonTestUtils.readFromString(planGenerator.apply(env));
+        final JsonNode json = JsonTestUtils.readFromStringInternal(planGenerator.apply(env));
         jsonModifier.accept(json);
         final List<String> planUids =
                 CompiledPlanUtils.toTransformationsInternal(

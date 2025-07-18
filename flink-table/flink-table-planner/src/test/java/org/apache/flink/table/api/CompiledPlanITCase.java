@@ -354,7 +354,7 @@ class CompiledPlanITCase extends JsonPlanTestBase {
     void testExplainPlan() throws IOException {
         String planFromResources =
                 JsonTestUtils.setFlinkVersion(
-                                JsonTestUtils.readFromResource("/jsonplan/testGetJsonPlan.out"),
+                                JsonTestUtils.readFromResourceInternal("/jsonplan/testGetJsonPlan.out"),
                                 FlinkVersion.current())
                         .toString();
 
