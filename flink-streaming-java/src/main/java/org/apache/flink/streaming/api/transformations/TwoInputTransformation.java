@@ -218,11 +218,11 @@ public class TwoInputTransformation<IN1, IN2, OUT> extends PhysicalTransformatio
 
     @Override
     public List<Transformation<?>> getTransitivePredecessors() {
-        List<Transformation<?>> result = Lists.newArrayList();
-        result.add(this);
-        result.addAll(input1.getTransitivePredecessors());
-        result.addAll(input2.getTransitivePredecessors());
-        return result;
+        List<Transformation<?>> predecessors = Lists.newArrayList();
+        predecessors.add(this);
+        predecessors.addAll(input1.getTransitivePredecessors());
+        predecessors.addAll(input2.getTransitivePredecessors());
+        return predecessors;
     }
 
     @Override
