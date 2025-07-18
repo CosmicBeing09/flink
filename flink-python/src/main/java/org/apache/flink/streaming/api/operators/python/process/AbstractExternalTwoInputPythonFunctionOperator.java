@@ -73,7 +73,7 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
     private transient ByteArrayInputStreamWithPos bais;
     private transient DataInputViewStreamWrapper baisWrapper;
     protected transient ByteArrayOutputStreamWithPos baos;
-    protected transient DataOutputViewStreamWrapper baosWrapper;
+    protected transient DataOutputViewStreamWrapper outputBufferWrapper;
 
     private transient RunnerInputHandler runnerInputHandler;
     private transient RunnerOutputCollector<OUT> runnerOutputCollector;
@@ -94,7 +94,7 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
         bais = new ByteArrayInputStreamWithPos();
         baisWrapper = new DataInputViewStreamWrapper(bais);
         baos = new ByteArrayOutputStreamWithPos();
-        baosWrapper = new DataOutputViewStreamWrapper(baos);
+        outputBufferWrapper = new DataOutputViewStreamWrapper(baos);
 
         runnerInputTypeInfo =
                 RunnerInputHandler.getRunnerInputTypeInfo(leftInputTypeInfo, rightInputTypeInfo);
@@ -131,7 +131,7 @@ public abstract class AbstractExternalTwoInputPythonFunctionOperator<IN1, IN2, O
     public void processElement(boolean isLeft, long timestamp, long watermark, Object element)
             throws Exception {
         Row row = runnerInputHandler.buildRunnerInputData(isLeft, timestamp, watermark, element);
-        runnerInputTypeSerializer.serialize(row, baosWrapper);
+        runnerInputTypeSerializer.serialize(row, outputBufferWrapper);
         pythonFunctionRunner.process(baos.toByteArray());
         baos.reset();
         elementCount++;

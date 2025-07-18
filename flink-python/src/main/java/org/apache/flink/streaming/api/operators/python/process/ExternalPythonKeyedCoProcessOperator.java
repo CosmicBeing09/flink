@@ -204,7 +204,7 @@ public class ExternalPythonKeyedCoProcessOperator<OUT>
                         timer.getTimestamp(),
                         timer.getKey(),
                         null);
-        timerDataSerializer.serialize(timerData, baosWrapper);
+        timerDataSerializer.serialize(timerData, outputBufferWrapper);
         pythonFunctionRunner.processTimer(baos.toByteArray());
         baos.reset();
         elementCount++;
