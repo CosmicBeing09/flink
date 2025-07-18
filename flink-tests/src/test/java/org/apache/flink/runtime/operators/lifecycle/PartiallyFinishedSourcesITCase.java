@@ -165,21 +165,21 @@ public class PartiallyFinishedSourcesITCase extends TestLogger {
         return graphBuilder.build(
                 sharedObjects,
                 cfg -> {},
-                env -> {
-                    RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);
+                streamEnv -> {
+                    RestartStrategyUtils.configureFixedDelayRestartStrategy(streamEnv, 1, 0L);
                     // checkpoints can hang (because of not yet fixed bugs and triggering
                     // checkpoint while the source finishes), so we reduce the timeout to
                     // avoid hanging for too long.
-                    env.getCheckpointConfig().setCheckpointTimeout(30000);
+                    streamEnv.getCheckpointConfig().setCheckpointTimeout(30000);
                     // but don't fail the job
-                    env.getCheckpointConfig()
+                    streamEnv.getCheckpointConfig()
                             .setTolerableCheckpointFailureNumber(Integer.MAX_VALUE);
                     // explicitly set to one to ease avoiding race conditions
-                    env.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
+                    streamEnv.getCheckpointConfig().setMaxConcurrentCheckpoints(1);
                     // with unaligned checkpoints state size can grow beyond the default
                     // limits of in-memory storage
                     CheckpointStorageUtils.configureFileSystemCheckpointStorage(
-                            env, TEMPORARY_FOLDER.newFolder().toURI());
+                            streamEnv, TEMPORARY_FOLDER.newFolder().toURI());
                 });
     }
 
