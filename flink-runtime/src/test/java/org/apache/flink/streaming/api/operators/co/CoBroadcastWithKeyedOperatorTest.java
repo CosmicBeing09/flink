@@ -753,7 +753,7 @@ class CoBroadcastWithKeyedOperatorTest {
                                                 () ->
                                                         getRuntimeContext()
                                                                 .getState(valueState)
-                                                                .value())
+                                                                .getCurrentValue())
                                         .isInstanceOf(NullPointerException.class)
                                         .hasMessage(
                                                 "No key set. This method should not be called outside of a keyed context.");

@@ -212,7 +212,7 @@ public abstract class AbstractRowTimeUnboundedPrecedingOver<K>
             } while (keyIterator.hasNext());
 
             // get last accumulator
-            RowData lastAccumulator = accState.value();
+            RowData lastAccumulator = accState.getCurrentValue();
             if (lastAccumulator == null) {
                 // initialize accumulator
                 lastAccumulator = function.createAccumulators();
@@ -240,7 +240,7 @@ public abstract class AbstractRowTimeUnboundedPrecedingOver<K>
 
             // update acc state
             lastAccumulator = function.getAccumulators();
-            accState.update(lastAccumulator);
+            accState.setCurrentValue(lastAccumulator);
 
             // if are are rows with timestamp > watermark, register a timer for the next watermark
             if (existEarlyRecord) {

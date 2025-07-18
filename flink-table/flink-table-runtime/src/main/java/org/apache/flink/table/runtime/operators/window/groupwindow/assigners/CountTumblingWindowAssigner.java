@@ -57,10 +57,10 @@ public class CountTumblingWindowAssigner extends GroupWindowAssigner<CountWindow
     @Override
     public Collection<CountWindow> assignWindows(RowData element, long timestamp)
             throws IOException {
-        Long countValue = count.value();
+        Long countValue = count.getCurrentValue();
         long currentCount = countValue == null ? 0L : countValue;
         long id = currentCount / size;
-        count.update(currentCount + 1);
+        count.setCurrentValue(currentCount + 1);
         return Collections.singleton(new CountWindow(id));
     }
 

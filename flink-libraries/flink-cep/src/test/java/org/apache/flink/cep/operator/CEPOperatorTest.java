@@ -507,7 +507,7 @@ public class CEPOperatorTest extends TestLogger {
             harness.processElement(new StreamRecord<>(endEvent, 4L));
 
             // verify the number of invocations NFA is updated
-            Mockito.verify(nfaOperatorStateSpy, Mockito.times(3)).update(Mockito.any());
+            Mockito.verify(nfaOperatorStateSpy, Mockito.times(3)).setCurrentValue(Mockito.any());
 
             // get and verify the output
             Queue<Object> result = harness.getOutput();
@@ -553,7 +553,7 @@ public class CEPOperatorTest extends TestLogger {
             harness.processElement(new StreamRecord<>(endEvent, 4L));
 
             // verify the number of invocations NFA is updated
-            Mockito.verify(nfaOperatorStateSpy, Mockito.times(3)).update(Mockito.any());
+            Mockito.verify(nfaOperatorStateSpy, Mockito.times(3)).setCurrentValue(Mockito.any());
 
             // get and verify the output
             Queue<Object> result = harness.getOutput();

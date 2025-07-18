@@ -81,7 +81,7 @@ public class RocksDBRocksStateKeysAndNamespacesIteratorTest {
             // insert record
             for (int i = 0; i < 1000; ++i) {
                 keyedStateBackend.setCurrentKey(getKeyFunc.apply(i));
-                testState.update(String.valueOf(i));
+                testState.setCurrentValue(String.valueOf(i));
             }
 
             DataOutputSerializer outputStream = new DataOutputSerializer(8);

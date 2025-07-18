@@ -141,7 +141,7 @@ public class KeyedStateReader extends KeyedStateReaderFunction<Object, RowData> 
                             getValue(
                                     valueLogicalType,
                                     ((ValueState) states.get(columnConfig.getColumnIndex()))
-                                            .value()));
+                                            .getCurrentValue()));
                     break;
 
                 case LIST:

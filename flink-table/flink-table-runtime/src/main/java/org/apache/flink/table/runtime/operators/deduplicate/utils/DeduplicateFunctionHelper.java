@@ -58,8 +58,8 @@ public class DeduplicateFunctionHelper {
         if (generateUpdateBefore || generateInsert) {
             // use state to keep the previous row content if we need to generate UPDATE_BEFORE
             // or use to distinguish the first row, if we need to generate INSERT
-            RowData preRow = state.value();
-            state.update(currentRow);
+            RowData preRow = state.getCurrentValue();
+            state.setCurrentValue(currentRow);
             if (preRow == null) {
                 // the first row, send INSERT message
                 currentRow.setRowKind(RowKind.INSERT);
@@ -108,7 +108,7 @@ public class DeduplicateFunctionHelper {
             boolean isStateTtlEnabled,
             RecordEqualiser equaliser)
             throws Exception {
-        RowData preRow = state.value();
+        RowData preRow = state.getCurrentValue();
         RowKind currentKind = currentRow.getRowKind();
         if (currentKind == RowKind.INSERT || currentKind == RowKind.UPDATE_AFTER) {
             if (preRow == null) {
@@ -134,7 +134,7 @@ public class DeduplicateFunctionHelper {
             // normalize row kind
             currentRow.setRowKind(RowKind.INSERT);
             // save to state
-            state.update(currentRow);
+            state.setCurrentValue(currentRow);
         } else {
             // DELETE or UPDATER_BEFORE
             if (preRow != null) {
@@ -166,10 +166,10 @@ public class DeduplicateFunctionHelper {
 
         checkInsertOnly(currentRow);
         // ignore record if it is not first row
-        if (state.value() != null) {
+        if (state.getCurrentValue() != null) {
             return;
         }
-        state.update(true);
+        state.setCurrentValue(true);
         // emit the first row which is INSERT message
         out.collect(currentRow);
     }

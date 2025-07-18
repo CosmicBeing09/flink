@@ -41,7 +41,7 @@ public final class WindowValueState<W> implements WindowState<W> {
     /** Returns the current value for the state under current key and the given window. */
     public RowData value(W window) throws IOException {
         windowState.setCurrentNamespace(window);
-        return windowState.value();
+        return windowState.getCurrentValue();
     }
 
     /**
@@ -52,6 +52,6 @@ public final class WindowValueState<W> implements WindowState<W> {
      */
     public void update(W window, RowData value) throws IOException {
         windowState.setCurrentNamespace(window);
-        windowState.update(value);
+        windowState.setCurrentValue(value);
     }
 }

@@ -114,7 +114,7 @@ class RegularWindowOperatorContractTest extends WindowOperatorContractTest {
                                 Trigger.TriggerContext context =
                                         (Trigger.TriggerContext) invocation.getArguments()[3];
                                 context.registerEventTimeTimer(window.getEnd());
-                                context.getPartitionedState(valueStateDescriptor).update("hello");
+                                context.getPartitionedState(valueStateDescriptor).setCurrentValue("hello");
                                 return TriggerResult.FIRE;
                             }
                         })

@@ -376,7 +376,7 @@ public class CepOperator<IN, KEY, OUT>
     }
 
     private NFAState getNFAState() throws IOException {
-        NFAState nfaState = computationStates.value();
+        NFAState nfaState = computationStates.getCurrentValue();
         return nfaState != null ? nfaState : nfa.createInitialNFAState();
     }
 
@@ -384,7 +384,7 @@ public class CepOperator<IN, KEY, OUT>
         if (nfaState.isStateChanged()) {
             nfaState.resetStateChanged();
             nfaState.resetNewStartPartialMatch();
-            computationStates.update(nfaState);
+            computationStates.setCurrentValue(nfaState);
         }
     }
 

@@ -44,7 +44,7 @@ public class ArtificialValueStateBuilder<IN, STATE> extends ArtificialStateBuild
 
     @Override
     public void artificialStateForElement(IN event) throws Exception {
-        valueState.update(stateValueGenerator.join(event, valueState.value()));
+        valueState.setCurrentValue(stateValueGenerator.join(event, valueState.getCurrentValue()));
     }
 
     @Override

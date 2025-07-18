@@ -103,7 +103,7 @@ public class FastTop1Function extends AbstractSyncStateTopNFunction
         RowData currentKey = (RowData) keyContext.getCurrentKey();
         RowData prevRow = helper.getPrevRowFromCache(currentKey);
         if (prevRow == null) {
-            prevRow = dataState.value();
+            prevRow = dataState.getCurrentValue();
         } else {
             helper.accHitCount();
         }
@@ -139,7 +139,7 @@ public class FastTop1Function extends AbstractSyncStateTopNFunction
         @Override
         public void flushBufferToState(RowData currentKey, RowData value) throws Exception {
             keyContext.setCurrentKey(currentKey);
-            FastTop1Function.this.dataState.update(value);
+            FastTop1Function.this.dataState.setCurrentValue(value);
         }
     }
 }

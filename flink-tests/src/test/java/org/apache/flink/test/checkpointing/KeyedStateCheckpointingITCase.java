@@ -304,10 +304,10 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
                 throw new Exception("Test Failure");
             }
 
-            Long oldSum = sum.value();
+            Long oldSum = sum.getCurrentValue();
             long currentSum = (oldSum == null ? 0L : oldSum) + value;
 
-            sum.update(currentSum);
+            sum.setCurrentValue(currentSum);
             ALL_SUMS.put(value, currentSum);
             return new Tuple2<>(value, currentSum);
         }
@@ -349,8 +349,8 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
 
         @Override
         public void invoke(Tuple2<Integer, Long> value) throws Exception {
-            final NonSerializableLong acRaw = aCounts.value();
-            final Long bcRaw = bCounts.value();
+            final NonSerializableLong acRaw = aCounts.getCurrentValue();
+            final Long bcRaw = bCounts.getCurrentValue();
 
             final long ac = acRaw == null ? 0L : acRaw.value;
             final long bc = bcRaw == null ? 0L : bcRaw;
@@ -358,8 +358,8 @@ public class KeyedStateCheckpointingITCase extends TestLogger {
             assertEquals(ac, bc);
 
             long currentCount = ac + 1;
-            aCounts.update(NonSerializableLong.of(currentCount));
-            bCounts.update(currentCount);
+            aCounts.setCurrentValue(NonSerializableLong.of(currentCount));
+            bCounts.setCurrentValue(currentCount);
 
             ALL_COUNTS.put(value.f0, currentCount);
         }

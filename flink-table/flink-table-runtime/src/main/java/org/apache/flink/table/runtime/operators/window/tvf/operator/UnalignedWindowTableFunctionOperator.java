@@ -208,11 +208,11 @@ public class UnalignedWindowTableFunctionOperator extends WindowTableFunctionOpe
         }
 
         // no matter if order exceeds the Long.MAX_VALUE
-        Long order = counterState.value();
+        Long order = counterState.getCurrentValue();
         if (null == order) {
             order = 0L;
         }
-        counterState.update(order + 1);
+        counterState.setCurrentValue(order + 1);
 
         timestamp = TimeWindowUtil.toUtcTimestampMills(timestamp, shiftTimeZone);
         // the windows which the input row should be placed into

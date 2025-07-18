@@ -97,7 +97,7 @@ public class ChangelogMetricGroupTest {
         assertEquals(0L, lastIncSizeOfNonMaterializationGauge.getValue().longValue());
 
         changelogKeyedStateBackend.setCurrentKey(1);
-        state.update(1);
+        state.setCurrentValue(1);
         periodicMaterializationManager.triggerMaterialization();
         runSnapshot(2L);
         assertEquals(2L, startedMaterializationCounter.getCount());
@@ -115,7 +115,7 @@ public class ChangelogMetricGroupTest {
         assertEquals(0L, lastIncSizeOfNonMaterialization.longValue());
 
         changelogKeyedStateBackend.setCurrentKey(2);
-        state.update(2);
+        state.setCurrentValue(2);
         runSnapshot(3L);
         // The materialization size will not be updated if no materialization triggered.
         assertEquals(lastFullSizeOfMaterialization, lastFullSizeOfMaterializationGauge.getValue());
@@ -132,7 +132,7 @@ public class ChangelogMetricGroupTest {
     public void testFailedMaterialization() throws Exception {
         setup(snapshotResult -> ExceptionallyDoneFuture.of(new RuntimeException()));
         changelogKeyedStateBackend.setCurrentKey(1);
-        state.update(1);
+        state.setCurrentValue(1);
         assertEquals(-1L, lastDurationOfMaterializationGauge.getValue().longValue());
         periodicMaterializationManager.triggerMaterialization();
         runSnapshot(1L);

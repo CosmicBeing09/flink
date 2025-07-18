@@ -40,15 +40,15 @@ class TtlValueState<K, N, T>
     }
 
     @Override
-    public T value() throws IOException {
+    public T getCurrentValue() throws IOException {
         accessCallback.run();
-        return getWithTtlCheckAndUpdate(original::value, original::update);
+        return getWithTtlCheckAndUpdate(original::getCurrentValue, original::setCurrentValue);
     }
 
     @Override
-    public void update(T value) throws IOException {
+    public void setCurrentValue(T value) throws IOException {
         accessCallback.run();
-        original.update(value == null ? null : wrapWithTs(value));
+        original.setCurrentValue(value == null ? null : wrapWithTs(value));
     }
 
     @Nullable

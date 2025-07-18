@@ -372,7 +372,7 @@ public class TemporalRowTimeJoinOperator extends BaseTwoInputStreamOperatorWithS
     }
 
     private void registerSmallestTimer(long timestamp) throws IOException {
-        Long currentRegisteredTimer = registeredTimer.value();
+        Long currentRegisteredTimer = registeredTimer.getCurrentValue();
         if (currentRegisteredTimer == null) {
             registerTimer(timestamp);
         } else if (currentRegisteredTimer > timestamp) {
@@ -382,7 +382,7 @@ public class TemporalRowTimeJoinOperator extends BaseTwoInputStreamOperatorWithS
     }
 
     private void registerTimer(long timestamp) throws IOException {
-        registeredTimer.update(timestamp);
+        registeredTimer.setCurrentValue(timestamp);
         timerService.registerEventTimeTimer(VoidNamespace.INSTANCE, timestamp);
     }
 
@@ -396,11 +396,11 @@ public class TemporalRowTimeJoinOperator extends BaseTwoInputStreamOperatorWithS
     }
 
     private long getNextLeftIndex() throws IOException {
-        Long index = nextLeftIndex.value();
+        Long index = nextLeftIndex.getCurrentValue();
         if (index == null) {
             index = 0L;
         }
-        nextLeftIndex.update(index + 1);
+        nextLeftIndex.setCurrentValue(index + 1);
         return index;
     }
 

@@ -287,7 +287,7 @@ public class NotifyCheckpointAbortedITCase extends TestLogger {
 
         @Override
         public Integer map(Tuple2<Integer, Integer> value) throws Exception {
-            valueState.update(value.f1);
+            valueState.setCurrentValue(value.f1);
             return value.f1;
         }
 

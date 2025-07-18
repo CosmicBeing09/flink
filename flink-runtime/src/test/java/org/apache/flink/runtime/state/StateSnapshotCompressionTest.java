@@ -138,16 +138,16 @@ class StateSnapshotCompressionTest {
 
             stateBackend.setCurrentKey("A");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("42");
+            state.setCurrentValue("42");
             stateBackend.setCurrentKey("B");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("43");
+            state.setCurrentValue("43");
             stateBackend.setCurrentKey("C");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("44");
+            state.setCurrentValue("44");
             stateBackend.setCurrentKey("D");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            state.update("45");
+            state.setCurrentValue("45");
             CheckpointStreamFactory streamFactory = new MemCheckpointStreamFactory(4 * 1024 * 1024);
             RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
                     stateBackend.createStateSnapshot(
@@ -176,16 +176,16 @@ class StateSnapshotCompressionTest {
 
             stateBackend.setCurrentKey("A");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("42");
+            assertThat(state.getCurrentValue()).isEqualTo("42");
             stateBackend.setCurrentKey("B");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("43");
+            assertThat(state.getCurrentValue()).isEqualTo("43");
             stateBackend.setCurrentKey("C");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("44");
+            assertThat(state.getCurrentValue()).isEqualTo("44");
             stateBackend.setCurrentKey("D");
             state.setCurrentNamespace(VoidNamespace.INSTANCE);
-            assertThat(state.value()).isEqualTo("45");
+            assertThat(state.getCurrentValue()).isEqualTo("45");
 
         } finally {
             IOUtils.closeQuietly(stateBackend);

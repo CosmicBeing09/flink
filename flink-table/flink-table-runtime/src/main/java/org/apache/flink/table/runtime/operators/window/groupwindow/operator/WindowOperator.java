@@ -351,7 +351,7 @@ public abstract class WindowOperator<K, W extends Window> extends AbstractStream
             isElementDropped = false;
 
             windowState.setCurrentNamespace(window);
-            RowData acc = windowState.value();
+            RowData acc = windowState.getCurrentValue();
             if (acc == null) {
                 acc = windowAggregator.createAccumulators();
             }
@@ -363,7 +363,7 @@ public abstract class WindowOperator<K, W extends Window> extends AbstractStream
                 windowAggregator.retract(inputRow);
             }
             acc = windowAggregator.getAccumulators();
-            windowState.update(acc);
+            windowState.setCurrentValue(acc);
         }
 
         // the actual window which the input row is belongs to
@@ -493,13 +493,13 @@ public abstract class WindowOperator<K, W extends Window> extends AbstractStream
         @Override
         public RowData getWindowAccumulators(W window) throws Exception {
             windowState.setCurrentNamespace(window);
-            return windowState.value();
+            return windowState.getCurrentValue();
         }
 
         @Override
         public void setWindowAccumulators(W window, RowData acc) throws Exception {
             windowState.setCurrentNamespace(window);
-            windowState.update(acc);
+            windowState.setCurrentValue(acc);
         }
 
         @Override

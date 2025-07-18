@@ -314,7 +314,7 @@ public class ChangelogStateDiscardTest {
                         "ns",
                         StringSerializer.INSTANCE,
                         new ValueStateDescriptor<>(randomString(), String.class))
-                .update(randomString());
+                .setCurrentValue(randomString());
     }
 
     private static List<UploadResult> uploadResult(UploadTask upload) {

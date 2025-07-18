@@ -392,9 +392,9 @@ public class RegionFailoverITCase extends TestLogger {
 
             // take input (1, 2) and (1, 3) for example, we would finally emit (1, 5) out with the
             // usage of keyed state.
-            Integer value = valueState.value();
+            Integer value = valueState.getCurrentValue();
             if (value == null) {
-                valueState.update(input.f1);
+                valueState.setCurrentValue(input.f1);
                 return input;
             } else {
                 return Tuple2.of(input.f0, value + input.f1);

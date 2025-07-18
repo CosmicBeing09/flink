@@ -56,14 +56,14 @@ public class StreamGroupedReduceOperator<IN>
     @Override
     public void processElement(StreamRecord<IN> element) throws Exception {
         IN value = element.getValue();
-        IN currentValue = values.value();
+        IN currentValue = values.getCurrentValue();
 
         if (currentValue != null) {
             IN reduced = userFunction.reduce(currentValue, value);
-            values.update(reduced);
+            values.setCurrentValue(reduced);
             output.collect(element.replace(reduced));
         } else {
-            values.update(value);
+            values.setCurrentValue(value);
             output.collect(element.replace(value));
         }
     }

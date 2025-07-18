@@ -50,12 +50,12 @@ class TtlValueStateVerifier
 
     @Override
     String getInternal(@Nonnull ValueState<String> state) throws Exception {
-        return state.value();
+        return state.getCurrentValue();
     }
 
     @Override
     void updateInternal(@Nonnull ValueState<String> state, String update) throws Exception {
-        state.update(update);
+        state.setCurrentValue(update);
     }
 
     @Override

@@ -509,7 +509,7 @@ public class RocksDBAsyncSnapshotTest extends TestLogger {
                             VoidNamespaceSerializer.INSTANCE,
                             new ValueStateDescriptor<>("count", StringSerializer.INSTANCE));
 
-            state.update(element.getValue());
+            state.setCurrentValue(element.getValue());
         }
     }
 

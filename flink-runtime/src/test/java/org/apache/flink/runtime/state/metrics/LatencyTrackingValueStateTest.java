@@ -67,10 +67,10 @@ class LatencyTrackingValueStateTest extends LatencyTrackingStateTestBase<Integer
             setCurrentKey(keyedBackend);
             for (int index = 1; index <= SAMPLE_INTERVAL; index++) {
                 int expectedResult = index == SAMPLE_INTERVAL ? 0 : index;
-                latencyTrackingState.update(ThreadLocalRandom.current().nextLong());
+                latencyTrackingState.setCurrentValue(ThreadLocalRandom.current().nextLong());
                 assertThat(latencyTrackingStateMetric.getUpdateCount()).isEqualTo(expectedResult);
 
-                latencyTrackingState.value();
+                latencyTrackingState.getCurrentValue();
                 assertThat(latencyTrackingStateMetric.getGetCount()).isEqualTo(expectedResult);
             }
         } finally {

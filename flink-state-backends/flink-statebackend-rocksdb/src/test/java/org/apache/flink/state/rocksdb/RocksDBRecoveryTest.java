@@ -165,7 +165,7 @@ public class RocksDBRecoveryTest {
                             KeyGroupRangeAssignment.assignKeyToParallelOperator(
                                     key, maxParallelism, startParallelism);
                     backends.get(index).setCurrentKey(key);
-                    valueStates.get(index).update(i);
+                    valueStates.get(index).setCurrentValue(i);
 
                     // Add at most one timer for each instance
                     KeyGroupedInternalPriorityQueue<TimerHeapInternalTimer<Integer, Integer>>
@@ -178,7 +178,7 @@ public class RocksDBRecoveryTest {
                                 KeyGroupRangeAssignment.assignKeyToParallelOperator(
                                         key, maxParallelism, startParallelism);
                         backends.get(index).setCurrentKey(key);
-                        valueStates.get(index).update(i);
+                        valueStates.get(index).setCurrentValue(i);
                     }
                 }
 

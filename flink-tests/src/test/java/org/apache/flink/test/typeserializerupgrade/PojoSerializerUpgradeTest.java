@@ -413,7 +413,7 @@ public class PojoSerializerUpgradeTest extends TestLogger {
 
             if (verify) {
                 if (keyed) {
-                    assertEquals(pojo, keyedValueState.value());
+                    assertEquals(pojo, keyedValueState.getCurrentValue());
 
                     Iterator<Object> listIterator = keyedListState.get().iterator();
 
@@ -443,7 +443,7 @@ public class PojoSerializerUpgradeTest extends TestLogger {
                 }
             } else {
                 if (keyed) {
-                    keyedValueState.update(pojo);
+                    keyedValueState.setCurrentValue(pojo);
                     keyedListState.add(pojo);
                     keyedReducingState.add(pojo);
                 } else {

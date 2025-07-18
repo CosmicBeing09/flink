@@ -77,12 +77,12 @@ public class RowTimeMiniBatchLatestChangeDeduplicateFunction
             RowData currentKey = entry.getKey();
             RowData bufferedRow = entry.getValue();
             ctx.setCurrentKey(currentKey);
-            RowData preRow = state.value();
+            RowData preRow = state.getCurrentValue();
             checkInsertOnly(bufferedRow);
             if (isDuplicate(preRow, bufferedRow, rowtimeIndex, keepLastRow)) {
                 updateDeduplicateResult(
                         generateUpdateBefore, generateInsert, preRow, bufferedRow, out);
-                state.update(bufferedRow);
+                state.setCurrentValue(bufferedRow);
             }
         }
     }

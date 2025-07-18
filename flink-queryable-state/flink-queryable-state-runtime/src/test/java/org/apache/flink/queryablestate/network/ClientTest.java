@@ -613,7 +613,7 @@ class ClientTest {
                         backend.getPartitionedState(
                                 VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, desc);
 
-                state.update(201 + i);
+                state.setCurrentValue(201 + i);
 
                 // we know it must be a KvState but this is not exposed to the user via State
                 InternalKvState<Integer, ?, Integer> kvState =

@@ -144,7 +144,7 @@ public class MultiStateKeyIteratorTest {
         backend.setCurrentKey(key);
         backend.getPartitionedState(
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, descriptor)
-                .update(0);
+                .setCurrentValue(0);
     }
 
     private static void clearKey(

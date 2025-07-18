@@ -1408,7 +1408,7 @@ public abstract class AbstractQueryableStateTestBase {
                                 executor);
 
                 Tuple2<Integer, Long> value =
-                        future.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS).value();
+                        future.get(deadline.timeLeft().toMillis(), TimeUnit.MILLISECONDS).getCurrentValue();
 
                 assertThat(key).isEqualTo(value.f0.intValue()).withFailMessage("Key mismatch");
                 if (expected == value.f1) {

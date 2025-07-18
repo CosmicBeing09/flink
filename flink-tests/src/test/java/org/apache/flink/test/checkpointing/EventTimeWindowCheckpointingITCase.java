@@ -421,20 +421,20 @@ public class EventTimeWindowCheckpointingITCase extends TestLogger {
 
                                     // the window count state starts with the key, so that we get
                                     // different count results for each key
-                                    if (count.value() == 0) {
-                                        count.update(l.intValue());
+                                    if (count.getCurrentValue() == 0) {
+                                        count.setCurrentValue(l.intValue());
                                     }
 
                                     // validate that the function has been opened properly
                                     assertTrue(open);
 
-                                    count.update(count.value() + 1);
+                                    count.setCurrentValue(count.getCurrentValue() + 1);
                                     out.collect(
                                             new Tuple4<>(
                                                     l,
                                                     window.getStart(),
                                                     window.getEnd(),
-                                                    new IntType(count.value())));
+                                                    new IntType(count.getCurrentValue())));
                                 }
                             })
                     .addSink(

@@ -115,7 +115,7 @@ class StateSnapshotTransformerTest {
 
         @Override
         void setToRandomValue() throws Exception {
-            state.update(getRandomString());
+            state.setCurrentValue(getRandomString());
         }
     }
 

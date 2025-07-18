@@ -63,7 +63,7 @@ public class StreamArrowPythonRowTimeBoundedRangeOperator<K>
     @Override
     public void bufferInput(RowData input) throws Exception {
         long triggeringTs = input.getLong(inputTimeFieldIndex);
-        Long lastTriggeringTs = lastTriggeringTsState.value();
+        Long lastTriggeringTs = lastTriggeringTsState.getCurrentValue();
         if (lastTriggeringTs == null) {
             lastTriggeringTs = 0L;
         }

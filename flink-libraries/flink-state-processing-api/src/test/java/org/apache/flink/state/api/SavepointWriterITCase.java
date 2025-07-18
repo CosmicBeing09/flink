@@ -289,7 +289,7 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
         @Override
         public void processElement(Account value, Context ctx) throws Exception {
-            state.update(value.amount);
+            state.setCurrentValue(value.amount);
         }
     }
 
@@ -308,12 +308,12 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
 
         @Override
         public void flatMap(Account value, Collector<Account> out) throws Exception {
-            Double current = state.value();
+            Double current = state.getCurrentValue();
             if (current != null) {
                 value.amount += current;
             }
 
-            state.update(value.amount);
+            state.setCurrentValue(value.amount);
             out.collect(value);
         }
     }

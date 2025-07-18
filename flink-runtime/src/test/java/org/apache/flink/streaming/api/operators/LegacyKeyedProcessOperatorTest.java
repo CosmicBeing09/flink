@@ -476,7 +476,7 @@ class LegacyKeyedProcessOperatorTest {
         public void processElement(Integer value, Context ctx, Collector<String> out)
                 throws Exception {
             out.collect("INPUT:" + value);
-            getRuntimeContext().getState(state).update(value);
+            getRuntimeContext().getState(state).setCurrentValue(value);
             if (timeDomain.equals(TimeDomain.EVENT_TIME)) {
                 ctx.timerService()
                         .registerEventTimeTimer(ctx.timerService().currentWatermark() + 5);
@@ -491,7 +491,7 @@ class LegacyKeyedProcessOperatorTest {
         public void onTimer(long timestamp, OnTimerContext ctx, Collector<String> out)
                 throws Exception {
             assertThat(ctx.timeDomain()).isEqualTo(timeDomain);
-            out.collect("STATE:" + getRuntimeContext().getState(state).value());
+            out.collect("STATE:" + getRuntimeContext().getState(state).getCurrentValue());
         }
     }
 

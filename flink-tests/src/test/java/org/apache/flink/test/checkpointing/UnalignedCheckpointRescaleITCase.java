@@ -702,13 +702,13 @@ public class UnalignedCheckpointRescaleITCase extends UnalignedCheckpointTestBas
 
         @Override
         public Long map(Long value) throws Exception {
-            final Long lastGroup = state.value();
+            final Long lastGroup = state.getCurrentValue();
             final long rawValue = withoutHeader(value);
             final long group = rawValue % NUM_GROUPS;
             if (lastGroup != null) {
                 checkState(group == lastGroup, "Mismatched key group");
             } else {
-                state.update(group);
+                state.setCurrentValue(group);
             }
             return value;
         }

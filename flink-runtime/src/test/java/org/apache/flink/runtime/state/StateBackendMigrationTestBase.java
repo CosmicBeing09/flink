@@ -173,11 +173,11 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
                             initialAccessDescriptor);
 
             backend.setCurrentKey(1);
-            valueState.update(new TestType("foo", 1456));
+            valueState.setCurrentValue(new TestType("foo", 1456));
             backend.setCurrentKey(2);
-            valueState.update(new TestType("bar", 478));
+            valueState.setCurrentValue(new TestType("bar", 478));
             backend.setCurrentKey(3);
-            valueState.update(new TestType("hello", 189));
+            valueState.setCurrentValue(new TestType("hello", 189));
 
             KeyedStateHandle snapshot =
                     runSnapshot(
@@ -199,16 +199,16 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             // make sure that reading and writing each key state works with the new serializer
             backend.setCurrentKey(1);
-            assertThat(valueState.value()).isEqualTo(new TestType("foo", 1456));
-            valueState.update(new TestType("newValue1", 751));
+            assertThat(valueState.getCurrentValue()).isEqualTo(new TestType("foo", 1456));
+            valueState.setCurrentValue(new TestType("newValue1", 751));
 
             backend.setCurrentKey(2);
-            assertThat(valueState.value()).isEqualTo(new TestType("bar", 478));
-            valueState.update(new TestType("newValue2", 167));
+            assertThat(valueState.getCurrentValue()).isEqualTo(new TestType("bar", 478));
+            valueState.setCurrentValue(new TestType("newValue2", 167));
 
             backend.setCurrentKey(3);
-            assertThat(valueState.value()).isEqualTo(new TestType("hello", 189));
-            valueState.update(new TestType("newValue3", 444));
+            assertThat(valueState.getCurrentValue()).isEqualTo(new TestType("hello", 189));
+            valueState.setCurrentValue(new TestType("newValue3", 444));
 
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
@@ -641,9 +641,9 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
                             VoidNamespace.INSTANCE, CustomVoidNamespaceSerializer.INSTANCE, kvId);
 
             backend.setCurrentKey(new TestType("foo", 123));
-            valueState.update(1);
+            valueState.setCurrentValue(1);
             backend.setCurrentKey(new TestType("bar", 456));
-            valueState.update(5);
+            valueState.setCurrentValue(5);
 
             KeyedStateHandle snapshot =
                     runSnapshot(
@@ -663,9 +663,9 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             // access and check previous state
             backend.setCurrentKey(new TestType("foo", 123));
-            assertThat(valueState.value().intValue()).isOne();
+            assertThat(valueState.getCurrentValue().intValue()).isOne();
             backend.setCurrentKey(new TestType("bar", 456));
-            assertThat(valueState.value().intValue()).isEqualTo(5);
+            assertThat(valueState.getCurrentValue().intValue()).isEqualTo(5);
 
             // do another snapshot to verify the snapshot logic after migration
             snapshot =
@@ -739,9 +739,9 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
                             new TestType("namespace", 123), initialNamespaceSerializer, kvId);
 
             backend.setCurrentKey(1);
-            valueState.update(10);
+            valueState.setCurrentValue(10);
             backend.setCurrentKey(5);
-            valueState.update(50);
+            valueState.setCurrentValue(50);
 
             KeyedStateHandle snapshot =
                     runSnapshot(
@@ -764,10 +764,10 @@ public abstract class StateBackendMigrationTestBase<B extends StateBackend> {
 
             // access and check previous state
             backend.setCurrentKey(1);
-            assertThat(valueState.value().intValue()).isEqualTo(10);
-            valueState.update(10);
+            assertThat(valueState.getCurrentValue().intValue()).isEqualTo(10);
+            valueState.setCurrentValue(10);
             backend.setCurrentKey(5);
-            assertThat(valueState.value().intValue()).isEqualTo(50);
+            assertThat(valueState.getCurrentValue().intValue()).isEqualTo(50);
 
             // do another snapshot to verify the snapshot logic after migration
             snapshot =

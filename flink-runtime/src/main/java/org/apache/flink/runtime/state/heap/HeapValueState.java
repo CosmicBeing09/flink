@@ -68,7 +68,7 @@ class HeapValueState<K, N, V> extends AbstractHeapState<K, N, V>
     }
 
     @Override
-    public V value() {
+    public V getCurrentValue() {
         final V result = stateTable.get(currentNamespace);
 
         if (result == null) {
@@ -79,7 +79,7 @@ class HeapValueState<K, N, V> extends AbstractHeapState<K, N, V>
     }
 
     @Override
-    public void update(V value) {
+    public void setCurrentValue(V value) {
 
         if (value == null) {
             clear();

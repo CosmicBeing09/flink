@@ -349,8 +349,8 @@ public class EmbeddedRocksDBStateBackendTest
 
         for (int i = 0; i < 100; ++i) {
             keyedStateBackend.setCurrentKey(i);
-            testState1.update(4200 + i);
-            testState2.update("S-" + (4200 + i));
+            testState1.setCurrentValue(4200 + i);
+            testState2.setCurrentValue("S-" + (4200 + i));
         }
     }
 
@@ -552,7 +552,7 @@ public class EmbeddedRocksDBStateBackendTest
                             VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, kvId);
 
             backend.setCurrentKey(1);
-            state.update("Hello");
+            state.setCurrentValue("Hello");
 
             // more than just the root directory
             assertThat(allFilesInDbDir.size()).isGreaterThan(1);
@@ -590,7 +590,7 @@ public class EmbeddedRocksDBStateBackendTest
                     reset(sharedStateRegistry);
 
                     backend.setCurrentKey(checkpointId);
-                    state.update("Hello-" + checkpointId);
+                    state.setCurrentValue("Hello-" + checkpointId);
 
                     RunnableFuture<SnapshotResult<KeyedStateHandle>> snapshot =
                             backend.createStateSnapshot(
@@ -732,7 +732,7 @@ public class EmbeddedRocksDBStateBackendTest
 
             for (int i = range.getStartKeyGroup(); i < range.getEndKeyGroup(); i++) {
                 backend.setCurrentKey(i);
-                state.update(Integer.toString(i));
+                state.setCurrentValue(Integer.toString(i));
                 // snapshot to force flushing memtables to disk and create a new SST file
                 runSnapshot(
                         backend.createStateSnapshot(
@@ -765,8 +765,8 @@ public class EmbeddedRocksDBStateBackendTest
                 Thread.sleep(1);
             }
             keyedStateBackend.setCurrentKey(i);
-            testState1.update(4200 + i);
-            testState2.update("S-" + (4200 + i));
+            testState1.setCurrentValue(4200 + i);
+            testState2.setCurrentValue("S-" + (4200 + i));
         }
     }
 

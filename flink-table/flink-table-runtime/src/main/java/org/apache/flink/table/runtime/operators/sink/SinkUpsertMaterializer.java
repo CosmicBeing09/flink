@@ -136,7 +136,7 @@ public class SinkUpsertMaterializer extends TableStreamOperator<RowData>
     @Override
     public void processElement(StreamRecord<RowData> element) throws Exception {
         final RowData row = element.getValue();
-        List<RowData> values = state.value();
+        List<RowData> values = state.getCurrentValue();
         if (values == null) {
             values = new ArrayList<>(2);
         }
@@ -170,7 +170,7 @@ public class SinkUpsertMaterializer extends TableStreamOperator<RowData>
         collector.collect(add);
 
         // Always need to sync with state
-        state.update(values);
+        state.setCurrentValue(values);
     }
 
     private void retractRow(List<RowData> values, RowData retract) throws IOException {
@@ -197,7 +197,7 @@ public class SinkUpsertMaterializer extends TableStreamOperator<RowData>
         if (values.isEmpty()) {
             state.clear();
         } else {
-            state.update(values);
+            state.setCurrentValue(values);
         }
     }
 

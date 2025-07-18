@@ -80,12 +80,12 @@ public class SlidingWindowCheckMapper
     public void flatMap(Tuple2<Integer, List<Event>> value, Collector<String> out)
             throws Exception {
         List<Tuple2<Event, Integer>> previousWindowValues =
-                Optional.ofNullable(eventsSeenSoFar.value()).orElseGet(Collections::emptyList);
+                Optional.ofNullable(eventsSeenSoFar.getCurrentValue()).orElseGet(Collections::emptyList);
 
         List<Event> newValues = value.f1;
         Optional<Event> lastEventInWindow = verifyWindowContiguity(newValues, out);
 
-        Long lastSequenceNumberSeenSoFar = lastSequenceNumber.value();
+        Long lastSequenceNumberSeenSoFar = lastSequenceNumber.getCurrentValue();
         List<Tuple2<Event, Integer>> newWindows =
                 verifyPreviousOccurences(
                         previousWindowValues, newValues, lastSequenceNumberSeenSoFar, out);
@@ -94,7 +94,7 @@ public class SlidingWindowCheckMapper
             updateLastSeenSequenceNumber(lastEventInWindow.get(), lastSequenceNumberSeenSoFar, out);
         }
 
-        eventsSeenSoFar.update(newWindows);
+        eventsSeenSoFar.setCurrentValue(newWindows);
     }
 
     private void updateLastSeenSequenceNumber(
@@ -103,7 +103,7 @@ public class SlidingWindowCheckMapper
         long lastSequenceNumberInWindow = lastEventInWindow.getSequenceNumber();
         if (lastSequenceNumberSeenSoFar == null
                 || lastSequenceNumberInWindow > lastSequenceNumberSeenSoFar) {
-            lastSequenceNumber.update(lastSequenceNumberInWindow);
+            lastSequenceNumber.setCurrentValue(lastSequenceNumberInWindow);
         } else if (lastSequenceNumberInWindow < lastSequenceNumberSeenSoFar) {
             failWithSequenceNumberDecreased(lastEventInWindow, lastSequenceNumberSeenSoFar, out);
         }

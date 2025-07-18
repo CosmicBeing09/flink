@@ -172,7 +172,7 @@ public class MiniBatchGroupAggFunction
 
             // set current key to access state under the key
             ctx.setCurrentKey(currentKey);
-            RowData acc = accState.value();
+            RowData acc = accState.getCurrentValue();
             if (acc == null) {
                 // Don't create a new accumulator for a retraction message. This
                 // might happen if the retraction message is the first message for the
@@ -217,7 +217,7 @@ public class MiniBatchGroupAggFunction
                 // we aggregated at least one record for this key
 
                 // update acc to state
-                accState.update(acc);
+                accState.setCurrentValue(acc);
 
                 // if this was not the first row and we have to emit retractions
                 if (!firstRow) {

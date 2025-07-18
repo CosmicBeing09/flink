@@ -64,9 +64,9 @@ public class CountSlidingWindowAssigner extends GroupWindowAssigner<CountWindow>
     @Override
     public Collection<CountWindow> assignWindows(RowData element, long timestamp)
             throws IOException {
-        Long countValue = count.value();
+        Long countValue = count.getCurrentValue();
         long currentCount = countValue == null ? 0L : countValue;
-        count.update(currentCount + 1);
+        count.setCurrentValue(currentCount + 1);
         long lastId = currentCount / windowSlide;
         long lastStart = lastId * windowSlide;
         long lastEnd = lastStart + windowSize - 1;

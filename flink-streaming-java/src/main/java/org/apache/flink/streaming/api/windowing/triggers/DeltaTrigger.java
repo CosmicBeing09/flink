@@ -52,12 +52,12 @@ public class DeltaTrigger<T, W extends Window> extends Trigger<T, W> {
     public TriggerResult onElement(T element, long timestamp, W window, TriggerContext ctx)
             throws Exception {
         ValueState<T> lastElementState = ctx.getPartitionedState(stateDesc);
-        if (lastElementState.value() == null) {
-            lastElementState.update(element);
+        if (lastElementState.getCurrentValue() == null) {
+            lastElementState.setCurrentValue(element);
             return TriggerResult.CONTINUE;
         }
-        if (deltaFunction.getDelta(lastElementState.value(), element) > this.threshold) {
-            lastElementState.update(element);
+        if (deltaFunction.getDelta(lastElementState.getCurrentValue(), element) > this.threshold) {
+            lastElementState.setCurrentValue(element);
             return TriggerResult.FIRE;
         }
         return TriggerResult.CONTINUE;

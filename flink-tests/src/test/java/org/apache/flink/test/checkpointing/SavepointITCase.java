@@ -1605,9 +1605,9 @@ public class SavepointITCase extends TestLogger {
 
         @Override
         public void flatMap(Integer value, Collector<Integer> out) throws Exception {
-            if (!operatorState.value()) {
+            if (!operatorState.getCurrentValue()) {
                 out.collect(value);
-                operatorState.update(true);
+                operatorState.setCurrentValue(true);
             }
 
             if (30 == value) {

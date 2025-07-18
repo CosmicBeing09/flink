@@ -148,7 +148,7 @@ class KvStateServerHandlerTest {
                 backend.getPartitionedState(
                         VoidNamespace.INSTANCE, VoidNamespaceSerializer.INSTANCE, desc);
 
-        state.update(expectedValue);
+        state.setCurrentValue(expectedValue);
 
         byte[] serializedKeyAndNamespace =
                 KvStateSerializer.serializeKeyAndNamespace(
@@ -638,7 +638,7 @@ class KvStateServerHandlerTest {
 
         // Update the KvState
         backend.setCurrentKey(key);
-        state.update(712828289);
+        state.setCurrentValue(712828289);
 
         byte[] wrongKeyAndNamespace =
                 KvStateSerializer.serializeKeyAndNamespace(
@@ -738,7 +738,7 @@ class KvStateServerHandlerTest {
 
         int key = 99812822;
         backend.setCurrentKey(key);
-        state.update(bytes);
+        state.setCurrentValue(bytes);
 
         // Request
         byte[] serializedKeyAndNamespace =

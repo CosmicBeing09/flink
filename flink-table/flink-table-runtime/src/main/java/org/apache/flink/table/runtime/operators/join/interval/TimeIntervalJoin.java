@@ -225,7 +225,7 @@ abstract class TimeIntervalJoin extends KeyedCoProcessFunction<RowData, RowData,
             }
             leftRowList.add(Tuple2.of(leftRow, emitted));
             leftCache.put(timeForLeftRow, leftRowList);
-            if (rightTimerState.value() == null) {
+            if (rightTimerState.getCurrentValue() == null) {
                 // Register a timer on the RIGHT stream to remove rows.
                 registerCleanUpTimer(ctx, timeForLeftRow, true);
             }
@@ -308,7 +308,7 @@ abstract class TimeIntervalJoin extends KeyedCoProcessFunction<RowData, RowData,
             }
             rightRowList.add(Tuple2.of(rightRow, emitted));
             rightCache.put(timeForRightRow, rightRowList);
-            if (leftTimerState.value() == null) {
+            if (leftTimerState.getCurrentValue() == null) {
                 // Register a timer on the LEFT stream to remove rows.
                 registerCleanUpTimer(ctx, timeForRightRow, false);
             }
@@ -327,14 +327,14 @@ abstract class TimeIntervalJoin extends KeyedCoProcessFunction<RowData, RowData,
         // In the future, we should separate the left and right watermarks. Otherwise, the
         // registered timer of the faster stream will be delayed, even if the watermarks have
         // already been emitted by the source.
-        Long leftCleanUpTime = leftTimerState.value();
+        Long leftCleanUpTime = leftTimerState.getCurrentValue();
         if (leftCleanUpTime != null && timestamp == leftCleanUpTime) {
             rightExpirationTime = calExpirationTime(leftOperatorTime, rightRelativeSize);
             removeExpiredRows(
                     joinCollector, rightExpirationTime, rightCache, leftTimerState, ctx, false);
         }
 
-        Long rightCleanUpTime = rightTimerState.value();
+        Long rightCleanUpTime = rightTimerState.getCurrentValue();
         if (rightCleanUpTime != null && timestamp == rightCleanUpTime) {
             leftExpirationTime = calExpirationTime(rightOperatorTime, leftRelativeSize);
             removeExpiredRows(
@@ -371,12 +371,12 @@ abstract class TimeIntervalJoin extends KeyedCoProcessFunction<RowData, RowData,
             long cleanUpTime =
                     rowTime + leftRelativeSize + minCleanUpInterval + allowedLateness + 1;
             registerTimer(ctx, cleanUpTime);
-            rightTimerState.update(cleanUpTime);
+            rightTimerState.setCurrentValue(cleanUpTime);
         } else {
             long cleanUpTime =
                     rowTime + rightRelativeSize + minCleanUpInterval + allowedLateness + 1;
             registerTimer(ctx, cleanUpTime);
-            leftTimerState.update(cleanUpTime);
+            leftTimerState.setCurrentValue(cleanUpTime);
         }
     }
 

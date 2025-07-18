@@ -28,7 +28,7 @@ import org.apache.flink.api.common.typeutils.TypeSerializer;
  * org.apache.flink.api.common.functions.RuntimeContext#getState(ValueStateDescriptor)}.
  *
  * <p>If you don't use one of the constructors that set a default value the value that you get when
- * reading a {@link ValueState} using {@link ValueState#value()} will be {@code null}.
+ * reading a {@link ValueState} using {@link ValueState#getCurrentValue()} will be {@code null}.
  *
  * @param <T> The type of the values that the value state can hold.
  */

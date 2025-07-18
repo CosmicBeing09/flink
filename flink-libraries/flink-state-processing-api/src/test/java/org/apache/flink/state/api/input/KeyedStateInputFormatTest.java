@@ -289,7 +289,7 @@ class KeyedStateInputFormatTest {
         public void readKey(
                 Integer key, KeyedStateReaderFunction.Context ctx, Collector<Integer> out)
                 throws Exception {
-            out.collect(state.value());
+            out.collect(state.getCurrentValue());
         }
     }
 
@@ -305,8 +305,8 @@ class KeyedStateInputFormatTest {
         public void readKey(
                 Integer key, KeyedStateReaderFunction.Context ctx, Collector<Integer> out)
                 throws Exception {
-            out.collect(state.value());
-            out.collect(state.value());
+            out.collect(state.getCurrentValue());
+            out.collect(state.getCurrentValue());
         }
     }
 
@@ -322,7 +322,7 @@ class KeyedStateInputFormatTest {
                 Integer key, KeyedStateReaderFunction.Context ctx, Collector<Integer> out)
                 throws Exception {
             ValueState<Integer> state = getRuntimeContext().getState(stateDescriptor);
-            out.collect(state.value());
+            out.collect(state.getCurrentValue());
         }
     }
 
@@ -336,7 +336,7 @@ class KeyedStateInputFormatTest {
 
         @Override
         public void flatMap(Integer value, Collector<Void> out) throws Exception {
-            state.update(value);
+            state.setCurrentValue(value);
         }
     }
 
@@ -371,7 +371,7 @@ class KeyedStateInputFormatTest {
         @Override
         public void processElement(Integer value, Context ctx, Collector<Void> out)
                 throws Exception {
-            state.update(value);
+            state.setCurrentValue(value);
             ctx.timerService().registerEventTimeTimer(value);
             ctx.timerService().registerProcessingTimeTimer(value);
         }

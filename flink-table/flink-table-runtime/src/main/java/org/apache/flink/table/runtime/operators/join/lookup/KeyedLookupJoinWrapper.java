@@ -147,7 +147,7 @@ public class KeyedLookupJoinWrapper extends KeyedProcessFunction<RowData, RowDat
             if (lookupJoinRunner.preFilter(in)) {
                 // do state access for non-acc msg
                 if (lookupKeyContainsPrimaryKey) {
-                    RowData rightRow = uniqueState.value();
+                    RowData rightRow = uniqueState.getCurrentValue();
                     // should distinguish null from empty(join condition unsatisfied)
                     if (null == rightRow) {
                         stateStaledErrorHandle();
@@ -156,7 +156,7 @@ public class KeyedLookupJoinWrapper extends KeyedProcessFunction<RowData, RowDat
                         collected = true;
                     }
                 } else {
-                    List<RowData> rightRows = state.value();
+                    List<RowData> rightRows = state.getCurrentValue();
                     if (null == rightRows) {
                         stateStaledErrorHandle();
                     } else {
@@ -204,16 +204,16 @@ public class KeyedLookupJoinWrapper extends KeyedProcessFunction<RowData, RowDat
     void updateState(RowData row) {
         try {
             if (lookupKeyContainsPrimaryKey) {
-                uniqueState.update(row);
+                uniqueState.setCurrentValue(row);
             } else {
                 // This can be optimized if lookupFunction can be unified collecting a collection of
                 // rows instead of collecting each row
-                List<RowData> rows = state.value();
+                List<RowData> rows = state.getCurrentValue();
                 if (null == rows) {
                     rows = new ArrayList<>();
                 }
                 rows.add(row);
-                state.update(rows);
+                state.setCurrentValue(rows);
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to update state!", e);

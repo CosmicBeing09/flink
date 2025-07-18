@@ -134,7 +134,7 @@ public class RescalingBenchmarkTest extends TestLogger {
                 KeyedProcessFunction<Integer, Integer, Void>.Context ctx,
                 Collector<Void> out)
                 throws Exception {
-            randomState.update(ThreadLocalRandom.current().nextInt());
+            randomState.setCurrentValue(ThreadLocalRandom.current().nextInt());
         }
     }
 }

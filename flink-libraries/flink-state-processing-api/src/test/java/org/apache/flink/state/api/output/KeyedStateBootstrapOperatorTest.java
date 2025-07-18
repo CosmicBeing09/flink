@@ -193,7 +193,7 @@ public class KeyedStateBootstrapOperatorTest {
 
         @Override
         public void processElement(Long value, Context ctx) throws Exception {
-            state.update(value);
+            state.setCurrentValue(value);
         }
     }
 
@@ -208,7 +208,7 @@ public class KeyedStateBootstrapOperatorTest {
 
         @Override
         public Long map(Long value) throws Exception {
-            return state.value();
+            return state.getCurrentValue();
         }
     }
 }

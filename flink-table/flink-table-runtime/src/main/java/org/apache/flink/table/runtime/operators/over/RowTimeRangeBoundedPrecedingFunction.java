@@ -152,7 +152,7 @@ public class RowTimeRangeBoundedPrecedingFunction<K>
         // triggering timestamp for trigger calculation
         long triggeringTs = input.getLong(rowTimeIdx);
 
-        Long lastTriggeringTs = lastTriggeringTsState.value();
+        Long lastTriggeringTs = lastTriggeringTsState.getCurrentValue();
         if (lastTriggeringTs == null) {
             lastTriggeringTs = 0L;
         }
@@ -183,12 +183,12 @@ public class RowTimeRangeBoundedPrecedingFunction<K>
         long minCleanupTimestamp = timestamp + precedingOffset + 1;
         long maxCleanupTimestamp = timestamp + (long) (precedingOffset * 1.5) + 1;
         // update timestamp and register timer if needed
-        Long curCleanupTimestamp = cleanupTsState.value();
+        Long curCleanupTimestamp = cleanupTsState.getCurrentValue();
         if (curCleanupTimestamp == null || curCleanupTimestamp < minCleanupTimestamp) {
             // we don't delete existing timer since it may delete timer for data processing
             // TODO Use timer with namespace to distinguish timers
             ctx.timerService().registerEventTimeTimer(maxCleanupTimestamp);
-            cleanupTsState.update(maxCleanupTimestamp);
+            cleanupTsState.setCurrentValue(maxCleanupTimestamp);
         }
     }
 
@@ -198,7 +198,7 @@ public class RowTimeRangeBoundedPrecedingFunction<K>
             KeyedProcessFunction<K, RowData, RowData>.OnTimerContext ctx,
             Collector<RowData> out)
             throws Exception {
-        Long cleanupTimestamp = cleanupTsState.value();
+        Long cleanupTimestamp = cleanupTsState.getCurrentValue();
         // if cleanupTsState has not been updated then it is safe to cleanup states
         if (cleanupTimestamp != null && cleanupTimestamp <= timestamp) {
             inputState.clear();
@@ -215,7 +215,7 @@ public class RowTimeRangeBoundedPrecedingFunction<K>
         if (null != inputs) {
 
             int dataListIndex = 0;
-            RowData accumulators = accState.value();
+            RowData accumulators = accState.getCurrentValue();
 
             // initialize when first run or failover recovery per key
             if (null == accumulators) {
@@ -284,9 +284,9 @@ public class RowTimeRangeBoundedPrecedingFunction<K>
 
             // update the value of accumulators for future incremental computation
             accumulators = function.getAccumulators();
-            accState.update(accumulators);
+            accState.setCurrentValue(accumulators);
         }
-        lastTriggeringTsState.update(timestamp);
+        lastTriggeringTsState.setCurrentValue(timestamp);
     }
 
     @Override

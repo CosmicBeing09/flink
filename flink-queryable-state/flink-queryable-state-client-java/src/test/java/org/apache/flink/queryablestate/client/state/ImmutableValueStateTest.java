@@ -53,15 +53,15 @@ class ImmutableValueStateTest {
 
     @Test
     void testUpdate() throws IOException {
-        long value = valueState.value();
+        long value = valueState.getCurrentValue();
         assertThat(value).isEqualTo(42L);
-        assertThatThrownBy(() -> valueState.update(54L))
+        assertThatThrownBy(() -> valueState.setCurrentValue(54L))
                 .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
     void testClear() throws IOException {
-        long value = valueState.value();
+        long value = valueState.getCurrentValue();
         assertThat(value).isEqualTo(42L);
         assertThatThrownBy(() -> valueState.clear())
                 .isInstanceOf(UnsupportedOperationException.class);

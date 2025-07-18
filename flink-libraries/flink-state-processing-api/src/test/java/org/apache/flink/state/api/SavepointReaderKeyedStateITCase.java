@@ -95,7 +95,7 @@ public abstract class SavepointReaderKeyedStateITCase<B extends StateBackend>
 
         @Override
         public void processElement(Pojo value, Context ctx, Collector<Void> out) throws Exception {
-            state.update(value.state);
+            state.setCurrentValue(value.state);
 
             value.eventTimeTimer.forEach(timer -> ctx.timerService().registerEventTimeTimer(timer));
             value.processingTimeTimer.forEach(
@@ -116,7 +116,7 @@ public abstract class SavepointReaderKeyedStateITCase<B extends StateBackend>
         public void readKey(Integer key, Context ctx, Collector<Pojo> out) throws Exception {
             Pojo pojo = new Pojo();
             pojo.key = key;
-            pojo.state = state.value();
+            pojo.state = state.getCurrentValue();
             pojo.eventTimeTimer = ctx.registeredEventTimeTimers();
             pojo.processingTimeTimer = ctx.registeredProcessingTimeTimers();
 

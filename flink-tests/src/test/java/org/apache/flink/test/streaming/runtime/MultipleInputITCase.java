@@ -179,11 +179,11 @@ public class MultipleInputITCase extends AbstractTestBaseJUnit4 {
 
             @Override
             public void processElement(StreamRecord<Long> element) throws Exception {
-                if (sumState.value() == null) {
-                    sumState.update(0L);
+                if (sumState.getCurrentValue() == null) {
+                    sumState.setCurrentValue(0L);
                 }
-                sumState.update(sumState.value() + element.getValue());
-                output.collect(element.replace(sumState.value()));
+                sumState.setCurrentValue(sumState.getCurrentValue() + element.getValue());
+                output.collect(element.replace(sumState.getCurrentValue()));
             }
         }
     }

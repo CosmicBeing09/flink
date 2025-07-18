@@ -61,7 +61,7 @@ public class RowTimeDeduplicateFunction
     @Override
     public void processElement(RowData input, Context ctx, Collector<RowData> out)
             throws Exception {
-        RowData prevRow = state.value();
+        RowData prevRow = state.getCurrentValue();
         helper.deduplicateOnRowTime(input, prevRow, out);
     }
 
@@ -74,7 +74,7 @@ public class RowTimeDeduplicateFunction
 
         @Override
         protected void updateState(RowData currentRow) throws Exception {
-            state.update(currentRow);
+            state.setCurrentValue(currentRow);
         }
     }
 }

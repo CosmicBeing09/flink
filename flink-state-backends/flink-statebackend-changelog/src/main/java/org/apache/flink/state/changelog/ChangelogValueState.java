@@ -53,13 +53,13 @@ class ChangelogValueState<K, N, V>
     }
 
     @Override
-    public V value() throws IOException {
-        return delegatedState.value();
+    public V getCurrentValue() throws IOException {
+        return delegatedState.getCurrentValue();
     }
 
     @Override
     public void update(V value) throws IOException {
-        delegatedState.update(value);
+        delegatedState.setCurrentValue(value);
         changeLogger.valueUpdated(value, getCurrentNamespace());
     }
 

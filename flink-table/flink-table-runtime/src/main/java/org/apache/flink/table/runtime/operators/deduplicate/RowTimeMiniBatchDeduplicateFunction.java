@@ -114,7 +114,7 @@ public class RowTimeMiniBatchDeduplicateFunction
         if (bufferedRows.isEmpty()) {
             return;
         }
-        RowData preRow = state.value();
+        RowData preRow = state.getCurrentValue();
         // Note: we output all changelog here rather than comparing the first and the last
         // record in buffer then output at most two changelog.
         // The motivation is we need all changelog in versioned table of temporal join.
@@ -126,6 +126,6 @@ public class RowTimeMiniBatchDeduplicateFunction
                 preRow = currentRow;
             }
         }
-        state.update(preRow);
+        state.setCurrentValue(preRow);
     }
 }

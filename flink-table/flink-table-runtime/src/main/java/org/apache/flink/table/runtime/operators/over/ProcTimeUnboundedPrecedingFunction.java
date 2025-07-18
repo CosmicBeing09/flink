@@ -82,7 +82,7 @@ public class ProcTimeUnboundedPrecedingFunction<K>
             KeyedProcessFunction<K, RowData, RowData>.Context ctx,
             Collector<RowData> out)
             throws Exception {
-        RowData accumulators = accState.value();
+        RowData accumulators = accState.getCurrentValue();
         if (null == accumulators) {
             accumulators = function.createAccumulators();
         }
@@ -94,7 +94,7 @@ public class ProcTimeUnboundedPrecedingFunction<K>
 
         // update the value of accumulators for future incremental computation
         accumulators = function.getAccumulators();
-        accState.update(accumulators);
+        accState.setCurrentValue(accumulators);
 
         // prepare output row
         RowData aggValue = function.getValue();

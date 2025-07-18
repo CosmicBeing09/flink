@@ -92,10 +92,10 @@ class AbstractStreamOperatorTestHarnessTest {
             int expectedValue = 42;
             keyedStateBackend.setCurrentKey(1);
             result.setStateTtlProcessingTime(0L);
-            state.update(expectedValue);
-            assertThat(state.value()).isEqualTo(expectedValue);
+            state.setCurrentValue(expectedValue);
+            assertThat(state.getCurrentValue()).isEqualTo(expectedValue);
             result.setStateTtlProcessingTime(timeToLive.toMillis() + 1);
-            assertThat(state.value()).isNull();
+            assertThat(state.getCurrentValue()).isNull();
         }
     }
 

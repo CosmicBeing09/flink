@@ -154,7 +154,7 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
         @Override
         public EV get(EK key) throws Exception {
             if (key == null) {
-                return getNullState().value();
+                return getNullState().getCurrentValue();
             } else {
                 return getMapState().get(key);
             }
@@ -163,7 +163,7 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
         @Override
         public void put(EK key, EV value) throws Exception {
             if (key == null) {
-                getNullState().update(value);
+                getNullState().setCurrentValue(value);
             } else {
                 getMapState().put(key, value);
             }
@@ -189,7 +189,7 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
         @Override
         public boolean contains(EK key) throws Exception {
             if (key == null) {
-                return getNullState().value() != null;
+                return getNullState().getCurrentValue() != null;
             } else {
                 return getMapState().contains(key);
             }
@@ -218,7 +218,7 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
 
         @Override
         public boolean isEmpty() throws Exception {
-            return getMapState().isEmpty() && getNullState().value() == null;
+            return getMapState().isEmpty() && getNullState().getCurrentValue() == null;
         }
 
         @Override
@@ -237,7 +237,7 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
             @Override
             public EV getValue() {
                 try {
-                    return getNullState().value();
+                    return getNullState().getCurrentValue();
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -247,8 +247,8 @@ public abstract class StateMapView<N, EK, EV> extends MapView<EK, EV> implements
             public EV setValue(EV value) {
                 EV oldValue;
                 try {
-                    oldValue = getNullState().value();
-                    getNullState().update(value);
+                    oldValue = getNullState().getCurrentValue();
+                    getNullState().setCurrentValue(value);
                     return oldValue;
                 } catch (IOException e) {
                     throw new RuntimeException(e);

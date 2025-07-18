@@ -473,7 +473,7 @@ class CoBroadcastWithNonKeyedOperatorTest {
                                                 () ->
                                                         getRuntimeContext()
                                                                 .getState(valueState)
-                                                                .value())
+                                                                .getCurrentValue())
                                         .isInstanceOf(NullPointerException.class)
                                         .hasMessage(
                                                 String.format(
@@ -523,7 +523,7 @@ class CoBroadcastWithNonKeyedOperatorTest {
                                                 () ->
                                                         getRuntimeContext()
                                                                 .getState(valueState)
-                                                                .value())
+                                                                .getCurrentValue())
                                         .isInstanceOf(NullPointerException.class)
                                         .hasMessage(
                                                 String.format(

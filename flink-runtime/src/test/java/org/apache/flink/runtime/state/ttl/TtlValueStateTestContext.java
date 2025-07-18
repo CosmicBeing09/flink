@@ -50,16 +50,16 @@ class TtlValueStateTestContext
 
     @Override
     public void update(Long value) throws Exception {
-        ttlState.update(value);
+        ttlState.setCurrentValue(value);
     }
 
     @Override
     public Long get() throws Exception {
-        return ttlState.value();
+        return ttlState.getCurrentValue();
     }
 
     @Override
     public Object getOriginal() throws Exception {
-        return ttlState.original.value();
+        return ttlState.original.getCurrentValue();
     }
 }

@@ -37,12 +37,12 @@ class BatchExecutionKeyValueState<K, N, T> extends AbstractBatchExecutionKeyStat
     }
 
     @Override
-    public T value() {
+    public T getCurrentValue() {
         return getOrDefault();
     }
 
     @Override
-    public void update(T value) {
+    public void setCurrentValue(T value) {
         setCurrentNamespaceValue(value);
     }
 

@@ -84,11 +84,11 @@ public abstract class AbstractSyncStateTopNFunction extends AbstractTopNFunction
             rankEnd = Objects.requireNonNull(constantRankEnd);
             return rankEnd;
         } else {
-            Long rankEndValue = rankEndState.value();
+            Long rankEndValue = rankEndState.getCurrentValue();
             long curRankEnd = rankEndFetcher.apply(row);
             if (rankEndValue == null) {
                 rankEnd = curRankEnd;
-                rankEndState.update(rankEnd);
+                rankEndState.setCurrentValue(rankEnd);
                 return rankEnd;
             } else {
                 rankEnd = rankEndValue;

@@ -192,12 +192,12 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
                             @Override
                             public void flatMap(Integer value, Collector<Integer> out)
                                     throws Exception {
-                                final Integer current = state.value();
+                                final Integer current = state.getCurrentValue();
                                 if (current != null) {
                                     value += current;
                                 }
 
-                                state.update(value);
+                                state.setCurrentValue(value);
                                 out.collect(value);
                             }
                         })
