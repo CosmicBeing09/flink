@@ -73,12 +73,12 @@ public interface CheckpointStatsTracker {
      *
      * @param completed The completed checkpoint stats.
      */
-    void reportCompletedCheckpoint(CompletedCheckpointStats completed);
+    void reportCheckpointCompletion(CompletedCheckpointStats completed);
 
     @Nullable
     PendingCheckpointStats getPendingCheckpointStats(long checkpointId);
 
-    void reportIncompleteStats(
+    void reportSubtaskCheckpointMetrics(
             long checkpointId, ExecutionAttemptID attemptId, CheckpointMetrics metrics);
 
     void reportInitializationStarted(

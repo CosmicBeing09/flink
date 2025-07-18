@@ -146,11 +146,11 @@ public class PendingCheckpointStatsTest {
         // Report completed
         String externalPath = "asdjkasdjkasd";
 
-        callback.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(externalPath));
+        callback.reportCheckpointCompletion(pending.toCompletedCheckpointStats(externalPath));
 
         ArgumentCaptor<CompletedCheckpointStats> args =
                 ArgumentCaptor.forClass(CompletedCheckpointStats.class);
-        verify(callback).reportCompletedCheckpoint(args.capture());
+        verify(callback).reportCheckpointCompletion(args.capture());
 
         CompletedCheckpointStats completed = args.getValue();
 

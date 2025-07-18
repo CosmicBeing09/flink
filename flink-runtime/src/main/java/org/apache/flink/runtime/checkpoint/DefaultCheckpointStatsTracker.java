@@ -208,7 +208,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     @Override
-    public void reportCompletedCheckpoint(CompletedCheckpointStats completed) {
+    public void reportCheckpointCompletion(CompletedCheckpointStats completed) {
         statsReadWriteLock.lock();
         try {
             latestCompletedCheckpoint = completed;
@@ -302,7 +302,7 @@ public class DefaultCheckpointStatsTracker implements CheckpointStatsTracker {
     }
 
     @Override
-    public void reportIncompleteStats(
+    public void reportSubtaskCheckpointMetrics(
             long checkpointId, ExecutionAttemptID attemptId, CheckpointMetrics metrics) {
         statsReadWriteLock.lock();
         try {

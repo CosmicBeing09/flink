@@ -85,7 +85,7 @@ class DefaultCheckpointStatsTrackerTest {
         pending.reportSubtaskStats(jobVertexID, createSubtaskStats(1));
         pending.reportSubtaskStats(jobVertexID, createSubtaskStats(2));
 
-        tracker.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(null));
+        tracker.reportCheckpointCompletion(pending.toCompletedCheckpointStats(null));
 
         CheckpointStatsSnapshot snapshot = tracker.createSnapshot();
         // History should be empty
@@ -135,7 +135,7 @@ class DefaultCheckpointStatsTrackerTest {
         completed1.reportSubtaskStats(jobVertexID, createSubtaskStats(1));
         completed1.reportSubtaskStats(jobVertexID, createSubtaskStats(2));
 
-        tracker.reportCompletedCheckpoint(completed1.toCompletedCheckpointStats(null));
+        tracker.reportCheckpointCompletion(completed1.toCompletedCheckpointStats(null));
 
         // Failed checkpoint
         PendingCheckpointStats failed =
@@ -160,7 +160,7 @@ class DefaultCheckpointStatsTrackerTest {
         savepoint.reportSubtaskStats(jobVertexID, createSubtaskStats(1));
         savepoint.reportSubtaskStats(jobVertexID, createSubtaskStats(2));
 
-        tracker.reportCompletedCheckpoint(savepoint.toCompletedCheckpointStats(null));
+        tracker.reportCheckpointCompletion(savepoint.toCompletedCheckpointStats(null));
 
         // In Progress
         PendingCheckpointStats inProgress =
@@ -245,7 +245,7 @@ class DefaultCheckpointStatsTrackerTest {
     void testCheckpointStatsListenerOnCompletedCheckpoint() {
         testCheckpointStatsListener(
                 (checkpointStatsTracker, pendingCheckpointStats) ->
-                        checkpointStatsTracker.reportCompletedCheckpoint(
+                        checkpointStatsTracker.reportCheckpointCompletion(
                                 pendingCheckpointStats.toCompletedCheckpointStats(
                                         "random-external-pointer")),
                 1,
@@ -333,7 +333,7 @@ class DefaultCheckpointStatsTrackerTest {
         assertThat(tracker.createSnapshot()).isEqualTo(snapshot2);
 
         // Complete checkpoint => new snapshot
-        tracker.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(null));
+        tracker.reportCheckpointCompletion(pending.toCompletedCheckpointStats(null));
 
         CheckpointStatsSnapshot snapshot3 = tracker.createSnapshot();
         assertThat(snapshot3).isNotEqualTo(snapshot2);
@@ -381,7 +381,7 @@ class DefaultCheckpointStatsTrackerTest {
         pending.reportSubtaskStats(jobVertexID, createSubtaskStats(0));
 
         // Complete checkpoint => new snapshot
-        tracker.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(null));
+        tracker.reportCheckpointCompletion(pending.toCompletedCheckpointStats(null));
 
         assertThat(reportedSpans.size()).isEqualTo(1);
         assertThat(
@@ -676,7 +676,7 @@ class DefaultCheckpointStatsTrackerTest {
 
         assertThat(pending.reportSubtaskStats(jobVertexID, subtaskStats)).isTrue();
 
-        stats.reportCompletedCheckpoint(pending.toCompletedCheckpointStats(externalPath));
+        stats.reportCheckpointCompletion(pending.toCompletedCheckpointStats(externalPath));
 
         // Verify completed checkpoint updated
         assertThat(numCheckpoints.getValue()).isOne();
@@ -742,7 +742,7 @@ class DefaultCheckpointStatsTrackerTest {
                         singletonMap(jobVertexID, 1));
 
         thirdPending.reportSubtaskStats(jobVertexID, subtaskStats);
-        stats.reportCompletedCheckpoint(thirdPending.toCompletedCheckpointStats(null));
+        stats.reportCheckpointCompletion(thirdPending.toCompletedCheckpointStats(null));
         assertThat(latestCompletedId.getValue()).isEqualTo(2);
 
         // Verify external path is "n/a", because internal checkpoint won't generate external path.
