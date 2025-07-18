@@ -175,16 +175,16 @@ public class SavepointWriterUidModificationITCase {
         final String savepointPath =
                 tmp.resolve(new AbstractID().toHexString()).toAbsolutePath().toString();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
-        final SavepointWriter writer = SavepointWriter.newSavepoint(env, 128);
+        final SavepointWriter writer = SavepointWriter.newSavepoint(streamExecutionEnvironment, 128);
 
-        mutator.accept(env, writer);
+        mutator.accept(streamExecutionEnvironment, writer);
 
         writer.write(savepointPath);
 
-        env.execute("Bootstrap");
+        streamExecutionEnvironment.execute("Bootstrap");
 
         return savepointPath;
     }
@@ -201,15 +201,15 @@ public class SavepointWriterUidModificationITCase {
         final String newSavepointPath =
                 tmp.resolve(new AbstractID().toHexString()).toAbsolutePath().toString();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
+        final StreamExecutionEnvironment streamExecutionEnvironment = StreamExecutionEnvironment.getExecutionEnvironment();
+        streamExecutionEnvironment.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
-        SavepointWriter writer = SavepointWriter.fromExistingSavepoint(env, savepointPath);
+        SavepointWriter writer = SavepointWriter.fromExistingSavepoint(streamExecutionEnvironment, savepointPath);
 
         mutator.accept(writer);
         writer.write(newSavepointPath);
 
-        env.execute("Modifying");
+        streamExecutionEnvironment.execute("Modifying");
 
         return newSavepointPath;
     }
