@@ -152,15 +152,15 @@ class NettyMessageClientSideSerializationTest {
 
     @Test
     void testBacklogAnnouncement() {
-        BacklogAnnouncement expected = new BacklogAnnouncement(1024, inputChannelId);
-        BacklogAnnouncement actual = encodeAndDecode(expected, channel);
-        assertThat(actual.backlog).isEqualTo(expected.backlog);
-        assertThat(actual.receiverId).isEqualTo(expected.receiverId);
+        BacklogAnnouncement requiredBacklogAnnouncement = new BacklogAnnouncement(1024, inputChannelId);
+        BacklogAnnouncement actual = encodeAndDecode(requiredBacklogAnnouncement, channel);
+        assertThat(actual.backlog).isEqualTo(requiredBacklogAnnouncement.backlog);
+        assertThat(actual.receiverId).isEqualTo(requiredBacklogAnnouncement.receiverId);
     }
 
-    private void testErrorResponse(ErrorResponse expect) {
-        ErrorResponse actual = encodeAndDecode(expect, channel);
-        verifyErrorResponse(expect, actual);
+    private void testErrorResponse(ErrorResponse requiredErrorResponse) {
+        ErrorResponse actual = encodeAndDecode(requiredErrorResponse, channel);
+        verifyErrorResponse(requiredErrorResponse, actual);
     }
 
     private void testBufferResponse(boolean testReadOnlyBuffer, boolean testCompressedBuffer) {
