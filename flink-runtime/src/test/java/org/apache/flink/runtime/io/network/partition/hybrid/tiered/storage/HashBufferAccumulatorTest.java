@@ -93,7 +93,7 @@ class HashBufferAccumulatorTest {
                     }));
 
             int numRecordBytesSinceLastEvent = 0;
-            int numExpectBuffers = 0;
+            int numRequiredBuffers = 0;
             for (int i = 0; i < numRecords; i++) {
                 boolean isBuffer = random.nextBoolean() && i != numRecords - 1;
                 ByteBuffer record;
@@ -105,13 +105,13 @@ class HashBufferAccumulatorTest {
                     if (!isPartialRecordAllowed
                             && numRecordBytesSinceLastEvent + numBytes > NETWORK_BUFFER_SIZE) {
                         if (numRecordBytesSinceLastEvent > 0) {
-                            numExpectBuffers++;
+                            numRequiredBuffers++;
                             numRecordBytesSinceLastEvent = 0;
                         }
                     }
 
                     if (!isPartialRecordAllowed && numBytes > NETWORK_BUFFER_SIZE) {
-                        numExpectBuffers +=
+                        numRequiredBuffers +=
                                 numBytes / NETWORK_BUFFER_SIZE
                                         + (numBytes % NETWORK_BUFFER_SIZE == 0 ? 0 : 1);
                     } else {
@@ -120,19 +120,19 @@ class HashBufferAccumulatorTest {
 
                     record = generateRandomData(numBytes, random);
                 } else {
-                    numExpectBuffers +=
+                    numRequiredBuffers +=
                             numRecordBytesSinceLastEvent / NETWORK_BUFFER_SIZE
                                     + (numRecordBytesSinceLastEvent % NETWORK_BUFFER_SIZE == 0
                                             ? 0
                                             : 1);
                     record = EventSerializer.toSerializedEvent(EndOfPartitionEvent.INSTANCE);
-                    numExpectBuffers++;
+                    numRequiredBuffers++;
                     numRecordBytesSinceLastEvent = 0;
                 }
                 bufferAccumulator.receive(record, subpartitionId, dataType, false);
             }
 
-            assertThat(numReceivedFinishedBuffer.get()).isEqualTo(numExpectBuffers);
+            assertThat(numReceivedFinishedBuffer.get()).isEqualTo(numRequiredBuffers);
         }
     }
 

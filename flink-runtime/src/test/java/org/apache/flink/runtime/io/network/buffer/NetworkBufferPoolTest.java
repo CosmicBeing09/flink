@@ -130,9 +130,9 @@ class NetworkBufferPoolTest {
         BufferPool boundedPool = globalPool.createBufferPool(1, 1, 1);
         BufferPool nonFixedPool = globalPool.createBufferPool(5, 5, Integer.MAX_VALUE);
 
-        assertThat(fixedPool.getExpectedNumberOfMemorySegments()).isEqualTo(2);
-        assertThat(boundedPool.getExpectedNumberOfMemorySegments()).isOne();
-        assertThat(nonFixedPool.getExpectedNumberOfMemorySegments()).isEqualTo(5);
+        assertThat(fixedPool.getRequiredNumberOfMemorySegments()).isEqualTo(2);
+        assertThat(boundedPool.getRequiredNumberOfMemorySegments()).isOne();
+        assertThat(nonFixedPool.getRequiredNumberOfMemorySegments()).isEqualTo(5);
 
         // actually, the buffer pool sizes may be different due to rounding and based on the
         // internal order of
@@ -240,9 +240,9 @@ class NetworkBufferPoolTest {
      */
     @Test
     void testInsufficientNumberOfBuffers() throws Exception {
-        final int numberOfSegmentsToRequest = 5;
+        final int requiredNumberOfSegmentsToRequest = 5;
 
-        final NetworkBufferPool globalPool = new NetworkBufferPool(numberOfSegmentsToRequest, 128);
+        final NetworkBufferPool globalPool = new NetworkBufferPool(requiredNumberOfSegmentsToRequest, 128);
 
         try {
             // the global pool should be in available state initially
@@ -250,9 +250,9 @@ class NetworkBufferPoolTest {
 
             // request 5 segments
             List<MemorySegment> segments1 =
-                    globalPool.requestUnpooledMemorySegments(numberOfSegmentsToRequest);
+                    globalPool.requestUnpooledMemorySegments(requiredNumberOfSegmentsToRequest);
             assertThat(globalPool.getAvailableFuture()).isNotDone();
-            assertThat(segments1).hasSize(numberOfSegmentsToRequest);
+            assertThat(segments1).hasSize(requiredNumberOfSegmentsToRequest);
 
             // request only 1 segment
             assertThatThrownBy(() -> globalPool.requestUnpooledMemorySegments(1))
@@ -265,9 +265,9 @@ class NetworkBufferPoolTest {
             assertThat(availableFuture).isDone();
 
             List<MemorySegment> segments2 =
-                    globalPool.requestUnpooledMemorySegments(numberOfSegmentsToRequest);
+                    globalPool.requestUnpooledMemorySegments(requiredNumberOfSegmentsToRequest);
             assertThat(globalPool.getAvailableFuture()).isNotDone();
-            assertThat(segments2).hasSize(numberOfSegmentsToRequest);
+            assertThat(segments2).hasSize(requiredNumberOfSegmentsToRequest);
         } finally {
             globalPool.destroy();
         }
@@ -508,7 +508,7 @@ class NetworkBufferPoolTest {
     @Test
     void testRequestMemorySegmentsTimeout() throws Exception {
         final int numBuffers = 10;
-        final int numberOfSegmentsToRequest = 2;
+        final int requiredNumberOfSegmentsToRequest = 2;
         final Duration requestSegmentsTimeout = Duration.ofMillis(50L);
 
         NetworkBufferPool globalPool =
@@ -525,7 +525,7 @@ class NetworkBufferPoolTest {
                 new CheckedThread() {
                     @Override
                     public void go() throws Exception {
-                        globalPool.requestUnpooledMemorySegments(numberOfSegmentsToRequest);
+                        globalPool.requestUnpooledMemorySegments(requiredNumberOfSegmentsToRequest);
                     }
                 };
 

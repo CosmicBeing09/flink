@@ -217,7 +217,7 @@ class NettyShuffleUtilsTest {
 
     private int calculateBuffersConsumption(ResultPartition partition) {
         if (!partition.getPartitionType().canBePipelinedConsumed()) {
-            return partition.getBufferPool().getExpectedNumberOfMemorySegments();
+            return partition.getBufferPool().getRequiredNumberOfMemorySegments();
         } else {
             return partition.getBufferPool().getMaxNumberOfMemorySegments();
         }
