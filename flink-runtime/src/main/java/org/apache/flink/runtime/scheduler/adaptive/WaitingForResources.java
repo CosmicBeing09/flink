@@ -102,8 +102,8 @@ class WaitingForResources extends StateWithoutExecutionGraph
     }
 
     private void checkPotentialStateTransition() {
-        stateTransitionManager.onChange();
-        stateTransitionManager.onTrigger();
+        stateTransitionManager.onEnvironmentChange();
+        stateTransitionManager.verifyAndTriggerTransition();
     }
 
     private void resourceTimeout() {

@@ -108,12 +108,12 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
     }
 
     @Override
-    public void onChange() {
+    public void onEnvironmentChange() {
         phase.onChange();
     }
 
     @Override
-    public void onTrigger() {
+    public void verifyAndTriggerTransition() {
         phase.onTrigger();
     }
 
@@ -229,8 +229,8 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
     }
 
     /**
-     * {@link Phase} to prevent any rescaling. {@link StateTransitionManager#onChange()} events will
-     * be monitored and forwarded to the next phase. {@link StateTransitionManager#onTrigger()}
+     * {@link Phase} to prevent any rescaling. {@link StateTransitionManager#onEnvironmentChange()} events will
+     * be monitored and forwarded to the next phase. {@link StateTransitionManager#verifyAndTriggerTransition()}
      * events will be ignored.
      */
     @VisibleForTesting
@@ -266,9 +266,9 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
 
     /**
      * {@link Phase} which follows the {@link Cooldown} phase if no {@link
-     * StateTransitionManager#onChange()} was observed, yet. The {@code
-     * DefaultStateTransitionManager} waits for a first {@link StateTransitionManager#onChange()}
-     * event. {@link StateTransitionManager#onTrigger()} events will be ignored.
+     * StateTransitionManager#onEnvironmentChange()} was observed, yet. The {@code
+     * DefaultStateTransitionManager} waits for a first {@link StateTransitionManager#onEnvironmentChange()}
+     * event. {@link StateTransitionManager#verifyAndTriggerTransition()} events will be ignored.
      */
     @VisibleForTesting
     static final class Idling extends Phase {
@@ -287,8 +287,8 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
 
     /**
      * {@link Phase} that handles the resources stabilization. In this phase, {@link
-     * StateTransitionManager#onTrigger()} will initiate rescaling if desired resources are met and
-     * {@link StateTransitionManager#onChange()} will schedule the evaluation of the desired
+     * StateTransitionManager#verifyAndTriggerTransition()} will initiate rescaling if desired resources are met and
+     * {@link StateTransitionManager#onEnvironmentChange()} will schedule the evaluation of the desired
      * resources.
      */
     static final class Stabilizing extends Phase {
@@ -353,7 +353,7 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
 
     /**
      * {@link Phase} that handles the post-stabilization phase. A {@link
-     * StateTransitionManager#onTrigger()} event initiates rescaling if sufficient resources are
+     * StateTransitionManager#verifyAndTriggerTransition()} event initiates rescaling if sufficient resources are
      * available; otherwise transitioning to {@link Idling} will be performed.
      */
     @VisibleForTesting
@@ -381,7 +381,7 @@ public class DefaultStateTransitionManager implements StateTransitionManager {
 
     /**
      * In this final {@link Phase} no additional transition is possible: {@link
-     * StateTransitionManager#onChange()} and {@link StateTransitionManager#onTrigger()} events will
+     * StateTransitionManager#onEnvironmentChange()} and {@link StateTransitionManager#verifyAndTriggerTransition()} events will
      * be ignored.
      */
     @VisibleForTesting
