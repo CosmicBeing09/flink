@@ -48,13 +48,13 @@ public class BuildExecutionGraphBenchmark extends SchedulerBenchmarkBase {
         super.setup();
 
         jobVertices = createDefaultJobVertices(jobConfiguration);
-        final ExecutionPlan jobGraph = createJobGraph(jobConfiguration);
+        final ExecutionPlan executionPlan = createJobGraph(jobConfiguration);
         final VertexParallelismStore parallelismStore =
                 SchedulerBase.computeVertexParallelismStore(jobVertices);
         executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .setVertexParallelismStore(parallelismStore)
-                        .setJobGraph(jobGraph)
+                        .setJobGraph(executionPlan)
                         .build(scheduledExecutorService);
     }
 
