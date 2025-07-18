@@ -114,26 +114,27 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
 
         @Override
         public List<ResolvedExpression> visit(UnresolvedCallExpression unresolvedCall) {
-            final FunctionDefinition definition;
+            final FunctionDefinition functionDefinition;
             // clean functions that were not registered in a catalog
             if (unresolvedCall.getFunctionIdentifier().isEmpty()) {
-                definition =
+                functionDefinition =
                         prepareInlineUserDefinedFunction(unresolvedCall.getFunctionDefinition());
             } else {
-                definition = unresolvedCall.getFunctionDefinition();
+                functionDefinition = unresolvedCall.getFunctionDefinition();
             }
 
             final String functionName =
                     unresolvedCall
                             .getFunctionIdentifier()
                             .map(FunctionIdentifier::toString)
-                            .orElseGet(definition::toString);
+                            .orElseGet(functionDefinition::toString);
 
-            final TypeInference typeInference = getTypeInferenceOrNull(definition);
+            final TypeInference typeInference = getTypeInferenceOrNull(functionDefinition);
 
             // Reorder named arguments and add replacements for optional ones
             final UnresolvedCallExpression adaptedCall =
-                    executeAssignment(functionName, definition, typeInference, unresolvedCall);
+                    executeAssignment(functionName,
+                            functionDefinition, typeInference, unresolvedCall);
 
             // resolve the children with information from the current call
             final List<ResolvedExpression> resolvedArgs = new ArrayList<>();
@@ -147,7 +148,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                     surroundingInfo =
                             SurroundingInfo.of(
                                     functionName,
-                                    definition,
+                                    functionDefinition,
                                     typeInference,
                                     argumentCount,
                                     argumentIndex,
@@ -158,7 +159,7 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
                 resolvedArgs.addAll(adaptedCall.getChildren().get(argumentIndex).accept(childResolver));
             }
 
-            if (definition == BuiltInFunctionDefinitions.FLATTEN) {
+            if (functionDefinition == BuiltInFunctionDefinitions.FLATTEN) {
                 return executeFlatten(resolvedArgs);
             }
 
@@ -241,9 +242,9 @@ final class ResolveCallByArgumentsRule implements ResolverRule {
         }
 
         /** Temporary method until all calls define a type inference. */
-        private @Nullable TypeInference getTypeInferenceOrNull(FunctionDefinition definition) {
+        private @Nullable TypeInference getTypeInferenceOrNull(FunctionDefinition functionDefinition) {
             final TypeInference inference =
-                    definition.getTypeInference(resolutionContext.typeFactory());
+                    functionDefinition.getTypeInference(resolutionContext.typeFactory());
             if (inference.getOutputTypeStrategy() != TypeStrategies.MISSING) {
                 return inference;
             } else {
