@@ -59,7 +59,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
     // --------------------------------------------------------------------------------------------
 
     /** The POJO type class. */
-    private final Class<T> clazz;
+    private final Class<T> pojoClass;
 
     /**
      * Fields of the POJO and their serializers.
@@ -89,7 +89,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
     /** Configuration of the current execution. */
     private final ExecutionConfig executionConfig;
 
-    private transient ClassLoader cl;
+    private transient ClassLoader classLoader;
 
     @Nullable private transient JavaRecordBuilderFactory<T> recordFactory;
 
@@ -101,7 +101,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             Field[] fields,
             ExecutionConfig executionConfig) {
 
-        this.clazz = checkNotNull(clazz);
+        this.pojoClass = checkNotNull(clazz);
         this.fieldSerializers = (TypeSerializer<Object>[]) checkNotNull(fieldSerializers);
         this.fields = checkNotNull(fields);
         this.numFields = fieldSerializers.length;
@@ -111,7 +111,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             this.fields[i].setAccessible(true);
         }
 
-        this.cl = Thread.currentThread().getContextClassLoader();
+        this.classLoader = Thread.currentThread().getContextClassLoader();
 
         // We only want those classes that are not our own class and are actually sub-classes.
         LinkedHashSet<Class<?>> registeredSubclasses =
@@ -140,7 +140,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             Map<Class<?>, TypeSerializer<?>> subclassSerializerCache,
             ExecutionConfig executionConfig) {
 
-        this.clazz = checkNotNull(clazz);
+        this.pojoClass = checkNotNull(clazz);
         this.fields = checkNotNull(fields);
         this.numFields = fields.length;
         this.fieldSerializers = checkNotNull(fieldSerializers);
@@ -148,7 +148,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         this.registeredSerializers = checkNotNull(registeredSerializers);
         this.subclassSerializerCache = checkNotNull(subclassSerializerCache);
         this.executionConfig = checkNotNull(executionConfig);
-        this.cl = Thread.currentThread().getContextClassLoader();
+        this.classLoader = Thread.currentThread().getContextClassLoader();
         if (TypeExtractor.isRecord(clazz)) {
             this.recordFactory = JavaRecordBuilderFactory.create(clazz, fields);
         }
@@ -170,7 +170,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
                 duplicateSerializers(registeredSerializers);
 
         return new PojoSerializer<>(
-                clazz,
+                pojoClass,
                 fields,
                 duplicateFieldSerializers,
                 new LinkedHashMap<>(registeredClasses),
@@ -203,11 +203,11 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
 
     @Override
     public T createInstance() {
-        if (clazz.isInterface() || Modifier.isAbstract(clazz.getModifiers()) || isRecord()) {
+        if (pojoClass.isInterface() || Modifier.isAbstract(pojoClass.getModifiers()) || isRecord()) {
             return null;
         }
         try {
-            T t = clazz.newInstance();
+            T t = pojoClass.newInstance();
             initializeFields(t);
             return t;
         } catch (Exception e) {
@@ -248,7 +248,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
                 throw new RuntimeException(
                         "Error during POJO copy, this should not happen since we check the fields before.");
             }
-        } else if (actualType == clazz) {
+        } else if (actualType == pojoClass) {
             T target;
             try {
                 target = (T) from.getClass().newInstance();
@@ -300,7 +300,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
                 throw new RuntimeException(
                         "Error during POJO copy, this should not happen since we check the fields before.");
             }
-        } else if (actualType == clazz) {
+        } else if (actualType == pojoClass) {
             try {
                 for (int i = 0; i < numFields; i++) {
                     if (fields[i] != null) {
@@ -363,7 +363,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         Integer subclassTag = -1;
         Class<?> actualClass = value.getClass();
         TypeSerializer subclassSerializer = null;
-        if (clazz != actualClass) {
+        if (pojoClass != actualClass) {
             subclassTag = registeredClasses.get(actualClass);
             if (subclassTag != null) {
                 flags |= IS_TAGGED_SUBCLASS;
@@ -427,7 +427,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         if ((flags & IS_SUBCLASS) != 0) {
             String subclassName = source.readUTF();
             try {
-                actualSubclass = Class.forName(subclassName, true, cl);
+                actualSubclass = Class.forName(subclassName, true, classLoader);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Cannot instantiate class.", e);
             }
@@ -493,7 +493,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         if ((flags & IS_SUBCLASS) != 0) {
             String subclassName = source.readUTF();
             try {
-                subclass = Class.forName(subclassName, true, cl);
+                subclass = Class.forName(subclassName, true, classLoader);
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Cannot instantiate class.", e);
             }
@@ -509,14 +509,14 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             int subclassTag = source.readByte();
             subclassSerializer = registeredSerializers[subclassTag];
 
-            if (reuse == null || ((PojoSerializer) subclassSerializer).clazz != reuse.getClass()) {
+            if (reuse == null || ((PojoSerializer) subclassSerializer).pojoClass != reuse.getClass()) {
                 // cannot reuse
                 reuse = (T) subclassSerializer.createInstance();
                 // also initialize fields for which the subclass serializer is not responsible
                 initializeFields(reuse);
             }
         } else {
-            if (reuse == null || clazz != reuse.getClass()) {
+            if (reuse == null || pojoClass != reuse.getClass()) {
                 reuse = createInstance();
             }
         }
@@ -634,7 +634,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         return 31
                         * (31 * Arrays.hashCode(fieldSerializers)
                                 + Arrays.hashCode(registeredSerializers))
-                + Objects.hash(clazz, numFields, registeredClasses);
+                + Objects.hash(pojoClass, numFields, registeredClasses);
     }
 
     @Override
@@ -642,7 +642,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
         if (obj instanceof PojoSerializer) {
             PojoSerializer<?> other = (PojoSerializer<?>) obj;
 
-            return clazz == other.clazz
+            return pojoClass == other.pojoClass
                     && Arrays.equals(fieldSerializers, other.fieldSerializers)
                     && Arrays.equals(registeredSerializers, other.registeredSerializers)
                     && numFields == other.numFields
@@ -659,7 +659,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
     @Override
     public PojoSerializerSnapshot<T> snapshotConfiguration() {
         return buildSnapshot(
-                clazz,
+                pojoClass,
                 registeredClasses,
                 registeredSerializers,
                 fields,
@@ -689,10 +689,10 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
             fields[i] = FieldSerializer.deserializeField(in);
         }
 
-        cl = Thread.currentThread().getContextClassLoader();
+        classLoader = Thread.currentThread().getContextClassLoader();
         subclassSerializerCache = new HashMap<>();
-        if (TypeExtractor.isRecord(clazz)) {
-            this.recordFactory = JavaRecordBuilderFactory.create(clazz, fields);
+        if (TypeExtractor.isRecord(pojoClass)) {
+            this.recordFactory = JavaRecordBuilderFactory.create(pojoClass, fields);
         }
     }
 
@@ -701,7 +701,7 @@ public final class PojoSerializer<T> extends TypeSerializer<T> {
     // --------------------------------------------------------------------------------------------
 
     Class<T> getPojoClass() {
-        return clazz;
+        return pojoClass;
     }
 
     Field[] getFields() {
