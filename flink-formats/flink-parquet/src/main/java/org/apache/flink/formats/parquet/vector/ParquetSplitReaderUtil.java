@@ -150,8 +150,8 @@ public class ParquetSplitReaderUtil {
     }
 
     public static ColumnVector createVectorFromConstant(
-            LogicalType type, Object value, int batchSize) {
-        switch (type.getTypeRoot()) {
+            LogicalType logicalType, Object value, int batchSize) {
+        switch (logicalType.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -207,7 +207,7 @@ public class ParquetSplitReaderUtil {
                 }
                 return lv;
             case DECIMAL:
-                DecimalType decimalType = (DecimalType) type;
+                DecimalType decimalType = (DecimalType) logicalType;
                 int precision = decimalType.getPrecision();
                 int scale = decimalType.getScale();
                 DecimalData decimal =
@@ -268,7 +268,7 @@ public class ParquetSplitReaderUtil {
                 }
                 return tv;
             default:
-                throw new UnsupportedOperationException("Unsupported type: " + type);
+                throw new UnsupportedOperationException("Unsupported type: " + logicalType);
         }
     }
 
@@ -295,13 +295,13 @@ public class ParquetSplitReaderUtil {
     public static ColumnReader createColumnReader(
             boolean isUtcTimestamp,
             LogicalType fieldType,
-            Type type,
+            Type schemaType,
             List<ColumnDescriptor> columnDescriptors,
             PageReadStore pages,
             int depth)
             throws IOException {
         List<ColumnDescriptor> descriptors =
-                getAllColumnDescriptorByType(depth, type, columnDescriptors);
+                getAllColumnDescriptorByType(depth, schemaType, columnDescriptors);
         switch (fieldType.getTypeRoot()) {
             case BOOLEAN:
                 return new BooleanColumnReader(
@@ -398,7 +398,7 @@ public class ParquetSplitReaderUtil {
                 return new MapColumnReader(multisetKeyReader, multisetValueReader);
             case ROW:
                 RowType rowType = (RowType) fieldType;
-                GroupType groupType = type.asGroupType();
+                GroupType groupType = schemaType.asGroupType();
                 List<ColumnReader> fieldReaders = new ArrayList<>();
                 for (int i = 0; i < rowType.getFieldCount(); i++) {
                     fieldReaders.add(
