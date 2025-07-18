@@ -216,7 +216,7 @@ public class ForStStateBackend extends AbstractManagedMemoryStateBackend
         if (original.remoteForStDirectory != null) {
             this.remoteForStDirectory = original.remoteForStDirectory;
         } else {
-            String remoteDirStr = config.get(ForStOptions.REMOTE_DIRECTORY);
+            String remoteDirStr = config.get(ForStOptions.PRIMARY_DIRECTORY);
             if (CHECKPOINT_DIRECTORY_SHORTCUT.equals(remoteDirStr)) {
                 this.remoteForStDirectory = null;
                 this.remoteShareWithCheckpoint = true;
