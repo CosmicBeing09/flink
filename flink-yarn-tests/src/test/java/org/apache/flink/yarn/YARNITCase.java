@@ -152,7 +152,7 @@ class YARNITCase extends YarnTestBase {
             jobGraph.addJar(new org.apache.flink.core.fs.Path(testingJar.toURI()));
             try (ClusterClient<ApplicationId> clusterClient =
                     yarnClusterDescriptor
-                            .deployJobCluster(clusterSpecification, jobGraph, false)
+                            .deployStreamCluster(clusterSpecification, jobGraph, false)
                             .getClusterClient()) {
 
                 for (DistributedCache.DistributedCacheEntry entry :

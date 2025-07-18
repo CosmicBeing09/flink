@@ -70,7 +70,7 @@ public class StandaloneClusterDescriptor implements ClusterDescriptor<Standalone
     }
 
     @Override
-    public ClusterClientProvider<StandaloneClusterId> deployJobCluster(
+    public ClusterClientProvider<StandaloneClusterId> deployStreamCluster(
             ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
         throw new UnsupportedOperationException(
                 "Per-Job Mode not supported by standalone deployments.");

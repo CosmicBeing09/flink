@@ -550,7 +550,7 @@ public class YarnClusterDescriptor implements ClusterDescriptor<ApplicationId> {
     }
 
     @Override
-    public ClusterClientProvider<ApplicationId> deployJobCluster(
+    public ClusterClientProvider<ApplicationId> deployStreamCluster(
             ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
             throws ClusterDeploymentException {
 

@@ -118,7 +118,7 @@ class YarnConfigurationITCase extends YarnTestBase {
 
                         final ClusterClient<ApplicationId> clusterClient =
                                 clusterDescriptor
-                                        .deployJobCluster(clusterSpecification, jobGraph, true)
+                                        .deployStreamCluster(clusterSpecification, jobGraph, true)
                                         .getClusterClient();
 
                         final ApplicationId clusterId = clusterClient.getClusterId();

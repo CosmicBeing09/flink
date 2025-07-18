@@ -59,7 +59,7 @@ public class DummyClusterDescriptor<T> implements ClusterDescriptor<T> {
     }
 
     @Override
-    public ClusterClientProvider<T> deployJobCluster(
+    public ClusterClientProvider<T> deployStreamCluster(
             ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
         return () -> clusterClient;
     }

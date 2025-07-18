@@ -245,7 +245,7 @@ public class KubernetesClusterDescriptor implements ClusterDescriptor<String> {
     }
 
     @Override
-    public ClusterClientProvider<String> deployJobCluster(
+    public ClusterClientProvider<String> deployStreamCluster(
             ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached)
             throws ClusterDeploymentException {
         throw new ClusterDeploymentException(

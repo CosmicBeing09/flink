@@ -80,7 +80,7 @@ public class AbstractStreamingJobClusterExecutor<
                     clusterClientFactory.getClusterSpecification(configuration);
 
             final ClusterClientProvider<ClusterID> clusterClientProvider =
-                    clusterDescriptor.deployJobCluster(
+                    clusterDescriptor.deployStreamCluster(
                             clusterSpecification, streamingJobGraph, configAccessor.getDetachedMode());
             LOG.info("Job has been submitted with JobID " + streamingJobGraph.getJobID());
 
