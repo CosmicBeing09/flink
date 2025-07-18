@@ -327,7 +327,7 @@ public class TaskDeploymentDescriptorFactory {
             @Nullable ResultPartitionDeploymentDescriptor consumedPartitionDescriptor,
             boolean nonFinishedHybridPartitionShouldBeUnknown) {
         // The producing task needs to be RUNNING or already FINISHED
-        if ((resultPartitionType.canBePipelinedConsumed() || hasAllDataProduced)
+        if ((resultPartitionType.allowsPipelinedConsumption() || hasAllDataProduced)
                 && consumedPartitionDescriptor != null
                 && isProducerAvailable(producerState)) {
             if (resultPartitionType.isHybridResultPartition()

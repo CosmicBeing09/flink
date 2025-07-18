@@ -112,7 +112,7 @@ public final class SchedulingPipelinedRegionComputeUtil {
             final List<Integer> currentRegionOutEdges = new ArrayList<>();
             for (SchedulingExecutionVertex vertex : currentRegion) {
                 for (SchedulingResultPartition producedResult : vertex.getProducedResults()) {
-                    if (producedResult.getResultType().mustBePipelinedConsumed()) {
+                    if (producedResult.getResultType().requiresPipelinedConsumption()) {
                         continue;
                     }
                     for (ConsumerVertexGroup consumerVertexGroup :
@@ -148,7 +148,7 @@ public final class SchedulingPipelinedRegionComputeUtil {
             for (IntermediateResultPartitionID partitionId : consumedPartitionGroup) {
                 SchedulingResultPartition consumedResult =
                         resultPartitionRetriever.apply(partitionId);
-                if (!consumedResult.getResultType().mustBePipelinedConsumed()) {
+                if (!consumedResult.getResultType().requiresPipelinedConsumption()) {
                     // The result types of partitions in one ConsumedPartitionGroup are all the same
                     break;
                 }

@@ -203,7 +203,7 @@ public class DefaultExecutionTopology implements SchedulingTopology {
                 .map(ExecutionJobVertex::getJobVertex)
                 .flatMap(v -> v.getInputs().stream())
                 .map(JobEdge::getSource)
-                .filter(r -> r.getResultType().mustBePipelinedConsumed())
+                .filter(r -> r.getResultType().requiresPipelinedConsumption())
                 .map(IntermediateDataSet::getProducer)
                 .map(JobVertex::getID)
                 .forEach(id -> checkState(newJobVertexIds.contains(id)));

@@ -48,7 +48,7 @@ public final class LogicalPipelinedRegionComputeUtil {
     private static Iterable<LogicalResult> getMustBePipelinedConsumedResults(LogicalVertex vertex) {
         List<LogicalResult> mustBePipelinedConsumedResults = new ArrayList<>();
         for (LogicalResult consumedResult : vertex.getConsumedResults()) {
-            if (consumedResult.getResultType().mustBePipelinedConsumed()) {
+            if (consumedResult.getResultType().requiresPipelinedConsumption()) {
                 mustBePipelinedConsumedResults.add(consumedResult);
             }
         }

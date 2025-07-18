@@ -180,7 +180,7 @@ public class VertexwiseSchedulingStrategy
                                         (consumerVertexGroup) ->
                                                 consumerVertexGroup
                                                         .getResultPartitionType()
-                                                        .canBePipelinedConsumed())
+                                                        .allowsPipelinedConsumption())
                                 .collect(Collectors.toSet());
                 for (ConsumerVertexGroup consumerVertexGroup : canBePipelinedConsumerVertexGroups) {
                     if (!visitedConsumerVertexGroup.contains(consumerVertexGroup)) {

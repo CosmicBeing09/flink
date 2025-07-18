@@ -155,12 +155,12 @@ public enum ResultPartitionType {
     }
 
     /** return if this partition's upstream and downstream must be scheduled in the same time. */
-    public boolean mustBePipelinedConsumed() {
+    public boolean requiresPipelinedConsumption() {
         return consumingConstraint == ConsumingConstraint.MUST_BE_PIPELINED;
     }
 
     /** return if this partition's upstream and downstream support scheduling in the same time. */
-    public boolean canBePipelinedConsumed() {
+    public boolean allowsPipelinedConsumption() {
         return consumingConstraint == ConsumingConstraint.CAN_BE_PIPELINED
                 || consumingConstraint == ConsumingConstraint.MUST_BE_PIPELINED;
     }
@@ -182,7 +182,7 @@ public enum ResultPartitionType {
      *
      * <p>this method not related to data consumption and partition release. As for the logic
      * related to partition release, use {@link #isReleaseByScheduler()} instead, and as consume
-     * type, use {@link #mustBePipelinedConsumed()} or {@link #canBePipelinedConsumed()} instead.
+     * type, use {@link #requiresPipelinedConsumption()} or {@link #allowsPipelinedConsumption()} instead.
      */
     public boolean isBlockingOrBlockingPersistentResultPartition() {
         return this == BLOCKING || this == BLOCKING_PERSISTENT;
@@ -197,7 +197,7 @@ public enum ResultPartitionType {
      *
      * <p>this method not related to data consumption and partition release. As for the logic
      * related to partition release, use {@link #isReleaseByScheduler()} instead, and as consume
-     * type, use {@link #mustBePipelinedConsumed()} or {@link #canBePipelinedConsumed()} instead.
+     * type, use {@link #requiresPipelinedConsumption()} or {@link #allowsPipelinedConsumption()} instead.
      */
     public boolean isHybridResultPartition() {
         return this == HYBRID_FULL || this == HYBRID_SELECTIVE;
@@ -212,7 +212,7 @@ public enum ResultPartitionType {
      *
      * <p>This method not related to data consumption and partition release. As for the logic
      * related to partition release, use {@link #isReleaseByScheduler()} instead, and as consume
-     * type, use {@link #mustBePipelinedConsumed()} or {@link #canBePipelinedConsumed()} instead.
+     * type, use {@link #requiresPipelinedConsumption()} or {@link #allowsPipelinedConsumption()} instead.
      */
     public boolean isPipelinedOrPipelinedBoundedResultPartition() {
         return this == PIPELINED || this == PIPELINED_BOUNDED;

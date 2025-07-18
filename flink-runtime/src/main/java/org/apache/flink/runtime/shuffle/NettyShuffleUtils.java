@@ -200,7 +200,7 @@ public class NettyShuffleUtils {
         // should take the max value;
         // 2. For blocking shuffle, it is back pressure free and floating buffers can be recycled
         // in time, so that the minimum required buffers would be enough.
-        int ret = type.canBePipelinedConsumed() ? tuple.f2 : tuple.f0;
+        int ret = type.allowsPipelinedConsumption() ? tuple.f2 : tuple.f0;
 
         if (ret == Integer.MAX_VALUE) {
             // Should never reach this branch. Result partition will allocate an unbounded
