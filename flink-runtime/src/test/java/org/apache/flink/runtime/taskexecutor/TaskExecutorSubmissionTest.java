@@ -95,7 +95,7 @@ class TaskExecutorSubmissionTest {
 
     private static final Duration timeout = Duration.ofMillis(10000L);
 
-    private JobID jobId = new JobID();
+    private JobID jobIdentifier = new JobID();
 
     private TestInfo testInfo;
 
@@ -109,24 +109,24 @@ class TaskExecutorSubmissionTest {
      */
     @Test
     void testTaskSubmission() throws Exception {
-        final ExecutionAttemptID eid = createExecutionAttemptId();
+        final ExecutionAttemptID executionAttemptId = createExecutionAttemptId();
 
         final TaskDeploymentDescriptor tdd =
                 createTestTaskDeploymentDescriptor(
-                        "test task", eid, FutureCompletingInvokable.class);
+                        "test task", executionAttemptId, FutureCompletingInvokable.class);
 
         final CompletableFuture<Void> taskRunningFuture = new CompletableFuture<>();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setSlotSize(1)
                         .addTaskManagerActionListener(
-                                eid, ExecutionState.RUNNING, taskRunningFuture)
+                                executionAttemptId, ExecutionState.RUNNING, taskRunningFuture)
                         .build(EXECUTOR_EXTENSION.getExecutor())) {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd, env.getJobMasterId(), timeout).get();
 
             taskRunningFuture.get();
@@ -150,12 +150,12 @@ class TaskExecutorSubmissionTest {
         // must be >= 1
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .build(EXECUTOR_EXTENSION.getExecutor())) {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
 
             assertThatFuture(tmGateway.submitTask(tdd, env.getJobMasterId(), timeout))
                     .eventuallyFailsWith(ExecutionException.class)
@@ -179,7 +179,7 @@ class TaskExecutorSubmissionTest {
         final CompletableFuture<Void> task1CanceledFuture = new CompletableFuture<>();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setSlotSize(2)
                         .addTaskManagerActionListener(
                                 eid1, ExecutionState.RUNNING, task1RunningFuture)
@@ -191,11 +191,11 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd1.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd1.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd1, env.getJobMasterId(), timeout).get();
             task1RunningFuture.get();
 
-            taskSlotTable.allocateSlot(1, jobId, tdd2.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(1, jobIdentifier, tdd2.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd2, env.getJobMasterId(), timeout).get();
             task2RunningFuture.get();
 
@@ -236,7 +236,7 @@ class TaskExecutorSubmissionTest {
         final CompletableFuture<Void> task2FailedFuture = new CompletableFuture<>();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .addTaskManagerActionListener(
                                 eid1, ExecutionState.RUNNING, task1RunningFuture)
                         .addTaskManagerActionListener(
@@ -250,11 +250,11 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd1.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd1.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd1, env.getJobMasterId(), timeout).get();
             task1RunningFuture.get();
 
-            taskSlotTable.allocateSlot(1, jobId, tdd2.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(1, jobIdentifier, tdd2.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd2, env.getJobMasterId(), timeout).get();
             task2RunningFuture.get();
 
@@ -292,7 +292,7 @@ class TaskExecutorSubmissionTest {
                         .build();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setResourceID(producerLocation)
                         .setSlotSize(2)
                         .addTaskManagerActionListener(
@@ -310,11 +310,11 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd1.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd1.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd1, jobMasterId, timeout).get();
             task1RunningFuture.get();
 
-            taskSlotTable.allocateSlot(1, jobId, tdd2.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(1, jobIdentifier, tdd2.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd2, jobMasterId, timeout).get();
             task2RunningFuture.get();
 
@@ -363,7 +363,7 @@ class TaskExecutorSubmissionTest {
                         .build();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setResourceID(producerLocation)
                         .setSlotSize(1)
                         .addTaskManagerActionListener(
@@ -375,13 +375,13 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd, jobMasterId, timeout).get();
 
             taskFinishedFuture.get();
 
             Collection<PartitionWithMetrics> partitionWithMetricsCollection =
-                    tmGateway.getAndRetainPartitionWithMetrics(jobId).get();
+                    tmGateway.getAndRetainPartitionWithMetrics(jobIdentifier).get();
             assertThat(partitionWithMetricsCollection.size()).isOne();
             PartitionWithMetrics partitionWithMetrics =
                     partitionWithMetricsCollection.iterator().next();
@@ -443,7 +443,7 @@ class TaskExecutorSubmissionTest {
                         .build();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setResourceID(producerLocation)
                         .setSlotSize(2)
                         .addTaskManagerActionListener(
@@ -461,11 +461,11 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd1.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd1.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd1, jobMasterId, timeout).get();
             task1RunningFuture.get();
 
-            taskSlotTable.allocateSlot(1, jobId, tdd2.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(1, jobIdentifier, tdd2.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd2, jobMasterId, timeout).get();
             task2RunningFuture.get();
 
@@ -504,7 +504,7 @@ class TaskExecutorSubmissionTest {
             final CompletableFuture<Void> taskFailedFuture = new CompletableFuture<>();
 
             try (TaskSubmissionTestEnvironment env =
-                    new TaskSubmissionTestEnvironment.Builder(jobId)
+                    new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                             .setSlotSize(2)
                             .addTaskManagerActionListener(
                                     eid, ExecutionState.RUNNING, taskRunningFuture)
@@ -517,7 +517,7 @@ class TaskExecutorSubmissionTest {
                 TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
                 TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-                taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+                taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
                 tmGateway.submitTask(tdd, env.getJobMasterId(), timeout).get();
                 taskRunningFuture.get();
 
@@ -542,7 +542,7 @@ class TaskExecutorSubmissionTest {
                 mock(ShuffleEnvironment.class, Mockito.RETURNS_MOCKS);
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setShuffleEnvironment(shuffleEnvironment)
                         .setSlotSize(1)
                         .addTaskManagerActionListener(
@@ -552,7 +552,7 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd, env.getJobMasterId(), timeout).get();
             taskRunningFuture.get();
 
@@ -598,7 +598,7 @@ class TaskExecutorSubmissionTest {
         final CompletableFuture<Void> taskFailedFuture = new CompletableFuture<>();
 
         try (TaskSubmissionTestEnvironment env =
-                new TaskSubmissionTestEnvironment.Builder(jobId)
+                new TaskSubmissionTestEnvironment.Builder(jobIdentifier)
                         .setResourceID(producerLocation)
                         .setSlotSize(1)
                         .addTaskManagerActionListener(
@@ -610,7 +610,7 @@ class TaskExecutorSubmissionTest {
             TaskExecutorGateway tmGateway = env.getTaskExecutorGateway();
             TaskSlotTable<Task> taskSlotTable = env.getTaskSlotTable();
 
-            taskSlotTable.allocateSlot(0, jobId, tdd.getAllocationId(), Duration.ofSeconds(60));
+            taskSlotTable.allocateSlot(0, jobIdentifier, tdd.getAllocationId(), Duration.ofSeconds(60));
             tmGateway.submitTask(tdd, env.getJobMasterId(), timeout).get();
             taskRunningFuture.get();
 
@@ -700,7 +700,7 @@ class TaskExecutorSubmissionTest {
         Preconditions.checkNotNull(producedPartitions);
         Preconditions.checkNotNull(inputGates);
         return createTaskDeploymentDescriptor(
-                jobId,
+                jobIdentifier,
                 testInfo.getDisplayName(),
                 eid,
                 new SerializedValue<>(new ExecutionConfig()),
