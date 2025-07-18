@@ -412,11 +412,11 @@ public class ProcessTableFunctionTest extends TableTestBase {
         private ErrorSpec(
                 String description,
                 Class<? extends UserDefinedFunction> functionClass,
-                String sql,
+                String selectSql,
                 String errorMessage) {
             this.description = description;
             this.functionClass = functionClass;
-            this.sql = sql;
+            this.sql = selectSql;
             this.errorMessage = errorMessage;
         }
 
