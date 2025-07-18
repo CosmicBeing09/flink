@@ -1443,7 +1443,7 @@ public class Execution
             slot.releaseSlot(cause)
                     .whenComplete(
                             (Object ignored, Throwable throwable) -> {
-                                jobMasterMainThreadExecutor.assertRunningInMainThread();
+                                jobMasterMainThreadExecutor.ensureMainThreadExecution();
                                 if (throwable != null) {
                                     releaseFuture.completeExceptionally(throwable);
                                 } else {
@@ -1639,6 +1639,6 @@ public class Execution
     private void assertRunningInJobMasterMainThread() {
         vertex.getExecutionGraphAccessor()
                 .getJobMasterMainThreadExecutor()
-                .assertRunningInMainThread();
+                .ensureMainThreadExecution();
     }
 }

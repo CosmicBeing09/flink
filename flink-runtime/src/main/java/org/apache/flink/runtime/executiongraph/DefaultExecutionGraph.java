@@ -369,7 +369,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
         this.schedulingFuture = null;
         this.jobMasterMainThreadExecutor =
-                new ComponentMainThreadExecutor.DummyComponentMainThreadExecutor(
+                new ComponentMainThreadExecutor.UnsupportedComponentMainThreadExecutor(
                         "ExecutionGraph is not initialized with proper main thread executor. "
                                 + "Call to ExecutionGraph.start(...) required.");
 
@@ -1660,8 +1660,8 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     private void assertRunningInJobMasterMainThread() {
         if (!(jobMasterMainThreadExecutor
-                instanceof ComponentMainThreadExecutor.DummyComponentMainThreadExecutor)) {
-            jobMasterMainThreadExecutor.assertRunningInMainThread();
+                instanceof ComponentMainThreadExecutor.UnsupportedComponentMainThreadExecutor)) {
+            jobMasterMainThreadExecutor.ensureMainThreadExecution();
         }
     }
 

@@ -26,7 +26,6 @@ import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.clusterframework.types.SlotID;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
-import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor.DummyComponentMainThreadExecutor;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.memory.MemoryManager;
 import org.apache.flink.runtime.taskexecutor.SlotReport;
@@ -106,7 +105,7 @@ public class TaskSlotTableImpl<T extends TaskSlotPayload> implements TaskSlotTab
 
     /** {@link ComponentMainThreadExecutor} to schedule internal calls to the main thread. */
     private ComponentMainThreadExecutor mainThreadExecutor =
-            new DummyComponentMainThreadExecutor(
+            new ComponentMainThreadExecutor.UnsupportedComponentMainThreadExecutor(
                     "TaskSlotTableImpl is not initialized with proper main thread executor, "
                             + "call to TaskSlotTableImpl#start is required");
 

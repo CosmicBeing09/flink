@@ -2437,7 +2437,7 @@ public class AdaptiveSchedulerTest {
                                         TestingStateTransitionManager.withOnTriggerEventOnly(
                                                 () -> {
                                                     singleThreadMainThreadExecutor
-                                                            .assertRunningInMainThread();
+                                                            .ensureMainThreadExecution();
 
                                                     if (context instanceof WaitingForResources) {
                                                         context.transitionToSubsequentState();

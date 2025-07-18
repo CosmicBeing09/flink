@@ -507,7 +507,7 @@ public class DeclarativeSlotPoolBridge extends DeclarativeSlotPoolService implem
 
     private void assertRunningInMainThread() {
         if (componentMainThreadExecutor != null) {
-            componentMainThreadExecutor.assertRunningInMainThread();
+            componentMainThreadExecutor.ensureMainThreadExecution();
         } else {
             throw new IllegalStateException("The FutureSlotPool has not been started yet.");
         }

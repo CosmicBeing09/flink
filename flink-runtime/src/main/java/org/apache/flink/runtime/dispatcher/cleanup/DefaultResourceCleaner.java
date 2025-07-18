@@ -174,7 +174,7 @@ public class DefaultResourceCleaner<T> implements ResourceCleaner {
 
     @Override
     public CompletableFuture<Void> cleanupAsync(JobID jobId) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         CompletableFuture<Void> cleanupFuture = FutureUtils.completedVoidFuture();
         for (CleanupWithLabel<T> cleanupWithLabel : prioritizedCleanup) {

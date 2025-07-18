@@ -106,7 +106,7 @@ public class DefaultBlocklistHandler implements BlocklistHandler, AutoCloseable 
     }
 
     private void assertRunningInMainThread() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
     }
 
     @Override

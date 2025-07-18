@@ -67,7 +67,7 @@ public class TestingResourceCleanerFactory implements ResourceCleanerFactory {
             Collection<T> resources,
             DefaultResourceCleaner.CleanupFn<T> cleanupFn) {
         return jobId -> {
-            mainThreadExecutor.assertRunningInMainThread();
+            mainThreadExecutor.ensureMainThreadExecution();
             Throwable t = null;
             for (T resource : resources) {
                 try {

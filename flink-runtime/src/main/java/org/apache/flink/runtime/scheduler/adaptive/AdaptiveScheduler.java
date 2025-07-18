@@ -299,7 +299,7 @@ public class AdaptiveScheduler
         private final Duration initialResourceAllocationTimeout;
         private final Duration resourceStabilizationTimeout;
         private final Duration slotIdleTimeout;
-        private final Duration scalingIntervalMin;
+        private final Duration executingCooldownInterval;
         private final Duration scalingResourceStabilizationTimeout;
         private final Duration maximumDelayForTriggeringRescale;
         private final int rescaleOnFailedCheckpointCount;
@@ -309,7 +309,7 @@ public class AdaptiveScheduler
                 Duration initialResourceAllocationTimeout,
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
-                Duration scalingIntervalMin,
+                Duration executingCooldownInterval,
                 Duration scalingResourceStabilizationTimeout,
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
@@ -317,7 +317,7 @@ public class AdaptiveScheduler
             this.initialResourceAllocationTimeout = initialResourceAllocationTimeout;
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
-            this.scalingIntervalMin = scalingIntervalMin;
+            this.executingCooldownInterval = executingCooldownInterval;
             this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
@@ -340,7 +340,7 @@ public class AdaptiveScheduler
         }
 
         public Duration getExecutingCooldownTimeout() {
-            return scalingIntervalMin;
+            return executingCooldownInterval;
         }
 
         public Duration getScalingResourceStabilizationTimeout() {
@@ -1548,7 +1548,7 @@ public class AdaptiveScheduler
         Preconditions.checkState(
                 state.getClass() != targetState.getStateClass(),
                 "Attempted to transition into the very state the scheduler is already in.");
-        componentMainThreadExecutor.assertRunningInMainThread();
+        componentMainThreadExecutor.ensureMainThreadExecution();
 
         try {
             isTransitioningState = true;

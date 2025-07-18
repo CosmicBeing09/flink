@@ -127,7 +127,7 @@ public class ExecutionGraphHandler {
 
     private void processCheckpointCoordinatorMessage(
             String messageType, ThrowingConsumer<CheckpointCoordinator, Exception> process) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         final CheckpointCoordinator checkpointCoordinator =
                 executionGraph.getCheckpointCoordinator();

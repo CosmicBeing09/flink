@@ -33,20 +33,20 @@ import java.util.concurrent.TimeUnit;
 public interface ComponentMainThreadExecutor extends ScheduledExecutor {
 
     /** Returns true if the method was called in the thread of this executor. */
-    void assertRunningInMainThread();
+    void ensureMainThreadExecution();
 
     /** Dummy implementation of ComponentMainThreadExecutor. */
-    final class DummyComponentMainThreadExecutor implements ComponentMainThreadExecutor {
+    final class UnsupportedComponentMainThreadExecutor implements ComponentMainThreadExecutor {
 
         /** Customized message for the exception that is thrown on method invocation. */
         private final String exceptionMessageOnInvocation;
 
-        public DummyComponentMainThreadExecutor(String exceptionMessageOnInvocation) {
+        public UnsupportedComponentMainThreadExecutor(String exceptionMessageOnInvocation) {
             this.exceptionMessageOnInvocation = exceptionMessageOnInvocation;
         }
 
         @Override
-        public void assertRunningInMainThread() {
+        public void ensureMainThreadExecution() {
             throw createException();
         }
 

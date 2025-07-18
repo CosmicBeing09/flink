@@ -636,7 +636,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public final void startScheduling() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         registerJobMetrics(
                 jobManagerJobMetricGroup,
                 executionGraph,
@@ -674,7 +674,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<Void> closeAsync() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         final FlinkException cause = new FlinkException("Scheduler is being stopped.");
 
@@ -697,7 +697,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void cancel() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         incrementVersionsOfAllVertices();
         cancelAllPendingSlotRequestsInternal();
@@ -809,7 +809,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public SerializedInputSplit requestNextInputSplit(
             JobVertexID vertexID, ExecutionAttemptID executionAttempt) throws IOException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return executionGraphHandler.requestNextInputSplit(vertexID, executionAttempt);
     }
@@ -820,7 +820,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final ResultPartitionID resultPartitionId)
             throws PartitionProducerDisposedException {
 
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return executionGraphHandler.requestPartitionState(intermediateResultId, resultPartitionId);
     }
@@ -832,14 +832,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public ExecutionGraphInfo requestJob() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return new ExecutionGraphInfo(
                 ArchivedExecutionGraph.createFrom(executionGraph), getExceptionHistory());
     }
 
     @Override
     public CheckpointStatsSnapshot requestCheckpointStats() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         return executionGraph.getCheckpointStatsSnapshot();
     }
 
@@ -851,7 +851,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     @Override
     public KvStateLocation requestKvStateLocation(final JobID jobId, final String registrationName)
             throws UnknownKvStateLocation, FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         return kvStateHandler.requestKvStateLocation(jobId, registrationName);
     }
@@ -865,7 +865,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final KvStateID kvStateId,
             final InetSocketAddress kvStateServerAddress)
             throws FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         kvStateHandler.notifyKvStateRegistered(
                 jobId,
@@ -883,7 +883,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final KeyGroupRange keyGroupRange,
             final String registrationName)
             throws FlinkJobNotFoundException {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         kvStateHandler.notifyKvStateUnregistered(
                 jobId, jobVertexId, keyGroupRange, registrationName);
@@ -891,7 +891,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void updateAccumulators(final AccumulatorSnapshot accumulatorSnapshot) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         executionGraph.updateAccumulators(accumulatorSnapshot);
     }
@@ -901,7 +901,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final String targetDirectory,
             final boolean cancelJob,
             final SavepointFormatType formatType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         if (isAnyOutputBlocking(executionGraph)) {
             // TODO: Introduce a more general solution to mark times when
@@ -949,7 +949,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public CompletableFuture<CompletedCheckpoint> triggerCheckpoint(CheckpointType checkpointType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         final CheckpointCoordinator checkpointCoordinator =
                 executionGraph.getCheckpointCoordinator();
@@ -984,7 +984,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     @Override
     public void startCheckpointScheduler() {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
         final CheckpointCoordinator checkpointCoordinator = getCheckpointCoordinator();
 
         if (checkpointCoordinator == null) {
@@ -1037,7 +1037,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             @Nullable final String targetDirectory,
             final boolean terminate,
             final SavepointFormatType formatType) {
-        mainThreadExecutor.assertRunningInMainThread();
+        mainThreadExecutor.ensureMainThreadExecution();
 
         if (isAnyOutputBlocking(executionGraph)) {
             return FutureUtils.completedExceptionally(

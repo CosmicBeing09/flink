@@ -240,7 +240,7 @@ public class EventReceivingTasks implements SubtaskAccess.SubtaskAccessFactory {
 
     /**
      * An implementation of {@link ComponentMainThreadExecutor} that executes Runnables with a
-     * wrapped {@link ScheduledExecutor} and disables {@link #assertRunningInMainThread()} checks.
+     * wrapped {@link ScheduledExecutor} and disables {@link #ensureMainThreadExecution()} checks.
      */
     private static class NoMainThreadCheckComponentMainThreadExecutor
             implements ComponentMainThreadExecutor {
@@ -274,7 +274,7 @@ public class EventReceivingTasks implements SubtaskAccess.SubtaskAccessFactory {
         }
 
         @Override
-        public void assertRunningInMainThread() {}
+        public void ensureMainThreadExecution() {}
 
         @Override
         public void execute(@Nonnull Runnable command) {
