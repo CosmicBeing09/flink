@@ -199,8 +199,8 @@ public class DataStream<T> {
      *
      * @return The cleaned Function
      */
-    protected <F> F clean(F f) {
-        return getExecutionEnvironment().clean(f);
+    protected <F> F clean(F functionToClean) {
+        return getExecutionEnvironment().clean(functionToClean);
     }
 
     /**
@@ -1116,13 +1116,13 @@ public class DataStream<T> {
                 getType().isTupleType(),
                 "The writeAsCsv() method can only be used on data streams of tuples.");
 
-        CsvOutputFormat<X> of = new CsvOutputFormat<>(new Path(path), rowDelimiter, fieldDelimiter);
+        CsvOutputFormat<X> csvOutputFormat = new CsvOutputFormat<>(new Path(path), rowDelimiter, fieldDelimiter);
 
         if (writeMode != null) {
-            of.setWriteMode(writeMode);
+            csvOutputFormat.setWriteMode(writeMode);
         }
 
-        return writeUsingOutputFormat((OutputFormat<T>) of);
+        return writeUsingOutputFormat((OutputFormat<T>) csvOutputFormat);
     }
 
     /**
