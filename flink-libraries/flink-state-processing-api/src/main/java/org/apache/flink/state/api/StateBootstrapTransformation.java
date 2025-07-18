@@ -116,7 +116,7 @@ public class StateBootstrapTransformation<T> {
     /**
      * @param operatorIdentifier The operator identifier for the stream operator.
      * @param stateBackend The state backend for the job.
-     * @param config Additional configurations applied to the bootstrap stream tasks.
+     * @param additionalConfig Additional configurations applied to the bootstrap stream tasks.
      * @param globalMaxParallelism Global max parallelism set for the savepoint.
      * @param savepointPath The path where the savepoint will be written.
      * @return The operator subtask states for this bootstrap transformation.
@@ -124,7 +124,7 @@ public class StateBootstrapTransformation<T> {
     DataStream<OperatorState> writeOperatorState(
             OperatorIdentifier operatorIdentifier,
             StateBackend stateBackend,
-            Configuration config,
+            Configuration additionalConfig,
             int globalMaxParallelism,
             Path savepointPath) {
         int localMaxParallelism = getMaxParallelism(globalMaxParallelism);
@@ -132,7 +132,7 @@ public class StateBootstrapTransformation<T> {
         return writeOperatorSubtaskStates(
                         operatorIdentifier,
                         stateBackend,
-                        config,
+                additionalConfig,
                         savepointPath,
                         localMaxParallelism)
                 .transform(
