@@ -46,7 +46,7 @@ import org.apache.flink.runtime.rest.messages.job.FailureLabelFilterParameter;
 import org.apache.flink.runtime.rest.messages.job.JobExceptionsMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.UpperLimitExceptionParameter;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.taskmanager.LocalTaskManagerLocation;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
@@ -220,8 +220,8 @@ class JobExceptionsHandlerTest {
     @Test
     void testWithExceptionHistoryAndConcurrentGlobalFailure()
             throws HandlerRequestException, ExecutionException, InterruptedException {
-        final ExceptionHistoryEntry otherFailure =
-                ExceptionHistoryEntry.createGlobal(
+        final FailureHistoryEntry otherFailure =
+                FailureHistoryEntry.createGlobal(
                         new RuntimeException("exception #1"),
                         CompletableFuture.completedFuture(Collections.emptyMap()));
         final RootExceptionHistoryEntry rootCause =
@@ -419,7 +419,7 @@ class JobExceptionsHandlerTest {
     void testArchivedTaskManagerLocationFallbackHandling() {
         assertThat(
                         JobExceptionsHandler.toString(
-                                (ExceptionHistoryEntry.ArchivedTaskManagerLocation) null))
+                                (FailureHistoryEntry.StaticTaskManagerLocation) null))
                 .isNull();
     }
 
@@ -590,7 +590,7 @@ class JobExceptionsHandlerTest {
     private static RootExceptionHistoryEntry fromGlobalFailure(
             Throwable cause,
             long timestamp,
-            Collection<ExceptionHistoryEntry> concurrentExceptions) {
+            Collection<FailureHistoryEntry> concurrentExceptions) {
         return new RootExceptionHistoryEntry(
                 cause,
                 timestamp,

@@ -23,10 +23,10 @@ import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
 import org.apache.flink.runtime.checkpoint.CheckpointScheduling;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.stopwithsavepoint.StopWithSavepointStoppingException;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.Preconditions;
@@ -97,13 +97,13 @@ class StopWithSavepoint extends StateWithExecutionGraph {
     StopWithSavepoint(
             Context context,
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             Logger logger,
             ClassLoader userCodeClassLoader,
             CompletableFuture<String> savepointFuture,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
         super(
                 context,
                 executionGraph,
@@ -179,7 +179,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
     /**
      * Restarts the checkpoint scheduler and, if only the savepoint failed without a task failure /
-     * job termination, transitions back to {@link Executing}.
+     * job termination, transitions back to {@link RunningJobState}.
      *
      * <p>This method must assume that {@link #onFailure}/{@link #onGloballyTerminalState} MAY
      * already be waiting for the savepoint operation to complete, itching to trigger a state
@@ -304,7 +304,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
         private final ExecutionGraph executionGraph;
 
-        private final ExecutionGraphHandler executionGraphHandler;
+        private final CheckpointCoordinatorHandler executionGraphHandler;
 
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
 
@@ -316,18 +316,18 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
         private final CompletableFuture<String> savepointFuture;
 
-        private final List<ExceptionHistoryEntry> failureCollection;
+        private final List<FailureHistoryEntry> failureCollection;
 
         Factory(
                 Context context,
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 Logger logger,
                 ClassLoader userCodeClassLoader,
                 CompletableFuture<String> savepointFuture,
-                List<ExceptionHistoryEntry> failureCollection) {
+                List<FailureHistoryEntry> failureCollection) {
             this.context = context;
             this.executionGraph = executionGraph;
             this.executionGraphHandler = executionGraphHandler;

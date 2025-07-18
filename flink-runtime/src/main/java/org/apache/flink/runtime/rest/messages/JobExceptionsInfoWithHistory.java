@@ -20,6 +20,7 @@ package org.apache.flink.runtime.rest.messages;
 
 import org.apache.flink.runtime.rest.handler.job.JobExceptionsHandler;
 
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonCreator;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.flink.shaded.jackson2.com.fasterxml.jackson.annotation.JsonInclude;
@@ -168,7 +169,7 @@ public class JobExceptionsInfoWithHistory extends JobExceptionsInfo implements R
 
     /**
      * Json equivalent of {@link
-     * org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry}.
+     * FailureHistoryEntry}.
      */
     public static class ExceptionInfo {
 

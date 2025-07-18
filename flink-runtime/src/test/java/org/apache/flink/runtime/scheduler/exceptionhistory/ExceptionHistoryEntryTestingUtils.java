@@ -24,13 +24,13 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
-import static org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry.ArchivedTaskManagerLocation.fromTaskManagerLocation;
+import static org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry.StaticTaskManagerLocation.fromTaskManagerLocation;
 
-/** A utility class to matches {@link ExceptionHistoryEntry} instances for testing. */
+/** A utility class to matches {@link FailureHistoryEntry} instances for testing. */
 public class ExceptionHistoryEntryTestingUtils {
 
     public static boolean matchesGlobalFailure(
-            ExceptionHistoryEntry exceptionHistoryEntry,
+            FailureHistoryEntry exceptionHistoryEntry,
             Throwable expectedException,
             long expectedTimestamp) {
         return matchesInternal(
@@ -38,7 +38,7 @@ public class ExceptionHistoryEntryTestingUtils {
     }
 
     public static boolean matchesFailure(
-            ExceptionHistoryEntry exceptionHistoryEntry,
+            FailureHistoryEntry exceptionHistoryEntry,
             Throwable expectedException,
             long expectedTimestamp,
             Map<String, String> expectedFailureLabels) {
@@ -52,7 +52,7 @@ public class ExceptionHistoryEntryTestingUtils {
     }
 
     public static boolean matchesFailure(
-            ExceptionHistoryEntry exceptionHistoryEntry,
+            FailureHistoryEntry exceptionHistoryEntry,
             Throwable expectedException,
             long expectedTimestamp,
             String expectedTaskName,
@@ -66,7 +66,7 @@ public class ExceptionHistoryEntryTestingUtils {
     }
 
     private static boolean matchesInternal(
-            ExceptionHistoryEntry exceptionHistoryEntry,
+            FailureHistoryEntry exceptionHistoryEntry,
             Throwable expectedException,
             long expectedTimestamp,
             String expectedTaskName,
@@ -81,7 +81,7 @@ public class ExceptionHistoryEntryTestingUtils {
     }
 
     private static boolean matchesInternal(
-            ExceptionHistoryEntry exceptionHistoryEntry,
+            FailureHistoryEntry exceptionHistoryEntry,
             Throwable expectedException,
             long expectedTimestamp,
             String expectedTaskName,
@@ -108,8 +108,8 @@ public class ExceptionHistoryEntryTestingUtils {
     }
 
     private static boolean matchesTaskManagerLocation(
-            ExceptionHistoryEntry.ArchivedTaskManagerLocation actual,
-            ExceptionHistoryEntry.ArchivedTaskManagerLocation expectedLocation) {
+            FailureHistoryEntry.StaticTaskManagerLocation actual,
+            FailureHistoryEntry.StaticTaskManagerLocation expectedLocation) {
         if (actual == null) {
             return expectedLocation == null;
         } else if (expectedLocation == null) {

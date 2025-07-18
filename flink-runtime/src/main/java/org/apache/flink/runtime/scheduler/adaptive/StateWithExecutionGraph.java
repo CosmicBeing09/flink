@@ -51,11 +51,11 @@ import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.KvStateHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.VertexEndOfDataListener;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.stopwithsavepoint.StopWithSavepointTerminationManager;
 import org.apache.flink.runtime.state.KeyGroupRange;
@@ -87,7 +87,7 @@ abstract class StateWithExecutionGraph implements State {
 
     private final ExecutionGraph executionGraph;
 
-    private final ExecutionGraphHandler executionGraphHandler;
+    private final CheckpointCoordinatorHandler executionGraphHandler;
 
     private final OperatorCoordinatorHandler operatorCoordinatorHandler;
 
@@ -97,18 +97,18 @@ abstract class StateWithExecutionGraph implements State {
 
     private final ClassLoader userCodeClassLoader;
 
-    private final List<ExceptionHistoryEntry> failureCollection;
+    private final List<FailureHistoryEntry> failureCollection;
 
     private final VertexEndOfDataListener vertexEndOfDataListener;
 
     StateWithExecutionGraph(
             Context context,
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Logger logger,
             ClassLoader userClassCodeLoader,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
         this.context = context;
         this.executionGraph = executionGraph;
         this.executionGraphHandler = executionGraphHandler;
@@ -149,7 +149,7 @@ abstract class StateWithExecutionGraph implements State {
         return operatorCoordinatorHandler;
     }
 
-    protected ExecutionGraphHandler getExecutionGraphHandler() {
+    protected CheckpointCoordinatorHandler getExecutionGraphHandler() {
         return executionGraphHandler;
     }
 
@@ -392,7 +392,7 @@ abstract class StateWithExecutionGraph implements State {
     @Override
     public void handleGlobalFailure(
             Throwable cause, CompletableFuture<Map<String, String>> failureLabels) {
-        failureCollection.add(ExceptionHistoryEntry.createGlobal(cause, failureLabels));
+        failureCollection.add(FailureHistoryEntry.createGlobal(cause, failureLabels));
         onFailure(cause, failureLabels);
     }
 
@@ -422,7 +422,7 @@ abstract class StateWithExecutionGraph implements State {
             final ExecutionState currentState = execution.getState();
             if (currentState == desiredState) {
                 failureCollection.add(
-                        ExceptionHistoryEntry.create(execution, taskName, failureLabels));
+                        FailureHistoryEntry.create(execution, taskName, failureLabels));
                 onFailure(
                         ErrorInfo.handleMissingThrowable(
                                 taskExecutionStateTransition.getError(userCodeClassLoader)),
@@ -432,16 +432,16 @@ abstract class StateWithExecutionGraph implements State {
         return successfulUpdate;
     }
 
-    List<ExceptionHistoryEntry> getFailures() {
+    List<FailureHistoryEntry> getFailures() {
         return failureCollection;
     }
 
     private static Optional<RootExceptionHistoryEntry> convertFailures(
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
         if (failureCollection.isEmpty()) {
             return Optional.empty();
         }
-        final ExceptionHistoryEntry first = failureCollection.remove(0);
+        final FailureHistoryEntry first = failureCollection.remove(0);
         return Optional.of(
                 RootExceptionHistoryEntry.fromExceptionHistoryEntry(first, failureCollection));
     }

@@ -34,7 +34,7 @@ import static org.apache.flink.runtime.scheduler.exceptionhistory.ArchivedTaskMa
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/** {@code ExceptionHistoryEntryTest} tests the creation of {@link ExceptionHistoryEntry}. */
+/** {@code ExceptionHistoryEntryTest} tests the creation of {@link FailureHistoryEntry}. */
 class ExceptionHistoryEntryTest {
 
     @Test
@@ -50,8 +50,8 @@ class ExceptionHistoryEntryTest {
         final String taskName = "task name";
         final Map<String, String> failureLabels = Collections.singletonMap("key", "value");
 
-        final ExceptionHistoryEntry entry =
-                ExceptionHistoryEntry.create(
+        final FailureHistoryEntry entry =
+                FailureHistoryEntry.create(
                         execution, taskName, CompletableFuture.completedFuture(failureLabels));
 
         assertThat(entry.getException().deserializeError(ClassLoader.getSystemClassLoader()))
@@ -68,7 +68,7 @@ class ExceptionHistoryEntryTest {
     void testCreationFailure() {
         assertThatThrownBy(
                         () ->
-                                ExceptionHistoryEntry.create(
+                                FailureHistoryEntry.create(
                                         TestingAccessExecution.newBuilder()
                                                 .withTaskManagerLocation(
                                                         new LocalTaskManagerLocation())
@@ -82,7 +82,7 @@ class ExceptionHistoryEntryTest {
     void testNullExecution() {
         assertThatThrownBy(
                         () ->
-                                ExceptionHistoryEntry.create(
+                                FailureHistoryEntry.create(
                                         null,
                                         "task name",
                                         FailureEnricherUtils.EMPTY_FAILURE_LABELS))
@@ -93,7 +93,7 @@ class ExceptionHistoryEntryTest {
     void testNullTaskName() {
         assertThatThrownBy(
                         () ->
-                                ExceptionHistoryEntry.create(
+                                FailureHistoryEntry.create(
                                         TestingAccessExecution.newBuilder()
                                                 .withErrorInfo(
                                                         new ErrorInfo(
@@ -113,8 +113,8 @@ class ExceptionHistoryEntryTest {
         final long timestamp = System.currentTimeMillis();
         final String taskName = "task name";
 
-        final ExceptionHistoryEntry entry =
-                ExceptionHistoryEntry.create(
+        final FailureHistoryEntry entry =
+                FailureHistoryEntry.create(
                         TestingAccessExecution.newBuilder()
                                 .withTaskManagerLocation(null)
                                 .withErrorInfo(new ErrorInfo(failure, timestamp))

@@ -95,10 +95,10 @@ import org.apache.flink.runtime.operators.coordination.TaskNotRunningException;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismStore;
 import org.apache.flink.runtime.scheduler.ExecutionGraphFactory;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.scheduler.JobStatusStore;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
@@ -113,7 +113,7 @@ import org.apache.flink.runtime.scheduler.adaptive.allocator.JobInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.ReservedSlots;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.SlotAllocator;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.metrics.DeploymentStateTimeMetrics;
 import org.apache.flink.runtime.state.KeyGroupRange;
@@ -177,7 +177,7 @@ public class AdaptiveScheduler
                 Created.Context,
                 WaitingForResources.Context,
                 CreatingExecutionGraph.Context,
-                Executing.Context,
+                RunningJobState.Context,
                 Restarting.Context,
                 Failing.Context,
                 Finished.Context,
@@ -349,7 +349,7 @@ public class AdaptiveScheduler
     }
 
     private final Settings settings;
-    private final RescaleManager.Factory rescaleManagerFactory;
+    private final AdaptiveScalingManager.Factory rescaleManagerFactory;
 
     private final JobGraph jobGraph;
 
@@ -455,7 +455,7 @@ public class AdaptiveScheduler
     @VisibleForTesting
     AdaptiveScheduler(
             Settings settings,
-            RescaleManager.Factory rescaleManagerFactory,
+            AdaptiveScalingManager.Factory rescaleManagerFactory,
             BiFunction<JobManagerJobMetricGroup, CheckpointStatsListener, CheckpointStatsTracker>
                     checkpointStatsTrackerFactory,
             JobGraph jobGraph,
@@ -676,8 +676,8 @@ public class AdaptiveScheduler
 
     private void newResourcesAvailable(Collection<? extends PhysicalSlot> physicalSlots) {
         state.tryRun(
-                ResourceListener.class,
-                ResourceListener::onNewResourcesAvailable,
+                ResourceEventListener.class,
+                ResourceEventListener::onResourcesAvailable,
                 "newResourcesAvailable");
     }
 
@@ -988,7 +988,7 @@ public class AdaptiveScheduler
     public CompletableFuture<String> stopWithSavepoint(
             @Nullable String targetDirectory, boolean terminate, SavepointFormatType formatType) {
         return state.tryCall(
-                        Executing.class,
+                        RunningJobState.class,
                         executing -> {
                             if (isAnyOutputBlocking(executing.getExecutionGraph())) {
                                 return FutureUtils.<String>completedExceptionally(
@@ -1062,8 +1062,8 @@ public class AdaptiveScheduler
                     new JobGraphJobInformation(jobGraph, maybeUpdateVertexParallelismStore.get());
             declareDesiredResources();
             state.tryRun(
-                    ResourceListener.class,
-                    ResourceListener::onNewResourceRequirements,
+                    ResourceEventListener.class,
+                    ResourceEventListener::onNewResourceRequirements,
                     "Current state does not react to desired parallelism changes.");
         }
     }
@@ -1163,11 +1163,11 @@ public class AdaptiveScheduler
     @Override
     public void goToExecuting(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
         transitionToState(
-                new Executing.Factory(
+                new RunningJobState.Factory(
                         executionGraph,
                         executionGraphHandler,
                         operatorCoordinatorHandler,
@@ -1183,9 +1183,9 @@ public class AdaptiveScheduler
     @Override
     public void goToCanceling(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
 
         transitionToState(
                 new Canceling.Factory(
@@ -1201,10 +1201,10 @@ public class AdaptiveScheduler
     @Override
     public void goToRestarting(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Duration backoffTime,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
 
         for (ExecutionVertex executionVertex : executionGraph.getAllExecutionVertices()) {
             final int attemptNumber =
@@ -1232,10 +1232,10 @@ public class AdaptiveScheduler
     @Override
     public void goToFailing(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Throwable failureCause,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
         transitionToState(
                 new Failing.Factory(
                         this,
@@ -1251,11 +1251,11 @@ public class AdaptiveScheduler
     @Override
     public CompletableFuture<String> goToStopWithSavepoint(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             CompletableFuture<String> savepointFuture,
-            List<ExceptionHistoryEntry> failureCollection) {
+            List<FailureHistoryEntry> failureCollection) {
 
         StopWithSavepoint stopWithSavepoint =
                 transitionToState(

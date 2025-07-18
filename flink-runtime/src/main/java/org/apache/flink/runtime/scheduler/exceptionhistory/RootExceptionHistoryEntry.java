@@ -36,15 +36,15 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * {@code RootExceptionHistoryEntry} extending {@link ExceptionHistoryEntry} by providing a list of
+ * {@code RootExceptionHistoryEntry} extending {@link FailureHistoryEntry} by providing a list of
  * {@code ExceptionHistoryEntry} instances to store concurrently caught failures.
  */
 @NotThreadSafe
-public class RootExceptionHistoryEntry extends ExceptionHistoryEntry {
+public class RootExceptionHistoryEntry extends FailureHistoryEntry {
 
     private static final long serialVersionUID = -7647332765867297434L;
 
-    private final Collection<ExceptionHistoryEntry> concurrentExceptions;
+    private final Collection<FailureHistoryEntry> concurrentExceptions;
 
     /**
      * Creates a {@code RootExceptionHistoryEntry} based on the passed {@link
@@ -99,7 +99,7 @@ public class RootExceptionHistoryEntry extends ExceptionHistoryEntry {
     }
 
     public static RootExceptionHistoryEntry fromExceptionHistoryEntry(
-            ExceptionHistoryEntry entry, Collection<ExceptionHistoryEntry> entries) {
+            FailureHistoryEntry entry, Collection<FailureHistoryEntry> entries) {
         return new RootExceptionHistoryEntry(
                 entry.getException(),
                 entry.getTimestamp(),
@@ -146,13 +146,13 @@ public class RootExceptionHistoryEntry extends ExceptionHistoryEntry {
                 createExceptionHistoryEntries(executions));
     }
 
-    private static Collection<ExceptionHistoryEntry> createExceptionHistoryEntries(
+    private static Collection<FailureHistoryEntry> createExceptionHistoryEntries(
             Iterable<Execution> executions) {
         return StreamSupport.stream(executions.spliterator(), false)
                 .filter(execution -> execution.getFailureInfo().isPresent())
                 .map(
                         execution ->
-                                ExceptionHistoryEntry.create(
+                                FailureHistoryEntry.create(
                                         execution,
                                         execution.getVertexWithAttempt(),
                                         FailureEnricherUtils.EMPTY_FAILURE_LABELS))
@@ -178,7 +178,7 @@ public class RootExceptionHistoryEntry extends ExceptionHistoryEntry {
             CompletableFuture<Map<String, String>> failureLabels,
             @Nullable String failingTaskName,
             @Nullable TaskManagerLocation taskManagerLocation,
-            Collection<ExceptionHistoryEntry> concurrentExceptions) {
+            Collection<FailureHistoryEntry> concurrentExceptions) {
         super(cause, timestamp, failureLabels, failingTaskName, taskManagerLocation);
         this.concurrentExceptions = concurrentExceptions;
     }
@@ -187,7 +187,7 @@ public class RootExceptionHistoryEntry extends ExceptionHistoryEntry {
         this.concurrentExceptions.addAll(createExceptionHistoryEntries(concurrentlyExecutions));
     }
 
-    public Iterable<ExceptionHistoryEntry> getConcurrentExceptions() {
+    public Iterable<FailureHistoryEntry> getConcurrentExceptions() {
         return concurrentExceptions;
     }
 }

@@ -18,23 +18,23 @@
 
 package org.apache.flink.runtime.scheduler.exceptionhistory;
 
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry.ArchivedTaskManagerLocation;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry.StaticTaskManagerLocation;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 
 import java.util.Objects;
 import java.util.function.Predicate;
 
-import static org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry.ArchivedTaskManagerLocation.fromTaskManagerLocation;
+import static org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry.StaticTaskManagerLocation.fromTaskManagerLocation;
 
 /**
  * {@code ArchivedTaskManagerLocationMatcher} can be used to match {@link TaskManagerLocation} with
- * {@link ArchivedTaskManagerLocation} instances.
+ * {@link FailureHistoryEntry.StaticTaskManagerLocation} instances.
  */
-class ArchivedTaskManagerLocationMatcher implements Predicate<ArchivedTaskManagerLocation> {
+class ArchivedTaskManagerLocationMatcher implements Predicate<FailureHistoryEntry.StaticTaskManagerLocation> {
 
-    private final ArchivedTaskManagerLocation expectedLocation;
+    private final FailureHistoryEntry.StaticTaskManagerLocation expectedLocation;
 
-    public static Predicate<ArchivedTaskManagerLocation> isArchivedTaskManagerLocation(
+    public static Predicate<FailureHistoryEntry.StaticTaskManagerLocation> isArchivedTaskManagerLocation(
             TaskManagerLocation actualLocation) {
         return new ArchivedTaskManagerLocationMatcher(actualLocation);
     }
@@ -43,12 +43,12 @@ class ArchivedTaskManagerLocationMatcher implements Predicate<ArchivedTaskManage
         this(fromTaskManagerLocation(expectedLocation));
     }
 
-    ArchivedTaskManagerLocationMatcher(ArchivedTaskManagerLocation expectedLocation) {
+    ArchivedTaskManagerLocationMatcher(FailureHistoryEntry.StaticTaskManagerLocation expectedLocation) {
         this.expectedLocation = expectedLocation;
     }
 
     @Override
-    public boolean test(ArchivedTaskManagerLocation actual) {
+    public boolean test(StaticTaskManagerLocation actual) {
         if (actual == null) {
             return expectedLocation == null;
         } else if (expectedLocation == null) {

@@ -21,9 +21,9 @@ package org.apache.flink.runtime.scheduler.adaptive;
 import org.apache.flink.runtime.checkpoint.CheckpointScheduling;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 
 import javax.annotation.Nullable;
 
@@ -51,9 +51,9 @@ public interface StateTransitions {
          */
         void goToCanceling(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<FailureHistoryEntry> failureCollection);
     }
 
     /** Interface covering transition to the {@link CreatingExecutionGraph} state. */
@@ -63,23 +63,23 @@ public interface StateTransitions {
         void goToCreatingExecutionGraph(@Nullable ExecutionGraph previousExecutionGraph);
     }
 
-    /** Interface covering transition to the {@link Executing} state. */
+    /** Interface covering transition to the {@link RunningJobState} state. */
     interface ToExecuting extends StateTransitions {
 
         /**
-         * Transitions into the {@link Executing} state.
+         * Transitions into the {@link RunningJobState} state.
          *
-         * @param executionGraph executionGraph to pass to the {@link Executing} state
-         * @param executionGraphHandler executionGraphHandler to pass to the {@link Executing} state
+         * @param executionGraph executionGraph to pass to the {@link RunningJobState} state
+         * @param executionGraphHandler executionGraphHandler to pass to the {@link RunningJobState} state
          * @param operatorCoordinatorHandler operatorCoordinatorHandler to pass to the {@link
-         *     Executing} state
+         *     RunningJobState} state
          * @param failureCollection collection of failures that are propagated
          */
         void goToExecuting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<FailureHistoryEntry> failureCollection);
     }
 
     /** Interface covering transition to the {@link Finished} state. */
@@ -109,10 +109,10 @@ public interface StateTransitions {
          */
         void goToFailing(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Throwable failureCause,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<FailureHistoryEntry> failureCollection);
     }
 
     /** Interface covering transition to the {@link Restarting} state. */
@@ -132,10 +132,10 @@ public interface StateTransitions {
          */
         void goToRestarting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<FailureHistoryEntry> failureCollection);
     }
 
     /** Interface covering transition to the {@link StopWithSavepoint} state. */
@@ -155,11 +155,11 @@ public interface StateTransitions {
          */
         CompletableFuture<String> goToStopWithSavepoint(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture,
-                List<ExceptionHistoryEntry> failureCollection);
+                List<FailureHistoryEntry> failureCollection);
     }
 
     /** Interface covering transition to the {@link WaitingForResources} state. */

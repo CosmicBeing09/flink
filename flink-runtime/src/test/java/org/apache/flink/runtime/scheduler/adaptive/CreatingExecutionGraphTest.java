@@ -25,10 +25,10 @@ import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutorServiceAda
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.Executors;
 
@@ -203,9 +203,9 @@ class CreatingExecutionGraphTest {
         @Override
         public void goToExecuting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
-                List<ExceptionHistoryEntry> failureCollection) {
+                List<FailureHistoryEntry> failureCollection) {
             executingStateValidator.validateInput(executionGraph);
             registerStateTransition();
         }

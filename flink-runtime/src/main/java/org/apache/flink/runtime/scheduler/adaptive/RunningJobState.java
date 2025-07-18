@@ -31,13 +31,13 @@ import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.runtime.scheduler.adaptive.scalingpolicy.EnforceMinimalIncreaseRescalingController;
 import org.apache.flink.runtime.scheduler.adaptive.scalingpolicy.EnforceParallelismChangeRescalingController;
 import org.apache.flink.runtime.scheduler.adaptive.scalingpolicy.RescalingController;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.stopwithsavepoint.StopWithSavepointTerminationManager;
 import org.apache.flink.util.Preconditions;
 
@@ -57,27 +57,27 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /** State which represents a running job with an {@link ExecutionGraph} and assigned slots. */
-class Executing extends StateWithExecutionGraph
-        implements ResourceListener, RescaleManager.Context, CheckpointStatsListener {
+class RunningJobState extends StateWithExecutionGraph
+        implements ResourceEventListener, AdaptiveScalingManager.Context, CheckpointStatsListener {
 
     private final Context context;
 
-    private final RescalingController sufficientResourcesController;
+    private final RescalingController parallelismChangeController;
     private final RescalingController desiredResourcesController;
-    private final RescaleManager rescaleManager;
+    private final AdaptiveScalingManager stateTransitionManager;
     private final int rescaleOnFailedCheckpointCount;
     // null indicates that there was no change event observed, yet
     @Nullable private AtomicInteger failedCheckpointCountdown;
 
-    Executing(
+    RunningJobState(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Logger logger,
             Context context,
             ClassLoader userCodeClassLoader,
-            List<ExceptionHistoryEntry> failureCollection,
-            RescaleManager.Factory rescaleManagerFactory,
+            List<FailureHistoryEntry> failureCollection,
+            AdaptiveScalingManager.Factory rescaleManagerFactory,
             int minParallelismChangeForRescale,
             int rescaleOnFailedCheckpointCount,
             Instant lastRescale) {
@@ -93,10 +93,10 @@ class Executing extends StateWithExecutionGraph
         Preconditions.checkState(
                 executionGraph.getState() == JobStatus.RUNNING, "Assuming running execution graph");
 
-        this.sufficientResourcesController = new EnforceParallelismChangeRescalingController();
+        this.parallelismChangeController = new EnforceParallelismChangeRescalingController();
         this.desiredResourcesController =
                 new EnforceMinimalIncreaseRescalingController(minParallelismChangeForRescale);
-        this.rescaleManager = rescaleManagerFactory.create(this, lastRescale);
+        this.stateTransitionManager = rescaleManagerFactory.create(this, lastRescale);
 
         Preconditions.checkArgument(
                 rescaleOnFailedCheckpointCount > 0,
@@ -110,15 +110,15 @@ class Executing extends StateWithExecutionGraph
         context.runIfState(
                 this,
                 () -> {
-                    rescaleManager.onChange();
-                    rescaleManager.onTrigger();
+                    stateTransitionManager.onChange();
+                    stateTransitionManager.onTrigger();
                 },
                 Duration.ZERO);
     }
 
     @Override
     public boolean hasSufficientResources() {
-        return shouldRescale(sufficientResourcesController);
+        return shouldRescale(parallelismChangeController);
     }
 
     @Override
@@ -211,14 +211,14 @@ class Executing extends StateWithExecutionGraph
     }
 
     @Override
-    public void onNewResourcesAvailable() {
-        rescaleManager.onChange();
+    public void onResourcesAvailable() {
+        stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
     @Override
     public void onNewResourceRequirements() {
-        rescaleManager.onChange();
+        stateTransitionManager.onChange();
         initializeFailedCheckpointCountdownIfUnset();
     }
 
@@ -236,7 +236,7 @@ class Executing extends StateWithExecutionGraph
     }
 
     private void triggerPotentialRescale() {
-        rescaleManager.onTrigger();
+        stateTransitionManager.onTrigger();
         this.failedCheckpointCountdown = null;
     }
 
@@ -277,7 +277,7 @@ class Executing extends StateWithExecutionGraph
                 getFailures());
     }
 
-    /** Context of the {@link Executing} state. */
+    /** Context of the {@link RunningJobState} state. */
     interface Context
             extends StateWithExecutionGraph.Context,
                     StateTransitions.ToCancelling,
@@ -313,28 +313,28 @@ class Executing extends StateWithExecutionGraph
         ScheduledFuture<?> runIfState(State expectedState, Runnable action, Duration delay);
     }
 
-    static class Factory implements StateFactory<Executing> {
+    static class Factory implements StateFactory<RunningJobState> {
 
         private final Context context;
         private final Logger log;
         private final ExecutionGraph executionGraph;
-        private final ExecutionGraphHandler executionGraphHandler;
+        private final CheckpointCoordinatorHandler executionGraphHandler;
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final ClassLoader userCodeClassLoader;
-        private final List<ExceptionHistoryEntry> failureCollection;
-        private final RescaleManager.Factory rescaleManagerFactory;
+        private final List<FailureHistoryEntry> failureCollection;
+        private final AdaptiveScalingManager.Factory rescaleManagerFactory;
         private final int minParallelismChangeForRescale;
         private final int rescaleOnFailedCheckpointCount;
 
         Factory(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Logger log,
                 Context context,
                 ClassLoader userCodeClassLoader,
-                List<ExceptionHistoryEntry> failureCollection,
-                RescaleManager.Factory rescaleManagerFactory,
+                List<FailureHistoryEntry> failureCollection,
+                AdaptiveScalingManager.Factory rescaleManagerFactory,
                 int minParallelismChangeForRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.context = context;
@@ -349,12 +349,12 @@ class Executing extends StateWithExecutionGraph
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
         }
 
-        public Class<Executing> getStateClass() {
-            return Executing.class;
+        public Class<RunningJobState> getStateClass() {
+            return RunningJobState.class;
         }
 
-        public Executing getState() {
-            return new Executing(
+        public RunningJobState getState() {
+            return new RunningJobState(
                     executionGraph,
                     executionGraphHandler,
                     operatorCoordinatorHandler,

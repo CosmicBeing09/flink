@@ -51,10 +51,10 @@ import java.util.function.Supplier;
  * <p>Thread-safety: This class is not implemented in a thread-safe manner and relies on the fact
  * that any method call happens within a single thread.
  *
- * @see Executing
+ * @see RunningJobState
  */
 @NotThreadSafe
-public class DefaultRescaleManager implements RescaleManager {
+public class DefaultRescaleManager implements AdaptiveScalingManager {
 
     private static final Logger LOG = LoggerFactory.getLogger(DefaultRescaleManager.class);
 
@@ -64,7 +64,7 @@ public class DefaultRescaleManager implements RescaleManager {
     @VisibleForTesting final Duration scalingIntervalMin;
     @VisibleForTesting @Nullable final Duration scalingIntervalMax;
 
-    private final RescaleManager.Context rescaleContext;
+    private final AdaptiveScalingManager.Context rescaleContext;
 
     private boolean rescaleScheduled = false;
 
@@ -83,7 +83,7 @@ public class DefaultRescaleManager implements RescaleManager {
 
     DefaultRescaleManager(
             Temporal initializationTime,
-            RescaleManager.Context rescaleContext,
+            AdaptiveScalingManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -100,7 +100,7 @@ public class DefaultRescaleManager implements RescaleManager {
     DefaultRescaleManager(
             Temporal initializationTime,
             Supplier<Temporal> clock,
-            RescaleManager.Context rescaleContext,
+            AdaptiveScalingManager.Context rescaleContext,
             Duration scalingIntervalMin,
             @Nullable Duration scalingIntervalMax,
             Duration maxTriggerDelay) {
@@ -191,7 +191,7 @@ public class DefaultRescaleManager implements RescaleManager {
         }
     }
 
-    public static class Factory implements RescaleManager.Factory {
+    public static class Factory implements AdaptiveScalingManager.Factory {
 
         private final Duration scalingIntervalMin;
         @Nullable private final Duration scalingIntervalMax;

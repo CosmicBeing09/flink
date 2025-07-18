@@ -51,24 +51,24 @@ import java.util.Optional;
 import java.util.concurrent.Executor;
 
 /** Handler for the {@link ExecutionGraph} which offers some common operations. */
-public class ExecutionGraphHandler {
+public class CheckpointCoordinatorHandler {
 
     private final ExecutionGraph executionGraph;
 
     private final Logger log;
 
-    private final Executor ioExecutor;
+    private final Executor checkpointIoExecutor;
 
     private final ComponentMainThreadExecutor mainThreadExecutor;
 
-    public ExecutionGraphHandler(
+    public CheckpointCoordinatorHandler(
             ExecutionGraph executionGraph,
             Logger log,
             Executor ioExecutor,
             ComponentMainThreadExecutor mainThreadExecutor) {
         this.executionGraph = executionGraph;
         this.log = log;
-        this.ioExecutor = ioExecutor;
+        this.checkpointIoExecutor = ioExecutor;
         this.mainThreadExecutor = mainThreadExecutor;
     }
 
@@ -133,7 +133,7 @@ public class ExecutionGraphHandler {
                 executionGraph.getCheckpointCoordinator();
 
         if (checkpointCoordinator != null) {
-            ioExecutor.execute(
+            checkpointIoExecutor.execute(
                     () -> {
                         try {
                             process.accept(checkpointCoordinator);

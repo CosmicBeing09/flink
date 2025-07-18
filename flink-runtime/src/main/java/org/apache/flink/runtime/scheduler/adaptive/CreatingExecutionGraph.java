@@ -28,7 +28,7 @@ import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.scheduler.DefaultOperatorCoordinatorHandler;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
@@ -52,7 +52,7 @@ import java.util.concurrent.ScheduledFuture;
  * the required slots. If the set of available slots has changed so that the created {@link
  * ExecutionGraph} cannot be executed, the state transitions back into {@link WaitingForResources}.
  * If there are enough slots for the {@link ExecutionGraph} to run, the state transitions to {@link
- * Executing}.
+ * RunningJobState}.
  */
 public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
 
@@ -94,7 +94,7 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                     .info(
                             "Failed to go from {} to {} because the ExecutionGraph creation failed.",
                             CreatingExecutionGraph.class.getSimpleName(),
-                            Executing.class.getSimpleName(),
+                            RunningJobState.class.getSimpleName(),
                             throwable);
             context.goToFinished(context.getArchivedExecutionGraph(JobStatus.FAILED, throwable));
         } else {
@@ -111,8 +111,8 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                         .debug(
                                 "Successfully reserved and assigned the required slots for the ExecutionGraph.");
                 final ExecutionGraph executionGraph = result.getExecutionGraph();
-                final ExecutionGraphHandler executionGraphHandler =
-                        new ExecutionGraphHandler(
+                final CheckpointCoordinatorHandler executionGraphHandler =
+                        new CheckpointCoordinatorHandler(
                                 executionGraph,
                                 getLogger(),
                                 context.getIOExecutor(),

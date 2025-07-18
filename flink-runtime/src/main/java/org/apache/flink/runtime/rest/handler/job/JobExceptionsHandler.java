@@ -37,7 +37,7 @@ import org.apache.flink.runtime.rest.messages.job.FailureLabelFilterParameter;
 import org.apache.flink.runtime.rest.messages.job.JobExceptionsMessageParameters;
 import org.apache.flink.runtime.rest.messages.job.UpperLimitExceptionParameter;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.taskmanager.TaskManagerLocation;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
@@ -248,7 +248,7 @@ public class JobExceptionsHandler
     }
 
     private static JobExceptionsInfoWithHistory.ExceptionInfo createExceptionInfo(
-            ExceptionHistoryEntry exceptionHistoryEntry) {
+            FailureHistoryEntry exceptionHistoryEntry) {
 
         if (exceptionHistoryEntry.isGlobal()) {
             return new JobExceptionsInfoWithHistory.ExceptionInfo(
@@ -275,7 +275,7 @@ public class JobExceptionsHandler
                 toTaskManagerId(exceptionHistoryEntry.getTaskManagerLocation()));
     }
 
-    private static void assertLocalExceptionInfo(ExceptionHistoryEntry exceptionHistoryEntry) {
+    private static void assertLocalExceptionInfo(FailureHistoryEntry exceptionHistoryEntry) {
         Preconditions.checkArgument(
                 exceptionHistoryEntry.getFailingTaskName() != null,
                 "The taskName must not be null for a non-global failure.");
@@ -297,13 +297,13 @@ public class JobExceptionsHandler
 
     @VisibleForTesting
     @Nullable
-    static String toString(@Nullable ExceptionHistoryEntry.ArchivedTaskManagerLocation location) {
+    static String toString(@Nullable FailureHistoryEntry.StaticTaskManagerLocation location) {
         return location != null ? location.getEndpoint() : null;
     }
 
     @VisibleForTesting
     static String toTaskManagerId(
-            @Nullable ExceptionHistoryEntry.ArchivedTaskManagerLocation location) {
+            @Nullable FailureHistoryEntry.StaticTaskManagerLocation location) {
         return location != null ? String.format("%s", location.getResourceID()) : null;
     }
 }

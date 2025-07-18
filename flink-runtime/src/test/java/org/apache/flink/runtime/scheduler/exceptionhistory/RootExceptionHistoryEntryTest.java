@@ -83,7 +83,7 @@ class RootExceptionHistoryEntryTest {
 
         final Throwable concurrentException1 = new IllegalStateException("Expected other failure1");
         final ExecutionVertex concurrentlyFailedExecutionVertex1 = extractExecutionVertex(1);
-        Predicate<ExceptionHistoryEntry> exception1Predicate =
+        Predicate<FailureHistoryEntry> exception1Predicate =
                 triggerFailureAndCreateEntryMatcher(
                         concurrentException1, concurrentlyFailedExecutionVertex1);
 
@@ -113,7 +113,7 @@ class RootExceptionHistoryEntryTest {
         // Test for addConcurrentExceptions
         final Throwable concurrentException2 = new IllegalStateException("Expected other failure2");
         final ExecutionVertex concurrentlyFailedExecutionVertex2 = extractExecutionVertex(2);
-        Predicate<ExceptionHistoryEntry> exception2Predicate =
+        Predicate<FailureHistoryEntry> exception2Predicate =
                 triggerFailureAndCreateEntryMatcher(
                         concurrentException2, concurrentlyFailedExecutionVertex2);
 
@@ -132,14 +132,14 @@ class RootExceptionHistoryEntryTest {
         final Throwable concurrentException0 =
                 new RuntimeException("Expected concurrent failure #0");
         final ExecutionVertex concurrentlyFailedExecutionVertex0 = extractExecutionVertex(0);
-        final Predicate<ExceptionHistoryEntry> exception0Predicate =
+        final Predicate<FailureHistoryEntry> exception0Predicate =
                 triggerFailureAndCreateEntryMatcher(
                         concurrentException0, concurrentlyFailedExecutionVertex0);
 
         final Throwable concurrentException1 =
                 new IllegalStateException("Expected concurrent failure #1");
         final ExecutionVertex concurrentlyFailedExecutionVertex1 = extractExecutionVertex(1);
-        final Predicate<ExceptionHistoryEntry> exception1Predicate =
+        final Predicate<FailureHistoryEntry> exception1Predicate =
                 triggerFailureAndCreateEntryMatcher(
                         concurrentException1, concurrentlyFailedExecutionVertex1);
 
@@ -170,7 +170,7 @@ class RootExceptionHistoryEntryTest {
                                         || exception1Predicate.test(exceptionHistoryEntry));
     }
 
-    private Predicate<ExceptionHistoryEntry> triggerFailureAndCreateEntryMatcher(
+    private Predicate<FailureHistoryEntry> triggerFailureAndCreateEntryMatcher(
             Throwable concurrentException0, ExecutionVertex concurrentlyFailedExecutionVertex0) {
         final long concurrentExceptionTimestamp0 =
                 triggerFailure(concurrentlyFailedExecutionVertex0, concurrentException0);

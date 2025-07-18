@@ -21,7 +21,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.util.FlinkException;
 
@@ -167,8 +167,8 @@ class StateWithExecutionGraphTest {
             ExecutionGraph executionGraph,
             OperatorCoordinatorHandler operatorCoordinatorHandler) {
 
-        final ExecutionGraphHandler executionGraphHandler =
-                new ExecutionGraphHandler(
+        final CheckpointCoordinatorHandler executionGraphHandler =
+                new CheckpointCoordinatorHandler(
                         executionGraph,
                         log,
                         context.getMainThreadExecutor(),
@@ -193,7 +193,7 @@ class StateWithExecutionGraphTest {
         TestingStateWithExecutionGraph(
                 Context context,
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Logger logger,
                 ClassLoader userCodeClassLoader) {

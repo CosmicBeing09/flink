@@ -36,7 +36,7 @@ import java.util.concurrent.ScheduledFuture;
 /**
  * State which describes that the scheduler is waiting for resources in order to execute the job.
  */
-class WaitingForResources extends StateWithoutExecutionGraph implements ResourceListener {
+class WaitingForResources extends StateWithoutExecutionGraph implements ResourceEventListener {
 
     private final Context context;
 
@@ -107,7 +107,7 @@ class WaitingForResources extends StateWithoutExecutionGraph implements Resource
     }
 
     @Override
-    public void onNewResourcesAvailable() {
+    public void onResourcesAvailable() {
         checkDesiredOrSufficientResourcesAvailable();
     }
 

@@ -39,12 +39,12 @@ import java.util.concurrent.CompletableFuture;
  * {@code ExceptionHistoryEntry} collects information about a single failure that triggered the
  * scheduler's failure handling.
  */
-public class ExceptionHistoryEntry extends ErrorInfo {
+public class FailureHistoryEntry extends ErrorInfo {
 
     private static final long serialVersionUID = -3855285510064263701L;
 
     @Nullable private final String failingTaskName;
-    @Nullable private final ArchivedTaskManagerLocation taskManagerLocation;
+    @Nullable private final FailureHistoryEntry.StaticTaskManagerLocation taskManagerLocation;
     private final transient CompletableFuture<Map<String, String>> failureLabelsFuture;
     /** Labels associated with the failure, set as soon as failureLabelsFuture is completed. */
     private Map<String, String> failureLabels;
@@ -60,7 +60,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
      * @throws IllegalArgumentException if the passed {@code Execution} does not provide a {@link
      *     Execution#getFailureInfo() failureInfo}.
      */
-    public static ExceptionHistoryEntry create(
+    public static FailureHistoryEntry create(
             AccessExecution failedExecution,
             String taskName,
             CompletableFuture<Map<String, String>> failureLabels) {
@@ -71,7 +71,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
                 "The selected Execution " + failedExecution.getAttemptId() + " didn't fail.");
 
         final ErrorInfo failure = failedExecution.getFailureInfo().get();
-        return new ExceptionHistoryEntry(
+        return new FailureHistoryEntry(
                 failure.getException(),
                 failure.getTimestamp(),
                 failureLabels,
@@ -80,14 +80,14 @@ public class ExceptionHistoryEntry extends ErrorInfo {
     }
 
     /** Creates an {@code ExceptionHistoryEntry} that is not based on an {@code Execution}. */
-    public static ExceptionHistoryEntry createGlobal(
+    public static FailureHistoryEntry createGlobal(
             Throwable cause, CompletableFuture<Map<String, String>> failureLabels) {
-        return new ExceptionHistoryEntry(
+        return new FailureHistoryEntry(
                 cause,
                 System.currentTimeMillis(),
                 failureLabels,
                 null,
-                (ArchivedTaskManagerLocation) null);
+                (StaticTaskManagerLocation) null);
     }
 
     /**
@@ -102,7 +102,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
      * @throws IllegalArgumentException if the passed {@code timestamp} is not bigger than {@code
      *     0}.
      */
-    protected ExceptionHistoryEntry(
+    protected FailureHistoryEntry(
             Throwable cause,
             long timestamp,
             CompletableFuture<Map<String, String>> failureLabels,
@@ -113,15 +113,15 @@ public class ExceptionHistoryEntry extends ErrorInfo {
                 timestamp,
                 failureLabels,
                 failingTaskName,
-                ArchivedTaskManagerLocation.fromTaskManagerLocation(taskManagerLocation));
+                StaticTaskManagerLocation.fromTaskManagerLocation(taskManagerLocation));
     }
 
-    private ExceptionHistoryEntry(
+    private FailureHistoryEntry(
             Throwable cause,
             long timestamp,
             CompletableFuture<Map<String, String>> failureLabels,
             @Nullable String failingTaskName,
-            @Nullable ArchivedTaskManagerLocation taskManagerLocation) {
+            @Nullable FailureHistoryEntry.StaticTaskManagerLocation taskManagerLocation) {
         super(cause, timestamp);
         this.failingTaskName = failingTaskName;
         this.taskManagerLocation = taskManagerLocation;
@@ -142,7 +142,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
     }
 
     @Nullable
-    public ArchivedTaskManagerLocation getTaskManagerLocation() {
+    public FailureHistoryEntry.StaticTaskManagerLocation getTaskManagerLocation() {
         return taskManagerLocation;
     }
 
@@ -170,7 +170,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
      * TaskManagerLocation}. It overcomes the issue with {@link TaskManagerLocation#inetAddress}
      * being partially transient due to the cache becoming out-dated.
      */
-    public static class ArchivedTaskManagerLocation implements Serializable {
+    public static class StaticTaskManagerLocation implements Serializable {
 
         private static final long serialVersionUID = -6596854145482446664L;
 
@@ -190,13 +190,13 @@ public class ExceptionHistoryEntry extends ErrorInfo {
          */
         @VisibleForTesting
         @Nullable
-        static ArchivedTaskManagerLocation fromTaskManagerLocation(
+        static FailureHistoryEntry.StaticTaskManagerLocation fromTaskManagerLocation(
                 TaskManagerLocation taskManagerLocation) {
             if (taskManagerLocation == null) {
                 return null;
             }
 
-            return new ArchivedTaskManagerLocation(
+            return new StaticTaskManagerLocation(
                     taskManagerLocation.getResourceID(),
                     taskManagerLocation.addressString(),
                     taskManagerLocation.dataPort(),
@@ -204,7 +204,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
                     taskManagerLocation.getFQDNHostname());
         }
 
-        private ArchivedTaskManagerLocation(
+        private StaticTaskManagerLocation(
                 ResourceID resourceID,
                 String addressStr,
                 int port,
@@ -244,7 +244,7 @@ public class ExceptionHistoryEntry extends ErrorInfo {
         @Override
         public String toString() {
             return new StringJoiner(
-                            ", ", ArchivedTaskManagerLocation.class.getSimpleName() + "[", "]")
+                            ", ", StaticTaskManagerLocation.class.getSimpleName() + "[", "]")
                     .add("resourceID=" + resourceID)
                     .add("addressStr='" + addressStr + "'")
                     .add("port=" + port)

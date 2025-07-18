@@ -24,10 +24,10 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.function.Predicate;
 
-/** Matches {@link ExceptionHistoryEntry} instances. */
-public class ExceptionHistoryEntryMatcher implements Predicate<ExceptionHistoryEntry> {
+/** Matches {@link FailureHistoryEntry} instances. */
+public class ExceptionHistoryEntryMatcher implements Predicate<FailureHistoryEntry> {
 
-    public static Predicate<ExceptionHistoryEntry> matchesGlobalFailure(
+    public static Predicate<FailureHistoryEntry> matchesGlobalFailure(
             Throwable expectedException,
             long expectedTimestamp,
             Map<String, String> expectedFailureLabels) {
@@ -35,7 +35,7 @@ public class ExceptionHistoryEntryMatcher implements Predicate<ExceptionHistoryE
                 expectedException, expectedTimestamp, expectedFailureLabels, null, null);
     }
 
-    public static Predicate<ExceptionHistoryEntry> matchesFailure(
+    public static Predicate<FailureHistoryEntry> matchesFailure(
             Throwable expectedException,
             long expectedTimestamp,
             String expectedTaskName,
@@ -48,7 +48,7 @@ public class ExceptionHistoryEntryMatcher implements Predicate<ExceptionHistoryE
                 expectedTaskManagerLocation);
     }
 
-    public static Predicate<ExceptionHistoryEntry> matchesFailure(
+    public static Predicate<FailureHistoryEntry> matchesFailure(
             Throwable expectedException,
             long expectedTimestamp,
             Map<String, String> expectedFailureLabels,
@@ -83,7 +83,7 @@ public class ExceptionHistoryEntryMatcher implements Predicate<ExceptionHistoryE
     }
 
     @Override
-    public boolean test(ExceptionHistoryEntry exceptionHistoryEntry) {
+    public boolean test(FailureHistoryEntry exceptionHistoryEntry) {
         boolean match = true;
         if (!exceptionHistoryEntry
                 .getException()

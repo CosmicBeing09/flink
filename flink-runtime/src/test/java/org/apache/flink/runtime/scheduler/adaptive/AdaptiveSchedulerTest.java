@@ -99,7 +99,7 @@ import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
 import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlot;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlotAllocator;
-import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
+import org.apache.flink.runtime.scheduler.exceptionhistory.FailureHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
 import org.apache.flink.runtime.slots.ResourceRequirement;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
@@ -1734,11 +1734,11 @@ public class AdaptiveSchedulerTest {
         final RootExceptionHistoryEntry failure = entries.iterator().next();
         assertThat(failure.getException().deserializeError(classLoader))
                 .isEqualTo(expectedException1);
-        final Iterable<ExceptionHistoryEntry> concurrentExceptions =
+        final Iterable<FailureHistoryEntry> concurrentExceptions =
                 failure.getConcurrentExceptions();
         final List<Throwable> foundExceptions =
                 IterableUtils.toStream(concurrentExceptions)
-                        .map(ExceptionHistoryEntry::getException)
+                        .map(FailureHistoryEntry::getException)
                         .map(exception -> exception.deserializeError(classLoader))
                         .collect(Collectors.toList());
 
@@ -1774,11 +1774,11 @@ public class AdaptiveSchedulerTest {
         final RootExceptionHistoryEntry failure = entries.iterator().next();
         assertThat(failure.getException().deserializeError(classLoader))
                 .isEqualTo(expectedException1);
-        final Iterable<ExceptionHistoryEntry> concurrentExceptions =
+        final Iterable<FailureHistoryEntry> concurrentExceptions =
                 failure.getConcurrentExceptions();
         final List<Throwable> foundExceptions =
                 IterableUtils.toStream(concurrentExceptions)
-                        .map(ExceptionHistoryEntry::getException)
+                        .map(FailureHistoryEntry::getException)
                         .map(exception -> exception.deserializeError(classLoader))
                         .collect(Collectors.toList());
 
