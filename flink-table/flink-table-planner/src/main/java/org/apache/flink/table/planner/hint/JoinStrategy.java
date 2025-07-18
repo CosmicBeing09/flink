@@ -50,10 +50,10 @@ public enum JoinStrategy {
     /** Instructs the optimizer to use lookup join strategy. Only accept key-value hint options. */
     LOOKUP("LOOKUP");
 
-    private final String joinHintName;
+    private final String strategyName;
 
-    JoinStrategy(String joinHintName) {
-        this.joinHintName = joinHintName;
+    JoinStrategy(String strategyName) {
+        this.strategyName = strategyName;
     }
 
     public static boolean isJoinStrategy(String hintName) {
@@ -66,7 +66,7 @@ public enum JoinStrategy {
     }
 
     public String getJoinHintName() {
-        return joinHintName;
+        return strategyName;
     }
 
     public static boolean validOptions(String hintName, List<String> options) {
