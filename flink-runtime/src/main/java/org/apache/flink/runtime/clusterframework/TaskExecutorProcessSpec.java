@@ -91,7 +91,7 @@ import java.util.stream.Collectors;
 public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecutorFlinkMemory> {
     private static final long serialVersionUID = 1L;
 
-    private final CPUResource cpuCores;
+    private final CPUResource cpuResources;
 
     private final int numSlots;
 
@@ -99,7 +99,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
 
     @VisibleForTesting
     public TaskExecutorProcessSpec(
-            CPUResource cpuCores,
+            CPUResource cpuResources,
             MemorySize frameworkHeapSize,
             MemorySize frameworkOffHeapSize,
             MemorySize taskHeapSize,
@@ -111,7 +111,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
             Collection<ExternalResource> extendedResources) {
 
         this(
-                cpuCores,
+                cpuResources,
                 new TaskExecutorFlinkMemory(
                         frameworkHeapSize,
                         frameworkOffHeapSize,
@@ -132,7 +132,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
             Collection<ExternalResource> extendedResources) {
 
         super(flinkMemory, jvmMetaspaceAndOverhead);
-        this.cpuCores = cpuCores;
+        this.cpuResources = cpuCores;
         this.numSlots = numSlots;
         this.extendedResources =
                 Preconditions.checkNotNull(extendedResources).stream()
@@ -144,7 +144,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
     }
 
     public CPUResource getCpuCores() {
-        return cpuCores;
+        return cpuResources;
     }
 
     MemorySize getFrameworkHeapSize() {
@@ -185,7 +185,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
             return true;
         } else if (obj instanceof TaskExecutorProcessSpec) {
             TaskExecutorProcessSpec that = (TaskExecutorProcessSpec) obj;
-            return Objects.equals(this.cpuCores, that.cpuCores)
+            return Objects.equals(this.cpuResources, that.cpuResources)
                     && Objects.equals(
                             this.getJvmMetaspaceAndOverhead(), that.getJvmMetaspaceAndOverhead())
                     && Objects.equals(this.getFlinkMemory(), that.getFlinkMemory())
@@ -200,7 +200,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
         return Objects.hash(
                 getJvmMetaspaceAndOverhead(),
                 getFlinkMemory(),
-                cpuCores,
+                cpuResources,
                 numSlots,
                 extendedResources);
     }
@@ -209,7 +209,7 @@ public class TaskExecutorProcessSpec extends CommonProcessMemorySpec<TaskExecuto
     public String toString() {
         return "TaskExecutorProcessSpec {"
                 + "cpuCores="
-                + cpuCores.getValue().doubleValue()
+                + cpuResources.getValue().doubleValue()
                 + ", frameworkHeapSize="
                 + getFrameworkHeapSize().toHumanReadableString()
                 + ", frameworkOffHeapSize="

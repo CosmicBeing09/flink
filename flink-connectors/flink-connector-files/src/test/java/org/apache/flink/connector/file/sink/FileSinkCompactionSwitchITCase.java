@@ -38,7 +38,7 @@ import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.runtime.client.JobExecutionException;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
@@ -172,8 +172,8 @@ public class FileSinkCompactionSwitchITCase {
 
         SharedReference<ConcurrentHashMap<Integer, Integer>> sendCountMap =
                 sharedObjects.add(new ConcurrentHashMap<>());
-        JobGraph jobGraph = createJobGraph(cpPath, originFileSink, false, sendCountMap);
-        JobGraph restoringJobGraph = createJobGraph(cpPath, restoredFileSink, true, sendCountMap);
+        ExecutionPlan jobGraph = createJobGraph(cpPath, originFileSink, false, sendCountMap);
+        ExecutionPlan restoringJobGraph = createJobGraph(cpPath, restoredFileSink, true, sendCountMap);
 
         final MiniClusterConfiguration cfg =
                 new MiniClusterConfiguration.Builder()
@@ -209,7 +209,7 @@ public class FileSinkCompactionSwitchITCase {
         checkIntegerSequenceSinkOutput(path, sendCountMap.get(), NUM_BUCKETS, NUM_SOURCES);
     }
 
-    private JobGraph createJobGraph(
+    private ExecutionPlan createJobGraph(
             String cpPath,
             FileSink<Integer> fileSink,
             boolean isFinite,

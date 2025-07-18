@@ -21,7 +21,7 @@ package org.apache.flink.test.streaming.runtime;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.connector.source.lib.NumberSequenceSource;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.MultipleConnectedStreams;
@@ -78,7 +78,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
     @Test
     public void testDirectSourcesOnlyChainCreation() throws Exception {
         final DataStream<Long> stream = createProgramWithSourcesOnly();
-        final JobGraph jobGraph = sinkAndCompileJobGraph(stream);
+        final ExecutionPlan jobGraph = sinkAndCompileJobGraph(stream);
 
         assertEquals(1, jobGraph.getNumberOfVertices());
     }
@@ -95,7 +95,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
     @Test
     public void testMixedInputsChainCreation() throws Exception {
         final DataStream<Long> stream = createProgramWithMixedInputs();
-        final JobGraph jobGraph = sinkAndCompileJobGraph(stream);
+        final ExecutionPlan jobGraph = sinkAndCompileJobGraph(stream);
 
         assertEquals(3, jobGraph.getNumberOfVertices());
     }
@@ -112,7 +112,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
     @Test
     public void testMixedInputsWithUnionChainCreation() throws Exception {
         final DataStream<Long> stream = createProgramWithUnionInput();
-        final JobGraph jobGraph = sinkAndCompileJobGraph(stream);
+        final ExecutionPlan jobGraph = sinkAndCompileJobGraph(stream);
 
         assertEquals(4, jobGraph.getNumberOfVertices());
     }
@@ -129,7 +129,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
     @Test
     public void testMixedInputsWithMultipleUnionsChainCreation() throws Exception {
         final DataStream<Long> stream = createProgramWithMultipleUnionInputs();
-        final JobGraph jobGraph = sinkAndCompileJobGraph(stream);
+        final ExecutionPlan jobGraph = sinkAndCompileJobGraph(stream);
 
         assertEquals(6, jobGraph.getNumberOfVertices());
     }
@@ -359,7 +359,7 @@ public class SourceNAryInputChainingITCase extends TestLogger {
         return new MultipleConnectedStreams(env).transform(transform);
     }
 
-    private static JobGraph sinkAndCompileJobGraph(DataStream<?> stream) {
+    private static ExecutionPlan sinkAndCompileJobGraph(DataStream<?> stream) {
         stream.sinkTo(new DiscardingSink<>());
 
         final StreamGraph streamGraph = stream.getExecutionEnvironment().getStreamGraph();

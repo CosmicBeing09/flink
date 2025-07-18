@@ -84,7 +84,7 @@ public class ProducerDescriptor {
         return new ProducerDescriptor(
                 producerLocation.getResourceID(),
                 attemptId,
-                producerLocation.address(),
-                producerLocation.dataPort());
+                producerLocation.getInetAddress(),
+                producerLocation.getDataPort());
     }
 }

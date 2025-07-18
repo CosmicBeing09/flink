@@ -71,7 +71,7 @@ import org.apache.flink.runtime.util.JvmShutdownSafeguard;
 import org.apache.flink.runtime.util.LeaderRetrievalUtils;
 import org.apache.flink.runtime.util.SignalHandler;
 import org.apache.flink.util.AbstractID;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.ExecutorUtils;
 import org.apache.flink.util.FlinkException;
@@ -797,7 +797,7 @@ public class TaskManagerRunner implements FatalErrorHandler {
                 throws Exception;
     }
 
-    public interface TaskExecutorService extends AutoCloseableAsync {
+    public interface TaskExecutorService extends AsyncCloseable {
         void start();
 
         CompletableFuture<Void> getTerminationFuture();

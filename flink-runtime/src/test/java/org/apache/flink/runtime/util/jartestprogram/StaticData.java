@@ -18,11 +18,11 @@
 
 package org.apache.flink.runtime.util.jartestprogram;
 
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 public class StaticData {
-    public static DataStreamSource<String> getDefaultTextLineDataSet(
+    public static SourceRepresentation<String> getDefaultTextLineDataSet(
             StreamExecutionEnvironment env) {
 
         return env.fromData(

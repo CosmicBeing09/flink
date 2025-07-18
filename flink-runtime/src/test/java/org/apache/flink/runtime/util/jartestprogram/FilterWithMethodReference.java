@@ -20,7 +20,7 @@ package org.apache.flink.runtime.util.jartestprogram;
 
 import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /** A lambda filter using a static method. */
@@ -28,7 +28,7 @@ public class FilterWithMethodReference {
 
     public static void main(String[] args) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> input = env.fromData("Please filter", "the words", "but not this");
+        SourceRepresentation<String> input = env.fromData("Please filter", "the words", "but not this");
 
         FilterFunction<String> filter = WordFilter::filter;
 

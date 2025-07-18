@@ -34,7 +34,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.kubernetes.KubernetesExtension;
 import org.apache.flink.kubernetes.configuration.KubernetesConfigOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.jobmanager.HighAvailabilityMode;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -109,29 +109,29 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
     @Test
     void testRecoverFromSavepoint() throws Exception {
         Path stateBackend1 = Files.createDirectory(temporaryPath.resolve("stateBackend1"));
-        final JobGraph jobGraph = createJobGraph(stateBackend1.toFile());
+        final ExecutionPlan executionPlan = createExecutionPlan(stateBackend1.toFile());
         clusterClient
-                .submitJob(jobGraph)
+                .submitJob(executionPlan)
                 .get(TestingUtils.infiniteTime().toMillis(), TimeUnit.MILLISECONDS);
 
         // Wait until all tasks running and getting a successful savepoint
         CommonTestUtils.waitUntilCondition(
-                () -> triggerSavepoint(clusterClient, jobGraph.getJobID(), savepointPath) != null,
+                () -> triggerSavepoint(clusterClient, executionPlan.getJobID(), savepointPath) != null,
                 1000);
 
         // Trigger savepoint 2
         final String savepoint2Path =
-                triggerSavepoint(clusterClient, jobGraph.getJobID(), savepointPath);
+                triggerSavepoint(clusterClient, executionPlan.getJobID(), savepointPath);
 
         // Cancel the old job
-        clusterClient.cancel(jobGraph.getJobID());
+        clusterClient.cancel(executionPlan.getJobID());
         CommonTestUtils.waitUntilCondition(
-                () -> clusterClient.getJobStatus(jobGraph.getJobID()).get() == JobStatus.CANCELED,
+                () -> clusterClient.getJobStatus(executionPlan.getJobID()).get() == JobStatus.CANCELED,
                 1000);
 
         // Start a new job with savepoint 2
         Path stateBackend2 = Files.createDirectory(temporaryPath.resolve("stateBackend2"));
-        final JobGraph jobGraphWithSavepoint = createJobGraph(stateBackend2.toFile());
+        final ExecutionPlan jobGraphWithSavepoint = createExecutionPlan(stateBackend2.toFile());
         final JobID jobId = jobGraphWithSavepoint.getJobID();
         jobGraphWithSavepoint.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(savepoint2Path));
@@ -166,7 +166,7 @@ class KubernetesHighAvailabilityRecoverFromSavepointITCase {
         return null;
     }
 
-    private JobGraph createJobGraph(File stateBackendFolder) throws Exception {
+    private ExecutionPlan createExecutionPlan(File stateBackendFolder) throws Exception {
         final StreamExecutionEnvironment sEnv =
                 StreamExecutionEnvironment.getExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(sEnv);

@@ -20,7 +20,7 @@ package org.apache.flink.runtime.rpc;
 
 import org.apache.flink.annotation.VisibleForTesting;
 import org.apache.flink.configuration.Configuration;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.concurrent.FutureUtils;
 
 import javax.annotation.Nullable;
@@ -96,17 +96,17 @@ public class RpcUtils {
             throws InterruptedException, ExecutionException {
         terminateAsyncCloseables(
                 Arrays.stream(rpcServices)
-                        .map(rpcService -> (AutoCloseableAsync) rpcService::closeAsync)
+                        .map(rpcService -> (AsyncCloseable) rpcService::closeAsync)
                         .collect(Collectors.toList()));
     }
 
     private static void terminateAsyncCloseables(
-            Collection<? extends AutoCloseableAsync> closeables)
+            Collection<? extends AsyncCloseable> closeables)
             throws InterruptedException, ExecutionException {
         final Collection<CompletableFuture<?>> terminationFutures =
                 new ArrayList<>(closeables.size());
 
-        for (AutoCloseableAsync closeableAsync : closeables) {
+        for (AsyncCloseable closeableAsync : closeables) {
             if (closeableAsync != null) {
                 terminationFutures.add(closeableAsync.closeAsync());
             }

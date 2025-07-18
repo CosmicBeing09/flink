@@ -49,7 +49,7 @@ public class ClientOptions {
                                     + "commands through the CLI or Flink's clients, wherever retry is supported (default 2sec).");
 
     /** Timeout for job client to report its heartbeat. */
-    public static final ConfigOption<Duration> CLIENT_HEARTBEAT_TIMEOUT =
+    public static final ConfigOption<Duration> CLIENT_HEARTBEAT_TIMEOUT_DURATION =
             key("client.heartbeat.timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(180000L))
@@ -76,6 +76,6 @@ public class ClientOptions {
                                             TextElement.text(DeploymentOptions.ATTACHED.key()),
                                             TextElement.text(
                                                     DeploymentOptions.SHUTDOWN_IF_ATTACHED.key()),
-                                            TextElement.text(CLIENT_HEARTBEAT_TIMEOUT.key()))
+                                            TextElement.text(CLIENT_HEARTBEAT_TIMEOUT_DURATION.key()))
                                     .build());
 }

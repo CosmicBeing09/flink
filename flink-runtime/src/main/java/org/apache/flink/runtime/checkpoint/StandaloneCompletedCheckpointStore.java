@@ -48,10 +48,10 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             LoggerFactory.getLogger(StandaloneCompletedCheckpointStore.class);
 
     /** The maximum number of checkpoints to retain (at least 1). */
-    private final int maxNumberOfCheckpointsToRetain;
+    private final int maxRetainedCheckpoints;
 
     /** The completed checkpoints. */
-    private final ArrayDeque<CompletedCheckpoint> checkpoints;
+    private final ArrayDeque<CompletedCheckpoint> retainedCheckpoints;
 
     private final Executor ioExecutor;
 
@@ -93,8 +93,8 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             RecoveryClaimMode recoveryClaimMode) {
         super(sharedStateRegistryFactory.create(ioExecutor, checkpoints, recoveryClaimMode));
         checkArgument(maxNumberOfCheckpointsToRetain >= 1, "Must retain at least one checkpoint.");
-        this.maxNumberOfCheckpointsToRetain = maxNumberOfCheckpointsToRetain;
-        this.checkpoints = checkpoints;
+        this.maxRetainedCheckpoints = maxNumberOfCheckpointsToRetain;
+        this.retainedCheckpoints = checkpoints;
         this.ioExecutor = checkNotNull(ioExecutor);
     }
 
@@ -106,19 +106,19 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             Runnable postCleanup)
             throws Exception {
 
-        checkpoints.addLast(checkpoint);
+        retainedCheckpoints.addLast(checkpoint);
 
         CompletedCheckpoint completedCheckpoint =
                 CheckpointSubsumeHelper.subsume(
-                                checkpoints,
-                                maxNumberOfCheckpointsToRetain,
+                                retainedCheckpoints,
+                                maxRetainedCheckpoints,
                                 (cc) -> {
                                     cc.markAsDiscardedOnSubsume();
                                     checkpointsCleaner.addSubsumedCheckpoint(cc);
                                 })
                         .orElse(null);
 
-        findLowest(checkpoints)
+        findLowest(retainedCheckpoints)
                 .ifPresent(
                         id ->
                                 checkpointsCleaner.cleanSubsumedCheckpoints(
@@ -132,17 +132,17 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
 
     @Override
     public List<CompletedCheckpoint> getAllCheckpoints() {
-        return new ArrayList<>(checkpoints);
+        return new ArrayList<>(retainedCheckpoints);
     }
 
     @Override
     public int getNumberOfRetainedCheckpoints() {
-        return checkpoints.size();
+        return retainedCheckpoints.size();
     }
 
     @Override
     public int getMaxNumberOfRetainedCheckpoints() {
-        return maxNumberOfCheckpointsToRetain;
+        return maxRetainedCheckpoints;
     }
 
     @Override
@@ -153,7 +153,7 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             LOG.info("Shutting down");
 
             long lowestRetained = Long.MAX_VALUE;
-            for (CompletedCheckpoint checkpoint : checkpoints) {
+            for (CompletedCheckpoint checkpoint : retainedCheckpoints) {
                 if (checkpoint.shouldBeDiscardedOnShutdown(jobStatus)) {
                     checkpoint.markAsDiscardedOnShutdown(jobStatus).discard();
                 } else {
@@ -179,7 +179,7 @@ public class StandaloneCompletedCheckpointStore extends AbstractCompleteCheckpoi
             }
 
         } finally {
-            checkpoints.clear();
+            retainedCheckpoints.clear();
         }
     }
 

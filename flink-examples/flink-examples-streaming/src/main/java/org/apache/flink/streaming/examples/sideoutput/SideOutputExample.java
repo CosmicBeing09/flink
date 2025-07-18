@@ -32,7 +32,7 @@ import org.apache.flink.connector.file.src.FileSource;
 import org.apache.flink.connector.file.src.reader.TextLineInputFormat;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.ProcessFunction;
@@ -86,7 +86,7 @@ public class SideOutputExample {
             System.out.println("Executing WordCount example with default input data set.");
             System.out.println("Use --input to specify file input.");
             // get default test text data
-            DataStreamSource<String> text = env.fromData(WordCountData.WORDS);
+            SourceRepresentation<String> text = env.fromData(WordCountData.WORDS);
             // We assign the WatermarkStrategy after creating the source because
             // StreamExecutionEnvironment#fromElemenets() methods currently does not accept
             // WatermarkStrategies. In a real-world job you should integrate the WatermarkStrategy

@@ -29,7 +29,7 @@ import org.apache.flink.configuration.DeploymentOptions;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.PipelineOptionsInternal;
 import org.apache.flink.core.execution.JobStatusChangedListener;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.graph.StreamGraph;
 import org.apache.flink.streaming.runtime.execution.DefaultJobCreatedEvent;
 
@@ -48,16 +48,16 @@ public class PipelineExecutorUtils {
     private static final Logger LOG = LoggerFactory.getLogger(PipelineExecutorUtils.class);
 
     /**
-     * Creates the {@link JobGraph} corresponding to the provided {@link Pipeline}.
+     * Creates the {@link ExecutionPlan} corresponding to the provided {@link Pipeline}.
      *
      * @param pipeline the pipeline whose job graph we are computing.
      * @param configuration the configuration with the necessary information such as jars and
      *     classpaths to be included, the parallelism of the job and potential savepoint settings
      *     used to bootstrap its state.
      * @param userClassloader the classloader which can load user classes.
-     * @return the corresponding {@link JobGraph}.
+     * @return the corresponding {@link ExecutionPlan}.
      */
-    public static JobGraph getJobGraph(
+    public static ExecutionPlan getJobGraph(
             @Nonnull final Pipeline pipeline,
             @Nonnull final Configuration configuration,
             @Nonnull ClassLoader userClassloader)
@@ -67,7 +67,7 @@ public class PipelineExecutorUtils {
 
         final ExecutionConfigAccessor executionConfigAccessor =
                 ExecutionConfigAccessor.fromConfiguration(configuration);
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 FlinkPipelineTranslationUtil.getJobGraph(
                         userClassloader,
                         pipeline,
@@ -81,7 +81,7 @@ public class PipelineExecutorUtils {
         if (configuration.get(DeploymentOptions.ATTACHED)
                 && configuration.get(DeploymentOptions.SHUTDOWN_IF_ATTACHED)) {
             jobGraph.setInitialClientHeartbeatTimeout(
-                    configuration.get(ClientOptions.CLIENT_HEARTBEAT_TIMEOUT).toMillis());
+                    configuration.get(ClientOptions.CLIENT_HEARTBEAT_TIMEOUT_DURATION).toMillis());
         }
 
         jobGraph.addJars(executionConfigAccessor.getJars());
@@ -100,7 +100,7 @@ public class PipelineExecutorUtils {
      */
     public static void notifyJobStatusListeners(
             @Nonnull final Pipeline pipeline,
-            @Nonnull final JobGraph jobGraph,
+            @Nonnull final ExecutionPlan jobGraph,
             List<JobStatusChangedListener> listeners) {
         RuntimeExecutionMode executionMode =
                 jobGraph.getJobConfiguration().get(ExecutionOptions.RUNTIME_MODE);

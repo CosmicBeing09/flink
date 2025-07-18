@@ -23,7 +23,7 @@ import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.api.connector.source.lib.NumberSequenceSource;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.SinkFunction;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -53,7 +53,7 @@ class LineageGraphUtilsTest {
     @Test
     void testExtractLineageGraphFromLegacyTransformations() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source = env.addSource(new LineageSourceFunction());
+        SourceRepresentation<Long> source = env.addSource(new LineageSourceFunction());
         DataStreamSink<Long> sink = source.addSink(new LineageSinkFunction());
 
         LineageGraph lineageGraph =
@@ -81,7 +81,7 @@ class LineageGraphUtilsTest {
     @Test
     void testExtractLineageGraphFromTransformations() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSource(new LineageSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         DataStreamSink<Long> sink = source.sinkTo(new LineageSink());
 
@@ -109,7 +109,7 @@ class LineageGraphUtilsTest {
     @Test
     void testExtractPartialLineageGraphWithSourceOnly() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSource(new LineageSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         source.sinkTo(new DiscardingSink<>());
 
@@ -131,7 +131,7 @@ class LineageGraphUtilsTest {
     @Test
     void testExtractPartialLineageGraphWithSinkOnly() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSource(
                         new NumberSequenceSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         source.sinkTo(new LineageSink());
@@ -153,7 +153,7 @@ class LineageGraphUtilsTest {
     @Test
     void testSourceDeduplication() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSource(new LineageSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         source.sinkTo(new DiscardingSink<>());
         List<Transformation<?>> list = new ArrayList<>();
@@ -169,7 +169,7 @@ class LineageGraphUtilsTest {
     @Test
     void testSinkDuduplication() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Long> source =
+        SourceRepresentation<Long> source =
                 env.fromSource(
                         new NumberSequenceSource(1L, 5L), WatermarkStrategy.noWatermarks(), "");
         source.sinkTo(new LineageSink());

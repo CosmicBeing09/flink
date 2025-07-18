@@ -24,7 +24,7 @@ import org.apache.flink.runtime.execution.ExecutionState;
 import org.apache.flink.runtime.executiongraph.Execution;
 import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
+import org.apache.flink.runtime.executiongraph.InternalExecutionPlanAccessor;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
 import org.apache.flink.runtime.jobgraph.JobEdge;
@@ -282,7 +282,7 @@ public class DefaultCheckpointPlanCalculator implements CheckpointPlanCalculator
             List<JobEdge> prevJobEdges,
             Map<JobVertexID, BitSet> taskRunningStatusByVertex) {
 
-        InternalExecutionGraphAccessor executionGraphAccessor = vertex.getExecutionGraphAccessor();
+        InternalExecutionPlanAccessor executionGraphAccessor = vertex.getExecutionGraphAccessor();
 
         for (int i = 0; i < prevJobEdges.size(); ++i) {
             if (prevJobEdges.get(i).getDistributionPattern() == DistributionPattern.POINTWISE) {

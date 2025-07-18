@@ -73,7 +73,7 @@ import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.scheduler.ClusterDatasetCorruptedException;
 import org.apache.flink.runtime.state.KeyGroupRangeAssignment;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.source.ContinuousFileReaderOperatorFactory;
 import org.apache.flink.streaming.api.functions.source.FileProcessingMode;
@@ -769,7 +769,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The data stream representing the given array of elements
      */
     @SafeVarargs
-    public final <OUT> DataStreamSource<OUT> fromData(OUT... data) {
+    public final <OUT> SourceRepresentation<OUT> fromData(OUT... data) {
         if (data.length == 0) {
             throw new IllegalArgumentException(
                     "fromElements needs at least one element as argument");
@@ -802,7 +802,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The data stream representing the given array of elements
      */
     @SafeVarargs
-    public final <OUT> DataStreamSource<OUT> fromData(TypeInformation<OUT> typeInfo, OUT... data) {
+    public final <OUT> SourceRepresentation<OUT> fromData(TypeInformation<OUT> typeInfo, OUT... data) {
         if (data.length == 0) {
             throw new IllegalArgumentException(
                     "fromElements needs at least one element as argument");
@@ -826,7 +826,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @param <OUT> The generic type of the returned data stream.
      * @return The data stream representing the given collection
      */
-    public <OUT> DataStreamSource<OUT> fromData(
+    public <OUT> SourceRepresentation<OUT> fromData(
             Collection<OUT> data, TypeInformation<OUT> typeInfo) {
         Preconditions.checkNotNull(data, "Collection must not be null");
 
@@ -857,7 +857,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The data stream representing the given array of elements
      */
     @SafeVarargs
-    public final <OUT> DataStreamSource<OUT> fromData(Class<OUT> type, OUT... data) {
+    public final <OUT> SourceRepresentation<OUT> fromData(Class<OUT> type, OUT... data) {
         if (data.length == 0) {
             throw new IllegalArgumentException(
                     "fromElements needs at least one element as argument");
@@ -892,7 +892,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @param <OUT> The generic type of the returned data stream.
      * @return The data stream representing the given collection
      */
-    public <OUT> DataStreamSource<OUT> fromData(Collection<OUT> data) {
+    public <OUT> SourceRepresentation<OUT> fromData(Collection<OUT> data) {
         TypeInformation<OUT> typeInfo = extractTypeInfoFromCollection(data);
         return fromData(data, typeInfo);
     }
@@ -935,7 +935,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     contains {@link org.apache.flink.api.connector.source.lib.NumberSequenceSource}.
      */
     @Deprecated
-    public DataStreamSource<Long> generateSequence(long from, long to) {
+    public SourceRepresentation<Long> generateSequence(long from, long to) {
         if (from > to) {
             throw new IllegalArgumentException(
                     "Start of sequence must not be greater than the end");
@@ -962,7 +962,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @param from The number to start at (inclusive)
      * @param to The number to stop at (inclusive)
      */
-    public DataStreamSource<Long> fromSequence(long from, long to) {
+    public SourceRepresentation<Long> fromSequence(long from, long to) {
         if (from > to) {
             throw new IllegalArgumentException(
                     "Start of sequence must not be greater than the end");
@@ -992,7 +992,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @SafeVarargs
     @Deprecated
-    public final <OUT> DataStreamSource<OUT> fromElements(OUT... data) {
+    public final <OUT> SourceRepresentation<OUT> fromElements(OUT... data) {
         if (data.length == 0) {
             throw new IllegalArgumentException(
                     "fromElements needs at least one element as argument");
@@ -1028,7 +1028,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @SafeVarargs
     @Deprecated
-    public final <OUT> DataStreamSource<OUT> fromElements(Class<OUT> type, OUT... data) {
+    public final <OUT> SourceRepresentation<OUT> fromElements(Class<OUT> type, OUT... data) {
         if (data.length == 0) {
             throw new IllegalArgumentException(
                     "fromElements needs at least one element as argument");
@@ -1065,7 +1065,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @deprecated This method will be removed a future release, possibly as early as version 2.0.
      *     Use {@link #fromData(Collection)} instead.
      */
-    public <OUT> DataStreamSource<OUT> fromCollection(Collection<OUT> data) {
+    public <OUT> SourceRepresentation<OUT> fromCollection(Collection<OUT> data) {
         TypeInformation<OUT> typeInfo = extractTypeInfoFromCollection(data);
         return fromCollection(data, typeInfo);
     }
@@ -1083,7 +1083,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @deprecated This method will be removed a future release, possibly as early as version 2.0.
      *     Use {@link #fromData(Collection, TypeInformation)} instead.
      */
-    public <OUT> DataStreamSource<OUT> fromCollection(
+    public <OUT> SourceRepresentation<OUT> fromCollection(
             Collection<OUT> data, TypeInformation<OUT> typeInfo) {
         Preconditions.checkNotNull(data, "Collection must not be null");
 
@@ -1117,7 +1117,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     to use a fixed set of elements in such scenario, combine it with {@link
      *     FromElementsGeneratorFunction}.
      */
-    public <OUT> DataStreamSource<OUT> fromCollection(Iterator<OUT> data, Class<OUT> type) {
+    public <OUT> SourceRepresentation<OUT> fromCollection(Iterator<OUT> data, Class<OUT> type) {
         return fromCollection(data, TypeExtractor.getForClass(type));
     }
 
@@ -1143,7 +1143,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     to use a fixed set of elements in such scenario, combine it with {@link
      *     FromElementsGeneratorFunction}.
      */
-    public <OUT> DataStreamSource<OUT> fromCollection(
+    public <OUT> SourceRepresentation<OUT> fromCollection(
             Iterator<OUT> data, TypeInformation<OUT> typeInfo) {
         Preconditions.checkNotNull(data, "The iterator must not be null");
 
@@ -1165,7 +1165,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @param <OUT> The type of the returned data stream
      * @return A data stream representing the elements in the iterator
      */
-    public <OUT> DataStreamSource<OUT> fromParallelCollection(
+    public <OUT> SourceRepresentation<OUT> fromParallelCollection(
             SplittableIterator<OUT> iterator, Class<OUT> type) {
         return fromParallelCollection(iterator, TypeExtractor.getForClass(type));
     }
@@ -1187,13 +1187,13 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @param <OUT> The type of the returned data stream
      * @return A data stream representing the elements in the iterator
      */
-    public <OUT> DataStreamSource<OUT> fromParallelCollection(
+    public <OUT> SourceRepresentation<OUT> fromParallelCollection(
             SplittableIterator<OUT> iterator, TypeInformation<OUT> typeInfo) {
         return fromParallelCollection(iterator, typeInfo, "Parallel Collection Source");
     }
 
     // private helper for passing different names
-    private <OUT> DataStreamSource<OUT> fromParallelCollection(
+    private <OUT> SourceRepresentation<OUT> fromParallelCollection(
             SplittableIterator<OUT> iterator, TypeInformation<OUT> typeInfo, String operatorName) {
         return addSource(
                 new FromSplittableIteratorFunction<>(iterator),
@@ -1236,7 +1236,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * }</pre>
      */
     @Deprecated
-    public <OUT> DataStreamSource<OUT> readFile(FileInputFormat<OUT> inputFormat, String filePath) {
+    public <OUT> SourceRepresentation<OUT> readFile(FileInputFormat<OUT> inputFormat, String filePath) {
         return readFile(inputFormat, filePath, FileProcessingMode.PROCESS_ONCE, -1);
     }
 
@@ -1262,7 +1262,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @PublicEvolving
     @Deprecated
-    public <OUT> DataStreamSource<OUT> readFile(
+    public <OUT> SourceRepresentation<OUT> readFile(
             FileInputFormat<OUT> inputFormat,
             String filePath,
             FileProcessingMode watchType,
@@ -1328,7 +1328,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Deprecated
     @PublicEvolving
-    public <OUT> DataStreamSource<OUT> readFile(
+    public <OUT> SourceRepresentation<OUT> readFile(
             FileInputFormat<OUT> inputFormat,
             String filePath,
             FileProcessingMode watchType,
@@ -1413,7 +1413,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Deprecated
     @PublicEvolving
-    public <OUT> DataStreamSource<OUT> readFile(
+    public <OUT> SourceRepresentation<OUT> readFile(
             FileInputFormat<OUT> inputFormat,
             String filePath,
             FileProcessingMode watchType,
@@ -1450,7 +1450,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @deprecated Use {@link #socketTextStream(String, int, String, long)} instead.
      */
     @Deprecated
-    public DataStreamSource<String> socketTextStream(
+    public SourceRepresentation<String> socketTextStream(
             String hostname, int port, char delimiter, long maxRetry) {
         return socketTextStream(hostname, port, String.valueOf(delimiter), maxRetry);
     }
@@ -1474,7 +1474,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return A data stream containing the strings received from the socket
      */
     @PublicEvolving
-    public DataStreamSource<String> socketTextStream(
+    public SourceRepresentation<String> socketTextStream(
             String hostname, int port, String delimiter, long maxRetry) {
         return addSource(
                 new SocketTextStreamFunction(hostname, port, delimiter, maxRetry), "Socket Stream");
@@ -1494,7 +1494,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      */
     @Deprecated
     @SuppressWarnings("deprecation")
-    public DataStreamSource<String> socketTextStream(String hostname, int port, char delimiter) {
+    public SourceRepresentation<String> socketTextStream(String hostname, int port, char delimiter) {
         return socketTextStream(hostname, port, delimiter, 0);
     }
 
@@ -1510,7 +1510,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return A data stream containing the strings received from the socket
      */
     @PublicEvolving
-    public DataStreamSource<String> socketTextStream(String hostname, int port, String delimiter) {
+    public SourceRepresentation<String> socketTextStream(String hostname, int port, String delimiter) {
         return socketTextStream(hostname, port, delimiter, 0);
     }
 
@@ -1525,7 +1525,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return A data stream containing the strings received from the socket
      */
     @PublicEvolving
-    public DataStreamSource<String> socketTextStream(String hostname, int port) {
+    public SourceRepresentation<String> socketTextStream(String hostname, int port) {
         return socketTextStream(hostname, port, "\n");
     }
 
@@ -1553,7 +1553,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The data stream that represents the data created by the input format
      */
     @PublicEvolving
-    public <OUT> DataStreamSource<OUT> createInput(InputFormat<OUT, ?> inputFormat) {
+    public <OUT> SourceRepresentation<OUT> createInput(InputFormat<OUT, ?> inputFormat) {
         return createInput(inputFormat, TypeExtractor.getInputFormatTypes(inputFormat));
     }
 
@@ -1578,9 +1578,9 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return The data stream that represents the data created by the input format
      */
     @PublicEvolving
-    public <OUT> DataStreamSource<OUT> createInput(
+    public <OUT> SourceRepresentation<OUT> createInput(
             InputFormat<OUT, ?> inputFormat, TypeInformation<OUT> typeInfo) {
-        DataStreamSource<OUT> source;
+        SourceRepresentation<OUT> source;
 
         if (inputFormat instanceof FileInputFormat) {
             @SuppressWarnings("unchecked")
@@ -1599,7 +1599,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         return source;
     }
 
-    private <OUT> DataStreamSource<OUT> createInput(
+    private <OUT> SourceRepresentation<OUT> createInput(
             InputFormat<OUT, ?> inputFormat, TypeInformation<OUT> typeInfo, String sourceName) {
 
         InputFormatSourceFunction<OUT> function =
@@ -1607,7 +1607,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         return addSource(function, sourceName, typeInfo);
     }
 
-    private <OUT> DataStreamSource<OUT> createFileInput(
+    private <OUT> SourceRepresentation<OUT> createFileInput(
             FileInputFormat<OUT> inputFormat,
             TypeInformation<OUT> typeInfo,
             String sourceName,
@@ -1646,7 +1646,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
                         .forceNonParallel()
                         .transform("Split Reader: " + sourceName, typeInfo, factory);
 
-        return new DataStreamSource<>(source);
+        return new SourceRepresentation<>(source);
     }
 
     /**
@@ -1656,7 +1656,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * source should implement {@link ParallelSourceFunction} or extend {@link
      * RichParallelSourceFunction}. In these cases the resulting source will have the parallelism of
      * the environment. To change this afterwards call {@link
-     * org.apache.flink.streaming.api.datastream.DataStreamSource#setParallelism(int)}
+     * SourceRepresentation#setParallelism(int)}
      *
      * @param function the user defined function
      * @param <OUT> type of the returned stream
@@ -1666,7 +1666,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     {@link org.apache.flink.api.connector.source.Source} API instead.
      */
     @Deprecated
-    public <OUT> DataStreamSource<OUT> addSource(SourceFunction<OUT> function) {
+    public <OUT> SourceRepresentation<OUT> addSource(SourceFunction<OUT> function) {
         return addSource(function, "Custom Source");
     }
 
@@ -1684,7 +1684,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     {@link org.apache.flink.api.connector.source.Source} API instead.
      */
     @Internal
-    public <OUT> DataStreamSource<OUT> addSource(SourceFunction<OUT> function, String sourceName) {
+    public <OUT> SourceRepresentation<OUT> addSource(SourceFunction<OUT> function, String sourceName) {
         return addSource(function, sourceName, null);
     }
 
@@ -1702,7 +1702,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     based on the new {@link org.apache.flink.api.connector.source.Source} API instead.
      */
     @Internal
-    public <OUT> DataStreamSource<OUT> addSource(
+    public <OUT> SourceRepresentation<OUT> addSource(
             SourceFunction<OUT> function, TypeInformation<OUT> typeInfo) {
         return addSource(function, "Custom Source", typeInfo);
     }
@@ -1722,12 +1722,12 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      *     based on the new {@link org.apache.flink.api.connector.source.Source} API instead.
      */
     @Internal
-    public <OUT> DataStreamSource<OUT> addSource(
+    public <OUT> SourceRepresentation<OUT> addSource(
             SourceFunction<OUT> function, String sourceName, TypeInformation<OUT> typeInfo) {
         return addSource(function, sourceName, typeInfo, Boundedness.CONTINUOUS_UNBOUNDED);
     }
 
-    private <OUT> DataStreamSource<OUT> addSource(
+    private <OUT> SourceRepresentation<OUT> addSource(
             final SourceFunction<OUT> function,
             final String sourceName,
             @Nullable final TypeInformation<OUT> typeInfo,
@@ -1744,7 +1744,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         clean(function);
 
         final StreamSource<OUT, ?> sourceOperator = new StreamSource<>(function);
-        return new DataStreamSource<>(
+        return new SourceRepresentation<>(
                 this, resolvedTypeInfo, sourceOperator, isParallel, sourceName, boundedness);
     }
 
@@ -1767,7 +1767,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return the data stream constructed
      */
     @PublicEvolving
-    public <OUT> DataStreamSource<OUT> fromSource(
+    public <OUT> SourceRepresentation<OUT> fromSource(
             Source<OUT, ?, ?> source,
             WatermarkStrategy<OUT> timestampsAndWatermarks,
             String sourceName) {
@@ -1793,7 +1793,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
      * @return the data stream constructed
      */
     @Experimental
-    public <OUT> DataStreamSource<OUT> fromSource(
+    public <OUT> SourceRepresentation<OUT> fromSource(
             Source<OUT, ?, ?> source,
             WatermarkStrategy<OUT> timestampsAndWatermarks,
             String sourceName,
@@ -1802,7 +1802,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         final TypeInformation<OUT> resolvedTypeInfo =
                 getTypeInfo(source, sourceName, Source.class, typeInfo);
 
-        return new DataStreamSource<>(
+        return new SourceRepresentation<>(
                 this,
                 checkNotNull(source, "source"),
                 checkNotNull(timestampsAndWatermarks, "timestampsAndWatermarks"),

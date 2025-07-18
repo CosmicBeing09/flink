@@ -21,13 +21,13 @@ package org.apache.flink.runtime.dispatcher.runner;
 import org.apache.flink.runtime.clusterframework.ApplicationStatus;
 import org.apache.flink.runtime.dispatcher.Dispatcher;
 import org.apache.flink.runtime.dispatcher.DispatcherGateway;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /** Leader process which encapsulates the lifecycle of the {@link Dispatcher} component. */
-interface DispatcherLeaderProcess extends AutoCloseableAsync {
+interface DispatcherLeaderProcess extends AsyncCloseable {
 
     void start();
 

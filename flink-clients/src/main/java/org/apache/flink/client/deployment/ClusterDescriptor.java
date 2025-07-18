@@ -20,7 +20,7 @@ package org.apache.flink.client.deployment;
 
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClientProvider;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.FlinkException;
 
 /**
@@ -86,7 +86,7 @@ public interface ClusterDescriptor<T> extends AutoCloseable {
     @Deprecated
     ClusterClientProvider<T> deployJobCluster(
             final ClusterSpecification clusterSpecification,
-            final JobGraph jobGraph,
+            final ExecutionPlan jobGraph,
             final boolean detached)
             throws ClusterDeploymentException;
 

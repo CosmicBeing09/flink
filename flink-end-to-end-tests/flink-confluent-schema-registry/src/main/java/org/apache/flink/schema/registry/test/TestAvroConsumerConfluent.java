@@ -28,7 +28,7 @@ import org.apache.flink.connector.kafka.source.enumerator.initializer.OffsetsIni
 import org.apache.flink.connector.kafka.source.reader.deserializer.KafkaRecordDeserializationSchema;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroDeserializationSchema;
 import org.apache.flink.formats.avro.registry.confluent.ConfluentRegistryAvroSerializationSchema;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.ParameterTool;
@@ -80,7 +80,7 @@ public class TestAvroConsumerConfluent {
                         .setStartingOffsets(OffsetsInitializer.earliest())
                         .build();
 
-        DataStreamSource<User> input =
+        SourceRepresentation<User> input =
                 env.fromSource(kafkaSource, WatermarkStrategy.noWatermarks(), "Kafka Source");
 
         SingleOutputStreamOperator<String> mapToString =

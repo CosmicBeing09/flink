@@ -25,7 +25,7 @@ import org.apache.flink.api.java.typeutils.TypeExtractor;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.rest.messages.job.JobDetailsInfo;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.legacy.FromElementsFunction;
@@ -52,14 +52,14 @@ public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.getConfig().disableClosureCleaner();
 
-        JobGraph jobGraph = executionEnvironment.getStreamGraph().getJobGraph();
+        ExecutionPlan executionPlan = executionEnvironment.getStreamGraph().getJobGraph();
 
-        JobID jobId = jobGraph.getJobID();
+        JobID executionJobId = executionPlan.getJobID();
 
         ClusterClient<?> client = MINI_CLUSTER_RESOURCE.getClusterClient();
 
         try {
-            JobID jobID = client.submitJob(jobGraph).get();
+            JobID jobID = client.submitJob(executionPlan).get();
 
             waitForAllRunningOrSomeTerminal(jobID, MINI_CLUSTER_RESOURCE);
 
@@ -67,7 +67,7 @@ public abstract class SavepointTestBase extends AbstractTestBaseJUnit4 {
         } catch (Exception e) {
             throw new RuntimeException("Failed to take savepoint", e);
         } finally {
-            client.cancel(jobId);
+            client.cancel(executionJobId);
         }
     }
 

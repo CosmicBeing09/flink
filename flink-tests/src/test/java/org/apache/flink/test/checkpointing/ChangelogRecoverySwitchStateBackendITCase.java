@@ -23,7 +23,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.core.execution.RecoveryClaimMode;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.state.AbstractStateBackend;
@@ -94,7 +94,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
         StreamExecutionEnvironment env1 = getEnv(firstCheckpointFolder, false, 100, -1);
         SharedReference<MiniCluster> miniClusterRef = sharedObjects.add(miniCluster);
 
-        JobGraph firstJobGraph =
+        ExecutionPlan firstJobGraph =
                 buildJobGraph(
                         delegatedStateBackend,
                         env1,
@@ -116,7 +116,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
         // 1st restore, switch from disable to enable.
         File secondCheckpointFolder = TEMPORARY_FOLDER.newFolder();
         StreamExecutionEnvironment env2 = getEnv(secondCheckpointFolder, true, 100, -1);
-        JobGraph secondJobGraph =
+        ExecutionPlan secondJobGraph =
                 buildJobGraph(
                         delegatedStateBackend,
                         env2,
@@ -138,7 +138,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
         // 2nd restore, private state of first restore checkpoint still exist.
         File thirdCheckpointFolder = TEMPORARY_FOLDER.newFolder();
         StreamExecutionEnvironment env3 = getEnv(thirdCheckpointFolder, true, 100, 1000);
-        JobGraph thirdJobGraph =
+        ExecutionPlan thirdJobGraph =
                 buildJobGraph(
                         delegatedStateBackend,
                         env3,
@@ -178,7 +178,7 @@ public class ChangelogRecoverySwitchStateBackendITCase extends ChangelogRecovery
         return env;
     }
 
-    private void setSavepointRestoreSettings(JobGraph jobGraph, String restorePath) {
+    private void setSavepointRestoreSettings(ExecutionPlan jobGraph, String restorePath) {
         jobGraph.setSavepointRestoreSettings(
                 SavepointRestoreSettings.forPath(restorePath, false, RecoveryClaimMode.CLAIM));
     }

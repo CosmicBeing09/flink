@@ -25,13 +25,8 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.runtime.clusterframework.types.ResourceID;
 import org.apache.flink.runtime.deployment.ResultPartitionDeploymentDescriptor;
 import org.apache.flink.runtime.execution.ExecutionState;
-import org.apache.flink.runtime.executiongraph.Execution;
-import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
-import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
-import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
-import org.apache.flink.runtime.executiongraph.ResultPartitionBytes;
+import org.apache.flink.runtime.executiongraph.*;
+import org.apache.flink.runtime.executiongraph.InternalExecutionPlanAccessor;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
@@ -599,7 +594,7 @@ public class DefaultBatchJobRecoveryHandler
                             reconcileResult.partitionsToReserve);
 
                     // release partitions which is no more needed.
-                    ((InternalExecutionGraphAccessor) context.getExecutionGraph())
+                    ((InternalExecutionPlanAccessor) context.getExecutionGraph())
                             .getPartitionTracker()
                             .stopTrackingAndReleasePartitions(reconcileResult.partitionsToRelease);
 
@@ -634,7 +629,7 @@ public class DefaultBatchJobRecoveryHandler
                                                                 shuffleDescriptor
                                                                         .getResultPartitionID()
                                                                         .getPartitionId());
-                                        ((InternalExecutionGraphAccessor)
+                                        ((InternalExecutionPlanAccessor)
                                                         context.getExecutionGraph())
                                                 .getPartitionTracker()
                                                 .startTrackingPartition(
@@ -660,7 +655,7 @@ public class DefaultBatchJobRecoveryHandler
                                             IntermediateResultPartitionID,
                                             ResultPartitionDeploymentDescriptor>>
                             allDescriptors = new HashMap<>();
-                    ((InternalExecutionGraphAccessor) context.getExecutionGraph())
+                    ((InternalExecutionPlanAccessor) context.getExecutionGraph())
                             .getPartitionTracker()
                             .getAllTrackedNonClusterPartitions()
                             .forEach(

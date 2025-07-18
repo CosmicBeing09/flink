@@ -29,7 +29,7 @@ import org.apache.flink.configuration.ReadableConfig;
 import org.apache.flink.connector.datagen.source.TestDataGenerators;
 import org.apache.flink.core.testutils.CommonTestUtils;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.HiveVersionTestUtil;
 import org.apache.flink.table.api.EnvironmentSettings;
@@ -1108,8 +1108,8 @@ public class HiveTableSourceITCase extends BatchAbstractTestBase {
         @Override
         public DataStream<RowData> getDataStream(
                 ProviderContext providerContext, StreamExecutionEnvironment execEnv) {
-            DataStreamSource<RowData> dataStream =
-                    (DataStreamSource<RowData>) super.getDataStream(providerContext, execEnv);
+            SourceRepresentation<RowData> dataStream =
+                    (SourceRepresentation<RowData>) super.getDataStream(providerContext, execEnv);
             int parallelism = dataStream.getTransformation().getParallelism();
             assertThat(parallelism).isEqualTo(inferParallelism ? 1 : 2);
             return dataStream;

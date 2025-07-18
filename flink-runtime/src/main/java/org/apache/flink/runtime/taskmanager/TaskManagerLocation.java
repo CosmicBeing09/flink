@@ -174,7 +174,7 @@ public class TaskManagerLocation implements Comparable<TaskManagerLocation>, jav
      *
      * @return the port instance's task manager expects to receive transfer envelopes on
      */
-    public int dataPort() {
+    public int getDataPort() {
         return dataPort;
     }
 
@@ -183,7 +183,7 @@ public class TaskManagerLocation implements Comparable<TaskManagerLocation>, jav
      *
      * @return the network address the instance's task manager binds its sockets to
      */
-    public InetAddress address() {
+    public InetAddress getInetAddress() {
         return inetAddress;
     }
 

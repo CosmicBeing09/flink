@@ -23,7 +23,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.test.util.TestBaseUtils;
 import org.apache.flink.testutils.junit.utils.TempDirUtils;
@@ -88,7 +88,7 @@ class ClosureCleanerITCase {
             int x = 5;
             StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
-            DataStreamSource<Long> nums = env.fromSequence(1, 4);
+            SourceRepresentation<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)
                     .setParallelism(1)
                     .fullWindowPartition()
@@ -114,7 +114,7 @@ class ClosureCleanerITCase {
             NonSerializable nonSer = new NonSerializable();
             StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
-            DataStreamSource<Long> nums = env.fromSequence(1, 4);
+            SourceRepresentation<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + getX())
                     .setParallelism(1)
                     .fullWindowPartition()
@@ -142,7 +142,7 @@ class ClosureCleanerITCase {
             int x = 5;
             StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
-            DataStreamSource<Long> nums = env.fromSequence(1, 4);
+            SourceRepresentation<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)
                     .setParallelism(1)
                     .fullWindowPartition()
@@ -164,7 +164,7 @@ class ClosureCleanerITCase {
             int x = 5;
             StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
-            DataStreamSource<Long> nums = env.fromSequence(1, 4);
+            SourceRepresentation<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)
                     .setParallelism(1)
                     .fullWindowPartition()

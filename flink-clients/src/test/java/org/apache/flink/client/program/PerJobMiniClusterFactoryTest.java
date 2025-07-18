@@ -25,7 +25,7 @@ import org.apache.flink.configuration.PipelineOptions;
 import org.apache.flink.core.execution.JobClient;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.execution.Environment;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.minicluster.MiniCluster;
@@ -80,7 +80,7 @@ class PerJobMiniClusterFactoryTest {
     void testJobClient() throws Exception {
         PerJobMiniClusterFactory perJobMiniClusterFactory = initializeMiniCluster();
 
-        JobGraph cancellableJobGraph = getCancellableJobGraph();
+        ExecutionPlan cancellableJobGraph = getCancellableJobGraph();
         JobClient jobClient =
                 perJobMiniClusterFactory
                         .submitJob(cancellableJobGraph, ClassLoader.getSystemClassLoader())
@@ -160,7 +160,7 @@ class PerJobMiniClusterFactoryTest {
     @Test
     void testTurnUpParallelismByOverwriteParallelism() throws Exception {
         JobVertex jobVertex = getBlockingJobVertex();
-        JobGraph jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
+        ExecutionPlan jobGraph = JobGraphTestUtils.streamingJobGraph(jobVertex);
         int overwriteParallelism = jobVertex.getParallelism() + 1;
         BlockingInvokable.reset(overwriteParallelism);
 
@@ -204,11 +204,11 @@ class PerJobMiniClusterFactoryTest {
         assertThat(miniCluster.isRunning()).isFalse();
     }
 
-    private static JobGraph getNoopJobGraph() {
+    private static ExecutionPlan getNoopJobGraph() {
         return JobGraphTestUtils.singleNoOpJobGraph();
     }
 
-    private static JobGraph getCancellableJobGraph() {
+    private static ExecutionPlan getCancellableJobGraph() {
         JobVertex jobVertex = new JobVertex("jobVertex");
         jobVertex.setInvokableClass(WaitingCancelableInvokable.class);
         jobVertex.setParallelism(1);

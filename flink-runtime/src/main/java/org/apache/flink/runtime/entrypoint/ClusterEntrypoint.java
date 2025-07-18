@@ -71,7 +71,7 @@ import org.apache.flink.runtime.security.token.DefaultDelegationTokenManagerFact
 import org.apache.flink.runtime.security.token.DelegationTokenManager;
 import org.apache.flink.runtime.util.ZooKeeperUtils;
 import org.apache.flink.runtime.webmonitor.retriever.impl.RpcMetricQueryServiceRetriever;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.ExceptionUtils;
 import org.apache.flink.util.ExecutorUtils;
 import org.apache.flink.util.FileUtils;
@@ -110,7 +110,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  * <p>Specialization of this class can be used for the session mode and the per-job mode
  */
-public abstract class ClusterEntrypoint implements AutoCloseableAsync, FatalErrorHandler {
+public abstract class ClusterEntrypoint implements AsyncCloseable, FatalErrorHandler {
 
     @Internal
     public static final ConfigOption<String> INTERNAL_CLUSTER_EXECUTION_MODE =

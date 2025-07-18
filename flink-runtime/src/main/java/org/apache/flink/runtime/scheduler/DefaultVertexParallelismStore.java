@@ -37,20 +37,20 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
      * Create a new {@link VertexParallelismStore} that reflects given {@link
      * JobResourceRequirements}.
      *
-     * @param oldVertexParallelismStore old vertex parallelism store that serves as a base for the
+     * @param baseStore old vertex parallelism store that serves as a base for the
      *     new one
      * @param jobResourceRequirements to apply over the old vertex parallelism store
      * @return new vertex parallelism store iff it was updated
      */
-    public static Optional<VertexParallelismStore> applyJobResourceRequirements(
-            VertexParallelismStore oldVertexParallelismStore,
+    public static Optional<VertexParallelismStore> applyExecutionPlanRequirements(
+            VertexParallelismStore baseStore,
             JobResourceRequirements jobResourceRequirements) {
         final DefaultVertexParallelismStore newVertexParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
         for (final JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
             final VertexParallelismInformation oldVertexParallelismInfo =
-                    oldVertexParallelismStore.getParallelismInfo(jobVertexId);
+                    baseStore.getParallelismInfo(jobVertexId);
             final JobVertexResourceRequirements.Parallelism parallelismSettings =
                     jobResourceRequirements.getParallelism(jobVertexId);
             final int minParallelism = parallelismSettings.getLowerBound();

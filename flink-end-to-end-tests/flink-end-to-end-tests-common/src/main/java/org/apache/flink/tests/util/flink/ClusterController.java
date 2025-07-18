@@ -20,13 +20,13 @@ package org.apache.flink.tests.util.flink;
 
 import org.apache.flink.test.util.JobSubmission;
 import org.apache.flink.test.util.SQLJobSubmission;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.io.IOException;
 import java.time.Duration;
 
 /** Controller for interacting with a cluster. */
-public interface ClusterController extends AutoCloseableAsync {
+public interface ClusterController extends AsyncCloseable {
 
     /**
      * Submits the given job to the cluster.

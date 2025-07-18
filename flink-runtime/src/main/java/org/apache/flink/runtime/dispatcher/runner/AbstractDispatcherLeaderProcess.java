@@ -30,7 +30,7 @@ import org.apache.flink.runtime.jobmaster.JobResult;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
 import org.apache.flink.runtime.webmonitor.RestfulGateway;
 import org.apache.flink.streaming.api.graph.ExecutionPlan;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.FutureUtils;
@@ -265,7 +265,7 @@ public abstract class AbstractDispatcherLeaderProcess implements DispatcherLeade
     }
 
     /** An accessor of the {@link DispatcherGateway}. */
-    public interface DispatcherGatewayService extends AutoCloseableAsync {
+    public interface DispatcherGatewayService extends AsyncCloseable {
         DispatcherGateway getGateway();
 
         CompletableFuture<Void> onRemovedExecutionPlan(JobID jobId);

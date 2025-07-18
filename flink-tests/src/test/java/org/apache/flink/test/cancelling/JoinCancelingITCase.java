@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.JoinFunction;
 import org.apache.flink.api.common.functions.OpenContext;
 import org.apache.flink.api.common.functions.RichJoinFunction;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
@@ -59,9 +59,9 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int parallelism)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<Integer, Integer>> input1 =
+        SourceRepresentation<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
-        DataStreamSource<Tuple2<Integer, Integer>> input2 =
+        SourceRepresentation<Tuple2<Integer, Integer>> input2 =
                 env.createInput(new InfiniteIntegerTupleInputFormat(slow));
 
         input1.join(input2)
@@ -103,9 +103,9 @@ public class JoinCancelingITCase extends CancelingTestBase {
             int maxTimeTillCanceled)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<Integer, Integer>> input1 =
+        SourceRepresentation<Tuple2<Integer, Integer>> input1 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
-        DataStreamSource<Tuple2<Integer, Integer>> input2 =
+        SourceRepresentation<Tuple2<Integer, Integer>> input2 =
                 env.createInput(new UniformIntTupleGeneratorInputFormat(keys, vals));
 
         input1.join(input2)

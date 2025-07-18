@@ -19,13 +19,13 @@
 package org.apache.flink.tests.util.flink;
 
 import org.apache.flink.test.util.SQLJobSubmission;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 
 import java.io.IOException;
 import java.time.Duration;
 
 /** Controller for interacting with a SqlGateway. */
-public interface GatewayController extends AutoCloseableAsync {
+public interface GatewayController extends AsyncCloseable {
 
     /**
      * Submits the given SQL job to the cluster.

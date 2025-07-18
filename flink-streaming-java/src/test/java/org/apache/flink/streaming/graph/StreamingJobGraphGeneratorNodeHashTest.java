@@ -22,7 +22,7 @@ import org.apache.flink.api.common.functions.FilterFunction;
 import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.java.functions.KeySelector;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.streaming.api.datastream.DataStream;
@@ -45,7 +45,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 /**
  * Tests the {@link StreamNode} hash assignment during translation from {@link StreamGraph} to
- * {@link JobGraph} instances.
+ * {@link ExecutionPlan} instances.
  */
 @SuppressWarnings("serial")
 class StreamingJobGraphGeneratorNodeHashTest {
@@ -89,7 +89,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>())
                 .name("sink");
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         final Map<JobVertexID, String> ids = rememberIds(jobGraph);
 
@@ -140,7 +140,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
         src0.union(src1)
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         List<JobVertex> vertices = jobGraph.getVerticesSortedTopologicallyFromSources();
         assertThat(vertices.get(0).isInputVertex()).isTrue();
@@ -172,7 +172,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .filter(new NoOpFilterFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         JobVertexID sourceId = jobGraph.getVerticesSortedTopologicallyFromSources().get(0).getID();
 
@@ -215,7 +215,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .filter(new NoOpFilterFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         JobVertex chainedMap = jobGraph.getVerticesSortedTopologicallyFromSources().get(1);
         assertThat(chainedMap.getName()).startsWith("map");
@@ -265,7 +265,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
         src.map(new NoOpMapFunction())
                 .sinkTo(new org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink<>());
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         Set<JobVertexID> vertexIds = new HashSet<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             assertThat(vertexIds.add(vertex.getID())).isTrue();
@@ -277,7 +277,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
     void testChangedOperatorName() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.createLocalEnvironment();
         env.addSource(new NoOpSourceFunction(), "A").map(new NoOpMapFunction());
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         JobVertexID expected = jobGraph.getVerticesAsArray()[0].getID();
 
@@ -328,7 +328,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .name("sink1")
                 .uid("sink1");
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         Set<JobVertexID> ids = new HashSet<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             assertThat(ids.add(vertex.getID())).isTrue();
@@ -360,7 +360,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
                 .name("sink1")
                 .uid("sink1");
 
-        JobGraph newJobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan newJobGraph = env.getStreamGraph().getJobGraph();
         assertThat(newJobGraph.getJobID()).isNotEqualTo(jobGraph.getJobID());
 
         for (JobVertex vertex : newJobGraph.getVertices()) {
@@ -495,7 +495,7 @@ class StreamingJobGraphGeneratorNodeHashTest {
     // ------------------------------------------------------------------------
 
     /** Returns a {@link JobVertexID} to vertex name mapping for the given graph. */
-    private Map<JobVertexID, String> rememberIds(JobGraph jobGraph) {
+    private Map<JobVertexID, String> rememberIds(ExecutionPlan jobGraph) {
         final Map<JobVertexID, String> ids = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             ids.put(vertex.getID(), vertex.getName());
@@ -504,10 +504,10 @@ class StreamingJobGraphGeneratorNodeHashTest {
     }
 
     /**
-     * Verifies that each {@link JobVertexID} of the {@link JobGraph} is contained in the given map
+     * Verifies that each {@link JobVertexID} of the {@link ExecutionPlan} is contained in the given map
      * and mapped to the same vertex name.
      */
-    private void verifyIdsEqual(JobGraph jobGraph, Map<JobVertexID, String> ids) {
+    private void verifyIdsEqual(ExecutionPlan jobGraph, Map<JobVertexID, String> ids) {
         // Verify same number of vertices
         assertThat(ids).hasSize(jobGraph.getNumberOfVertices());
 
@@ -519,9 +519,9 @@ class StreamingJobGraphGeneratorNodeHashTest {
     }
 
     /**
-     * Verifies that no {@link JobVertexID} of the {@link JobGraph} is contained in the given map.
+     * Verifies that no {@link JobVertexID} of the {@link ExecutionPlan} is contained in the given map.
      */
-    private void verifyIdsNotEqual(JobGraph jobGraph, Map<JobVertexID, String> ids) {
+    private void verifyIdsNotEqual(ExecutionPlan jobGraph, Map<JobVertexID, String> ids) {
         // Verify same number of vertices
         assertThat(ids).hasSize(jobGraph.getNumberOfVertices());
 

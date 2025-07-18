@@ -35,7 +35,7 @@ import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.client.JobStatusMessage;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -201,13 +201,13 @@ public class RescalingITCase extends TestLogger {
         ClusterClient<?> client = cluster.getClusterClient();
 
         try {
-            JobGraph jobGraph =
+            ExecutionPlan executionPlan =
                     createJobGraphWithKeyedState(
                             parallelism, maxParallelism, numberKeys, numberElements, false, 100);
 
-            final JobID jobID = jobGraph.getJobID();
+            final JobID jobID = executionPlan.getJobID();
 
-            client.submitJob(jobGraph).get();
+            client.submitJob(executionPlan).get();
 
             // wait til the sources have emitted numberElements for each key and completed a
             // checkpoint
@@ -236,7 +236,7 @@ public class RescalingITCase extends TestLogger {
             // clear the CollectionSink set for the restarted job
             CollectionSink.clearElementsSet();
 
-            waitForAllTaskRunning(cluster.getMiniCluster(), jobGraph.getJobID(), false);
+            waitForAllTaskRunning(cluster.getMiniCluster(), executionPlan.getJobID(), false);
             CompletableFuture<String> savepointPathFuture =
                     client.triggerSavepoint(jobID, null, SavepointFormatType.CANONICAL);
 
@@ -252,7 +252,7 @@ public class RescalingITCase extends TestLogger {
             int restoreMaxParallelism =
                     deriveMaxParallelism ? JobVertex.MAX_PARALLELISM_DEFAULT : maxParallelism;
 
-            JobGraph scaledJobGraph =
+            ExecutionPlan scaledExecutionPlan =
                     createJobGraphWithKeyedState(
                             parallelism2,
                             restoreMaxParallelism,
@@ -261,10 +261,10 @@ public class RescalingITCase extends TestLogger {
                             true,
                             100);
 
-            scaledJobGraph.setSavepointRestoreSettings(
+            scaledExecutionPlan.setSavepointRestoreSettings(
                     SavepointRestoreSettings.forPath(savepointPath));
 
-            submitJobAndWaitForResult(client, scaledJobGraph, getClass().getClassLoader());
+            submitJobAndWaitForResult(client, scaledExecutionPlan, getClass().getClassLoader());
 
             Set<Tuple2<Integer, Integer>> actualResult2 = CollectionSink.getElementsSet();
 
@@ -305,7 +305,7 @@ public class RescalingITCase extends TestLogger {
         ClusterClient<?> client = cluster.getClusterClient();
 
         try {
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithOperatorState(
                             parallelism, maxParallelism, OperatorCheckpointMethod.NON_PARTITIONED);
             // make sure the job does not finish before we take the savepoint
@@ -334,7 +334,7 @@ public class RescalingITCase extends TestLogger {
             }
 
             // job successfully removed
-            JobGraph scaledJobGraph =
+            ExecutionPlan scaledJobGraph =
                     createJobGraphWithOperatorState(
                             parallelism2, maxParallelism, OperatorCheckpointMethod.NON_PARTITIONED);
 
@@ -375,7 +375,7 @@ public class RescalingITCase extends TestLogger {
 
         try {
 
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithKeyedAndNonPartitionedOperatorState(
                             parallelism,
                             maxParallelism,
@@ -433,7 +433,7 @@ public class RescalingITCase extends TestLogger {
                 Thread.sleep(50);
             }
 
-            JobGraph scaledJobGraph =
+            ExecutionPlan scaledJobGraph =
                     createJobGraphWithKeyedAndNonPartitionedOperatorState(
                             parallelism2,
                             maxParallelism,
@@ -533,7 +533,7 @@ public class RescalingITCase extends TestLogger {
         }
 
         try {
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithOperatorState(parallelism, maxParallelism, checkpointMethod);
             // make sure the job does not finish before we take the savepoint
             StateSourceBase.canFinishLatch = new CountDownLatch(1);
@@ -568,7 +568,7 @@ public class RescalingITCase extends TestLogger {
                 Thread.sleep(50);
             }
 
-            JobGraph scaledJobGraph =
+            ExecutionPlan scaledJobGraph =
                     createJobGraphWithOperatorState(parallelism2, maxParallelism, checkpointMethod);
 
             scaledJobGraph.setSavepointRestoreSettings(
@@ -615,7 +615,7 @@ public class RescalingITCase extends TestLogger {
 
     // ------------------------------------------------------------------------------------------------------------------
 
-    private static JobGraph createJobGraphWithOperatorState(
+    private static ExecutionPlan createJobGraphWithOperatorState(
             int parallelism, int maxParallelism, OperatorCheckpointMethod checkpointMethod) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -651,7 +651,7 @@ public class RescalingITCase extends TestLogger {
         return env.getStreamGraph().getJobGraph();
     }
 
-    private static JobGraph createJobGraphWithKeyedState(
+    private static ExecutionPlan createJobGraphWithKeyedState(
             int parallelism,
             int maxParallelism,
             int numberKeys,
@@ -693,7 +693,7 @@ public class RescalingITCase extends TestLogger {
         return env.getStreamGraph().getJobGraph();
     }
 
-    private static JobGraph createJobGraphWithKeyedAndNonPartitionedOperatorState(
+    private static ExecutionPlan createJobGraphWithKeyedAndNonPartitionedOperatorState(
             int parallelism,
             int maxParallelism,
             int fixedParallelism,

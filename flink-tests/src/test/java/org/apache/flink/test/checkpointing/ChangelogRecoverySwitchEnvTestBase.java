@@ -18,7 +18,7 @@
 package org.apache.flink.test.checkpointing;
 
 import org.apache.flink.api.common.JobID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.state.AbstractStateBackend;
@@ -55,7 +55,7 @@ public abstract class ChangelogRecoverySwitchEnvTestBase extends ChangelogRecove
 
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 firstEnv, firstCheckpointFolder.toURI());
-        JobGraph firstJobGraph =
+        ExecutionPlan firstJobGraph =
                 firstNormalJobGraph(stateBackend, firstEnv, miniCluster, currentMaterializationId);
 
         try {
@@ -69,7 +69,7 @@ public abstract class ChangelogRecoverySwitchEnvTestBase extends ChangelogRecove
         File secondCheckpointFolder = TEMPORARY_FOLDER.newFolder();
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 secondEnv, secondCheckpointFolder.toURI());
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 nextNormalJobGraph(stateBackend, secondEnv, miniCluster, currentMaterializationId);
         File checkpointFile = getMostRecentCompletedCheckpoint(firstCheckpointFolder);
         jobGraph.setSavepointRestoreSettings(
@@ -77,7 +77,7 @@ public abstract class ChangelogRecoverySwitchEnvTestBase extends ChangelogRecove
         waitAndAssert(jobGraph);
     }
 
-    private JobGraph firstNormalJobGraph(
+    private ExecutionPlan firstNormalJobGraph(
             StateBackend stateBackend,
             StreamExecutionEnvironment env,
             SharedReference<MiniCluster> miniCluster,
@@ -113,7 +113,7 @@ public abstract class ChangelogRecoverySwitchEnvTestBase extends ChangelogRecove
                 jobID.get());
     }
 
-    private JobGraph nextNormalJobGraph(
+    private ExecutionPlan nextNormalJobGraph(
             StateBackend stateBackend,
             StreamExecutionEnvironment env,
             SharedReference<MiniCluster> miniCluster,
@@ -141,7 +141,7 @@ public abstract class ChangelogRecoverySwitchEnvTestBase extends ChangelogRecove
                 jobID.get());
     }
 
-    protected JobGraph buildJobGraph(
+    protected ExecutionPlan buildJobGraph(
             StateBackend stateBackend,
             StreamExecutionEnvironment env,
             int waitingOnIndex,

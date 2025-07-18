@@ -36,7 +36,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
 import org.apache.flink.runtime.jobgraph.IntermediateDataSetID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.OperatorID;
@@ -53,7 +53,7 @@ import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.scheduler.adaptive.AdaptiveScheduler;
 import org.apache.flink.runtime.state.KeyGroupRange;
 import org.apache.flink.runtime.taskmanager.TaskExecutionState;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.FlinkException;
 
 import javax.annotation.Nullable;
@@ -65,13 +65,13 @@ import java.util.concurrent.CompletableFuture;
 /**
  * Interface for scheduling Flink jobs.
  *
- * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link JobGraph} when
+ * <p>Instances are created via {@link SchedulerNGFactory}, and receive a {@link ExecutionPlan} when
  * instantiated.
  *
  * <p>Implementations can expect that methods will not be invoked concurrently. In fact, all
  * invocations will originate from a thread in the {@link ComponentMainThreadExecutor}.
  */
-public interface SchedulerNG extends GlobalFailureHandler, AutoCloseableAsync {
+public interface SchedulerNG extends GlobalFailureHandler, AsyncCloseable {
 
     void startScheduling();
 

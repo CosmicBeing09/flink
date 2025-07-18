@@ -18,7 +18,7 @@
 
 package org.apache.flink.client.testjar;
 
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
@@ -29,7 +29,7 @@ public class TestUserClassLoaderJob {
     public static void main(String[] args) throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        final DataStreamSource<Integer> source =
+        final SourceRepresentation<Integer> source =
                 env.fromData(new TestUserClassLoaderJobLib().getValue(), 1, 2, 3, 4);
         final SingleOutputStreamOperator<Integer> mapper = source.map(element -> 2 * element);
         mapper.sinkTo(new DiscardingSink<>());

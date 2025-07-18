@@ -19,7 +19,7 @@
 package org.apache.flink.runtime.checkpoint;
 
 import org.apache.flink.configuration.CheckpointingOptions;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.concurrent.FutureUtils;
 
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ import static org.apache.flink.util.Preconditions.checkState;
  * clean.
  */
 @ThreadSafe
-public class CheckpointsCleaner implements Serializable, AutoCloseableAsync {
+public class CheckpointsCleaner implements Serializable, AsyncCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(CheckpointsCleaner.class);
     private static final long serialVersionUID = 2545865801947537790L;
 

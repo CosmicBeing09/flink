@@ -21,7 +21,7 @@ package org.apache.flink.connector.file.sink;
 import org.apache.flink.connector.file.sink.utils.IntegerFileSinkTestDataUtils;
 import org.apache.flink.connector.file.sink.utils.PartSizeAndCheckpointRollingPolicy;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.minicluster.MiniClusterConfiguration;
 
@@ -54,7 +54,7 @@ abstract class FileSinkITBase {
             throws Exception {
         String path = tmpDir.toString();
 
-        JobGraph jobGraph = createJobGraph(triggerFailover, path);
+        ExecutionPlan jobGraph = createJobGraph(triggerFailover, path);
 
         final MiniClusterConfiguration cfg =
                 new MiniClusterConfiguration.Builder()
@@ -72,7 +72,7 @@ abstract class FileSinkITBase {
                 path, NUM_RECORDS, NUM_BUCKETS, NUM_SOURCES);
     }
 
-    protected abstract JobGraph createJobGraph(boolean triggerFailover, String path);
+    protected abstract ExecutionPlan createJobGraph(boolean triggerFailover, String path);
 
     protected FileSink<Integer> createFileSink(String path) {
         return FileSink.forRowFormat(new Path(path), new IntegerFileSinkTestDataUtils.IntEncoder())

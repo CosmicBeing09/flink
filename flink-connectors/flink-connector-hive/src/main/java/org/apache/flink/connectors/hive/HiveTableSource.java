@@ -38,7 +38,7 @@ import org.apache.flink.core.fs.Path;
 import org.apache.flink.formats.parquet.utils.ParquetFormatStatisticsReportUtil;
 import org.apache.flink.orc.util.OrcFormatStatisticsReportUtil;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.TableException;
 import org.apache.flink.table.catalog.Column;
@@ -157,7 +157,7 @@ public class HiveTableSource
                         .setLimit(limit);
 
         if (isStreamingSource()) {
-            DataStreamSource<RowData> sourceStream =
+            SourceRepresentation<RowData> sourceStream =
                     toDataStreamSource(execEnv, sourceBuilder.buildWithDefaultBulkFormat());
             providerContext.generateUid(HIVE_TRANSFORMATION).ifPresent(sourceStream::uid);
             return sourceStream;
@@ -192,7 +192,7 @@ public class HiveTableSource
         }
     }
 
-    private DataStreamSource<RowData> toDataStreamSource(
+    private SourceRepresentation<RowData> toDataStreamSource(
             StreamExecutionEnvironment execEnv, HiveSource<RowData> hiveSource) {
         return execEnv.fromSource(
                 hiveSource,

@@ -33,7 +33,7 @@ import java.time.Duration;
 public class SpeculativeExecutionJobVertex extends ExecutionJobVertex {
 
     public SpeculativeExecutionJobVertex(
-            InternalExecutionGraphAccessor graph,
+            InternalExecutionPlanAccessor graph,
             JobVertex jobVertex,
             VertexParallelismInformation parallelismInfo,
             CoordinatorStore coordinatorStore,
@@ -82,7 +82,7 @@ public class SpeculativeExecutionJobVertex extends ExecutionJobVertex {
     public static class Factory extends ExecutionJobVertex.Factory {
         @Override
         ExecutionJobVertex createExecutionJobVertex(
-                InternalExecutionGraphAccessor graph,
+                InternalExecutionPlanAccessor graph,
                 JobVertex jobVertex,
                 VertexParallelismInformation parallelismInfo,
                 CoordinatorStore coordinatorStore,

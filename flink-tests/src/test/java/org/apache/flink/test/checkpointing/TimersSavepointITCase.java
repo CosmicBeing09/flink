@@ -31,7 +31,7 @@ import org.apache.flink.contrib.streaming.state.EmbeddedRocksDBStateBackend.Prio
 import org.apache.flink.contrib.streaming.state.RocksDBOptions;
 import org.apache.flink.core.execution.SavepointFormatType;
 import org.apache.flink.core.testutils.OneShotLatch;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
 import org.apache.flink.runtime.state.FunctionSnapshotContext;
@@ -110,7 +110,7 @@ public class TimersSavepointITCase {
 
     private void verifySavepoint(String savepointPath, ClusterClient<?> client)
             throws IOException, InterruptedException, java.util.concurrent.ExecutionException {
-        JobGraph jobGraph;
+        ExecutionPlan jobGraph;
 
         jobGraph = getJobGraph(EmbeddedRocksDBStateBackend.PriorityQueueStateType.HEAP);
         jobGraph.setSavepointRestoreSettings(SavepointRestoreSettings.forPath(savepointPath));
@@ -119,7 +119,7 @@ public class TimersSavepointITCase {
     }
 
     private void takeSavepoint(String savepointPath, ClusterClient<?> client) throws Exception {
-        JobGraph jobGraph = getJobGraph(EmbeddedRocksDBStateBackend.PriorityQueueStateType.ROCKSDB);
+        ExecutionPlan jobGraph = getJobGraph(EmbeddedRocksDBStateBackend.PriorityQueueStateType.ROCKSDB);
         client.submitJob(jobGraph).get();
         waitForAllTaskRunning(miniClusterResource.getMiniCluster(), jobGraph.getJobID(), false);
         CompletableFuture<String> savepointPathFuture =
@@ -132,7 +132,7 @@ public class TimersSavepointITCase {
         FileUtils.moveDirectory(jobManagerSavepoint, new File(savepointPath));
     }
 
-    public JobGraph getJobGraph(PriorityQueueStateType priorityQueueStateType) throws IOException {
+    public ExecutionPlan getJobGraph(PriorityQueueStateType priorityQueueStateType) throws IOException {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.addSource(new Source())

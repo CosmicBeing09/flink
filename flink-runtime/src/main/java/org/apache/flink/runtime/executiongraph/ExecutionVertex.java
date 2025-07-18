@@ -334,7 +334,7 @@ public class ExecutionVertex
         return Optional.ofNullable(lastAssignedAllocationID);
     }
 
-    public final InternalExecutionGraphAccessor getExecutionGraphAccessor() {
+    public final InternalExecutionPlanAccessor getExecutionGraphAccessor() {
         return this.jobVertex.getGraph();
     }
 

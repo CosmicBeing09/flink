@@ -28,7 +28,7 @@ import org.apache.flink.runtime.io.network.api.writer.RecordWriter;
 import org.apache.flink.runtime.io.network.api.writer.RecordWriterBuilder;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
 import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
@@ -300,7 +300,7 @@ public class NetworkStackThroughputITCase extends TestLogger {
             final int parallelism)
             throws Exception {
         final ClusterClient<?> client = cluster.getClusterClient();
-        final JobGraph jobGraph =
+        final ExecutionPlan jobGraph =
                 createJobGraph(
                         dataVolumeGb, useForwarder, isSlowSender, isSlowReceiver, parallelism);
         final JobResult jobResult =
@@ -320,7 +320,7 @@ public class NetworkStackThroughputITCase extends TestLogger {
                         mbitPerSecond, runtimeSecs, dataVolumeGb, dataVolumeMbit));
     }
 
-    private JobGraph createJobGraph(
+    private ExecutionPlan createJobGraph(
             int dataVolumeGb,
             boolean useForwarder,
             boolean isSlowSender,

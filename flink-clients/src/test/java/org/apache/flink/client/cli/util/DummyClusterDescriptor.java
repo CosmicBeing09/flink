@@ -23,7 +23,7 @@ import org.apache.flink.client.deployment.ClusterSpecification;
 import org.apache.flink.client.deployment.application.ApplicationConfiguration;
 import org.apache.flink.client.program.ClusterClient;
 import org.apache.flink.client.program.ClusterClientProvider;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.util.Preconditions;
 
 /** Dummy {@link ClusterDescriptor} implementation for testing purposes. */
@@ -60,7 +60,7 @@ public class DummyClusterDescriptor<T> implements ClusterDescriptor<T> {
 
     @Override
     public ClusterClientProvider<T> deployJobCluster(
-            ClusterSpecification clusterSpecification, JobGraph jobGraph, boolean detached) {
+            ClusterSpecification clusterSpecification, ExecutionPlan jobGraph, boolean detached) {
         return () -> clusterClient;
     }
 

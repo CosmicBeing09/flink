@@ -184,7 +184,7 @@ public class IntermediateResult {
         List<JobEdge> consumers = intermediateDataSet.getConsumers();
         checkState(!consumers.isEmpty());
 
-        InternalExecutionGraphAccessor graph = getProducer().getGraph();
+        InternalExecutionPlanAccessor graph = getProducer().getGraph();
         int consumersParallelism =
                 graph.getJobVertex(consumers.get(0).getTarget().getID()).getParallelism();
         if (consumers.size() == 1) {
@@ -208,7 +208,7 @@ public class IntermediateResult {
         List<JobEdge> consumers = intermediateDataSet.getConsumers();
         checkState(!consumers.isEmpty());
 
-        InternalExecutionGraphAccessor graph = getProducer().getGraph();
+        InternalExecutionPlanAccessor graph = getProducer().getGraph();
         int consumersMaxParallelism =
                 graph.getJobVertex(consumers.get(0).getTarget().getID()).getMaxParallelism();
         if (consumers.size() == 1) {

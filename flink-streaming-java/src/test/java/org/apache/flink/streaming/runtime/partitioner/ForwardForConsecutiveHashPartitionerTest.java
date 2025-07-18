@@ -17,7 +17,7 @@
 
 package org.apache.flink.streaming.runtime.partitioner;
 
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.streaming.api.graph.NonChainedOutput;
 import org.apache.flink.streaming.api.graph.StreamConfig;
@@ -40,7 +40,7 @@ class ForwardForConsecutiveHashPartitionerTest {
     }
 
     private void testConvertToForwardPartitioner(StreamExchangeMode streamExchangeMode) {
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 StreamPartitionerTestUtils.createJobGraph(
                         "group1",
                         "group1",
@@ -64,7 +64,7 @@ class ForwardForConsecutiveHashPartitionerTest {
     }
 
     private void testConvertToHashPartitioner(StreamExchangeMode streamExchangeMode) {
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 StreamPartitionerTestUtils.createJobGraph(
                         "group1",
                         "group2",

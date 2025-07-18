@@ -36,7 +36,7 @@ import org.apache.flink.core.testutils.CheckedThread;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.functions.source.legacy.FromElementsFunction;
@@ -87,7 +87,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testFromElementsDeducedType() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> source = env.fromData("a", "b");
+        SourceRepresentation<String> source = env.fromData("a", "b");
 
         DataGeneratorSource<String> generatorSource = getSourceFromStream(source);
 
@@ -97,7 +97,7 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testFromElementsPostConstructionType() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> source = env.fromData("a", "b");
+        SourceRepresentation<String> source = env.fromData("a", "b");
         TypeInformation<String> customType = new GenericTypeInfo<>(String.class);
 
         source.returns(customType);
@@ -114,7 +114,7 @@ class StreamExecutionEnvironmentTest {
     @SuppressWarnings({"unchecked", "rawtypes"})
     void testFromElementsPostConstructionTypeIncompatible() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> source = env.fromData("a", "b");
+        SourceRepresentation<String> source = env.fromData("a", "b");
         source.returns((TypeInformation) BasicTypeInfo.INT_TYPE_INFO);
         source.sinkTo(new DiscardingSink<>());
 
@@ -138,7 +138,7 @@ class StreamExecutionEnvironmentTest {
             TypeInformation<Integer> typeInfo = BasicTypeInfo.INT_TYPE_INFO;
             StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-            DataStreamSource<Integer> dataStream2 =
+            SourceRepresentation<Integer> dataStream2 =
                     env.fromParallelCollection(new DummySplittableIterator<Integer>(), typeInfo)
                             .setParallelism(4);
 
@@ -172,20 +172,20 @@ class StreamExecutionEnvironmentTest {
                     @Override
                     public void cancel() {}
                 };
-        DataStreamSource<Integer> src1 = env.addSource(srcFun);
+        SourceRepresentation<Integer> src1 = env.addSource(srcFun);
         src1.sinkTo(new DiscardingSink<>());
         assertThat(getFunctionFromDataSource(src1)).isEqualTo(srcFun);
 
         List<Long> list = Arrays.asList(0L, 1L, 2L);
 
-        DataStreamSource<Long> src2 = env.fromSequence(0, 2);
+        SourceRepresentation<Long> src2 = env.fromSequence(0, 2);
         Object generatorSource = getSourceFromStream(src2);
         assertThat(generatorSource).isInstanceOf(NumberSequenceSource.class);
 
-        DataStreamSource<Long> src3 = env.fromData(0L, 1L, 2L);
+        SourceRepresentation<Long> src3 = env.fromData(0L, 1L, 2L);
         assertThat(getSourceFromDataSourceTyped(src3)).isInstanceOf(DataGeneratorSource.class);
 
-        DataStreamSource<Long> src4 = env.fromCollection(list);
+        SourceRepresentation<Long> src4 = env.fromCollection(list);
         assertThat(getFunctionFromDataSource(src4)).isInstanceOf(FromElementsFunction.class);
     }
 
@@ -194,7 +194,7 @@ class StreamExecutionEnvironmentTest {
     void testFromSequence() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Long> src = env.fromSequence(0, 2);
+        SourceRepresentation<Long> src = env.fromSequence(0, 2);
 
         assertThat(src.getType()).isEqualTo(BasicTypeInfo.LONG_TYPE_INFO);
     }
@@ -320,20 +320,20 @@ class StreamExecutionEnvironmentTest {
     void testGetStreamGraph() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> dataStream1 = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> dataStream1 = env.fromData(1, 2, 3);
         dataStream1.sinkTo(new DiscardingSink<>());
         assertThat(env.getStreamGraph().getStreamNodes().size()).isEqualTo(2);
 
-        DataStreamSource<Integer> dataStream2 = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> dataStream2 = env.fromData(1, 2, 3);
         dataStream2.sinkTo(new DiscardingSink<>());
         // Previous getStreamGraph() call cleaned dataStream1 transformations
         assertThat(env.getStreamGraph().getStreamNodes().size()).isEqualTo(2);
 
-        DataStreamSource<Integer> dataStream3 = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> dataStream3 = env.fromData(1, 2, 3);
         dataStream3.sinkTo(new DiscardingSink<>());
         // Does not clear the transformations.
         env.getExecutionPlan();
-        DataStreamSource<Integer> dataStream4 = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> dataStream4 = env.fromData(1, 2, 3);
         dataStream4.sinkTo(new DiscardingSink<>());
         // dataStream3 are preserved
         assertThat(env.getStreamGraph().getStreamNodes().size()).isEqualTo(4);
@@ -377,12 +377,12 @@ class StreamExecutionEnvironmentTest {
     @Test
     void testAddSourceWithUserDefinedTypeInfo() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Row> source1 =
+        SourceRepresentation<Row> source1 =
                 env.addSource(new RowSourceFunction(), Types.ROW(Types.STRING));
         // the source type information should be the user defined type
         assertThat(source1.getType()).isEqualTo(Types.ROW(Types.STRING));
 
-        DataStreamSource<Row> source2 = env.addSource(new RowSourceFunction());
+        SourceRepresentation<Row> source2 = env.addSource(new RowSourceFunction());
         // the source type information should be derived from RowSourceFunction#getProducedType
         assertThat(source2.getType()).isEqualTo(new GenericTypeInfo<>(Row.class));
     }
@@ -560,7 +560,7 @@ class StreamExecutionEnvironmentTest {
 
     @SuppressWarnings("unchecked")
     private static <T> SourceFunction<T> getFunctionFromDataSource(
-            DataStreamSource<T> dataStreamSource) {
+            SourceRepresentation<T> dataStreamSource) {
         dataStreamSource.sinkTo(new DiscardingSink<>());
         AbstractUdfStreamOperator<?, ?> operator =
                 (AbstractUdfStreamOperator<?, ?>) getOperatorFromDataStream(dataStreamSource);
@@ -573,7 +573,7 @@ class StreamExecutionEnvironmentTest {
     }
 
     private static <T> Source<T, ?, ?> getSourceFromDataSourceTyped(
-            DataStreamSource<T> dataStreamSource) {
+            SourceRepresentation<T> dataStreamSource) {
         dataStreamSource.sinkTo(new DiscardingSink<>());
         dataStreamSource.getExecutionEnvironment().getStreamGraph();
         return ((SourceTransformation<T, ?, ?>) dataStreamSource.getTransformation()).getSource();

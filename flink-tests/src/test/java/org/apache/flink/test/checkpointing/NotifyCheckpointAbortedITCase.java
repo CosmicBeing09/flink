@@ -45,7 +45,7 @@ import org.apache.flink.runtime.checkpoint.StandaloneCompletedCheckpointStore;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServices;
 import org.apache.flink.runtime.highavailability.HighAvailabilityServicesFactory;
 import org.apache.flink.runtime.highavailability.nonha.embedded.EmbeddedHaServicesWithLeadershipControl;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.state.BackendBuildingException;
 import org.apache.flink.runtime.state.CheckpointStorage;
@@ -175,7 +175,7 @@ public class NotifyCheckpointAbortedITCase extends TestLogger {
                 .transform(DECLINE_SINK_NAME, TypeInformation.of(Object.class), new DeclineSink());
 
         final ClusterClient<?> clusterClient = cluster.getClusterClient();
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
         JobID jobID = jobGraph.getJobID();
 
         clusterClient.submitJob(jobGraph).get();

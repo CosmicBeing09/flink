@@ -45,7 +45,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
 import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
-import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
+import org.apache.flink.runtime.executiongraph.InternalExecutionPlanAccessor;
 import org.apache.flink.runtime.executiongraph.JobVertexInputInfo;
 import org.apache.flink.runtime.executiongraph.MarkPartitionFinishedStrategy;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
@@ -1141,7 +1141,7 @@ class ExecutingTest {
     }
 
     private static class MockInternalExecutionGraphAccessor
-            implements InternalExecutionGraphAccessor {
+            implements InternalExecutionPlanAccessor {
 
         @Override
         public Executor getFutureExecutor() {

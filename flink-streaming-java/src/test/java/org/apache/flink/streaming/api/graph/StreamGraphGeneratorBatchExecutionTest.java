@@ -21,12 +21,7 @@ package org.apache.flink.streaming.api.graph;
 import org.apache.flink.api.common.BatchShuffleMode;
 import org.apache.flink.api.common.ExecutionConfig;
 import org.apache.flink.api.common.RuntimeExecutionMode;
-import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
-import org.apache.flink.api.common.typeinfo.IntegerTypeInfo;
-import org.apache.flink.api.common.typeinfo.TypeInformation;
-import org.apache.flink.api.connector.source.Boundedness;
-import org.apache.flink.api.connector.source.mocks.MockSource;
 import org.apache.flink.api.dag.Transformation;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
@@ -34,7 +29,7 @@ import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.core.memory.ManagedMemoryUseCase;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.MultipleConnectedStreams;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.CheckpointConfig;
@@ -54,10 +49,7 @@ import org.apache.flink.streaming.api.operators.StreamOperator;
 import org.apache.flink.streaming.api.operators.StreamOperatorParameters;
 import org.apache.flink.streaming.api.operators.TwoInputStreamOperator;
 import org.apache.flink.streaming.api.operators.sorted.state.BatchExecutionStateBackend;
-import org.apache.flink.streaming.api.transformations.CoFeedbackTransformation;
-import org.apache.flink.streaming.api.transformations.FeedbackTransformation;
 import org.apache.flink.streaming.api.transformations.KeyedMultipleInputTransformation;
-import org.apache.flink.streaming.api.transformations.SourceTransformation;
 import org.apache.flink.streaming.runtime.streamrecord.StreamRecord;
 import org.apache.flink.util.Collector;
 
@@ -242,8 +234,8 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testTwoInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
         SingleOutputStreamOperator<Integer> process =
                 elements1
                         .connect(elements2)
@@ -269,8 +261,8 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testDisablingStateBackendTwoInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
         SingleOutputStreamOperator<Integer> process =
                 elements1
                         .connect(elements2)
@@ -298,8 +290,8 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testDisablingSortingInputsTwoInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
         SingleOutputStreamOperator<Integer> process =
                 elements1
                         .connect(elements2)
@@ -324,8 +316,8 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testDisablingSortingInputsWithoutBatchStateBackendTwoInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
         SingleOutputStreamOperator<Integer> process =
                 elements1
                         .connect(elements2)
@@ -346,8 +338,8 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testInputSelectableTwoInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
         SingleOutputStreamOperator<Integer> process =
                 elements1
                         .connect(elements2)
@@ -374,9 +366,9 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testMultiInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements3 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements3 = env.fromData(1, 2);
 
         MultipleInputOperatorFactory selectableOperator =
                 new MultipleInputOperatorFactory(3, false);
@@ -414,9 +406,9 @@ class StreamGraphGeneratorBatchExecutionTest {
     void testInputSelectableMultiInputTransformation() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 
-        DataStreamSource<Integer> elements1 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements2 = env.fromData(1, 2);
-        DataStreamSource<Integer> elements3 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements1 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements2 = env.fromData(1, 2);
+        SourceRepresentation<Integer> elements3 = env.fromData(1, 2);
 
         MultipleInputOperatorFactory selectableOperator = new MultipleInputOperatorFactory(3, true);
         KeyedMultipleInputTransformation<Integer> multipleInputTransformation =
@@ -439,29 +431,6 @@ class StreamGraphGeneratorBatchExecutionTest {
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining(
                         "Batch state backend and sorting inputs are not supported in graphs with an InputSelectable operator.");
-    }
-
-    @Test
-    void testFeedbackThrowsExceptionInBatch() {
-        final SourceTransformation<Integer, ?, ?> bounded =
-                new SourceTransformation<>(
-                        "Bounded Source",
-                        new MockSource(Boundedness.BOUNDED, 100),
-                        WatermarkStrategy.noWatermarks(),
-                        IntegerTypeInfo.of(Integer.class),
-                        1);
-
-        final FeedbackTransformation<Integer> feedbackTransformation =
-                new FeedbackTransformation<>(bounded, 5L);
-
-        testNoSupportForIterationsInBatchHelper(bounded, feedbackTransformation);
-    }
-
-    @Test
-    void testCoFeedbackThrowsExceptionInBatch() {
-        final CoFeedbackTransformation<Integer> coFeedbackTransformation =
-                new CoFeedbackTransformation<>(2, TypeInformation.of(Integer.TYPE), 5L);
-        testNoSupportForIterationsInBatchHelper(coFeedbackTransformation);
     }
 
     private void testNoSupportForIterationsInBatchHelper(

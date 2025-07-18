@@ -28,10 +28,10 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.CoreOptions;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.configuration.NettyShuffleEnvironmentOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.legacy.RichSinkFunction;
 import org.apache.flink.streaming.api.functions.source.legacy.ParallelSourceFunction;
@@ -78,7 +78,7 @@ class BatchShuffleITCaseBase {
         Arrays.fill(NUM_RECEIVED_RECORDS, 0);
     }
 
-    protected JobGraph createJobGraph(
+    protected ExecutionPlan createJobGraph(
             int numRecordsToSend,
             boolean failExecution,
             Configuration configuration,
@@ -91,7 +91,7 @@ class BatchShuffleITCaseBase {
                 enableAdaptiveAutoParallelism);
     }
 
-    protected JobGraph createJobGraph(
+    protected ExecutionPlan createJobGraph(
             int numRecordsToSend,
             boolean failExecution,
             boolean deletePartitionFile,
@@ -106,7 +106,7 @@ class BatchShuffleITCaseBase {
         env.setParallelism(NUM_SLOTS_PER_TASK_MANAGER);
 
         DataStream<String> source =
-                new DataStreamSource<>(
+                new SourceRepresentation<>(
                                 env,
                                 BasicTypeInfo.STRING_TYPE_INFO,
                                 new StreamSource<>(new StringSource(numRecordsToSend)),
@@ -132,7 +132,7 @@ class BatchShuffleITCaseBase {
         return configuration;
     }
 
-    protected void executeJob(JobGraph jobGraph, Configuration configuration, int numRecordsToSend)
+    protected void executeJob(ExecutionPlan jobGraph, Configuration configuration, int numRecordsToSend)
             throws Exception {
         JobGraphRunningUtil.execute(
                 jobGraph, configuration, NUM_TASK_MANAGERS, NUM_SLOTS_PER_TASK_MANAGER);

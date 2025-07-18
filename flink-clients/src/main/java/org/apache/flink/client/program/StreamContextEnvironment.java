@@ -163,7 +163,7 @@ public class StreamContextEnvironment extends StreamExecutionEnvironment {
                                         .get(ClientOptions.CLIENT_HEARTBEAT_INTERVAL)
                                         .toMillis(),
                                 configuration
-                                        .get(ClientOptions.CLIENT_HEARTBEAT_TIMEOUT)
+                                        .get(ClientOptions.CLIENT_HEARTBEAT_TIMEOUT_DURATION)
                                         .toMillis());
             }
 

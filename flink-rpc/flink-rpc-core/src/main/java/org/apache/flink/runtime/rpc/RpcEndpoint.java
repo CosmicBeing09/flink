@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobID;
 import org.apache.flink.core.fs.CloseableRegistry;
 import org.apache.flink.runtime.concurrent.ComponentMainThreadExecutor;
 import org.apache.flink.runtime.concurrent.ScheduledFutureAdapter;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.MdcUtils;
 import org.apache.flink.util.Preconditions;
 import org.apache.flink.util.concurrent.ExecutorThreadFactory;
@@ -92,7 +92,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * <p>The running state can be queried in a RPC method handler or in the main thread by calling
  * {@link #isRunning()} method.
  */
-public abstract class RpcEndpoint implements RpcGateway, AutoCloseableAsync {
+public abstract class RpcEndpoint implements RpcGateway, AsyncCloseable {
 
     protected final Logger log = LoggerFactory.getLogger(getClass());
 

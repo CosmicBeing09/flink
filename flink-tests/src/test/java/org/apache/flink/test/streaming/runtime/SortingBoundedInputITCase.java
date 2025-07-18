@@ -36,7 +36,7 @@ import org.apache.flink.api.java.typeutils.TupleTypeInfo;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.KeyedStream;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -94,7 +94,7 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
         env.configure(config, this.getClass().getClassLoader());
 
-        DataStreamSource<Tuple2<Integer, byte[]>> elements =
+        SourceRepresentation<Tuple2<Integer, byte[]>> elements =
                 env.fromParallelCollection(
                         new InputGenerator(numberOfRecords),
                         new TupleTypeInfo<>(
@@ -125,14 +125,14 @@ public class SortingBoundedInputITCase extends AbstractTestBaseJUnit4 {
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
         env.configure(config, this.getClass().getClassLoader());
 
-        DataStreamSource<Tuple2<Integer, byte[]>> elements1 =
+        SourceRepresentation<Tuple2<Integer, byte[]>> elements1 =
                 env.fromParallelCollection(
                         new InputGenerator(numberOfRecords),
                         new TupleTypeInfo<>(
                                 BasicTypeInfo.INT_TYPE_INFO,
                                 PrimitiveArrayTypeInfo.BYTE_PRIMITIVE_ARRAY_TYPE_INFO));
 
-        DataStreamSource<Tuple2<Integer, byte[]>> elements2 =
+        SourceRepresentation<Tuple2<Integer, byte[]>> elements2 =
                 env.fromParallelCollection(
                         new InputGenerator(numberOfRecords),
                         new TupleTypeInfo<>(

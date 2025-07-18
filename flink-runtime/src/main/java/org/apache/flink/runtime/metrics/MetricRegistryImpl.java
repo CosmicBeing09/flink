@@ -37,12 +37,8 @@ import org.apache.flink.runtime.webmonitor.retriever.MetricQueryServiceGateway;
 import org.apache.flink.traces.Span;
 import org.apache.flink.traces.SpanBuilder;
 import org.apache.flink.traces.reporter.TraceReporter;
-import org.apache.flink.util.AutoCloseableAsync;
-import org.apache.flink.util.ExceptionUtils;
-import org.apache.flink.util.ExecutorUtils;
-import org.apache.flink.util.FlinkException;
-import org.apache.flink.util.Preconditions;
-import org.apache.flink.util.TimeUtils;
+import org.apache.flink.util.*;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.concurrent.ExecutorThreadFactory;
 import org.apache.flink.util.concurrent.FutureUtils;
 import org.apache.flink.util.function.QuadConsumer;
@@ -70,7 +66,7 @@ import java.util.stream.Collectors;
  * A MetricRegistry keeps track of all registered {@link Metric Metrics}. It serves as the
  * connection between {@link MetricGroup MetricGroups} and {@link MetricReporter MetricReporters}.
  */
-public class MetricRegistryImpl implements MetricRegistry, AutoCloseableAsync {
+public class MetricRegistryImpl implements MetricRegistry, AsyncCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(MetricRegistryImpl.class);
 
     private final Object lock = new Object();

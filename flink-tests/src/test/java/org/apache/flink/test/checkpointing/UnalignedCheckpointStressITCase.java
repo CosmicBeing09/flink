@@ -28,7 +28,7 @@ import org.apache.flink.changelog.fs.FsStateChangelogStorageFactory;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExternalizedCheckpointRetention;
 import org.apache.flink.runtime.io.network.logger.NetworkActionsLogger;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.operators.testutils.ExpectedTestException;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -36,7 +36,7 @@ import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.DataStreamUtils;
 import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -177,16 +177,16 @@ class UnalignedCheckpointStressITCase {
         int numberOfSources4 = PARALLELISM / 4;
         int totalNumberOfSources =
                 numberOfSources1 + numberOfSources2 + numberOfSources3 + numberOfSources4;
-        DataStreamSource<Record> source1 =
+        SourceRepresentation<Record> source1 =
                 env.addSource(new LegacySourceFunction(0)).setParallelism(numberOfSources1);
 
-        DataStreamSource<Record> source2 =
+        SourceRepresentation<Record> source2 =
                 env.addSource(new LegacySourceFunction(numberOfSources1))
                         .setParallelism(numberOfSources2);
-        DataStreamSource<Record> source3 =
+        SourceRepresentation<Record> source3 =
                 env.addSource(new LegacySourceFunction(numberOfSources1 + numberOfSources2))
                         .setParallelism(numberOfSources3);
-        DataStreamSource<Record> source4 =
+        SourceRepresentation<Record> source4 =
                 env.addSource(
                                 new LegacySourceFunction(
                                         numberOfSources1 + numberOfSources2 + numberOfSources3))
@@ -250,7 +250,7 @@ class UnalignedCheckpointStressITCase {
                 .map(File::toString)
                 .map(SavepointRestoreSettings::forPath)
                 .ifPresent(streamGraph::setSavepointRestoreSettings);
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
         try {
             submitJobAndWaitForResult(

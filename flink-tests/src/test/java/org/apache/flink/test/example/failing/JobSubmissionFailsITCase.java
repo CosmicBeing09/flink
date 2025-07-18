@@ -24,7 +24,7 @@ import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.MemorySize;
 import org.apache.flink.configuration.TaskManagerOptions;
 import org.apache.flink.runtime.blob.PermanentBlobKey;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.testtasks.NoOpInvokable;
@@ -70,7 +70,7 @@ public class JobSubmissionFailsITCase extends TestLogger {
         return config;
     }
 
-    private static JobGraph getWorkingJobGraph() {
+    private static ExecutionPlan getWorkingJobGraph() {
         return JobGraphTestUtils.singleNoOpJobGraph();
     }
 
@@ -82,7 +82,7 @@ public class JobSubmissionFailsITCase extends TestLogger {
         failingJobVertex.setInvokableClass(NoOpInvokable.class);
         failingJobVertex.setParallelism(1);
 
-        final JobGraph failingJobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
+        final ExecutionPlan failingJobGraph = JobGraphTestUtils.streamingJobGraph(failingJobVertex);
         runJobSubmissionTest(
                 failingJobGraph,
                 e ->
@@ -95,7 +95,7 @@ public class JobSubmissionFailsITCase extends TestLogger {
 
     @Test
     public void testSubmitEmptyJobGraph() throws Exception {
-        final JobGraph jobGraph = JobGraphTestUtils.emptyJobGraph();
+        final ExecutionPlan jobGraph = JobGraphTestUtils.emptyJobGraph();
         runJobSubmissionTest(
                 jobGraph,
                 e ->
@@ -109,12 +109,12 @@ public class JobSubmissionFailsITCase extends TestLogger {
 
     @Test
     public void testMissingJarBlob() throws Exception {
-        final JobGraph jobGraph = getJobGraphWithMissingBlobKey();
+        final ExecutionPlan jobGraph = getJobGraphWithMissingBlobKey();
         runJobSubmissionTest(
                 jobGraph, e -> ExceptionUtils.findThrowable(e, IOException.class).isPresent());
     }
 
-    private void runJobSubmissionTest(JobGraph jobGraph, Predicate<Exception> failurePredicate)
+    private void runJobSubmissionTest(ExecutionPlan jobGraph, Predicate<Exception> failurePredicate)
             throws Exception {
         ClusterClient<?> client = MINI_CLUSTER_RESOURCE.getClusterClient();
 
@@ -131,8 +131,8 @@ public class JobSubmissionFailsITCase extends TestLogger {
     }
 
     @Nonnull
-    private static JobGraph getJobGraphWithMissingBlobKey() {
-        final JobGraph jobGraph = getWorkingJobGraph();
+    private static ExecutionPlan getJobGraphWithMissingBlobKey() {
+        final ExecutionPlan jobGraph = getWorkingJobGraph();
         jobGraph.addUserJarBlobKey(new PermanentBlobKey());
         return jobGraph;
     }

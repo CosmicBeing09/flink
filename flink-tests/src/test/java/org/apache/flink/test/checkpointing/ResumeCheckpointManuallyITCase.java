@@ -33,7 +33,7 @@ import org.apache.flink.configuration.HighAvailabilityOptions;
 import org.apache.flink.configuration.StateBackendOptions;
 import org.apache.flink.configuration.StateRecoveryOptions;
 import org.apache.flink.core.execution.RecoveryClaimMode;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.SavepointRestoreSettings;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.runtime.testutils.ZooKeeperTestUtils;
@@ -422,7 +422,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             int consecutiveCheckpoints,
             boolean retainCheckpoints)
             throws Exception {
-        JobGraph initialJobGraph =
+        ExecutionPlan initialJobGraph =
                 getJobGraph(externalCheckpoint, recoveryClaimMode, jobConfig, retainCheckpoints);
         NotifyingInfiniteTupleSource.countDownLatch = new CountDownLatch(PARALLELISM);
         cluster.getClusterClient().submitJob(initialJobGraph).get();
@@ -443,7 +443,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
                         });
     }
 
-    private static JobGraph getJobGraph(
+    private static ExecutionPlan getJobGraph(
             @Nullable String externalCheckpoint,
             RecoveryClaimMode recoveryClaimMode,
             Configuration jobConfig,
@@ -469,7 +469,7 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
 
         StreamGraph streamGraph = env.getStreamGraph();
 
-        JobGraph jobGraph = streamGraph.getJobGraph();
+        ExecutionPlan jobGraph = streamGraph.getJobGraph();
 
         // recover from previous iteration?
         if (externalCheckpoint != null) {

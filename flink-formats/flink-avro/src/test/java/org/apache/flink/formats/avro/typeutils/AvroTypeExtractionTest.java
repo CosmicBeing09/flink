@@ -30,7 +30,7 @@ import org.apache.flink.formats.avro.generated.User;
 import org.apache.flink.runtime.minicluster.MiniCluster;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.util.TestStreamEnvironment;
 import org.apache.flink.test.junit5.InjectMiniCluster;
@@ -213,7 +213,7 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataStreamSource<User> usersDS = env.createInput(users);
+        SourceRepresentation<User> usersDS = env.createInput(users);
 
         DataStream<Tuple2<String, Integer>> res =
                 usersDS.keyBy(User::getName)
@@ -241,7 +241,7 @@ class AvroTypeExtractionTest {
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
-        DataStreamSource<User> usersDS = env.createInput(users);
+        SourceRepresentation<User> usersDS = env.createInput(users);
 
         DataStream<Tuple2<String, Integer>> res =
                 usersDS.keyBy(User::getName)

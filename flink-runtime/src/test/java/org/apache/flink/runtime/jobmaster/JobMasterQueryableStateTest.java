@@ -23,7 +23,7 @@ import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.core.testutils.FlinkAssertions;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.queryablestate.KvStateID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.JobVertex;
@@ -66,7 +66,7 @@ class JobMasterQueryableStateTest {
     private static final int PARALLELISM = 4;
     private static final JobVertex JOB_VERTEX_1;
     private static final JobVertex JOB_VERTEX_2;
-    private static final JobGraph JOB_GRAPH;
+    private static final ExecutionPlan JOB_GRAPH;
 
     static {
         JOB_VERTEX_1 = new JobVertex("v1");

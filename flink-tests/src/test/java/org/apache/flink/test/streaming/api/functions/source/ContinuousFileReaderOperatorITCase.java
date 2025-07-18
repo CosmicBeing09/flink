@@ -24,7 +24,7 @@ import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.connector.file.src.FileSource;
 import org.apache.flink.connector.file.src.reader.TextLineInputFormat;
 import org.apache.flink.core.fs.Path;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.sink.filesystem.OutputFileConfig;
 import org.apache.flink.streaming.api.functions.sink.filesystem.rollingpolicies.DefaultRollingPolicy;
@@ -55,7 +55,7 @@ public class ContinuousFileReaderOperatorITCase {
                 FileSource.forRecordStreamFormat(
                                 new TextLineInputFormat(), new Path(input.getAbsolutePath()))
                         .build();
-        DataStreamSource<String> stream =
+        SourceRepresentation<String> stream =
                 env.fromSource(source, WatermarkStrategy.noWatermarks(), "file-source");
         final FileSink<String> sink =
                 FileSink.forRowFormat(

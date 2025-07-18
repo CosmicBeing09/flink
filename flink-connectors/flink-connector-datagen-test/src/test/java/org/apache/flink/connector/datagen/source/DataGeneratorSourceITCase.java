@@ -31,7 +31,7 @@ import org.apache.flink.runtime.state.FunctionSnapshotContext;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.checkpoint.CheckpointedFunction;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.operators.OutputTypeConfigurable;
 import org.apache.flink.streaming.api.transformations.SourceTransformation;
@@ -197,7 +197,7 @@ class DataGeneratorSourceITCase extends TestLogger {
                         RateLimiterStrategy.perCheckpoint(capacityPerCheckpoint),
                         Types.LONG);
 
-        final DataStreamSource<Long> streamSource =
+        final SourceRepresentation<Long> streamSource =
                 env.fromSource(generatorSource, WatermarkStrategy.noWatermarks(), "Data Generator");
         final DataStream<Long> map = streamSource.flatMap(new FirstCheckpointFilter());
         final List<Long> results = map.executeAndCollect(1000);
@@ -215,7 +215,7 @@ class DataGeneratorSourceITCase extends TestLogger {
         OutputTypeConfigurableGeneratorFunction generatorFunction =
                 new OutputTypeConfigurableGeneratorFunction(BasicTypeInfo.STRING_TYPE_INFO);
 
-        final DataStreamSource<Long> streamSource =
+        final SourceRepresentation<Long> streamSource =
                 getGeneratorSourceStream(generatorFunction, env, 1);
         streamSource.returns(BasicTypeInfo.LONG_TYPE_INFO).executeAndCollect(1);
 
@@ -275,7 +275,7 @@ class DataGeneratorSourceITCase extends TestLogger {
         public void initializeState(FunctionInitializationContext context) throws Exception {}
     }
 
-    private DataStreamSource<Long> getGeneratorSourceStream(
+    private SourceRepresentation<Long> getGeneratorSourceStream(
             GeneratorFunction<Long, Long> generatorFunction,
             StreamExecutionEnvironment env,
             long count) {

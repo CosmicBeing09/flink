@@ -33,7 +33,7 @@ import org.apache.flink.runtime.executiongraph.ExecutionVertex;
 import org.apache.flink.runtime.executiongraph.IndexRange;
 import org.apache.flink.runtime.executiongraph.IntermediateResult;
 import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
-import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
+import org.apache.flink.runtime.executiongraph.InternalExecutionPlanAccessor;
 import org.apache.flink.runtime.executiongraph.JobInformation;
 import org.apache.flink.runtime.executiongraph.TaskInformation;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionID;
@@ -201,7 +201,7 @@ public class TaskDeploymentDescriptorFactory {
     private List<MaybeOffloaded<ShuffleDescriptorGroup>> getConsumedPartitionShuffleDescriptors(
             IntermediateResult intermediateResult,
             ConsumedPartitionGroup consumedPartitionGroup,
-            InternalExecutionGraphAccessor internalExecutionGraphAccessor)
+            InternalExecutionPlanAccessor internalExecutionGraphAccessor)
             throws IOException {
         CachedShuffleDescriptors cachedShuffleDescriptors =
                 intermediateResult.getCachedShuffleDescriptors(consumedPartitionGroup);
@@ -220,7 +220,7 @@ public class TaskDeploymentDescriptorFactory {
 
     private ShuffleDescriptorAndIndex[] computeConsumedPartitionShuffleDescriptors(
             ConsumedPartitionGroup consumedPartitionGroup,
-            InternalExecutionGraphAccessor internalExecutionGraphAccessor) {
+            InternalExecutionPlanAccessor internalExecutionGraphAccessor) {
 
         ShuffleDescriptorAndIndex[] shuffleDescriptors =
                 new ShuffleDescriptorAndIndex[consumedPartitionGroup.size()];
@@ -242,7 +242,7 @@ public class TaskDeploymentDescriptorFactory {
 
     private static Map<IntermediateDataSetID, ShuffleDescriptorAndIndex[]>
             getClusterPartitionShuffleDescriptors(ExecutionVertex executionVertex) {
-        final InternalExecutionGraphAccessor internalExecutionGraphAccessor =
+        final InternalExecutionPlanAccessor internalExecutionGraphAccessor =
                 executionVertex.getExecutionGraphAccessor();
         final List<IntermediateDataSetID> consumedClusterDataSetIds =
                 executionVertex.getJobVertex().getJobVertex().getIntermediateDataSetIdsToConsume();

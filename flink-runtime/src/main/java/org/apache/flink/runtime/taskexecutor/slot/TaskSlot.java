@@ -23,7 +23,7 @@ import org.apache.flink.runtime.clusterframework.types.AllocationID;
 import org.apache.flink.runtime.clusterframework.types.ResourceProfile;
 import org.apache.flink.runtime.executiongraph.ExecutionAttemptID;
 import org.apache.flink.runtime.memory.MemoryManager;
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.CollectionUtil;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.Preconditions;
@@ -61,7 +61,7 @@ import java.util.stream.Collectors;
  *
  * @param <T> type of the {@link TaskSlotPayload} stored in this slot
  */
-public class TaskSlot<T extends TaskSlotPayload> implements AutoCloseableAsync {
+public class TaskSlot<T extends TaskSlotPayload> implements AsyncCloseable {
     private static final Logger LOG = LoggerFactory.getLogger(TaskSlot.class);
 
     /** Index of the task slot. */

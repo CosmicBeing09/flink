@@ -41,7 +41,7 @@ import org.apache.flink.contrib.streaming.state.RocksDBConfigurableOptions;
 import org.apache.flink.core.execution.CheckpointingMode;
 import org.apache.flink.core.testutils.OneShotLatch;
 import org.apache.flink.runtime.client.JobExecutionException;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobResourceRequirements;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.state.FunctionInitializationContext;
@@ -224,7 +224,7 @@ public class AutoRescalingITCase extends TestLogger {
 
         try {
 
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithKeyedState(
                             cluster.getMiniCluster().getConfiguration().clone(),
                             parallelism,
@@ -323,7 +323,7 @@ public class AutoRescalingITCase extends TestLogger {
         ClusterClient<?> client = cluster.getClusterClient();
 
         try {
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithOperatorState(
                             parallelism, maxParallelism, OperatorCheckpointMethod.NON_PARTITIONED);
             // make sure the job does not finish before we take a checkpoint
@@ -379,7 +379,7 @@ public class AutoRescalingITCase extends TestLogger {
 
         try {
 
-            JobGraph jobGraph =
+            ExecutionPlan jobGraph =
                     createJobGraphWithKeyedAndNonPartitionedOperatorState(
                             parallelism,
                             maxParallelism,
@@ -510,7 +510,7 @@ public class AutoRescalingITCase extends TestLogger {
             throw new UnsupportedOperationException("Unsupported method:" + checkpointMethod);
         }
 
-        JobGraph jobGraph =
+        ExecutionPlan jobGraph =
                 createJobGraphWithOperatorState(parallelism, maxParallelism, checkpointMethod);
         // make sure the job does not finish before we take the checkpoint
         StateSourceBase.canFinishLatch = new CountDownLatch(1);
@@ -574,7 +574,7 @@ public class AutoRescalingITCase extends TestLogger {
         config.enableUnalignedCheckpoints(true);
     }
 
-    private static JobGraph createJobGraphWithOperatorState(
+    private static ExecutionPlan createJobGraphWithOperatorState(
             int parallelism, int maxParallelism, OperatorCheckpointMethod checkpointMethod) {
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
@@ -608,7 +608,7 @@ public class AutoRescalingITCase extends TestLogger {
         return env.getStreamGraph().getJobGraph();
     }
 
-    public static JobGraph createJobGraphWithKeyedState(
+    public static ExecutionPlan createJobGraphWithKeyedState(
             Configuration configuration,
             int parallelism,
             int maxParallelism,
@@ -648,7 +648,7 @@ public class AutoRescalingITCase extends TestLogger {
         return env.getStreamGraph().getJobGraph();
     }
 
-    private static JobGraph createJobGraphWithKeyedAndNonPartitionedOperatorState(
+    private static ExecutionPlan createJobGraphWithKeyedAndNonPartitionedOperatorState(
             int parallelism,
             int maxParallelism,
             int fixedParallelism,

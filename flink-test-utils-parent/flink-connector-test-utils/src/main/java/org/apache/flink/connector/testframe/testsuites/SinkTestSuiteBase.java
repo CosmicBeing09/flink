@@ -45,7 +45,7 @@ import org.apache.flink.runtime.metrics.MetricNames;
 import org.apache.flink.runtime.rest.RestClient;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.operators.collect.CollectResultIterator;
 import org.apache.flink.streaming.api.operators.collect.CollectSinkOperatorFactory;
@@ -243,7 +243,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
 
         // Step 3: Build and execute Flink job
         int numBeforeSuccess = testRecords.size() / 2;
-        DataStreamSource<T> source =
+        SourceRepresentation<T> source =
                 execEnv.fromSource(
                                 new FromElementsSource<>(
                                         Boundedness.CONTINUOUS_UNBOUNDED,
@@ -304,7 +304,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
                                 .build());
         restartEnv.enableCheckpointing(50);
 
-        DataStreamSource<T> restartSource =
+        SourceRepresentation<T> restartSource =
                 restartEnv
                         .fromSource(
                                 new FromElementsSource<>(
@@ -359,7 +359,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
                                 .build());
         env.enableCheckpointing(50);
 
-        DataStreamSource<T> source =
+        SourceRepresentation<T> source =
                 env.fromSource(
                                 new FromElementsSource<>(
                                         Boundedness.CONTINUOUS_UNBOUNDED,

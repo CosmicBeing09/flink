@@ -19,7 +19,7 @@
 package org.apache.flink.table.api.bridge.java.internal;
 
 import org.apache.flink.api.dag.Transformation;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.table.api.Table;
 import org.apache.flink.table.api.TableConfig;
@@ -47,7 +47,7 @@ class StreamTableEnvironmentImplTest {
     @Test
     void testAppendStreamDoesNotOverwriteTableConfig() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> elements = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> elements = env.fromData(1, 2, 3);
 
         StreamTableEnvironmentImpl tEnv = getStreamTableEnvironment(env, elements);
 
@@ -62,7 +62,7 @@ class StreamTableEnvironmentImplTest {
     @Test
     void testRetractStreamDoesNotOverwriteTableConfig() {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> elements = env.fromData(1, 2, 3);
+        SourceRepresentation<Integer> elements = env.fromData(1, 2, 3);
 
         StreamTableEnvironmentImpl tEnv = getStreamTableEnvironment(env, elements);
 
@@ -75,7 +75,7 @@ class StreamTableEnvironmentImplTest {
     }
 
     private StreamTableEnvironmentImpl getStreamTableEnvironment(
-            StreamExecutionEnvironment env, DataStreamSource<Integer> elements) {
+            StreamExecutionEnvironment env, SourceRepresentation<Integer> elements) {
         TableConfig tableConfig = TableConfig.getDefault();
         CatalogManager catalogManager = CatalogManagerMocks.createEmptyCatalogManager();
         ModuleManager moduleManager = new ModuleManager();

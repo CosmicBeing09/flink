@@ -31,12 +31,8 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.common.typeutils.base.StringSerializer;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
-import org.apache.flink.streaming.api.datastream.BroadcastStream;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
-import org.apache.flink.streaming.api.datastream.KeyedStream;
-import org.apache.flink.streaming.api.datastream.MultipleConnectedStreams;
-import org.apache.flink.streaming.api.datastream.SingleOutputStreamOperator;
+import org.apache.flink.streaming.api.datastream.*;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.co.BroadcastProcessFunction;
 import org.apache.flink.streaming.api.functions.co.KeyedBroadcastProcessFunction;
@@ -96,7 +92,7 @@ public class DataStreamBatchExecutionITCase {
 
         final StreamExecutionEnvironment env = getExecutionEnvironment();
 
-        DataStreamSource<String> source = env.fromData("foo", "bar");
+        SourceRepresentation<String> source = env.fromData("foo", "bar");
 
         SingleOutputStreamOperator<String> mapped =
                 source.map(new SuffixAttemptId("a"))
@@ -125,7 +121,7 @@ public class DataStreamBatchExecutionITCase {
 
         final StreamExecutionEnvironment env = getExecutionEnvironment();
 
-        DataStreamSource<String> source = env.fromData("foo", "bar");
+        SourceRepresentation<String> source = env.fromData("foo", "bar");
 
         SingleOutputStreamOperator<String> mapped =
                 source.map(new SuffixAttemptId("a"))
@@ -154,7 +150,7 @@ public class DataStreamBatchExecutionITCase {
 
         final StreamExecutionEnvironment env = getExecutionEnvironment();
 
-        DataStreamSource<String> source = env.fromData("foo", "bar");
+        SourceRepresentation<String> source = env.fromData("foo", "bar");
         env.setParallelism(1);
 
         SingleOutputStreamOperator<String> mapped =
@@ -179,7 +175,7 @@ public class DataStreamBatchExecutionITCase {
     @Test
     public void batchReduceSingleResultPerKey() throws Exception {
         StreamExecutionEnvironment env = getExecutionEnvironment();
-        DataStreamSource<Long> numbers = env.fromSequence(0, 10);
+        SourceRepresentation<Long> numbers = env.fromSequence(0, 10);
 
         // send all records into a single reducer
         KeyedStream<Long, Long> stream = numbers.keyBy(i -> i % 2);
@@ -194,7 +190,7 @@ public class DataStreamBatchExecutionITCase {
     @Test
     public void batchSumSingleResultPerKey() throws Exception {
         StreamExecutionEnvironment env = getExecutionEnvironment();
-        DataStreamSource<Long> numbers = env.fromSequence(0, 10);
+        SourceRepresentation<Long> numbers = env.fromSequence(0, 10);
 
         // send all records into a single reducer
         KeyedStream<Long, Long> stream = numbers.keyBy(i -> i % 2);

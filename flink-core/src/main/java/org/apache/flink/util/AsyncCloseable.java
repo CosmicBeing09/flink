@@ -22,7 +22,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 /** Closeable interface which allows to close a resource in a non blocking fashion. */
-public interface AutoCloseableAsync extends AutoCloseable {
+public interface AsyncCloseable extends AutoCloseable {
 
     /**
      * Trigger the closing of the resource and return the corresponding close future.

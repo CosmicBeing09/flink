@@ -21,14 +21,10 @@ import org.apache.flink.api.common.functions.FlatMapFunction;
 import org.apache.flink.api.java.tuple.Tuple;
 import org.apache.flink.api.java.tuple.Tuple2;
 import org.apache.flink.runtime.JobException;
-import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.executiongraph.ExecutionJobVertex;
-import org.apache.flink.runtime.executiongraph.ExecutionVertex;
-import org.apache.flink.runtime.executiongraph.IntermediateResultPartition;
-import org.apache.flink.runtime.executiongraph.InternalExecutionGraphAccessor;
-import org.apache.flink.runtime.executiongraph.TestingDefaultExecutionGraphBuilder;
+import org.apache.flink.runtime.executiongraph.*;
+import org.apache.flink.runtime.executiongraph.InternalExecutionPlanAccessor;
 import org.apache.flink.runtime.jobgraph.IntermediateResultPartitionID;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
@@ -113,7 +109,7 @@ class RescalePartitionerTest extends StreamPartitionerTest {
 
         counts.rescale().print().setParallelism(2);
 
-        JobGraph jobGraph = env.getStreamGraph().getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph().getJobGraph();
 
         List<JobVertex> jobVertices = jobGraph.getVerticesSortedTopologicallyFromSources();
 
@@ -180,7 +176,7 @@ class RescalePartitionerTest extends StreamPartitionerTest {
         assertThat(execSinkVertex.getInputs()).hasSize(1);
         assertThat(execSinkVertex.getParallelism()).isEqualTo(2);
         ExecutionVertex[] sinkTaskVertices = execSinkVertex.getTaskVertices();
-        InternalExecutionGraphAccessor executionGraphAccessor = execSinkVertex.getGraph();
+        InternalExecutionPlanAccessor executionGraphAccessor = execSinkVertex.getGraph();
 
         // verify each sink instance has two inputs from the map and that each map subpartition
         // only occurs in one unique input edge

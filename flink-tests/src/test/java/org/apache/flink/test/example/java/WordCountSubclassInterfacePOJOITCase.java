@@ -26,7 +26,7 @@ import org.apache.flink.api.common.serialization.SimpleStringEncoder;
 import org.apache.flink.connector.file.sink.FileSink;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.legacy.io.TextInputFormat;
 import org.apache.flink.streaming.api.windowing.assigners.GlobalWindows;
@@ -60,7 +60,7 @@ public class WordCountSubclassInterfacePOJOITCase extends JavaProgramTestBaseJUn
     @Override
     protected void testProgram() throws Exception {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> text = env.createInput(new TextInputFormat(new Path(textPath)));
+        SourceRepresentation<String> text = env.createInput(new TextInputFormat(new Path(textPath)));
 
         DataStream<WCBase> counts =
                 text.flatMap(new Tokenizer())

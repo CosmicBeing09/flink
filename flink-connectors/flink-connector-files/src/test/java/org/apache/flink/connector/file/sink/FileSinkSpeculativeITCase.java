@@ -30,11 +30,11 @@ import org.apache.flink.configuration.SlowTaskDetectorOptions;
 import org.apache.flink.connector.file.sink.utils.IntegerFileSinkTestDataUtils;
 import org.apache.flink.connector.file.sink.utils.PartSizeAndCheckpointRollingPolicy;
 import org.apache.flink.core.execution.JobClient;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.operators.StreamSource;
@@ -95,8 +95,8 @@ class FileSinkSpeculativeITCase {
         // Create a testing job with a bounded source.
         StreamSource<Integer, ?> sourceOperator =
                 new StreamSource<>(new BatchExecutionTestSource(NUM_RECORDS));
-        DataStreamSource<Integer> source =
-                new DataStreamSource<>(
+        SourceRepresentation<Integer> source =
+                new SourceRepresentation<>(
                         env,
                         BasicTypeInfo.INT_TYPE_INFO,
                         sourceOperator,
@@ -114,7 +114,7 @@ class FileSinkSpeculativeITCase {
                         .name("file_sink")
                         .setParallelism(NUM_SINKS);
 
-        JobGraph jobGraph = env.getStreamGraph(false).getJobGraph();
+        ExecutionPlan jobGraph = env.getStreamGraph(false).getJobGraph();
 
         // Assert that the TestingMap operator is chained with FileSink, which will lead
         // to a slow sink as well.

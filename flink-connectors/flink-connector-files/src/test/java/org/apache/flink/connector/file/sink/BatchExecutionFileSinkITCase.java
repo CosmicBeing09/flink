@@ -24,9 +24,9 @@ import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.api.connector.source.Boundedness;
 import org.apache.flink.configuration.Configuration;
 import org.apache.flink.configuration.ExecutionOptions;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.streaming.api.datastream.DataStreamSink;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.legacy.RichParallelSourceFunction;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -41,7 +41,7 @@ class BatchExecutionFileSinkITCase extends FileSinkITBase {
      * -> File Sink]. The Failover Map is introduced to ensure the failover would always restart the
      * file writer so the data would be re-written.
      */
-    protected JobGraph createJobGraph(boolean triggerFailover, String path) {
+    protected ExecutionPlan createJobGraph(boolean triggerFailover, String path) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
@@ -56,8 +56,8 @@ class BatchExecutionFileSinkITCase extends FileSinkITBase {
         // Create a testing job with a bounded legacy source in a bit hacky way.
         StreamSource<Integer, ?> sourceOperator =
                 new StreamSource<>(new BatchExecutionTestSource(NUM_RECORDS));
-        DataStreamSource<Integer> source =
-                new DataStreamSource<>(
+        SourceRepresentation<Integer> source =
+                new SourceRepresentation<>(
                         env,
                         BasicTypeInfo.INT_TYPE_INFO,
                         sourceOperator,

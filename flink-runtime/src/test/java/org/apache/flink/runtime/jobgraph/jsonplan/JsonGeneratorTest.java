@@ -19,11 +19,8 @@
 package org.apache.flink.runtime.jobgraph.jsonplan;
 
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.DistributionPattern;
-import org.apache.flink.runtime.jobgraph.JobGraph;
-import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
-import org.apache.flink.runtime.jobgraph.JobVertex;
-import org.apache.flink.runtime.jobgraph.JobVertexID;
+import org.apache.flink.runtime.jobgraph.*;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.operators.testutils.DummyInvokable;
 import org.apache.flink.util.jackson.JacksonMapperFactory;
 
@@ -81,7 +78,7 @@ public class JsonGeneratorTest {
             sink2.connectNewDataSetAsInput(
                     join1, DistributionPattern.ALL_TO_ALL, ResultPartitionType.PIPELINED);
 
-            JobGraph jg =
+            ExecutionPlan executionPlan =
                     JobGraphTestUtils.batchJobGraph(
                             source1,
                             source2,
@@ -93,7 +90,7 @@ public class JsonGeneratorTest {
                             sink1,
                             sink2);
 
-            String plan = JsonPlanGenerator.generatePlan(jg);
+            String plan = JsonPlanGenerator.generatePlan(executionPlan);
             assertNotNull(plan);
 
             // validate the produced JSON
@@ -101,9 +98,9 @@ public class JsonGeneratorTest {
             JsonNode rootNode = m.readTree(plan);
 
             // core fields
-            assertEquals(new TextNode(jg.getJobID().toString()), rootNode.get("jid"));
-            assertEquals(new TextNode(jg.getName()), rootNode.get("name"));
-            assertEquals(new TextNode(jg.getJobType().name()), rootNode.get("type"));
+            assertEquals(new TextNode(executionPlan.getJobID().toString()), rootNode.get("jid"));
+            assertEquals(new TextNode(executionPlan.getName()), rootNode.get("name"));
+            assertEquals(new TextNode(executionPlan.getJobType().name()), rootNode.get("type"));
 
             assertTrue(rootNode.path("nodes").isArray());
 
@@ -113,7 +110,7 @@ public class JsonGeneratorTest {
                 JsonNode idNode = next.get("id");
                 assertNotNull(idNode);
                 assertTrue(idNode.isTextual());
-                checkVertexExists(idNode.asText(), jg);
+                checkVertexExists(idNode.asText(), executionPlan);
 
                 String description = next.get("description").asText();
                 assertTrue(
@@ -128,10 +125,10 @@ public class JsonGeneratorTest {
         }
     }
 
-    private void checkVertexExists(String vertexId, JobGraph graph) {
+    private void checkVertexExists(String vertexId, ExecutionPlan executionPlan) {
         // validate that the vertex has a valid
         JobVertexID id = JobVertexID.fromHexString(vertexId);
-        for (JobVertex vertex : graph.getVertices()) {
+        for (JobVertex vertex : executionPlan.getVertices()) {
             if (vertex.getID().equals(id)) {
                 return;
             }

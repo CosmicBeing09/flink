@@ -18,7 +18,7 @@
 
 package org.apache.flink.runtime.jobmaster;
 
-import org.apache.flink.util.AutoCloseableAsync;
+import org.apache.flink.util.AsyncCloseable;
 import org.apache.flink.util.FlinkException;
 import org.apache.flink.util.concurrent.FutureUtils;
 
@@ -28,7 +28,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 /** JobMasterServiceProcess is responsible for running a {@link JobMasterService}. */
-public interface JobMasterServiceProcess extends AutoCloseableAsync {
+public interface JobMasterServiceProcess extends AsyncCloseable {
 
     static JobMasterServiceProcess waitingForLeadership() {
         return WaitingForLeadership.INSTANCE;

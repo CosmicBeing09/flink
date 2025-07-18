@@ -23,7 +23,7 @@ import org.apache.flink.api.common.typeinfo.Types;
 import org.apache.flink.api.connector.source.util.ratelimit.RateLimiterStrategy;
 import org.apache.flink.connector.datagen.source.DataGeneratorSource;
 import org.apache.flink.connector.datagen.source.GeneratorFunction;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 /** An example for generating specific data per checkpoint with a {@link DataGeneratorSource} . */
@@ -47,7 +47,7 @@ public class DataGeneratorPerCheckpoint {
                         RateLimiterStrategy.perCheckpoint(size),
                         Types.STRING);
 
-        final DataStreamSource<String> streamSource =
+        final SourceRepresentation<String> streamSource =
                 env.fromSource(generatorSource, WatermarkStrategy.noWatermarks(), "Data Generator");
         streamSource.print();
 

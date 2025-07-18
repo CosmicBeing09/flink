@@ -30,7 +30,7 @@ import org.apache.flink.datastream.api.function.TwoOutputStreamProcessFunction;
 import org.apache.flink.datastream.api.stream.NonKeyedPartitionStream;
 import org.apache.flink.datastream.impl.ExecutionEnvironmentImpl;
 import org.apache.flink.runtime.io.network.partition.ResultPartitionType;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.streaming.api.functions.sink.v2.DiscardingSink;
 import org.apache.flink.streaming.api.graph.StreamGraph;
@@ -68,7 +68,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -103,7 +103,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -146,7 +146,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
                 .toSink(new WrappedSink<>(new DiscardingSink<>()))
                 .withParallelism(3);
         StreamGraph streamGraph = env.getStreamGraph();
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);
@@ -183,7 +183,7 @@ class StreamingJobGraphGeneratorWithAttributeTest {
             nodeMap.put(node.getOperatorName(), node);
         }
         assertThat(nodeMap).hasSize(4);
-        JobGraph jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
+        ExecutionPlan jobGraph = StreamingJobGraphGenerator.createJobGraph(streamGraph);
         Map<String, JobVertex> vertexMap = new HashMap<>();
         for (JobVertex vertex : jobGraph.getVertices()) {
             vertexMap.put(vertex.getName(), vertex);

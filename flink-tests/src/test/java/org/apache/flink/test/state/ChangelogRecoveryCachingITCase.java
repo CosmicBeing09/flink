@@ -32,7 +32,7 @@ import org.apache.flink.core.fs.FileSystemFactory;
 import org.apache.flink.core.fs.Path;
 import org.apache.flink.core.fs.local.LocalFileSystem;
 import org.apache.flink.core.plugin.TestingPluginManager;
-import org.apache.flink.runtime.jobgraph.JobGraph;
+import org.apache.flink.runtime.jobgraph.ExecutionPlan;
 import org.apache.flink.runtime.testutils.CommonTestUtils;
 import org.apache.flink.runtime.testutils.MiniClusterResourceConfiguration;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -134,14 +134,14 @@ public class ChangelogRecoveryCachingITCase extends TestLogger {
         checkState(fileSystem.hasOpenedPaths());
     }
 
-    private JobID submit(Configuration conf, Consumer<JobGraph> updateGraph)
+    private JobID submit(Configuration conf, Consumer<ExecutionPlan> updateGraph)
             throws InterruptedException, ExecutionException {
-        JobGraph jobGraph = createJobGraph(conf);
+        ExecutionPlan jobGraph = createJobGraph(conf);
         updateGraph.accept(jobGraph);
         return cluster.getClusterClient().submitJob(jobGraph).get();
     }
 
-    private JobGraph createJobGraph(Configuration conf) {
+    private ExecutionPlan createJobGraph(Configuration conf) {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(conf);
         env.fromSequence(Long.MIN_VALUE, Long.MAX_VALUE)
                 .keyBy(num -> num % 1000)

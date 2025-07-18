@@ -90,7 +90,7 @@ public class ExecutionJobVertex
 
     private final Object stateMonitor = new Object();
 
-    private final InternalExecutionGraphAccessor graph;
+    private final InternalExecutionPlanAccessor graph;
 
     private final JobVertex jobVertex;
 
@@ -126,7 +126,7 @@ public class ExecutionJobVertex
 
     @VisibleForTesting
     public ExecutionJobVertex(
-            InternalExecutionGraphAccessor graph,
+            InternalExecutionPlanAccessor graph,
             JobVertex jobVertex,
             VertexParallelismInformation parallelismInfo,
             CoordinatorStore coordinatorStore,
@@ -323,7 +323,7 @@ public class ExecutionJobVertex
         parallelismInfo.setMaxParallelism(maxParallelism);
     }
 
-    public InternalExecutionGraphAccessor getGraph() {
+    public InternalExecutionPlanAccessor getGraph() {
         return graph;
     }
 
@@ -663,7 +663,7 @@ public class ExecutionJobVertex
     /** Factory to create {@link ExecutionJobVertex}. */
     public static class Factory {
         ExecutionJobVertex createExecutionJobVertex(
-                InternalExecutionGraphAccessor graph,
+                InternalExecutionPlanAccessor graph,
                 JobVertex jobVertex,
                 VertexParallelismInformation parallelismInfo,
                 CoordinatorStore coordinatorStore,

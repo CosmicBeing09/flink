@@ -25,7 +25,7 @@ import org.apache.flink.api.common.functions.ReduceFunction;
 import org.apache.flink.api.common.operators.Order;
 import org.apache.flink.api.java.functions.KeySelector;
 import org.apache.flink.api.java.tuple.Tuple2;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.datastream.NonKeyedPartitionWindowedStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.util.CloseableIterator;
@@ -54,7 +54,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     @Test
     void testMapPartition() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<String> source = env.fromData(createSource());
+        SourceRepresentation<String> source = env.fromData(createSource());
         int parallelism = 2;
         CloseableIterator<String> resultIterator =
                 source.map(v -> v)
@@ -80,7 +80,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     @Test
     void testReduce() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> source = env.fromData(1, 1, 1, 1, 998, 998);
+        SourceRepresentation<Integer> source = env.fromData(1, 1, 1, 1, 998, 998);
         CloseableIterator<String> resultIterator =
                 source.map(v -> v)
                         .setParallelism(2)
@@ -107,7 +107,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     @Test
     void testAggregate() throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Integer> source = env.fromData(1, 1, 2, 2, 3, 3);
+        SourceRepresentation<Integer> source = env.fromData(1, 1, 2, 2, 3, 3);
         CloseableIterator<String> resultIterator =
                 source.map(v -> v)
                         .setParallelism(2)
@@ -174,7 +174,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionOfTupleElementsInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<Tuple2<String, Integer>> source =
+        SourceRepresentation<Tuple2<String, Integer>> source =
                 env.fromData(
                         Tuple2.of("Test", 0),
                         Tuple2.of("Test", 0),
@@ -214,7 +214,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionOfPojoElementsInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<TestPojo> source =
+        SourceRepresentation<TestPojo> source =
                 env.fromData(
                         new TestPojo(0),
                         new TestPojo(0),
@@ -252,7 +252,7 @@ class NonKeyedPartitionWindowedStreamITCase {
     private CloseableIterator<String> sortPartitionByKeySelectorInOrder(Order order)
             throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        DataStreamSource<TestPojo> source =
+        SourceRepresentation<TestPojo> source =
                 env.fromData(
                         new TestPojo("KEY", 0),
                         new TestPojo("KEY", 0),

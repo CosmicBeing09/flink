@@ -125,7 +125,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
 import static org.apache.flink.util.Preconditions.checkState;
 
 /** Default implementation of the {@link ExecutionGraph}. */
-public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionGraphAccessor {
+public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionPlanAccessor {
 
     /** The log object used for debugging. */
     static final Logger LOG = LoggerFactory.getLogger(ExecutionGraph.class);

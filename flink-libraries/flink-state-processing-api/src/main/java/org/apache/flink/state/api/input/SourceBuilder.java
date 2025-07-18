@@ -22,7 +22,7 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.api.common.io.InputFormat;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
 import org.apache.flink.api.connector.source.Boundedness;
-import org.apache.flink.streaming.api.datastream.DataStreamSource;
+import org.apache.flink.streaming.api.datastream.SourceRepresentation;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.apache.flink.streaming.api.functions.source.legacy.InputFormatSourceFunction;
 import org.apache.flink.streaming.api.operators.StreamSource;
@@ -44,7 +44,7 @@ public final class SourceBuilder {
      * @param <OUT> The output type.
      * @return A source that is bounded.
      */
-    public static <OUT> DataStreamSource<OUT> fromFormat(
+    public static <OUT> SourceRepresentation<OUT> fromFormat(
             StreamExecutionEnvironment env,
             InputFormat<OUT, ?> inputFormat,
             TypeInformation<OUT> typeInfo) {
@@ -54,7 +54,7 @@ public final class SourceBuilder {
         env.clean(function);
 
         final StreamSource<OUT, ?> sourceOperator = new StreamSource<>(function);
-        return new DataStreamSource<>(
+        return new SourceRepresentation<>(
                 env, typeInfo, sourceOperator, true, SOURCE_NAME, Boundedness.BOUNDED);
     }
 }

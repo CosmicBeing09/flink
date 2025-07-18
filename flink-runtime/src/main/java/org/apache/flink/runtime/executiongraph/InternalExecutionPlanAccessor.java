@@ -42,7 +42,7 @@ import java.util.concurrent.Executor;
  * This interface encapsulates all methods needed by ExecutionJobVertex / ExecutionVertices /
  * Execution from the DefaultExecutionGraph.
  */
-public interface InternalExecutionGraphAccessor {
+public interface InternalExecutionPlanAccessor {
 
     ClassLoader getUserClassLoader();
 
