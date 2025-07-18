@@ -104,7 +104,7 @@ class ReporterSetupTest {
     }
 
     /**
-     * Verifies that {@link MetricOptions#REPORTERS_LIST} is correctly used to filter configured
+     * Verifies that {@link MetricOptions#METRICS_REPORTERS_LIST} is correctly used to filter configured
      * reporters.
      */
     @Test
@@ -114,7 +114,7 @@ class ReporterSetupTest {
         configureReporter1(config);
         configureReporter2(config);
 
-        config.set(MetricOptions.REPORTERS_LIST, "reporter2");
+        config.set(MetricOptions.METRICS_REPORTERS_LIST, "reporter2");
 
         final List<ReporterSetup> reporterSetups = ReporterSetup.fromConfiguration(config, null);
 
