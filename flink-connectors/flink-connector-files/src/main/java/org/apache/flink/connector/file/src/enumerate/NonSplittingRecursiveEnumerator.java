@@ -74,13 +74,13 @@ public class NonSplittingRecursiveEnumerator implements FileEnumerator {
     // ------------------------------------------------------------------------
 
     @Override
-    public Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits)
+    public Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits)
             throws IOException {
         final ArrayList<FileSourceSplit> splits = new ArrayList<>();
 
-        for (Path path : paths) {
-            final FileSystem fs = path.getFileSystem();
-            final FileStatus status = fs.getFileStatus(path);
+        for (Path inputPath : inputPaths) {
+            final FileSystem fs = inputPath.getFileSystem();
+            final FileStatus status = fs.getFileStatus(inputPath);
             addSplitsForPath(status, fs, splits);
         }
 

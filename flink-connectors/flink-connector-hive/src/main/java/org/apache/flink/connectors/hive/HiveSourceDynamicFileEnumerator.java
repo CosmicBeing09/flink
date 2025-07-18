@@ -170,7 +170,7 @@ public class HiveSourceDynamicFileEnumerator implements DynamicFileEnumerator {
     }
 
     @Override
-    public Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits)
+    public Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits)
             throws IOException {
         return new ArrayList<>(
                 HiveSourceFileEnumerator.createInputSplits(

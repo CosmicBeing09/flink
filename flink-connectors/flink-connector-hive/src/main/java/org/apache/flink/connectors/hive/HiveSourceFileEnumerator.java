@@ -63,7 +63,7 @@ public class HiveSourceFileEnumerator implements FileEnumerator {
     }
 
     @Override
-    public Collection<FileSourceSplit> enumerateSplits(Path[] paths, int minDesiredSplits)
+    public Collection<FileSourceSplit> enumerateSplits(Path[] inputPaths, int minDesiredSplits)
             throws IOException {
         return new ArrayList<>(createInputSplits(minDesiredSplits, partitions, jobConf, false));
     }
