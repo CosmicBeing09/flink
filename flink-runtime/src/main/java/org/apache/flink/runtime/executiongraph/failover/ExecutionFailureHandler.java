@@ -200,7 +200,7 @@ public class ExecutionFailureHandler {
                     true);
         }
 
-        boolean isNewAttempt = restartBackoffTimeStrategy.notifyFailure(cause);
+        boolean isNewAttempt = restartBackoffTimeStrategy.notifyTaskFailure(cause);
         if (restartBackoffTimeStrategy.canRestart()) {
             if (isNewAttempt) {
                 numberOfRestarts++;
@@ -212,7 +212,7 @@ public class ExecutionFailureHandler {
                     timestamp,
                     failureLabels,
                     verticesToRestart,
-                    restartBackoffTimeStrategy.getBackoffTime(),
+                    restartBackoffTimeStrategy.getRestartBackoffDelay(),
                     globalFailure,
                     isNewAttempt);
         } else {

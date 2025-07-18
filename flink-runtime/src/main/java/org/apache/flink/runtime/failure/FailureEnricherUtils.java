@@ -143,7 +143,7 @@ public class FailureEnricherUtils {
         final Map<String, Set<Class<?>>> enrichersByKey = new HashMap<>();
         failureEnrichers.forEach(
                 enricher ->
-                        enricher.getOutputKeys()
+                        enricher.getLabelKeys()
                                 .forEach(
                                         enricherKey ->
                                                 enrichersByKey
@@ -194,13 +194,13 @@ public class FailureEnricherUtils {
                                         final Map<String, String> validLabels = new HashMap<>();
                                         enricherLabels.forEach(
                                                 (k, v) -> {
-                                                    if (!enricher.getOutputKeys().contains(k)) {
+                                                    if (!enricher.getLabelKeys().contains(k)) {
                                                         LOG.warn(
                                                                 "Ignoring label with key {} from enricher {}"
                                                                         + " violating contract, keys allowed {}.",
                                                                 k,
                                                                 enricher.getClass(),
-                                                                enricher.getOutputKeys());
+                                                                enricher.getLabelKeys());
                                                     } else {
                                                         validLabels.put(k, v);
                                                     }

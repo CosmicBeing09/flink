@@ -47,7 +47,7 @@ public interface ExecutionGraphFactory {
      * @param initializationTimestamp initializationTimestamp when the ExecutionGraph was created
      * @param vertexAttemptNumberStore vertexAttemptNumberStore keeping information about the vertex
      *     attempts of previous runs
-     * @param vertexParallelismStore vertexMaxParallelismStore keeping information about the vertex
+     * @param vertexMaxParallelismStore vertexMaxParallelismStore keeping information about the vertex
      *     max parallelism settings
      * @param executionStateUpdateListener listener for state transitions of the individual
      *     executions
@@ -64,7 +64,7 @@ public interface ExecutionGraphFactory {
             TaskDeploymentDescriptorFactory.PartitionLocationConstraint partitionLocationConstraint,
             long initializationTimestamp,
             VertexAttemptNumberStore vertexAttemptNumberStore,
-            VertexParallelismStore vertexParallelismStore,
+            VertexParallelismStore vertexMaxParallelismStore,
             ExecutionStateUpdateListener executionStateUpdateListener,
             MarkPartitionFinishedStrategy markPartitionFinishedStrategy,
             Logger log)

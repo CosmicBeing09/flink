@@ -53,11 +53,11 @@ class JobManagerOperatorGroupTest {
         final OperatorID operatorId2 = new OperatorID();
 
         JobManagerOperatorMetricGroup jmOperatorGroup11 =
-                jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId1, "taskName1", operatorId1, "opName1");
         JobManagerOperatorMetricGroup jmOperatorGroup12 =
-                jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId1, "taskName1", operatorId1, "opName1");
         JobManagerOperatorMetricGroup jmOperatorGroup21 =
-                jmJobGroup.getOrAddOperator(jobVertexId2, "taskName3", operatorId2, "opName3");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId2, "taskName3", operatorId2, "opName3");
 
         assertThat(jmOperatorGroup11).isEqualTo(jmOperatorGroup12);
 
@@ -84,11 +84,11 @@ class JobManagerOperatorGroupTest {
         final OperatorID operatorId2 = new OperatorID();
 
         JobManagerOperatorMetricGroup jmOperatorGroup11 =
-                jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId1, "taskName1", operatorId1, "opName1");
         JobManagerOperatorMetricGroup jmOperatorGroup12 =
-                jmJobGroup.getOrAddOperator(jobVertexId1, "taskName1", operatorId1, "opName1");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId1, "taskName1", operatorId1, "opName1");
         JobManagerOperatorMetricGroup jmOperatorGroup21 =
-                jmJobGroup.getOrAddOperator(jobVertexId2, "taskName3", operatorId2, "opName3");
+                jmJobGroup.getOrCreateOperatorMetricGroup(jobVertexId2, "taskName3", operatorId2, "opName3");
 
         assertThat(jmOperatorGroup11).isEqualTo(jmOperatorGroup12);
         assertThat(jmJobGroup.numRegisteredOperatorMetricGroups()).isEqualTo(2);
@@ -111,7 +111,7 @@ class JobManagerOperatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
 
         assertThat(jmJobGroup.getScopeComponents())
                 .containsExactly("localhost", "jobmanager", "myJobName", "opName");
@@ -136,7 +136,7 @@ class JobManagerOperatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
 
         assertThat(jmJobGroup.getScopeComponents())
                 .containsExactly(
@@ -174,7 +174,7 @@ class JobManagerOperatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
 
         assertThat(jmJobGroup.getScopeComponents())
                 .containsExactly(
@@ -199,7 +199,7 @@ class JobManagerOperatorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "host")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
 
         QueryScopeInfo.JobManagerOperatorQueryScopeInfo info =
                 jmJobGroup.createQueryServiceMetricInfo(new DummyCharacterFilter());

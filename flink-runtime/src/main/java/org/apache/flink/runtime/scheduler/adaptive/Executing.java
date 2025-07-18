@@ -114,7 +114,7 @@ class Executing extends StateWithExecutionGraph
 
     @Override
     public boolean hasDesiredResources() {
-        return parallelismChanged() && context.hasDesiredResources();
+        return parallelismChanged() && context.hasDeclaredResourceRequirements();
     }
 
     private boolean parallelismChanged() {
@@ -320,7 +320,7 @@ class Executing extends StateWithExecutionGraph
          *
          * @return {@code true} if we have enough resources; otherwise {@code false}
          */
-        boolean hasDesiredResources();
+        boolean hasDeclaredResourceRequirements();
 
         /**
          * Checks if we currently have sufficient resources for executing the job.

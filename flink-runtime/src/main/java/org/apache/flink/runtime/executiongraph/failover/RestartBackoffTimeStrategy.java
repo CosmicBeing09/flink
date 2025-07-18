@@ -32,7 +32,7 @@ public interface RestartBackoffTimeStrategy {
      *
      * @return the delay to do the restarting
      */
-    long getBackoffTime();
+    long getRestartBackoffDelay();
 
     /**
      * Notify the strategy about the task failure cause.
@@ -42,7 +42,7 @@ public interface RestartBackoffTimeStrategy {
      *     handling happened, false means that there has been a failure before that was not handled,
      *     yet, and the current failure will be considered in a combined failure handling effort.
      */
-    boolean notifyFailure(Throwable cause);
+    boolean notifyTaskFailure(Throwable cause);
 
     // ------------------------------------------------------------------------
     //  factory

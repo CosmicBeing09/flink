@@ -78,11 +78,11 @@ public class JobGraph implements Serializable {
     // --- job and configuration ---
 
     /** List of task vertices included in this job graph. */
-    private final Map<JobVertexID, JobVertex> taskVertices =
+    private final Map<JobVertexID, JobVertex> jobVerticesMap =
             new LinkedHashMap<JobVertexID, JobVertex>();
 
     /** The job configuration attached to this job. */
-    private Configuration jobConfiguration = new Configuration();
+    private Configuration jobConfig = new Configuration();
 
     /** ID of this job. May be set if specific job id is desired (e.g. session management) */
     private JobID jobID;
@@ -204,7 +204,7 @@ public class JobGraph implements Serializable {
     }
 
     public void setJobConfiguration(Configuration jobConfiguration) {
-        this.jobConfiguration = jobConfiguration;
+        this.jobConfig = jobConfiguration;
     }
 
     /**
@@ -214,7 +214,7 @@ public class JobGraph implements Serializable {
      * @return The configuration object for this job.
      */
     public Configuration getJobConfiguration() {
-        return this.jobConfiguration;
+        return this.jobConfig;
     }
 
     /**
@@ -295,11 +295,11 @@ public class JobGraph implements Serializable {
      */
     public void addVertex(JobVertex vertex) {
         final JobVertexID id = vertex.getID();
-        JobVertex previous = taskVertices.put(id, vertex);
+        JobVertex previous = jobVerticesMap.put(id, vertex);
 
         // if we had a prior association, restore and throw an exception
         if (previous != null) {
-            taskVertices.put(id, previous);
+            jobVerticesMap.put(id, previous);
             throw new IllegalArgumentException(
                     "The JobGraph already contains a vertex with that id.");
         }
@@ -311,7 +311,7 @@ public class JobGraph implements Serializable {
      * @return an Iterable to iterate all vertices registered with the job graph
      */
     public Iterable<JobVertex> getVertices() {
-        return this.taskVertices.values();
+        return this.jobVerticesMap.values();
     }
 
     /**
@@ -321,7 +321,7 @@ public class JobGraph implements Serializable {
      * @return an array of all job vertices that are registered with the job graph
      */
     public JobVertex[] getVerticesAsArray() {
-        return this.taskVertices.values().toArray(new JobVertex[this.taskVertices.size()]);
+        return this.jobVerticesMap.values().toArray(new JobVertex[this.jobVerticesMap.size()]);
     }
 
     /**
@@ -330,7 +330,7 @@ public class JobGraph implements Serializable {
      * @return The number of all vertices.
      */
     public int getNumberOfVertices() {
-        return this.taskVertices.size();
+        return this.jobVerticesMap.size();
     }
 
     public Set<SlotSharingGroup> getSlotSharingGroups() {
@@ -397,7 +397,7 @@ public class JobGraph implements Serializable {
      *     be found
      */
     public JobVertex findVertexByID(JobVertexID id) {
-        return this.taskVertices.get(id);
+        return this.jobVerticesMap.get(id);
     }
 
     /**
@@ -420,7 +420,7 @@ public class JobGraph implements Serializable {
      */
     public int getMaximumParallelism() {
         int maxParallelism = -1;
-        for (JobVertex vertex : taskVertices.values()) {
+        for (JobVertex vertex : jobVerticesMap.values()) {
             maxParallelism = Math.max(vertex.getParallelism(), maxParallelism);
         }
         return maxParallelism;
@@ -433,12 +433,12 @@ public class JobGraph implements Serializable {
     public List<JobVertex> getVerticesSortedTopologicallyFromSources()
             throws InvalidProgramException {
         // early out on empty lists
-        if (this.taskVertices.isEmpty()) {
+        if (this.jobVerticesMap.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<JobVertex> sorted = new ArrayList<JobVertex>(this.taskVertices.size());
-        Set<JobVertex> remaining = new LinkedHashSet<JobVertex>(this.taskVertices.values());
+        List<JobVertex> sorted = new ArrayList<JobVertex>(this.jobVerticesMap.size());
+        Set<JobVertex> remaining = new LinkedHashSet<JobVertex>(this.jobVerticesMap.values());
 
         // start by finding the vertices with no input edges
         // and the ones with disconnected inputs (that refer to some standalone data set)
@@ -647,7 +647,7 @@ public class JobGraph implements Serializable {
         for (Map.Entry<String, DistributedCache.DistributedCacheEntry> userArtifact :
                 userArtifacts.entrySet()) {
             DistributedCache.writeFileInfoToConfig(
-                    userArtifact.getKey(), userArtifact.getValue(), jobConfiguration);
+                    userArtifact.getKey(), userArtifact.getValue(), jobConfig);
         }
     }
 
@@ -661,10 +661,10 @@ public class JobGraph implements Serializable {
     }
 
     public void setInitialClientHeartbeatTimeout(long initialClientHeartbeatTimeout) {
-        jobConfiguration.set(INITIAL_CLIENT_HEARTBEAT_TIMEOUT, initialClientHeartbeatTimeout);
+        jobConfig.set(INITIAL_CLIENT_HEARTBEAT_TIMEOUT, initialClientHeartbeatTimeout);
     }
 
     public long getInitialClientHeartbeatTimeout() {
-        return jobConfiguration.get(INITIAL_CLIENT_HEARTBEAT_TIMEOUT);
+        return jobConfig.get(INITIAL_CLIENT_HEARTBEAT_TIMEOUT);
     }
 }

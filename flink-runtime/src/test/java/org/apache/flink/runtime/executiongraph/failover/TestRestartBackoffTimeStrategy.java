@@ -47,12 +47,12 @@ public class TestRestartBackoffTimeStrategy implements RestartBackoffTimeStrateg
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartBackoffDelay() {
         return backoffTime;
     }
 
     @Override
-    public boolean notifyFailure(Throwable cause) {
+    public boolean notifyTaskFailure(Throwable cause) {
         // ignore
         return isNewAttempt.get();
     }

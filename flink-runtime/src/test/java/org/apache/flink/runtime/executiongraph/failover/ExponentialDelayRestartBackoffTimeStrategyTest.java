@@ -49,7 +49,7 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
 
         for (int i = 0; i <= maxAttempts; i++) {
             assertThat(restartStrategy.canRestart()).isTrue();
-            assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+            assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
             clock.advanceTime(Duration.ofMillis(maxBackoffMS + 1));
         }
         assertThat(restartStrategy.canRestart()).isFalse();
@@ -63,7 +63,7 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                 new ExponentialDelayRestartBackoffTimeStrategy(
                         new ManualClock(), initialBackoffMS, 45L, 2.0, 8L, 0, 10);
 
-        assertThatThrownBy(restartStrategy::getBackoffTime)
+        assertThatThrownBy(restartStrategy::getRestartBackoffDelay)
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessage("Please call notifyFailure first.");
     }
@@ -76,8 +76,8 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                 new ExponentialDelayRestartBackoffTimeStrategy(
                         new ManualClock(), initialBackoffMS, 45L, 2.0, 8L, 0, Integer.MAX_VALUE);
 
-        restartStrategy.notifyFailure(failure);
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(initialBackoffMS);
+        restartStrategy.notifyTaskFailure(failure);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(initialBackoffMS);
     }
 
     @Test
@@ -89,8 +89,8 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                         new ManualClock(), 1L, maxBackoffMS, 2.0, 8L, 0.25, Integer.MAX_VALUE);
 
         for (int i = 0; i < 10; i++) {
-            restartStrategy.notifyFailure(failure);
-            assertThat(restartStrategy.getBackoffTime()).isLessThanOrEqualTo(maxBackoffMS);
+            restartStrategy.notifyTaskFailure(failure);
+            assertThat(restartStrategy.getRestartBackoffDelay()).isLessThanOrEqualTo(maxBackoffMS);
         }
     }
 
@@ -110,20 +110,20 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                         0.25,
                         Integer.MAX_VALUE);
 
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
 
         clock.advanceTime(
-                resetBackoffThresholdMS + restartStrategy.getBackoffTime() - 1,
+                resetBackoffThresholdMS + restartStrategy.getRestartBackoffDelay() - 1,
                 TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
-        assertThat(restartStrategy.getBackoffTime())
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
+        assertThat(restartStrategy.getRestartBackoffDelay())
                 .as("Backoff should be increased")
                 .isEqualTo(2L);
 
         clock.advanceTime(
-                resetBackoffThresholdMS + restartStrategy.getBackoffTime(), TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
-        assertThat(restartStrategy.getBackoffTime())
+                resetBackoffThresholdMS + restartStrategy.getRestartBackoffDelay(), TimeUnit.MILLISECONDS);
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
+        assertThat(restartStrategy.getRestartBackoffDelay())
                 .as("Backoff should be reset")
                 .isEqualTo(initialBackoffMS);
     }
@@ -146,16 +146,16 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                         jitterFactor,
                         10);
 
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(4L); // 4
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(4L); // 4
         clock.advanceTime(Duration.ofMillis(maxBackoffMS + 1));
 
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(9L); // 4 * 2.3
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(9L); // 4 * 2.3
         clock.advanceTime(Duration.ofMillis(maxBackoffMS + 1));
 
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(21L); // 4 * 2.3 * 2.3
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(21L); // 4 * 2.3 * 2.3
         clock.advanceTime(Duration.ofMillis(maxBackoffMS + 1));
     }
 
@@ -223,9 +223,9 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                     RestartBackoffTimeStrategy restartStrategy = factory.create();
                     for (int i = 0; i < failureCount; i++) {
                         clock.advanceTime(Duration.ofMillis(advanceMsEachFailure));
-                        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+                        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
                     }
-                    return restartStrategy.getBackoffTime();
+                    return restartStrategy.getRestartBackoffDelay();
                 },
                 expectedNumbers);
     }
@@ -250,33 +250,33 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
                         Integer.MAX_VALUE);
 
         // ensure initial data
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(initialBackoffMS);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(initialBackoffMS);
 
         // ensure backoff time is initial after the first failure
         clock.advanceTime(resetBackoffThresholdMS + 1, TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(initialBackoffMS);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(initialBackoffMS);
 
         // ensure backoff increases until threshold is reached
         clock.advanceTime(4, TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(2L);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(2L);
 
         // ensure backoff is reset after threshold is reached
         clock.advanceTime(resetBackoffThresholdMS + 9 + 1, TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isOne();
+        assertThat(restartStrategy.getRestartBackoffDelay()).isOne();
         clock.advanceTime(Duration.ofMillis(maxBackoffMS + 1));
 
         // ensure backoff still increases
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isTrue();
-        assertThat(restartStrategy.getBackoffTime()).isEqualTo(2L);
+        assertThat(restartStrategy.getRestartBackoffDelay()).isEqualTo(2L);
     }
 
     @Test
@@ -313,7 +313,7 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
 
         // After advance time it's a new round, and it reaches the maxAttempts.
         clock.advanceTime(1, TimeUnit.MILLISECONDS);
-        assertThat(restartStrategy.notifyFailure(failure)).isTrue();
+        assertThat(restartStrategy.notifyTaskFailure(failure)).isTrue();
         assertThat(restartStrategy.canRestart()).isFalse();
     }
 
@@ -363,14 +363,14 @@ class ExponentialDelayRestartBackoffTimeStrategyTest {
         boolean expectedNewAttempt = true;
         for (int advanceMs = 0; advanceMs < expectedBackoffMS; advanceMs++) {
             for (int i = 0; i < 10; i++) {
-                assertThat(restartStrategy.notifyFailure(failure)).isEqualTo(expectedNewAttempt);
+                assertThat(restartStrategy.notifyTaskFailure(failure)).isEqualTo(expectedNewAttempt);
                 if (expectedNewAttempt) {
                     // Only the first one is new attempt, all rest of failures aren't new attempt.
                     expectedNewAttempt = false;
                 }
 
                 assertThat(restartStrategy.canRestart()).isTrue();
-                assertThat(restartStrategy.getBackoffTime())
+                assertThat(restartStrategy.getRestartBackoffDelay())
                         .isEqualTo(expectedBackoffMS - advanceMs);
             }
             clock.advanceTime(1, TimeUnit.MILLISECONDS);

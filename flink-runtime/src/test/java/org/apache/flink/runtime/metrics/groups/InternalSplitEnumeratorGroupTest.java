@@ -41,7 +41,7 @@ class InternalSplitEnumeratorGroupTest {
         JobManagerOperatorMetricGroup jmJobGroup =
                 JobManagerMetricGroup.createJobManagerMetricGroup(registry, "localhost")
                         .addJob(jobId, "myJobName")
-                        .getOrAddOperator(jobVertexId, "taskName", operatorId, "opName");
+                        .getOrCreateOperatorMetricGroup(jobVertexId, "taskName", operatorId, "opName");
         InternalOperatorCoordinatorMetricGroup operatorCoordinatorMetricGroup =
                 new InternalOperatorCoordinatorMetricGroup(jmJobGroup);
         InternalSplitEnumeratorMetricGroup splitEnumeratorMetricGroup =

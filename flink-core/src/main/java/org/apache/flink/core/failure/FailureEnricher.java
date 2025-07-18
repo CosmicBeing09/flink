@@ -42,11 +42,11 @@ public interface FailureEnricher {
      *
      * @return the unique label Keys of the FailureEnricher
      */
-    Set<String> getOutputKeys();
+    Set<String> getLabelKeys();
 
     /**
      * Method to handle a failure as part of the enricher and optionally return a map of KV pairs
-     * (labels). Note that Values should only be associated with Keys from {@code getOutputKeys}
+     * (labels). Note that Values should only be associated with Keys from {@code getLabelKeys}
      * method otherwise will be ignored.
      *
      * @param cause the exception that caused this failure

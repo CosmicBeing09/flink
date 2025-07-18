@@ -39,7 +39,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  */
 @Internal
 public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGroup> {
-    private final Map<String, JobManagerOperatorMetricGroup> operators = new HashMap<>();
+    private final Map<String, JobManagerOperatorMetricGroup> operatorMetricGroupMap = new HashMap<>();
 
     JobManagerJobMetricGroup(
             MetricRegistry registry,
@@ -60,7 +60,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
         return parent;
     }
 
-    public JobManagerOperatorMetricGroup getOrAddOperator(
+    public JobManagerOperatorMetricGroup getOrCreateOperatorMetricGroup(
             AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
         final String truncatedOperatorName = getTruncatedOperatorName(operatorName);
 
@@ -69,7 +69,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
         final String key = operatorID + truncatedOperatorName;
 
         synchronized (this) {
-            return operators.computeIfAbsent(
+            return operatorMetricGroupMap.computeIfAbsent(
                     key,
                     operator ->
                             new JobManagerOperatorMetricGroup(
@@ -96,7 +96,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
     @VisibleForTesting
     int numRegisteredOperatorMetricGroups() {
-        return operators.size();
+        return operatorMetricGroupMap.size();
     }
 
     void removeOperatorMetricGroup(OperatorID operatorID, String operatorName) {
@@ -108,7 +108,7 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
         synchronized (this) {
             if (!isClosed()) {
-                operators.remove(key);
+                operatorMetricGroupMap.remove(key);
             }
         }
     }
@@ -119,6 +119,6 @@ public class JobManagerJobMetricGroup extends JobMetricGroup<JobManagerMetricGro
 
     @Override
     protected Iterable<? extends ComponentMetricGroup> subComponents() {
-        return operators.values();
+        return operatorMetricGroupMap.values();
     }
 }

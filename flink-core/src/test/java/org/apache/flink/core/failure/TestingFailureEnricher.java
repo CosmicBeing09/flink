@@ -31,7 +31,7 @@ public class TestingFailureEnricher implements FailureEnricher {
     final Map<String, String> failureLabels = Collections.singletonMap("failKey", "failValue");
 
     @Override
-    public Set<String> getOutputKeys() {
+    public Set<String> getLabelKeys() {
         return Collections.singleton("failKey");
     }
 

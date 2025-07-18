@@ -56,12 +56,12 @@ public class FixedDelayRestartBackoffTimeStrategy implements RestartBackoffTimeS
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartBackoffDelay() {
         return backoffTimeMS;
     }
 
     @Override
-    public boolean notifyFailure(Throwable cause) {
+    public boolean notifyTaskFailure(Throwable cause) {
         currentRestartAttempt++;
         return true;
     }

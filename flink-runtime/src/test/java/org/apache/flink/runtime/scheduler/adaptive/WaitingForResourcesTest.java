@@ -340,7 +340,7 @@ class WaitingForResourcesTest {
         }
 
         @Override
-        public boolean hasDesiredResources() {
+        public boolean hasDeclaredResourceRequirements() {
             return hasDesiredResourcesSupplier.get();
         }
 

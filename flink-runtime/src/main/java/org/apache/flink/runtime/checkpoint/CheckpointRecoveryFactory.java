@@ -34,16 +34,16 @@ public interface CheckpointRecoveryFactory {
      * use them as the initial state.
      *
      * @param jobId Job ID to recover checkpoints for
-     * @param maxNumberOfCheckpointsToRetain Maximum number of checkpoints to retain
+     * @param checkpointRetentionLimit Maximum number of checkpoints to retain
      * @param sharedStateRegistryFactory Simple factory to produce {@link SharedStateRegistry}
      *     objects.
      * @param ioExecutor Executor used to run (async) deletes.
      * @param recoveryClaimMode the claim mode with which the job is restoring.
      * @return {@link CompletedCheckpointStore} instance for the job
      */
-    CompletedCheckpointStore createRecoveredCompletedCheckpointStore(
+    CompletedCheckpointStore createRestoredCheckpointStore(
             JobID jobId,
-            int maxNumberOfCheckpointsToRetain,
+            int checkpointRetentionLimit,
             SharedStateRegistryFactory sharedStateRegistryFactory,
             Executor ioExecutor,
             RecoveryClaimMode recoveryClaimMode)

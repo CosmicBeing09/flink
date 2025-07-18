@@ -147,9 +147,9 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     private final SchedulingTopology schedulingTopology;
 
-    protected final StateLocationRetriever stateLocationRetriever;
+    protected final StateLocationRetriever preferredStateLocationRetriever;
 
-    protected final InputsLocationsRetriever inputsLocationsRetriever;
+    protected final InputsLocationsRetriever inputLocationsRetriever;
 
     private final CompletedCheckpointStore completedCheckpointStore;
 
@@ -244,10 +244,10 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
         this.schedulingTopology = executionGraph.getSchedulingTopology();
 
-        stateLocationRetriever =
+        preferredStateLocationRetriever =
                 executionVertexId ->
                         getExecutionVertex(executionVertexId).getPreferredLocationBasedOnState();
-        inputsLocationsRetriever =
+        inputLocationsRetriever =
                 new ExecutionGraphToInputsLocationsRetrieverAdapter(executionGraph);
 
         this.kvStateHandler = new KvStateHandler(executionGraph);

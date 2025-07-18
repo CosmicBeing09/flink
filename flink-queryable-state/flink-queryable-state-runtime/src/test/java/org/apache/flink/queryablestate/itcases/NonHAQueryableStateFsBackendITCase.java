@@ -95,7 +95,7 @@ public class NonHAQueryableStateFsBackendITCase extends AbstractQueryableStateTe
         config.set(
                 QueryableStateOptions.SERVER_PORT_RANGE,
                 QS_SERVER_PORT_RANGE_START + "-" + (QS_SERVER_PORT_RANGE_START + NUM_PORT_COUNT));
-        config.set(WebOptions.SUBMIT_ENABLE, false);
+        config.set(WebOptions.ENABLE_JOB_SUBMISSION, false);
         return config;
     }
 }

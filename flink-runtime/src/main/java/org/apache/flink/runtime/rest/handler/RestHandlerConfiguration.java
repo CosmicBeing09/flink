@@ -125,8 +125,8 @@ public class RestHandlerConfiguration {
         final String rootDir = "flink-web-ui";
         final File webUiDir = new File(configuration.get(WebOptions.TMP_DIR), rootDir);
 
-        final boolean webSubmitEnabled = configuration.get(WebOptions.SUBMIT_ENABLE);
-        final boolean webCancelEnabled = configuration.get(WebOptions.CANCEL_ENABLE);
+        final boolean webSubmitEnabled = configuration.get(WebOptions.ENABLE_JOB_SUBMISSION);
+        final boolean webCancelEnabled = configuration.get(WebOptions.ENABLE_JOB_CANCELLATION);
         final boolean webRescaleSupported =
                 ClusterOptions.isAdaptiveSchedulerEnabled(configuration)
                         && !ClusterOptions.isReactiveModeEnabled(configuration);

@@ -51,7 +51,7 @@ class JobStatusStoreTest {
     @Test
     void getState() {
         final JobStatusStore store = new JobStatusStore(0L);
-        store.jobStatusChanges(new JobID(), JobStatus.RUNNING, 1L);
+        store.onJobStatusChanged(new JobID(), JobStatus.RUNNING, 1L);
 
         assertThat(store.getState(), is(JobStatus.RUNNING));
     }
@@ -59,7 +59,7 @@ class JobStatusStoreTest {
     @Test
     void getStatusTimestamp() {
         final JobStatusStore store = new JobStatusStore(0L);
-        store.jobStatusChanges(new JobID(), JobStatus.RUNNING, 1L);
+        store.onJobStatusChanged(new JobID(), JobStatus.RUNNING, 1L);
 
         assertThat(store.getStatusTimestamp(JobStatus.RUNNING), is(1L));
     }

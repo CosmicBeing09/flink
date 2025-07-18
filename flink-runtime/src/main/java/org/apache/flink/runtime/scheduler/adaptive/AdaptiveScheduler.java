@@ -309,7 +309,7 @@ public class AdaptiveScheduler
                 Duration resourceStabilizationTimeout,
                 Duration slotIdleTimeout,
                 Duration scalingIntervalMin,
-                Duration scalingResourceStabilizationTimeout,
+                Duration executingResourceStabilizationTimeout,
                 Duration maximumDelayForTriggeringRescale,
                 int rescaleOnFailedCheckpointCount) {
             this.executionMode = executionMode;
@@ -317,7 +317,7 @@ public class AdaptiveScheduler
             this.resourceStabilizationTimeout = resourceStabilizationTimeout;
             this.slotIdleTimeout = slotIdleTimeout;
             this.scalingIntervalMin = scalingIntervalMin;
-            this.scalingResourceStabilizationTimeout = scalingResourceStabilizationTimeout;
+            this.scalingResourceStabilizationTimeout = executingResourceStabilizationTimeout;
             this.maximumDelayForTriggeringRescale = maximumDelayForTriggeringRescale;
             this.rescaleOnFailedCheckpointCount = rescaleOnFailedCheckpointCount;
         }
@@ -405,7 +405,7 @@ public class AdaptiveScheduler
 
     private final BoundedFIFOQueue<RootExceptionHistoryEntry> exceptionHistory;
     private JobGraphJobInformation jobInformation;
-    private ResourceCounter desiredResources = ResourceCounter.empty();
+    private ResourceCounter declaredResourceRequirements = ResourceCounter.empty();
 
     private final JobManagerJobMetricGroup jobManagerJobMetricGroup;
 
@@ -1080,8 +1080,8 @@ public class AdaptiveScheduler
     // ----------------------------------------------------------------
 
     @Override
-    public boolean hasDesiredResources() {
-        return hasDesiredResources(desiredResources, declarativeSlotPool.getAllSlotsInformation());
+    public boolean hasDeclaredResourceRequirements() {
+        return hasDesiredResources(declaredResourceRequirements, declarativeSlotPool.getAllSlotsInformation());
     }
 
     @VisibleForTesting
@@ -1167,9 +1167,9 @@ public class AdaptiveScheduler
     private void declareDesiredResources() {
         final ResourceCounter newDesiredResources = calculateDesiredResources();
 
-        if (!newDesiredResources.equals(this.desiredResources)) {
-            this.desiredResources = newDesiredResources;
-            declarativeSlotPool.setResourceRequirements(this.desiredResources);
+        if (!newDesiredResources.equals(this.declaredResourceRequirements)) {
+            this.declaredResourceRequirements = newDesiredResources;
+            declarativeSlotPool.setResourceRequirements(this.declaredResourceRequirements);
         }
     }
 
@@ -1475,10 +1475,10 @@ public class AdaptiveScheduler
                     new JobException("The failure is not recoverable", failure));
         }
 
-        restartBackoffTimeStrategy.notifyFailure(failure);
+        restartBackoffTimeStrategy.notifyTaskFailure(failure);
         if (restartBackoffTimeStrategy.canRestart()) {
             return FailureResult.canRestart(
-                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getBackoffTime()));
+                    failure, Duration.ofMillis(restartBackoffTimeStrategy.getRestartBackoffDelay()));
         } else {
             return FailureResult.canNotRestart(
                     new JobException(
@@ -1568,7 +1568,7 @@ public class AdaptiveScheduler
                 final long timestamp = System.currentTimeMillis();
                 jobStatusListeners.forEach(
                         listener ->
-                                listener.jobStatusChanges(
+                                listener.onJobStatusChanged(
                                         jobInformation.getJobID(), newJobStatus, timestamp));
             }
 

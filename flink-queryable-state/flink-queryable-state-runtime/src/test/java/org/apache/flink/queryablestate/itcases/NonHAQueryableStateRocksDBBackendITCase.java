@@ -94,7 +94,7 @@ public class NonHAQueryableStateRocksDBBackendITCase extends AbstractQueryableSt
         config.set(
                 QueryableStateOptions.SERVER_PORT_RANGE,
                 QS_SERVER_PORT_RANGE_START + "-" + (QS_SERVER_PORT_RANGE_START + NUM_TMS));
-        config.set(WebOptions.SUBMIT_ENABLE, false);
+        config.set(WebOptions.ENABLE_JOB_SUBMISSION, false);
         return config;
     }
 }

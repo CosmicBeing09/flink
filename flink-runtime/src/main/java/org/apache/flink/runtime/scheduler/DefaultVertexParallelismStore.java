@@ -37,25 +37,25 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
      * Create a new {@link VertexParallelismStore} that reflects given {@link
      * JobResourceRequirements}.
      *
-     * @param oldVertexParallelismStore old vertex parallelism store that serves as a base for the
+     * @param currentParallelismStore old vertex parallelism store that serves as a base for the
      *     new one
      * @param jobResourceRequirements to apply over the old vertex parallelism store
      * @return new vertex parallelism store iff it was updated
      */
     public static Optional<VertexParallelismStore> applyJobResourceRequirements(
-            VertexParallelismStore oldVertexParallelismStore,
+            VertexParallelismStore currentParallelismStore,
             JobResourceRequirements jobResourceRequirements) {
-        final DefaultVertexParallelismStore newVertexParallelismStore =
+        final DefaultVertexParallelismStore updatedParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
         for (final JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
             final VertexParallelismInformation oldVertexParallelismInfo =
-                    oldVertexParallelismStore.getParallelismInfo(jobVertexId);
+                    currentParallelismStore.getParallelismInfo(jobVertexId);
             final JobVertexResourceRequirements.Parallelism parallelismSettings =
                     jobResourceRequirements.getParallelism(jobVertexId);
             final int minParallelism = parallelismSettings.getLowerBound();
             final int parallelism = parallelismSettings.getUpperBound();
-            newVertexParallelismStore.setParallelismInfo(
+            updatedParallelismStore.setParallelismInfo(
                     jobVertexId,
                     new DefaultVertexParallelismInfo(
                             minParallelism,
@@ -66,7 +66,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
                     oldVertexParallelismInfo.getMinParallelism() != minParallelism
                             || oldVertexParallelismInfo.getParallelism() != parallelism;
         }
-        return changed ? Optional.of(newVertexParallelismStore) : Optional.empty();
+        return changed ? Optional.of(updatedParallelismStore) : Optional.empty();
     }
 
     private final Map<JobVertexID, VertexParallelismInformation> vertexToParallelismInfo =

@@ -76,13 +76,13 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * <p>NOTE: This map stores the values that are actually used, and does not include any escaping
      * that is required by the standard YAML syntax.
      */
-    protected final HashMap<String, Object> confData;
+    protected final HashMap<String, Object> configData;
 
     // --------------------------------------------------------------------------------------------
 
     /** Creates a new empty configuration. */
     public Configuration() {
-        this.confData = new HashMap<>();
+        this.configData = new HashMap<>();
     }
 
     /**
@@ -91,7 +91,7 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @param other The configuration to copy the entries from.
      */
     public Configuration(Configuration other) {
-        this.confData = new HashMap<>(other.confData);
+        this.configData = new HashMap<>(other.configData);
     }
 
     // --------------------------------------------------------------------------------------------
@@ -660,24 +660,24 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @return the keys of all key/value pairs stored inside this configuration object
      */
     public Set<String> keySet() {
-        synchronized (this.confData) {
-            return new HashSet<>(this.confData.keySet());
+        synchronized (this.configData) {
+            return new HashSet<>(this.configData.keySet());
         }
     }
 
     /** Adds all entries in this {@code Configuration} to the given {@link Properties}. */
     public void addAllToProperties(Properties props) {
-        synchronized (this.confData) {
-            for (Map.Entry<String, Object> entry : this.confData.entrySet()) {
+        synchronized (this.configData) {
+            for (Map.Entry<String, Object> entry : this.configData.entrySet()) {
                 props.put(entry.getKey(), entry.getValue());
             }
         }
     }
 
     public void addAll(Configuration other) {
-        synchronized (this.confData) {
-            synchronized (other.confData) {
-                this.confData.putAll(other.confData);
+        synchronized (this.configData) {
+            synchronized (other.configData) {
+                this.configData.putAll(other.configData);
             }
         }
     }
@@ -690,16 +690,16 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @param prefix The prefix to prepend.
      */
     public void addAll(Configuration other, String prefix) {
-        final StringBuilder bld = new StringBuilder();
-        bld.append(prefix);
-        final int pl = bld.length();
+        final StringBuilder prefixBuilder = new StringBuilder();
+        prefixBuilder.append(prefix);
+        final int pl = prefixBuilder.length();
 
-        synchronized (this.confData) {
-            synchronized (other.confData) {
-                for (Map.Entry<String, Object> entry : other.confData.entrySet()) {
-                    bld.setLength(pl);
-                    bld.append(entry.getKey());
-                    this.confData.put(bld.toString(), entry.getValue());
+        synchronized (this.configData) {
+            synchronized (other.configData) {
+                for (Map.Entry<String, Object> entry : other.configData.entrySet()) {
+                    prefixBuilder.setLength(pl);
+                    prefixBuilder.append(entry.getKey());
+                    this.configData.put(prefixBuilder.toString(), entry.getValue());
                 }
             }
         }
@@ -720,8 +720,8 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @return true if the key is stored, false otherwise
      */
     public boolean containsKey(String key) {
-        synchronized (this.confData) {
-            return this.confData.containsKey(key);
+        synchronized (this.configData) {
+            return this.configData.containsKey(key);
         }
     }
 
@@ -734,11 +734,11 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      */
     @PublicEvolving
     public boolean contains(ConfigOption<?> configOption) {
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             final BiFunction<String, Boolean, Optional<Boolean>> applier =
                     (key, canBePrefixMap) -> {
-                        if (canBePrefixMap && containsPrefixMap(this.confData, key)
-                                || this.confData.containsKey(key)) {
+                        if (canBePrefixMap && containsPrefixMap(this.configData, key)
+                                || this.configData.containsKey(key)) {
                             return Optional.of(true);
                         }
                         return Optional.empty();
@@ -832,10 +832,10 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
 
     @Override
     public Map<String, String> toMap() {
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             Map<String, String> ret =
-                    CollectionUtil.newHashMapWithExpectedSize(this.confData.size());
-            for (Map.Entry<String, Object> entry : confData.entrySet()) {
+                    CollectionUtil.newHashMapWithExpectedSize(this.configData.size());
+            for (Map.Entry<String, Object> entry : configData.entrySet()) {
                 ret.put(entry.getKey(), ConfigurationUtils.convertToString(entry.getValue()));
             }
             return ret;
@@ -853,10 +853,10 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      */
     @Internal
     public Map<String, String> toFileWritableMap() {
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             Map<String, String> ret =
-                    CollectionUtil.newHashMapWithExpectedSize(this.confData.size());
-            for (Map.Entry<String, Object> entry : confData.entrySet()) {
+                    CollectionUtil.newHashMapWithExpectedSize(this.configData.size());
+            for (Map.Entry<String, Object> entry : configData.entrySet()) {
                 // Because some character in standard yaml should be escaped by quotes, such as
                 // '*', here we should wrap the value by Yaml pattern
                 ret.put(entry.getKey(), YamlParserUtils.toYAMLString(entry.getValue()));
@@ -873,11 +873,11 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @return true is config has been removed, false otherwise
      */
     public <T> boolean removeConfig(ConfigOption<T> configOption) {
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             final BiFunction<String, Boolean, Optional<Boolean>> applier =
                     (key, canBePrefixMap) -> {
-                        if (canBePrefixMap && removePrefixMap(this.confData, key)
-                                || this.confData.remove(key) != null) {
+                        if (canBePrefixMap && removePrefixMap(this.configData, key)
+                                || this.configData.remove(key) != null) {
                             return Optional.of(true);
                         }
                         return Optional.empty();
@@ -893,9 +893,9 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
      * @return true is config has been removed, false otherwise
      */
     public boolean removeKey(String key) {
-        synchronized (this.confData) {
-            boolean removed = this.confData.remove(key) != null;
-            removed |= removePrefixMap(confData, key);
+        synchronized (this.configData) {
+            boolean removed = this.configData.remove(key) != null;
+            removed |= removePrefixMap(configData, key);
             return removed;
         }
     }
@@ -910,11 +910,11 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
             throw new NullPointerException("Value must not be null.");
         }
 
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             if (canBePrefixMap) {
-                removePrefixMap(this.confData, key);
+                removePrefixMap(this.configData, key);
             }
-            this.confData.put(key, value);
+            this.configData.put(key, value);
         }
     }
 
@@ -931,13 +931,13 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
             throw new NullPointerException("Key must not be null.");
         }
 
-        synchronized (this.confData) {
-            final Object valueFromExactKey = this.confData.get(key);
+        synchronized (this.configData) {
+            final Object valueFromExactKey = this.configData.get(key);
             if (!canBePrefixMap || valueFromExactKey != null) {
                 return Optional.ofNullable(valueFromExactKey);
             }
             final Map<String, String> valueFromPrefixMap =
-                    convertToPropertiesPrefixed(confData, key);
+                    convertToPropertiesPrefixed(configData, key);
             if (valueFromPrefixMap.isEmpty()) {
                 return Optional.empty();
             }
@@ -979,7 +979,7 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
 
     @Override
     public void read(DataInputView in) throws IOException {
-        synchronized (this.confData) {
+        synchronized (this.configData) {
             final int numberOfProperties = in.readInt();
 
             for (int i = 0; i < numberOfProperties; i++) {
@@ -1019,17 +1019,17 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
                                         type));
                 }
 
-                this.confData.put(key, value);
+                this.configData.put(key, value);
             }
         }
     }
 
     @Override
     public void write(final DataOutputView out) throws IOException {
-        synchronized (this.confData) {
-            out.writeInt(this.confData.size());
+        synchronized (this.configData) {
+            out.writeInt(this.configData.size());
 
-            for (Map.Entry<String, Object> entry : this.confData.entrySet()) {
+            for (Map.Entry<String, Object> entry : this.configData.entrySet()) {
                 String key = entry.getKey();
                 Object val = entry.getValue();
 
@@ -1073,7 +1073,7 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
     @Override
     public int hashCode() {
         int hash = 0;
-        for (String s : this.confData.keySet()) {
+        for (String s : this.configData.keySet()) {
             hash ^= s.hashCode();
         }
         return hash;
@@ -1084,9 +1084,9 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
         if (this == obj) {
             return true;
         } else if (obj instanceof Configuration) {
-            Map<String, Object> otherConf = ((Configuration) obj).confData;
+            Map<String, Object> otherConf = ((Configuration) obj).configData;
 
-            for (Map.Entry<String, Object> e : this.confData.entrySet()) {
+            for (Map.Entry<String, Object> e : this.configData.entrySet()) {
                 Object thisVal = e.getValue();
                 Object otherVal = otherConf.get(e.getKey());
 
@@ -1112,7 +1112,7 @@ public class Configuration extends ExecutionConfig.GlobalJobParameters
     @Override
     public String toString() {
         return ConfigurationUtils.hideSensitiveValues(
-                        this.confData.entrySet().stream()
+                        this.configData.entrySet().stream()
                                 .collect(
                                         Collectors.toMap(
                                                 Map.Entry::getKey,

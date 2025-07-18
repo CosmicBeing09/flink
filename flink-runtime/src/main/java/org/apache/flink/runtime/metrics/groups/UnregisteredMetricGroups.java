@@ -140,7 +140,7 @@ public class UnregisteredMetricGroups {
         }
 
         @Override
-        public JobManagerOperatorMetricGroup getOrAddOperator(
+        public JobManagerOperatorMetricGroup getOrCreateOperatorMetricGroup(
                 AbstractID vertexId, String taskName, OperatorID operatorID, String operatorName) {
             return createUnregisteredJobManagerOperatorMetricGroup(this);
         }

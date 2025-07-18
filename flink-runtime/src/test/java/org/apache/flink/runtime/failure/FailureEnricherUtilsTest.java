@@ -339,7 +339,7 @@ class FailureEnricherUtilsTest {
         }
 
         @Override
-        public Set<String> getOutputKeys() {
+        public Set<String> getLabelKeys() {
             return outputKeys;
         }
 

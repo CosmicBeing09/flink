@@ -36,7 +36,7 @@ public class TestingCheckpointRecoveryFactory implements CheckpointRecoveryFacto
     }
 
     @Override
-    public CompletedCheckpointStore createRecoveredCompletedCheckpointStore(
+    public CompletedCheckpointStore createRestoredCheckpointStore(
             JobID jobId,
             int maxNumberOfCheckpointsToRetain,
             SharedStateRegistryFactory sharedStateRegistryFactory,

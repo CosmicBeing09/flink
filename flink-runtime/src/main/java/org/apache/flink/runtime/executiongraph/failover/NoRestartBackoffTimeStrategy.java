@@ -28,12 +28,12 @@ public enum NoRestartBackoffTimeStrategy implements RestartBackoffTimeStrategy {
     }
 
     @Override
-    public long getBackoffTime() {
+    public long getRestartBackoffDelay() {
         return 0L;
     }
 
     @Override
-    public boolean notifyFailure(final Throwable cause) {
+    public boolean notifyTaskFailure(final Throwable cause) {
         // nothing to do
         return true;
     }
