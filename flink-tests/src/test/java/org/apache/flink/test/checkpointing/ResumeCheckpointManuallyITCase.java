@@ -235,14 +235,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     @Test
     public void testExternalizedSwitchRocksDBCheckpointsStandalone() throws Exception {
         final File checkpointDir = temporaryFolder.newFolder();
-        StateBackend previousStateBackend = createRocksDBStateBackend(checkpointDir, false);
-        StateBackend newStateBackend = createRocksDBStateBackend(checkpointDir, true);
+        StateBackend previousStateBackendConfig = createRocksDBStateBackend(checkpointDir, false);
+        StateBackend newStateBackendConfig = createRocksDBStateBackend(checkpointDir, true);
         testExternalizedCheckpoints(
                 checkpointDir,
                 null,
-                previousStateBackend,
-                newStateBackend,
-                previousStateBackend,
+                previousStateBackendConfig,
+                newStateBackendConfig,
+                previousStateBackendConfig,
                 false,
                 recoveryClaimMode);
     }
@@ -251,14 +251,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     public void testExternalizedSwitchRocksDBCheckpointsWithLocalRecoveryStandalone()
             throws Exception {
         final File checkpointDir = temporaryFolder.newFolder();
-        StateBackend previousStateBackend = createRocksDBStateBackend(checkpointDir, false);
-        StateBackend newStateBackend = createRocksDBStateBackend(checkpointDir, true);
+        StateBackend previousStateBackendConfig = createRocksDBStateBackend(checkpointDir, false);
+        StateBackend newStateBackendConfig = createRocksDBStateBackend(checkpointDir, true);
         testExternalizedCheckpoints(
                 checkpointDir,
                 null,
-                previousStateBackend,
-                newStateBackend,
-                previousStateBackend,
+                previousStateBackendConfig,
+                newStateBackendConfig,
+                previousStateBackendConfig,
                 true,
                 recoveryClaimMode);
     }
@@ -267,14 +267,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     public void testExternalizedSwitchRocksDBCheckpointsZookeeper() throws Exception {
         try (TestingServer zkServer = ZooKeeperTestUtils.createAndStartZookeeperTestingServer()) {
             final File checkpointDir = temporaryFolder.newFolder();
-            StateBackend previousStateBackend = createRocksDBStateBackend(checkpointDir, false);
-            StateBackend newStateBackend = createRocksDBStateBackend(checkpointDir, true);
+            StateBackend previousStateBackendConfig = createRocksDBStateBackend(checkpointDir, false);
+            StateBackend newStateBackendConfig = createRocksDBStateBackend(checkpointDir, true);
             testExternalizedCheckpoints(
                     checkpointDir,
                     zkServer.getConnectString(),
-                    previousStateBackend,
-                    newStateBackend,
-                    previousStateBackend,
+                    previousStateBackendConfig,
+                    newStateBackendConfig,
+                    previousStateBackendConfig,
                     false,
                     recoveryClaimMode);
         }
@@ -285,14 +285,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
             throws Exception {
         try (TestingServer zkServer = ZooKeeperTestUtils.createAndStartZookeeperTestingServer()) {
             final File checkpointDir = temporaryFolder.newFolder();
-            StateBackend previousStateBackend = createRocksDBStateBackend(checkpointDir, false);
-            StateBackend newStateBackend = createRocksDBStateBackend(checkpointDir, true);
+            StateBackend previousStateBackendConfig = createRocksDBStateBackend(checkpointDir, false);
+            StateBackend newStateBackendConfig = createRocksDBStateBackend(checkpointDir, true);
             testExternalizedCheckpoints(
                     checkpointDir,
                     zkServer.getConnectString(),
-                    previousStateBackend,
-                    newStateBackend,
-                    previousStateBackend,
+                    previousStateBackendConfig,
+                    newStateBackendConfig,
+                    previousStateBackendConfig,
                     true,
                     recoveryClaimMode);
         }
@@ -311,16 +311,16 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     private static void testExternalizedCheckpoints(
             File checkpointDir,
             String zooKeeperQuorum,
-            StateBackend backend,
+            StateBackend backendConfig,
             boolean localRecovery,
             RecoveryClaimMode recoveryClaimMode)
             throws Exception {
         testExternalizedCheckpoints(
                 checkpointDir,
                 zooKeeperQuorum,
-                backend,
-                backend,
-                backend,
+                backendConfig,
+                backendConfig,
+                backendConfig,
                 localRecovery,
                 recoveryClaimMode);
     }
@@ -397,14 +397,14 @@ public class ResumeCheckpointManuallyITCase extends TestLogger {
     }
 
     private static String runJobAndGetExternalizedCheckpoint(
-            StateBackend backend,
+            StateBackend backendConfig,
             @Nullable String externalCheckpoint,
             MiniClusterWithClientResource cluster,
             RecoveryClaimMode recoveryClaimMode)
             throws Exception {
         // complete at least two checkpoints so that the initial checkpoint can be subsumed
         return runJobAndGetExternalizedCheckpoint(
-                backend,
+                backendConfig,
                 externalCheckpoint,
                 cluster,
                 recoveryClaimMode,
