@@ -109,11 +109,11 @@ public class JobResourceRequirements implements Serializable {
     public static List<String> validate(
             JobResourceRequirements jobResourceRequirements,
             Map<JobVertexID, Integer> maxParallelismPerVertex) {
-        final List<String> errors = new ArrayList<>();
-        final Set<JobVertexID> missingJobVertexIds =
+        final List<String> validationErrors = new ArrayList<>();
+        final Set<JobVertexID> unmatchedJobVertexIds =
                 new HashSet<>(maxParallelismPerVertex.keySet());
         for (JobVertexID jobVertexId : jobResourceRequirements.getJobVertices()) {
-            missingJobVertexIds.remove(jobVertexId);
+            unmatchedJobVertexIds.remove(jobVertexId);
             final Optional<Integer> maybeMaxParallelism =
                     Optional.ofNullable(maxParallelismPerVertex.get(jobVertexId));
             if (maybeMaxParallelism.isPresent()) {
@@ -128,7 +128,7 @@ public class JobResourceRequirements implements Serializable {
                                 ? maybeMaxParallelism.get()
                                 : requestedParallelism.getUpperBound();
                 if (lowerBound < 1 || upperBound < 1) {
-                    errors.add(
+                    validationErrors.add(
                             String.format(
                                     "Both, the requested lower bound [%d] and upper bound [%d] for job vertex [%s] must be greater than zero.",
                                     lowerBound, upperBound, jobVertexId));
@@ -136,30 +136,30 @@ public class JobResourceRequirements implements Serializable {
                     continue;
                 }
                 if (lowerBound > upperBound) {
-                    errors.add(
+                    validationErrors.add(
                             String.format(
                                     "The requested lower bound [%d] for job vertex [%s] is higher than the upper bound [%d].",
                                     lowerBound, jobVertexId, upperBound));
                 }
                 if (maybeMaxParallelism.get() < upperBound) {
-                    errors.add(
+                    validationErrors.add(
                             String.format(
                                     "The newly requested parallelism %d for the job vertex %s exceeds its maximum parallelism %d.",
                                     upperBound, jobVertexId, maybeMaxParallelism.get()));
                 }
             } else {
-                errors.add(
+                validationErrors.add(
                         String.format(
                                 "Job vertex [%s] was not found in the JobGraph.", jobVertexId));
             }
         }
-        for (JobVertexID jobVertexId : missingJobVertexIds) {
-            errors.add(
+        for (JobVertexID jobVertexId : unmatchedJobVertexIds) {
+            validationErrors.add(
                     String.format(
                             "The request is incomplete, missing job vertex [%s] resource requirements.",
                             jobVertexId));
         }
-        return errors;
+        return validationErrors;
     }
 
     public static JobResourceRequirements empty() {
