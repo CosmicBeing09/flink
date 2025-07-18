@@ -130,6 +130,6 @@ public class LocalExecutor implements PipelineExecutor {
             plan.setDefaultParallelism(slotsPerTaskManager * numTaskManagers);
         }
 
-        return PipelineExecutorUtils.getJobGraph(pipeline, configuration, userCodeClassloader);
+        return PipelineExecutorUtils.getStreamingJobGraph(pipeline, configuration, userCodeClassloader);
     }
 }
