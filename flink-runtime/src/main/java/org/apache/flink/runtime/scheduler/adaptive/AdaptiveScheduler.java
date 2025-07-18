@@ -201,7 +201,7 @@ public class AdaptiveScheduler
                 StateTransitionManager.Context context,
                 Supplier<Temporal> clock,
                 Duration cooldownTimeout,
-                Duration resourceStabilizationTimeout,
+                Duration initialResourceStabilizationTimeout,
                 Duration maximumDelayForTrigger);
     }
 
@@ -230,7 +230,7 @@ public class AdaptiveScheduler
                 stabilizationTimeoutDefault = Duration.ZERO;
             }
 
-            final Duration scalingIntervalMin =
+            final Duration minScalingInterval =
                     configuration.get(JobManagerOptions.SCHEDULER_SCALING_INTERVAL_MIN);
 
             final int rescaleOnFailedCheckpointsCount =
@@ -286,7 +286,7 @@ public class AdaptiveScheduler
                             .getOptional(JobManagerOptions.RESOURCE_STABILIZATION_TIMEOUT)
                             .orElse(stabilizationTimeoutDefault),
                     configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_IDLE_TIMEOUT),
-                    scalingIntervalMin,
+                    minScalingInterval,
                     configuration.get(
                             JobManagerOptions.SCHEDULER_SCALING_RESOURCE_STABILIZATION_TIMEOUT),
                     configuration.get(
