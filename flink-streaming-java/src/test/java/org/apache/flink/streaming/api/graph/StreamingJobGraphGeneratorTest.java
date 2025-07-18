@@ -1749,7 +1749,7 @@ class StreamingJobGraphGeneratorTest {
     @Test
     void testTreeDescription() {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        JobGraph job = createJobGraphWithDescription(env, "test source");
+        JobGraph job = createJobGraphWithDescriptionInternal(env, "test source");
         JobVertex[] allVertices = job.getVerticesAsArray();
         assertThat(allVertices).hasSize(1);
         assertThat(allVertices[0].getOperatorPrettyName())
@@ -1766,7 +1766,7 @@ class StreamingJobGraphGeneratorTest {
     @Test
     void testTreeDescriptionWithChainedSource() {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
-        JobGraph job = createJobGraphWithDescription(env, "test source 1", "test source 2");
+        JobGraph job = createJobGraphWithDescriptionInternal(env, "test source 1", "test source 2");
         JobVertex[] allVertices = job.getVerticesAsArray();
         assertThat(allVertices).hasSize(1);
         assertThat(allVertices[0].getOperatorPrettyName())
@@ -1788,7 +1788,7 @@ class StreamingJobGraphGeneratorTest {
                 PipelineOptions.VertexDescriptionMode.CASCADING);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(config);
-        JobGraph job = createJobGraphWithDescription(env, "test source");
+        JobGraph job = createJobGraphWithDescriptionInternal(env, "test source");
         JobVertex[] allVertices = job.getVerticesAsArray();
         assertThat(allVertices).hasSize(1);
         assertThat(allVertices[0].getOperatorPrettyName())
@@ -1804,7 +1804,7 @@ class StreamingJobGraphGeneratorTest {
                 PipelineOptions.VertexDescriptionMode.CASCADING);
         final StreamExecutionEnvironment env =
                 StreamExecutionEnvironment.getExecutionEnvironment(config);
-        JobGraph job = createJobGraphWithDescription(env, "test source 1", "test source 2");
+        JobGraph job = createJobGraphWithDescriptionInternal(env, "test source 1", "test source 2");
         JobVertex[] allVertices = job.getVerticesAsArray();
         assertThat(allVertices).hasSize(1);
         assertThat(allVertices[0].getOperatorPrettyName())
@@ -2002,9 +2002,9 @@ class StreamingJobGraphGeneratorTest {
                         .collect(Collectors.toList());
         assertThat(producedDataSet).hasSize(5);
 
-        JobVertex sinkVertex1 = checkNotNull(findJobVertexWithName(vertices, "sink1"));
-        JobVertex sinkVertex2 = checkNotNull(findJobVertexWithName(vertices, "sink2"));
-        JobVertex sinkVertex3 = checkNotNull(findJobVertexWithName(vertices, "sink3"));
+        JobVertex sinkVertex1 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink1"));
+        JobVertex sinkVertex2 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink2"));
+        JobVertex sinkVertex3 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink3"));
 
         assertThat(sinkVertex2.getInputs().get(0).getSource().getId())
                 .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
@@ -2071,10 +2071,10 @@ class StreamingJobGraphGeneratorTest {
                         .collect(Collectors.toList());
         assertThat(producedDataSet).hasSize(6);
 
-        JobVertex sinkVertex1 = checkNotNull(findJobVertexWithName(vertices, "sink1"));
-        JobVertex sinkVertex2 = checkNotNull(findJobVertexWithName(vertices, "sink2"));
-        JobVertex sinkVertex3 = checkNotNull(findJobVertexWithName(vertices, "sink3"));
-        JobVertex sinkVertex4 = checkNotNull(findJobVertexWithName(vertices, "sink4"));
+        JobVertex sinkVertex1 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink1"));
+        JobVertex sinkVertex2 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink2"));
+        JobVertex sinkVertex3 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink3"));
+        JobVertex sinkVertex4 = checkNotNull(findJobVertexWithNameInternal(vertices, "sink4"));
 
         assertThat(sinkVertex2.getInputs().get(0).getSource().getId())
                 .isEqualTo(sinkVertex1.getInputs().get(0).getSource().getId());
@@ -2850,7 +2850,7 @@ class StreamingJobGraphGeneratorTest {
         }
     }
 
-    private static JobVertex findJobVertexWithName(List<JobVertex> vertices, String name) {
+    private static JobVertex findJobVertexWithNameInternal(List<JobVertex> vertices, String name) {
         for (JobVertex jobVertex : vertices) {
             if (jobVertex.getName().contains(name)) {
                 return jobVertex;
@@ -2859,7 +2859,7 @@ class StreamingJobGraphGeneratorTest {
         return null;
     }
 
-    private JobGraph createJobGraphWithDescription(
+    private JobGraph createJobGraphWithDescriptionInternal(
             StreamExecutionEnvironment env, String... inputNames) {
         env.setParallelism(1);
         DataStream<Long> source;
