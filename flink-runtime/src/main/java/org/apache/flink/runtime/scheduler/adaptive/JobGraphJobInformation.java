@@ -24,7 +24,7 @@ import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.jobmanager.scheduler.SlotSharingGroup;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobInformation;
 import org.apache.flink.util.InstantiationUtil;
 
@@ -38,10 +38,10 @@ public class JobGraphJobInformation implements JobInformation {
     private final JobGraph jobGraph;
     private final JobID jobID;
     private final String name;
-    private final VertexParallelismStore vertexParallelismStore;
+    private final VertexMaxParallelismRegistry vertexParallelismStore;
 
     public JobGraphJobInformation(
-            JobGraph jobGraph, VertexParallelismStore vertexParallelismStore) {
+            JobGraph jobGraph, VertexMaxParallelismRegistry vertexParallelismStore) {
         this.jobGraph = jobGraph;
         this.jobID = jobGraph.getJobID();
         this.name = jobGraph.getName();
@@ -57,7 +57,7 @@ public class JobGraphJobInformation implements JobInformation {
     public JobInformation.VertexInformation getVertexInformation(JobVertexID jobVertexId) {
         return new JobVertexInformation(
                 jobGraph.findVertexByID(jobVertexId),
-                vertexParallelismStore.getParallelismInfo(jobVertexId));
+                vertexParallelismStore.getVertexParallelismInformation(jobVertexId));
     }
 
     public JobID getJobID() {
@@ -83,7 +83,7 @@ public class JobGraphJobInformation implements JobInformation {
         return InstantiationUtil.cloneUnchecked(jobGraph);
     }
 
-    public VertexParallelismStore getVertexParallelismStore() {
+    public VertexMaxParallelismRegistry getVertexParallelismStore() {
         return vertexParallelismStore;
     }
 

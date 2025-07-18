@@ -106,8 +106,8 @@ import org.apache.flink.runtime.scheduler.SchedulerBase;
 import org.apache.flink.runtime.scheduler.SchedulerNG;
 import org.apache.flink.runtime.scheduler.SchedulerUtils;
 import org.apache.flink.runtime.scheduler.UpdateSchedulerNgOnInternalFailuresListener;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobAllocationsInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.JobInformation;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.ReservedSlots;
@@ -363,7 +363,7 @@ public class AdaptiveScheduler
 
     private final JobInfo jobInfo;
 
-    private final VertexParallelismStore initialParallelismStore;
+    private final VertexMaxParallelismRegistry initialParallelismStore;
 
     private final DeclarativeSlotPool declarativeSlotPool;
 
@@ -495,7 +495,7 @@ public class AdaptiveScheduler
         this.jobGraph = jobGraph;
         this.jobInfo = new JobInfoImpl(jobGraph.getJobID(), jobGraph.getName());
 
-        VertexParallelismStore vertexParallelismStore =
+        VertexMaxParallelismRegistry vertexParallelismStore =
                 computeVertexParallelismStore(jobGraph, settings.getExecutionMode());
         if (jobResourceRequirements != null) {
             vertexParallelismStore =
@@ -602,7 +602,7 @@ public class AdaptiveScheduler
      * @return The parallelism store.
      */
     @VisibleForTesting
-    static VertexParallelismStore computeReactiveModeVertexParallelismStore(
+    static VertexMaxParallelismRegistry computeReactiveModeVertexParallelismStore(
             Iterable<JobVertex> vertices,
             Function<JobVertex, Integer> defaultMaxParallelismFunc,
             boolean adjustParallelism) {
@@ -652,7 +652,7 @@ public class AdaptiveScheduler
      * @param executionMode The mode of scheduler execution.
      * @return The parallelism store.
      */
-    private static VertexParallelismStore computeVertexParallelismStore(
+    private static VertexMaxParallelismRegistry computeVertexParallelismStore(
             JobGraph jobGraph, SchedulerExecutionMode executionMode) {
         if (executionMode == SchedulerExecutionMode.REACTIVE) {
             return computeReactiveModeVertexParallelismStore(
@@ -672,7 +672,7 @@ public class AdaptiveScheduler
      * @return The parallelism store.
      */
     @VisibleForTesting
-    static VertexParallelismStore computeVertexParallelismStoreForExecution(
+    static VertexMaxParallelismRegistry computeVertexParallelismStoreForExecution(
             JobGraph jobGraph,
             SchedulerExecutionMode executionMode,
             Function<JobVertex, Integer> defaultMaxParallelismFunc) {
@@ -1064,7 +1064,7 @@ public class AdaptiveScheduler
             throw new UnsupportedOperationException(
                     "Cannot change the parallelism of a job running in reactive mode.");
         }
-        final Optional<VertexParallelismStore> maybeUpdateVertexParallelismStore =
+        final Optional<VertexMaxParallelismRegistry> maybeUpdateVertexParallelismStore =
                 DefaultVertexParallelismStore.applyJobResourceRequirements(
                         jobInformation.getVertexParallelismStore(), jobResourceRequirements);
         if (maybeUpdateVertexParallelismStore.isPresent()) {
@@ -1323,7 +1323,7 @@ public class AdaptiveScheduler
             createExecutionGraphWithAvailableResourcesAsync(
                     @Nullable ExecutionGraph previousExecutionGraph) {
         final JobSchedulingPlan schedulingPlan;
-        final VertexParallelismStore adjustedParallelismStore;
+        final VertexMaxParallelismRegistry adjustedParallelismStore;
 
         try {
             schedulingPlan = determineParallelism(slotAllocator, previousExecutionGraph);
@@ -1345,7 +1345,7 @@ public class AdaptiveScheduler
                             settings.getExecutionMode(),
                             (vertex) -> {
                                 VertexParallelismInformation vertexParallelismInfo =
-                                        initialParallelismStore.getParallelismInfo(vertex.getID());
+                                        initialParallelismStore.getVertexParallelismInformation(vertex.getID());
                                 return vertexParallelismInfo.getMaxParallelism();
                             });
         } catch (Exception exception) {
@@ -1400,7 +1400,7 @@ public class AdaptiveScheduler
     }
 
     private CompletableFuture<ExecutionGraph> createExecutionGraphAndRestoreStateAsync(
-            VertexParallelismStore adjustedParallelismStore) {
+            VertexMaxParallelismRegistry adjustedParallelismStore) {
         backgroundTask.abort();
 
         backgroundTask =
@@ -1414,7 +1414,7 @@ public class AdaptiveScheduler
 
     @Nonnull
     private ExecutionGraph createExecutionGraphAndRestoreState(
-            VertexParallelismStore adjustedParallelismStore) throws Exception {
+            VertexMaxParallelismRegistry adjustedParallelismStore) throws Exception {
         return executionGraphFactory.createAndRestoreExecutionGraph(
                 jobInformation.copyJobGraph(),
                 completedCheckpointStore,

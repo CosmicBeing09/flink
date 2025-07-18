@@ -194,7 +194,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             final ComponentMainThreadExecutor mainThreadExecutor,
             final JobStatusListener jobStatusListener,
             final ExecutionGraphFactory executionGraphFactory,
-            final VertexParallelismStore vertexParallelismStore)
+            final VertexMaxParallelismRegistry vertexParallelismStore)
             throws Exception {
 
         this.log = checkNotNull(log);
@@ -303,14 +303,14 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 normalizeParallelism(vertex.getParallelism()));
     }
 
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices, Function<JobVertex, Integer> defaultMaxParallelismFunc) {
         return computeVertexParallelismStore(
                 vertices, defaultMaxParallelismFunc, SchedulerBase::normalizeParallelism);
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all given vertices, which will set defaults
+     * Compute the {@link VertexMaxParallelismRegistry} for all given vertices, which will set defaults
      * and ensure that the returned store contains valid parallelisms, with a custom function for
      * default max parallelism calculation and a custom function for normalizing vertex parallelism.
      *
@@ -320,7 +320,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
      * @param normalizeParallelismFunc a function for normalizing vertex parallelism
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices,
             Function<JobVertex, Integer> defaultMaxParallelismFunc,
             Function<Integer, Integer> normalizeParallelismFunc) {
@@ -357,25 +357,25 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all given vertices, which will set defaults
+     * Compute the {@link VertexMaxParallelismRegistry} for all given vertices, which will set defaults
      * and ensure that the returned store contains valid parallelisms.
      *
      * @param vertices the vertices to compute parallelism for
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(
             Iterable<JobVertex> vertices) {
         return computeVertexParallelismStore(vertices, SchedulerBase::getDefaultMaxParallelism);
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all vertices of a given job graph, which will
+     * Compute the {@link VertexMaxParallelismRegistry} for all vertices of a given job graph, which will
      * set defaults and ensure that the returned store contains valid parallelisms.
      *
      * @param jobGraph the job graph to retrieve vertices from
      * @return the computed parallelism store
      */
-    public static VertexParallelismStore computeVertexParallelismStore(JobGraph jobGraph) {
+    public static VertexMaxParallelismRegistry computeVertexParallelismStore(JobGraph jobGraph) {
         return computeVertexParallelismStore(jobGraph.getVertices());
     }
 
@@ -387,7 +387,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
             long initializationTimestamp,
             ComponentMainThreadExecutor mainThreadExecutor,
             JobStatusListener jobStatusListener,
-            VertexParallelismStore vertexParallelismStore)
+            VertexMaxParallelismRegistry vertexParallelismStore)
             throws Exception {
 
         final ExecutionGraph newExecutionGraph =

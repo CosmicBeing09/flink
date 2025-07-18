@@ -97,7 +97,7 @@ import org.apache.flink.runtime.scheduler.SchedulerNG;
 import org.apache.flink.runtime.scheduler.SchedulerTestingUtils;
 import org.apache.flink.runtime.scheduler.TestingPhysicalSlot;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlot;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.TestingSlotAllocator;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
@@ -1979,14 +1979,14 @@ public class AdaptiveSchedulerTest {
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
         JobGraph graph = streamingJobGraph(v1, v2);
 
-        VertexParallelismStore parallelismStore =
+        VertexMaxParallelismRegistry parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
                         graph,
                         SchedulerExecutionMode.REACTIVE,
                         SchedulerBase::getDefaultMaxParallelism);
 
         for (JobVertex vertex : graph.getVertices()) {
-            VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
+            VertexParallelismInformation info = parallelismStore.getVertexParallelismInformation(vertex.getID());
 
             assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());
@@ -1999,12 +1999,12 @@ public class AdaptiveSchedulerTest {
         JobVertex v2 = createNoOpVertex("v2", 50, 50);
         JobGraph graph = streamingJobGraph(v1, v2);
 
-        VertexParallelismStore parallelismStore =
+        VertexMaxParallelismRegistry parallelismStore =
                 AdaptiveScheduler.computeVertexParallelismStoreForExecution(
                         graph, null, SchedulerBase::getDefaultMaxParallelism);
 
         for (JobVertex vertex : graph.getVertices()) {
-            VertexParallelismInformation info = parallelismStore.getParallelismInfo(vertex.getID());
+            VertexParallelismInformation info = parallelismStore.getVertexParallelismInformation(vertex.getID());
 
             assertThat(info.getParallelism()).isEqualTo(vertex.getParallelism());
             assertThat(info.getMaxParallelism()).isEqualTo(vertex.getMaxParallelism());

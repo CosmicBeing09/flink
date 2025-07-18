@@ -69,8 +69,8 @@ import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
 import org.apache.flink.runtime.query.KvStateLocationRegistry;
 import org.apache.flink.runtime.scheduler.InternalFailuresListener;
 import org.apache.flink.runtime.scheduler.SsgNetworkMemoryCalculationUtils;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.scheduler.adapter.DefaultExecutionTopology;
 import org.apache.flink.runtime.scheduler.strategy.ConsumedPartitionGroup;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
@@ -251,7 +251,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
 
     private final VertexAttemptNumberStore initialAttemptCounts;
 
-    private final VertexParallelismStore parallelismStore;
+    private final VertexMaxParallelismRegistry parallelismStore;
 
     // ------ Fields that are relevant to the execution and need to be cleared before archiving
     // -------
@@ -326,7 +326,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             ExecutionStateUpdateListener executionStateUpdateListener,
             long initializationTimestamp,
             VertexAttemptNumberStore initialAttemptCounts,
-            VertexParallelismStore vertexParallelismStore,
+            VertexMaxParallelismRegistry vertexParallelismStore,
             boolean isDynamic,
             ExecutionJobVertex.Factory executionJobVertexFactory,
             List<JobStatusHook> jobStatusHooks,
@@ -875,7 +875,7 @@ public class DefaultExecutionGraph implements ExecutionGraph, InternalExecutionG
             }
 
             VertexParallelismInformation parallelismInfo =
-                    parallelismStore.getParallelismInfo(jobVertex.getID());
+                    parallelismStore.getVertexParallelismInformation(jobVertex.getID());
 
             // create the execution job vertex and attach it to the graph
             ExecutionJobVertex ejv =

@@ -40,7 +40,7 @@ import org.apache.flink.runtime.jobgraph.JobGraphTestUtils;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 import org.apache.flink.runtime.shuffle.ShuffleTestUtils;
 
@@ -76,7 +76,7 @@ public class TestingDefaultExecutionGraphBuilder {
             NoOpExecutionDeploymentListener.get();
     private ExecutionStateUpdateListener executionStateUpdateListener =
             (execution, previousState, newState) -> {};
-    private VertexParallelismStore vertexParallelismStore;
+    private VertexMaxParallelismRegistry vertexParallelismStore;
     private ExecutionJobVertex.Factory executionJobVertexFactory = new ExecutionJobVertex.Factory();
 
     private MarkPartitionFinishedStrategy markPartitionFinishedStrategy =
@@ -150,7 +150,7 @@ public class TestingDefaultExecutionGraphBuilder {
     }
 
     public TestingDefaultExecutionGraphBuilder setVertexParallelismStore(
-            VertexParallelismStore store) {
+            VertexMaxParallelismRegistry store) {
         this.vertexParallelismStore = store;
         return this;
     }

@@ -31,7 +31,7 @@ class DefaultVertexParallelismStoreTest {
     void testNotSet() {
         DefaultVertexParallelismStore store = new DefaultVertexParallelismStore();
 
-        assertThatThrownBy(() -> store.getParallelismInfo(new JobVertexID()))
+        assertThatThrownBy(() -> store.getVertexParallelismInformation(new JobVertexID()))
                 .withFailMessage("No parallelism information set for vertex")
                 .isInstanceOf(IllegalStateException.class);
     }
@@ -44,7 +44,7 @@ class DefaultVertexParallelismStoreTest {
 
         store.setParallelismInfo(id, info);
 
-        VertexParallelismInformation storedInfo = store.getParallelismInfo(id);
+        VertexParallelismInformation storedInfo = store.getVertexParallelismInformation(id);
 
         assertThat(storedInfo).isEqualTo(info);
     }

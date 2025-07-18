@@ -25,8 +25,8 @@ import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.tasks.AbstractInvokable;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.VertexParallelismInformation;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
 import org.apache.flink.runtime.scheduler.adaptivebatch.AdaptiveBatchScheduler;
 import org.apache.flink.testutils.TestingUtils;
 import org.apache.flink.testutils.executor.TestExecutorExtension;
@@ -184,11 +184,11 @@ class ExecutionJobVertexTest {
         final DefaultExecutionGraph eg =
                 TestingDefaultExecutionGraphBuilder.newBuilder()
                         .build(EXECUTOR_RESOURCE.getExecutor());
-        final VertexParallelismStore vertexParallelismStore =
+        final VertexMaxParallelismRegistry vertexParallelismStore =
                 AdaptiveBatchScheduler.computeVertexParallelismStoreForDynamicGraph(
                         Collections.singletonList(jobVertex), defaultMaxParallelism);
         final VertexParallelismInformation vertexParallelismInfo =
-                vertexParallelismStore.getParallelismInfo(jobVertex.getID());
+                vertexParallelismStore.getVertexParallelismInformation(jobVertex.getID());
 
         return new ExecutionJobVertex(
                 eg,

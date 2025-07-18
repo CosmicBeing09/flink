@@ -83,10 +83,10 @@ class SchedulerBaseComputeVertexParallelismTest {
     @TestTemplate
     void testMaxParallelismDefaulting() {
         JobVertex jobVertex = createNoOpVertex("test", parallelism, maxParallelism);
-        VertexParallelismStore store =
+        VertexMaxParallelismRegistry store =
                 SchedulerBase.computeVertexParallelismStore(Collections.singleton(jobVertex));
 
-        VertexParallelismInformation info = store.getParallelismInfo(jobVertex.getID());
+        VertexParallelismInformation info = store.getVertexParallelismInformation(jobVertex.getID());
 
         assertThat(info.getParallelism()).as("constant parallelism").isEqualTo(parallelism);
         assertThat(info.getMaxParallelism()).as("expected max").isEqualTo(expectedMaxParallelism);

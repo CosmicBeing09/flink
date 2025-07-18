@@ -34,7 +34,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
             maxParallelism -> Optional.of("Cannot change the max parallelism.");
 
     /**
-     * Create a new {@link VertexParallelismStore} that reflects given {@link
+     * Create a new {@link VertexMaxParallelismRegistry} that reflects given {@link
      * JobResourceRequirements}.
      *
      * @param oldVertexParallelismStore old vertex parallelism store that serves as a base for the
@@ -42,15 +42,15 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
      * @param jobResourceRequirements to apply over the old vertex parallelism store
      * @return new vertex parallelism store iff it was updated
      */
-    public static Optional<VertexParallelismStore> applyJobResourceRequirements(
-            VertexParallelismStore oldVertexParallelismStore,
+    public static Optional<VertexMaxParallelismRegistry> applyJobResourceRequirements(
+            VertexMaxParallelismRegistry oldVertexParallelismStore,
             JobResourceRequirements jobResourceRequirements) {
         final DefaultVertexParallelismStore newVertexParallelismStore =
                 new DefaultVertexParallelismStore();
         boolean changed = false;
         for (final JobVertexID vertexId : jobResourceRequirements.getJobVertices()) {
             final VertexParallelismInformation oldVertexParallelismInfo =
-                    oldVertexParallelismStore.getParallelismInfo(vertexId);
+                    oldVertexParallelismStore.getVertexParallelismInformation(vertexId);
             final JobVertexResourceRequirements.Parallelism parallelismSettings =
                     jobResourceRequirements.getParallelism(vertexId);
             final int minParallelism = parallelismSettings.getLowerBound();
@@ -78,7 +78,7 @@ public class DefaultVertexParallelismStore implements MutableVertexParallelismSt
     }
 
     @Override
-    public VertexParallelismInformation getParallelismInfo(JobVertexID vertexId) {
+    public VertexParallelismInformation getVertexParallelismInformation(JobVertexID vertexId) {
         return Optional.ofNullable(vertexToParallelismInfo.get(vertexId))
                 .orElseThrow(
                         () ->

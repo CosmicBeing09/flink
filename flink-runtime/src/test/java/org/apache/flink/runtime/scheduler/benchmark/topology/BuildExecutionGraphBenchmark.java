@@ -24,7 +24,7 @@ import org.apache.flink.runtime.jobgraph.JobGraph;
 import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.scheduler.SchedulerBase;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.benchmark.JobConfiguration;
 import org.apache.flink.runtime.scheduler.benchmark.SchedulerBenchmarkBase;
 
@@ -49,7 +49,7 @@ public class BuildExecutionGraphBenchmark extends SchedulerBenchmarkBase {
 
         jobVertices = createDefaultJobVertices(jobConfiguration);
         final JobGraph jobGraph = createJobGraph(jobConfiguration);
-        final VertexParallelismStore parallelismStore =
+        final VertexMaxParallelismRegistry parallelismStore =
                 SchedulerBase.computeVertexParallelismStore(jobVertices);
         executionGraph =
                 TestingDefaultExecutionGraphBuilder.newBuilder()

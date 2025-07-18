@@ -64,14 +64,8 @@ import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalResult;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalTopology;
 import org.apache.flink.runtime.jobgraph.topology.DefaultLogicalVertex;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
-import org.apache.flink.runtime.scheduler.DefaultExecutionDeployer;
-import org.apache.flink.runtime.scheduler.DefaultScheduler;
-import org.apache.flink.runtime.scheduler.ExecutionGraphFactory;
-import org.apache.flink.runtime.scheduler.ExecutionOperations;
-import org.apache.flink.runtime.scheduler.ExecutionSlotAllocatorFactory;
-import org.apache.flink.runtime.scheduler.ExecutionVertexVersion;
-import org.apache.flink.runtime.scheduler.ExecutionVertexVersioner;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.*;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.scheduler.strategy.ExecutionVertexID;
 import org.apache.flink.runtime.scheduler.strategy.SchedulingStrategyFactory;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
@@ -836,7 +830,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
     }
 
     /**
-     * Compute the {@link VertexParallelismStore} for all given vertices in a dynamic graph, which
+     * Compute the {@link VertexMaxParallelismRegistry} for all given vertices in a dynamic graph, which
      * will set defaults and ensure that the returned store contains valid parallelisms, with the
      * configured default max parallelism.
      *
@@ -845,7 +839,7 @@ public class AdaptiveBatchScheduler extends DefaultScheduler {
      * @return the computed parallelism store
      */
     @VisibleForTesting
-    public static VertexParallelismStore computeVertexParallelismStoreForDynamicGraph(
+    public static VertexMaxParallelismRegistry computeVertexParallelismStoreForDynamicGraph(
             Iterable<JobVertex> vertices, int defaultMaxParallelism) {
         // Resets the JobVertices to their original parallelism after JM failover, maintaining
         // consistency between the job graph loaded from the file and the one in memory.

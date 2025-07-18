@@ -45,7 +45,7 @@ import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.jobgraph.tasks.CheckpointCoordinatorConfiguration;
 import org.apache.flink.runtime.jobgraph.tasks.JobCheckpointingSettings;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
-import org.apache.flink.runtime.scheduler.VertexParallelismStore;
+import org.apache.flink.runtime.scheduler.VertexMaxParallelismRegistry;
 import org.apache.flink.runtime.shuffle.ShuffleMaster;
 import org.apache.flink.runtime.state.CheckpointStorage;
 import org.apache.flink.runtime.state.CheckpointStorageLoader;
@@ -92,7 +92,7 @@ public class DefaultExecutionGraphBuilder {
             ExecutionStateUpdateListener executionStateUpdateListener,
             long initializationTimestamp,
             VertexAttemptNumberStore vertexAttemptNumberStore,
-            VertexParallelismStore vertexParallelismStore,
+            VertexMaxParallelismRegistry vertexParallelismStore,
             CheckpointStatsTracker checkpointStatsTracker,
             boolean isDynamicGraph,
             ExecutionJobVertex.Factory executionJobVertexFactory,
@@ -205,7 +205,7 @@ public class DefaultExecutionGraphBuilder {
                         new SimpleInitializeOnMasterContext(
                                 classLoader,
                                 vertexParallelismStore
-                                        .getParallelismInfo(vertex.getID())
+                                        .getVertexParallelismInformation(vertex.getID())
                                         .getParallelism()));
             } catch (Throwable t) {
                 throw new JobExecutionException(
