@@ -94,7 +94,7 @@ public class CrossOperatorBase<IN1, IN2, OUT, FT extends CrossFunction<IN1, IN2,
             List<IN1> inputData1,
             List<IN2> inputData2,
             RuntimeContext ctx,
-            ExecutionConfig executionConfig)
+            ExecutionConfig config)
             throws Exception {
         CrossFunction<IN1, IN2, OUT> function = this.userFunction.getUserCodeObject();
 
@@ -104,11 +104,11 @@ public class CrossOperatorBase<IN1, IN2, OUT, FT extends CrossFunction<IN1, IN2,
         ArrayList<OUT> result = new ArrayList<OUT>(inputData1.size() * inputData2.size());
 
         TypeSerializer<IN1> inSerializer1 =
-                getOperatorInfo().getFirstInputType().createSerializer(executionConfig);
+                getOperatorInfo().getFirstInputType().createSerializer(config);
         TypeSerializer<IN2> inSerializer2 =
-                getOperatorInfo().getSecondInputType().createSerializer(executionConfig);
+                getOperatorInfo().getSecondInputType().createSerializer(config);
         TypeSerializer<OUT> outSerializer =
-                getOperatorInfo().getOutputType().createSerializer(executionConfig);
+                getOperatorInfo().getOutputType().createSerializer(config);
 
         for (IN1 element1 : inputData1) {
             for (IN2 element2 : inputData2) {

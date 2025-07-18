@@ -82,7 +82,7 @@ public final class Utils {
     }
 
     public static TypeComparatorFactory<?> getShipComparator(
-            Channel channel, ExecutionConfig executionConfig) {
+            Channel channel, ExecutionConfig config) {
         PlanNode source = channel.getSource();
         Operator<?> javaOp = source.getProgramOperator();
         TypeInformation<?> type = javaOp.getOperatorInfo().getOutputType();
@@ -90,23 +90,23 @@ public final class Utils {
                 type,
                 channel.getShipStrategyKeys(),
                 getSortOrders(channel.getShipStrategyKeys(), channel.getShipStrategySortOrder()),
-                executionConfig);
+                config);
     }
 
     private static <T> TypeComparatorFactory<?> createComparator(
             TypeInformation<T> typeInfo,
             FieldList keys,
             boolean[] sortOrder,
-            ExecutionConfig executionConfig) {
+            ExecutionConfig config) {
 
         TypeComparator<T> comparator;
         if (typeInfo instanceof CompositeType) {
             comparator =
                     ((CompositeType<T>) typeInfo)
-                            .createComparator(keys.toArray(), sortOrder, 0, executionConfig);
+                            .createComparator(keys.toArray(), sortOrder, 0, config);
         } else if (typeInfo instanceof AtomicType) {
             // handle grouping of atomic types
-            comparator = ((AtomicType<T>) typeInfo).createComparator(sortOrder[0], executionConfig);
+            comparator = ((AtomicType<T>) typeInfo).createComparator(sortOrder[0], config);
         } else {
             throw new RuntimeException("Unrecognized type: " + typeInfo);
         }

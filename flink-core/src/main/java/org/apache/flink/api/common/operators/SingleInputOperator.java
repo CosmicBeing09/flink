@@ -214,6 +214,6 @@ public abstract class SingleInputOperator<IN, OUT, FT extends Function>
     // --------------------------------------------------------------------------------------------
 
     protected abstract List<OUT> executeOnCollections(
-            List<IN> inputData, RuntimeContext runtimeContext, ExecutionConfig executionConfig)
+            List<IN> inputData, RuntimeContext runtimeContext, ExecutionConfig config)
             throws Exception;
 }

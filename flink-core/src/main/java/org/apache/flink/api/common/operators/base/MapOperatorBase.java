@@ -61,7 +61,7 @@ public class MapOperatorBase<IN, OUT, FT extends MapFunction<IN, OUT>>
 
     @Override
     protected List<OUT> executeOnCollections(
-            List<IN> inputData, RuntimeContext ctx, ExecutionConfig executionConfig)
+            List<IN> inputData, RuntimeContext ctx, ExecutionConfig config)
             throws Exception {
         MapFunction<IN, OUT> function = this.userFunction.getUserCodeObject();
 
@@ -71,9 +71,9 @@ public class MapOperatorBase<IN, OUT, FT extends MapFunction<IN, OUT>>
         ArrayList<OUT> result = new ArrayList<OUT>(inputData.size());
 
         TypeSerializer<IN> inSerializer =
-                getOperatorInfo().getInputType().createSerializer(executionConfig);
+                getOperatorInfo().getInputType().createSerializer(config);
         TypeSerializer<OUT> outSerializer =
-                getOperatorInfo().getOutputType().createSerializer(executionConfig);
+                getOperatorInfo().getOutputType().createSerializer(config);
 
         for (IN element : inputData) {
             IN inCopy = inSerializer.copy(element);

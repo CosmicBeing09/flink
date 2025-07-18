@@ -42,7 +42,7 @@ public class NoOpBinaryUdfOp<OUT> extends DualInputOperator<OUT, OUT, OUT, NoOpF
             List<OUT> inputData1,
             List<OUT> inputData2,
             RuntimeContext runtimeContext,
-            ExecutionConfig executionConfig) {
+            ExecutionConfig config) {
         throw new UnsupportedOperationException();
     }
 }
