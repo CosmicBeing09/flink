@@ -39,34 +39,34 @@ class TumblingEventTimeWindowsTest {
 
     @Test
     void testWindowAssignment() {
-        WindowAssigner.WindowAssignerContext mockContext =
+        WindowAssigner.WindowAssignerContext windowAssignerContext =
                 mock(WindowAssigner.WindowAssignerContext.class);
 
         TumblingEventTimeWindows assigner = TumblingEventTimeWindows.of(Duration.ofMillis(5000));
 
-        assertThat(assigner.assignWindows("String", 0L, mockContext))
+        assertThat(assigner.assignWindows("String", 0L, windowAssignerContext))
                 .containsExactly(new TimeWindow(0, 5000));
-        assertThat(assigner.assignWindows("String", 4999L, mockContext))
+        assertThat(assigner.assignWindows("String", 4999L, windowAssignerContext))
                 .containsExactly(new TimeWindow(0, 5000));
-        assertThat(assigner.assignWindows("String", 5000L, mockContext))
+        assertThat(assigner.assignWindows("String", 5000L, windowAssignerContext))
                 .containsExactly(new TimeWindow(5000, 10000));
     }
 
     @Test
     void testWindowAssignmentWithStagger() {
-        WindowAssigner.WindowAssignerContext mockContext =
+        WindowAssigner.WindowAssignerContext windowAssignerContext =
                 mock(WindowAssigner.WindowAssignerContext.class);
 
         TumblingEventTimeWindows assigner =
                 TumblingEventTimeWindows.of(
                         Duration.ofMillis(5000), Duration.ofMillis(0), WindowStagger.NATURAL);
 
-        when(mockContext.getCurrentProcessingTime()).thenReturn(150L);
-        assertThat(assigner.assignWindows("String", 150L, mockContext))
+        when(windowAssignerContext.getCurrentProcessingTime()).thenReturn(150L);
+        assertThat(assigner.assignWindows("String", 150L, windowAssignerContext))
                 .containsExactly(new TimeWindow(150, 5150));
-        assertThat(assigner.assignWindows("String", 5099L, mockContext))
+        assertThat(assigner.assignWindows("String", 5099L, windowAssignerContext))
                 .containsExactly(new TimeWindow(150, 5150));
-        assertThat(assigner.assignWindows("String", 5300L, mockContext))
+        assertThat(assigner.assignWindows("String", 5300L, windowAssignerContext))
                 .containsExactly(new TimeWindow(5150, 10150));
     }
 
