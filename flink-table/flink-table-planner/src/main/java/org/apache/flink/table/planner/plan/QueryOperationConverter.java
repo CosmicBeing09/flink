@@ -556,7 +556,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
             } else {
                 String refId =
                         String.format(
-                                "Unregistered_DataStream_%s", operation.getDataStream().getId());
+                                "Unregistered_DataStream_%s", operation.getDataStream().getIdInternal());
                 names = Collections.singletonList(refId);
             }
 
@@ -594,7 +594,7 @@ public class QueryOperationConverter extends QueryOperationDefaultVisitor<RelNod
                                 identifier.get().getDatabaseName(),
                                 identifier.get().getObjectName());
             } else {
-                String refId = String.format("Unregistered_DataStream_%s", dataStream.getId());
+                String refId = String.format("Unregistered_DataStream_%s", dataStream.getIdInternal());
                 names = Collections.singletonList(refId);
             }
             final RelDataType rowType =

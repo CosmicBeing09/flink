@@ -313,8 +313,8 @@ class StreamingJobGraphGeneratorTest {
         StreamGraph streamGraph = env.getStreamGraph();
 
         // check the streamGraph max parallelism is configured correctly
-        assertThat(streamGraph.getStreamNode(source.getId()).getMaxParallelism()).isEqualTo(4);
-        assertThat(streamGraph.getStreamNode(map.getId()).getMaxParallelism()).isEqualTo(10);
+        assertThat(streamGraph.getStreamNode(source.getIdInternal()).getMaxParallelism()).isEqualTo(4);
+        assertThat(streamGraph.getStreamNode(map.getIdInternal()).getMaxParallelism()).isEqualTo(10);
         assertThat(streamGraph.getStreamNode(sink.getTransformation().getId()).getMaxParallelism())
                 .isEqualTo(20);
     }

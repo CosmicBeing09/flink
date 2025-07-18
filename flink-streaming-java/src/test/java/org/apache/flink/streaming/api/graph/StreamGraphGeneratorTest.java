@@ -202,35 +202,35 @@ class StreamGraphGeneratorTest {
         StreamGraph graph = env.getStreamGraph();
 
         // rebalanceMap
-        assertThat(graph.getStreamNode(rebalanceMap.getId()).getInEdges().get(0).getPartitioner())
+        assertThat(graph.getStreamNode(rebalanceMap.getIdInternal()).getInEdges().get(0).getPartitioner())
                 .isInstanceOf(RebalancePartitioner.class);
 
         // verify that only last partitioning takes precedence
-        assertThat(graph.getStreamNode(broadcastMap.getId()).getInEdges().get(0).getPartitioner())
+        assertThat(graph.getStreamNode(broadcastMap.getIdInternal()).getInEdges().get(0).getPartitioner())
                 .isInstanceOf(BroadcastPartitioner.class);
         assertThat(
                         graph.getSourceVertex(
-                                        graph.getStreamNode(broadcastMap.getId())
+                                        graph.getStreamNode(broadcastMap.getIdInternal())
                                                 .getInEdges()
                                                 .get(0))
                                 .getId())
-                .isEqualTo(rebalanceMap.getId());
+                .isEqualTo(rebalanceMap.getIdInternal());
 
         // verify that partitioning in unions is preserved
         assertThat(
-                        graph.getStreamNode(broadcastOperator.getId())
+                        graph.getStreamNode(broadcastOperator.getIdInternal())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
                 .isInstanceOf(BroadcastPartitioner.class);
         assertThat(
-                        graph.getStreamNode(globalOperator.getId())
+                        graph.getStreamNode(globalOperator.getIdInternal())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
                 .isInstanceOf(GlobalPartitioner.class);
         assertThat(
-                        graph.getStreamNode(shuffleOperator.getId())
+                        graph.getStreamNode(shuffleOperator.getIdInternal())
                                 .getOutEdges()
                                 .get(0)
                                 .getPartitioner())
@@ -333,12 +333,12 @@ class StreamGraphGeneratorTest {
         StreamGraph streamGraph = env.getStreamGraph();
         assertThat(streamGraph.getStreamNodes().size()).isEqualTo(4);
 
-        assertThat(streamGraph.getStreamEdges(source1.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source2.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source3.getId(), transform.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source1.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source2.getId())).hasSize(1);
-        assertThat(streamGraph.getStreamEdges(source3.getId())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source1.getIdInternal(), transform.getId())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source2.getIdInternal(), transform.getId())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source3.getIdInternal(), transform.getId())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source1.getIdInternal())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source2.getIdInternal())).hasSize(1);
+        assertThat(streamGraph.getStreamEdges(source3.getIdInternal())).hasSize(1);
         assertThat(streamGraph.getStreamEdges(transform.getId())).hasSize(0);
     }
 
@@ -437,7 +437,7 @@ class StreamGraphGeneratorTest {
 
     private static StreamEdge edge(
             StreamGraph streamGraph, DataStream<Long> op1, DataStream<Long> op2) {
-        List<StreamEdge> streamEdges = streamGraph.getStreamEdges(op1.getId(), op2.getId());
+        List<StreamEdge> streamEdges = streamGraph.getStreamEdges(op1.getIdInternal(), op2.getIdInternal());
         assertThat(streamEdges).hasSize(1);
         return streamEdges.get(0);
     }
@@ -472,7 +472,7 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getId());
+        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getIdInternal());
 
         StreamPartitioner<?> streamPartitioner =
                 keyedResultNode.getInEdges().get(0).getPartitioner();
@@ -501,8 +501,8 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResult1Node = graph.getStreamNode(keyedResult1.getId());
-        StreamNode keyedResult2Node = graph.getStreamNode(keyedResult2.getId());
+        StreamNode keyedResult1Node = graph.getStreamNode(keyedResult1.getIdInternal());
+        StreamNode keyedResult2Node = graph.getStreamNode(keyedResult2.getIdInternal());
 
         assertThat(keyedResult1Node.getMaxParallelism()).isEqualTo(globalMaxParallelism);
         assertThat(keyedResult2Node.getMaxParallelism()).isEqualTo(keyedResult2MaxParallelism);
@@ -547,8 +547,8 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResult3Node = graph.getStreamNode(keyedResult3.getId());
-        StreamNode keyedResult4Node = graph.getStreamNode(keyedResult4.getId());
+        StreamNode keyedResult3Node = graph.getStreamNode(keyedResult3.getIdInternal());
+        StreamNode keyedResult4Node = graph.getStreamNode(keyedResult4.getIdInternal());
 
         assertThat(keyedResult3Node.getMaxParallelism()).isEqualTo(maxParallelism);
         assertThat(keyedResult4Node.getMaxParallelism()).isEqualTo(maxParallelism);
@@ -574,7 +574,7 @@ class StreamGraphGeneratorTest {
 
         StreamGraph graph = env.getStreamGraph();
 
-        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getId());
+        StreamNode keyedResultNode = graph.getStreamNode(keyedResult.getIdInternal());
 
         StreamPartitioner<?> streamPartitioner1 =
                 keyedResultNode.getInEdges().get(0).getPartitioner();

@@ -151,7 +151,7 @@ public class DataStream<T> {
      * @return ID of the DataStream
      */
     @Internal
-    public int getId() {
+    public int getIdInternal() {
         return transformation.getId();
     }
 
@@ -1456,7 +1456,7 @@ public class DataStream<T> {
         env.addOperator(sink.getTransformation());
 
         env.registerCollectIteratorInternal(iterator);
-        collector.setIterator(iterator);
+        collector.setIteratorInternal(iterator);
     }
 
     /**
@@ -1481,7 +1481,7 @@ public class DataStream<T> {
         private CloseableIterator<T> iterator;
 
         @Internal
-        void setIterator(CloseableIterator<T> iterator) {
+        void setIteratorInternal(CloseableIterator<T> iterator) {
             this.iterator = iterator;
         }
 
