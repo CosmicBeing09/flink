@@ -51,32 +51,32 @@ class StateSnapshotCompressionTest {
         ExecutionConfig executionConfig = new ExecutionConfig();
         executionConfig.setSnapshotCompressionEnabled(true);
 
-        AbstractKeyedStateBackend<String> stateBackend =
-                getStringHeapKeyedStateBackend(executionConfig);
+        AbstractKeyedStateBackend<String> stringStateBackend =
+                createStringHeapKeyedStateBackend(executionConfig);
 
         try {
             assertThat(
                             SnappyStreamCompressionDecorator.INSTANCE.equals(
-                                    stateBackend.getKeyGroupCompressionDecorator()))
+                                    stringStateBackend.getKeyGroupCompressionDecorator()))
                     .isTrue();
         } finally {
-            IOUtils.closeQuietly(stateBackend);
-            stateBackend.dispose();
+            IOUtils.closeQuietly(stringStateBackend);
+            stringStateBackend.dispose();
         }
 
         executionConfig = new ExecutionConfig();
         executionConfig.setSnapshotCompressionEnabled(false);
 
-        stateBackend = getStringHeapKeyedStateBackend(executionConfig);
+        stringStateBackend = createStringHeapKeyedStateBackend(executionConfig);
 
         try {
             assertThat(
                             UncompressedStreamCompressionDecorator.INSTANCE.equals(
-                                    stateBackend.getKeyGroupCompressionDecorator()))
+                                    stringStateBackend.getKeyGroupCompressionDecorator()))
                     .isTrue();
         } finally {
-            IOUtils.closeQuietly(stateBackend);
-            stateBackend.dispose();
+            IOUtils.closeQuietly(stringStateBackend);
+            stringStateBackend.dispose();
         }
     }
 
@@ -90,7 +90,7 @@ class StateSnapshotCompressionTest {
         snapshotRestoreRoundtrip(false);
     }
 
-    private HeapKeyedStateBackend<String> getStringHeapKeyedStateBackend(
+    private HeapKeyedStateBackend<String> createStringHeapKeyedStateBackend(
             ExecutionConfig executionConfig) throws BackendBuildingException {
         return getStringHeapKeyedStateBackend(executionConfig, Collections.emptyList());
     }
@@ -128,7 +128,7 @@ class StateSnapshotCompressionTest {
         stateDescriptor.initializeSerializerUnlessSet(executionConfig);
 
         AbstractKeyedStateBackend<String> stateBackend =
-                getStringHeapKeyedStateBackend(executionConfig);
+                createStringHeapKeyedStateBackend(executionConfig);
 
         try {
 
