@@ -86,14 +86,14 @@ public class ExecutionOptions {
      * Should be moved to {@code ExecutionCheckpointingOptions} along with {@code
      * ExecutionConfig#useSnapshotCompression}, which should be put into {@code CheckpointConfig}.
      */
-    public static final ConfigOption<Boolean> SNAPSHOT_COMPRESSION =
+    public static final ConfigOption<Boolean> CHECKPOINT_SNAPSHOT_COMPRESSION_ENABLED =
             ConfigOptions.key("execution.checkpointing.snapshot-compression")
                     .booleanType()
                     .defaultValue(false)
                     .withDescription(
                             "Tells if we should use compression for the state snapshot data or not");
 
-    public static final ConfigOption<Boolean> BUFFER_TIMEOUT_ENABLED =
+    public static final ConfigOption<Boolean> EXECUTION_BUFFER_FLUSHING_ENABLED =
             ConfigOptions.key("execution.buffer-timeout.enabled")
                     .booleanType()
                     .defaultValue(true)
@@ -123,7 +123,7 @@ public class ExecutionOptions {
                                                             + " triggers flushing after every record thus minimizing latency"),
                                             text(
                                                     "If the config "
-                                                            + BUFFER_TIMEOUT_ENABLED.key()
+                                                            + EXECUTION_BUFFER_FLUSHING_ENABLED.key()
                                                             + " is false,"
                                                             + " trigger flushing only when the output buffer is full thus maximizing "
                                                             + "throughput"))
