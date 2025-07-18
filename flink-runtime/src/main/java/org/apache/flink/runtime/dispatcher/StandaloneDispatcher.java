@@ -34,7 +34,7 @@ public class StandaloneDispatcher extends Dispatcher {
     public StandaloneDispatcher(
             RpcService rpcService,
             DispatcherId fencingToken,
-            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredJobs,
+            Collection<org.apache.flink.streaming.api.graph.ExecutionPlan> recoveredExecutionPlans,
             Collection<JobResult> recoveredDirtyJobResults,
             DispatcherBootstrapFactory dispatcherBootstrapFactory,
             DispatcherServices dispatcherServices)
@@ -42,7 +42,7 @@ public class StandaloneDispatcher extends Dispatcher {
         super(
                 rpcService,
                 fencingToken,
-                recoveredJobs,
+                recoveredExecutionPlans,
                 recoveredDirtyJobResults,
                 dispatcherBootstrapFactory,
                 dispatcherServices);
