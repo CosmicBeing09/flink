@@ -47,7 +47,7 @@ public class BufferTimeoutITCase extends AbstractTestBaseJUnit4 {
      */
     @Test
     public void testDisablingBufferTimeout() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setBufferTimeout(-1);
         final SharedReference<ArrayList<Integer>> results = sharedObjects.add(new ArrayList<>());

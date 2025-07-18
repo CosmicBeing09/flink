@@ -112,7 +112,7 @@ class HiveTableSinkITCase {
 
     @Test
     void testHiveTableSinkWithParallelismInStreaming() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final TableEnvironment tEnv =
                 HiveTestUtils.createTableEnvInStreamingMode(env, SqlDialect.HIVE);
         testHiveTableSinkWithParallelismBase(
@@ -217,7 +217,7 @@ class HiveTableSinkITCase {
                 "parquet",
                 (p) -> {
                     StreamExecutionEnvironment env =
-                            StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                            StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
                     env.setParallelism(1);
                     StreamTableEnvironment tEnv = HiveTestUtils.createTableEnvInStreamingMode(env);
                     tEnv.registerCatalog(hiveCatalog.getName(), hiveCatalog);
@@ -247,7 +247,7 @@ class HiveTableSinkITCase {
 
     @Test
     void testStreamingSinkWithTimestampLtzWatermark() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
         StreamTableEnvironment tEnv = HiveTestUtils.createTableEnvInStreamingMode(env);
@@ -408,7 +408,7 @@ class HiveTableSinkITCase {
 
     @Test
     void testStreamingSinkWithoutCommitPolicy() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tableEnv = HiveTestUtils.createTableEnvInStreamingMode(env);
         tableEnv.registerCatalog(hiveCatalog.getName(), hiveCatalog);
         tableEnv.useCatalog(hiveCatalog.getName());
@@ -770,7 +770,7 @@ class HiveTableSinkITCase {
 
     private void testStreamingWriteWithCustomPartitionCommitPolicy(
             String customPartitionCommitPolicyClassName) throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
         // avoid the job to restart infinitely
@@ -867,7 +867,7 @@ class HiveTableSinkITCase {
     private void testStreamingWrite(
             boolean part, boolean useMr, String format, Consumer<String> pathConsumer)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

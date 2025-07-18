@@ -65,7 +65,7 @@ public class TestAvroConsumerConfluent {
         config.setProperty("group.id", parameterTool.getRequired("group.id"));
         String schemaRegistryUrl = parameterTool.getRequired("schema-registry-url");
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         String bootstrapServers = parameterTool.getRequired("bootstrap.servers");
         KafkaSource<User> kafkaSource =

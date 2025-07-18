@@ -62,7 +62,7 @@ public class SocketWindowWordCount {
         }
 
         // get the execution environment
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // get input data by connecting to the socket
         DataStream<String> text = env.socketTextStream(hostname, port, "\n");

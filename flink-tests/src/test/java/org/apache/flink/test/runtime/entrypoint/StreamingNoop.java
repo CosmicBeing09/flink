@@ -43,7 +43,7 @@ public class StreamingNoop {
         ParameterTool params = ParameterTool.fromArgs(args);
 
         // define the dataflow
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(2);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 10, 1000);
         env.readFileStream("input/", 60000, FileMonitoringFunction.WatchType.ONLY_NEW_FILES)

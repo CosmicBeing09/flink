@@ -56,7 +56,7 @@ class StreamGraphGeneratorExecutionModeDetectionTest {
     @Test
     void testExecutionModePropagationFromEnvWithDefaultAndBoundedSource() {
         final StreamExecutionEnvironment environment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         environment.enableCheckpointing(100);
 
         environment
@@ -79,7 +79,7 @@ class StreamGraphGeneratorExecutionModeDetectionTest {
     @Test
     void testExecutionModePropagationFromEnvWithDefaultAndUnboundedSource() {
         final StreamExecutionEnvironment environment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         environment
                 .fromSource(
@@ -104,7 +104,7 @@ class StreamGraphGeneratorExecutionModeDetectionTest {
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.AUTOMATIC);
 
         final StreamExecutionEnvironment environment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         environment.enableCheckpointing(100L);
         environment.configure(config, getClass().getClassLoader());
 
@@ -135,7 +135,7 @@ class StreamGraphGeneratorExecutionModeDetectionTest {
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.BATCH);
 
         final StreamExecutionEnvironment environment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         environment.configure(config, getClass().getClassLoader());
 
         environment

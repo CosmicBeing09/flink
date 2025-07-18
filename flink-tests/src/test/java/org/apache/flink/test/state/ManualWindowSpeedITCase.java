@@ -60,7 +60,7 @@ public class ManualWindowSpeedITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testTumblingIngestionTimeWindowsWithFsBackend() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(1);
 
@@ -99,7 +99,7 @@ public class ManualWindowSpeedITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testTumblingIngestionTimeWindowsWithFsBackendWithLateness() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(1);
 
@@ -140,7 +140,7 @@ public class ManualWindowSpeedITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testTumblingIngestionTimeWindowsWithRocksDBBackend() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(1);
 
@@ -177,7 +177,7 @@ public class ManualWindowSpeedITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testTumblingIngestionTimeWindowsWithRocksDBBackendWithLateness() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(1);
 

@@ -51,7 +51,7 @@ public class TemporalJoinSQLExample {
     public static void main(String[] args) throws Exception {
 
         // set up the Java DataStream API
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // set up the Java Table API
         final StreamTableEnvironment tableEnv = StreamTableEnvironment.create(env);

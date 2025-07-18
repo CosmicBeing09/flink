@@ -92,7 +92,7 @@ public class HiveSourceITCase {
                 .addRow(new Object[] {2})
                 .commit();
 
-        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment streamEnv = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         streamEnv.setParallelism(1);
         HiveSource<RowData> hiveSource =
                 new HiveSourceBuilder(

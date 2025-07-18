@@ -43,7 +43,7 @@ public class FastFailuresITCase extends AbstractTestBaseJUnit4 {
     public void testThis() throws Exception {
         final int parallelism = 4;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(parallelism);
         env.enableCheckpointing(1000);

@@ -125,7 +125,7 @@ public class ContinuousFileProcessingITCase extends AbstractTestBaseJUnit4 {
         format.setFilesFilter(FilePathFilter.createDefaultFilter());
 
         // create the stream execution environment with a parallelism > 1 to test
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
 
         ContinuousFileMonitoringFunction<String> monitoringFunction =

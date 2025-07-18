@@ -69,7 +69,7 @@ public class BigUserProgramJobSubmitITCase extends TestLogger {
 
         CollectingSink resultSink = new CollectingSink();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Integer> src = env.fromData(1, 3, 5);

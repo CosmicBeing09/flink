@@ -134,7 +134,7 @@ public class SavepointDeepCopyTest extends AbstractTestBaseJUnit4 {
      */
     @Test
     public void testSavepointDeepCopy() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<String> words = env.fromData(TEXT.split(" "));
 

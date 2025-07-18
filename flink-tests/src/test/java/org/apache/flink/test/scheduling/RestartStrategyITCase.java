@@ -73,7 +73,7 @@ class RestartStrategyITCase {
                 Duration.ofSeconds(3));
         conf.set(RestartStrategyOptions.RESTART_STRATEGY_EXPONENTIAL_DELAY_ATTEMPTS, 3);
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(runtimeExecutionMode);
         conf.set(JobManagerOptions.SCHEDULER, schedulerType);
 

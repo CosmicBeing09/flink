@@ -30,7 +30,7 @@ import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 public class DataGenerator {
 
     public static void main(String[] args) throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         GeneratorFunction<Long, String> generatorFunction = index -> "Number: " + index;

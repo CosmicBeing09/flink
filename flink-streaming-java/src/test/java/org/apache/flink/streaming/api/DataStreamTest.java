@@ -101,7 +101,7 @@ class DataStreamTest {
     /** Ensure that WatermarkStrategy is easy to use in the API, without superfluous generics. */
     @Test
     void testErgonomicWatermarkStrategy() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<String> input = env.fromData("bonjour");
 
@@ -123,7 +123,7 @@ class DataStreamTest {
      */
     @Test
     void testUnion() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Long> input1 =
@@ -294,7 +294,7 @@ class DataStreamTest {
      */
     @Test
     void testNaming() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Long> dataStream1 =
                 env.fromSequence(0, 0)
@@ -365,7 +365,7 @@ class DataStreamTest {
      */
     @Test
     void testPartitioning() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<Long, Long>> src1 = env.fromData(new Tuple2<>(0L, 0L));
         DataStream<Tuple2<Long, Long>> src2 = env.fromData(new Tuple2<>(0L, 0L));
@@ -625,7 +625,7 @@ class DataStreamTest {
     /** Tests whether parallelism gets set. */
     @Test
     void testParallelism() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Tuple2<Long, Long>> src = env.fromData(new Tuple2<>(0L, 0L));
         env.setParallelism(10);
@@ -708,7 +708,7 @@ class DataStreamTest {
     /** Tests whether resources get set. */
     @Test
     void testResources() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         ResourceSpec minResource1 = ResourceSpec.newBuilder(1.0, 100).build();
         ResourceSpec preferredResource1 = ResourceSpec.newBuilder(2.0, 200).build();
@@ -843,7 +843,7 @@ class DataStreamTest {
 
     @Test
     void testTypeInfo() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Long> src1 = env.fromSequence(0, 0);
         assertThat(src1.getType()).isEqualTo(TypeExtractor.getForClass(Long.class));
@@ -912,7 +912,7 @@ class DataStreamTest {
      */
     @Test
     void testKeyedStreamKeyedProcessTranslation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<Long> src = env.fromSequence(0, 0);
 
         KeyedProcessFunction<Long, Long, Integer> keyedProcessFunction =
@@ -947,7 +947,7 @@ class DataStreamTest {
      */
     @Test
     void testProcessTranslation() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<Long> src = env.fromSequence(0, 0);
 
         ProcessFunction<Long, Integer> processFunction =
@@ -986,7 +986,7 @@ class DataStreamTest {
                 new MapStateDescriptor<>(
                         "broadcast", BasicTypeInfo.LONG_TYPE_INFO, BasicTypeInfo.STRING_TYPE_INFO);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final DataStream<Long> srcOne =
                 env.fromSequence(0L, 5L)
                         .assignTimestampsAndWatermarks(
@@ -1045,7 +1045,7 @@ class DataStreamTest {
                 new MapStateDescriptor<>(
                         "broadcast", BasicTypeInfo.LONG_TYPE_INFO, BasicTypeInfo.STRING_TYPE_INFO);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final DataStream<Long> srcOne =
                 env.fromSequence(0L, 5L)
                         .assignTimestampsAndWatermarks(
@@ -1100,7 +1100,7 @@ class DataStreamTest {
     @Test
     void testWindowOperatorDescription() {
         // global window
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStream<Long> dataStream1 =
                 env.fromSequence(0, 0)
                         .windowAll(GlobalWindows.create())
@@ -1153,7 +1153,7 @@ class DataStreamTest {
      */
     @Test
     void testUserDefinedDescription() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Long> dataStream1 =
                 env.fromSequence(0, 0)
@@ -1237,7 +1237,7 @@ class DataStreamTest {
 
     @Test
     void operatorTest() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Long> src = env.fromSequence(0, 0);
 
@@ -1305,7 +1305,7 @@ class DataStreamTest {
 
     @Test
     void testKeyedConnectedStreamsType() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Integer> stream1 = env.fromData(1, 2);
         DataStreamSource<Integer> stream2 = env.fromData(1, 2);
@@ -1321,7 +1321,7 @@ class DataStreamTest {
 
     @Test
     void sinkKeyTest() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSink<Long> sink = env.fromSequence(1, 100).print();
         assertThat(
@@ -1415,7 +1415,7 @@ class DataStreamTest {
 
     @Test
     void testChannelSelectors() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStreamSource<Long> src = env.fromSequence(0, 0);
 
@@ -1528,7 +1528,7 @@ class DataStreamTest {
     private <K> void assertArrayKeyRejection(
             KeySelector<Tuple2<Integer[], String>, K> keySelector,
             TypeInformation<K> expectedKeyType) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<Integer[], String>> input =
                 env.fromData(new Tuple2<>(new Integer[] {1, 2}, "barfoo"));
@@ -1546,7 +1546,7 @@ class DataStreamTest {
     void testEnumKeyRejection() {
         KeySelector<Tuple2<TestEnum, String>, TestEnum> keySelector = value -> value.f0;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<TestEnum, String>> input =
                 env.fromData(Tuple2.of(TestEnum.FOO, "Foo"), Tuple2.of(TestEnum.BAR, "Bar"));
@@ -1561,7 +1561,7 @@ class DataStreamTest {
 
     @Test
     void testPOJOWithNestedArrayNoHashCodeKeyRejection() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<POJOWithHashCode> input = env.fromData(new POJOWithHashCode(new int[] {1, 2}));
 
@@ -1577,7 +1577,7 @@ class DataStreamTest {
 
     @Test
     void testPOJOWithNestedArrayAndHashCodeWorkAround() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<POJOWithHashCode> input = env.fromData(new POJOWithHashCode(new int[] {1, 2}));
 
@@ -1609,7 +1609,7 @@ class DataStreamTest {
                     }
                 };
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<POJOWithoutHashCode> input =
                 env.fromData(new POJOWithoutHashCode(new int[] {1, 2}));
@@ -1623,7 +1623,7 @@ class DataStreamTest {
 
     @Test
     void testTupleNestedArrayKeyRejection() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<Integer[], String>> input =
                 env.fromData(new Tuple2<>(new Integer[] {1, 2}, "test-test"));
@@ -1652,7 +1652,7 @@ class DataStreamTest {
 
     @Test
     void testPrimitiveKeyAcceptance() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setMaxParallelism(1);
 

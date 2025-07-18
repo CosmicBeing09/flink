@@ -54,7 +54,7 @@ public class DataStreamWithSharedPartitionNodeITCase {
 
     @Test
     public void testJobWithSharePartitionNode() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         DataStream<Integer> source =
                 env.fromData(1, 2, 3, 4).partitionCustom(new TestPartitioner(), f -> f);

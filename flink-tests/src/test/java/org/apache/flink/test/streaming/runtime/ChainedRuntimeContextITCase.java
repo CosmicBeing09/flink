@@ -37,7 +37,7 @@ public class ChainedRuntimeContextITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void test() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         env.addSource(new TestSource()).map(new TestMap()).sinkTo(new DiscardingSink<>());

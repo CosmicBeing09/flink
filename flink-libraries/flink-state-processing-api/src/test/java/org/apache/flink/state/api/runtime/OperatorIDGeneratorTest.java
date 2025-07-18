@@ -50,7 +50,7 @@ public class OperatorIDGeneratorTest {
 
     private static OperatorID getOperatorID() {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         env.fromData(1, 2, 3)

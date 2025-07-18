@@ -62,7 +62,7 @@ class ParquetProtoStreamingFileSinkITCase {
                         SimpleProtoRecord.newBuilder().setFoo("b").setBar("y").setNum(2).build(),
                         SimpleProtoRecord.newBuilder().setFoo("c").setBar("z").setNum(3).build());
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

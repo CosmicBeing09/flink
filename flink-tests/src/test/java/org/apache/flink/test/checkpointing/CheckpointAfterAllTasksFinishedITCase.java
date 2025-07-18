@@ -72,7 +72,7 @@ public class CheckpointAfterAllTasksFinishedITCase extends AbstractTestBaseJUnit
 
     @BeforeEach
     public void setUp() {
-        env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
         smallResult = sharedObjects.add(new CopyOnWriteArrayList<>());
         bigResult = sharedObjects.add(new CopyOnWriteArrayList<>());

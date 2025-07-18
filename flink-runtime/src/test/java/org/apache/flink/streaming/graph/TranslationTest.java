@@ -60,7 +60,7 @@ class TranslationTest {
     }
 
     private static StreamExecutionEnvironment getSimpleJob() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.fromSequence(1, 10000000)
                 .addSink(
                         new SinkFunction<Long>() {

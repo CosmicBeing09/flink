@@ -57,7 +57,7 @@ public class PeriodicStreamingJob {
         int duration = params.getInt("durationInSecond", 60);
         int offset = params.getInt("offsetInSecond", 0);
 
-        StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         sEnv.enableCheckpointing(4000);
         sEnv.getConfig().setAutoWatermarkInterval(1000);
 

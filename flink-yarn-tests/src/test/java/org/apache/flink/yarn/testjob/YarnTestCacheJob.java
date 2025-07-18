@@ -44,7 +44,7 @@ public class YarnTestCacheJob {
     private static final String TEST_DIRECTORY_NAME = "test_directory";
 
     public static JobGraph getDistributedCacheJobGraph(File testDirectory) {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final String cacheFilePath =
                 Thread.currentThread()

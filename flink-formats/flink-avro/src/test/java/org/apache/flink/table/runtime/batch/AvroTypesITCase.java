@@ -153,7 +153,7 @@ public class AvroTypesITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testAvroToRow() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         DataStream<User> ds = testData(env);
@@ -182,7 +182,7 @@ public class AvroTypesITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testAvroStringAccess() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         DataStream<User> ds = testData(env);
@@ -199,7 +199,7 @@ public class AvroTypesITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testAvroObjectAccess() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         DataStream<User> ds = testData(env);
@@ -218,7 +218,7 @@ public class AvroTypesITCase extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testAvroToAvro() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
 
         DataStream<User> ds = testData(env);

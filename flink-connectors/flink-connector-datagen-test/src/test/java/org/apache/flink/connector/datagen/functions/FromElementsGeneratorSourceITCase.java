@@ -61,7 +61,7 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Produces expected String output")
     void testBasicType() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         String[] data = {"Foo", "bar", "baz"};
         FromElementsGeneratorFunction<String> generatorFunction =
@@ -82,7 +82,7 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Handles Avro data correctly")
     void testAvroType() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         User user1 = new User("Foo", 1);
         User user2 = new User("Bar", 2);
@@ -106,7 +106,7 @@ class FromElementsGeneratorSourceITCase extends TestLogger {
     @Test
     @DisplayName("Test exception when more elements are requested than available")
     void testMoreElementsRequestedThanAvailable() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         String[] data = {"foo", "bar"};
         FromElementsGeneratorFunction<String> generatorFunction =
                 new FromElementsGeneratorFunction<>(Types.STRING, data);

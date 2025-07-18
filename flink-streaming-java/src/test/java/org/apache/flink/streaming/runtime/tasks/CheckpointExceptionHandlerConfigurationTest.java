@@ -33,7 +33,7 @@ class CheckpointExceptionHandlerConfigurationTest {
     @Test
     void testCheckpointConfigDefault() {
         StreamExecutionEnvironment streamExecutionEnvironment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         CheckpointConfig checkpointConfig = streamExecutionEnvironment.getCheckpointConfig();
         assertThat(checkpointConfig.getTolerableCheckpointFailureNumber()).isZero();
     }
@@ -41,7 +41,7 @@ class CheckpointExceptionHandlerConfigurationTest {
     @Test
     void testSetCheckpointConfig() {
         StreamExecutionEnvironment streamExecutionEnvironment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         CheckpointConfig checkpointConfig = streamExecutionEnvironment.getCheckpointConfig();
 
         checkpointConfig.setTolerableCheckpointFailureNumber(5);

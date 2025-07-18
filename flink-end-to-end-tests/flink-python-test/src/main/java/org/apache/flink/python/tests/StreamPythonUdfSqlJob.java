@@ -30,7 +30,7 @@ import java.util.List;
 public class StreamPythonUdfSqlJob {
 
     public static void main(String[] args) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);
         tEnv.executeSql(

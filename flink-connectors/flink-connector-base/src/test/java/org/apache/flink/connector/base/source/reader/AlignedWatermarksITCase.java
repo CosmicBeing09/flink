@@ -103,7 +103,7 @@ public class AlignedWatermarksITCase {
     }
 
     private JobGraph getJobGraph() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.getConfig().setAutoWatermarkInterval(0L);
         env.setParallelism(1);
 

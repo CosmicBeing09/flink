@@ -110,7 +110,7 @@ class CoordinatorEventsToStreamOperatorRecipientExactlyOnceITCase
 
     @BeforeEach
     void setup() {
-        env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
         ManuallyClosedSourceFunction.shouldCloseSource = false;

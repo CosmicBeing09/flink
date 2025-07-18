@@ -72,7 +72,7 @@ class AvroParquetStreamingFileSinkITCase {
                         new Address(2, "p", "q", "r", "12345"),
                         new Address(3, "x", "y", "z", "12345"));
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 
@@ -102,7 +102,7 @@ class AvroParquetStreamingFileSinkITCase {
 
         final Collection<GenericRecord> data = new GenericTestDataCollection();
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 
@@ -136,7 +136,7 @@ class AvroParquetStreamingFileSinkITCase {
         final List<Datum> data =
                 Arrays.asList(new Datum("a", 1), new Datum("b", 2), new Datum("c", 3));
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(100);
 

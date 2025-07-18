@@ -157,7 +157,7 @@ public class NotifyCheckpointAbortedITCase extends TestLogger {
      */
     @Test(timeout = TEST_TIMEOUT)
     public void testNotifyCheckpointAborted() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(200, CheckpointingMode.EXACTLY_ONCE);
         env.getCheckpointConfig().enableUnalignedCheckpoints(unalignedCheckpointEnabled);
         env.getCheckpointConfig().setTolerableCheckpointFailureNumber(2);

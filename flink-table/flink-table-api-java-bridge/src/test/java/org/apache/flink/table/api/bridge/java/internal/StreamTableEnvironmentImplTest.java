@@ -46,7 +46,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class StreamTableEnvironmentImplTest {
     @Test
     void testAppendStreamDoesNotOverwriteTableConfig() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<Integer> elements = env.fromData(1, 2, 3);
 
         StreamTableEnvironmentImpl tEnv = getStreamTableEnvironment(env, elements);
@@ -61,7 +61,7 @@ class StreamTableEnvironmentImplTest {
 
     @Test
     void testRetractStreamDoesNotOverwriteTableConfig() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStreamSource<Integer> elements = env.fromData(1, 2, 3);
 
         StreamTableEnvironmentImpl tEnv = getStreamTableEnvironment(env, elements);

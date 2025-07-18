@@ -85,7 +85,7 @@ public class StickyAllocationAndLocalRecoveryTestJob {
 
         final ParameterTool pt = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(pt.getInt("parallelism", 1));
         env.setMaxParallelism(pt.getInt("maxParallelism", pt.getInt("parallelism", 1)));

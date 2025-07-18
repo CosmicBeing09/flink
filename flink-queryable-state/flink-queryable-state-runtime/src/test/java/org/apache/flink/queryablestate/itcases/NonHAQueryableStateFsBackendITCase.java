@@ -65,7 +65,7 @@ public class NonHAQueryableStateFsBackendITCase extends AbstractQueryableStateTe
 
     @Override
     protected StreamExecutionEnvironment createEnv() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StateBackendUtils.configureHashMapStateBackend(env);
         CheckpointStorageUtils.configureFileSystemCheckpointStorage(
                 env, tmpStateBackendDir.toUri().toString());

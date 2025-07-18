@@ -195,7 +195,7 @@ public class OperatorEventSendingCheckpointITCase extends TestLogger {
         final int numElements = 100;
         final int failAt = intermittentFailure ? numElements / 2 : numElements * 2;
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.enableCheckpointing(50);
 

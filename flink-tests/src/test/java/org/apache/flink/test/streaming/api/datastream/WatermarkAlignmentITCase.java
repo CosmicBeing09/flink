@@ -45,7 +45,7 @@ class WatermarkAlignmentITCase {
     @Test
     void testTaskFinishedWithWatermarkAlignmentExecution() throws Exception {
         // Set up the execution environment with parallelism of 2
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(2);
 
         // Create a stream from a custom source with watermark strategy

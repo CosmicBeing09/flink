@@ -79,7 +79,7 @@ public class DistributedCacheTest extends AbstractTestBaseJUnit4 {
     @Test
     public void testStreamingDistributedCache() throws Exception {
         String textPath = createTempFile("count.txt", DATA);
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.registerCachedFile(textPath, "cache_test");
         env.readTextFile(textPath).flatMap(new WordChecker());
         env.execute();

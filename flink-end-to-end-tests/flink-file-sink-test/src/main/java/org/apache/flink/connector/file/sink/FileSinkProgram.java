@@ -62,7 +62,7 @@ public enum FileSinkProgram {
         final String outputPath = params.getRequired("outputPath");
         final String sinkToTest = params.getRequired("sinkToTest");
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(4);
         env.enableCheckpointing(5000L);

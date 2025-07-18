@@ -45,7 +45,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testStreamingCollect() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> stream = env.fromData(1, 2, 3);
@@ -61,7 +61,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testStreamingCollectAndLimit() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> stream = env.fromData(1, 2, 3, 4, 5);
@@ -75,7 +75,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testBoundedCollect() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> stream = env.fromData(1, 2, 3);
@@ -95,7 +95,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testBoundedCollectAndLimit() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         Configuration config = new Configuration();
@@ -113,7 +113,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testAsyncCollect() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final DataStream<Integer> stream1 = env.fromData(1, 2, 3, 4, 5);
         final DataStream<Integer> stream2 = env.fromData(6, 7, 8, 9, 10);
@@ -136,7 +136,7 @@ public class DataStreamCollectTestITCase extends TestLogger {
 
     @Test
     public void testAsyncCollectWithCollector() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final DataStream.Collector<Integer> collector1 = new DataStream.Collector<>();
         final DataStream.Collector<Integer> collector2 = new DataStream.Collector<>();

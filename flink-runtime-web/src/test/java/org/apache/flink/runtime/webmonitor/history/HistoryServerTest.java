@@ -416,7 +416,7 @@ class HistoryServerTest {
     }
 
     private static void runJob() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.fromData(1, 2, 3).sinkTo(new DiscardingSink<>());
 
         env.execute();

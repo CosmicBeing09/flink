@@ -63,7 +63,7 @@ public class JobCancelingITCase extends TestLogger {
 
     @Test
     public void testCancelingWhileBackPressured() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.getConfig().enableObjectReuse();
         // Basically disable interrupts and JVM killer watchdogs

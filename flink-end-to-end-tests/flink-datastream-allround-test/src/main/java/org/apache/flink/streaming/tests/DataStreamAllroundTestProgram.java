@@ -85,7 +85,7 @@ public class DataStreamAllroundTestProgram {
     public static void main(String[] args) throws Exception {
         final ParameterTool pt = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         setupEnvironment(env, pt);
 

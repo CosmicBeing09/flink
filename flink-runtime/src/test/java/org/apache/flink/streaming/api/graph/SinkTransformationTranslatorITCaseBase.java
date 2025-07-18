@@ -155,7 +155,7 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
 
     @TestTemplate
     void throwExceptionWithoutSettingUid() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, runtimeExecutionMode);
@@ -168,7 +168,7 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
 
     @TestTemplate
     void disableOperatorChain() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final DataStreamSource<Integer> src = env.fromElements(1, 2);
         final DataStreamSink<Integer> dataStreamSink = sinkTo(src, sinkWithCommitter()).name(NAME);
@@ -224,7 +224,7 @@ abstract class SinkTransformationTranslatorITCaseBase<SinkT> {
 
     StreamGraph buildGraph(
             SinkT sink, RuntimeExecutionMode runtimeExecutionMode, boolean setSinkParallelism) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, runtimeExecutionMode);

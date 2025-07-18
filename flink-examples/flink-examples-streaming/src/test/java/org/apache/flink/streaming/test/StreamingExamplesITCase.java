@@ -60,7 +60,7 @@ public class StreamingExamplesITCase extends AbstractTestBaseJUnit4 {
 
         try {
             final StreamExecutionEnvironment env =
-                    StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                    StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
             DataStream<Tuple2<String, Integer>> grades =
                     env.fromData(WindowJoinData.GRADES_INPUT.split("\n"))

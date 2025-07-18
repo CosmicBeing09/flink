@@ -48,7 +48,7 @@ public class NettyEpollITCase extends TestLogger {
     public void testNettyEpoll() throws Exception {
         MiniClusterWithClientResource cluster = trySetUpCluster();
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(NUM_TASK_MANAGERS);
 
             DataStream<Integer> input = env.fromData(1, 2, 3, 4, 1, 2, 3, 42);

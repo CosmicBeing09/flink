@@ -135,7 +135,7 @@ class CliFrontendITCase {
      */
     public static class TestingJob {
         public static void main(String[] args) {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             System.out.println(
                     "Watermark interval is " + env.getConfig().getAutoWatermarkInterval());
         }

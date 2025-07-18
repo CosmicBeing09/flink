@@ -70,7 +70,7 @@ public final class ChangelogSocketExample {
         final String hostname = params.get("hostname", "localhost");
         final String port = params.get("port", "9999");
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1); // source only supports parallelism of 1
 
         final StreamTableEnvironment tEnv = StreamTableEnvironment.create(env);

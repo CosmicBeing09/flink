@@ -42,7 +42,7 @@ public class AsyncSinkBaseITCase {
                             .setNumberSlotsPerTaskManager(1)
                             .build());
 
-    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+    final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
     @Test
     public void testWriteTwentyThousandRecordsToGenericSink() throws Exception {

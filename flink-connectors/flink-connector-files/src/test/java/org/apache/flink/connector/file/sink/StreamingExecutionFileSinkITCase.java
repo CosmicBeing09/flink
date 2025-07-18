@@ -73,7 +73,7 @@ class StreamingExecutionFileSinkITCase extends FileSinkITBase {
      */
     @Override
     protected JobGraph createJobGraph(boolean triggerFailover, String path) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         Configuration config = new Configuration();
         config.set(ExecutionOptions.RUNTIME_MODE, RuntimeExecutionMode.STREAMING);
         env.configure(config, getClass().getClassLoader());

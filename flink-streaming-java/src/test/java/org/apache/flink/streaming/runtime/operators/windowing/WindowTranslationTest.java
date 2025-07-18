@@ -84,7 +84,7 @@ class WindowTranslationTest {
      */
     @Test
     void testReduceWithRichReducerFails() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -115,7 +115,7 @@ class WindowTranslationTest {
      */
     @Test
     void testAggregateWithRichFunctionFails() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -139,7 +139,7 @@ class WindowTranslationTest {
     void testMergingAssignerWithNonMergingTriggerFails() {
         // verify that we check for trigger compatibility
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         WindowedStream<String, String, TimeWindow> windowedStream =
                 env.fromData("Hello", "Ciao")
@@ -205,7 +205,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testMergingWindowsWithEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Integer> source = env.fromData(1, 2);
 
@@ -242,7 +242,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -276,7 +276,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -311,7 +311,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithWindowFunctionEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -365,7 +365,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithWindowFunctionProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -418,7 +418,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithProcesWindowFunctionEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -472,7 +472,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithProcessWindowFunctionProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -526,7 +526,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyWithPreReducerEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -581,7 +581,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyWithPreReducerAndEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -639,7 +639,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -675,7 +675,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -712,7 +712,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithWindowFunctionEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -748,7 +748,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithWindowFunctionProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -783,7 +783,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithProcessWindowFunctionEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -817,7 +817,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithProcessWindowFunctionProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -857,7 +857,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -908,7 +908,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -960,7 +960,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testProcessEventTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1011,7 +1011,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testProcessProcessingTime() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1063,7 +1063,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithCustomTrigger() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1100,7 +1100,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyWithCustomTrigger() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1152,7 +1152,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testProcessWithCustomTrigger() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1204,7 +1204,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1242,7 +1242,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testReduceWithEvictorAndProcessFunction() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1297,7 +1297,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -1334,7 +1334,7 @@ class WindowTranslationTest {
 
     @Test
     void testAggregateWithEvictorAndProcessFunction() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple3<String, String, Integer>> source =
                 env.fromData(Tuple3.of("hello", "hallo", 1), Tuple3.of("hello", "hallo", 2));
@@ -1372,7 +1372,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testApplyWithEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));
@@ -1426,7 +1426,7 @@ class WindowTranslationTest {
     @Test
     @SuppressWarnings("rawtypes")
     void testProcessWithEvictor() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<Tuple2<String, Integer>> source =
                 env.fromData(Tuple2.of("hello", 1), Tuple2.of("hello", 2));

@@ -213,7 +213,7 @@ public class DataStreamBatchExecutionITCase {
      */
     @Test
     public void batchKeyedNonKeyedTwoInputOperator() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
@@ -270,7 +270,7 @@ public class DataStreamBatchExecutionITCase {
      */
     @Test
     public void batchNonKeyedKeyedTwoInputOperator() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
@@ -322,7 +322,7 @@ public class DataStreamBatchExecutionITCase {
     /** Verifies that all broadcast input is processed before keyed input. */
     @Test
     public void batchKeyedBroadcastExecution() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
@@ -379,7 +379,7 @@ public class DataStreamBatchExecutionITCase {
     /** Verifies that all broadcast input is processed before regular input. */
     @Test
     public void batchBroadcastExecution() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
@@ -428,7 +428,7 @@ public class DataStreamBatchExecutionITCase {
 
     @Test
     public void batchMixedKeyedAndNonKeyedTwoInputOperator() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
@@ -486,7 +486,7 @@ public class DataStreamBatchExecutionITCase {
 
     @Test
     public void batchMixedKeyedAndNonKeyedMultiInputOperator() throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
 
         DataStream<Tuple2<String, Integer>> bc1Input =
@@ -547,7 +547,7 @@ public class DataStreamBatchExecutionITCase {
     }
 
     private StreamExecutionEnvironment getBatchStreamExecutionEnvironment() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
         env.setParallelism(1);
 

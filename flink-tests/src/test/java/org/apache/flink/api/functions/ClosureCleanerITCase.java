@@ -86,7 +86,7 @@ class ClosureCleanerITCase {
         public static void run(String resultPath) throws Exception {
             NonSerializable nonSer = new NonSerializable();
             int x = 5;
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
             DataStreamSource<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)
@@ -112,7 +112,7 @@ class ClosureCleanerITCase {
 
         public void run(String resultPath) throws Exception {
             NonSerializable nonSer = new NonSerializable();
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
             DataStreamSource<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + getX())
@@ -140,7 +140,7 @@ class ClosureCleanerITCase {
         public void run(String resultPath) throws Exception {
             NonSerializable nonSer2 = new NonSerializable();
             int x = 5;
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
             DataStreamSource<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)
@@ -162,7 +162,7 @@ class ClosureCleanerITCase {
         public void run(String resultPath) throws Exception {
             NonSerializable nonSer2 = new NonSerializable();
             int x = 5;
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setRuntimeMode(RuntimeExecutionMode.BATCH);
             DataStreamSource<Long> nums = env.fromSequence(1, 4);
             nums.map(num -> num + x)

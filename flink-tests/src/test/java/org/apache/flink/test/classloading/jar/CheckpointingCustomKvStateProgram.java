@@ -57,7 +57,7 @@ public class CheckpointingCustomKvStateProgram {
         final String outputPath = args[1];
         final int parallelism = 1;
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.setParallelism(parallelism);
         env.enableCheckpointing(100);

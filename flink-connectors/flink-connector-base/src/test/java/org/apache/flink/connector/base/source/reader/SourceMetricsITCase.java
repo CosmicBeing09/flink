@@ -97,7 +97,7 @@ public class SourceMetricsITCase extends TestLogger {
 
     private void testMetrics(WatermarkStrategy<Integer> strategy, boolean hasTimestamps)
             throws Exception {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         int numSplits = Math.max(1, env.getParallelism() - 2);
         env.getConfig().setAutoWatermarkInterval(1L);
 

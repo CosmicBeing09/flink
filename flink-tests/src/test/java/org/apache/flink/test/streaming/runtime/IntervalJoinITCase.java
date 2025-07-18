@@ -56,7 +56,7 @@ public class IntervalJoinITCase {
     @Test
     public void testCanJoinOverSameKey() throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         KeyedStream<Tuple2<String, Integer>, String> streamOne =
@@ -112,7 +112,7 @@ public class IntervalJoinITCase {
 
     @Test
     public void testJoinsCorrectlyWithMultipleKeys() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         KeyedStream<Tuple2<String, Integer>, String> streamOne =
@@ -182,7 +182,7 @@ public class IntervalJoinITCase {
     @Test
     public void testBoundedUnorderedStreamsStillJoinCorrectly() throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne =
@@ -270,7 +270,7 @@ public class IntervalJoinITCase {
 
     @Test(expected = NullPointerException.class)
     public void testFailsWithoutUpperBound() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne = env.fromData(Tuple2.of("1", 1));
@@ -284,7 +284,7 @@ public class IntervalJoinITCase {
 
     @Test(expected = NullPointerException.class)
     public void testFailsWithoutLowerBound() {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne = env.fromData(Tuple2.of("1", 1));
@@ -298,7 +298,7 @@ public class IntervalJoinITCase {
 
     @Test
     public void testBoundsCanBeExclusive() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne =
@@ -325,7 +325,7 @@ public class IntervalJoinITCase {
 
     @Test
     public void testBoundsCanBeInclusive() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne =
@@ -356,7 +356,7 @@ public class IntervalJoinITCase {
 
     @Test
     public void testBoundsAreInclusiveByDefault() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne =
@@ -387,7 +387,7 @@ public class IntervalJoinITCase {
 
     @Test(expected = UnsupportedTimeCharacteristicException.class)
     public void testExecutionFailsInProcessingTime() throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(1);
 
         DataStream<Tuple2<String, Integer>> streamOne = env.fromData(Tuple2.of("1", 1));

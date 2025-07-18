@@ -214,7 +214,7 @@ public class WindowReaderTest {
 
     private static WindowOperator<Integer, Integer, ?, Void, ?> getWindowOperator(
             Function<KeyedStream<Integer, Integer>, SingleOutputStreamOperator<Integer>> window) {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         KeyedStream<Integer, Integer> keyedStream =
                 env.addSource(mockSourceFunction())

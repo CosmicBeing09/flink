@@ -68,7 +68,7 @@ public class PythonFunctionFactoryTest {
                             + "    return str + str\n";
             out.write(code.getBytes());
         }
-        StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment sEnv = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         tableEnv = StreamTableEnvironment.create(sEnv);
         tableEnv.getConfig().set(PYTHON_FILES, pyFilePath.getAbsolutePath());
         tableEnv.getConfig().set(TASK_OFF_HEAP_MEMORY, MemorySize.parse("80mb"));

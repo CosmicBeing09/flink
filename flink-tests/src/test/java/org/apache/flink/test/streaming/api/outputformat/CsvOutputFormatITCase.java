@@ -35,7 +35,7 @@ public class CsvOutputFormatITCase extends AbstractTestBaseJUnit4 {
     public void testProgram() throws Exception {
         String resultPath = getTempDirPath("result");
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         DataStream<String> text = env.fromData(WordCountData.TEXT);
 

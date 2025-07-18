@@ -51,7 +51,7 @@ public class CustomKvStateProgram {
         final Optional<Boolean> unalignedCheckpoints =
                 args.length > 4 ? Optional.of(Boolean.parseBoolean(args[4])) : Optional.empty();
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(parallelism);
         env.enableCheckpointing(checkpointingInterval);
         unalignedCheckpoints.ifPresent(

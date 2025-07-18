@@ -268,7 +268,7 @@ class BatchMultipleInputStreamOperatorTest extends MultipleInputTestBase {
      */
     private TestingBatchMultipleInputStreamOperator createMultipleInputStreamOperator()
             throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         Transformation<RowData> source1 = createSource(env, "source1");
         Transformation<RowData> source2 = createSource(env, "source2");
         Transformation<RowData> source3 = createSource(env, "source3");

@@ -59,7 +59,7 @@ public class TopSpeedWindowing {
 
         // Create the execution environment. This is the main entrypoint
         // to building a Flink application.
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         // Apache Flink’s unified approach to stream and batch processing means that a DataStream
         // application executed over bounded input will produce the same final results regardless

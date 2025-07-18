@@ -41,7 +41,7 @@ public class GroupedProcessingTimeWindowExample {
 
     public static void main(String[] args) throws Exception {
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         final long numElementsPerParallel = 20000000;
         final long numKeys = 10000;

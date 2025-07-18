@@ -122,7 +122,7 @@ class AvroParquetFileReadITCase {
                                 Path.fromLocalFile(temporaryFolder.toFile()))
                         .monitorContinuously(Duration.ofMillis(5))
                         .build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.enableCheckpointing(10L);
 
@@ -149,7 +149,7 @@ class AvroParquetFileReadITCase {
                                 Path.fromLocalFile(temporaryFolder.toFile()))
                         .monitorContinuously(Duration.ofMillis(5))
                         .build();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(PARALLELISM);
         env.enableCheckpointing(10L);
 

@@ -98,7 +98,7 @@ public class SessionWindowITCase extends AbstractTestBaseJUnit4 {
                     windowFunction)
             throws Exception {
 
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         WindowedStream<SessionEvent<Integer, TestEventPayload>, Tuple, TimeWindow> windowedStream =
                 env.addSource(dataSource)
                         .keyBy("sessionKey")

@@ -209,7 +209,7 @@ public abstract class S5CmdOnMinioITCase {
 
     @Test
     void testRecoveryWithS5Cmd(@InjectMiniCluster MiniCluster flinkCluster) throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(2);
         env.enableCheckpointing(CHECKPOINT_INTERVAL);
         RestartStrategyUtils.configureFixedDelayRestartStrategy(env, 1, 0L);

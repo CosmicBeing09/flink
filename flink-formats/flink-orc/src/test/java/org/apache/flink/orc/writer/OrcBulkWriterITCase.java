@@ -48,7 +48,7 @@ class OrcBulkWriterITCase {
 
     @Test
     void testOrcBulkWriter(@TempDir File outDir) throws Exception {
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         final Properties writerProps = new Properties();
         writerProps.setProperty("orc.compress", "LZ4");
 

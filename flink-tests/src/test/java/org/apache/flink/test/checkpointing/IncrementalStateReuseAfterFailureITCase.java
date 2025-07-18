@@ -96,7 +96,7 @@ public class IncrementalStateReuseAfterFailureITCase {
     }
 
     private TestJobWithDescription createJob() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.enableCheckpointing(200);
 
         // reliably fails Changelog with FLINK-25395, but might affect any incremental backend

@@ -35,7 +35,7 @@ public class FailureEnricherTestProgram {
 
         final ParameterTool params = ParameterTool.fromArgs(args);
 
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         env.fromData("Hello")
                 .map(

@@ -41,7 +41,7 @@ public class StateBootstrapTransformationTest extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testBroadcastStateTransformationParallelism() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(10);
 
         DataStream<Integer> input = env.fromData(0);
@@ -66,7 +66,7 @@ public class StateBootstrapTransformationTest extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testDefaultParallelismRespectedWhenLessThanMaxParallelism() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> input = env.fromData(0);
@@ -91,7 +91,7 @@ public class StateBootstrapTransformationTest extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testMaxParallelismRespected() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(10);
 
         DataStream<Integer> input = env.fromData(0);
@@ -116,7 +116,7 @@ public class StateBootstrapTransformationTest extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testOperatorSpecificMaxParallelismRespected() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         env.setParallelism(4);
 
         DataStream<Integer> input = env.fromData(0);
@@ -142,7 +142,7 @@ public class StateBootstrapTransformationTest extends AbstractTestBaseJUnit4 {
 
     @Test
     public void testStreamConfig() {
-        StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+        StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         DataStream<String> input = env.fromData("");
 
         StateBootstrapTransformation<String> transformation =

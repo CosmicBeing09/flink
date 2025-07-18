@@ -83,9 +83,9 @@ class StreamExecutionEnvironmentConfigurationTest {
     @TestTemplate
     void testLoadingFromConfiguration() {
         StreamExecutionEnvironment configFromSetters =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
         StreamExecutionEnvironment configFromFile =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         Configuration configuration = new Configuration();
         configuration.setString(spec.key, spec.value);
@@ -98,7 +98,7 @@ class StreamExecutionEnvironmentConfigurationTest {
     @TestTemplate
     void testNotOverridingIfNotSet() {
         StreamExecutionEnvironment environment =
-                StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+                StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
 
         spec.setNonDefaultValue(environment);
         Configuration configuration = new Configuration();

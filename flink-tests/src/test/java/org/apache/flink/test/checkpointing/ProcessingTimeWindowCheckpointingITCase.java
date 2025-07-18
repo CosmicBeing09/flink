@@ -83,7 +83,7 @@ public class ProcessingTimeWindowCheckpointingITCase extends TestLogger {
         final int numElements = 3000;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.getConfig().setAutoWatermarkInterval(10);
             env.enableCheckpointing(100);
@@ -146,7 +146,7 @@ public class ProcessingTimeWindowCheckpointingITCase extends TestLogger {
         final int numElements = 3000;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.getConfig().setAutoWatermarkInterval(10);
             env.enableCheckpointing(100);
@@ -209,7 +209,7 @@ public class ProcessingTimeWindowCheckpointingITCase extends TestLogger {
         final int numElements = 3000;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.getConfig().setAutoWatermarkInterval(10);
             env.enableCheckpointing(100);
@@ -252,7 +252,7 @@ public class ProcessingTimeWindowCheckpointingITCase extends TestLogger {
         final int numElements = 3000;
 
         try {
-            StreamExecutionEnvironment env = StreamExecutionEnvironment.getBatchStreamExecutionEnvironment();
+            StreamExecutionEnvironment env = StreamExecutionEnvironment.getTestStreamExecutionEnvironment();
             env.setParallelism(PARALLELISM);
             env.getConfig().setAutoWatermarkInterval(10);
             env.enableCheckpointing(100);
