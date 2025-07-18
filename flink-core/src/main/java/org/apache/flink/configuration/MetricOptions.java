@@ -39,7 +39,7 @@ import static org.apache.flink.configuration.description.TextElement.text;
 @PublicEvolving
 public class MetricOptions {
 
-    private static final String NAMED_REPORTER_CONFIG_PREFIX =
+    private static final String REPORTER_CONFIG_PREFIX_TEMPLATE =
             ConfigConstants.METRICS_REPORTER_PREFIX + "<name>";
 
     /**
@@ -89,7 +89,7 @@ public class MetricOptions {
                 configuration, ConfigConstants.METRICS_REPORTER_PREFIX + reporterName + ".");
     }
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 1)
     public static final ConfigOption<String> REPORTER_FACTORY_CLASS =
             key("factory.class")
@@ -98,7 +98,7 @@ public class MetricOptions {
                     .withDescription(
                             "The reporter factory class to use for the reporter named <name>.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 2)
     public static final ConfigOption<Duration> REPORTER_INTERVAL =
             key("interval")
@@ -107,7 +107,7 @@ public class MetricOptions {
                     .withDescription(
                             "The reporter interval to use for the reporter named <name>. Only applicable to push-based reporters.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 2)
     public static final ConfigOption<String> REPORTER_SCOPE_DELIMITER =
             key("scope.delimiter")
@@ -116,7 +116,7 @@ public class MetricOptions {
                     .withDescription(
                             "The delimiter used to assemble the metric identifier for the reporter named <name>.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 3)
     public static final ConfigOption<Map<String, String>> REPORTER_ADDITIONAL_VARIABLES =
             key("scope.variables.additional")
@@ -125,7 +125,7 @@ public class MetricOptions {
                     .withDescription(
                             "The map of additional variables that should be included for the reporter named <name>. Only applicable to tag-based reporters.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 3)
     public static final ConfigOption<String> REPORTER_EXCLUDED_VARIABLES =
             key("scope.variables.excludes")
@@ -134,7 +134,7 @@ public class MetricOptions {
                     .withDescription(
                             "The set of variables that should be excluded for the reporter named <name>. Only applicable to tag-based reporters.");
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 4)
     public static final ConfigOption<List<String>> REPORTER_INCLUDES =
             key("filter.includes")
@@ -208,7 +208,7 @@ public class MetricOptions {
                                                     code("numBytesOut")))
                                     .build());
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 5)
     public static final ConfigOption<List<String>> REPORTER_EXCLUDES =
             key("filter.excludes")
@@ -223,7 +223,7 @@ public class MetricOptions {
                                     .linebreak()
                                     .build());
 
-    @Documentation.SuffixOption(NAMED_REPORTER_CONFIG_PREFIX)
+    @Documentation.SuffixOption(REPORTER_CONFIG_PREFIX_TEMPLATE)
     @Documentation.Section(value = Documentation.Sections.METRIC_REPORTERS, position = 6)
     public static final ConfigOption<String> REPORTER_CONFIG_PARAMETER =
             key("<parameter>")
