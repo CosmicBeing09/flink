@@ -94,21 +94,21 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
         testStateBootstrapAndModification(new EmbeddedRocksDBStateBackend());
     }
 
-    public void testStateBootstrapAndModification(StateBackend stateBackendConfiguration) throws Exception {
+    public void testStateBootstrapAndModification(StateBackend stateBackendSettings) throws Exception {
         final String savepointPath = getTempDirPath(new AbstractID().toHexString());
 
-        bootstrapState(stateBackendConfiguration, savepointPath);
+        bootstrapState(stateBackendSettings, savepointPath);
 
-        validateBootstrap(stateBackendConfiguration, savepointPath);
+        validateBootstrap(stateBackendSettings, savepointPath);
 
         final String modifyPath = getTempDirPath(new AbstractID().toHexString());
 
-        modifySavepoint(stateBackendConfiguration, savepointPath, modifyPath);
+        modifySavepoint(stateBackendSettings, savepointPath, modifyPath);
 
-        validateModification(stateBackendConfiguration, modifyPath);
+        validateModification(stateBackendSettings, modifyPath);
     }
 
-    private void bootstrapState(StateBackend stateBackendConfiguration, String savepointPath) throws Exception {
+    private void bootstrapState(StateBackend stateBackendSettings, String savepointPath) throws Exception {
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.AUTOMATIC);
 
@@ -122,9 +122,9 @@ public class SavepointWriterITCase extends AbstractTestBaseJUnit4 {
                         .transform(new CurrencyBootstrapFunction());
 
         SavepointWriter writer =
-                stateBackendConfiguration == null
+                stateBackendSettings == null
                         ? SavepointWriter.newSavepoint(env, 128)
-                        : SavepointWriter.newSavepoint(env, stateBackendConfiguration, 128);
+                        : SavepointWriter.newSavepoint(env, stateBackendSettings, 128);
 
         writer.withOperator(OperatorIdentifier.forUid(ACCOUNT_UID), transformation)
                 .withOperator(getUidHashFromUid(CURRENCY_UID), broadcastTransformation)
