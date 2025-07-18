@@ -37,7 +37,7 @@ class LegacyRowSerializerTest {
 
     @Test
     void testRowSerializer() {
-        RowTypeInfo typeInfo =
+        RowTypeInfo rowTypeInfo =
                 new RowTypeInfo(BasicTypeInfo.INT_TYPE_INFO, BasicTypeInfo.STRING_TYPE_INFO);
         Row row1 = new Row(2);
         row1.setField(0, 1);
@@ -47,14 +47,14 @@ class LegacyRowSerializerTest {
         row2.setField(0, 2);
         row2.setField(1, null);
 
-        TypeSerializer<Row> serializer = typeInfo.createLegacySerializer(new ExecutionConfig());
+        TypeSerializer<Row> serializer = rowTypeInfo.createLegacySerializer(new ExecutionConfig());
         RowSerializerTestInstance instance = new RowSerializerTestInstance(serializer, row1, row2);
         instance.testAll();
     }
 
     @Test
     void testLargeRowSerializer() {
-        RowTypeInfo typeInfo =
+        RowTypeInfo rowTypeInfo =
                 new RowTypeInfo(
                         BasicTypeInfo.INT_TYPE_INFO,
                         BasicTypeInfo.INT_TYPE_INFO,
@@ -84,7 +84,7 @@ class LegacyRowSerializerTest {
         row.setField(11, null);
         row.setField(12, "Test");
 
-        TypeSerializer<Row> serializer = typeInfo.createLegacySerializer(new ExecutionConfig());
+        TypeSerializer<Row> serializer = rowTypeInfo.createLegacySerializer(new ExecutionConfig());
         RowSerializerTestInstance testInstance = new RowSerializerTestInstance(serializer, row);
         testInstance.testAll();
     }
