@@ -120,22 +120,22 @@ class FsMergingCheckpointStorageLocationTest {
     @Test
     void testCheckpointStreamClosedExceptionally() throws Exception {
         try (FileMergingSnapshotManager snapshotManager = createFileMergingSnapshotManager()) {
-            Path filePath1 = null;
+            Path stateFilePath1 = null;
             try (FileMergingCheckpointStateOutputStream stream1 =
                     snapshotManager.createCheckpointStateOutputStream(SUBTASK_KEY, 1, EXCLUSIVE)) {
                 stream1.flushToFile();
-                filePath1 = stream1.getFilePath();
-                assertPathNotNullAndCheckExistence(filePath1, true);
+                stateFilePath1 = stream1.getFilePath();
+                assertPathNotNullAndCheckExistence(stateFilePath1, true);
                 throw new IOException();
             } catch (IOException ignored) {
             }
-            assertPathNotNullAndCheckExistence(filePath1, false);
+            assertPathNotNullAndCheckExistence(stateFilePath1, false);
         }
     }
 
-    private void assertPathNotNullAndCheckExistence(Path path, boolean exist) throws IOException {
-        assertThat(path).isNotNull();
-        assertThat(path.getFileSystem().exists(path)).isEqualTo(exist);
+    private void assertPathNotNullAndCheckExistence(Path stateFilePath, boolean exist) throws IOException {
+        assertThat(stateFilePath).isNotNull();
+        assertThat(stateFilePath.getFileSystem().exists(stateFilePath)).isEqualTo(exist);
     }
 
     @Test
