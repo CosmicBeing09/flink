@@ -79,8 +79,8 @@ import java.util.Optional;
 public class ProcessTableOperator extends AbstractStreamOperator<RowData>
         implements OneInputStreamOperator<RowData, RowData>, Triggerable<RowData, Object> {
 
-    private final @Nullable RuntimeTableSemantics tableSemantics;
-    private final List<RuntimeStateInfo> stateInfos;
+    private final @Nullable RuntimeTableSemantics runtimeTableSemantics;
+    private final List<RuntimeStateInfo> runtimeStateInfos;
     private final ProcessTableRunner processTableRunner;
     private final HashFunction[] stateHashCode;
     private final RecordEqualiser[] stateEquals;
@@ -103,8 +103,8 @@ public class ProcessTableOperator extends AbstractStreamOperator<RowData>
             HashFunction[] stateHashCode,
             RecordEqualiser[] stateEquals) {
         super(parameters);
-        this.tableSemantics = tableSemantics;
-        this.stateInfos = stateInfos;
+        this.runtimeTableSemantics = tableSemantics;
+        this.runtimeStateInfos = stateInfos;
         this.processTableRunner = processTableRunner;
         this.stateHashCode = stateHashCode;
         this.stateEquals = stateEquals;
@@ -141,8 +141,8 @@ public class ProcessTableOperator extends AbstractStreamOperator<RowData>
     @Override
     public void processElement(StreamRecord<RowData> element) throws Exception {
         // Set table argument
-        if (tableSemantics != null) {
-            processTableRunner.ingestTableEvent(0, element.getValue(), tableSemantics.timeColumn());
+        if (runtimeTableSemantics != null) {
+            processTableRunner.ingestTableEvent(0, element.getValue(), runtimeTableSemantics.timeColumn());
         }
         processTableRunner.processEval();
     }
@@ -179,15 +179,15 @@ public class ProcessTableOperator extends AbstractStreamOperator<RowData>
         }
 
         private Map<String, RuntimeTableSemantics> createTableSemanticsMap() {
-            return Optional.ofNullable(tableSemantics)
-                    .map(s -> Map.of(tableSemantics.getArgName(), tableSemantics))
+            return Optional.ofNullable(runtimeTableSemantics)
+                    .map(s -> Map.of(runtimeTableSemantics.getArgName(), runtimeTableSemantics))
                     .orElse(Map.of());
         }
 
         private Map<String, Integer> createStateNameToPosMap() {
             final Map<String, Integer> stateNameToPosMap = new HashMap<>();
-            for (int i = 0; i < stateInfos.size(); i++) {
-                stateNameToPosMap.put(stateInfos.get(i).getStateName(), i);
+            for (int i = 0; i < runtimeStateInfos.size(); i++) {
+                stateNameToPosMap.put(runtimeStateInfos.get(i).getStateName(), i);
             }
             return stateNameToPosMap;
         }
@@ -311,19 +311,19 @@ public class ProcessTableOperator extends AbstractStreamOperator<RowData>
     }
 
     private void setCollectors() {
-        if (tableSemantics == null || tableSemantics.passColumnsThrough()) {
+        if (runtimeTableSemantics == null || runtimeTableSemantics.passColumnsThrough()) {
             evalCollector = new PassAllCollector(output);
         } else {
             evalCollector =
-                    new PassPartitionKeysCollector(output, tableSemantics.partitionByColumns());
+                    new PassPartitionKeysCollector(output, runtimeTableSemantics.partitionByColumns());
         }
         onTimerCollector = new PassAllCollector(output);
     }
 
     private void setStateDescriptors() {
-        final StateDescriptor<?, ?>[] stateDescriptors = new StateDescriptor[stateInfos.size()];
-        for (int i = 0; i < stateInfos.size(); i++) {
-            final RuntimeStateInfo stateInfo = stateInfos.get(i);
+        final StateDescriptor<?, ?>[] stateDescriptors = new StateDescriptor[runtimeStateInfos.size()];
+        for (int i = 0; i < runtimeStateInfos.size(); i++) {
+            final RuntimeStateInfo stateInfo = runtimeStateInfos.get(i);
             final DataType dataType = stateInfo.getDataType();
             final LogicalType type = dataType.getLogicalType();
             final String stateName = stateInfo.getStateName();
@@ -384,13 +384,13 @@ public class ProcessTableOperator extends AbstractStreamOperator<RowData>
     }
 
     private boolean shouldEmitRowtime() {
-        return tableSemantics != null && tableSemantics.timeColumn() != -1;
+        return runtimeTableSemantics != null && runtimeTableSemantics.timeColumn() != -1;
     }
 
     private boolean shouldEnableTimers() {
-        return tableSemantics != null
-                && tableSemantics.hasSetSemantics()
-                && !tableSemantics.passColumnsThrough()
-                && tableSemantics.getChangelogMode().containsOnly(RowKind.INSERT);
+        return runtimeTableSemantics != null
+                && runtimeTableSemantics.hasSetSemantics()
+                && !runtimeTableSemantics.passColumnsThrough()
+                && runtimeTableSemantics.getChangelogMode().containsOnly(RowKind.INSERT);
     }
 }
