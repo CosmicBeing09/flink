@@ -25,17 +25,17 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * This class represents a {@link CheckpointIDCounter} if checkpointing is deactivated.
- * Consequently, no component should use methods of this class other than {@link #start()} and
- * {@link #shutdown}.
+ * Consequently, no component should use methods of this class other than {@link #startCheckpointIDCounter()} and
+ * {@link #shutdownCheckpointIDCounter}.
  */
 public enum DeactivatedCheckpointIDCounter implements CheckpointIDCounter {
     INSTANCE;
 
     @Override
-    public void start() throws Exception {}
+    public void startCheckpointIDCounter() throws Exception {}
 
     @Override
-    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
         return FutureUtils.completedVoidFuture();
     }
 

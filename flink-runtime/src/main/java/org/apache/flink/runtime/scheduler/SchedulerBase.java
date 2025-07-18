@@ -278,7 +278,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
         }
 
         try {
-            checkpointIdCounter.shutdown(jobStatus).get();
+            checkpointIdCounter.shutdownCheckpointIDCounter(jobStatus).get();
         } catch (Exception e) {
             exception = ExceptionUtils.firstOrSuppressed(e, exception);
         }

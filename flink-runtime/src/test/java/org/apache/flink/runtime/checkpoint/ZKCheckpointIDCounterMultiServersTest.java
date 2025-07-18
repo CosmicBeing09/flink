@@ -69,7 +69,7 @@ class ZKCheckpointIDCounterMultiServersTest {
             ZooKeeperCheckpointIDCounter idCounter =
                     new ZooKeeperCheckpointIDCounter(
                             curatorFrameworkWrapper.asCuratorFramework(), listener);
-            idCounter.start();
+            idCounter.startCheckpointIDCounter();
 
             final long initialID = idCounter.getAndIncrement();
 

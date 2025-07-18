@@ -1946,7 +1946,7 @@ public class DefaultSchedulerTest {
                 new StandaloneCheckpointIDCounter() {
 
                     @Override
-                    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+                    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
                         try {
                             checkpointServicesShutdownBlocked.await();
                         } catch (InterruptedException e) {
@@ -1956,7 +1956,7 @@ public class DefaultSchedulerTest {
                             Thread.currentThread().interrupt();
                         }
 
-                        return super.shutdown(jobStatus);
+                        return super.shutdownCheckpointIDCounter(jobStatus);
                     }
                 };
         final CheckpointsCleaner checkpointsCleaner =

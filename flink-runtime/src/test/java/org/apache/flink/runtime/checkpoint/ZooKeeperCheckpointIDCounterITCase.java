@@ -60,36 +60,36 @@ class ZooKeeperCheckpointIDCounterITCase extends CheckpointIDCounterTestBase {
     @Test
     void testShutdownRemovesState() throws Exception {
         ZooKeeperCheckpointIDCounter counter = createCheckpointIdCounter();
-        counter.start();
+        counter.startCheckpointIDCounter();
 
         CuratorFramework client = getZooKeeperClient();
         assertThat(client.checkExists().forPath(counter.getPath())).isNotNull();
 
-        counter.shutdown(JobStatus.FINISHED).join();
+        counter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
         assertThat(client.checkExists().forPath(counter.getPath())).isNull();
     }
 
     @Test
     void testIdempotentShutdown() throws Exception {
         ZooKeeperCheckpointIDCounter counter = createCheckpointIdCounter();
-        counter.start();
+        counter.startCheckpointIDCounter();
 
         CuratorFramework client = getZooKeeperClient();
-        counter.shutdown(JobStatus.FINISHED).join();
+        counter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
 
         // shutdown shouldn't fail due to missing path
-        counter.shutdown(JobStatus.FINISHED).join();
+        counter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
         assertThat(client.checkExists().forPath(counter.getPath())).isNull();
     }
 
     @Test
     void testShutdownWithFailureDueToMissingConnection() throws Exception {
         ZooKeeperCheckpointIDCounter counter = createCheckpointIdCounter();
-        counter.start();
+        counter.startCheckpointIDCounter();
 
         zooKeeperExtension.close();
 
-        assertThatFuture(counter.shutdown(JobStatus.FINISHED))
+        assertThatFuture(counter.shutdownCheckpointIDCounter(JobStatus.FINISHED))
                 .as("The shutdown should fail because of the client connection being dropped.")
                 .eventuallyFailsWith(ExecutionException.class)
                 .withCauseInstanceOf(IllegalStateException.class);
@@ -98,7 +98,7 @@ class ZooKeeperCheckpointIDCounterITCase extends CheckpointIDCounterTestBase {
     @Test
     void testShutdownWithFailureDueToExistingChildNodes() throws Exception {
         final ZooKeeperCheckpointIDCounter counter = createCheckpointIdCounter();
-        counter.start();
+        counter.startCheckpointIDCounter();
 
         final CuratorFramework client =
                 ZooKeeperUtils.useNamespaceAndEnsurePath(getZooKeeperClient(), "/");
@@ -112,7 +112,7 @@ class ZooKeeperCheckpointIDCounterITCase extends CheckpointIDCounterTestBase {
                 ZooKeeperUtils.generateZookeeperPath(client.getNamespace(), counterNodePath);
         final Throwable expectedRootCause =
                 KeeperException.create(KeeperException.Code.NOTEMPTY, namespacedCounterNodePath);
-        assertThatFuture(counter.shutdown(JobStatus.FINISHED))
+        assertThatFuture(counter.shutdownCheckpointIDCounter(JobStatus.FINISHED))
                 .as(
                         "The shutdown should fail because of a child node being present and the shutdown not performing an explicit recursive deletion.")
                 .eventuallyFailsWith(ExecutionException.class)
@@ -120,7 +120,7 @@ class ZooKeeperCheckpointIDCounterITCase extends CheckpointIDCounterTestBase {
                 .withCause(expectedRootCause);
 
         client.delete().forPath(childNodePath);
-        counter.shutdown(JobStatus.FINISHED).join();
+        counter.shutdownCheckpointIDCounter(JobStatus.FINISHED).join();
 
         assertThat(client.checkExists().forPath(counterNodePath))
                 .as(
@@ -132,12 +132,12 @@ class ZooKeeperCheckpointIDCounterITCase extends CheckpointIDCounterTestBase {
     @Test
     void testSuspendKeepsState() throws Exception {
         ZooKeeperCheckpointIDCounter counter = createCheckpointIdCounter();
-        counter.start();
+        counter.startCheckpointIDCounter();
 
         CuratorFramework client = getZooKeeperClient();
         assertThat(client.checkExists().forPath(counter.getPath())).isNotNull();
 
-        counter.shutdown(JobStatus.SUSPENDED).join();
+        counter.shutdownCheckpointIDCounter(JobStatus.SUSPENDED).join();
         assertThat(client.checkExists().forPath(counter.getPath())).isNotNull();
     }
 

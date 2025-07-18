@@ -27,7 +27,7 @@ public interface CheckpointIDCounter {
     int INITIAL_CHECKPOINT_ID = 1;
 
     /** Starts the {@link CheckpointIDCounter} service down. */
-    void start() throws Exception;
+    void startCheckpointIDCounter() throws Exception;
 
     /**
      * Shuts the {@link CheckpointIDCounter} service.
@@ -38,7 +38,7 @@ public interface CheckpointIDCounter {
      * @param jobStatus Job state on shut down
      * @return The {@code CompletableFuture} holding the result of the shutdown operation.
      */
-    CompletableFuture<Void> shutdown(JobStatus jobStatus);
+    CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus);
 
     /**
      * Atomically increments the current checkpoint ID.

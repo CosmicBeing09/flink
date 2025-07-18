@@ -66,14 +66,14 @@ public class KubernetesCheckpointIDCounter implements CheckpointIDCounter {
     }
 
     @Override
-    public void start() {
+    public void startCheckpointIDCounter() {
         if (!running) {
             running = true;
         }
     }
 
     @Override
-    public CompletableFuture<Void> shutdown(JobStatus jobStatus) {
+    public CompletableFuture<Void> shutdownCheckpointIDCounter(JobStatus jobStatus) {
         if (!running) {
             return FutureUtils.completedVoidFuture();
         }
