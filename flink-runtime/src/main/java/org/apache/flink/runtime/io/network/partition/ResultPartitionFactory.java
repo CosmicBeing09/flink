@@ -300,7 +300,7 @@ public class ResultPartitionFactory {
             throw new IllegalArgumentException("Unrecognized ResultPartitionType: " + type);
         }
 
-        partition.isNumberOfPartitionConsumerUndefined(isNumberOfPartitionConsumerUndefined);
+        partition.setNumberOfPartitionConsumersUndefined(isNumberOfPartitionConsumerUndefined);
 
         LOG.debug("{}: Initialized {}", taskNameWithSubtaskAndId, this);
 

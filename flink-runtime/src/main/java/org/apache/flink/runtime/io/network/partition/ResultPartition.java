@@ -115,7 +115,7 @@ public abstract class ResultPartition implements ResultPartitionWriter {
 
     protected ResultPartitionBytesCounter resultPartitionBytes;
 
-    private boolean isNumberOfPartitionConsumerUndefined = false;
+    private boolean numberOfPartitionConsumersUndefined = false;
 
     public ResultPartition(
             String owningTaskName,
@@ -185,12 +185,12 @@ public abstract class ResultPartition implements ResultPartitionWriter {
         return bufferPool;
     }
 
-    public void isNumberOfPartitionConsumerUndefined(boolean isNumberOfPartitionConsumerUndefined) {
-        this.isNumberOfPartitionConsumerUndefined = isNumberOfPartitionConsumerUndefined;
+    public void setNumberOfPartitionConsumersUndefined(boolean isNumberOfPartitionConsumerUndefined) {
+        this.numberOfPartitionConsumersUndefined = isNumberOfPartitionConsumerUndefined;
     }
 
     public boolean isNumberOfPartitionConsumerUndefined() {
-        return isNumberOfPartitionConsumerUndefined;
+        return numberOfPartitionConsumersUndefined;
     }
 
     /** Returns the total number of queued buffers of all subpartitions. */
