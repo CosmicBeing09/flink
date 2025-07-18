@@ -71,15 +71,15 @@ public class ShuffleMasterSnapshotUtil {
                         && shuffleMaster.supportsBatchSnapshot();
         if (isJobRecoveryEnabled) {
             String clusterId = configuration.get(HighAvailabilityOptions.HA_CLUSTER_ID);
-            Path path =
+            Path snapshotDirectory =
                     new Path(
                             HighAvailabilityServicesUtils.getClusterHighAvailableStoragePath(
                                     configuration),
                             "shuffleMaster-snapshot");
 
-            if (ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(path, clusterId)) {
+            if (ShuffleMasterSnapshotUtil.isShuffleMasterSnapshotExist(snapshotDirectory, clusterId)) {
                 ShuffleMasterSnapshot snapshot =
-                        ShuffleMasterSnapshotUtil.readSnapshot(path, clusterId);
+                        ShuffleMasterSnapshotUtil.readSnapshot(snapshotDirectory, clusterId);
 
                 LOG.info("Restore shuffle master state from cluster level snapshot.");
                 shuffleMaster.restoreState(snapshot);
@@ -97,7 +97,8 @@ public class ShuffleMasterSnapshotUtil {
                                     shuffleMasterSnapshot -> {
                                         try {
                                             ShuffleMasterSnapshotUtil.writeSnapshot(
-                                                    shuffleMasterSnapshot, path, clusterId);
+                                                    shuffleMasterSnapshot,
+                                                    snapshotDirectory, clusterId);
                                         } catch (IOException e) {
                                             LOG.warn(
                                                     "Write cluster level shuffle master snapshot failed.",
@@ -172,8 +173,8 @@ public class ShuffleMasterSnapshotUtil {
     static ShuffleMasterSnapshot readSnapshot(Path workingDir, String clusterId)
             throws IOException {
         FileSystem fileSystem = workingDir.getFileSystem();
-        Path file = new Path(workingDir, clusterId);
-        try (DataInputStream inputStream = new DataInputStream(fileSystem.open(file))) {
+        Path snapshotFile = new Path(workingDir, clusterId);
+        try (DataInputStream inputStream = new DataInputStream(fileSystem.open(snapshotFile))) {
             int byteLength = inputStream.readInt();
             byte[] bytes = new byte[byteLength];
             inputStream.readFully(bytes);
