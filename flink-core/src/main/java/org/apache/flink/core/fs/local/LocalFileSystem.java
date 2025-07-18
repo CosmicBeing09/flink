@@ -93,9 +93,9 @@ public class LocalFileSystem extends FileSystem {
 
     @Override
     public FileStatus getFileStatus(Path flinkPath) throws IOException {
-        final File path = pathToFile(flinkPath);
-        if (path.exists()) {
-            return new LocalFileStatus(path, this);
+        final File localFile = pathToFile(flinkPath);
+        if (localFile.exists()) {
+            return new LocalFileStatus(localFile, this);
         } else {
             throw new FileNotFoundException(
                     "File "
@@ -140,8 +140,8 @@ public class LocalFileSystem extends FileSystem {
 
     @Override
     public boolean exists(Path filePath) throws IOException {
-        final File path = pathToFile(filePath);
-        return path.exists();
+        final File localFile = pathToFile(filePath);
+        return localFile.exists();
     }
 
     @Override
