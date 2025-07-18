@@ -59,10 +59,10 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             ColumnDescriptor descriptor,
             PageReader pageReader,
             boolean isUtcTimestamp,
-            Type type,
+            Type elementType,
             LogicalType logicalType)
             throws IOException {
-        super(descriptor, pageReader, isUtcTimestamp, type, logicalType);
+        super(descriptor, pageReader, isUtcTimestamp, elementType, logicalType);
     }
 
     @Override
@@ -97,10 +97,10 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
      * Reads a single value from parquet page, puts it into lastValue. Returns a boolean indicating
      * if there is more values to read (true).
      *
-     * @param type the element type of array
+     * @param elementType the element type of array
      * @return boolean
      */
-    private boolean fetchNextValue(LogicalType type) {
+    private boolean fetchNextValue(LogicalType elementType) {
         int left = readPageIfNeed();
         if (left > 0) {
             // get the values of repetition and definitionLevel
@@ -110,7 +110,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
                 if (isCurrentPageDictionaryEncoded) {
                     lastValue = dataColumn.readValueDictionaryId();
                 } else {
-                    lastValue = readPrimitiveTypedRow(type);
+                    lastValue = readPrimitiveTypedRow(elementType);
                 }
             } else {
                 lastValue = null;
@@ -135,8 +135,8 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
 
     // Need to be in consistent with that VectorizedPrimitiveColumnReader#readBatchHelper
     // TODO Reduce the duplicated code
-    private Object readPrimitiveTypedRow(LogicalType type) {
-        switch (type.getTypeRoot()) {
+    private Object readPrimitiveTypedRow(LogicalType category) {
+        switch (category.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -172,16 +172,16 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
                 return dataColumn.readTimestamp();
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported type in the list: " + category);
         }
     }
 
-    private Object dictionaryDecodeValue(LogicalType type, Integer dictionaryValue) {
+    private Object dictionaryDecodeValue(LogicalType elementType, Integer dictionaryValue) {
         if (dictionaryValue == null) {
             return null;
         }
 
-        switch (type.getTypeRoot()) {
+        switch (elementType.getTypeRoot()) {
             case CHAR:
             case VARCHAR:
             case BINARY:
@@ -217,7 +217,7 @@ public class ArrayColumnReader extends BaseVectorizedColumnReader {
             case TIMESTAMP_WITH_LOCAL_TIME_ZONE:
                 return dictionary.readTimestamp(dictionaryValue);
             default:
-                throw new RuntimeException("Unsupported type in the list: " + type);
+                throw new RuntimeException("Unsupported type in the list: " + elementType);
         }
     }
 
