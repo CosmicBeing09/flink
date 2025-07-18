@@ -193,13 +193,13 @@ public class ZooKeeperUtils {
         int sessionTimeout =
                 Math.toIntExact(
                         configuration
-                                .get(HighAvailabilityOptions.ZOOKEEPER_SESSION_TIMEOUT)
+                                .get(HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT)
                                 .toMillis());
 
         int connectionTimeout =
                 Math.toIntExact(
                         configuration
-                                .get(HighAvailabilityOptions.ZOOKEEPER_CONNECTION_TIMEOUT)
+                                .get(HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_CONNECTION_TIMEOUT)
                                 .toMillis());
 
         int retryWait =

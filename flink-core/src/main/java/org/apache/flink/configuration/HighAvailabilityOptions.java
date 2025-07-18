@@ -141,7 +141,7 @@ public class HighAvailabilityOptions {
     // ------------------------------------------------------------------------
 
     @Documentation.Section(Documentation.Sections.EXPERT_ZOOKEEPER_HIGH_AVAILABILITY)
-    public static final ConfigOption<Duration> ZOOKEEPER_SESSION_TIMEOUT =
+    public static final ConfigOption<Duration> HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT =
             key("high-availability.zookeeper.client.session-timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(60000))
@@ -149,7 +149,7 @@ public class HighAvailabilityOptions {
                     .withDescription("Defines the session timeout for the ZooKeeper session.");
 
     @Documentation.Section(Documentation.Sections.EXPERT_ZOOKEEPER_HIGH_AVAILABILITY)
-    public static final ConfigOption<Duration> ZOOKEEPER_CONNECTION_TIMEOUT =
+    public static final ConfigOption<Duration> HA_ZOOKEEPER_CLIENT_CONNECTION_TIMEOUT =
             key("high-availability.zookeeper.client.connection-timeout")
                     .durationType()
                     .defaultValue(Duration.ofMillis(15000))

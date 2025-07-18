@@ -335,7 +335,7 @@ class YARNHighAvailabilityITCase extends YarnTestBase {
         flinkConfiguration.set(
                 HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM, zkServer.getConnectString());
         flinkConfiguration.set(
-                HighAvailabilityOptions.ZOOKEEPER_SESSION_TIMEOUT, Duration.ofMillis(20000));
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT, Duration.ofMillis(20000));
 
         flinkConfiguration.set(RestartStrategyOptions.RESTART_STRATEGY, FIXED_DELAY.getMainValue());
         flinkConfiguration.set(

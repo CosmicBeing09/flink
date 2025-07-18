@@ -1127,7 +1127,7 @@ class ZooKeeperStateHandleStoreTest {
         configuration.set(
                 HighAvailabilityOptions.HA_ZOOKEEPER_QUORUM, zooKeeperExtension.getConnectString());
         configuration.set(
-                HighAvailabilityOptions.ZOOKEEPER_SESSION_TIMEOUT, Duration.ofMillis(100));
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT, Duration.ofMillis(100));
         configuration.set(HighAvailabilityOptions.HA_ZOOKEEPER_ROOT, "timeout");
 
         try (CuratorFrameworkWithUnhandledErrorListener curatorFrameworkWrapper =

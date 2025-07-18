@@ -90,9 +90,9 @@ class ZooKeeperLeaderElectionConnectionHandlingTest {
     void testLoseLeadershipOnLostConnectionIfTolerateSuspendedConnectionsIsEnabled()
             throws Exception {
         configuration.set(
-                HighAvailabilityOptions.ZOOKEEPER_SESSION_TIMEOUT, Duration.ofMillis(1000));
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_SESSION_TIMEOUT, Duration.ofMillis(1000));
         configuration.set(
-                HighAvailabilityOptions.ZOOKEEPER_CONNECTION_TIMEOUT, Duration.ofMillis(1000));
+                HighAvailabilityOptions.HA_ZOOKEEPER_CLIENT_CONNECTION_TIMEOUT, Duration.ofMillis(1000));
         configuration.set(HighAvailabilityOptions.ZOOKEEPER_TOLERATE_SUSPENDED_CONNECTIONS, true);
         runTestWithLostZooKeeperConnection(
                 configuration,
