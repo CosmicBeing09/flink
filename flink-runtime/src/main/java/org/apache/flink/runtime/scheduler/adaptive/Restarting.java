@@ -20,7 +20,7 @@ package org.apache.flink.runtime.scheduler.adaptive;
 
 import org.apache.flink.api.common.JobStatus;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.util.Preconditions;
@@ -47,7 +47,7 @@ class Restarting extends StateWithExecutionGraph {
     Restarting(
             Context context,
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Logger logger,
             Duration backoffTime,
@@ -134,7 +134,7 @@ class Restarting extends StateWithExecutionGraph {
         private final Context context;
         private final Logger log;
         private final ExecutionGraph executionGraph;
-        private final ExecutionGraphHandler executionGraphHandler;
+        private final CheckpointCoordinatorHandler executionGraphHandler;
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
         private final Duration backoffTime;
         private final ClassLoader userCodeClassLoader;
@@ -143,7 +143,7 @@ class Restarting extends StateWithExecutionGraph {
         public Factory(
                 Context context,
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Logger log,
                 Duration backoffTime,

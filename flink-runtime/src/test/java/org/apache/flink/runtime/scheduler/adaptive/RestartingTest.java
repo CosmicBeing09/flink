@@ -24,7 +24,7 @@ import org.apache.flink.runtime.JobException;
 import org.apache.flink.runtime.client.JobExecutionException;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.RootExceptionHistoryEntry;
@@ -136,8 +136,8 @@ class RestartingTest {
 
     public Restarting createRestartingState(
             MockRestartingContext ctx, ExecutionGraph executionGraph) {
-        final ExecutionGraphHandler executionGraphHandler =
-                new ExecutionGraphHandler(
+        final CheckpointCoordinatorHandler executionGraphHandler =
+                new CheckpointCoordinatorHandler(
                         executionGraph,
                         log,
                         ctx.getMainThreadExecutor(),
@@ -181,7 +181,7 @@ class RestartingTest {
         @Override
         public void goToCanceling(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(

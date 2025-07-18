@@ -59,8 +59,8 @@ import org.apache.flink.runtime.jobgraph.JobVertex;
 import org.apache.flink.runtime.jobgraph.JobVertexID;
 import org.apache.flink.runtime.metrics.groups.UnregisteredMetricGroups;
 import org.apache.flink.runtime.operators.coordination.CoordinatorStoreImpl;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
@@ -662,9 +662,9 @@ class ExecutingTest {
         }
     }
 
-    private ExecutionGraphHandler getExecutionGraphHandler(
+    private CheckpointCoordinatorHandler getExecutionGraphHandler(
             ExecutionGraph executionGraph, ComponentMainThreadExecutor mainThreadExecutor) {
-        return new ExecutionGraphHandler(
+        return new CheckpointCoordinatorHandler(
                 executionGraph, log, mainThreadExecutor, mainThreadExecutor);
     }
 
@@ -709,7 +709,7 @@ class ExecutingTest {
         @Override
         public void goToCanceling(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             cancellingStateValidator.validateInput(
@@ -732,7 +732,7 @@ class ExecutingTest {
         @Override
         public void goToRestarting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -748,7 +748,7 @@ class ExecutingTest {
         @Override
         public void goToFailing(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Throwable failureCause,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -764,7 +764,7 @@ class ExecutingTest {
         @Override
         public CompletableFuture<String> goToStopWithSavepoint(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture,
@@ -804,12 +804,12 @@ class ExecutingTest {
 
     static class CancellingArguments {
         private final ExecutionGraph executionGraph;
-        private final ExecutionGraphHandler executionGraphHandler;
+        private final CheckpointCoordinatorHandler executionGraphHandler;
         private final OperatorCoordinatorHandler operatorCoordinatorHandle;
 
         public CancellingArguments(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandle) {
             this.executionGraph = executionGraph;
             this.executionGraphHandler = executionGraphHandler;
@@ -820,7 +820,7 @@ class ExecutingTest {
             return executionGraph;
         }
 
-        public ExecutionGraphHandler getExecutionGraphHandler() {
+        public CheckpointCoordinatorHandler getExecutionGraphHandler() {
             return executionGraphHandler;
         }
 
@@ -835,7 +835,7 @@ class ExecutingTest {
 
         public StopWithSavepointArguments(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandle,
                 CheckpointScheduling checkpointScheduling,
                 CompletableFuture<String> savepointFuture) {
@@ -850,7 +850,7 @@ class ExecutingTest {
 
         public RestartingArguments(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);
@@ -867,7 +867,7 @@ class ExecutingTest {
 
         public FailingArguments(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Throwable failureCause) {
             super(executionGraph, executionGraphHandler, operatorCoordinatorHandler);

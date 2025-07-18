@@ -463,8 +463,8 @@ class DefaultRescaleManagerTest {
     private static class TestingRescaleManagerContext implements AdaptiveScalingManager.Context {
 
         // default configuration values to allow for easy transitioning between the phases
-        private static final Duration SCALING_MIN = Duration.ofHours(1);
-        private static final Duration SCALING_MAX = Duration.ofHours(2);
+        private static final Duration COOLDOWN_INTERVAL = Duration.ofHours(1);
+        private static final Duration MAX_SCALE_INTERVAL = Duration.ofHours(2);
 
         // configuration that defines what kind of rescaling would be possible
         private boolean hasSufficientResources = false;
@@ -580,8 +580,8 @@ class DefaultRescaleManagerTest {
                             // clock that returns the time based on the configured elapsedTime
                             () -> Objects.requireNonNull(initializationTime).plus(elapsedTime),
                             this,
-                            SCALING_MIN,
-                            SCALING_MAX,
+                            COOLDOWN_INTERVAL,
+                            MAX_SCALE_INTERVAL,
                             Duration.ofHours(5)) {
                         @Override
                         public void onChange() {
@@ -615,7 +615,7 @@ class DefaultRescaleManagerTest {
          * phase.
          */
         public void transitionIntoCooldownTimeframe() {
-            this.elapsedTime = SCALING_MIN.dividedBy(2);
+            this.elapsedTime = COOLDOWN_INTERVAL.dividedBy(2);
             this.triggerOutdatedTasks();
         }
 
@@ -626,10 +626,10 @@ class DefaultRescaleManagerTest {
         public void transitionIntoSoftScalingTimeframe() {
             // the state transition is scheduled based on the current event's time rather than the
             // initializationTime
-            this.elapsedTime = elapsedTime.plus(SCALING_MIN);
+            this.elapsedTime = elapsedTime.plus(COOLDOWN_INTERVAL);
 
             // make sure that we're still below the scalingIntervalMax
-            this.elapsedTime = elapsedTime.plus(SCALING_MAX.minus(elapsedTime).dividedBy(2));
+            this.elapsedTime = elapsedTime.plus(MAX_SCALE_INTERVAL.minus(elapsedTime).dividedBy(2));
             this.triggerOutdatedTasks();
         }
 
@@ -640,7 +640,7 @@ class DefaultRescaleManagerTest {
         public void transitionIntoHardScalingTimeframe() {
             // the state transition is scheduled based on the current event's time rather than the
             // initializationTime
-            this.elapsedTime = elapsedTime.plus(SCALING_MAX).plusMinutes(1);
+            this.elapsedTime = elapsedTime.plus(MAX_SCALE_INTERVAL).plusMinutes(1);
             this.triggerOutdatedTasks();
         }
 

@@ -23,7 +23,7 @@ import org.apache.flink.runtime.checkpoint.CheckpointCoordinator;
 import org.apache.flink.runtime.checkpoint.CheckpointScheduling;
 import org.apache.flink.runtime.executiongraph.ArchivedExecutionGraph;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
@@ -97,7 +97,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
     StopWithSavepoint(
             Context context,
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             Logger logger,
@@ -304,7 +304,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
 
         private final ExecutionGraph executionGraph;
 
-        private final ExecutionGraphHandler executionGraphHandler;
+        private final CheckpointCoordinatorHandler executionGraphHandler;
 
         private final OperatorCoordinatorHandler operatorCoordinatorHandler;
 
@@ -321,7 +321,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
         Factory(
                 Context context,
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 CheckpointScheduling checkpointScheduling,
                 Logger logger,

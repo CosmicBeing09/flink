@@ -163,7 +163,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
     private final KvStateHandler kvStateHandler;
 
-    private final ExecutionGraphHandler executionGraphHandler;
+    private final CheckpointCoordinatorHandler executionGraphHandler;
 
     protected final OperatorCoordinatorHandler operatorCoordinatorHandler;
 
@@ -252,7 +252,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
 
         this.kvStateHandler = new KvStateHandler(executionGraph);
         this.executionGraphHandler =
-                new ExecutionGraphHandler(executionGraph, log, ioExecutor, this.mainThreadExecutor);
+                new CheckpointCoordinatorHandler(executionGraph, log, ioExecutor, this.mainThreadExecutor);
 
         this.operatorCoordinatorHandler =
                 new DefaultOperatorCoordinatorHandler(executionGraph, this::handleGlobalFailure);

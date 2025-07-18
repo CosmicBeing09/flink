@@ -28,7 +28,7 @@ import org.apache.flink.runtime.jobgraph.JobType;
 import org.apache.flink.runtime.jobgraph.jsonplan.JsonPlanGenerator;
 import org.apache.flink.runtime.metrics.groups.JobManagerJobMetricGroup;
 import org.apache.flink.runtime.scheduler.DefaultOperatorCoordinatorHandler;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.GlobalFailureHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.adaptive.allocator.VertexParallelism;
@@ -111,8 +111,8 @@ public class CreatingExecutionGraph extends StateWithoutExecutionGraph {
                         .debug(
                                 "Successfully reserved and assigned the required slots for the ExecutionGraph.");
                 final ExecutionGraph executionGraph = result.getExecutionGraph();
-                final ExecutionGraphHandler executionGraphHandler =
-                        new ExecutionGraphHandler(
+                final CheckpointCoordinatorHandler executionGraphHandler =
+                        new CheckpointCoordinatorHandler(
                                 executionGraph,
                                 getLogger(),
                                 context.getIOExecutor(),

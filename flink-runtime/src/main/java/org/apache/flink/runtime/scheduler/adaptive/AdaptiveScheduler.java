@@ -95,10 +95,10 @@ import org.apache.flink.runtime.operators.coordination.TaskNotRunningException;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
 import org.apache.flink.runtime.rpc.FatalErrorHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismInfo;
 import org.apache.flink.runtime.scheduler.DefaultVertexParallelismStore;
 import org.apache.flink.runtime.scheduler.ExecutionGraphFactory;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
 import org.apache.flink.runtime.scheduler.ExecutionGraphInfo;
 import org.apache.flink.runtime.scheduler.JobStatusStore;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
@@ -1163,7 +1163,7 @@ public class AdaptiveScheduler
     @Override
     public void goToExecuting(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             List<ExceptionHistoryEntry> failureCollection) {
         transitionToState(
@@ -1183,7 +1183,7 @@ public class AdaptiveScheduler
     @Override
     public void goToCanceling(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             List<ExceptionHistoryEntry> failureCollection) {
 
@@ -1201,7 +1201,7 @@ public class AdaptiveScheduler
     @Override
     public void goToRestarting(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Duration backoffTime,
             List<ExceptionHistoryEntry> failureCollection) {
@@ -1232,7 +1232,7 @@ public class AdaptiveScheduler
     @Override
     public void goToFailing(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Throwable failureCause,
             List<ExceptionHistoryEntry> failureCollection) {
@@ -1251,7 +1251,7 @@ public class AdaptiveScheduler
     @Override
     public CompletableFuture<String> goToStopWithSavepoint(
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             CheckpointScheduling checkpointScheduling,
             CompletableFuture<String> savepointFuture,

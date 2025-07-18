@@ -51,7 +51,7 @@ import org.apache.flink.runtime.operators.coordination.CoordinationResponse;
 import org.apache.flink.runtime.operators.coordination.OperatorEvent;
 import org.apache.flink.runtime.query.KvStateLocation;
 import org.apache.flink.runtime.query.UnknownKvStateLocation;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.KvStateHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.VertexEndOfDataListener;
@@ -87,7 +87,7 @@ abstract class StateWithExecutionGraph implements State {
 
     private final ExecutionGraph executionGraph;
 
-    private final ExecutionGraphHandler executionGraphHandler;
+    private final CheckpointCoordinatorHandler executionGraphHandler;
 
     private final OperatorCoordinatorHandler operatorCoordinatorHandler;
 
@@ -104,7 +104,7 @@ abstract class StateWithExecutionGraph implements State {
     StateWithExecutionGraph(
             Context context,
             ExecutionGraph executionGraph,
-            ExecutionGraphHandler executionGraphHandler,
+            CheckpointCoordinatorHandler executionGraphHandler,
             OperatorCoordinatorHandler operatorCoordinatorHandler,
             Logger logger,
             ClassLoader userClassCodeLoader,
@@ -149,7 +149,7 @@ abstract class StateWithExecutionGraph implements State {
         return operatorCoordinatorHandler;
     }
 
-    protected ExecutionGraphHandler getExecutionGraphHandler() {
+    protected CheckpointCoordinatorHandler getExecutionGraphHandler() {
         return executionGraphHandler;
     }
 

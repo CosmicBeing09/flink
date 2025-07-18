@@ -26,7 +26,7 @@ import org.apache.flink.runtime.executiongraph.ErrorInfo;
 import org.apache.flink.runtime.executiongraph.ExecutionGraph;
 import org.apache.flink.runtime.executiongraph.TaskExecutionStateTransition;
 import org.apache.flink.runtime.failure.FailureEnricherUtils;
-import org.apache.flink.runtime.scheduler.ExecutionGraphHandler;
+import org.apache.flink.runtime.scheduler.CheckpointCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.OperatorCoordinatorHandler;
 import org.apache.flink.runtime.scheduler.exceptionhistory.ExceptionHistoryEntry;
 import org.apache.flink.runtime.scheduler.exceptionhistory.TestingAccessExecution;
@@ -476,8 +476,8 @@ class StopWithSavepointTest {
             CheckpointScheduling checkpointScheduling,
             ExecutionGraph executionGraph,
             CompletableFuture<String> savepointFuture) {
-        final ExecutionGraphHandler executionGraphHandler =
-                new ExecutionGraphHandler(
+        final CheckpointCoordinatorHandler executionGraphHandler =
+                new CheckpointCoordinatorHandler(
                         executionGraph,
                         LOG,
                         ctx.getMainThreadExecutor(),
@@ -556,7 +556,7 @@ class StopWithSavepointTest {
         @Override
         public void goToCanceling(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
@@ -573,7 +573,7 @@ class StopWithSavepointTest {
         @Override
         public void goToRestarting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Duration backoffTime,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -593,7 +593,7 @@ class StopWithSavepointTest {
         @Override
         public void goToFailing(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 Throwable failureCause,
                 List<ExceptionHistoryEntry> failureCollection) {
@@ -613,7 +613,7 @@ class StopWithSavepointTest {
         @Override
         public void goToExecuting(
                 ExecutionGraph executionGraph,
-                ExecutionGraphHandler executionGraphHandler,
+                CheckpointCoordinatorHandler executionGraphHandler,
                 OperatorCoordinatorHandler operatorCoordinatorHandler,
                 List<ExceptionHistoryEntry> failureCollection) {
             if (hadStateTransition) {
