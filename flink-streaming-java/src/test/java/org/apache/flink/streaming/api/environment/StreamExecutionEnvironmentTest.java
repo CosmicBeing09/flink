@@ -470,9 +470,9 @@ class StreamExecutionEnvironmentTest {
 
         assertThat(env.getConfig().getAsyncInflightRecordsLimit())
                 .isEqualTo(ExecutionOptions.ASYNC_INFLIGHT_RECORDS_LIMIT.defaultValue());
-        assertThat(env.getConfig().getAsyncStateBufferSize())
+        assertThat(env.getConfig().getAsyncStateActiveBufferSize())
                 .isEqualTo(ExecutionOptions.ASYNC_STATE_BUFFER_SIZE.defaultValue());
-        assertThat(env.getConfig().getAsyncStateBufferTimeout())
+        assertThat(env.getConfig().getAsyncStateActiveBufferTimeout())
                 .isEqualTo(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT.defaultValue());
 
         config.set(ExecutionOptions.ASYNC_INFLIGHT_RECORDS_LIMIT, 3);
@@ -480,16 +480,16 @@ class StreamExecutionEnvironmentTest {
         config.set(ExecutionOptions.ASYNC_STATE_BUFFER_TIMEOUT, 1L);
         env.configure(config, this.getClass().getClassLoader());
         assertThat(env.getConfig().getAsyncInflightRecordsLimit()).isEqualTo(3);
-        assertThat(env.getConfig().getAsyncStateBufferSize()).isEqualTo(2);
-        assertThat(env.getConfig().getAsyncStateBufferTimeout()).isEqualTo(1);
+        assertThat(env.getConfig().getAsyncStateActiveBufferSize()).isEqualTo(2);
+        assertThat(env.getConfig().getAsyncStateActiveBufferTimeout()).isEqualTo(1);
 
         env.getConfig()
                 .setAsyncInflightRecordsLimit(6)
-                .setAsyncStateBufferSize(5)
+                .setAsyncStateActiveBufferSize(5)
                 .setAsyncStateBufferTimeout(4);
         assertThat(env.getConfig().getAsyncInflightRecordsLimit()).isEqualTo(6);
-        assertThat(env.getConfig().getAsyncStateBufferSize()).isEqualTo(5);
-        assertThat(env.getConfig().getAsyncStateBufferTimeout()).isEqualTo(4);
+        assertThat(env.getConfig().getAsyncStateActiveBufferSize()).isEqualTo(5);
+        assertThat(env.getConfig().getAsyncStateActiveBufferTimeout()).isEqualTo(4);
     }
 
     private void testBufferTimeout(Configuration config, StreamExecutionEnvironment env) {
