@@ -714,12 +714,12 @@ class LocalInputChannelTest {
 
         private final int numberOfInputChannels;
 
-        private final int numberOfExpectedBuffersPerChannel;
+        private final int numberOfRequiredBuffersPerChannel;
 
         TestLocalInputChannelConsumer(
                 int subpartitionIndex,
                 int numberOfInputChannels,
-                int numberOfExpectedBuffersPerChannel,
+                int numberOfRequiredBuffersPerChannel,
                 BufferPool bufferPool,
                 ResultPartitionManager partitionManager,
                 TaskEventDispatcher taskEventDispatcher,
@@ -727,7 +727,7 @@ class LocalInputChannelTest {
                 throws IOException {
 
             checkArgument(numberOfInputChannels >= 1);
-            checkArgument(numberOfExpectedBuffersPerChannel >= 1);
+            checkArgument(numberOfRequiredBuffersPerChannel >= 1);
 
             this.inputGate =
                     new SingleInputGateBuilder()
@@ -752,7 +752,7 @@ class LocalInputChannelTest {
             setupInputGate(inputGate, inputChannels);
 
             this.numberOfInputChannels = numberOfInputChannels;
-            this.numberOfExpectedBuffersPerChannel = numberOfExpectedBuffersPerChannel;
+            this.numberOfRequiredBuffersPerChannel = numberOfRequiredBuffersPerChannel;
         }
 
         @Override
@@ -769,7 +769,7 @@ class LocalInputChannelTest {
                         // Check that we don't receive too many buffers
                         if (++numberOfBuffersPerChannel[
                                         boe.get().getChannelInfo().getInputChannelIdx()]
-                                > numberOfExpectedBuffersPerChannel) {
+                                > numberOfRequiredBuffersPerChannel) {
 
                             throw new IllegalStateException(
                                     "Received more buffers than expected "
@@ -784,7 +784,7 @@ class LocalInputChannelTest {
                 for (int i = 0; i < numberOfBuffersPerChannel.length; i++) {
                     final int actualNumberOfReceivedBuffers = numberOfBuffersPerChannel[i];
 
-                    if (actualNumberOfReceivedBuffers != numberOfExpectedBuffersPerChannel) {
+                    if (actualNumberOfReceivedBuffers != numberOfRequiredBuffersPerChannel) {
                         throw new IllegalStateException(
                                 "Received unexpected number of buffers "
                                         + "on channel "
@@ -793,7 +793,7 @@ class LocalInputChannelTest {
                                         + actualNumberOfReceivedBuffers
                                         + " instead "
                                         + "of "
-                                        + numberOfExpectedBuffersPerChannel
+                                        + numberOfRequiredBuffersPerChannel
                                         + ").");
                     }
                 }
