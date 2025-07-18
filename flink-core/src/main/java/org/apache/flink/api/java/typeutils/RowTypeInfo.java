@@ -249,9 +249,9 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
 
     @Override
     public TypeSerializer<Row> createSerializer(ExecutionConfig config) {
-        int len = getArity();
-        TypeSerializer<?>[] fieldSerializers = new TypeSerializer[len];
-        for (int i = 0; i < len; i++) {
+        int fieldCount = getArity();
+        TypeSerializer<?>[] fieldSerializers = new TypeSerializer[fieldCount];
+        for (int i = 0; i < fieldCount; i++) {
             fieldSerializers[i] = types[i].createSerializer(config);
         }
         final LinkedHashMap<String, Integer> positionByName = new LinkedHashMap<>();
@@ -308,9 +308,9 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
      */
     @Deprecated
     public TypeSerializer<Row> createLegacySerializer(ExecutionConfig config) {
-        int len = getArity();
-        TypeSerializer<?>[] fieldSerializers = new TypeSerializer[len];
-        for (int i = 0; i < len; i++) {
+        int fieldCount = getArity();
+        TypeSerializer<?>[] fieldSerializers = new TypeSerializer[fieldCount];
+        for (int i = 0; i < fieldCount; i++) {
             fieldSerializers[i] = types[i].createSerializer(config);
         }
         return new RowSerializer(fieldSerializers, null, false);
@@ -367,13 +367,13 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
                     fieldComparators.size() == logicalKeyFields.size(),
                     "The number of field comparators and key fields is not equal.");
 
-            final int maxKey = Collections.max(logicalKeyFields);
+            final int maxKeyFieldIndex = Collections.max(logicalKeyFields);
 
-            checkState(maxKey >= 0, "The maximum key field must be greater or equal than 0.");
+            checkState(maxKeyFieldIndex >= 0, "The maximum key field must be greater or equal than 0.");
 
-            TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[maxKey + 1];
+            TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[maxKeyFieldIndex + 1];
 
-            for (int i = 0; i <= maxKey; i++) {
+            for (int i = 0; i <= maxKeyFieldIndex; i++) {
                 fieldSerializers[i] = types[i].createSerializer(config);
             }
 
