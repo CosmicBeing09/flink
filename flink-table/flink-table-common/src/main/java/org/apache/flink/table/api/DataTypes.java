@@ -1109,7 +1109,8 @@ public final class DataTypes {
             addResolutionMapping(
                     IntervalUnit.YEAR,
                     null,
-                    (p1, p2) -> new YearMonthIntervalType(YearMonthResolution.YEAR, p1));
+                    (firstPrecision, p2) -> new YearMonthIntervalType(YearMonthResolution.YEAR,
+                            firstPrecision));
             addResolutionMapping(
                     IntervalUnit.MONTH,
                     null,
