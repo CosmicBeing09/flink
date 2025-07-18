@@ -436,8 +436,8 @@ public class StreamGraph implements Pipeline {
 
         setSerializers(
                 vertexID,
-                in1TypeInfo.createSerializer(executionConfig.getSerializerConfig()),
-                in2TypeInfo.createSerializer(executionConfig.getSerializerConfig()),
+                in1TypeInfo.createSerializer(executionConfig.getSerializerConfigInternal()),
+                in2TypeInfo.createSerializer(executionConfig.getSerializerConfigInternal()),
                 outSerializer);
 
         if (taskOperatorFactory.isOutputTypeConfigurable()) {
@@ -819,7 +819,7 @@ public class StreamGraph implements Pipeline {
                         .map(
                                 typeInfo ->
                                         typeInfo.createSerializer(
-                                                executionConfig.getSerializerConfig()))
+                                                executionConfig.getSerializerConfigInternal()))
                         .toArray(TypeSerializer[]::new));
         vertex.setSerializerOut(out);
     }
@@ -1009,7 +1009,7 @@ public class StreamGraph implements Pipeline {
 
     private <T> TypeSerializer<T> createSerializer(TypeInformation<T> typeInfo) {
         return typeInfo != null && !(typeInfo instanceof MissingTypeInfo)
-                ? typeInfo.createSerializer(executionConfig.getSerializerConfig())
+                ? typeInfo.createSerializer(executionConfig.getSerializerConfigInternal())
                 : null;
     }
 

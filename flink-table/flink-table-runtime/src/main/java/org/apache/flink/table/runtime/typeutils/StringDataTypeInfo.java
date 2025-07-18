@@ -71,7 +71,7 @@ public class StringDataTypeInfo extends TypeInformation<StringData> {
 
     @Override
     public TypeSerializer<StringData> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

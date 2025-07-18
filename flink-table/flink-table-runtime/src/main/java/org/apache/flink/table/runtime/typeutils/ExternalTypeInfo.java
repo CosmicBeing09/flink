@@ -145,7 +145,7 @@ public final class ExternalTypeInfo<T> extends TypeInformation<T> implements Dat
 
     @Override
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

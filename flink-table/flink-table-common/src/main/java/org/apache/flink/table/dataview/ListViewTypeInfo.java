@@ -105,7 +105,7 @@ public class ListViewTypeInfo<T> extends TypeInformation<ListView<T>> {
 
     @Override
     public TypeSerializer<ListView<T>> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

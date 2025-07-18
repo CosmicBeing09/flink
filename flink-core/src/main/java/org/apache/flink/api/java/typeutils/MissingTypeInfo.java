@@ -95,7 +95,7 @@ public class MissingTypeInfo extends TypeInformation<InvalidTypesException> {
 
     @Override
     public TypeSerializer<InvalidTypesException> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

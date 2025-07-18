@@ -118,7 +118,7 @@ public class MapTypeInfo<K, V> extends TypeInformation<Map<K, V>> {
 
     @Override
     public TypeSerializer<Map<K, V>> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

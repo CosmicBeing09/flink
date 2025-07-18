@@ -73,27 +73,27 @@ class ExecutionConfigFromConfigurationTest {
                         .whenSetFromFile("pipeline.force-avro", "true")
                         .viaSetter(
                                 booleanSetter(
-                                        (ec) -> ec.getSerializerConfig().setForceAvro(true),
-                                        (ec) -> ec.getSerializerConfig().setForceAvro(false)))
-                        .getterVia((ec) -> ec.getSerializerConfig().isForceAvroEnabled())
+                                        (ec) -> ec.getSerializerConfigInternal().setForceAvro(true),
+                                        (ec) -> ec.getSerializerConfigInternal().setForceAvro(false)))
+                        .getterVia((ec) -> ec.getSerializerConfigInternal().isForceAvroEnabled())
                         .nonDefaultValue(true),
                 TestSpec.testValue(false)
                         .whenSetFromFile("pipeline.force-kryo", "false")
                         .viaSetter(
                                 booleanSetter(
-                                        (ec) -> ec.getSerializerConfig().setForceKryo(true),
-                                        (ec) -> ec.getSerializerConfig().setForceKryo(false)))
-                        .getterVia((ec) -> ec.getSerializerConfig().isForceKryoEnabled())
+                                        (ec) -> ec.getSerializerConfigInternal().setForceKryo(true),
+                                        (ec) -> ec.getSerializerConfigInternal().setForceKryo(false)))
+                        .getterVia((ec) -> ec.getSerializerConfigInternal().isForceKryoEnabled())
                         .nonDefaultValue(false),
                 TestSpec.testValue(false)
                         .whenSetFromFile("pipeline.generic-types", "false")
                         .viaSetter(
                                 booleanSetter(
-                                        (ec) -> ec.getSerializerConfig().setGenericTypes(true),
-                                        (ec) -> ec.getSerializerConfig().setGenericTypes(false)))
+                                        (ec) -> ec.getSerializerConfigInternal().setGenericTypes(true),
+                                        (ec) -> ec.getSerializerConfigInternal().setGenericTypes(false)))
                         .getterVia(
                                 execConfig ->
-                                        !execConfig.getSerializerConfig().hasGenericTypesDisabled())
+                                        !execConfig.getSerializerConfigInternal().hasGenericTypesDisabled())
                         .nonDefaultValue(false),
                 TestSpec.testValue(getTestGlobalJobParameters())
                         .whenSetFromFile(

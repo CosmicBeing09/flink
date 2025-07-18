@@ -86,7 +86,7 @@ public final class TypeInformationRawType<T> extends LogicalType {
         return new RawType<>(
                 isNullable(),
                 typeInfo.getTypeClass(),
-                typeInfo.createSerializer(config.getSerializerConfig()));
+                typeInfo.createSerializer(config.getSerializerConfigInternal()));
     }
 
     @Override

@@ -115,7 +115,7 @@ public final class TupleTypeInfo<T extends Tuple> extends TupleTypeInfoBase<T> {
     @Deprecated
     @PublicEvolving
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override
@@ -161,7 +161,7 @@ public final class TupleTypeInfo<T extends Tuple> extends TupleTypeInfoBase<T> {
             TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[maxKey + 1];
 
             for (int i = 0; i <= maxKey; i++) {
-                fieldSerializers[i] = types[i].createSerializer(config.getSerializerConfig());
+                fieldSerializers[i] = types[i].createSerializer(config.getSerializerConfigInternal());
             }
 
             return new TupleComparator<T>(

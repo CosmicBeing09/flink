@@ -858,7 +858,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                                     .createSerializer(
                                             input1.getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig())
+                                                    .getSerializerConfigInternal())
                                     .createInstance()),
                     returnType,
                     hint,
@@ -891,7 +891,7 @@ public abstract class JoinOperator<I1, I2, OUT>
                                     .createSerializer(
                                             input1.getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig())
+                                                    .getSerializerConfigInternal())
                                     .createInstance()),
                     returnType,
                     hint,

@@ -110,7 +110,7 @@ class OperatorStateBackendTest {
                 .isFalse();
 
         final ExecutionConfig cfg = new ExecutionConfig();
-        cfg.getSerializerConfig()
+        cfg.getSerializerConfigInternal()
                 .registerTypeWithKryoSerializer(
                         registeredType, com.esotericsoftware.kryo.serializers.JavaSerializer.class);
 

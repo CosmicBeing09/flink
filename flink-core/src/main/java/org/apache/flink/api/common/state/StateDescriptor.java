@@ -323,7 +323,7 @@ public abstract class StateDescriptor<S extends State, T> implements Serializabl
                         return typeInformation.createSerializer(
                                 executionConfig == null
                                         ? null
-                                        : executionConfig.getSerializerConfig());
+                                        : executionConfig.getSerializerConfigInternal());
                     }
                 });
     }

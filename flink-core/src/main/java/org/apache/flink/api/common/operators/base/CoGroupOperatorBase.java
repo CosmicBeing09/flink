@@ -219,9 +219,9 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
         Arrays.fill(inputDirections2, true);
 
         final TypeSerializer<IN1> inputSerializer1 =
-                inputType1.createSerializer(executionConfig.getSerializerConfig());
+                inputType1.createSerializer(executionConfig.getSerializerConfigInternal());
         final TypeSerializer<IN2> inputSerializer2 =
-                inputType2.createSerializer(executionConfig.getSerializerConfig());
+                inputType2.createSerializer(executionConfig.getSerializerConfigInternal());
 
         final TypeComparator<IN1> inputComparator1 =
                 getTypeComparator(executionConfig, inputType1, inputKeys1, inputDirections1);
@@ -306,7 +306,7 @@ public class CoGroupOperatorBase<IN1, IN2, OUT, FT extends CoGroupFunction<IN1, 
                         result,
                         getOperatorInfo()
                                 .getOutputType()
-                                .createSerializer(executionConfig.getSerializerConfig()));
+                                .createSerializer(executionConfig.getSerializerConfigInternal()));
 
         while (coGroupIterator.next()) {
             function.coGroup(

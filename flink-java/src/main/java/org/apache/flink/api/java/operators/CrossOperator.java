@@ -296,7 +296,7 @@ public class CrossOperator<I1, I2, OUT>
                                     .createSerializer(
                                             input1.getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig())
+                                                    .getSerializerConfigInternal())
                                     .createInstance()),
                     returnType,
                     hint,
@@ -323,7 +323,7 @@ public class CrossOperator<I1, I2, OUT>
                                     .createSerializer(
                                             input1.getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig())
+                                                    .getSerializerConfigInternal())
                                     .createInstance()),
                     returnType,
                     hint,

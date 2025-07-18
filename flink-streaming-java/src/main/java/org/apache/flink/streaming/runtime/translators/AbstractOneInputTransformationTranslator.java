@@ -72,7 +72,7 @@ abstract class AbstractOneInputTransformationTranslator<IN, OUT, OP extends Tran
 
         if (stateKeySelector != null) {
             TypeSerializer<?> keySerializer =
-                    stateKeyType.createSerializer(executionConfig.getSerializerConfig());
+                    stateKeyType.createSerializer(executionConfig.getSerializerConfigInternal());
             streamGraph.setOneInputStateKey(transformationId, stateKeySelector, keySerializer);
         }
 

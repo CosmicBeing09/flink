@@ -115,7 +115,7 @@ public class CompactCoordinator extends AbstractStreamOperator<CoordinatorOutput
                                                 new KryoSerializer<>(
                                                         Path.class,
                                                         getExecutionConfig()
-                                                                .getSerializerConfig())))));
+                                                                .getSerializerConfigInternal())))));
         inputFilesState = context.getOperatorStateStore().getListState(filesDescriptor);
         inputFiles = new TreeMap<>();
         currentInputFiles = new HashMap<>();

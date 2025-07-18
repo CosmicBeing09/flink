@@ -352,7 +352,7 @@ public class ExecutionEnvironment {
      */
     public <T extends Serializer<?> & Serializable> void addDefaultKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializer);
     }
 
     /**
@@ -363,7 +363,7 @@ public class ExecutionEnvironment {
      */
     public void addDefaultKryoSerializer(
             Class<?> type, Class<? extends Serializer<?>> serializerClass) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -378,7 +378,7 @@ public class ExecutionEnvironment {
      */
     public <T extends Serializer<?> & Serializable> void registerTypeWithKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializer);
     }
 
     /**
@@ -390,7 +390,7 @@ public class ExecutionEnvironment {
      */
     public void registerTypeWithKryoSerializer(
             Class<?> type, Class<? extends Serializer<?>> serializerClass) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -409,9 +409,9 @@ public class ExecutionEnvironment {
         TypeInformation<?> typeInfo = TypeExtractor.createTypeInfo(type);
 
         if (typeInfo instanceof PojoTypeInfo) {
-            config.getSerializerConfig().registerPojoType(type);
+            config.getSerializerConfigInternal().registerPojoType(type);
         } else {
-            config.getSerializerConfig().registerKryoType(type);
+            config.getSerializerConfigInternal().registerKryoType(type);
         }
     }
 
@@ -726,7 +726,7 @@ public class ExecutionEnvironment {
         return new DataSource<>(
                 this,
                 new CollectionInputFormat<>(
-                        data, type.createSerializer(config.getSerializerConfig())),
+                        data, type.createSerializer(config.getSerializerConfigInternal())),
                 type,
                 Utils.getCallLocationName());
     }
@@ -752,7 +752,7 @@ public class ExecutionEnvironment {
         return new DataSource<>(
                 this,
                 new CollectionInputFormat<>(
-                        data, type.createSerializer(config.getSerializerConfig())),
+                        data, type.createSerializer(config.getSerializerConfigInternal())),
                 type,
                 callLocationName);
     }

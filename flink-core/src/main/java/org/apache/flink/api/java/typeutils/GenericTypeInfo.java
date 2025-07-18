@@ -96,7 +96,7 @@ public class GenericTypeInfo<T> extends TypeInformation<T> implements AtomicType
     @Deprecated
     @PublicEvolving
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @SuppressWarnings("unchecked")
@@ -109,7 +109,7 @@ public class GenericTypeInfo<T> extends TypeInformation<T> implements AtomicType
             GenericTypeComparator comparator =
                     new GenericTypeComparator(
                             sortOrderAscending,
-                            createSerializer(executionConfig.getSerializerConfig()),
+                            createSerializer(executionConfig.getSerializerConfigInternal()),
                             this.typeClass);
             return (TypeComparator<T>) comparator;
         }

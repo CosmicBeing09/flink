@@ -148,7 +148,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     private final SerializerConfig serializerConfig;
 
     @Internal
-    public SerializerConfig getSerializerConfig() {
+    public SerializerConfig getSerializerConfigInternal() {
         return serializerConfig;
     }
 
@@ -276,7 +276,7 @@ public class ExecutionConfig implements Serializable, Archiveable<ArchivedExecut
     }
 
     @Internal
-    public boolean isLatencyTrackingConfigured() {
+    public boolean isLatencyTrackingConfiguredInternal() {
         return configuration.getOptional(MetricOptions.LATENCY_INTERVAL).isPresent();
     }
 

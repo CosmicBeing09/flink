@@ -419,7 +419,7 @@ public abstract class DataSet<T> {
         final TypeSerializer<T> serializer =
                 getType()
                         .createSerializer(
-                                getExecutionEnvironment().getConfig().getSerializerConfig());
+                                getExecutionEnvironment().getConfig().getSerializerConfigInternal());
 
         this.output(new Utils.CollectHelper<>(id, serializer)).name("collect()");
         JobExecutionResult res = getExecutionEnvironment().execute();

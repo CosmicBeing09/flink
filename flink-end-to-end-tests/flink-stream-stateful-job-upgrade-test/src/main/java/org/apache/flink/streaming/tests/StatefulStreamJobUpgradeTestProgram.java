@@ -100,7 +100,7 @@ public class StatefulStreamJobUpgradeTestProgram {
         List<TypeSerializer<ComplexPayload>> stateSer =
                 Collections.singletonList(
                         new KryoSerializer<>(
-                                ComplexPayload.class, env.getConfig().getSerializerConfig()));
+                                ComplexPayload.class, env.getConfig().getSerializerConfigInternal()));
 
         KeyedStream<Event, Integer> afterStatefulOperations =
                 applyOriginalStatefulOperations(source, stateSer, Collections.emptyList());
@@ -126,7 +126,7 @@ public class StatefulStreamJobUpgradeTestProgram {
         List<TypeSerializer<ComplexPayload>> stateSer =
                 Collections.singletonList(
                         new KryoSerializer<>(
-                                ComplexPayload.class, env.getConfig().getSerializerConfig()));
+                                ComplexPayload.class, env.getConfig().getSerializerConfigInternal()));
 
         KeyedStream<UpgradedEvent, Integer> afterStatefulOperations =
                 applyUpgradedStatefulOperations(source, stateSer, Collections.emptyList());

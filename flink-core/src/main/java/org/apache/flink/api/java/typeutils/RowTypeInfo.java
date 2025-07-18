@@ -264,7 +264,7 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
 
     @Override
     public TypeSerializer<Row> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override
@@ -380,7 +380,7 @@ public class RowTypeInfo extends TupleTypeInfoBase<Row> {
             TypeSerializer<?>[] fieldSerializers = new TypeSerializer<?>[maxKey + 1];
 
             for (int i = 0; i <= maxKey; i++) {
-                fieldSerializers[i] = types[i].createSerializer(config.getSerializerConfig());
+                fieldSerializers[i] = types[i].createSerializer(config.getSerializerConfigInternal());
             }
 
             int[] keyPositions = new int[logicalKeyFields.size()];

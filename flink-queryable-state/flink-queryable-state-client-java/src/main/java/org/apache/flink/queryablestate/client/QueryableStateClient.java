@@ -366,6 +366,6 @@ public class QueryableStateClient {
     }
 
     private SerializerConfig getSerializerConfig() {
-        return executionConfig == null ? null : executionConfig.getSerializerConfig();
+        return executionConfig == null ? null : executionConfig.getSerializerConfigInternal();
     }
 }

@@ -141,7 +141,7 @@ public final class BasicArrayTypeInfo<T, C> extends TypeInformation<T> {
     @Deprecated
     @PublicEvolving
     public TypeSerializer<T> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

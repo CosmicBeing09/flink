@@ -45,7 +45,7 @@ public class SumAggregator<T> extends AggregationFunction<T> {
             serializer = null;
         } else {
             isTuple = false;
-            this.serializer = typeInfo.createSerializer(config.getSerializerConfig());
+            this.serializer = typeInfo.createSerializer(config.getSerializerConfigInternal());
         }
     }
 
@@ -57,7 +57,7 @@ public class SumAggregator<T> extends AggregationFunction<T> {
             serializer = null;
         } else {
             isTuple = false;
-            this.serializer = typeInfo.createSerializer(config.getSerializerConfig());
+            this.serializer = typeInfo.createSerializer(config.getSerializerConfigInternal());
         }
     }
 

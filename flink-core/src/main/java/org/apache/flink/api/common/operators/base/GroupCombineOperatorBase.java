@@ -147,11 +147,11 @@ public class GroupCombineOperatorBase<IN, OUT, FT extends GroupCombineFunction<I
 
         if (keyColumns.length == 0) {
             final TypeSerializer<IN> inputSerializer =
-                    inputType.createSerializer(executionConfig.getSerializerConfig());
+                    inputType.createSerializer(executionConfig.getSerializerConfigInternal());
             TypeSerializer<OUT> outSerializer =
                     getOperatorInfo()
                             .getOutputType()
-                            .createSerializer(executionConfig.getSerializerConfig());
+                            .createSerializer(executionConfig.getSerializerConfigInternal());
             List<IN> inputDataCopy = new ArrayList<IN>(inputData.size());
             for (IN in : inputData) {
                 inputDataCopy.add(inputSerializer.copy(in));
@@ -162,7 +162,7 @@ public class GroupCombineOperatorBase<IN, OUT, FT extends GroupCombineFunction<I
             function.combine(inputDataCopy, collector);
         } else {
             final TypeSerializer<IN> inputSerializer =
-                    inputType.createSerializer(executionConfig.getSerializerConfig());
+                    inputType.createSerializer(executionConfig.getSerializerConfigInternal());
             boolean[] keyOrderings = new boolean[keyColumns.length];
             final TypeComparator<IN> comparator =
                     getTypeComparator(inputType, keyColumns, keyOrderings, executionConfig);
@@ -173,7 +173,7 @@ public class GroupCombineOperatorBase<IN, OUT, FT extends GroupCombineFunction<I
             TypeSerializer<OUT> outSerializer =
                     getOperatorInfo()
                             .getOutputType()
-                            .createSerializer(executionConfig.getSerializerConfig());
+                            .createSerializer(executionConfig.getSerializerConfigInternal());
             CopyingListCollector<OUT> collector =
                     new CopyingListCollector<OUT>(result, outSerializer);
 

@@ -59,7 +59,7 @@ class TupleTypeInfoTest extends TypeInformationTestBase<TupleTypeInfo<?>> {
 
                     @Override
                     public TypeSerializer<Tuple1> createSerializer(ExecutionConfig config) {
-                        return createSerializer(config.getSerializerConfig());
+                        return createSerializer(config.getSerializerConfigInternal());
                     }
 
                     @Override

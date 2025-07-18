@@ -91,7 +91,7 @@ public class DecimalDataTypeInfo extends TypeInformation<DecimalData> implements
 
     @Override
     public TypeSerializer<DecimalData> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

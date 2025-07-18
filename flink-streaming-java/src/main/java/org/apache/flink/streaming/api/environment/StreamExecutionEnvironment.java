@@ -946,7 +946,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public <T extends Serializer<?> & Serializable> void addDefaultKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializer);
     }
 
     /**
@@ -964,7 +964,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public void addDefaultKryoSerializer(
             Class<?> type, Class<? extends Serializer<?>> serializerClass) {
-        config.getSerializerConfig().addDefaultKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().addDefaultKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -990,7 +990,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @Deprecated
     public <T extends Serializer<?> & Serializable> void registerTypeWithKryoSerializer(
             Class<?> type, T serializer) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializer);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializer);
     }
 
     /**
@@ -1010,7 +1010,7 @@ public class StreamExecutionEnvironment implements AutoCloseable {
     @SuppressWarnings("rawtypes")
     public void registerTypeWithKryoSerializer(
             Class<?> type, Class<? extends Serializer> serializerClass) {
-        config.getSerializerConfig().registerTypeWithKryoSerializer(type, serializerClass);
+        config.getSerializerConfigInternal().registerTypeWithKryoSerializer(type, serializerClass);
     }
 
     /**
@@ -1036,9 +1036,9 @@ public class StreamExecutionEnvironment implements AutoCloseable {
         TypeInformation<?> typeInfo = TypeExtractor.createTypeInfo(type);
 
         if (typeInfo instanceof PojoTypeInfo) {
-            config.getSerializerConfig().registerPojoType(type);
+            config.getSerializerConfigInternal().registerPojoType(type);
         } else {
-            config.getSerializerConfig().registerKryoType(type);
+            config.getSerializerConfigInternal().registerKryoType(type);
         }
     }
 

@@ -128,7 +128,7 @@ public class DataStreamAllroundTestProgram {
                                                 new KryoSerializer<>(
                                                         ComplexPayload.class,
                                                         env.getConfig()
-                                                                .getSerializerConfig()), // KryoSerializer
+                                                                .getSerializerConfigInternal()), // KryoSerializer
                                                 new StatefulComplexPayloadSerializer()), // custom
                                         // stateful
                                         // serializer

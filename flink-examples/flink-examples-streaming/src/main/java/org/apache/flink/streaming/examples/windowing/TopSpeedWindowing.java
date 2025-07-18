@@ -147,7 +147,7 @@ public class TopSpeedWindowing {
                                         },
                                         carData.getType()
                                                 .createSerializer(
-                                                        env.getConfig().getSerializerConfig())))
+                                                        env.getConfig().getSerializerConfigInternal())))
                         .maxBy(1);
 
         if (params.getOutput().isPresent()) {

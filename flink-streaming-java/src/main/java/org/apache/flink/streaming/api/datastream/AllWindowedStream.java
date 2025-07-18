@@ -291,7 +291,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -319,7 +319,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalIterableAllWindowFunction<>(
                                     new ReduceApplyAllWindowFunction<>(reduceFunction, function)),
@@ -337,7 +337,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()));
+                                                    .getSerializerConfigInternal()));
 
             opDescription =
                     "TriggerWindow("
@@ -360,7 +360,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalSingleValueAllWindowFunction<>(function),
                             trigger,
@@ -437,7 +437,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -465,7 +465,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalIterableProcessAllWindowFunction<>(
                                     new ReduceApplyProcessAllWindowFunction<>(
@@ -484,7 +484,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()));
+                                                    .getSerializerConfigInternal()));
 
             opName =
                     "TriggerWindow("
@@ -507,7 +507,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalSingleValueProcessAllWindowFunction<>(function),
                             trigger,
@@ -697,7 +697,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -725,7 +725,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalIterableAllWindowFunction<>(
                                     new AggregateApplyAllWindowFunction<>(
@@ -741,7 +741,7 @@ public class AllWindowedStream<T, W extends Window> {
                             "window-contents",
                             aggregateFunction,
                             accumulatorType.createSerializer(
-                                    getExecutionEnvironment().getConfig().getSerializerConfig()));
+                                    getExecutionEnvironment().getConfig().getSerializerConfigInternal()));
 
             opName =
                     "TriggerWindow("
@@ -764,7 +764,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalSingleValueAllWindowFunction<>(windowFunction),
                             trigger,
@@ -873,7 +873,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -901,7 +901,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalAggregateProcessAllWindowFunction<>(
                                     aggregateFunction, windowFunction),
@@ -916,7 +916,7 @@ public class AllWindowedStream<T, W extends Window> {
                             "window-contents",
                             aggregateFunction,
                             accumulatorType.createSerializer(
-                                    getExecutionEnvironment().getConfig().getSerializerConfig()));
+                                    getExecutionEnvironment().getConfig().getSerializerConfigInternal()));
 
             opDescription =
                     "TriggerWindow("
@@ -939,7 +939,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalSingleValueProcessAllWindowFunction<>(windowFunction),
                             trigger,
@@ -1054,7 +1054,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -1082,7 +1082,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             function,
                             trigger,
@@ -1098,7 +1098,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()));
+                                                    .getSerializerConfigInternal()));
 
             opName =
                     "TriggerWindow("
@@ -1121,7 +1121,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             function,
                             trigger,
@@ -1197,7 +1197,7 @@ public class AllWindowedStream<T, W extends Window> {
                                             .createSerializer(
                                                     getExecutionEnvironment()
                                                             .getConfig()
-                                                            .getSerializerConfig()));
+                                                            .getSerializerConfigInternal()));
 
             ListStateDescriptor<StreamRecord<T>> stateDesc =
                     new ListStateDescriptor<>("window-contents", streamRecordSerializer);
@@ -1225,7 +1225,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalIterableAllWindowFunction<>(
                                     new ReduceApplyAllWindowFunction<>(reduceFunction, function)),
@@ -1243,7 +1243,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()));
+                                                    .getSerializerConfigInternal()));
 
             opName =
                     "TriggerWindow("
@@ -1266,7 +1266,7 @@ public class AllWindowedStream<T, W extends Window> {
                                     .createSerializer(
                                             getExecutionEnvironment()
                                                     .getConfig()
-                                                    .getSerializerConfig()),
+                                                    .getSerializerConfigInternal()),
                             stateDesc,
                             new InternalSingleValueAllWindowFunction<>(function),
                             trigger,

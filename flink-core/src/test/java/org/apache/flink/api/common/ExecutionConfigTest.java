@@ -55,7 +55,7 @@ public class ExecutionConfigTest {
         List<Class<?>> expectedTypes = Arrays.asList(Double.class, Integer.class);
 
         for (Class<?> tpe : types) {
-            config.getSerializerConfig().registerKryoType(tpe);
+            config.getSerializerConfigInternal().registerKryoType(tpe);
         }
 
         int counter = 0;
@@ -119,9 +119,9 @@ public class ExecutionConfigTest {
         } else {
             config.disableClosureCleaner();
         }
-        config.getSerializerConfig().setForceAvro(forceAvroEnabled);
-        config.getSerializerConfig().setForceKryo(forceKryoEnabled);
-        config.getSerializerConfig().setGenericTypes(!disableGenericTypes);
+        config.getSerializerConfigInternal().setForceAvro(forceAvroEnabled);
+        config.getSerializerConfigInternal().setForceKryo(forceKryoEnabled);
+        config.getSerializerConfigInternal().setGenericTypes(!disableGenericTypes);
         if (objectReuseEnabled) {
             config.enableObjectReuse();
         } else {
@@ -140,10 +140,10 @@ public class ExecutionConfigTest {
         assertThat(config).isEqualTo(copy2);
 
         assertThat(closureCleanerEnabled).isEqualTo(copy1.isClosureCleanerEnabled());
-        assertThat(forceAvroEnabled).isEqualTo(copy1.getSerializerConfig().isForceAvroEnabled());
-        assertThat(forceKryoEnabled).isEqualTo(copy1.getSerializerConfig().isForceKryoEnabled());
+        assertThat(forceAvroEnabled).isEqualTo(copy1.getSerializerConfigInternal().isForceAvroEnabled());
+        assertThat(forceKryoEnabled).isEqualTo(copy1.getSerializerConfigInternal().isForceKryoEnabled());
         assertThat(disableGenericTypes)
-                .isEqualTo(copy1.getSerializerConfig().hasGenericTypesDisabled());
+                .isEqualTo(copy1.getSerializerConfigInternal().hasGenericTypesDisabled());
         assertThat(objectReuseEnabled).isEqualTo(copy1.isObjectReuseEnabled());
         assertThat(parallelism).isEqualTo(copy1.getParallelism());
     }
@@ -178,8 +178,8 @@ public class ExecutionConfigTest {
     @Test
     void testLoadingRegisteredKryoTypesFromConfiguration() {
         ExecutionConfig configFromSetters = new ExecutionConfig();
-        configFromSetters.getSerializerConfig().registerKryoType(ExecutionConfigTest.class);
-        configFromSetters.getSerializerConfig().registerKryoType(TestSerializer1.class);
+        configFromSetters.getSerializerConfigInternal().registerKryoType(ExecutionConfigTest.class);
+        configFromSetters.getSerializerConfigInternal().registerKryoType(TestSerializer1.class);
 
         ExecutionConfig configFromConfiguration = new ExecutionConfig();
 
@@ -223,10 +223,10 @@ public class ExecutionConfigTest {
     void testLoadingDefaultKryoSerializersFromConfiguration() {
         ExecutionConfig configFromSetters = new ExecutionConfig();
         configFromSetters
-                .getSerializerConfig()
+                .getSerializerConfigInternal()
                 .addDefaultKryoSerializer(ExecutionConfigTest.class, TestSerializer1.class);
         configFromSetters
-                .getSerializerConfig()
+                .getSerializerConfigInternal()
                 .addDefaultKryoSerializer(TestSerializer1.class, TestSerializer2.class);
 
         ExecutionConfig configFromConfiguration = new ExecutionConfig();
@@ -243,8 +243,8 @@ public class ExecutionConfigTest {
         configFromConfiguration.configure(
                 configuration, Thread.currentThread().getContextClassLoader());
 
-        assertThat(configFromConfiguration.getSerializerConfig().getDefaultKryoSerializers())
-                .isEqualTo(configFromSetters.getSerializerConfig().getDefaultKryoSerializers());
+        assertThat(configFromConfiguration.getSerializerConfigInternal().getDefaultKryoSerializers())
+                .isEqualTo(configFromSetters.getSerializerConfigInternal().getDefaultKryoSerializers());
     }
 
     @Test
@@ -269,8 +269,8 @@ public class ExecutionConfigTest {
     @Test
     void testNotOverridingRegisteredKryoTypesWithDefaultsFromConfiguration() {
         ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig().registerKryoType(ExecutionConfigTest.class);
-        config.getSerializerConfig().registerKryoType(TestSerializer1.class);
+        config.getSerializerConfigInternal().registerKryoType(ExecutionConfigTest.class);
+        config.getSerializerConfigInternal().registerKryoType(TestSerializer1.class);
 
         Configuration configuration = new Configuration();
 
@@ -316,9 +316,9 @@ public class ExecutionConfigTest {
     @Test
     void testNotOverridingDefaultKryoSerializersFromConfiguration() {
         ExecutionConfig config = new ExecutionConfig();
-        config.getSerializerConfig()
+        config.getSerializerConfigInternal()
                 .addDefaultKryoSerializer(ExecutionConfigTest.class, TestSerializer1.class);
-        config.getSerializerConfig()
+        config.getSerializerConfigInternal()
                 .addDefaultKryoSerializer(TestSerializer1.class, TestSerializer2.class);
 
         Configuration configuration = new Configuration();
@@ -329,7 +329,7 @@ public class ExecutionConfigTest {
         LinkedHashMap<Class<?>, Class<? extends Serializer>> serialiers = new LinkedHashMap<>();
         serialiers.put(ExecutionConfigTest.class, TestSerializer1.class);
         serialiers.put(TestSerializer1.class, TestSerializer2.class);
-        assertThat(config.getSerializerConfig().getDefaultKryoSerializerClasses())
+        assertThat(config.getSerializerConfigInternal().getDefaultKryoSerializerClasses())
                 .isEqualTo(serialiers);
     }
 

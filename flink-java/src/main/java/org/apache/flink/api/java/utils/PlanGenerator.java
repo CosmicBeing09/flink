@@ -113,7 +113,7 @@ public class PlanGenerator {
                             OperatorInformation<?> opInfo = visitable.getOperatorInfo();
                             Serializers.recursivelyRegisterType(
                                     opInfo.getOutputType(),
-                                    config.getSerializerConfig(),
+                                    config.getSerializerConfigInternal(),
                                     registeredTypes);
                             return true;
                         }
@@ -156,13 +156,13 @@ public class PlanGenerator {
                 registeredTypes,
                 defaultKryoSerializers);
 
-        if (config.getSerializerConfig().isForceKryoEnabled()
-                && config.getSerializerConfig().isForceAvroEnabled()) {
+        if (config.getSerializerConfigInternal().isForceKryoEnabled()
+                && config.getSerializerConfigInternal().isForceAvroEnabled()) {
             LOG.warn(
                     "In the ExecutionConfig, both Avro and Kryo are enforced. Using Kryo serializer for serializing POJOs");
-        } else if (config.getSerializerConfig().isForceKryoEnabled()) {
+        } else if (config.getSerializerConfigInternal().isForceKryoEnabled()) {
             LOG.info("Using KryoSerializer for serializing POJOs");
-        } else if (config.getSerializerConfig().isForceAvroEnabled()) {
+        } else if (config.getSerializerConfigInternal().isForceAvroEnabled()) {
             LOG.info("Using AvroSerializer for serializing POJOs");
         }
 
@@ -172,37 +172,37 @@ public class PlanGenerator {
     }
 
     private int getNumberOfRegisteredTypes() {
-        return config.getSerializerConfig().getRegisteredKryoTypes().size()
-                + config.getSerializerConfig().getRegisteredPojoTypes().size()
-                + config.getSerializerConfig().getRegisteredTypesWithKryoSerializerClasses().size()
-                + config.getSerializerConfig().getRegisteredTypesWithKryoSerializers().size();
+        return config.getSerializerConfigInternal().getRegisteredKryoTypes().size()
+                + config.getSerializerConfigInternal().getRegisteredPojoTypes().size()
+                + config.getSerializerConfigInternal().getRegisteredTypesWithKryoSerializerClasses().size()
+                + config.getSerializerConfigInternal().getRegisteredTypesWithKryoSerializers().size();
     }
 
     private int getNumberOfDefaultKryoSerializers() {
-        return config.getSerializerConfig().getDefaultKryoSerializers().size()
-                + config.getSerializerConfig().getDefaultKryoSerializerClasses().size();
+        return config.getSerializerConfigInternal().getDefaultKryoSerializers().size()
+                + config.getSerializerConfigInternal().getDefaultKryoSerializerClasses().size();
     }
 
     private void logDebuggingTypeDetails() {
         LOG.debug(
                 "Registered Kryo types: {}",
-                config.getSerializerConfig().getRegisteredKryoTypes().toString());
+                config.getSerializerConfigInternal().getRegisteredKryoTypes().toString());
         LOG.debug(
                 "Registered Kryo with Serializers types: {}",
-                config.getSerializerConfig().getRegisteredTypesWithKryoSerializers().entrySet());
+                config.getSerializerConfigInternal().getRegisteredTypesWithKryoSerializers().entrySet());
         LOG.debug(
                 "Registered Kryo with Serializer Classes types: {}",
-                config.getSerializerConfig()
+                config.getSerializerConfigInternal()
                         .getRegisteredTypesWithKryoSerializerClasses()
                         .entrySet());
         LOG.debug(
                 "Registered Kryo default Serializers: {}",
-                config.getSerializerConfig().getDefaultKryoSerializers().entrySet());
+                config.getSerializerConfigInternal().getDefaultKryoSerializers().entrySet());
         LOG.debug(
                 "Registered Kryo default Serializers Classes {}",
-                config.getSerializerConfig().getDefaultKryoSerializerClasses().entrySet());
+                config.getSerializerConfigInternal().getDefaultKryoSerializerClasses().entrySet());
         LOG.debug(
                 "Registered POJO types: {}",
-                config.getSerializerConfig().getRegisteredPojoTypes().toString());
+                config.getSerializerConfigInternal().getRegisteredPojoTypes().toString());
     }
 }

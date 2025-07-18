@@ -76,7 +76,7 @@ public class NothingTypeInfo extends TypeInformation<Nothing> {
     @Override
     @Deprecated
     public TypeSerializer<Nothing> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

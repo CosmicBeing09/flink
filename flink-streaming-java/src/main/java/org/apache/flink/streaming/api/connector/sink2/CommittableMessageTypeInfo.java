@@ -116,7 +116,7 @@ public class CommittableMessageTypeInfo<CommT> extends TypeInformation<Committab
 
     @Override
     public TypeSerializer<CommittableMessage<CommT>> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override

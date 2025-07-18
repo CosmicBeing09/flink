@@ -133,7 +133,7 @@ class AvroTypeExtractionTest {
     void testSerializeWithAvro(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
         final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
-        env.getConfig().getSerializerConfig().setForceAvro(true);
+        env.getConfig().getSerializerConfigInternal().setForceAvro(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
@@ -212,7 +212,7 @@ class AvroTypeExtractionTest {
     void testWithAvroGenericSer(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
         final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
-        env.getConfig().getSerializerConfig().setForceAvro(true);
+        env.getConfig().getSerializerConfigInternal().setForceAvro(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);
@@ -243,7 +243,7 @@ class AvroTypeExtractionTest {
     void testWithKryoGenericSer(boolean useMiniCluster, @InjectMiniCluster MiniCluster miniCluster)
             throws Exception {
         final ExecutionEnvironment env = getExecutionEnvironment(useMiniCluster, miniCluster);
-        env.getConfig().getSerializerConfig().setForceKryo(true);
+        env.getConfig().getSerializerConfigInternal().setForceKryo(true);
         Path in = new Path(inFile.getAbsoluteFile().toURI());
 
         AvroInputFormat<User> users = new AvroInputFormat<>(in, User.class);

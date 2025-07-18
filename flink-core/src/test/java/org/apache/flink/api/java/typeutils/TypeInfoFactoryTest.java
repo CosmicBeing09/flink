@@ -264,7 +264,7 @@ public class TypeInfoFactoryTest {
 
         @Override
         public TypeSerializer<MyFaulty> createSerializer(ExecutionConfig config) {
-            return createSerializer(config.getSerializerConfig());
+            return createSerializer(config.getSerializerConfigInternal());
         }
 
         @Override
@@ -368,7 +368,7 @@ public class TypeInfoFactoryTest {
 
         @Override
         public TypeSerializer<MyTuple<T0, T1>> createSerializer(ExecutionConfig config) {
-            return createSerializer(config.getSerializerConfig());
+            return createSerializer(config.getSerializerConfigInternal());
         }
 
         @Override
@@ -471,7 +471,7 @@ public class TypeInfoFactoryTest {
 
         @Override
         public TypeSerializer<MyOption<T>> createSerializer(ExecutionConfig config) {
-            return createSerializer(config.getSerializerConfig());
+            return createSerializer(config.getSerializerConfigInternal());
         }
 
         @Override

@@ -87,7 +87,7 @@ public class SortedMapTypeInfo<K, V> extends AbstractMapTypeInfo<K, V, SortedMap
 
     @Override
     public TypeSerializer<SortedMap<K, V>> createSerializer(ExecutionConfig config) {
-        return createSerializer(config.getSerializerConfig());
+        return createSerializer(config.getSerializerConfigInternal());
     }
 
     @Override
