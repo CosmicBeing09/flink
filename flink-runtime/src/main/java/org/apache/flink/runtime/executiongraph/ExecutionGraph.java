@@ -84,13 +84,13 @@ public interface ExecutionGraph extends AccessExecutionGraph {
     SchedulingTopology getSchedulingTopology();
 
     void enableCheckpointing(
-            CheckpointCoordinatorConfiguration chkConfig,
+            CheckpointCoordinatorConfiguration checkpointCoordinatorConfig,
             List<MasterTriggerRestoreHook<?>> masterHooks,
             CheckpointIDCounter checkpointIDCounter,
             CompletedCheckpointStore checkpointStore,
             StateBackend checkpointStateBackend,
             CheckpointStorage checkpointStorage,
-            CheckpointStatsTracker statsTracker,
+            CheckpointStatsTracker checkpointStatsTracker,
             CheckpointsCleaner checkpointsCleaner,
             String changelogStorage);
 
