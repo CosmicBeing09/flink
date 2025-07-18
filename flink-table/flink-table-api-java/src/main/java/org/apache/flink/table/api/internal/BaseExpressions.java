@@ -212,9 +212,9 @@ import static org.apache.flink.table.types.utils.TypeConversions.fromLegacyInfoT
  */
 @PublicEvolving
 public abstract class BaseExpressions<InType, OutType> {
-    protected abstract Expression toExpr();
+    protected abstract Expression toExprInternal();
 
-    protected abstract OutType toApiSpecificExpression(Expression expression);
+    protected abstract OutType toApiSpecificExpressionInternal(Expression expression);
 
     /**
      * Specifies a name for an expression i.e. a field.
@@ -223,11 +223,11 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param extraNames additional names if the expression expands to multiple fields
      */
     public OutType as(String name, String... extraNames) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 ApiExpressionUtils.unresolvedCall(
                         BuiltInFunctionDefinitions.AS,
                         Stream.concat(
-                                        Stream.of(toExpr(), ApiExpressionUtils.valueLiteral(name)),
+                                        Stream.of(toExprInternal(), ApiExpressionUtils.valueLiteral(name)),
                                         Stream.of(extraNames).map(ApiExpressionUtils::valueLiteral))
                                 .toArray(Expression[]::new)));
     }
@@ -241,8 +241,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * from array1 is kept.
      */
     public OutType arrayExcept(InType array) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_EXCEPT, toExpr(), objectToExpression(array)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_EXCEPT, toExprInternal(), objectToExpression(array)));
     }
 
     /**
@@ -252,7 +252,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @see Expressions#and(Object, Object, Object...)
      */
     public OutType and(InType other) {
-        return toApiSpecificExpression(unresolvedCall(AND, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(AND, toExprInternal(), objectToExpression(other)));
     }
 
     /**
@@ -262,7 +262,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @see Expressions#or(Object, Object, Object...)
      */
     public OutType or(InType other) {
-        return toApiSpecificExpression(unresolvedCall(OR, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(OR, toExprInternal(), objectToExpression(other)));
     }
 
     /**
@@ -282,62 +282,62 @@ public abstract class BaseExpressions<InType, OutType> {
      * }</pre>
      */
     public OutType not() {
-        return toApiSpecificExpression(unresolvedCall(NOT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(NOT, toExprInternal()));
     }
 
     /** Greater than. */
     public OutType isGreater(InType other) {
-        return toApiSpecificExpression(
-                unresolvedCall(GREATER_THAN, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(GREATER_THAN, toExprInternal(), objectToExpression(other)));
     }
 
     /** Greater than or equal. */
     public OutType isGreaterOrEqual(InType other) {
-        return toApiSpecificExpression(
-                unresolvedCall(GREATER_THAN_OR_EQUAL, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(GREATER_THAN_OR_EQUAL, toExprInternal(), objectToExpression(other)));
     }
 
     /** Less than. */
     public OutType isLess(InType other) {
-        return toApiSpecificExpression(
-                unresolvedCall(LESS_THAN, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(LESS_THAN, toExprInternal(), objectToExpression(other)));
     }
 
     /** Less than or equal. */
     public OutType isLessOrEqual(InType other) {
-        return toApiSpecificExpression(
-                unresolvedCall(LESS_THAN_OR_EQUAL, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(LESS_THAN_OR_EQUAL, toExprInternal(), objectToExpression(other)));
     }
 
     /** Equals. */
     public OutType isEqual(InType other) {
-        return toApiSpecificExpression(unresolvedCall(EQUALS, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(EQUALS, toExprInternal(), objectToExpression(other)));
     }
 
     /** Not equal. */
     public OutType isNotEqual(InType other) {
-        return toApiSpecificExpression(
-                unresolvedCall(NOT_EQUALS, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(NOT_EQUALS, toExprInternal(), objectToExpression(other)));
     }
 
     /** Returns left plus right. */
     public OutType plus(InType other) {
-        return toApiSpecificExpression(unresolvedCall(PLUS, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(PLUS, toExprInternal(), objectToExpression(other)));
     }
 
     /** Returns left minus right. */
     public OutType minus(InType other) {
-        return toApiSpecificExpression(unresolvedCall(MINUS, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(MINUS, toExprInternal(), objectToExpression(other)));
     }
 
     /** Returns left divided by right. */
     public OutType dividedBy(InType other) {
-        return toApiSpecificExpression(unresolvedCall(DIVIDE, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(DIVIDE, toExprInternal(), objectToExpression(other)));
     }
 
     /** Returns left multiplied by right. */
     public OutType times(InType other) {
-        return toApiSpecificExpression(unresolvedCall(TIMES, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(TIMES, toExprInternal(), objectToExpression(other)));
     }
 
     /**
@@ -348,10 +348,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param upperBound numeric or comparable expression
      */
     public OutType between(InType lowerBound, InType upperBound) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         BETWEEN,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(lowerBound),
                         objectToExpression(upperBound)));
     }
@@ -365,10 +365,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param upperBound numeric or comparable expression
      */
     public OutType notBetween(InType lowerBound, InType upperBound) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         NOT_BETWEEN,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(lowerBound),
                         objectToExpression(upperBound)));
     }
@@ -383,9 +383,9 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param ifFalse expression to be evaluated if condition does not hold
      */
     public OutType then(InType ifTrue, InType ifFalse) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
-                        IF, toExpr(), objectToExpression(ifTrue), objectToExpression(ifFalse)));
+                        IF, toExprInternal(), objectToExpression(ifTrue), objectToExpression(ifFalse)));
     }
 
     /**
@@ -402,42 +402,42 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>E.g., <code>$('nullable_column').ifNull(5)</code> returns never NULL.
      */
     public OutType ifNull(InType nullReplacement) {
-        return toApiSpecificExpression(
-                unresolvedCall(IF_NULL, toExpr(), objectToExpression(nullReplacement)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(IF_NULL, toExprInternal(), objectToExpression(nullReplacement)));
     }
 
     /** Returns true if the given expression is null. */
     public OutType isNull() {
-        return toApiSpecificExpression(unresolvedCall(IS_NULL, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_NULL, toExprInternal()));
     }
 
     /** Returns true if the given expression is not null. */
     public OutType isNotNull() {
-        return toApiSpecificExpression(unresolvedCall(IS_NOT_NULL, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_NOT_NULL, toExprInternal()));
     }
 
     /** Returns true if given boolean expression is true. False otherwise (for null and false). */
     public OutType isTrue() {
-        return toApiSpecificExpression(unresolvedCall(IS_TRUE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_TRUE, toExprInternal()));
     }
 
     /** Returns true if given boolean expression is false. False otherwise (for null and true). */
     public OutType isFalse() {
-        return toApiSpecificExpression(unresolvedCall(IS_FALSE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_FALSE, toExprInternal()));
     }
 
     /**
      * Returns true if given boolean expression is not true (for null and false). False otherwise.
      */
     public OutType isNotTrue() {
-        return toApiSpecificExpression(unresolvedCall(IS_NOT_TRUE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_NOT_TRUE, toExprInternal()));
     }
 
     /**
      * Returns true if given boolean expression is not false (for null and true). False otherwise.
      */
     public OutType isNotFalse() {
-        return toApiSpecificExpression(unresolvedCall(IS_NOT_FALSE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_NOT_FALSE, toExprInternal()));
     }
 
     /**
@@ -453,7 +453,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * }</pre>
      */
     public OutType distinct() {
-        return toApiSpecificExpression(unresolvedCall(DISTINCT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(DISTINCT, toExprInternal()));
     }
 
     /**
@@ -461,7 +461,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * returned.
      */
     public OutType sum() {
-        return toApiSpecificExpression(unresolvedCall(SUM, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SUM, toExprInternal()));
     }
 
     /**
@@ -469,37 +469,37 @@ public abstract class BaseExpressions<InType, OutType> {
      * returned.
      */
     public OutType sum0() {
-        return toApiSpecificExpression(unresolvedCall(SUM0, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SUM0, toExprInternal()));
     }
 
     /** Returns the minimum value of field across all input values. */
     public OutType min() {
-        return toApiSpecificExpression(unresolvedCall(MIN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MIN, toExprInternal()));
     }
 
     /** Returns the maximum value of field across all input values. */
     public OutType max() {
-        return toApiSpecificExpression(unresolvedCall(MAX, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MAX, toExprInternal()));
     }
 
     /** Returns the number of input rows for which the field is not null. */
     public OutType count() {
-        return toApiSpecificExpression(unresolvedCall(COUNT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(COUNT, toExprInternal()));
     }
 
     /** Returns the average (arithmetic mean) of the numeric field across all input values. */
     public OutType avg() {
-        return toApiSpecificExpression(unresolvedCall(AVG, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(AVG, toExprInternal()));
     }
 
     /** Returns the first value of field across all input values. */
     public OutType firstValue() {
-        return toApiSpecificExpression(unresolvedCall(FIRST_VALUE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(FIRST_VALUE, toExprInternal()));
     }
 
     /** Returns the last value of field across all input values. */
     public OutType lastValue() {
-        return toApiSpecificExpression(unresolvedCall(LAST_VALUE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LAST_VALUE, toExprInternal()));
     }
 
     /**
@@ -507,7 +507,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * The separator is not added at the end of string.
      */
     public OutType listAgg() {
-        return toApiSpecificExpression(unresolvedCall(LISTAGG, toExpr(), valueLiteral(",")));
+        return toApiSpecificExpressionInternal(unresolvedCall(LISTAGG, toExprInternal(), valueLiteral(",")));
     }
 
     /**
@@ -517,37 +517,37 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param separator string containing the character
      */
     public OutType listAgg(String separator) {
-        return toApiSpecificExpression(unresolvedCall(LISTAGG, toExpr(), valueLiteral(separator)));
+        return toApiSpecificExpressionInternal(unresolvedCall(LISTAGG, toExprInternal(), valueLiteral(separator)));
     }
 
     /** Returns the population standard deviation of an expression (the square root of varPop()). */
     public OutType stddevPop() {
-        return toApiSpecificExpression(unresolvedCall(STDDEV_POP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(STDDEV_POP, toExprInternal()));
     }
 
     /** Returns the sample standard deviation of an expression (the square root of varSamp()). */
     public OutType stddevSamp() {
-        return toApiSpecificExpression(unresolvedCall(STDDEV_SAMP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(STDDEV_SAMP, toExprInternal()));
     }
 
     /** Returns the population standard variance of an expression. */
     public OutType varPop() {
-        return toApiSpecificExpression(unresolvedCall(VAR_POP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(VAR_POP, toExprInternal()));
     }
 
     /** Returns the sample variance of a given expression. */
     public OutType varSamp() {
-        return toApiSpecificExpression(unresolvedCall(VAR_SAMP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(VAR_SAMP, toExprInternal()));
     }
 
     /** Returns multiset aggregate of a given expression. */
     public OutType collect() {
-        return toApiSpecificExpression(unresolvedCall(COLLECT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(COLLECT, toExprInternal()));
     }
 
     /** Returns array aggregate of a given expression. */
     public OutType arrayAgg() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_AGG, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_AGG, toExprInternal()));
     }
 
     /**
@@ -562,7 +562,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * {@code "non-number".cast(DataTypes.INT())} throws an exception and fails the job.
      */
     public OutType cast(DataType toType) {
-        return toApiSpecificExpression(unresolvedCall(CAST, toExpr(), typeLiteral(toType)));
+        return toApiSpecificExpressionInternal(unresolvedCall(CAST, toExprInternal(), typeLiteral(toType)));
     }
 
     /**
@@ -576,7 +576,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * 0} of type {@link DataTypes#INT()}.
      */
     public OutType tryCast(DataType toType) {
-        return toApiSpecificExpression(unresolvedCall(TRY_CAST, toExpr(), typeLiteral(toType)));
+        return toApiSpecificExpressionInternal(unresolvedCall(TRY_CAST, toExprInternal(), typeLiteral(toType)));
     }
 
     /**
@@ -588,18 +588,18 @@ public abstract class BaseExpressions<InType, OutType> {
      */
     @Deprecated
     public OutType cast(TypeInformation<?> toType) {
-        return toApiSpecificExpression(
-                unresolvedCall(CAST, toExpr(), typeLiteral(fromLegacyInfoToDataType(toType))));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(CAST, toExprInternal(), typeLiteral(fromLegacyInfoToDataType(toType))));
     }
 
     /** Specifies ascending order of an expression i.e. a field for orderBy unresolvedCall. */
     public OutType asc() {
-        return toApiSpecificExpression(unresolvedCall(ORDER_ASC, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ORDER_ASC, toExprInternal()));
     }
 
     /** Specifies descending order of an expression i.e. a field for orderBy unresolvedCall. */
     public OutType desc() {
-        return toApiSpecificExpression(unresolvedCall(ORDER_DESC, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ORDER_DESC, toExprInternal()));
     }
 
     /**
@@ -615,10 +615,10 @@ public abstract class BaseExpressions<InType, OutType> {
     public final OutType in(InType... elements) {
         Expression[] args =
                 Stream.concat(
-                                Stream.of(toExpr()),
+                                Stream.of(toExprInternal()),
                                 Arrays.stream(elements).map(ApiExpressionUtils::objectToExpression))
                         .toArray(Expression[]::new);
-        return toApiSpecificExpression(unresolvedCall(IN, args));
+        return toApiSpecificExpressionInternal(unresolvedCall(IN, args));
     }
 
     /**
@@ -628,13 +628,13 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>Note: This operation is not supported in a streaming environment yet.
      */
     public OutType in(Table table) {
-        return toApiSpecificExpression(
-                unresolvedCall(IN, toExpr(), tableRef(table.toString(), table)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(IN, toExprInternal(), tableRef(table.toString(), table)));
     }
 
     /** Returns the start time (inclusive) of a window when applied on a window reference. */
     public OutType start() {
-        return toApiSpecificExpression(unresolvedCall(WINDOW_START, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(WINDOW_START, toExprInternal()));
     }
 
     /**
@@ -643,137 +643,137 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. if a window ends at 10:59:59.999 this property will return 11:00:00.000.
      */
     public OutType end() {
-        return toApiSpecificExpression(unresolvedCall(WINDOW_END, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(WINDOW_END, toExprInternal()));
     }
 
     /** Calculates the remainder of division the given number by another one. */
     public OutType mod(InType other) {
-        return toApiSpecificExpression(unresolvedCall(MOD, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(MOD, toExprInternal(), objectToExpression(other)));
     }
 
     /** Calculates the Euler's number raised to the given power. */
     public OutType exp() {
-        return toApiSpecificExpression(unresolvedCall(EXP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(EXP, toExprInternal()));
     }
 
     /** Calculates the base 10 logarithm of the given value. */
     public OutType log10() {
-        return toApiSpecificExpression(unresolvedCall(LOG10, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOG10, toExprInternal()));
     }
 
     /** Calculates the base 2 logarithm of the given value. */
     public OutType log2() {
-        return toApiSpecificExpression(unresolvedCall(LOG2, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOG2, toExprInternal()));
     }
 
     /** Calculates the natural logarithm of the given value. */
     public OutType ln() {
-        return toApiSpecificExpression(unresolvedCall(LN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LN, toExprInternal()));
     }
 
     /** Calculates the natural logarithm of the given value. */
     public OutType log() {
-        return toApiSpecificExpression(unresolvedCall(LOG, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOG, toExprInternal()));
     }
 
     /** Calculates the logarithm of the given value to the given base. */
     public OutType log(InType base) {
-        return toApiSpecificExpression(unresolvedCall(LOG, objectToExpression(base), toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOG, objectToExpression(base), toExprInternal()));
     }
 
     /** Calculates the given number raised to the power of the other value. */
     public OutType power(InType other) {
-        return toApiSpecificExpression(unresolvedCall(POWER, toExpr(), objectToExpression(other)));
+        return toApiSpecificExpressionInternal(unresolvedCall(POWER, toExprInternal(), objectToExpression(other)));
     }
 
     /** Calculates the hyperbolic cosine of a given value. */
     public OutType cosh() {
-        return toApiSpecificExpression(unresolvedCall(COSH, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(COSH, toExprInternal()));
     }
 
     /** Calculates the square root of a given value. */
     public OutType sqrt() {
-        return toApiSpecificExpression(unresolvedCall(SQRT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SQRT, toExprInternal()));
     }
 
     /** Calculates the absolute value of given value. */
     public OutType abs() {
-        return toApiSpecificExpression(unresolvedCall(ABS, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ABS, toExprInternal()));
     }
 
     /** Calculates the largest integer less than or equal to a given number. */
     public OutType floor() {
-        return toApiSpecificExpression(unresolvedCall(FLOOR, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(FLOOR, toExprInternal()));
     }
 
     /** Calculates the hyperbolic sine of a given value. */
     public OutType sinh() {
-        return toApiSpecificExpression(unresolvedCall(SINH, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SINH, toExprInternal()));
     }
 
     /** Calculates the smallest integer greater than or equal to a given number. */
     public OutType ceil() {
-        return toApiSpecificExpression(unresolvedCall(CEIL, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(CEIL, toExprInternal()));
     }
 
     /** Calculates the sine of a given number. */
     public OutType sin() {
-        return toApiSpecificExpression(unresolvedCall(SIN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SIN, toExprInternal()));
     }
 
     /** Calculates the cosine of a given number. */
     public OutType cos() {
-        return toApiSpecificExpression(unresolvedCall(COS, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(COS, toExprInternal()));
     }
 
     /** Calculates the tangent of a given number. */
     public OutType tan() {
-        return toApiSpecificExpression(unresolvedCall(TAN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(TAN, toExprInternal()));
     }
 
     /** Calculates the cotangent of a given number. */
     public OutType cot() {
-        return toApiSpecificExpression(unresolvedCall(COT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(COT, toExprInternal()));
     }
 
     /** Calculates the arc sine of a given number. */
     public OutType asin() {
-        return toApiSpecificExpression(unresolvedCall(ASIN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ASIN, toExprInternal()));
     }
 
     /** Calculates the arc cosine of a given number. */
     public OutType acos() {
-        return toApiSpecificExpression(unresolvedCall(ACOS, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ACOS, toExprInternal()));
     }
 
     /** Calculates the arc tangent of a given number. */
     public OutType atan() {
-        return toApiSpecificExpression(unresolvedCall(ATAN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ATAN, toExprInternal()));
     }
 
     /** Calculates the hyperbolic tangent of a given number. */
     public OutType tanh() {
-        return toApiSpecificExpression(unresolvedCall(TANH, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(TANH, toExprInternal()));
     }
 
     /** Converts numeric from radians to degrees. */
     public OutType degrees() {
-        return toApiSpecificExpression(unresolvedCall(DEGREES, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(DEGREES, toExprInternal()));
     }
 
     /** Converts numeric from degrees to radians. */
     public OutType radians() {
-        return toApiSpecificExpression(unresolvedCall(RADIANS, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(RADIANS, toExprInternal()));
     }
 
     /** Calculates the signum of a given number. */
     public OutType sign() {
-        return toApiSpecificExpression(unresolvedCall(SIGN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SIGN, toExprInternal()));
     }
 
     /** Rounds the given number to integer places right to the decimal point. */
     public OutType round(InType places) {
-        return toApiSpecificExpression(unresolvedCall(ROUND, toExpr(), objectToExpression(places)));
+        return toApiSpecificExpressionInternal(unresolvedCall(ROUND, toExprInternal(), objectToExpression(places)));
     }
 
     /**
@@ -781,7 +781,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * numeric is null. E.g. "4" leads to "100", "12" leads to "1100".
      */
     public OutType bin() {
-        return toApiSpecificExpression(unresolvedCall(BIN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(BIN, toExprInternal()));
     }
 
     /**
@@ -792,7 +792,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * leads to "68656c6c6f2c776f726c64".
      */
     public OutType hex() {
-        return toApiSpecificExpression(unresolvedCall(HEX, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(HEX, toExprInternal()));
     }
 
     /**
@@ -801,12 +801,12 @@ public abstract class BaseExpressions<InType, OutType> {
      * value to become zero. E.g. truncate(42.345, 2) to 42.34.
      */
     public OutType truncate(InType n) {
-        return toApiSpecificExpression(unresolvedCall(TRUNCATE, toExpr(), objectToExpression(n)));
+        return toApiSpecificExpressionInternal(unresolvedCall(TRUNCATE, toExprInternal(), objectToExpression(n)));
     }
 
     /** Returns a number of truncated to 0 decimal places. E.g. truncate(42.345) to 42.0. */
     public OutType truncate() {
-        return toApiSpecificExpression(unresolvedCall(TRUNCATE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(TRUNCATE, toExprInternal()));
     }
 
     // String operations
@@ -818,10 +818,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param length number of characters of the substring
      */
     public OutType substring(InType beginIndex, InType length) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         SUBSTRING,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(beginIndex),
                         objectToExpression(length)));
     }
@@ -832,8 +832,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param beginIndex first character of the substring (starting at 1, inclusive)
      */
     public OutType substring(InType beginIndex) {
-        return toApiSpecificExpression(
-                unresolvedCall(SUBSTRING, toExpr(), objectToExpression(beginIndex)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(SUBSTRING, toExprInternal(), objectToExpression(beginIndex)));
     }
 
     /**
@@ -843,10 +843,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param length number of characters of the substring
      */
     public OutType substr(InType beginIndex, InType length) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         SUBSTR,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(beginIndex),
                         objectToExpression(length)));
     }
@@ -857,19 +857,19 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param beginIndex first character of the substring (starting at 1, inclusive)
      */
     public OutType substr(InType beginIndex) {
-        return toApiSpecificExpression(
-                unresolvedCall(SUBSTR, toExpr(), objectToExpression(beginIndex)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(SUBSTR, toExprInternal(), objectToExpression(beginIndex)));
     }
 
     /** Removes leading space characters from the given string. */
     public OutType trimLeading() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         TRIM,
                         valueLiteral(true),
                         valueLiteral(false),
                         valueLiteral(" "),
-                        toExpr()));
+                        toExprInternal()));
     }
 
     /**
@@ -878,24 +878,24 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param character string containing the character
      */
     public OutType trimLeading(InType character) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         TRIM,
                         valueLiteral(true),
                         valueLiteral(false),
                         objectToExpression(character),
-                        toExpr()));
+                        toExprInternal()));
     }
 
     /** Removes trailing space characters from the given string. */
     public OutType trimTrailing() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         TRIM,
                         valueLiteral(false),
                         valueLiteral(true),
                         valueLiteral(" "),
-                        toExpr()));
+                        toExprInternal()));
     }
 
     /**
@@ -904,20 +904,20 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param character string containing the character
      */
     public OutType trimTrailing(InType character) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         TRIM,
                         valueLiteral(false),
                         valueLiteral(true),
                         objectToExpression(character),
-                        toExpr()));
+                        toExprInternal()));
     }
 
     /** Removes leading and trailing space characters from the given string. */
     public OutType trim() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
-                        TRIM, valueLiteral(true), valueLiteral(true), valueLiteral(" "), toExpr()));
+                        TRIM, valueLiteral(true), valueLiteral(true), valueLiteral(" "), toExprInternal()));
     }
 
     /**
@@ -926,13 +926,13 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param character string containing the character
      */
     public OutType trim(InType character) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         TRIM,
                         valueLiteral(true),
                         valueLiteral(true),
                         objectToExpression(character),
-                        toExpr()));
+                        toExprInternal()));
     }
 
     /**
@@ -940,17 +940,17 @@ public abstract class BaseExpressions<InType, OutType> {
      * replacement string (non-overlapping).
      */
     public OutType replace(InType search, InType replacement) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         REPLACE,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(search),
                         objectToExpression(replacement)));
     }
 
     /** Returns the length of a string. */
     public OutType charLength() {
-        return toApiSpecificExpression(unresolvedCall(CHAR_LENGTH, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(CHAR_LENGTH, toExprInternal()));
     }
 
     /**
@@ -958,7 +958,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * locale.
      */
     public OutType upperCase() {
-        return toApiSpecificExpression(unresolvedCall(UPPER, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(UPPER, toExprInternal()));
     }
 
     /**
@@ -966,7 +966,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * locale.
      */
     public OutType lowerCase() {
-        return toApiSpecificExpression(unresolvedCall(LOWER, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOWER, toExprInternal()));
     }
 
     /**
@@ -974,7 +974,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * containing only [A-Za-z0-9], everything else is treated as whitespace.
      */
     public OutType initCap() {
-        return toApiSpecificExpression(unresolvedCall(INIT_CAP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(INIT_CAP, toExprInternal()));
     }
 
     /**
@@ -983,7 +983,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. "Jo_n%" matches all strings that start with "Jo(arbitrary letter)n"
      */
     public OutType like(InType pattern) {
-        return toApiSpecificExpression(unresolvedCall(LIKE, toExpr(), objectToExpression(pattern)));
+        return toApiSpecificExpressionInternal(unresolvedCall(LIKE, toExprInternal(), objectToExpression(pattern)));
     }
 
     /**
@@ -992,8 +992,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. "A+" matches all strings that consist of at least one A
      */
     public OutType similar(InType pattern) {
-        return toApiSpecificExpression(
-                unresolvedCall(SIMILAR, toExpr(), objectToExpression(pattern)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(SIMILAR, toExprInternal(), objectToExpression(pattern)));
     }
 
     /**
@@ -1003,8 +1003,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("a").position("bbbbba") leads to 6
      */
     public OutType position(InType haystack) {
-        return toApiSpecificExpression(
-                unresolvedCall(POSITION, toExpr(), objectToExpression(haystack)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(POSITION, toExprInternal(), objectToExpression(haystack)));
     }
 
     /**
@@ -1014,8 +1014,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("hi").lpad(4, "??") returns "??hi", lit("hi").lpad(1, '??') returns "h"
      */
     public OutType lpad(InType len, InType pad) {
-        return toApiSpecificExpression(
-                unresolvedCall(LPAD, toExpr(), objectToExpression(len), objectToExpression(pad)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(LPAD, toExprInternal(), objectToExpression(len), objectToExpression(pad)));
     }
 
     /**
@@ -1025,8 +1025,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("hi").rpad(4, "??") returns "hi??", lit("hi").rpad(1, '??') returns "h"
      */
     public OutType rpad(InType len, InType pad) {
-        return toApiSpecificExpression(
-                unresolvedCall(RPAD, toExpr(), objectToExpression(len), objectToExpression(pad)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(RPAD, toExprInternal(), objectToExpression(len), objectToExpression(pad)));
     }
 
     /**
@@ -1041,7 +1041,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * }</pre>
      */
     public OutType over(InType alias) {
-        return toApiSpecificExpression(unresolvedCall(OVER, toExpr(), objectToExpression(alias)));
+        return toApiSpecificExpressionInternal(unresolvedCall(OVER, toExprInternal(), objectToExpression(alias)));
     }
 
     /**
@@ -1050,10 +1050,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("xxxxxtest").overlay("xxxx", 6) leads to "xxxxxxxxx"
      */
     public OutType overlay(InType newString, InType starting) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         OVERLAY,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(newString),
                         objectToExpression(starting)));
     }
@@ -1065,10 +1065,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("xxxxxtest").overlay("xxxx", 6, 2) leads to "xxxxxxxxxst"
      */
     public OutType overlay(InType newString, InType starting, InType length) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         OVERLAY,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(newString),
                         objectToExpression(starting),
                         objectToExpression(length)));
@@ -1079,7 +1079,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * FALSE. Returns NULL if any of arguments is NULL.
      */
     public OutType regexp(InType regex) {
-        return toApiSpecificExpression(unresolvedCall(REGEXP, toExpr(), objectToExpression(regex)));
+        return toApiSpecificExpressionInternal(unresolvedCall(REGEXP, toExprInternal(), objectToExpression(regex)));
     }
 
     /**
@@ -1087,10 +1087,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * replaced.
      */
     public OutType regexpReplace(InType regex, InType replacement) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         REGEXP_REPLACE,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(regex),
                         objectToExpression(replacement)));
     }
@@ -1099,111 +1099,111 @@ public abstract class BaseExpressions<InType, OutType> {
      * Returns a string extracted with a specified regular expression and a regex match group index.
      */
     public OutType regexpExtract(InType regex, InType extractIndex) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         REGEXP_EXTRACT,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(regex),
                         objectToExpression(extractIndex)));
     }
 
     /** Returns a string extracted with a specified regular expression. */
     public OutType regexpExtract(InType regex) {
-        return toApiSpecificExpression(
-                unresolvedCall(REGEXP_EXTRACT, toExpr(), objectToExpression(regex)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(REGEXP_EXTRACT, toExprInternal(), objectToExpression(regex)));
     }
 
     /** Returns the base string decoded with base64. */
     public OutType fromBase64() {
-        return toApiSpecificExpression(unresolvedCall(FROM_BASE64, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(FROM_BASE64, toExprInternal()));
     }
 
     /** Returns the base64-encoded result of the input string. */
     public OutType toBase64() {
-        return toApiSpecificExpression(unresolvedCall(TO_BASE64, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(TO_BASE64, toExprInternal()));
     }
 
     /** Returns the numeric value of the first character of the input string. */
     public OutType ascii() {
-        return toApiSpecificExpression(unresolvedCall(ASCII, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ASCII, toExprInternal()));
     }
 
     /** Returns the ASCII character result of the input integer. */
     public OutType chr() {
-        return toApiSpecificExpression(unresolvedCall(CHR, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(CHR, toExprInternal()));
     }
 
     /** Decodes the first argument into a String using the provided character set. */
     public OutType decode(InType charset) {
-        return toApiSpecificExpression(
-                unresolvedCall(DECODE, toExpr(), objectToExpression(charset)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(DECODE, toExprInternal(), objectToExpression(charset)));
     }
 
     /** Encodes the string into a BINARY using the provided character set. */
     public OutType encode(InType charset) {
-        return toApiSpecificExpression(
-                unresolvedCall(ENCODE, toExpr(), objectToExpression(charset)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ENCODE, toExprInternal(), objectToExpression(charset)));
     }
 
     /** Returns the leftmost integer characters from the input string. */
     public OutType left(InType len) {
-        return toApiSpecificExpression(unresolvedCall(LEFT, toExpr(), objectToExpression(len)));
+        return toApiSpecificExpressionInternal(unresolvedCall(LEFT, toExprInternal(), objectToExpression(len)));
     }
 
     /** Returns the rightmost integer characters from the input string. */
     public OutType right(InType len) {
-        return toApiSpecificExpression(unresolvedCall(RIGHT, toExpr(), objectToExpression(len)));
+        return toApiSpecificExpressionInternal(unresolvedCall(RIGHT, toExprInternal(), objectToExpression(len)));
     }
 
     /** Returns the position of the first occurrence of the input string. */
     public OutType instr(InType str) {
-        return toApiSpecificExpression(unresolvedCall(INSTR, toExpr(), objectToExpression(str)));
+        return toApiSpecificExpressionInternal(unresolvedCall(INSTR, toExprInternal(), objectToExpression(str)));
     }
 
     /** Returns the position of the first occurrence in the input string. */
     public OutType locate(InType str) {
-        return toApiSpecificExpression(unresolvedCall(LOCATE, toExpr(), objectToExpression(str)));
+        return toApiSpecificExpressionInternal(unresolvedCall(LOCATE, toExprInternal(), objectToExpression(str)));
     }
 
     /** Returns the position of the first occurrence in the input string after position integer. */
     public OutType locate(InType str, InType pos) {
-        return toApiSpecificExpression(
-                unresolvedCall(LOCATE, toExpr(), objectToExpression(str), objectToExpression(pos)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(LOCATE, toExprInternal(), objectToExpression(str), objectToExpression(pos)));
     }
 
     /**
      * Parse url and return various parameter of the URL. If accept any null arguments, return null.
      */
     public OutType parseUrl(InType partToExtract) {
-        return toApiSpecificExpression(
-                unresolvedCall(PARSE_URL, toExpr(), objectToExpression(partToExtract)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(PARSE_URL, toExprInternal(), objectToExpression(partToExtract)));
     }
 
     /**
      * Parse url and return various parameter of the URL. If accept any null arguments, return null.
      */
     public OutType parseUrl(InType partToExtract, InType key) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         PARSE_URL,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(partToExtract),
                         objectToExpression(key)));
     }
 
     /** Returns a string that removes the left whitespaces from the given string. */
     public OutType ltrim() {
-        return toApiSpecificExpression(unresolvedCall(LTRIM, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(LTRIM, toExprInternal()));
     }
 
     /** Returns a string that removes the right whitespaces from the given string. */
     public OutType rtrim() {
-        return toApiSpecificExpression(unresolvedCall(RTRIM, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(RTRIM, toExprInternal()));
     }
 
     /** Returns a string that repeats the base string n times. */
     public OutType repeat(InType n) {
-        return toApiSpecificExpression(unresolvedCall(REPEAT, toExpr(), objectToExpression(n)));
+        return toApiSpecificExpressionInternal(unresolvedCall(REPEAT, toExprInternal(), objectToExpression(n)));
     }
 
     /**
@@ -1212,7 +1212,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return a new string which character order is reverse to current string.
      */
     public OutType reverse() {
-        return toApiSpecificExpression(unresolvedCall(REVERSE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(REVERSE, toExprInternal()));
     }
 
     /**
@@ -1223,10 +1223,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return the string at the index of split results.
      */
     public OutType splitIndex(InType separator, InType index) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         SPLIT_INDEX,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(separator),
                         objectToExpression(index)));
     }
@@ -1240,7 +1240,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return the map
      */
     public OutType strToMap() {
-        return toApiSpecificExpression(unresolvedCall(STR_TO_MAP, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(STR_TO_MAP, toExprInternal()));
     }
 
     /**
@@ -1253,10 +1253,10 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return the map
      */
     public OutType strToMap(InType listDelimiter, InType keyValueDelimiter) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         STR_TO_MAP,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(listDelimiter),
                         objectToExpression(keyValueDelimiter)));
     }
@@ -1265,28 +1265,28 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Parses a date string in the form "yyyy-MM-dd" to a SQL Date. */
     public OutType toDate() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         CAST,
-                        toExpr(),
+                        toExprInternal(),
                         typeLiteral(fromLegacyInfoToDataType(SqlTimeTypeInfo.DATE))));
     }
 
     /** Parses a time string in the form "HH:mm:ss" to a SQL Time. */
     public OutType toTime() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         CAST,
-                        toExpr(),
+                        toExprInternal(),
                         typeLiteral(fromLegacyInfoToDataType(SqlTimeTypeInfo.TIME))));
     }
 
     /** Parses a timestamp string in the form "yyyy-MM-dd HH:mm:ss[.SSS]" to a SQL Timestamp. */
     public OutType toTimestamp() {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         CAST,
-                        toExpr(),
+                        toExprInternal(),
                         typeLiteral(fromLegacyInfoToDataType(SqlTimeTypeInfo.TIMESTAMP))));
     }
 
@@ -1296,8 +1296,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("2006-06-05").toDate().extract(DAY) leads to 5
      */
     public OutType extract(TimeIntervalUnit timeIntervalUnit) {
-        return toApiSpecificExpression(
-                unresolvedCall(EXTRACT, valueLiteral(timeIntervalUnit), toExpr()));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(EXTRACT, valueLiteral(timeIntervalUnit), toExprInternal()));
     }
 
     /**
@@ -1306,8 +1306,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("12:44:31").toDate().floor(MINUTE) leads to 12:44:00
      */
     public OutType floor(TimeIntervalUnit timeIntervalUnit) {
-        return toApiSpecificExpression(
-                unresolvedCall(FLOOR, toExpr(), valueLiteral(timeIntervalUnit)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(FLOOR, toExprInternal(), valueLiteral(timeIntervalUnit)));
     }
 
     /**
@@ -1316,8 +1316,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>e.g. lit("12:44:31").toDate().ceil(MINUTE) leads to 12:45:00
      */
     public OutType ceil(TimeIntervalUnit timeIntervalUnit) {
-        return toApiSpecificExpression(
-                unresolvedCall(CEIL, toExpr(), valueLiteral(timeIntervalUnit)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(CEIL, toExprInternal(), valueLiteral(timeIntervalUnit)));
     }
 
     // Advanced type helper functions
@@ -1329,7 +1329,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param name name of the field (similar to Flink's field expressions)
      */
     public OutType get(String name) {
-        return toApiSpecificExpression(unresolvedCall(GET, toExpr(), valueLiteral(name)));
+        return toApiSpecificExpressionInternal(unresolvedCall(GET, toExprInternal(), valueLiteral(name)));
     }
 
     /**
@@ -1339,7 +1339,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param index position of the field
      */
     public OutType get(int index) {
-        return toApiSpecificExpression(unresolvedCall(GET, toExpr(), valueLiteral(index)));
+        return toApiSpecificExpressionInternal(unresolvedCall(GET, toExprInternal(), valueLiteral(index)));
     }
 
     /**
@@ -1347,7 +1347,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * into a flat representation where every subtype is a separate field.
      */
     public OutType flatten() {
-        return toApiSpecificExpression(unresolvedCall(FLATTEN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(FLATTEN, toExprInternal()));
     }
 
     /**
@@ -1356,12 +1356,12 @@ public abstract class BaseExpressions<InType, OutType> {
      * @param index key or position of the element (array index starting at 1)
      */
     public OutType at(InType index) {
-        return toApiSpecificExpression(unresolvedCall(AT, toExpr(), objectToExpression(index)));
+        return toApiSpecificExpressionInternal(unresolvedCall(AT, toExprInternal(), objectToExpression(index)));
     }
 
     /** Returns the number of elements of an array or number of entries of a map. */
     public OutType cardinality() {
-        return toApiSpecificExpression(unresolvedCall(CARDINALITY, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(CARDINALITY, toExprInternal()));
     }
 
     /**
@@ -1369,7 +1369,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * empty. Throws an exception if the array has more than one element.
      */
     public OutType element() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_ELEMENT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_ELEMENT, toExprInternal()));
     }
 
     /**
@@ -1380,8 +1380,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * to the array's element type if necessary.
      */
     public OutType arrayAppend(InType element) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_APPEND, toExpr(), objectToExpression(element)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_APPEND, toExprInternal(), objectToExpression(element)));
     }
 
     /**
@@ -1392,8 +1392,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * if necessary.
      */
     public OutType arrayContains(InType needle) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_CONTAINS, toExpr(), objectToExpression(needle)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_CONTAINS, toExprInternal(), objectToExpression(needle)));
     }
 
     /**
@@ -1402,7 +1402,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>If the array itself is null, the function will return null. Keeps ordering of elements.
      */
     public OutType arrayDistinct() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_DISTINCT, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_DISTINCT, toExprInternal()));
     }
 
     /**
@@ -1414,8 +1414,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * index 1.
      */
     public OutType arrayPosition(InType needle) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_POSITION, toExpr(), objectToExpression(needle)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_POSITION, toExprInternal(), objectToExpression(needle)));
     }
 
     /**
@@ -1426,8 +1426,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * implicitly to the array's element type if necessary.
      */
     public OutType arrayPrepend(InType element) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_PREPEND, toExpr(), objectToExpression(element)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_PREPEND, toExprInternal(), objectToExpression(element)));
     }
 
     /**
@@ -1436,8 +1436,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>If the array itself is null, the function will return null. Keeps ordering of elements.
      */
     public OutType arrayRemove(InType needle) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_REMOVE, toExpr(), objectToExpression(needle)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_REMOVE, toExprInternal(), objectToExpression(needle)));
     }
 
     /**
@@ -1446,7 +1446,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>If the array itself is null, the function will return null.
      */
     public OutType arrayReverse() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_REVERSE, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_REVERSE, toExprInternal()));
     }
 
     /**
@@ -1459,17 +1459,17 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>Returns null if any input is null.
      */
     public OutType arraySlice(InType startOffset, InType endOffset) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         ARRAY_SLICE,
-                        toExpr(),
+                        toExprInternal(),
                         objectToExpression(startOffset),
                         objectToExpression(endOffset)));
     }
 
     public OutType arraySlice(InType startOffset) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_SLICE, toExpr(), objectToExpression(startOffset)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_SLICE, toExprInternal(), objectToExpression(startOffset)));
     }
 
     /**
@@ -1478,8 +1478,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>If any of the array is null, the function will return null.
      */
     public OutType arrayUnion(InType array) {
-        return toApiSpecificExpression(
-                unresolvedCall(ARRAY_UNION, toExpr(), objectToExpression(array)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(ARRAY_UNION, toExprInternal(), objectToExpression(array)));
     }
 
     /**
@@ -1493,10 +1493,10 @@ public abstract class BaseExpressions<InType, OutType> {
         arrays = convertToArrays(arrays);
         Expression[] args =
                 Stream.concat(
-                                Stream.of(toExpr()),
+                                Stream.of(toExprInternal()),
                                 Arrays.stream(arrays).map(ApiExpressionUtils::objectToExpression))
                         .toArray(Expression[]::new);
-        return toApiSpecificExpression(unresolvedCall(ARRAY_CONCAT, args));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_CONCAT, args));
     }
 
     private InType[] convertToArrays(InType[] arrays) {
@@ -1522,7 +1522,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>if array itself is null, the function returns null.
      */
     public OutType arrayMax() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_MAX, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_MAX, toExprInternal()));
     }
 
     /**
@@ -1531,22 +1531,22 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>if array itself is null, the function returns null.
      */
     public OutType arrayMin() {
-        return toApiSpecificExpression(unresolvedCall(ARRAY_MIN, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ARRAY_MIN, toExprInternal()));
     }
 
     /** Returns the keys of the map as an array. */
     public OutType mapKeys() {
-        return toApiSpecificExpression(unresolvedCall(MAP_KEYS, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MAP_KEYS, toExprInternal()));
     }
 
     /** Returns the values of the map as an array. */
     public OutType mapValues() {
-        return toApiSpecificExpression(unresolvedCall(MAP_VALUES, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MAP_VALUES, toExprInternal()));
     }
 
     /** Returns an array of all entries in the given map. */
     public OutType mapEntries() {
-        return toApiSpecificExpression(unresolvedCall(MAP_ENTRIES, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MAP_ENTRIES, toExprInternal()));
     }
 
     /**
@@ -1558,10 +1558,10 @@ public abstract class BaseExpressions<InType, OutType> {
     public OutType mapUnion(InType... inputs) {
         Expression[] args =
                 Stream.concat(
-                                Stream.of(toExpr()),
+                                Stream.of(toExprInternal()),
                                 Arrays.stream(inputs).map(ApiExpressionUtils::objectToExpression))
                         .toArray(Expression[]::new);
-        return toApiSpecificExpression(unresolvedCall(MAP_UNION, args));
+        return toApiSpecificExpressionInternal(unresolvedCall(MAP_UNION, args));
     }
 
     // Time definition
@@ -1571,7 +1571,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * event time.
      */
     public OutType rowtime() {
-        return toApiSpecificExpression(unresolvedCall(ROWTIME, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(ROWTIME, toExprInternal()));
     }
 
     /**
@@ -1579,7 +1579,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * processing time.
      */
     public OutType proctime() {
-        return toApiSpecificExpression(unresolvedCall(PROCTIME, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(PROCTIME, toExprInternal()));
     }
 
     /**
@@ -1588,7 +1588,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * <p>The produced expression is of type {@code DataTypes.INTERVAL}
      */
     public OutType year() {
-        return toApiSpecificExpression(toMonthInterval(toExpr(), 12));
+        return toApiSpecificExpressionInternal(toMonthInterval(toExprInternal(), 12));
     }
 
     /** Creates an interval of the given number of years. */
@@ -1598,7 +1598,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of quarters. */
     public OutType quarter() {
-        return toApiSpecificExpression(toMonthInterval(toExpr(), 3));
+        return toApiSpecificExpressionInternal(toMonthInterval(toExprInternal(), 3));
     }
 
     /** Creates an interval of the given number of quarters. */
@@ -1608,7 +1608,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of months. */
     public OutType month() {
-        return toApiSpecificExpression(toMonthInterval(toExpr(), 1));
+        return toApiSpecificExpressionInternal(toMonthInterval(toExprInternal(), 1));
     }
 
     /** Creates an interval of the given number of months. */
@@ -1618,7 +1618,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of weeks. */
     public OutType week() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), 7 * MILLIS_PER_DAY));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), 7 * MILLIS_PER_DAY));
     }
 
     /** Creates an interval of the given number of weeks. */
@@ -1628,7 +1628,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of days. */
     public OutType day() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), MILLIS_PER_DAY));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), MILLIS_PER_DAY));
     }
 
     /** Creates an interval of the given number of days. */
@@ -1638,7 +1638,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of hours. */
     public OutType hour() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), MILLIS_PER_HOUR));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), MILLIS_PER_HOUR));
     }
 
     /** Creates an interval of the given number of hours. */
@@ -1648,7 +1648,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of minutes. */
     public OutType minute() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), MILLIS_PER_MINUTE));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), MILLIS_PER_MINUTE));
     }
 
     /** Creates an interval of the given number of minutes. */
@@ -1658,7 +1658,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of seconds. */
     public OutType second() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), MILLIS_PER_SECOND));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), MILLIS_PER_SECOND));
     }
 
     /** Creates an interval of the given number of seconds. */
@@ -1668,7 +1668,7 @@ public abstract class BaseExpressions<InType, OutType> {
 
     /** Creates an interval of the given number of milliseconds. */
     public OutType milli() {
-        return toApiSpecificExpression(toMilliInterval(toExpr(), 1));
+        return toApiSpecificExpressionInternal(toMilliInterval(toExprInternal(), 1));
     }
 
     /** Creates an interval of the given number of milliseconds. */
@@ -1684,7 +1684,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 32 hexadecimal digits or null
      */
     public OutType md5() {
-        return toApiSpecificExpression(unresolvedCall(MD5, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(MD5, toExprInternal()));
     }
 
     /**
@@ -1693,7 +1693,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 40 hexadecimal digits or null
      */
     public OutType sha1() {
-        return toApiSpecificExpression(unresolvedCall(SHA1, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SHA1, toExprInternal()));
     }
 
     /**
@@ -1702,7 +1702,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 56 hexadecimal digits or null
      */
     public OutType sha224() {
-        return toApiSpecificExpression(unresolvedCall(SHA224, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SHA224, toExprInternal()));
     }
 
     /**
@@ -1711,7 +1711,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 64 hexadecimal digits or null
      */
     public OutType sha256() {
-        return toApiSpecificExpression(unresolvedCall(SHA256, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SHA256, toExprInternal()));
     }
 
     /**
@@ -1720,7 +1720,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 96 hexadecimal digits or null
      */
     public OutType sha384() {
-        return toApiSpecificExpression(unresolvedCall(SHA384, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SHA384, toExprInternal()));
     }
 
     /**
@@ -1729,7 +1729,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string of 128 hexadecimal digits or null
      */
     public OutType sha512() {
-        return toApiSpecificExpression(unresolvedCall(SHA512, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(SHA512, toExprInternal()));
     }
 
     /**
@@ -1740,8 +1740,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return string or null if one of the arguments is null.
      */
     public OutType sha2(InType hashLength) {
-        return toApiSpecificExpression(
-                unresolvedCall(SHA2, toExpr(), objectToExpression(hashLength)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(SHA2, toExprInternal(), objectToExpression(hashLength)));
     }
 
     // JSON functions
@@ -1778,7 +1778,7 @@ public abstract class BaseExpressions<InType, OutType> {
      *     otherwise.
      */
     public OutType isJson(JsonType type) {
-        return toApiSpecificExpression(unresolvedCall(IS_JSON, toExpr(), valueLiteral(type)));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_JSON, toExprInternal(), valueLiteral(type)));
     }
 
     /**
@@ -1789,7 +1789,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return {@code true} if the string is a valid JSON value, {@code false} otherwise.
      */
     public OutType isJson() {
-        return toApiSpecificExpression(unresolvedCall(IS_JSON, toExpr()));
+        return toApiSpecificExpressionInternal(unresolvedCall(IS_JSON, toExprInternal()));
     }
 
     /**
@@ -1818,8 +1818,8 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return {@code true} if the JSON string satisfies the search criterion.
      */
     public OutType jsonExists(String path, JsonExistsOnError onError) {
-        return toApiSpecificExpression(
-                unresolvedCall(JSON_EXISTS, toExpr(), valueLiteral(path), valueLiteral(onError)));
+        return toApiSpecificExpressionInternal(
+                unresolvedCall(JSON_EXISTS, toExprInternal(), valueLiteral(path), valueLiteral(onError)));
     }
 
     /**
@@ -1847,7 +1847,7 @@ public abstract class BaseExpressions<InType, OutType> {
      * @return {@code true} if the JSON string satisfies the search criterion.
      */
     public OutType jsonExists(String path) {
-        return toApiSpecificExpression(unresolvedCall(JSON_EXISTS, toExpr(), valueLiteral(path)));
+        return toApiSpecificExpressionInternal(unresolvedCall(JSON_EXISTS, toExprInternal(), valueLiteral(path)));
     }
 
     /**
@@ -1910,10 +1910,10 @@ public abstract class BaseExpressions<InType, OutType> {
             InType defaultOnEmpty,
             JsonValueOnEmptyOrError onError,
             InType defaultOnError) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         JSON_VALUE,
-                        toExpr(),
+                        toExprInternal(),
                         valueLiteral(path),
                         typeLiteral(returningType),
                         valueLiteral(onEmpty),
@@ -2046,10 +2046,10 @@ public abstract class BaseExpressions<InType, OutType> {
             JsonQueryWrapper wrappingBehavior,
             JsonQueryOnEmptyOrError onEmpty,
             JsonQueryOnEmptyOrError onError) {
-        return toApiSpecificExpression(
+        return toApiSpecificExpressionInternal(
                 unresolvedCall(
                         JSON_QUERY,
-                        toExpr(),
+                        toExprInternal(),
                         valueLiteral(path),
                         valueLiteral(wrappingBehavior),
                         valueLiteral(onEmpty),

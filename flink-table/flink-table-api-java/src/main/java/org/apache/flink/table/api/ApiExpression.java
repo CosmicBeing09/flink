@@ -48,12 +48,12 @@ public final class ApiExpression extends BaseExpressions<Object, ApiExpression>
     }
 
     @Override
-    public Expression toExpr() {
+    public Expression toExprInternal() {
         return wrappedExpression;
     }
 
     @Override
-    protected ApiExpression toApiSpecificExpression(Expression expression) {
+    protected ApiExpression toApiSpecificExpressionInternal(Expression expression) {
         return new ApiExpression(expression);
     }
 
