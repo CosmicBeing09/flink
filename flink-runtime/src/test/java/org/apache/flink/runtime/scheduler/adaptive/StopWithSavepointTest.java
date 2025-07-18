@@ -674,12 +674,12 @@ class StopWithSavepointTest {
         private boolean checkpointSchedulerStarted = false;
 
         @Override
-        public void startCheckpointScheduler() {
+        public void startPeriodicCheckpointScheduler() {
             checkpointSchedulerStarted = true;
         }
 
         @Override
-        public void stopCheckpointScheduler() {
+        public void stopPeriodicCheckpointScheduler() {
             checkpointSchedulerStarted = false;
         }
 

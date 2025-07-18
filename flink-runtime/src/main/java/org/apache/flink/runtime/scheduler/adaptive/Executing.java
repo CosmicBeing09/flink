@@ -265,7 +265,7 @@ class Executing extends StateWithExecutionGraph
 
         CheckpointScheduling schedulingProvider = new CheckpointSchedulingProvider(executionGraph);
 
-        schedulingProvider.stopCheckpointScheduler();
+        schedulingProvider.stopPeriodicCheckpointScheduler();
 
         final CompletableFuture<String> savepointFuture =
                 Objects.requireNonNull(executionGraph.getCheckpointCoordinator())

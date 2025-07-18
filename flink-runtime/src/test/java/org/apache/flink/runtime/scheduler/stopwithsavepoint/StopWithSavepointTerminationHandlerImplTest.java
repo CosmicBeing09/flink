@@ -68,7 +68,7 @@ class StopWithSavepointTerminationHandlerImplTest {
     private StopWithSavepointTerminationHandlerImpl createTestInstance(
             Consumer<Throwable> handleGlobalFailureConsumer) {
         // checkpointing should be always stopped before initiating stop-with-savepoint
-        checkpointScheduling.stopCheckpointScheduler();
+        checkpointScheduling.stopPeriodicCheckpointScheduler();
 
         final SchedulerNG scheduler =
                 TestingSchedulerNG.newBuilder()

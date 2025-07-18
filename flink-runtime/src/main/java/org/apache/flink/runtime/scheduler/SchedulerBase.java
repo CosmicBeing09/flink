@@ -935,7 +935,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                 jobGraph.getJobID());
 
         if (cancelJob) {
-            stopCheckpointScheduler();
+            stopPeriodicCheckpointScheduler();
         }
 
         return checkpointCoordinator
@@ -945,7 +945,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
                         (path, throwable) -> {
                             if (throwable != null) {
                                 if (cancelJob) {
-                                    startCheckpointScheduler();
+                                    startPeriodicCheckpointScheduler();
                                 }
                                 throw new CompletionException(throwable);
                             } else if (cancelJob) {
@@ -985,7 +985,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     }
 
     @Override
-    public void stopCheckpointScheduler() {
+    public void stopPeriodicCheckpointScheduler() {
         final CheckpointCoordinator checkpointCoordinator = getCheckpointCoordinator();
         if (checkpointCoordinator == null) {
             logger.info(
@@ -996,7 +996,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
     }
 
     @Override
-    public void startCheckpointScheduler() {
+    public void startPeriodicCheckpointScheduler() {
         mainThreadExecutor.assertRunningInMainThread();
         final CheckpointCoordinator checkpointCoordinator = getCheckpointCoordinator();
 
@@ -1069,7 +1069,7 @@ public abstract class SchedulerBase implements SchedulerNG, CheckpointScheduling
         // to have only the data of the synchronous savepoint committed.
         // in case of failure, and if the job restarts, the coordinator
         // will be restarted by the CheckpointCoordinatorDeActivator.
-        stopCheckpointScheduler();
+        stopPeriodicCheckpointScheduler();
 
         final CompletableFuture<Collection<ExecutionState>> executionTerminationsFuture =
                 getCombinedExecutionTerminationFuture();

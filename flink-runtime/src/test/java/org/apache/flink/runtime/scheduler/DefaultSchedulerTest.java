@@ -732,13 +732,13 @@ public class DefaultSchedulerTest {
     @Test
     void testStartingCheckpointSchedulerAfterExecutionGraphFinished() {
         assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
-                SchedulerBase::startCheckpointScheduler);
+                SchedulerBase::startPeriodicCheckpointScheduler);
     }
 
     @Test
     void testStoppingCheckpointSchedulerAfterExecutionGraphFinished() {
         assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(
-                SchedulerBase::stopCheckpointScheduler);
+                SchedulerBase::stopPeriodicCheckpointScheduler);
     }
 
     private void assertCheckpointSchedulingOperationHavingNoEffectAfterJobFinished(

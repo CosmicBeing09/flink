@@ -197,7 +197,7 @@ class StopWithSavepoint extends StateWithExecutionGraph {
      */
     private void onSavepointFailure(Throwable cause) {
         // revert side-effect of Executing#stopWithSavepoint
-        checkpointScheduling.startCheckpointScheduler();
+        checkpointScheduling.startPeriodicCheckpointScheduler();
         // a task failed concurrently; defer the error handling to onFailure()
         // otherwise we will attempt 2 state transitions, which is forbidden
         if (!hasPendingStateTransition) {
