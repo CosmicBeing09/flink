@@ -158,7 +158,7 @@ public final class DefaultSlotPoolServiceSchedulerFactory
     public static DefaultSlotPoolServiceSchedulerFactory fromConfiguration(
             Configuration configuration, JobType jobType, boolean isDynamicGraph) {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
         final Duration slotIdleTimeout = configuration.get(JobManagerOptions.SCHEDULER_SLOT_IDLE_TIMEOUT);
         final Duration batchSlotTimeout = configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT);
 

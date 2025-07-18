@@ -91,7 +91,7 @@ public class MiniClusterResourceConfiguration {
         private Configuration configuration = new Configuration();
         private int numberTaskManagers = 1;
         private int numberSlotsPerTaskManager = 1;
-        private Duration shutdownTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        private Duration shutdownTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         private RpcServiceSharing rpcServiceSharing = RpcServiceSharing.SHARED;
         private MiniCluster.HaServices haServices = MiniCluster.HaServices.CONFIGURED;

@@ -206,7 +206,7 @@ class PekkoUtils {
 
     private static void addBaseRemoteConfig(
             ConfigBuilder configBuilder, Configuration configuration, int port, int externalPort) {
-        final Duration askTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration askTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         final String startupTimeout =
                 TimeUtils.getStringInMillis(
@@ -214,7 +214,7 @@ class PekkoUtils {
                                 RpcOptions.STARTUP_TIMEOUT, askTimeout.multipliedBy(10L)));
 
         final String tcpTimeout =
-                TimeUtils.getStringInMillis(configuration.get(RpcOptions.TCP_TIMEOUT));
+                TimeUtils.getStringInMillis(configuration.get(RpcOptions.RPC_OUTBOUND_CONNECTION_TIMEOUT));
 
         final String framesize = configuration.get(RpcOptions.FRAMESIZE);
 

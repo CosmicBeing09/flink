@@ -75,7 +75,7 @@ public class JobMasterConfiguration {
 
     public static JobMasterConfiguration fromConfiguration(Configuration configuration) {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         final Duration slotRequestTimeout =
                 configuration.get(JobManagerOptions.JOB_MANAGER_SLOT_REQUEST_TIMEOUT);

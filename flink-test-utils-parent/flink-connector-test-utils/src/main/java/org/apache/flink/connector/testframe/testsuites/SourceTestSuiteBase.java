@@ -798,7 +798,7 @@ public abstract class SourceTestSuiteBase<T> {
                             serializer,
                             accumulatorName,
                             checkpointConfig,
-                            RpcOptions.ASK_TIMEOUT_DURATION.defaultValue().toMillis());
+                            RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue().toMillis());
             iterator.setJobClient(jobClient);
             return iterator;
         }

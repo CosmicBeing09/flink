@@ -124,7 +124,7 @@ public class ZooKeeperTestUtils {
         config.set(CheckpointingOptions.CHECKPOINTS_DIRECTORY, fsStateHandlePath + "/checkpoints");
         config.set(HighAvailabilityOptions.HA_STORAGE_PATH, fsStateHandlePath + "/recovery");
 
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(100));
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofSeconds(100));
 
         return config;
     }

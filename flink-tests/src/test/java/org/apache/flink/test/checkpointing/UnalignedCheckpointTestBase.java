@@ -787,7 +787,7 @@ public abstract class UnalignedCheckpointTestBase extends TestLogger {
             // amount of buffers
             conf.set(TaskManagerOptions.NETWORK_MEMORY_MIN, MemorySize.ofMebiBytes(32));
             conf.set(TaskManagerOptions.NETWORK_MEMORY_MAX, MemorySize.ofMebiBytes(32));
-            conf.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofMinutes(1));
+            conf.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofMinutes(1));
             return conf;
         }
 

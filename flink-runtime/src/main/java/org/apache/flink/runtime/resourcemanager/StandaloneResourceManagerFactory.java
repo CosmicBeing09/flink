@@ -89,7 +89,7 @@ public final class StandaloneResourceManagerFactory extends ResourceManagerFacto
                 fatalErrorHandler,
                 resourceManagerMetricGroup,
                 standaloneClusterStartupPeriodTime,
-                configuration.get(RpcOptions.ASK_TIMEOUT_DURATION),
+                configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION),
                 ioExecutor);
     }
 

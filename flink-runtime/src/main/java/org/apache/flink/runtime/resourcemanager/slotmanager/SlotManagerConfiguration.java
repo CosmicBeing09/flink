@@ -229,7 +229,7 @@ public class SlotManagerConfiguration {
             Configuration configuration, WorkerResourceSpec defaultWorkerResourceSpec)
             throws ConfigurationException {
 
-        final Duration rpcTimeout = configuration.get(RpcOptions.ASK_TIMEOUT_DURATION);
+        final Duration rpcTimeout = configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION);
 
         final Duration taskManagerTimeout =
                 configuration.get(ResourceManagerOptions.TASK_MANAGER_TIMEOUT);

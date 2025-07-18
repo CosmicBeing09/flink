@@ -206,7 +206,7 @@ public class TaskManagerDisconnectOnShutdownITCase {
                     fatalErrorHandler,
                     resourceManagerMetricGroup,
                     standaloneClusterStartupPeriodTime,
-                    configuration.get(RpcOptions.ASK_TIMEOUT_DURATION),
+                    configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION),
                     ioExecutor) {
 
                 @Override

@@ -629,7 +629,7 @@ public abstract class SinkTestSuiteBase<T extends Comparable<T>> {
                 serializer,
                 accumulatorName,
                 stream.getExecutionEnvironment().getCheckpointConfig(),
-                RpcOptions.ASK_TIMEOUT_DURATION.defaultValue().toMillis());
+                RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue().toMillis());
     }
 
     private void waitExpectedSizeData(CollectResultIterator<T> iterator, int targetNum) {

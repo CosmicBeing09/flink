@@ -50,10 +50,10 @@ class RpcSSLAuthITCase {
     @Test
     void testConnectFailure() throws Exception {
         final Configuration baseConfig = new Configuration();
-        baseConfig.set(RpcOptions.TCP_TIMEOUT, Duration.ofSeconds(1));
+        baseConfig.set(RpcOptions.RPC_OUTBOUND_CONNECTION_TIMEOUT, Duration.ofSeconds(1));
         // we start the RPC service with a very long timeout to ensure that the test
         // can only pass if the connection problem is not recognized merely via a timeout
-        baseConfig.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(10000000));
+        baseConfig.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofSeconds(10000000));
 
         // !!! This config has KEY_STORE_FILE / TRUST_STORE_FILE !!!
         Configuration sslConfig1 = new Configuration(baseConfig);

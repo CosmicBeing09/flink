@@ -101,7 +101,7 @@ class ClientTest {
         config = new Configuration();
         config.set(JobManagerOptions.ADDRESS, "localhost");
 
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, RpcOptions.ASK_TIMEOUT_DURATION.defaultValue());
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue());
     }
 
     private Configuration fromPackagedProgram(

@@ -90,8 +90,8 @@ public class MiniClusterConfiguration {
         }
 
         // increase the ask.timeout if not set in order to harden tests on slow CI
-        if (!modifiedConfig.contains(RpcOptions.ASK_TIMEOUT_DURATION)) {
-            modifiedConfig.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofMinutes(5L));
+        if (!modifiedConfig.contains(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION)) {
+            modifiedConfig.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofMinutes(5L));
         }
 
         return new UnmodifiableConfiguration(modifiedConfig);

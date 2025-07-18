@@ -68,7 +68,7 @@ public class RpcOptions {
                                     + "memory footprint.");
 
     /** Timeout for Pekko ask calls. */
-    public static final ConfigOption<Duration> ASK_TIMEOUT_DURATION =
+    public static final ConfigOption<Duration> RPC_ASK_CALL_TIMEOUT_DURATION =
             ConfigOptions.key("pekko.ask.timeout")
                     .durationType()
                     .defaultValue(Duration.ofSeconds(10))
@@ -79,7 +79,7 @@ public class RpcOptions {
                                     + " timeout value requires a time-unit specifier (ms/s/min/h/d).");
 
     /** The Pekko tcp connection timeout. */
-    public static final ConfigOption<Duration> TCP_TIMEOUT =
+    public static final ConfigOption<Duration> RPC_OUTBOUND_CONNECTION_TIMEOUT =
             ConfigOptions.key("pekko.tcp.timeout")
                     .durationType()
                     .defaultValue(Duration.ofSeconds(20))

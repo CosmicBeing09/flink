@@ -299,7 +299,7 @@ public class TaskManagerServicesConfiguration {
                 QueryableStateConfiguration.fromConfiguration(configuration);
 
         long timerServiceShutdownTimeout =
-                configuration.get(RpcOptions.ASK_TIMEOUT_DURATION).toMillis();
+                configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION).toMillis();
 
         final RetryingRegistrationConfiguration retryingRegistrationConfiguration =
                 RetryingRegistrationConfiguration.fromConfiguration(configuration);

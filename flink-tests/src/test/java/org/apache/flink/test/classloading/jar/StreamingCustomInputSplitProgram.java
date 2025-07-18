@@ -46,7 +46,7 @@ public class StreamingCustomInputSplitProgram {
     public static void main(String[] args) throws Exception {
         Configuration config = new Configuration();
 
-        config.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofSeconds(5));
+        config.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofSeconds(5));
 
         StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
 

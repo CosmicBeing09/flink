@@ -88,7 +88,7 @@ public class CollectResultIterator<T> implements CloseableIterator<T> {
                         operatorIdFuture,
                         accumulatorName,
                         retryMillis,
-                        RpcOptions.ASK_TIMEOUT_DURATION.defaultValue().toMillis());
+                        RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.defaultValue().toMillis());
         this.bufferedResult = null;
     }
 

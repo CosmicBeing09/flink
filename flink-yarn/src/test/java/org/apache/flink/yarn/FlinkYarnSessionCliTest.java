@@ -100,7 +100,7 @@ class FlinkYarnSessionCliTest {
                             "-j",
                             "fake.jar",
                             "-D",
-                            RpcOptions.ASK_TIMEOUT_DURATION.key() + "=5 min",
+                            RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION.key() + "=5 min",
                             "-D",
                             CoreOptions.FLINK_JVM_OPTIONS.key() + "=-DappName=foobar",
                             "-D",
@@ -108,7 +108,7 @@ class FlinkYarnSessionCliTest {
                         });
 
         Configuration executorConfig = cli.toConfiguration(cmd);
-        assertThat(executorConfig.get(RpcOptions.ASK_TIMEOUT_DURATION)).hasMinutes(5);
+        assertThat(executorConfig.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION)).hasMinutes(5);
         assertThat(executorConfig.get(CoreOptions.FLINK_JVM_OPTIONS)).isEqualTo("-DappName=foobar");
         assertThat(executorConfig.get(SecurityOptions.SSL_INTERNAL_KEY_PASSWORD))
                 .isEqualTo("changeit");

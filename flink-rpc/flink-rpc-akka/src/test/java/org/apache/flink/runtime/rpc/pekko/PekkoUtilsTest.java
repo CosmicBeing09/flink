@@ -225,7 +225,7 @@ class PekkoUtilsTest {
     @Test
     void getConfigDefaultsStartupTimeoutTo10TimesOfAskTimeout() {
         final Configuration configuration = new Configuration();
-        configuration.set(RpcOptions.ASK_TIMEOUT_DURATION, Duration.ofMillis(100));
+        configuration.set(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION, Duration.ofMillis(100));
 
         final Config config =
                 PekkoUtils.getConfig(configuration, new HostAndPort("localhost", 31337));

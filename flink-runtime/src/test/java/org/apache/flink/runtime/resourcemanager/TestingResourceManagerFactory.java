@@ -101,7 +101,7 @@ public class TestingResourceManagerFactory extends ResourceManagerFactory<Resour
                 clusterInformation,
                 fatalErrorHandler,
                 resourceManagerMetricGroup,
-                configuration.get(RpcOptions.ASK_TIMEOUT_DURATION),
+                configuration.get(RpcOptions.RPC_ASK_CALL_TIMEOUT_DURATION),
                 ioExecutor);
     }
 
