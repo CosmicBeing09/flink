@@ -125,9 +125,9 @@ class PartitionedFileWriteReadTest {
         for (int region = 0; region < numRegions; ++region) {
             boolean isBroadcastRegion = random.nextBoolean();
             fileWriter.startNewRegion(isBroadcastRegion);
-            List<BufferWithChannel>[] bufferWithChannels = new List[numSubpartitions];
+            List<BufferWithSubpartition>[] buffersWithSubpartition = new List[numSubpartitions];
             for (int i = 0; i < numSubpartitions; i++) {
-                bufferWithChannels[i] = new ArrayList<>();
+                buffersWithSubpartition[i] = new ArrayList<>();
             }
 
             for (int i = 0; i < numBuffers; ++i) {
@@ -135,22 +135,22 @@ class PartitionedFileWriteReadTest {
                 if (isBroadcastRegion) {
                     for (int subpartition = 0; subpartition < numSubpartitions; ++subpartition) {
                         buffersWritten[subpartition].add(buffer);
-                        bufferWithChannels[subpartition].add(
-                                new BufferWithChannel(buffer, subpartition));
+                        buffersWithSubpartition[subpartition].add(
+                                new BufferWithSubpartition(buffer, subpartition));
                     }
                 } else {
                     int subpartition = random.nextInt(numSubpartitions);
                     buffersWritten[subpartition].add(buffer);
-                    bufferWithChannels[subpartition].add(
-                            new BufferWithChannel(buffer, subpartition));
+                    buffersWithSubpartition[subpartition].add(
+                            new BufferWithSubpartition(buffer, subpartition));
                 }
             }
 
             int[] writeOrder = DataBufferTest.getRandomSubpartitionOrder(numSubpartitions);
             for (int index = 0; index < numSubpartitions; ++index) {
                 int subpartition = writeOrder[index];
-                fileWriter.writeBuffers(bufferWithChannels[subpartition]);
-                long totalBytes = getTotalBytes(bufferWithChannels[subpartition]);
+                fileWriter.writeBuffers(buffersWithSubpartition[subpartition]);
+                long totalBytes = getTotalBytes(buffersWithSubpartition[subpartition]);
                 if (isBroadcastRegion) {
                     for (int j = 0; j < numSubpartitions; j++) {
                         regionStat[j].add(Tuple2.of(currentOffset, totalBytes));
@@ -166,9 +166,9 @@ class PartitionedFileWriteReadTest {
         return fileWriter.finish();
     }
 
-    private static long getTotalBytes(List<BufferWithChannel> bufferWithChannels) {
+    private static long getTotalBytes(List<BufferWithSubpartition> buffersWithSubpartition) {
         long totalBytes = 0L;
-        for (BufferWithChannel bufferWithChannel : bufferWithChannels) {
+        for (BufferWithSubpartition bufferWithChannel : buffersWithSubpartition) {
             totalBytes +=
                     bufferWithChannel.getBuffer().readableBytes()
                             + BufferReaderWriterUtil.HEADER_LENGTH;
@@ -419,8 +419,8 @@ class PartitionedFileWriteReadTest {
         return FileChannel.open(path, StandardOpenOption.READ);
     }
 
-    private List<BufferWithChannel> getBufferWithChannels(Buffer buffer, int channelIndex) {
-        return Collections.singletonList(new BufferWithChannel(buffer, channelIndex));
+    private List<BufferWithSubpartition> getBufferWithChannels(Buffer buffer, int channelIndex) {
+        return Collections.singletonList(new BufferWithSubpartition(buffer, channelIndex));
     }
 
     private PartitionedFile createEmptyPartitionedFile() throws IOException {

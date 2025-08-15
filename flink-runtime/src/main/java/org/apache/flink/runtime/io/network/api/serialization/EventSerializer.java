@@ -68,11 +68,11 @@ public class EventSerializer {
 
     private static final int CANCEL_CHECKPOINT_MARKER_EVENT = 4;
 
-    private static final int END_OF_CHANNEL_STATE_EVENT = 5;
+    private static final int END_OF_SUBPARTITION_STATE_EVENT = 5;
 
     private static final int ANNOUNCEMENT_EVENT = 6;
 
-    private static final int VIRTUAL_CHANNEL_SELECTOR_EVENT = 7;
+    private static final int VIRTUAL_SUBPARTITION_SELECTOR_EVENT = 7;
 
     private static final int END_OF_USER_RECORDS_EVENT = 8;
 
@@ -104,7 +104,7 @@ public class EventSerializer {
         } else if (eventClass == EndOfSuperstepEvent.class) {
             return ByteBuffer.wrap(new byte[] {0, 0, 0, END_OF_SUPERSTEP_EVENT});
         } else if (eventClass == EndOfChannelStateEvent.class) {
-            return ByteBuffer.wrap(new byte[] {0, 0, 0, END_OF_CHANNEL_STATE_EVENT});
+            return ByteBuffer.wrap(new byte[] {0, 0, 0, END_OF_SUBPARTITION_STATE_EVENT});
         } else if (eventClass == EndOfData.class) {
             return ByteBuffer.wrap(
                     new byte[] {
@@ -137,7 +137,7 @@ public class EventSerializer {
         } else if (eventClass == SubtaskConnectionDescriptor.class) {
             SubtaskConnectionDescriptor selector = (SubtaskConnectionDescriptor) event;
             ByteBuffer buf = ByteBuffer.allocate(12);
-            buf.putInt(VIRTUAL_CHANNEL_SELECTOR_EVENT);
+            buf.putInt(VIRTUAL_SUBPARTITION_SELECTOR_EVENT);
             buf.putInt(selector.getInputSubtaskIndex());
             buf.putInt(selector.getOutputSubtaskIndex());
             buf.flip();
@@ -175,7 +175,7 @@ public class EventSerializer {
                 return deserializeCheckpointBarrier(buffer);
             } else if (type == END_OF_SUPERSTEP_EVENT) {
                 return EndOfSuperstepEvent.INSTANCE;
-            } else if (type == END_OF_CHANNEL_STATE_EVENT) {
+            } else if (type == END_OF_SUBPARTITION_STATE_EVENT) {
                 return EndOfChannelStateEvent.INSTANCE;
             } else if (type == END_OF_USER_RECORDS_EVENT) {
                 return new EndOfData(StopMode.values()[buffer.get()]);
@@ -186,7 +186,7 @@ public class EventSerializer {
                 int sequenceNumber = buffer.getInt();
                 AbstractEvent announcedEvent = fromSerializedEvent(buffer, classLoader);
                 return new EventAnnouncement(announcedEvent, sequenceNumber);
-            } else if (type == VIRTUAL_CHANNEL_SELECTOR_EVENT) {
+            } else if (type == VIRTUAL_SUBPARTITION_SELECTOR_EVENT) {
                 return new SubtaskConnectionDescriptor(buffer.getInt(), buffer.getInt());
             } else if (type == END_OF_SEGMENT) {
                 return EndOfSegmentEvent.INSTANCE;

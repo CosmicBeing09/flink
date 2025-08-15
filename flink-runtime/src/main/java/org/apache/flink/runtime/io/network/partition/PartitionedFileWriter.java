@@ -48,7 +48,7 @@ public class PartitionedFileWriter implements AutoCloseable {
 
     private static final int MIN_INDEX_BUFFER_SIZE = 50 * PartitionedFile.INDEX_ENTRY_SIZE;
 
-    /** Number of channels. When writing a buffer, target subpartition must be in this range. */
+    /** Number of subpartitions. When writing a buffer, target subpartition must be in this range. */
     private final int numSubpartitions;
 
     /** Opened data file channel of the target {@link PartitionedFile}. */
@@ -193,8 +193,8 @@ public class PartitionedFileWriter implements AutoCloseable {
 
     private void writeRegionIndex() throws IOException {
         if (Arrays.stream(subpartitionBytes).sum() > 0) {
-            for (int channel = 0; channel < numSubpartitions; ++channel) {
-                writeIndexEntry(subpartitionOffsets[channel], subpartitionBytes[channel]);
+            for (int subpartition = 0; subpartition < numSubpartitions; ++subpartition) {
+                writeIndexEntry(subpartitionOffsets[subpartition], subpartitionBytes[subpartition]);
             }
 
             currentSubpartition = -1;
@@ -218,7 +218,7 @@ public class PartitionedFileWriter implements AutoCloseable {
      * <p>Note: The caller is responsible for recycling the target buffers and releasing the failed
      * {@link PartitionedFile} if any exception occurs.
      */
-    public void writeBuffers(List<BufferWithChannel> bufferWithChannels) throws IOException {
+    public void writeBuffers(List<BufferWithSubpartition> bufferWithChannels) throws IOException {
         checkState(!isFinished, "File writer is already finished.");
         checkState(!isClosed, "File writer is already closed.");
 
@@ -241,11 +241,11 @@ public class PartitionedFileWriter implements AutoCloseable {
     }
 
     private long collectUnicastBuffers(
-            List<BufferWithChannel> bufferWithChannels, ByteBuffer[] bufferWithHeaders) {
+            List<BufferWithSubpartition> bufferWithChannels, ByteBuffer[] bufferWithHeaders) {
         long expectedBytes = 0;
         long fileOffset = totalBytesWritten;
         for (int i = 0; i < bufferWithChannels.size(); i++) {
-            int subpartition = bufferWithChannels.get(i).getChannelIndex();
+            int subpartition = bufferWithChannels.get(i).getSubpartitionIndex();
             if (subpartition != currentSubpartition) {
                 checkState(
                         subpartitionBytes[subpartition] == 0,
@@ -264,7 +264,7 @@ public class PartitionedFileWriter implements AutoCloseable {
     }
 
     private long collectBroadcastBuffers(
-            List<BufferWithChannel> bufferWithChannels, ByteBuffer[] bufferWithHeaders) {
+            List<BufferWithSubpartition> bufferWithChannels, ByteBuffer[] bufferWithHeaders) {
         // set the file offset of all channels as the current file size on the first call
         if (subpartitionBytes[0] == 0) {
             for (int subpartition = 0; subpartition < numSubpartitions; ++subpartition) {

@@ -77,12 +77,12 @@ public enum PartitionTestUtils {
     public static ResultPartition createPartition(
             NettyShuffleEnvironment environment,
             ResultPartitionType partitionType,
-            int numChannels) {
+            int numSubpartitions) {
         return new ResultPartitionBuilder()
                 .setResultPartitionManager(environment.getResultPartitionManager())
                 .setupBufferPoolFactoryFromNettyShuffleEnvironment(environment)
                 .setResultPartitionType(partitionType)
-                .setNumberOfSubpartitions(numChannels)
+                .setNumberOfSubpartitions(numSubpartitions)
                 .build();
     }
 
@@ -90,13 +90,13 @@ public enum PartitionTestUtils {
             NettyShuffleEnvironment environment,
             FileChannelManager channelManager,
             ResultPartitionType partitionType,
-            int numChannels) {
+            int numSubpartitions) {
         return new ResultPartitionBuilder()
                 .setResultPartitionManager(environment.getResultPartitionManager())
                 .setupBufferPoolFactoryFromNettyShuffleEnvironment(environment)
                 .setFileChannelManager(channelManager)
                 .setResultPartitionType(partitionType)
-                .setNumberOfSubpartitions(numChannels)
+                .setNumberOfSubpartitions(numSubpartitions)
                 .build();
     }
 
@@ -144,7 +144,7 @@ public enum PartitionTestUtils {
             int bufferSize,
             byte[] dataBytes)
             throws Exception {
-        List<BufferWithChannel> buffers = new ArrayList<>();
+        List<BufferWithSubpartition> buffers = new ArrayList<>();
         for (int i = 0; i < numSubpartitions; ++i) {
             for (int j = 0; j < numBuffersPerSubpartition; ++j) {
                 Buffer.DataType dataType =
@@ -157,7 +157,7 @@ public enum PartitionTestUtils {
                 Buffer buffer =
                         new NetworkBuffer(
                                 segment, FreeingBufferRecycler.INSTANCE, dataType, bufferSize);
-                buffers.add(new BufferWithChannel(buffer, i));
+                buffers.add(new BufferWithSubpartition(buffer, i));
             }
         }
 

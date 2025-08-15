@@ -83,7 +83,7 @@ public class HashBasedDataBuffer implements DataBuffer {
     // For writing
     // ---------------------------------------------------------------------------------------------
 
-    /** Partial buffers to be appended data for each channel. */
+    /** Partial buffers to be appended data for each subpartition. */
     private final BufferBuilder[] builders;
 
     /** Total number of network buffers already occupied currently by this sort buffer. */
@@ -119,8 +119,8 @@ public class HashBasedDataBuffer implements DataBuffer {
 
         this.builders = new BufferBuilder[numSubpartitions];
         this.buffers = new ArrayDeque[numSubpartitions];
-        for (int channel = 0; channel < numSubpartitions; ++channel) {
-            this.buffers[channel] = new ArrayDeque<>();
+        for (int subpartitionIndex = 0; subpartitionIndex < numSubpartitions; ++subpartitionIndex) {
+            this.buffers[subpartitionIndex] = new ArrayDeque<>();
         }
 
         this.subpartitionReadOrder = new int[numSubpartitions];
@@ -140,7 +140,7 @@ public class HashBasedDataBuffer implements DataBuffer {
      * buffer or this data buffer after reset).
      */
     @Override
-    public boolean append(ByteBuffer source, int targetChannel, Buffer.DataType dataType)
+    public boolean append(ByteBuffer source, int targetSubpartition, Buffer.DataType dataType)
             throws IOException {
         checkArgument(source.hasRemaining(), "Cannot append empty data.");
         checkState(!isFinished, "Sort buffer is already finished.");
@@ -148,9 +148,9 @@ public class HashBasedDataBuffer implements DataBuffer {
 
         int totalBytes = source.remaining();
         if (dataType.isBuffer()) {
-            writeRecord(source, targetChannel);
+            writeRecord(source, targetSubpartition);
         } else {
-            writeEvent(source, targetChannel, dataType);
+            writeEvent(source, targetSubpartition, dataType);
         }
 
         if (source.hasRemaining()) {
@@ -207,11 +207,11 @@ public class HashBasedDataBuffer implements DataBuffer {
     }
 
     @Override
-    public BufferWithChannel getNextBuffer(MemorySegment transitBuffer) {
+    public BufferWithSubpartition getNextBuffer(MemorySegment transitBuffer) {
         checkState(isFinished, "Sort buffer is not ready to be read.");
         checkState(!isReleased, "Sort buffer is already released.");
 
-        BufferWithChannel buffer = null;
+        BufferWithSubpartition buffer = null;
         if (!hasRemaining() || readOrderIndex >= subpartitionReadOrder.length) {
             return null;
         }
@@ -220,7 +220,7 @@ public class HashBasedDataBuffer implements DataBuffer {
         while (buffer == null) {
             BufferConsumer consumer = buffers[targetChannel].poll();
             if (consumer != null) {
-                buffer = new BufferWithChannel(consumer.build(), targetChannel);
+                buffer = new BufferWithSubpartition(consumer.build(), targetChannel);
                 numBuffersOccupied -= buffer.getBuffer().isBuffer() ? 1 : 0;
                 numTotalBytesRead += buffer.getBuffer().readableBytes();
                 consumer.close();

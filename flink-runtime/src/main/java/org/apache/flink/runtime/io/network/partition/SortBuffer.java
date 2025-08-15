@@ -161,7 +161,7 @@ public abstract class SortBuffer implements DataBuffer {
      * either all data of target record will be written or nothing will be written.
      */
     @Override
-    public boolean append(ByteBuffer source, int targetChannel, Buffer.DataType dataType)
+    public boolean append(ByteBuffer source, int targetSubpartition, Buffer.DataType dataType)
             throws IOException {
         checkArgument(source.hasRemaining(), "Cannot append empty data.");
         checkState(!isFinished, "Sort buffer is already finished.");
@@ -175,7 +175,7 @@ public abstract class SortBuffer implements DataBuffer {
         }
 
         // write the index entry and record or event data
-        writeIndex(targetChannel, totalBytes, dataType);
+        writeIndex(targetSubpartition, totalBytes, dataType);
         writeRecord(source);
 
         ++numTotalRecords;
@@ -184,7 +184,7 @@ public abstract class SortBuffer implements DataBuffer {
         return false;
     }
 
-    private void writeIndex(int channelIndex, int numRecordBytes, Buffer.DataType dataType) {
+    private void writeIndex(int subpartitionIndex, int numRecordBytes, Buffer.DataType dataType) {
         MemorySegment segment = segments.get(writeSegmentIndex);
 
         // record length takes the high 32 bits and data type takes the low 32 bits
@@ -193,8 +193,8 @@ public abstract class SortBuffer implements DataBuffer {
         // segment index takes the high 32 bits and segment offset takes the low 32 bits
         long indexEntryAddress = ((long) writeSegmentIndex << 32) | writeSegmentOffset;
 
-        long lastIndexEntryAddress = lastIndexEntryAddresses[channelIndex];
-        lastIndexEntryAddresses[channelIndex] = indexEntryAddress;
+        long lastIndexEntryAddress = lastIndexEntryAddresses[subpartitionIndex];
+        lastIndexEntryAddresses[subpartitionIndex] = indexEntryAddress;
 
         if (lastIndexEntryAddress >= 0) {
             // link the previous index entry of the given channel to the new index entry
@@ -202,7 +202,7 @@ public abstract class SortBuffer implements DataBuffer {
             segment.putLong(
                     getSegmentOffsetFromPointer(lastIndexEntryAddress) + 8, indexEntryAddress);
         } else {
-            firstIndexEntryAddresses[channelIndex] = indexEntryAddress;
+            firstIndexEntryAddresses[subpartitionIndex] = indexEntryAddress;
         }
 
         // move the write position forward so as to write the corresponding record
@@ -315,7 +315,7 @@ public abstract class SortBuffer implements DataBuffer {
         return numBytesToCopy;
     }
 
-    protected void updateReadChannelAndIndexEntryAddress() {
+    protected void updateReadSubpartitionAndIndexEntryAddress() {
         // skip the channels without any data
         while (++readOrderIndex < firstIndexEntryAddresses.length) {
             int channelIndex = subpartitionReadOrder[readOrderIndex];
@@ -355,7 +355,7 @@ public abstract class SortBuffer implements DataBuffer {
         isFinished = true;
 
         // prepare for reading
-        updateReadChannelAndIndexEntryAddress();
+        updateReadSubpartitionAndIndexEntryAddress();
     }
 
     @Override
